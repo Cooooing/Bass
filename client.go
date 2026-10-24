@@ -65,9 +65,11 @@ type APIClient struct {
 
 	DomainService DomainService
 
-	HolidayService HolidayService
+	EmojiService EmojiService
 
-	IMService IMService
+	GlobalChatService GlobalChatService
+
+	HolidayService HolidayService
 
 	LocationService LocationService
 
@@ -82,6 +84,8 @@ type APIClient struct {
 	PreferencesService PreferencesService
 
 	PrivacySettingService PrivacySettingService
+
+	PrivateChatService PrivateChatService
 
 	RealtimeService RealtimeService
 
@@ -114,8 +118,9 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.CheckinService = (*CheckinServiceService)(&c.common)
 	c.CommentService = (*CommentServiceService)(&c.common)
 	c.DomainService = (*DomainServiceService)(&c.common)
+	c.EmojiService = (*EmojiServiceService)(&c.common)
+	c.GlobalChatService = (*GlobalChatServiceService)(&c.common)
 	c.HolidayService = (*HolidayServiceService)(&c.common)
-	c.IMService = (*IMServiceService)(&c.common)
 	c.LocationService = (*LocationServiceService)(&c.common)
 	c.MoonbreezeService = (*MoonbreezeServiceService)(&c.common)
 	c.NotificationService = (*NotificationServiceService)(&c.common)
@@ -123,6 +128,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.PostscriptService = (*PostscriptServiceService)(&c.common)
 	c.PreferencesService = (*PreferencesServiceService)(&c.common)
 	c.PrivacySettingService = (*PrivacySettingServiceService)(&c.common)
+	c.PrivateChatService = (*PrivateChatServiceService)(&c.common)
 	c.RealtimeService = (*RealtimeServiceService)(&c.common)
 	c.RelationService = (*RelationServiceService)(&c.common)
 	c.TagService = (*TagServiceService)(&c.common)

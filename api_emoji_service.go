@@ -19,232 +19,232 @@ import (
 )
 
 
-type IMService interface {
+type EmojiService interface {
 
 	/*
-	CountPrivateChatUnread Method for CountPrivateChatUnread
+	AddItem Method for AddItem
 
-	统计当前账号的私聊未读数。
+	向分组加入已上传图片。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCountPrivateChatUnreadRequest
+	@return ApiAddItemRequest
 	*/
-	CountPrivateChatUnread(ctx context.Context) ApiCountPrivateChatUnreadRequest
+	AddItem(ctx context.Context) ApiAddItemRequest
 
-	// CountPrivateChatUnreadExecute executes the request
-	//  @return CountPrivateChatUnreadResp
-	CountPrivateChatUnreadExecute(r ApiCountPrivateChatUnreadRequest) (*CountPrivateChatUnreadResp, *http.Response, error)
+	// AddItemExecute executes the request
+	//  @return AddEmojiItemResp
+	AddItemExecute(r ApiAddItemRequest) (*AddEmojiItemResp, *http.Response, error)
 
 	/*
-	ListGlobalChatMessages Method for ListGlobalChatMessages
+	CreateGroup Method for CreateGroup
 
-	查询全局聊天室消息。
+	创建一个表情分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListGlobalChatMessagesRequest
+	@return ApiCreateGroupRequest
 	*/
-	ListGlobalChatMessages(ctx context.Context) ApiListGlobalChatMessagesRequest
+	CreateGroup(ctx context.Context) ApiCreateGroupRequest
 
-	// ListGlobalChatMessagesExecute executes the request
-	//  @return ListGlobalChatMessagesResp
-	ListGlobalChatMessagesExecute(r ApiListGlobalChatMessagesRequest) (*ListGlobalChatMessagesResp, *http.Response, error)
+	// CreateGroupExecute executes the request
+	//  @return CreateEmojiGroupResp
+	CreateGroupExecute(r ApiCreateGroupRequest) (*CreateEmojiGroupResp, *http.Response, error)
 
 	/*
-	ListGlobalChatOnlineMembers Method for ListGlobalChatOnlineMembers
+	CreateShare Method for CreateShare
 
-	查询全部在线的聊天室成员。
+	生成七天有效的分组分享码。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListGlobalChatOnlineMembersRequest
+	@return ApiCreateShareRequest
 	*/
-	ListGlobalChatOnlineMembers(ctx context.Context) ApiListGlobalChatOnlineMembersRequest
+	CreateShare(ctx context.Context) ApiCreateShareRequest
 
-	// ListGlobalChatOnlineMembersExecute executes the request
-	//  @return ListGlobalChatOnlineMembersResp
-	ListGlobalChatOnlineMembersExecute(r ApiListGlobalChatOnlineMembersRequest) (*ListGlobalChatOnlineMembersResp, *http.Response, error)
+	// CreateShareExecute executes the request
+	//  @return CreateEmojiShareResp
+	CreateShareExecute(r ApiCreateShareRequest) (*CreateEmojiShareResp, *http.Response, error)
 
 	/*
-	ListPrivateChatMessages Method for ListPrivateChatMessages
+	DeleteGroup Method for DeleteGroup
 
-	查询私聊消息。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListPrivateChatMessagesRequest
-	*/
-	ListPrivateChatMessages(ctx context.Context) ApiListPrivateChatMessagesRequest
-
-	// ListPrivateChatMessagesExecute executes the request
-	//  @return ListPrivateChatMessagesResp
-	ListPrivateChatMessagesExecute(r ApiListPrivateChatMessagesRequest) (*ListPrivateChatMessagesResp, *http.Response, error)
-
-	/*
-	ListPrivateChatSessions Method for ListPrivateChatSessions
-
-	查询当前账号的私聊会话。
+	删除一个表情分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListPrivateChatSessionsRequest
+	@return ApiDeleteGroupRequest
 	*/
-	ListPrivateChatSessions(ctx context.Context) ApiListPrivateChatSessionsRequest
+	DeleteGroup(ctx context.Context) ApiDeleteGroupRequest
 
-	// ListPrivateChatSessionsExecute executes the request
-	//  @return ListPrivateChatSessionsResp
-	ListPrivateChatSessionsExecute(r ApiListPrivateChatSessionsRequest) (*ListPrivateChatSessionsResp, *http.Response, error)
-
-	/*
-	MarkPrivateChatSessionRead Method for MarkPrivateChatSessionRead
-
-	标记私聊会话已读。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiMarkPrivateChatSessionReadRequest
-	*/
-	MarkPrivateChatSessionRead(ctx context.Context) ApiMarkPrivateChatSessionReadRequest
-
-	// MarkPrivateChatSessionReadExecute executes the request
+	// DeleteGroupExecute executes the request
 	//  @return map[string]interface{}
-	MarkPrivateChatSessionReadExecute(r ApiMarkPrivateChatSessionReadRequest) (map[string]interface{}, *http.Response, error)
+	DeleteGroupExecute(r ApiDeleteGroupRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	RevokeGlobalChatMessage Method for RevokeGlobalChatMessage
+	DeleteItem Method for DeleteItem
 
-	撤回自己的全局聊天室消息。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRevokeGlobalChatMessageRequest
-	*/
-	RevokeGlobalChatMessage(ctx context.Context) ApiRevokeGlobalChatMessageRequest
-
-	// RevokeGlobalChatMessageExecute executes the request
-	//  @return RevokeGlobalChatMessageResp
-	RevokeGlobalChatMessageExecute(r ApiRevokeGlobalChatMessageRequest) (*RevokeGlobalChatMessageResp, *http.Response, error)
-
-	/*
-	RevokePrivateChatMessage Method for RevokePrivateChatMessage
-
-	撤回私聊消息。
+	从分组移除表情。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRevokePrivateChatMessageRequest
+	@return ApiDeleteItemRequest
 	*/
-	RevokePrivateChatMessage(ctx context.Context) ApiRevokePrivateChatMessageRequest
+	DeleteItem(ctx context.Context) ApiDeleteItemRequest
 
-	// RevokePrivateChatMessageExecute executes the request
-	//  @return RevokePrivateChatMessageResp
-	RevokePrivateChatMessageExecute(r ApiRevokePrivateChatMessageRequest) (*RevokePrivateChatMessageResp, *http.Response, error)
-
-	/*
-	SendGlobalChatMessage Method for SendGlobalChatMessage
-
-	发送全局聊天室消息。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiSendGlobalChatMessageRequest
-	*/
-	SendGlobalChatMessage(ctx context.Context) ApiSendGlobalChatMessageRequest
-
-	// SendGlobalChatMessageExecute executes the request
-	//  @return SendGlobalChatMessageResp
-	SendGlobalChatMessageExecute(r ApiSendGlobalChatMessageRequest) (*SendGlobalChatMessageResp, *http.Response, error)
-
-	/*
-	SendPrivateChatMessage Method for SendPrivateChatMessage
-
-	发送私聊消息。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiSendPrivateChatMessageRequest
-	*/
-	SendPrivateChatMessage(ctx context.Context) ApiSendPrivateChatMessageRequest
-
-	// SendPrivateChatMessageExecute executes the request
-	//  @return SendPrivateChatMessageResp
-	SendPrivateChatMessageExecute(r ApiSendPrivateChatMessageRequest) (*SendPrivateChatMessageResp, *http.Response, error)
-
-	/*
-	SetPrivateChatSessionMuted Method for SetPrivateChatSessionMuted
-
-	设置私聊会话免打扰。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiSetPrivateChatSessionMutedRequest
-	*/
-	SetPrivateChatSessionMuted(ctx context.Context) ApiSetPrivateChatSessionMutedRequest
-
-	// SetPrivateChatSessionMutedExecute executes the request
+	// DeleteItemExecute executes the request
 	//  @return map[string]interface{}
-	SetPrivateChatSessionMutedExecute(r ApiSetPrivateChatSessionMutedRequest) (map[string]interface{}, *http.Response, error)
+	DeleteItemExecute(r ApiDeleteItemRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	SetPrivateChatSessionPinned Method for SetPrivateChatSessionPinned
+	ImportShare Method for ImportShare
 
-	设置私聊会话置顶。
+	把分享码导入为一个新分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiSetPrivateChatSessionPinnedRequest
+	@return ApiImportShareRequest
 	*/
-	SetPrivateChatSessionPinned(ctx context.Context) ApiSetPrivateChatSessionPinnedRequest
+	ImportShare(ctx context.Context) ApiImportShareRequest
 
-	// SetPrivateChatSessionPinnedExecute executes the request
+	// ImportShareExecute executes the request
+	//  @return ImportEmojiShareResp
+	ImportShareExecute(r ApiImportShareRequest) (*ImportEmojiShareResp, *http.Response, error)
+
+	/*
+	List Method for List
+
+	查询当前账号的表情分组。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListRequest
+	*/
+	List(ctx context.Context) ApiListRequest
+
+	// ListExecute executes the request
+	//  @return ListEmojiGroupsResp
+	ListExecute(r ApiListRequest) (*ListEmojiGroupsResp, *http.Response, error)
+
+	/*
+	MoveItem Method for MoveItem
+
+	将表情移动到另一个当前账号分组。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiMoveItemRequest
+	*/
+	MoveItem(ctx context.Context) ApiMoveItemRequest
+
+	// MoveItemExecute executes the request
+	//  @return MoveEmojiItemResp
+	MoveItemExecute(r ApiMoveItemRequest) (*MoveEmojiItemResp, *http.Response, error)
+
+	/*
+	RenameGroup Method for RenameGroup
+
+	重命名一个表情分组。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiRenameGroupRequest
+	*/
+	RenameGroup(ctx context.Context) ApiRenameGroupRequest
+
+	// RenameGroupExecute executes the request
+	//  @return RenameEmojiGroupResp
+	RenameGroupExecute(r ApiRenameGroupRequest) (*RenameEmojiGroupResp, *http.Response, error)
+
+	/*
+	RenameItem Method for RenameItem
+
+	重命名一个表情别名。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiRenameItemRequest
+	*/
+	RenameItem(ctx context.Context) ApiRenameItemRequest
+
+	// RenameItemExecute executes the request
+	//  @return RenameEmojiItemResp
+	RenameItemExecute(r ApiRenameItemRequest) (*RenameEmojiItemResp, *http.Response, error)
+
+	/*
+	ReorderGroups Method for ReorderGroups
+
+	重排表情分组。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiReorderGroupsRequest
+	*/
+	ReorderGroups(ctx context.Context) ApiReorderGroupsRequest
+
+	// ReorderGroupsExecute executes the request
 	//  @return map[string]interface{}
-	SetPrivateChatSessionPinnedExecute(r ApiSetPrivateChatSessionPinnedRequest) (map[string]interface{}, *http.Response, error)
+	ReorderGroupsExecute(r ApiReorderGroupsRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
+	ReorderItems Method for ReorderItems
+
+	重排同一分组内的表情。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiReorderItemsRequest
+	*/
+	ReorderItems(ctx context.Context) ApiReorderItemsRequest
+
+	// ReorderItemsExecute executes the request
+	//  @return map[string]interface{}
+	ReorderItemsExecute(r ApiReorderItemsRequest) (map[string]interface{}, *http.Response, error)
 }
 
-// IMServiceService IMService service
-type IMServiceService service
+// EmojiServiceService EmojiService service
+type EmojiServiceService service
 
-type ApiCountPrivateChatUnreadRequest struct {
+type ApiAddItemRequest struct {
 	ctx context.Context
-	ApiService IMService
-	body *map[string]interface{}
+	ApiService EmojiService
+	addEmojiItemReq *AddEmojiItemReq
 }
 
-func (r ApiCountPrivateChatUnreadRequest) Body(body map[string]interface{}) ApiCountPrivateChatUnreadRequest {
-	r.body = &body
+func (r ApiAddItemRequest) AddEmojiItemReq(addEmojiItemReq AddEmojiItemReq) ApiAddItemRequest {
+	r.addEmojiItemReq = &addEmojiItemReq
 	return r
 }
 
-func (r ApiCountPrivateChatUnreadRequest) Execute() (*CountPrivateChatUnreadResp, *http.Response, error) {
-	return r.ApiService.CountPrivateChatUnreadExecute(r)
+func (r ApiAddItemRequest) Execute() (*AddEmojiItemResp, *http.Response, error) {
+	return r.ApiService.AddItemExecute(r)
 }
 
 /*
-CountPrivateChatUnread Method for CountPrivateChatUnread
+AddItem Method for AddItem
 
-统计当前账号的私聊未读数。
+向分组加入已上传图片。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCountPrivateChatUnreadRequest
+ @return ApiAddItemRequest
 */
-func (a *IMServiceService) CountPrivateChatUnread(ctx context.Context) ApiCountPrivateChatUnreadRequest {
-	return ApiCountPrivateChatUnreadRequest{
+func (a *EmojiServiceService) AddItem(ctx context.Context) ApiAddItemRequest {
+	return ApiAddItemRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CountPrivateChatUnreadResp
-func (a *IMServiceService) CountPrivateChatUnreadExecute(r ApiCountPrivateChatUnreadRequest) (*CountPrivateChatUnreadResp, *http.Response, error) {
+//  @return AddEmojiItemResp
+func (a *EmojiServiceService) AddItemExecute(r ApiAddItemRequest) (*AddEmojiItemResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CountPrivateChatUnreadResp
+		localVarReturnValue  *AddEmojiItemResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.CountPrivateChatUnread")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.AddItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/im/private-chat/unread-count"
+	localVarPath := localBasePath + "/v1/im/emoji/items"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.body == nil {
-		return localVarReturnValue, nil, reportError("body is required and must be specified")
+	if r.addEmojiItemReq == nil {
+		return localVarReturnValue, nil, reportError("addEmojiItemReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -265,7 +265,7 @@ func (a *IMServiceService) CountPrivateChatUnreadExecute(r ApiCountPrivateChatUn
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.body
+	localVarPostBody = r.addEmojiItemReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -303,58 +303,58 @@ func (a *IMServiceService) CountPrivateChatUnreadExecute(r ApiCountPrivateChatUn
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListGlobalChatMessagesRequest struct {
+type ApiCreateGroupRequest struct {
 	ctx context.Context
-	ApiService IMService
-	listGlobalChatMessagesReq *ListGlobalChatMessagesReq
+	ApiService EmojiService
+	createEmojiGroupReq *CreateEmojiGroupReq
 }
 
-func (r ApiListGlobalChatMessagesRequest) ListGlobalChatMessagesReq(listGlobalChatMessagesReq ListGlobalChatMessagesReq) ApiListGlobalChatMessagesRequest {
-	r.listGlobalChatMessagesReq = &listGlobalChatMessagesReq
+func (r ApiCreateGroupRequest) CreateEmojiGroupReq(createEmojiGroupReq CreateEmojiGroupReq) ApiCreateGroupRequest {
+	r.createEmojiGroupReq = &createEmojiGroupReq
 	return r
 }
 
-func (r ApiListGlobalChatMessagesRequest) Execute() (*ListGlobalChatMessagesResp, *http.Response, error) {
-	return r.ApiService.ListGlobalChatMessagesExecute(r)
+func (r ApiCreateGroupRequest) Execute() (*CreateEmojiGroupResp, *http.Response, error) {
+	return r.ApiService.CreateGroupExecute(r)
 }
 
 /*
-ListGlobalChatMessages Method for ListGlobalChatMessages
+CreateGroup Method for CreateGroup
 
-查询全局聊天室消息。
+创建一个表情分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListGlobalChatMessagesRequest
+ @return ApiCreateGroupRequest
 */
-func (a *IMServiceService) ListGlobalChatMessages(ctx context.Context) ApiListGlobalChatMessagesRequest {
-	return ApiListGlobalChatMessagesRequest{
+func (a *EmojiServiceService) CreateGroup(ctx context.Context) ApiCreateGroupRequest {
+	return ApiCreateGroupRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ListGlobalChatMessagesResp
-func (a *IMServiceService) ListGlobalChatMessagesExecute(r ApiListGlobalChatMessagesRequest) (*ListGlobalChatMessagesResp, *http.Response, error) {
+//  @return CreateEmojiGroupResp
+func (a *EmojiServiceService) CreateGroupExecute(r ApiCreateGroupRequest) (*CreateEmojiGroupResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListGlobalChatMessagesResp
+		localVarReturnValue  *CreateEmojiGroupResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.ListGlobalChatMessages")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.CreateGroup")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/im/global-chat/messages/list"
+	localVarPath := localBasePath + "/v1/im/emoji/groups"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listGlobalChatMessagesReq == nil {
-		return localVarReturnValue, nil, reportError("listGlobalChatMessagesReq is required and must be specified")
+	if r.createEmojiGroupReq == nil {
+		return localVarReturnValue, nil, reportError("createEmojiGroupReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -375,7 +375,7 @@ func (a *IMServiceService) ListGlobalChatMessagesExecute(r ApiListGlobalChatMess
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listGlobalChatMessagesReq
+	localVarPostBody = r.createEmojiGroupReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -413,58 +413,58 @@ func (a *IMServiceService) ListGlobalChatMessagesExecute(r ApiListGlobalChatMess
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListGlobalChatOnlineMembersRequest struct {
+type ApiCreateShareRequest struct {
 	ctx context.Context
-	ApiService IMService
-	body *map[string]interface{}
+	ApiService EmojiService
+	createEmojiShareReq *CreateEmojiShareReq
 }
 
-func (r ApiListGlobalChatOnlineMembersRequest) Body(body map[string]interface{}) ApiListGlobalChatOnlineMembersRequest {
-	r.body = &body
+func (r ApiCreateShareRequest) CreateEmojiShareReq(createEmojiShareReq CreateEmojiShareReq) ApiCreateShareRequest {
+	r.createEmojiShareReq = &createEmojiShareReq
 	return r
 }
 
-func (r ApiListGlobalChatOnlineMembersRequest) Execute() (*ListGlobalChatOnlineMembersResp, *http.Response, error) {
-	return r.ApiService.ListGlobalChatOnlineMembersExecute(r)
+func (r ApiCreateShareRequest) Execute() (*CreateEmojiShareResp, *http.Response, error) {
+	return r.ApiService.CreateShareExecute(r)
 }
 
 /*
-ListGlobalChatOnlineMembers Method for ListGlobalChatOnlineMembers
+CreateShare Method for CreateShare
 
-查询全部在线的聊天室成员。
+生成七天有效的分组分享码。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListGlobalChatOnlineMembersRequest
+ @return ApiCreateShareRequest
 */
-func (a *IMServiceService) ListGlobalChatOnlineMembers(ctx context.Context) ApiListGlobalChatOnlineMembersRequest {
-	return ApiListGlobalChatOnlineMembersRequest{
+func (a *EmojiServiceService) CreateShare(ctx context.Context) ApiCreateShareRequest {
+	return ApiCreateShareRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ListGlobalChatOnlineMembersResp
-func (a *IMServiceService) ListGlobalChatOnlineMembersExecute(r ApiListGlobalChatOnlineMembersRequest) (*ListGlobalChatOnlineMembersResp, *http.Response, error) {
+//  @return CreateEmojiShareResp
+func (a *EmojiServiceService) CreateShareExecute(r ApiCreateShareRequest) (*CreateEmojiShareResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListGlobalChatOnlineMembersResp
+		localVarReturnValue  *CreateEmojiShareResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.ListGlobalChatOnlineMembers")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.CreateShare")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/im/global-chat/online-members/list"
+	localVarPath := localBasePath + "/v1/im/emoji/shares"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.body == nil {
-		return localVarReturnValue, nil, reportError("body is required and must be specified")
+	if r.createEmojiShareReq == nil {
+		return localVarReturnValue, nil, reportError("createEmojiShareReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -485,7 +485,7 @@ func (a *IMServiceService) ListGlobalChatOnlineMembersExecute(r ApiListGlobalCha
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.body
+	localVarPostBody = r.createEmojiShareReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -523,260 +523,31 @@ func (a *IMServiceService) ListGlobalChatOnlineMembersExecute(r ApiListGlobalCha
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListPrivateChatMessagesRequest struct {
+type ApiDeleteGroupRequest struct {
 	ctx context.Context
-	ApiService IMService
-	listPrivateChatMessagesReq *ListPrivateChatMessagesReq
+	ApiService EmojiService
+	deleteEmojiGroupReq *DeleteEmojiGroupReq
 }
 
-func (r ApiListPrivateChatMessagesRequest) ListPrivateChatMessagesReq(listPrivateChatMessagesReq ListPrivateChatMessagesReq) ApiListPrivateChatMessagesRequest {
-	r.listPrivateChatMessagesReq = &listPrivateChatMessagesReq
+func (r ApiDeleteGroupRequest) DeleteEmojiGroupReq(deleteEmojiGroupReq DeleteEmojiGroupReq) ApiDeleteGroupRequest {
+	r.deleteEmojiGroupReq = &deleteEmojiGroupReq
 	return r
 }
 
-func (r ApiListPrivateChatMessagesRequest) Execute() (*ListPrivateChatMessagesResp, *http.Response, error) {
-	return r.ApiService.ListPrivateChatMessagesExecute(r)
+func (r ApiDeleteGroupRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DeleteGroupExecute(r)
 }
 
 /*
-ListPrivateChatMessages Method for ListPrivateChatMessages
+DeleteGroup Method for DeleteGroup
 
-查询私聊消息。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListPrivateChatMessagesRequest
-*/
-func (a *IMServiceService) ListPrivateChatMessages(ctx context.Context) ApiListPrivateChatMessagesRequest {
-	return ApiListPrivateChatMessagesRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return ListPrivateChatMessagesResp
-func (a *IMServiceService) ListPrivateChatMessagesExecute(r ApiListPrivateChatMessagesRequest) (*ListPrivateChatMessagesResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ListPrivateChatMessagesResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.ListPrivateChatMessages")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/im/private-chat/messages/list"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.listPrivateChatMessagesReq == nil {
-		return localVarReturnValue, nil, reportError("listPrivateChatMessagesReq is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.listPrivateChatMessagesReq
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiListPrivateChatSessionsRequest struct {
-	ctx context.Context
-	ApiService IMService
-	pagePage *string
-	pageSize *string
-}
-
-// 页码
-func (r ApiListPrivateChatSessionsRequest) PagePage(pagePage string) ApiListPrivateChatSessionsRequest {
-	r.pagePage = &pagePage
-	return r
-}
-
-// 页大小
-func (r ApiListPrivateChatSessionsRequest) PageSize(pageSize string) ApiListPrivateChatSessionsRequest {
-	r.pageSize = &pageSize
-	return r
-}
-
-func (r ApiListPrivateChatSessionsRequest) Execute() (*ListPrivateChatSessionsResp, *http.Response, error) {
-	return r.ApiService.ListPrivateChatSessionsExecute(r)
-}
-
-/*
-ListPrivateChatSessions Method for ListPrivateChatSessions
-
-查询当前账号的私聊会话。
+删除一个表情分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListPrivateChatSessionsRequest
+ @return ApiDeleteGroupRequest
 */
-func (a *IMServiceService) ListPrivateChatSessions(ctx context.Context) ApiListPrivateChatSessionsRequest {
-	return ApiListPrivateChatSessionsRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return ListPrivateChatSessionsResp
-func (a *IMServiceService) ListPrivateChatSessionsExecute(r ApiListPrivateChatSessionsRequest) (*ListPrivateChatSessionsResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodGet
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ListPrivateChatSessionsResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.ListPrivateChatSessions")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/im/private-chat/sessions"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-
-	if r.pagePage != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page.page", r.pagePage, "form", "")
-	}
-	if r.pageSize != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "page.size", r.pageSize, "form", "")
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiMarkPrivateChatSessionReadRequest struct {
-	ctx context.Context
-	ApiService IMService
-	markPrivateChatSessionReadReq *MarkPrivateChatSessionReadReq
-}
-
-func (r ApiMarkPrivateChatSessionReadRequest) MarkPrivateChatSessionReadReq(markPrivateChatSessionReadReq MarkPrivateChatSessionReadReq) ApiMarkPrivateChatSessionReadRequest {
-	r.markPrivateChatSessionReadReq = &markPrivateChatSessionReadReq
-	return r
-}
-
-func (r ApiMarkPrivateChatSessionReadRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.MarkPrivateChatSessionReadExecute(r)
-}
-
-/*
-MarkPrivateChatSessionRead Method for MarkPrivateChatSessionRead
-
-标记私聊会话已读。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMarkPrivateChatSessionReadRequest
-*/
-func (a *IMServiceService) MarkPrivateChatSessionRead(ctx context.Context) ApiMarkPrivateChatSessionReadRequest {
-	return ApiMarkPrivateChatSessionReadRequest{
+func (a *EmojiServiceService) DeleteGroup(ctx context.Context) ApiDeleteGroupRequest {
+	return ApiDeleteGroupRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -784,7 +555,7 @@ func (a *IMServiceService) MarkPrivateChatSessionRead(ctx context.Context) ApiMa
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *IMServiceService) MarkPrivateChatSessionReadExecute(r ApiMarkPrivateChatSessionReadRequest) (map[string]interface{}, *http.Response, error) {
+func (a *EmojiServiceService) DeleteGroupExecute(r ApiDeleteGroupRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -792,18 +563,18 @@ func (a *IMServiceService) MarkPrivateChatSessionReadExecute(r ApiMarkPrivateCha
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.MarkPrivateChatSessionRead")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.DeleteGroup")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/im/private-chat/read"
+	localVarPath := localBasePath + "/v1/im/emoji/groups/delete"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.markPrivateChatSessionReadReq == nil {
-		return localVarReturnValue, nil, reportError("markPrivateChatSessionReadReq is required and must be specified")
+	if r.deleteEmojiGroupReq == nil {
+		return localVarReturnValue, nil, reportError("deleteEmojiGroupReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -824,7 +595,7 @@ func (a *IMServiceService) MarkPrivateChatSessionReadExecute(r ApiMarkPrivateCha
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.markPrivateChatSessionReadReq
+	localVarPostBody = r.deleteEmojiGroupReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -862,471 +633,31 @@ func (a *IMServiceService) MarkPrivateChatSessionReadExecute(r ApiMarkPrivateCha
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRevokeGlobalChatMessageRequest struct {
+type ApiDeleteItemRequest struct {
 	ctx context.Context
-	ApiService IMService
-	revokeGlobalChatMessageReq *RevokeGlobalChatMessageReq
+	ApiService EmojiService
+	deleteEmojiItemReq *DeleteEmojiItemReq
 }
 
-func (r ApiRevokeGlobalChatMessageRequest) RevokeGlobalChatMessageReq(revokeGlobalChatMessageReq RevokeGlobalChatMessageReq) ApiRevokeGlobalChatMessageRequest {
-	r.revokeGlobalChatMessageReq = &revokeGlobalChatMessageReq
+func (r ApiDeleteItemRequest) DeleteEmojiItemReq(deleteEmojiItemReq DeleteEmojiItemReq) ApiDeleteItemRequest {
+	r.deleteEmojiItemReq = &deleteEmojiItemReq
 	return r
 }
 
-func (r ApiRevokeGlobalChatMessageRequest) Execute() (*RevokeGlobalChatMessageResp, *http.Response, error) {
-	return r.ApiService.RevokeGlobalChatMessageExecute(r)
+func (r ApiDeleteItemRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DeleteItemExecute(r)
 }
 
 /*
-RevokeGlobalChatMessage Method for RevokeGlobalChatMessage
+DeleteItem Method for DeleteItem
 
-撤回自己的全局聊天室消息。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRevokeGlobalChatMessageRequest
-*/
-func (a *IMServiceService) RevokeGlobalChatMessage(ctx context.Context) ApiRevokeGlobalChatMessageRequest {
-	return ApiRevokeGlobalChatMessageRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return RevokeGlobalChatMessageResp
-func (a *IMServiceService) RevokeGlobalChatMessageExecute(r ApiRevokeGlobalChatMessageRequest) (*RevokeGlobalChatMessageResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *RevokeGlobalChatMessageResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.RevokeGlobalChatMessage")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/im/global-chat/messages/revoke"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.revokeGlobalChatMessageReq == nil {
-		return localVarReturnValue, nil, reportError("revokeGlobalChatMessageReq is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.revokeGlobalChatMessageReq
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiRevokePrivateChatMessageRequest struct {
-	ctx context.Context
-	ApiService IMService
-	revokePrivateChatMessageReq *RevokePrivateChatMessageReq
-}
-
-func (r ApiRevokePrivateChatMessageRequest) RevokePrivateChatMessageReq(revokePrivateChatMessageReq RevokePrivateChatMessageReq) ApiRevokePrivateChatMessageRequest {
-	r.revokePrivateChatMessageReq = &revokePrivateChatMessageReq
-	return r
-}
-
-func (r ApiRevokePrivateChatMessageRequest) Execute() (*RevokePrivateChatMessageResp, *http.Response, error) {
-	return r.ApiService.RevokePrivateChatMessageExecute(r)
-}
-
-/*
-RevokePrivateChatMessage Method for RevokePrivateChatMessage
-
-撤回私聊消息。
+从分组移除表情。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRevokePrivateChatMessageRequest
+ @return ApiDeleteItemRequest
 */
-func (a *IMServiceService) RevokePrivateChatMessage(ctx context.Context) ApiRevokePrivateChatMessageRequest {
-	return ApiRevokePrivateChatMessageRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return RevokePrivateChatMessageResp
-func (a *IMServiceService) RevokePrivateChatMessageExecute(r ApiRevokePrivateChatMessageRequest) (*RevokePrivateChatMessageResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *RevokePrivateChatMessageResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.RevokePrivateChatMessage")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/im/private-chat/messages/revoke"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.revokePrivateChatMessageReq == nil {
-		return localVarReturnValue, nil, reportError("revokePrivateChatMessageReq is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.revokePrivateChatMessageReq
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiSendGlobalChatMessageRequest struct {
-	ctx context.Context
-	ApiService IMService
-	sendGlobalChatMessageReq *SendGlobalChatMessageReq
-}
-
-func (r ApiSendGlobalChatMessageRequest) SendGlobalChatMessageReq(sendGlobalChatMessageReq SendGlobalChatMessageReq) ApiSendGlobalChatMessageRequest {
-	r.sendGlobalChatMessageReq = &sendGlobalChatMessageReq
-	return r
-}
-
-func (r ApiSendGlobalChatMessageRequest) Execute() (*SendGlobalChatMessageResp, *http.Response, error) {
-	return r.ApiService.SendGlobalChatMessageExecute(r)
-}
-
-/*
-SendGlobalChatMessage Method for SendGlobalChatMessage
-
-发送全局聊天室消息。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSendGlobalChatMessageRequest
-*/
-func (a *IMServiceService) SendGlobalChatMessage(ctx context.Context) ApiSendGlobalChatMessageRequest {
-	return ApiSendGlobalChatMessageRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return SendGlobalChatMessageResp
-func (a *IMServiceService) SendGlobalChatMessageExecute(r ApiSendGlobalChatMessageRequest) (*SendGlobalChatMessageResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *SendGlobalChatMessageResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.SendGlobalChatMessage")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/im/global-chat/messages"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.sendGlobalChatMessageReq == nil {
-		return localVarReturnValue, nil, reportError("sendGlobalChatMessageReq is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.sendGlobalChatMessageReq
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiSendPrivateChatMessageRequest struct {
-	ctx context.Context
-	ApiService IMService
-	sendPrivateChatMessageReq *SendPrivateChatMessageReq
-}
-
-func (r ApiSendPrivateChatMessageRequest) SendPrivateChatMessageReq(sendPrivateChatMessageReq SendPrivateChatMessageReq) ApiSendPrivateChatMessageRequest {
-	r.sendPrivateChatMessageReq = &sendPrivateChatMessageReq
-	return r
-}
-
-func (r ApiSendPrivateChatMessageRequest) Execute() (*SendPrivateChatMessageResp, *http.Response, error) {
-	return r.ApiService.SendPrivateChatMessageExecute(r)
-}
-
-/*
-SendPrivateChatMessage Method for SendPrivateChatMessage
-
-发送私聊消息。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSendPrivateChatMessageRequest
-*/
-func (a *IMServiceService) SendPrivateChatMessage(ctx context.Context) ApiSendPrivateChatMessageRequest {
-	return ApiSendPrivateChatMessageRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return SendPrivateChatMessageResp
-func (a *IMServiceService) SendPrivateChatMessageExecute(r ApiSendPrivateChatMessageRequest) (*SendPrivateChatMessageResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *SendPrivateChatMessageResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.SendPrivateChatMessage")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/im/private-chat/messages"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.sendPrivateChatMessageReq == nil {
-		return localVarReturnValue, nil, reportError("sendPrivateChatMessageReq is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.sendPrivateChatMessageReq
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiSetPrivateChatSessionMutedRequest struct {
-	ctx context.Context
-	ApiService IMService
-	setPrivateChatSessionMutedReq *SetPrivateChatSessionMutedReq
-}
-
-func (r ApiSetPrivateChatSessionMutedRequest) SetPrivateChatSessionMutedReq(setPrivateChatSessionMutedReq SetPrivateChatSessionMutedReq) ApiSetPrivateChatSessionMutedRequest {
-	r.setPrivateChatSessionMutedReq = &setPrivateChatSessionMutedReq
-	return r
-}
-
-func (r ApiSetPrivateChatSessionMutedRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.SetPrivateChatSessionMutedExecute(r)
-}
-
-/*
-SetPrivateChatSessionMuted Method for SetPrivateChatSessionMuted
-
-设置私聊会话免打扰。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSetPrivateChatSessionMutedRequest
-*/
-func (a *IMServiceService) SetPrivateChatSessionMuted(ctx context.Context) ApiSetPrivateChatSessionMutedRequest {
-	return ApiSetPrivateChatSessionMutedRequest{
+func (a *EmojiServiceService) DeleteItem(ctx context.Context) ApiDeleteItemRequest {
+	return ApiDeleteItemRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1334,7 +665,7 @@ func (a *IMServiceService) SetPrivateChatSessionMuted(ctx context.Context) ApiSe
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *IMServiceService) SetPrivateChatSessionMutedExecute(r ApiSetPrivateChatSessionMutedRequest) (map[string]interface{}, *http.Response, error) {
+func (a *EmojiServiceService) DeleteItemExecute(r ApiDeleteItemRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1342,18 +673,18 @@ func (a *IMServiceService) SetPrivateChatSessionMutedExecute(r ApiSetPrivateChat
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.SetPrivateChatSessionMuted")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.DeleteItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/im/private-chat/muted"
+	localVarPath := localBasePath + "/v1/im/emoji/items/delete"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.setPrivateChatSessionMutedReq == nil {
-		return localVarReturnValue, nil, reportError("setPrivateChatSessionMutedReq is required and must be specified")
+	if r.deleteEmojiItemReq == nil {
+		return localVarReturnValue, nil, reportError("deleteEmojiItemReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -1374,7 +705,7 @@ func (a *IMServiceService) SetPrivateChatSessionMutedExecute(r ApiSetPrivateChat
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.setPrivateChatSessionMutedReq
+	localVarPostBody = r.deleteEmojiItemReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -1412,58 +743,58 @@ func (a *IMServiceService) SetPrivateChatSessionMutedExecute(r ApiSetPrivateChat
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiSetPrivateChatSessionPinnedRequest struct {
+type ApiImportShareRequest struct {
 	ctx context.Context
-	ApiService IMService
-	setPrivateChatSessionPinnedReq *SetPrivateChatSessionPinnedReq
+	ApiService EmojiService
+	importEmojiShareReq *ImportEmojiShareReq
 }
 
-func (r ApiSetPrivateChatSessionPinnedRequest) SetPrivateChatSessionPinnedReq(setPrivateChatSessionPinnedReq SetPrivateChatSessionPinnedReq) ApiSetPrivateChatSessionPinnedRequest {
-	r.setPrivateChatSessionPinnedReq = &setPrivateChatSessionPinnedReq
+func (r ApiImportShareRequest) ImportEmojiShareReq(importEmojiShareReq ImportEmojiShareReq) ApiImportShareRequest {
+	r.importEmojiShareReq = &importEmojiShareReq
 	return r
 }
 
-func (r ApiSetPrivateChatSessionPinnedRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.SetPrivateChatSessionPinnedExecute(r)
+func (r ApiImportShareRequest) Execute() (*ImportEmojiShareResp, *http.Response, error) {
+	return r.ApiService.ImportShareExecute(r)
 }
 
 /*
-SetPrivateChatSessionPinned Method for SetPrivateChatSessionPinned
+ImportShare Method for ImportShare
 
-设置私聊会话置顶。
+把分享码导入为一个新分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSetPrivateChatSessionPinnedRequest
+ @return ApiImportShareRequest
 */
-func (a *IMServiceService) SetPrivateChatSessionPinned(ctx context.Context) ApiSetPrivateChatSessionPinnedRequest {
-	return ApiSetPrivateChatSessionPinnedRequest{
+func (a *EmojiServiceService) ImportShare(ctx context.Context) ApiImportShareRequest {
+	return ApiImportShareRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *IMServiceService) SetPrivateChatSessionPinnedExecute(r ApiSetPrivateChatSessionPinnedRequest) (map[string]interface{}, *http.Response, error) {
+//  @return ImportEmojiShareResp
+func (a *EmojiServiceService) ImportShareExecute(r ApiImportShareRequest) (*ImportEmojiShareResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *ImportEmojiShareResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "IMServiceService.SetPrivateChatSessionPinned")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ImportShare")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/im/private-chat/pinned"
+	localVarPath := localBasePath + "/v1/im/emoji/shares/import"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.setPrivateChatSessionPinnedReq == nil {
-		return localVarReturnValue, nil, reportError("setPrivateChatSessionPinnedReq is required and must be specified")
+	if r.importEmojiShareReq == nil {
+		return localVarReturnValue, nil, reportError("importEmojiShareReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -1484,7 +815,667 @@ func (a *IMServiceService) SetPrivateChatSessionPinnedExecute(r ApiSetPrivateCha
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.setPrivateChatSessionPinnedReq
+	localVarPostBody = r.importEmojiShareReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListRequest struct {
+	ctx context.Context
+	ApiService EmojiService
+	listEmojiGroupsReq *ListEmojiGroupsReq
+}
+
+func (r ApiListRequest) ListEmojiGroupsReq(listEmojiGroupsReq ListEmojiGroupsReq) ApiListRequest {
+	r.listEmojiGroupsReq = &listEmojiGroupsReq
+	return r
+}
+
+func (r ApiListRequest) Execute() (*ListEmojiGroupsResp, *http.Response, error) {
+	return r.ApiService.ListExecute(r)
+}
+
+/*
+List Method for List
+
+查询当前账号的表情分组。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListRequest
+*/
+func (a *EmojiServiceService) List(ctx context.Context) ApiListRequest {
+	return ApiListRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListEmojiGroupsResp
+func (a *EmojiServiceService) ListExecute(r ApiListRequest) (*ListEmojiGroupsResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListEmojiGroupsResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.List")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/im/emoji/groups/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listEmojiGroupsReq == nil {
+		return localVarReturnValue, nil, reportError("listEmojiGroupsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listEmojiGroupsReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiMoveItemRequest struct {
+	ctx context.Context
+	ApiService EmojiService
+	moveEmojiItemReq *MoveEmojiItemReq
+}
+
+func (r ApiMoveItemRequest) MoveEmojiItemReq(moveEmojiItemReq MoveEmojiItemReq) ApiMoveItemRequest {
+	r.moveEmojiItemReq = &moveEmojiItemReq
+	return r
+}
+
+func (r ApiMoveItemRequest) Execute() (*MoveEmojiItemResp, *http.Response, error) {
+	return r.ApiService.MoveItemExecute(r)
+}
+
+/*
+MoveItem Method for MoveItem
+
+将表情移动到另一个当前账号分组。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiMoveItemRequest
+*/
+func (a *EmojiServiceService) MoveItem(ctx context.Context) ApiMoveItemRequest {
+	return ApiMoveItemRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return MoveEmojiItemResp
+func (a *EmojiServiceService) MoveItemExecute(r ApiMoveItemRequest) (*MoveEmojiItemResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *MoveEmojiItemResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.MoveItem")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/im/emoji/items/move"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.moveEmojiItemReq == nil {
+		return localVarReturnValue, nil, reportError("moveEmojiItemReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.moveEmojiItemReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiRenameGroupRequest struct {
+	ctx context.Context
+	ApiService EmojiService
+	renameEmojiGroupReq *RenameEmojiGroupReq
+}
+
+func (r ApiRenameGroupRequest) RenameEmojiGroupReq(renameEmojiGroupReq RenameEmojiGroupReq) ApiRenameGroupRequest {
+	r.renameEmojiGroupReq = &renameEmojiGroupReq
+	return r
+}
+
+func (r ApiRenameGroupRequest) Execute() (*RenameEmojiGroupResp, *http.Response, error) {
+	return r.ApiService.RenameGroupExecute(r)
+}
+
+/*
+RenameGroup Method for RenameGroup
+
+重命名一个表情分组。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiRenameGroupRequest
+*/
+func (a *EmojiServiceService) RenameGroup(ctx context.Context) ApiRenameGroupRequest {
+	return ApiRenameGroupRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return RenameEmojiGroupResp
+func (a *EmojiServiceService) RenameGroupExecute(r ApiRenameGroupRequest) (*RenameEmojiGroupResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *RenameEmojiGroupResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.RenameGroup")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/im/emoji/groups/rename"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.renameEmojiGroupReq == nil {
+		return localVarReturnValue, nil, reportError("renameEmojiGroupReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.renameEmojiGroupReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiRenameItemRequest struct {
+	ctx context.Context
+	ApiService EmojiService
+	renameEmojiItemReq *RenameEmojiItemReq
+}
+
+func (r ApiRenameItemRequest) RenameEmojiItemReq(renameEmojiItemReq RenameEmojiItemReq) ApiRenameItemRequest {
+	r.renameEmojiItemReq = &renameEmojiItemReq
+	return r
+}
+
+func (r ApiRenameItemRequest) Execute() (*RenameEmojiItemResp, *http.Response, error) {
+	return r.ApiService.RenameItemExecute(r)
+}
+
+/*
+RenameItem Method for RenameItem
+
+重命名一个表情别名。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiRenameItemRequest
+*/
+func (a *EmojiServiceService) RenameItem(ctx context.Context) ApiRenameItemRequest {
+	return ApiRenameItemRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return RenameEmojiItemResp
+func (a *EmojiServiceService) RenameItemExecute(r ApiRenameItemRequest) (*RenameEmojiItemResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *RenameEmojiItemResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.RenameItem")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/im/emoji/items/rename"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.renameEmojiItemReq == nil {
+		return localVarReturnValue, nil, reportError("renameEmojiItemReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.renameEmojiItemReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiReorderGroupsRequest struct {
+	ctx context.Context
+	ApiService EmojiService
+	reorderEmojiGroupsReq *ReorderEmojiGroupsReq
+}
+
+func (r ApiReorderGroupsRequest) ReorderEmojiGroupsReq(reorderEmojiGroupsReq ReorderEmojiGroupsReq) ApiReorderGroupsRequest {
+	r.reorderEmojiGroupsReq = &reorderEmojiGroupsReq
+	return r
+}
+
+func (r ApiReorderGroupsRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.ReorderGroupsExecute(r)
+}
+
+/*
+ReorderGroups Method for ReorderGroups
+
+重排表情分组。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiReorderGroupsRequest
+*/
+func (a *EmojiServiceService) ReorderGroups(ctx context.Context) ApiReorderGroupsRequest {
+	return ApiReorderGroupsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *EmojiServiceService) ReorderGroupsExecute(r ApiReorderGroupsRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ReorderGroups")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/im/emoji/groups/reorder"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.reorderEmojiGroupsReq == nil {
+		return localVarReturnValue, nil, reportError("reorderEmojiGroupsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.reorderEmojiGroupsReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiReorderItemsRequest struct {
+	ctx context.Context
+	ApiService EmojiService
+	reorderEmojiItemsReq *ReorderEmojiItemsReq
+}
+
+func (r ApiReorderItemsRequest) ReorderEmojiItemsReq(reorderEmojiItemsReq ReorderEmojiItemsReq) ApiReorderItemsRequest {
+	r.reorderEmojiItemsReq = &reorderEmojiItemsReq
+	return r
+}
+
+func (r ApiReorderItemsRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.ReorderItemsExecute(r)
+}
+
+/*
+ReorderItems Method for ReorderItems
+
+重排同一分组内的表情。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiReorderItemsRequest
+*/
+func (a *EmojiServiceService) ReorderItems(ctx context.Context) ApiReorderItemsRequest {
+	return ApiReorderItemsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *EmojiServiceService) ReorderItemsExecute(r ApiReorderItemsRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ReorderItems")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/im/emoji/items/reorder"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.reorderEmojiItemsReq == nil {
+		return localVarReturnValue, nil, reportError("reorderEmojiItemsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.reorderEmojiItemsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

@@ -1,94 +1,43 @@
-# IMService
+# EmojiService
 
 All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**countPrivateChatUnread**](#countprivatechatunread) | **POST** /v1/im/private-chat/unread-count | |
-|[**listGlobalChatMessages**](#listglobalchatmessages) | **POST** /v1/im/global-chat/messages/list | |
-|[**listGlobalChatOnlineMembers**](#listglobalchatonlinemembers) | **POST** /v1/im/global-chat/online-members/list | |
-|[**listPrivateChatMessages**](#listprivatechatmessages) | **POST** /v1/im/private-chat/messages/list | |
-|[**listPrivateChatSessions**](#listprivatechatsessions) | **GET** /v1/im/private-chat/sessions | |
-|[**markPrivateChatSessionRead**](#markprivatechatsessionread) | **POST** /v1/im/private-chat/read | |
-|[**revokeGlobalChatMessage**](#revokeglobalchatmessage) | **POST** /v1/im/global-chat/messages/revoke | |
-|[**revokePrivateChatMessage**](#revokeprivatechatmessage) | **POST** /v1/im/private-chat/messages/revoke | |
-|[**sendGlobalChatMessage**](#sendglobalchatmessage) | **POST** /v1/im/global-chat/messages | |
-|[**sendPrivateChatMessage**](#sendprivatechatmessage) | **POST** /v1/im/private-chat/messages | |
-|[**setPrivateChatSessionMuted**](#setprivatechatsessionmuted) | **POST** /v1/im/private-chat/muted | |
-|[**setPrivateChatSessionPinned**](#setprivatechatsessionpinned) | **POST** /v1/im/private-chat/pinned | |
+|[**addItem**](#additem) | **POST** /v1/im/emoji/items | |
+|[**createGroup**](#creategroup) | **POST** /v1/im/emoji/groups | |
+|[**createShare**](#createshare) | **POST** /v1/im/emoji/shares | |
+|[**deleteGroup**](#deletegroup) | **POST** /v1/im/emoji/groups/delete | |
+|[**deleteItem**](#deleteitem) | **POST** /v1/im/emoji/items/delete | |
+|[**importShare**](#importshare) | **POST** /v1/im/emoji/shares/import | |
+|[**list**](#list) | **POST** /v1/im/emoji/groups/list | |
+|[**moveItem**](#moveitem) | **POST** /v1/im/emoji/items/move | |
+|[**renameGroup**](#renamegroup) | **POST** /v1/im/emoji/groups/rename | |
+|[**renameItem**](#renameitem) | **POST** /v1/im/emoji/items/rename | |
+|[**reorderGroups**](#reordergroups) | **POST** /v1/im/emoji/groups/reorder | |
+|[**reorderItems**](#reorderitems) | **POST** /v1/im/emoji/items/reorder | |
 
-# **countPrivateChatUnread**
-> CountPrivateChatUnreadResp countPrivateChatUnread(body)
+# **addItem**
+> AddEmojiItemResp addItem(addEmojiItemReq)
 
-统计当前账号的私聊未读数。
-
-### Example
-
-```typescript
-import {
-    IMService,
-    Configuration
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
-
-let body: object; //
-
-const { status, data } = await apiInstance.countPrivateChatUnread(
-    body
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **body** | **object**|  | |
-
-
-### Return type
-
-**CountPrivateChatUnreadResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **listGlobalChatMessages**
-> ListGlobalChatMessagesResp listGlobalChatMessages(listGlobalChatMessagesReq)
-
-查询全局聊天室消息。
+向分组加入已上传图片。
 
 ### Example
 
 ```typescript
 import {
-    IMService,
+    EmojiService,
     Configuration,
-    ListGlobalChatMessagesReq
+    AddEmojiItemReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
+const apiInstance = new EmojiService(configuration);
 
-let listGlobalChatMessagesReq: ListGlobalChatMessagesReq; //
+let addEmojiItemReq: AddEmojiItemReq; //
 
-const { status, data } = await apiInstance.listGlobalChatMessages(
-    listGlobalChatMessagesReq
+const { status, data } = await apiInstance.addItem(
+    addEmojiItemReq
 );
 ```
 
@@ -96,12 +45,12 @@ const { status, data } = await apiInstance.listGlobalChatMessages(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listGlobalChatMessagesReq** | **ListGlobalChatMessagesReq**|  | |
+| **addEmojiItemReq** | **AddEmojiItemReq**|  | |
 
 
 ### Return type
 
-**ListGlobalChatMessagesResp**
+**AddEmojiItemResp**
 
 ### Authorization
 
@@ -120,78 +69,27 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listGlobalChatOnlineMembers**
-> ListGlobalChatOnlineMembersResp listGlobalChatOnlineMembers(body)
+# **createGroup**
+> CreateEmojiGroupResp createGroup(createEmojiGroupReq)
 
-查询全部在线的聊天室成员。
-
-### Example
-
-```typescript
-import {
-    IMService,
-    Configuration
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
-
-let body: object; //
-
-const { status, data } = await apiInstance.listGlobalChatOnlineMembers(
-    body
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **body** | **object**|  | |
-
-
-### Return type
-
-**ListGlobalChatOnlineMembersResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **listPrivateChatMessages**
-> ListPrivateChatMessagesResp listPrivateChatMessages(listPrivateChatMessagesReq)
-
-查询私聊消息。
+创建一个表情分组。
 
 ### Example
 
 ```typescript
 import {
-    IMService,
+    EmojiService,
     Configuration,
-    ListPrivateChatMessagesReq
+    CreateEmojiGroupReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
+const apiInstance = new EmojiService(configuration);
 
-let listPrivateChatMessagesReq: ListPrivateChatMessagesReq; //
+let createEmojiGroupReq: CreateEmojiGroupReq; //
 
-const { status, data } = await apiInstance.listPrivateChatMessages(
-    listPrivateChatMessagesReq
+const { status, data } = await apiInstance.createGroup(
+    createEmojiGroupReq
 );
 ```
 
@@ -199,12 +97,12 @@ const { status, data } = await apiInstance.listPrivateChatMessages(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listPrivateChatMessagesReq** | **ListPrivateChatMessagesReq**|  | |
+| **createEmojiGroupReq** | **CreateEmojiGroupReq**|  | |
 
 
 ### Return type
 
-**ListPrivateChatMessagesResp**
+**CreateEmojiGroupResp**
 
 ### Authorization
 
@@ -223,28 +121,27 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listPrivateChatSessions**
-> ListPrivateChatSessionsResp listPrivateChatSessions()
+# **createShare**
+> CreateEmojiShareResp createShare(createEmojiShareReq)
 
-查询当前账号的私聊会话。
+生成七天有效的分组分享码。
 
 ### Example
 
 ```typescript
 import {
-    IMService,
-    Configuration
+    EmojiService,
+    Configuration,
+    CreateEmojiShareReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
+const apiInstance = new EmojiService(configuration);
 
-let pagePage: string; //页码 (optional) (default to undefined)
-let pageSize: string; //页大小 (optional) (default to undefined)
+let createEmojiShareReq: CreateEmojiShareReq; //
 
-const { status, data } = await apiInstance.listPrivateChatSessions(
-    pagePage,
-    pageSize
+const { status, data } = await apiInstance.createShare(
+    createEmojiShareReq
 );
 ```
 
@@ -252,13 +149,12 @@ const { status, data } = await apiInstance.listPrivateChatSessions(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **pagePage** | [**string**] | 页码 | (optional) defaults to undefined|
-| **pageSize** | [**string**] | 页大小 | (optional) defaults to undefined|
+| **createEmojiShareReq** | **CreateEmojiShareReq**|  | |
 
 
 ### Return type
 
-**ListPrivateChatSessionsResp**
+**CreateEmojiShareResp**
 
 ### Authorization
 
@@ -266,7 +162,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
@@ -277,27 +173,27 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **markPrivateChatSessionRead**
-> object markPrivateChatSessionRead(markPrivateChatSessionReadReq)
+# **deleteGroup**
+> object deleteGroup(deleteEmojiGroupReq)
 
-标记私聊会话已读。
+删除一个表情分组。
 
 ### Example
 
 ```typescript
 import {
-    IMService,
+    EmojiService,
     Configuration,
-    MarkPrivateChatSessionReadReq
+    DeleteEmojiGroupReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
+const apiInstance = new EmojiService(configuration);
 
-let markPrivateChatSessionReadReq: MarkPrivateChatSessionReadReq; //
+let deleteEmojiGroupReq: DeleteEmojiGroupReq; //
 
-const { status, data } = await apiInstance.markPrivateChatSessionRead(
-    markPrivateChatSessionReadReq
+const { status, data } = await apiInstance.deleteGroup(
+    deleteEmojiGroupReq
 );
 ```
 
@@ -305,7 +201,7 @@ const { status, data } = await apiInstance.markPrivateChatSessionRead(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **markPrivateChatSessionReadReq** | **MarkPrivateChatSessionReadReq**|  | |
+| **deleteEmojiGroupReq** | **DeleteEmojiGroupReq**|  | |
 
 
 ### Return type
@@ -329,27 +225,27 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **revokeGlobalChatMessage**
-> RevokeGlobalChatMessageResp revokeGlobalChatMessage(revokeGlobalChatMessageReq)
+# **deleteItem**
+> object deleteItem(deleteEmojiItemReq)
 
-撤回自己的全局聊天室消息。
+从分组移除表情。
 
 ### Example
 
 ```typescript
 import {
-    IMService,
+    EmojiService,
     Configuration,
-    RevokeGlobalChatMessageReq
+    DeleteEmojiItemReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
+const apiInstance = new EmojiService(configuration);
 
-let revokeGlobalChatMessageReq: RevokeGlobalChatMessageReq; //
+let deleteEmojiItemReq: DeleteEmojiItemReq; //
 
-const { status, data } = await apiInstance.revokeGlobalChatMessage(
-    revokeGlobalChatMessageReq
+const { status, data } = await apiInstance.deleteItem(
+    deleteEmojiItemReq
 );
 ```
 
@@ -357,215 +253,7 @@ const { status, data } = await apiInstance.revokeGlobalChatMessage(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **revokeGlobalChatMessageReq** | **RevokeGlobalChatMessageReq**|  | |
-
-
-### Return type
-
-**RevokeGlobalChatMessageResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **revokePrivateChatMessage**
-> RevokePrivateChatMessageResp revokePrivateChatMessage(revokePrivateChatMessageReq)
-
-撤回私聊消息。
-
-### Example
-
-```typescript
-import {
-    IMService,
-    Configuration,
-    RevokePrivateChatMessageReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
-
-let revokePrivateChatMessageReq: RevokePrivateChatMessageReq; //
-
-const { status, data } = await apiInstance.revokePrivateChatMessage(
-    revokePrivateChatMessageReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **revokePrivateChatMessageReq** | **RevokePrivateChatMessageReq**|  | |
-
-
-### Return type
-
-**RevokePrivateChatMessageResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **sendGlobalChatMessage**
-> SendGlobalChatMessageResp sendGlobalChatMessage(sendGlobalChatMessageReq)
-
-发送全局聊天室消息。
-
-### Example
-
-```typescript
-import {
-    IMService,
-    Configuration,
-    SendGlobalChatMessageReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
-
-let sendGlobalChatMessageReq: SendGlobalChatMessageReq; //
-
-const { status, data } = await apiInstance.sendGlobalChatMessage(
-    sendGlobalChatMessageReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **sendGlobalChatMessageReq** | **SendGlobalChatMessageReq**|  | |
-
-
-### Return type
-
-**SendGlobalChatMessageResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **sendPrivateChatMessage**
-> SendPrivateChatMessageResp sendPrivateChatMessage(sendPrivateChatMessageReq)
-
-发送私聊消息。
-
-### Example
-
-```typescript
-import {
-    IMService,
-    Configuration,
-    SendPrivateChatMessageReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
-
-let sendPrivateChatMessageReq: SendPrivateChatMessageReq; //
-
-const { status, data } = await apiInstance.sendPrivateChatMessage(
-    sendPrivateChatMessageReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **sendPrivateChatMessageReq** | **SendPrivateChatMessageReq**|  | |
-
-
-### Return type
-
-**SendPrivateChatMessageResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **setPrivateChatSessionMuted**
-> object setPrivateChatSessionMuted(setPrivateChatSessionMutedReq)
-
-设置私聊会话免打扰。
-
-### Example
-
-```typescript
-import {
-    IMService,
-    Configuration,
-    SetPrivateChatSessionMutedReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
-
-let setPrivateChatSessionMutedReq: SetPrivateChatSessionMutedReq; //
-
-const { status, data } = await apiInstance.setPrivateChatSessionMuted(
-    setPrivateChatSessionMutedReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **setPrivateChatSessionMutedReq** | **SetPrivateChatSessionMutedReq**|  | |
+| **deleteEmojiItemReq** | **DeleteEmojiItemReq**|  | |
 
 
 ### Return type
@@ -589,27 +277,27 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **setPrivateChatSessionPinned**
-> object setPrivateChatSessionPinned(setPrivateChatSessionPinnedReq)
+# **importShare**
+> ImportEmojiShareResp importShare(importEmojiShareReq)
 
-设置私聊会话置顶。
+把分享码导入为一个新分组。
 
 ### Example
 
 ```typescript
 import {
-    IMService,
+    EmojiService,
     Configuration,
-    SetPrivateChatSessionPinnedReq
+    ImportEmojiShareReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new IMService(configuration);
+const apiInstance = new EmojiService(configuration);
 
-let setPrivateChatSessionPinnedReq: SetPrivateChatSessionPinnedReq; //
+let importEmojiShareReq: ImportEmojiShareReq; //
 
-const { status, data } = await apiInstance.setPrivateChatSessionPinned(
-    setPrivateChatSessionPinnedReq
+const { status, data } = await apiInstance.importShare(
+    importEmojiShareReq
 );
 ```
 
@@ -617,7 +305,319 @@ const { status, data } = await apiInstance.setPrivateChatSessionPinned(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **setPrivateChatSessionPinnedReq** | **SetPrivateChatSessionPinnedReq**|  | |
+| **importEmojiShareReq** | **ImportEmojiShareReq**|  | |
+
+
+### Return type
+
+**ImportEmojiShareResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list**
+> ListEmojiGroupsResp list(listEmojiGroupsReq)
+
+查询当前账号的表情分组。
+
+### Example
+
+```typescript
+import {
+    EmojiService,
+    Configuration,
+    ListEmojiGroupsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new EmojiService(configuration);
+
+let listEmojiGroupsReq: ListEmojiGroupsReq; //
+
+const { status, data } = await apiInstance.list(
+    listEmojiGroupsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listEmojiGroupsReq** | **ListEmojiGroupsReq**|  | |
+
+
+### Return type
+
+**ListEmojiGroupsResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **moveItem**
+> MoveEmojiItemResp moveItem(moveEmojiItemReq)
+
+将表情移动到另一个当前账号分组。
+
+### Example
+
+```typescript
+import {
+    EmojiService,
+    Configuration,
+    MoveEmojiItemReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new EmojiService(configuration);
+
+let moveEmojiItemReq: MoveEmojiItemReq; //
+
+const { status, data } = await apiInstance.moveItem(
+    moveEmojiItemReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **moveEmojiItemReq** | **MoveEmojiItemReq**|  | |
+
+
+### Return type
+
+**MoveEmojiItemResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **renameGroup**
+> RenameEmojiGroupResp renameGroup(renameEmojiGroupReq)
+
+重命名一个表情分组。
+
+### Example
+
+```typescript
+import {
+    EmojiService,
+    Configuration,
+    RenameEmojiGroupReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new EmojiService(configuration);
+
+let renameEmojiGroupReq: RenameEmojiGroupReq; //
+
+const { status, data } = await apiInstance.renameGroup(
+    renameEmojiGroupReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **renameEmojiGroupReq** | **RenameEmojiGroupReq**|  | |
+
+
+### Return type
+
+**RenameEmojiGroupResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **renameItem**
+> RenameEmojiItemResp renameItem(renameEmojiItemReq)
+
+重命名一个表情别名。
+
+### Example
+
+```typescript
+import {
+    EmojiService,
+    Configuration,
+    RenameEmojiItemReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new EmojiService(configuration);
+
+let renameEmojiItemReq: RenameEmojiItemReq; //
+
+const { status, data } = await apiInstance.renameItem(
+    renameEmojiItemReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **renameEmojiItemReq** | **RenameEmojiItemReq**|  | |
+
+
+### Return type
+
+**RenameEmojiItemResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **reorderGroups**
+> object reorderGroups(reorderEmojiGroupsReq)
+
+重排表情分组。
+
+### Example
+
+```typescript
+import {
+    EmojiService,
+    Configuration,
+    ReorderEmojiGroupsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new EmojiService(configuration);
+
+let reorderEmojiGroupsReq: ReorderEmojiGroupsReq; //
+
+const { status, data } = await apiInstance.reorderGroups(
+    reorderEmojiGroupsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **reorderEmojiGroupsReq** | **ReorderEmojiGroupsReq**|  | |
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **reorderItems**
+> object reorderItems(reorderEmojiItemsReq)
+
+重排同一分组内的表情。
+
+### Example
+
+```typescript
+import {
+    EmojiService,
+    Configuration,
+    ReorderEmojiItemsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new EmojiService(configuration);
+
+let reorderEmojiItemsReq: ReorderEmojiItemsReq; //
+
+const { status, data } = await apiInstance.reorderItems(
+    reorderEmojiItemsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **reorderEmojiItemsReq** | **ReorderEmojiItemsReq**|  | |
 
 
 ### Return type

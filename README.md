@@ -104,19 +104,27 @@ Class | Method | HTTP request | Description
 *DomainService* | [**create**](docs/DomainService.md#create) | **POST** /v1/content/domain/create | 
 *DomainService* | [**list**](docs/DomainService.md#list) | **POST** /v1/content/domain/list | 
 *DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
+*EmojiService* | [**addItem**](docs/EmojiService.md#additem) | **POST** /v1/im/emoji/items | 
+*EmojiService* | [**createGroup**](docs/EmojiService.md#creategroup) | **POST** /v1/im/emoji/groups | 
+*EmojiService* | [**createShare**](docs/EmojiService.md#createshare) | **POST** /v1/im/emoji/shares | 
+*EmojiService* | [**deleteGroup**](docs/EmojiService.md#deletegroup) | **POST** /v1/im/emoji/groups/delete | 
+*EmojiService* | [**deleteItem**](docs/EmojiService.md#deleteitem) | **POST** /v1/im/emoji/items/delete | 
+*EmojiService* | [**importShare**](docs/EmojiService.md#importshare) | **POST** /v1/im/emoji/shares/import | 
+*EmojiService* | [**list**](docs/EmojiService.md#list) | **POST** /v1/im/emoji/groups/list | 
+*EmojiService* | [**moveItem**](docs/EmojiService.md#moveitem) | **POST** /v1/im/emoji/items/move | 
+*EmojiService* | [**renameGroup**](docs/EmojiService.md#renamegroup) | **POST** /v1/im/emoji/groups/rename | 
+*EmojiService* | [**renameItem**](docs/EmojiService.md#renameitem) | **POST** /v1/im/emoji/items/rename | 
+*EmojiService* | [**reorderGroups**](docs/EmojiService.md#reordergroups) | **POST** /v1/im/emoji/groups/reorder | 
+*EmojiService* | [**reorderItems**](docs/EmojiService.md#reorderitems) | **POST** /v1/im/emoji/items/reorder | 
+*GlobalChatService* | [**getGlobalChatTopic**](docs/GlobalChatService.md#getglobalchattopic) | **POST** /v1/im/global-chat/topic/get | 
+*GlobalChatService* | [**listGlobalChatBarrages**](docs/GlobalChatService.md#listglobalchatbarrages) | **POST** /v1/im/global-chat/barrages/list | 
+*GlobalChatService* | [**listGlobalChatMessages**](docs/GlobalChatService.md#listglobalchatmessages) | **POST** /v1/im/global-chat/messages/list | 
+*GlobalChatService* | [**listGlobalChatOnlineMembers**](docs/GlobalChatService.md#listglobalchatonlinemembers) | **POST** /v1/im/global-chat/online-members/list | 
+*GlobalChatService* | [**revokeGlobalChatMessage**](docs/GlobalChatService.md#revokeglobalchatmessage) | **POST** /v1/im/global-chat/messages/revoke | 
+*GlobalChatService* | [**sendGlobalChatBarrage**](docs/GlobalChatService.md#sendglobalchatbarrage) | **POST** /v1/im/global-chat/barrages | 
+*GlobalChatService* | [**sendGlobalChatMessage**](docs/GlobalChatService.md#sendglobalchatmessage) | **POST** /v1/im/global-chat/messages | 
+*GlobalChatService* | [**setGlobalChatTopic**](docs/GlobalChatService.md#setglobalchattopic) | **POST** /v1/im/global-chat/topic/set | 
 *HolidayService* | [**getCurrent**](docs/HolidayService.md#getcurrent) | **POST** /v1/platform/holiday/get-current | 
-*IMService* | [**countPrivateChatUnread**](docs/IMService.md#countprivatechatunread) | **POST** /v1/im/private-chat/unread-count | 
-*IMService* | [**listGlobalChatMessages**](docs/IMService.md#listglobalchatmessages) | **POST** /v1/im/global-chat/messages/list | 
-*IMService* | [**listGlobalChatOnlineMembers**](docs/IMService.md#listglobalchatonlinemembers) | **POST** /v1/im/global-chat/online-members/list | 
-*IMService* | [**listPrivateChatMessages**](docs/IMService.md#listprivatechatmessages) | **POST** /v1/im/private-chat/messages/list | 
-*IMService* | [**listPrivateChatSessions**](docs/IMService.md#listprivatechatsessions) | **GET** /v1/im/private-chat/sessions | 
-*IMService* | [**markPrivateChatSessionRead**](docs/IMService.md#markprivatechatsessionread) | **POST** /v1/im/private-chat/read | 
-*IMService* | [**revokeGlobalChatMessage**](docs/IMService.md#revokeglobalchatmessage) | **POST** /v1/im/global-chat/messages/revoke | 
-*IMService* | [**revokePrivateChatMessage**](docs/IMService.md#revokeprivatechatmessage) | **POST** /v1/im/private-chat/messages/revoke | 
-*IMService* | [**sendGlobalChatMessage**](docs/IMService.md#sendglobalchatmessage) | **POST** /v1/im/global-chat/messages | 
-*IMService* | [**sendPrivateChatMessage**](docs/IMService.md#sendprivatechatmessage) | **POST** /v1/im/private-chat/messages | 
-*IMService* | [**setPrivateChatSessionMuted**](docs/IMService.md#setprivatechatsessionmuted) | **POST** /v1/im/private-chat/muted | 
-*IMService* | [**setPrivateChatSessionPinned**](docs/IMService.md#setprivatechatsessionpinned) | **POST** /v1/im/private-chat/pinned | 
 *LocationService* | [**getCurrent**](docs/LocationService.md#getcurrent) | **POST** /v1/platform/location/get-current | 
 *MoonbreezeService* | [**create**](docs/MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
 *MoonbreezeService* | [**pageMember**](docs/MoonbreezeService.md#pagemember) | **POST** /v1/content/moonbreeze/page-member | 
@@ -137,6 +145,14 @@ Class | Method | HTTP request | Description
 *PreferencesService* | [**updateCurrent**](docs/PreferencesService.md#updatecurrent) | **POST** /v1/user/preference/update-current | 
 *PrivacySettingService* | [**getCurrent**](docs/PrivacySettingService.md#getcurrent) | **POST** /v1/user/privacy-setting/get-current | 
 *PrivacySettingService* | [**updateCurrent**](docs/PrivacySettingService.md#updatecurrent) | **POST** /v1/user/privacy-setting/update-current | 
+*PrivateChatService* | [**countPrivateChatUnread**](docs/PrivateChatService.md#countprivatechatunread) | **POST** /v1/im/private-chat/unread-count | 
+*PrivateChatService* | [**listPrivateChatMessages**](docs/PrivateChatService.md#listprivatechatmessages) | **POST** /v1/im/private-chat/messages/list | 
+*PrivateChatService* | [**listPrivateChatSessions**](docs/PrivateChatService.md#listprivatechatsessions) | **GET** /v1/im/private-chat/sessions | 
+*PrivateChatService* | [**markPrivateChatSessionRead**](docs/PrivateChatService.md#markprivatechatsessionread) | **POST** /v1/im/private-chat/read | 
+*PrivateChatService* | [**revokePrivateChatMessage**](docs/PrivateChatService.md#revokeprivatechatmessage) | **POST** /v1/im/private-chat/messages/revoke | 
+*PrivateChatService* | [**sendPrivateChatMessage**](docs/PrivateChatService.md#sendprivatechatmessage) | **POST** /v1/im/private-chat/messages | 
+*PrivateChatService* | [**setPrivateChatSessionMuted**](docs/PrivateChatService.md#setprivatechatsessionmuted) | **POST** /v1/im/private-chat/muted | 
+*PrivateChatService* | [**setPrivateChatSessionPinned**](docs/PrivateChatService.md#setprivatechatsessionpinned) | **POST** /v1/im/private-chat/pinned | 
 *RealtimeService* | [**createTicket**](docs/RealtimeService.md#createticket) | **POST** /v1/realtime/ticket | 
 *RelationService* | [**block**](docs/RelationService.md#block) | **POST** /v1/user/relation/block | 
 *RelationService* | [**follow**](docs/RelationService.md#follow) | **POST** /v1/user/relation/follow | 
@@ -160,6 +176,8 @@ Class | Method | HTTP request | Description
  - [AccountContact](docs/AccountContact.md)
  - [AccountProfile](docs/AccountProfile.md)
  - [AccountProfileListItem](docs/AccountProfileListItem.md)
+ - [AddEmojiItemReq](docs/AddEmojiItemReq.md)
+ - [AddEmojiItemResp](docs/AddEmojiItemResp.md)
  - [AddPostscriptReq](docs/AddPostscriptReq.md)
  - [AddPostscriptResp](docs/AddPostscriptResp.md)
  - [ArchiveArticleReq](docs/ArchiveArticleReq.md)
@@ -201,13 +219,21 @@ Class | Method | HTTP request | Description
  - [CreateDomainResp](docs/CreateDomainResp.md)
  - [CreateDraftArticleReq](docs/CreateDraftArticleReq.md)
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
+ - [CreateEmojiGroupReq](docs/CreateEmojiGroupReq.md)
+ - [CreateEmojiGroupResp](docs/CreateEmojiGroupResp.md)
+ - [CreateEmojiShareReq](docs/CreateEmojiShareReq.md)
+ - [CreateEmojiShareResp](docs/CreateEmojiShareResp.md)
  - [CreateMoonbreezeReq](docs/CreateMoonbreezeReq.md)
  - [CreateMoonbreezeResp](docs/CreateMoonbreezeResp.md)
  - [CreateRealtimeTicketResp](docs/CreateRealtimeTicketResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
+ - [DeleteEmojiGroupReq](docs/DeleteEmojiGroupReq.md)
+ - [DeleteEmojiItemReq](docs/DeleteEmojiItemReq.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
  - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
+ - [EmojiGroup](docs/EmojiGroup.md)
+ - [EmojiItem](docs/EmojiItem.md)
  - [EnterArticleLotteryReq](docs/EnterArticleLotteryReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
  - [GetArticleReq](docs/GetArticleReq.md)
@@ -220,14 +246,19 @@ Class | Method | HTTP request | Description
  - [GetCurrentPreferencesResp](docs/GetCurrentPreferencesResp.md)
  - [GetCurrentPrivacySettingResp](docs/GetCurrentPrivacySettingResp.md)
  - [GetCurrentTotpResp](docs/GetCurrentTotpResp.md)
+ - [GetGlobalChatTopicResp](docs/GetGlobalChatTopicResp.md)
  - [GetProfileReq](docs/GetProfileReq.md)
  - [GetProfileResp](docs/GetProfileResp.md)
  - [GetStatusRelationReq](docs/GetStatusRelationReq.md)
  - [GetStatusRelationResp](docs/GetStatusRelationResp.md)
+ - [GlobalChatBarrage](docs/GlobalChatBarrage.md)
  - [GlobalChatMember](docs/GlobalChatMember.md)
  - [GlobalChatMessage](docs/GlobalChatMessage.md)
  - [GlobalChatOnlineMember](docs/GlobalChatOnlineMember.md)
+ - [GlobalChatTopic](docs/GlobalChatTopic.md)
  - [ImageResp](docs/ImageResp.md)
+ - [ImportEmojiShareReq](docs/ImportEmojiShareReq.md)
+ - [ImportEmojiShareResp](docs/ImportEmojiShareResp.md)
  - [LikeArticleReq](docs/LikeArticleReq.md)
  - [LikeArticleResp](docs/LikeArticleResp.md)
  - [LikeCommentReq](docs/LikeCommentReq.md)
@@ -248,6 +279,8 @@ Class | Method | HTTP request | Description
  - [ListCommentsResp](docs/ListCommentsResp.md)
  - [ListDomainsReq](docs/ListDomainsReq.md)
  - [ListDomainsResp](docs/ListDomainsResp.md)
+ - [ListEmojiGroupsReq](docs/ListEmojiGroupsReq.md)
+ - [ListEmojiGroupsResp](docs/ListEmojiGroupsResp.md)
  - [ListFollowersRelationsReq](docs/ListFollowersRelationsReq.md)
  - [ListFollowersRelationsResp](docs/ListFollowersRelationsResp.md)
  - [ListFollowersReq](docs/ListFollowersReq.md)
@@ -258,6 +291,8 @@ Class | Method | HTTP request | Description
  - [ListFollowingRelationsResp](docs/ListFollowingRelationsResp.md)
  - [ListFollowingReq](docs/ListFollowingReq.md)
  - [ListFollowingResp](docs/ListFollowingResp.md)
+ - [ListGlobalChatBarragesReq](docs/ListGlobalChatBarragesReq.md)
+ - [ListGlobalChatBarragesResp](docs/ListGlobalChatBarragesResp.md)
  - [ListGlobalChatMessagesReq](docs/ListGlobalChatMessagesReq.md)
  - [ListGlobalChatMessagesResp](docs/ListGlobalChatMessagesResp.md)
  - [ListGlobalChatOnlineMembersResp](docs/ListGlobalChatOnlineMembersResp.md)
@@ -278,6 +313,8 @@ Class | Method | HTTP request | Description
  - [MarkReadNotificationReq](docs/MarkReadNotificationReq.md)
  - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
  - [Moonbreeze](docs/Moonbreeze.md)
+ - [MoveEmojiItemReq](docs/MoveEmojiItemReq.md)
+ - [MoveEmojiItemResp](docs/MoveEmojiItemResp.md)
  - [PageArticleViewHistoryReq](docs/PageArticleViewHistoryReq.md)
  - [PageArticleViewHistoryResp](docs/PageArticleViewHistoryResp.md)
  - [PageMemberMoonbreezesReq](docs/PageMemberMoonbreezesReq.md)
@@ -302,6 +339,12 @@ Class | Method | HTTP request | Description
  - [RefreshTokenResp](docs/RefreshTokenResp.md)
  - [RegisterReq](docs/RegisterReq.md)
  - [Relation](docs/Relation.md)
+ - [RenameEmojiGroupReq](docs/RenameEmojiGroupReq.md)
+ - [RenameEmojiGroupResp](docs/RenameEmojiGroupResp.md)
+ - [RenameEmojiItemReq](docs/RenameEmojiItemReq.md)
+ - [RenameEmojiItemResp](docs/RenameEmojiItemResp.md)
+ - [ReorderEmojiGroupsReq](docs/ReorderEmojiGroupsReq.md)
+ - [ReorderEmojiItemsReq](docs/ReorderEmojiItemsReq.md)
  - [ReqArticle](docs/ReqArticle.md)
  - [ReqArticleQuery](docs/ReqArticleQuery.md)
  - [ReqCommentQuery](docs/ReqCommentQuery.md)
@@ -343,12 +386,16 @@ Class | Method | HTTP request | Description
  - [SearchMentionAccountsResp](docs/SearchMentionAccountsResp.md)
  - [SendEmailOtpReq](docs/SendEmailOtpReq.md)
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
+ - [SendGlobalChatBarrageReq](docs/SendGlobalChatBarrageReq.md)
+ - [SendGlobalChatBarrageResp](docs/SendGlobalChatBarrageResp.md)
  - [SendGlobalChatMessageReq](docs/SendGlobalChatMessageReq.md)
  - [SendGlobalChatMessageResp](docs/SendGlobalChatMessageResp.md)
  - [SendPhoneOtpReq](docs/SendPhoneOtpReq.md)
  - [SendPhoneOtpResp](docs/SendPhoneOtpResp.md)
  - [SendPrivateChatMessageReq](docs/SendPrivateChatMessageReq.md)
  - [SendPrivateChatMessageResp](docs/SendPrivateChatMessageResp.md)
+ - [SetGlobalChatTopicReq](docs/SetGlobalChatTopicReq.md)
+ - [SetGlobalChatTopicResp](docs/SetGlobalChatTopicResp.md)
  - [SetPinnedArticleCommentReq](docs/SetPinnedArticleCommentReq.md)
  - [SetPrivateChatSessionMutedReq](docs/SetPrivateChatSessionMutedReq.md)
  - [SetPrivateChatSessionPinnedReq](docs/SetPrivateChatSessionPinnedReq.md)

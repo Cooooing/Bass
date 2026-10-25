@@ -27,10 +27,10 @@ export interface ThankCommentReq {
     id: string;
     /**
      * 
-     * @type {boolean}
+     * @type {string}
      * @memberof ThankCommentReq
      */
-    active: boolean;
+    clientRequestId: string;
 }
 
 /**
@@ -38,7 +38,7 @@ export interface ThankCommentReq {
  */
 export function instanceOfThankCommentReq(value: object): value is ThankCommentReq {
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('active' in value) || value['active'] === undefined) return false;
+    if (!('clientRequestId' in value) || value['clientRequestId'] === undefined) return false;
     return true;
 }
 
@@ -53,7 +53,7 @@ export function ThankCommentReqFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': json['id'],
-        'active': json['active'],
+        'clientRequestId': json['client_request_id'],
     };
 }
 
@@ -69,7 +69,7 @@ export function ThankCommentReqToJSONTyped(value?: ThankCommentReq | null, ignor
     return {
         
         'id': value['id'],
-        'active': value['active'],
+        'client_request_id': value['clientRequestId'],
     };
 }
 

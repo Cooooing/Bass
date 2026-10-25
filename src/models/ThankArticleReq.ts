@@ -27,10 +27,10 @@ export interface ThankArticleReq {
     articleId: string;
     /**
      * 
-     * @type {boolean}
+     * @type {string}
      * @memberof ThankArticleReq
      */
-    active: boolean;
+    clientRequestId: string;
 }
 
 /**
@@ -38,7 +38,7 @@ export interface ThankArticleReq {
  */
 export function instanceOfThankArticleReq(value: object): value is ThankArticleReq {
     if (!('articleId' in value) || value['articleId'] === undefined) return false;
-    if (!('active' in value) || value['active'] === undefined) return false;
+    if (!('clientRequestId' in value) || value['clientRequestId'] === undefined) return false;
     return true;
 }
 
@@ -53,7 +53,7 @@ export function ThankArticleReqFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'articleId': json['article_id'],
-        'active': json['active'],
+        'clientRequestId': json['client_request_id'],
     };
 }
 
@@ -69,7 +69,7 @@ export function ThankArticleReqToJSONTyped(value?: ThankArticleReq | null, ignor
     return {
         
         'article_id': value['articleId'],
-        'active': value['active'],
+        'client_request_id': value['clientRequestId'],
     };
 }
 

@@ -7,7 +7,7 @@
 Name | Type
 ------------ | -------------
 `id` | string
-`active` | boolean
+`clientRequestId` | string
 
 ## Example
 
@@ -17,7 +17,7 @@ import type { ThankCommentReq } from '@bass/bbs-sdk-fetch'
 // TODO: Update the object below with actual values
 const example = {
   "id": null,
-  "active": null,
+  "clientRequestId": null,
 } satisfies ThankCommentReq
 
 console.log(example)

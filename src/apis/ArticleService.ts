@@ -617,7 +617,7 @@ export interface ArticleServiceInterface {
     thankRequestOpts(requestParameters: ThankRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 感谢文章
+     * 感谢文章，确认后不可撤销。
      * @param {ThankArticleReq} thankArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -626,7 +626,7 @@ export interface ArticleServiceInterface {
     thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankArticleResp>>;
 
     /**
-     * 感谢文章
+     * 感谢文章，确认后不可撤销。
      */
     thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankArticleResp>;
 
@@ -1485,7 +1485,7 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
-     * 感谢文章
+     * 感谢文章，确认后不可撤销。
      */
     async thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankArticleResp>> {
         const requestOptions = await this.thankRequestOpts(requestParameters);
@@ -1495,7 +1495,7 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
-     * 感谢文章
+     * 感谢文章，确认后不可撤销。
      */
     async thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankArticleResp> {
         const response = await this.thankRaw(requestParameters, initOverrides);

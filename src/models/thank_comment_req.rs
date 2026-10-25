@@ -15,15 +15,15 @@ use serde::{Deserialize, Serialize};
 pub struct ThankCommentReq {
     #[serde(rename = "id")]
     pub id: String,
-    #[serde(rename = "active")]
-    pub active: bool,
+    #[serde(rename = "client_request_id")]
+    pub client_request_id: String,
 }
 
 impl ThankCommentReq {
-    pub fn new(id: String, active: bool) -> ThankCommentReq {
+    pub fn new(id: String, client_request_id: String) -> ThankCommentReq {
         ThankCommentReq {
             id,
-            active,
+            client_request_id,
         }
     }
 }

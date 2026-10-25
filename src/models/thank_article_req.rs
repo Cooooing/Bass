@@ -15,15 +15,15 @@ use serde::{Deserialize, Serialize};
 pub struct ThankArticleReq {
     #[serde(rename = "article_id")]
     pub article_id: String,
-    #[serde(rename = "active")]
-    pub active: bool,
+    #[serde(rename = "client_request_id")]
+    pub client_request_id: String,
 }
 
 impl ThankArticleReq {
-    pub fn new(article_id: String, active: bool) -> ThankArticleReq {
+    pub fn new(article_id: String, client_request_id: String) -> ThankArticleReq {
         ThankArticleReq {
             article_id,
-            active,
+            client_request_id,
         }
     }
 }

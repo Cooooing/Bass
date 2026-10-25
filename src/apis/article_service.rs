@@ -102,7 +102,7 @@ pub trait ArticleService: Send + Sync {
 
     /// POST /v1/content/article/thank
     ///
-    /// 感谢文章
+    /// 感谢文章，确认后不可撤销。
     async fn thank<'thank_article_req>(&self, thank_article_req: models::ThankArticleReq) -> Result<models::ThankArticleResp, Error<ThankError>>;
 
     /// POST /v1/content/article/draft/update
@@ -759,7 +759,7 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
-    /// 感谢文章
+    /// 感谢文章，确认后不可撤销。
     async fn thank<'thank_article_req>(&self, thank_article_req: models::ThankArticleReq) -> Result<models::ThankArticleResp, Error<ThankError>> {
         let local_var_configuration = &self.configuration;
 

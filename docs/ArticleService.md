@@ -512,7 +512,7 @@ No authorization required
 > models::ThankArticleResp thank(thank_article_req)
 
 
-感谢文章
+感谢文章，确认后不可撤销。
 
 ### Parameters
 

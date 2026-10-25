@@ -2453,7 +2453,7 @@ No authorization required
 
 
 
-感谢文章
+感谢文章，确认后不可撤销。
 
 ### Example
 
@@ -2521,7 +2521,7 @@ No authorization required
 
 
 
-感谢文章
+感谢文章，确认后不可撤销。
 
 ### Example
 

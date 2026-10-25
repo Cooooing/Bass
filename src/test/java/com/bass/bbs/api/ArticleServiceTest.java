@@ -403,7 +403,7 @@ public class ArticleServiceTest {
     /**
      * 
      *
-     * 感谢文章
+     * 感谢文章，确认后不可撤销。
      *
      * @throws ApiException
      *          if the Api call fails

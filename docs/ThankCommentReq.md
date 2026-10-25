@@ -8,7 +8,7 @@
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
 |**id** | **String** |  |  |
-|**active** | **Boolean** |  |  |
+|**clientRequestId** | **String** |  |  |
 
 
 

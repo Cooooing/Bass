@@ -34,7 +34,7 @@ import com.bass.bbs.ApiClient;
  */
 @JsonPropertyOrder({
   ThankArticleReq.JSON_PROPERTY_ARTICLE_ID,
-  ThankArticleReq.JSON_PROPERTY_ACTIVE
+  ThankArticleReq.JSON_PROPERTY_CLIENT_REQUEST_ID
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ThankArticleReq {
@@ -42,9 +42,9 @@ public class ThankArticleReq {
   @javax.annotation.Nonnull
   private String articleId;
 
-  public static final String JSON_PROPERTY_ACTIVE = "active";
+  public static final String JSON_PROPERTY_CLIENT_REQUEST_ID = "client_request_id";
   @javax.annotation.Nonnull
-  private Boolean active;
+  private String clientRequestId;
 
   public ThankArticleReq() { 
   }
@@ -73,27 +73,27 @@ public class ThankArticleReq {
   }
 
 
-  public ThankArticleReq active(@javax.annotation.Nonnull Boolean active) {
-    this.active = active;
+  public ThankArticleReq clientRequestId(@javax.annotation.Nonnull String clientRequestId) {
+    this.clientRequestId = clientRequestId;
     return this;
   }
 
   /**
-   * Get active
-   * @return active
+   * Get clientRequestId
+   * @return clientRequestId
    */
   @javax.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ACTIVE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public Boolean getActive() {
-    return active;
+  public String getClientRequestId() {
+    return clientRequestId;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_ACTIVE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setActive(@javax.annotation.Nonnull Boolean active) {
-    this.active = active;
+  public void setClientRequestId(@javax.annotation.Nonnull String clientRequestId) {
+    this.clientRequestId = clientRequestId;
   }
 
 
@@ -110,12 +110,12 @@ public class ThankArticleReq {
     }
     ThankArticleReq thankArticleReq = (ThankArticleReq) o;
     return Objects.equals(this.articleId, thankArticleReq.articleId) &&
-        Objects.equals(this.active, thankArticleReq.active);
+        Objects.equals(this.clientRequestId, thankArticleReq.clientRequestId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(articleId, active);
+    return Objects.hash(articleId, clientRequestId);
   }
 
   @Override
@@ -123,7 +123,7 @@ public class ThankArticleReq {
     StringBuilder sb = new StringBuilder();
     sb.append("class ThankArticleReq {\n");
     sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
-    sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    clientRequestId: ").append(toIndentedString(clientRequestId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -173,9 +173,9 @@ public class ThankArticleReq {
       joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleId()))));
     }
 
-    // add `active` to the URL query string
-    if (getActive() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sactive%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getActive()))));
+    // add `client_request_id` to the URL query string
+    if (getClientRequestId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sclient_request_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getClientRequestId()))));
     }
 
     return joiner.toString();

@@ -34,7 +34,7 @@ import com.bass.bbs.ApiClient;
  */
 @JsonPropertyOrder({
   ThankCommentReq.JSON_PROPERTY_ID,
-  ThankCommentReq.JSON_PROPERTY_ACTIVE
+  ThankCommentReq.JSON_PROPERTY_CLIENT_REQUEST_ID
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ThankCommentReq {
@@ -42,9 +42,9 @@ public class ThankCommentReq {
   @javax.annotation.Nonnull
   private String id;
 
-  public static final String JSON_PROPERTY_ACTIVE = "active";
+  public static final String JSON_PROPERTY_CLIENT_REQUEST_ID = "client_request_id";
   @javax.annotation.Nonnull
-  private Boolean active;
+  private String clientRequestId;
 
   public ThankCommentReq() { 
   }
@@ -73,27 +73,27 @@ public class ThankCommentReq {
   }
 
 
-  public ThankCommentReq active(@javax.annotation.Nonnull Boolean active) {
-    this.active = active;
+  public ThankCommentReq clientRequestId(@javax.annotation.Nonnull String clientRequestId) {
+    this.clientRequestId = clientRequestId;
     return this;
   }
 
   /**
-   * Get active
-   * @return active
+   * Get clientRequestId
+   * @return clientRequestId
    */
   @javax.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_ACTIVE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public Boolean getActive() {
-    return active;
+  public String getClientRequestId() {
+    return clientRequestId;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_ACTIVE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setActive(@javax.annotation.Nonnull Boolean active) {
-    this.active = active;
+  public void setClientRequestId(@javax.annotation.Nonnull String clientRequestId) {
+    this.clientRequestId = clientRequestId;
   }
 
 
@@ -110,12 +110,12 @@ public class ThankCommentReq {
     }
     ThankCommentReq thankCommentReq = (ThankCommentReq) o;
     return Objects.equals(this.id, thankCommentReq.id) &&
-        Objects.equals(this.active, thankCommentReq.active);
+        Objects.equals(this.clientRequestId, thankCommentReq.clientRequestId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, active);
+    return Objects.hash(id, clientRequestId);
   }
 
   @Override
@@ -123,7 +123,7 @@ public class ThankCommentReq {
     StringBuilder sb = new StringBuilder();
     sb.append("class ThankCommentReq {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    clientRequestId: ").append(toIndentedString(clientRequestId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -173,9 +173,9 @@ public class ThankCommentReq {
       joiner.add(String.format(java.util.Locale.ROOT, "%sid%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getId()))));
     }
 
-    // add `active` to the URL query string
-    if (getActive() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sactive%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getActive()))));
+    // add `client_request_id` to the URL query string
+    if (getClientRequestId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sclient_request_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getClientRequestId()))));
     }
 
     return joiner.toString();

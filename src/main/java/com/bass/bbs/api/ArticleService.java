@@ -3410,7 +3410,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param apiRequest {@link APIThankRequest}
    * @return ThankArticleResp
    * @throws ApiException if fails to make API call
@@ -3421,7 +3421,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param apiRequest {@link APIThankRequest}
    * @param headers Optional headers to include in the request
    * @return ThankArticleResp
@@ -3435,7 +3435,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param apiRequest {@link APIThankRequest}
    * @return ApiResponse&lt;ThankArticleResp&gt;
    * @throws ApiException if fails to make API call
@@ -3446,7 +3446,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param apiRequest {@link APIThankRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ThankArticleResp&gt;
@@ -3459,7 +3459,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param thankArticleReq  (required)
    * @return ThankArticleResp
    * @throws ApiException if fails to make API call
@@ -3470,7 +3470,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param thankArticleReq  (required)
    * @param headers Optional headers to include in the request
    * @return ThankArticleResp
@@ -3483,7 +3483,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param thankArticleReq  (required)
    * @return ApiResponse&lt;ThankArticleResp&gt;
    * @throws ApiException if fails to make API call
@@ -3494,7 +3494,7 @@ public class ArticleService {
 
   /**
    * 
-   * 感谢文章
+   * 感谢文章，确认后不可撤销。
    * @param thankArticleReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ThankArticleResp&gt;

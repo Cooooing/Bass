@@ -22,7 +22,7 @@ var _ MappedNullable = &ThankArticleReq{}
 // ThankArticleReq struct for ThankArticleReq
 type ThankArticleReq struct {
 	ArticleId string `json:"article_id"`
-	Active bool `json:"active"`
+	ClientRequestId string `json:"client_request_id"`
 }
 
 type _ThankArticleReq ThankArticleReq
@@ -31,10 +31,10 @@ type _ThankArticleReq ThankArticleReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewThankArticleReq(articleId string, active bool) *ThankArticleReq {
+func NewThankArticleReq(articleId string, clientRequestId string) *ThankArticleReq {
 	this := ThankArticleReq{}
 	this.ArticleId = articleId
-	this.Active = active
+	this.ClientRequestId = clientRequestId
 	return &this
 }
 
@@ -70,28 +70,28 @@ func (o *ThankArticleReq) SetArticleId(v string) {
 	o.ArticleId = v
 }
 
-// GetActive returns the Active field value
-func (o *ThankArticleReq) GetActive() bool {
+// GetClientRequestId returns the ClientRequestId field value
+func (o *ThankArticleReq) GetClientRequestId() string {
 	if o == nil {
-		var ret bool
+		var ret string
 		return ret
 	}
 
-	return o.Active
+	return o.ClientRequestId
 }
 
-// GetActiveOk returns a tuple with the Active field value
+// GetClientRequestIdOk returns a tuple with the ClientRequestId field value
 // and a boolean to check if the value has been set.
-func (o *ThankArticleReq) GetActiveOk() (*bool, bool) {
+func (o *ThankArticleReq) GetClientRequestIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Active, true
+	return &o.ClientRequestId, true
 }
 
-// SetActive sets field value
-func (o *ThankArticleReq) SetActive(v bool) {
-	o.Active = v
+// SetClientRequestId sets field value
+func (o *ThankArticleReq) SetClientRequestId(v string) {
+	o.ClientRequestId = v
 }
 
 func (o ThankArticleReq) MarshalJSON() ([]byte, error) {
@@ -105,7 +105,7 @@ func (o ThankArticleReq) MarshalJSON() ([]byte, error) {
 func (o ThankArticleReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["article_id"] = o.ArticleId
-	toSerialize["active"] = o.Active
+	toSerialize["client_request_id"] = o.ClientRequestId
 	return toSerialize, nil
 }
 
@@ -115,7 +115,7 @@ func (o *ThankArticleReq) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"article_id",
-		"active",
+		"client_request_id",
 	}
 
 	allProperties := make(map[string]interface{})

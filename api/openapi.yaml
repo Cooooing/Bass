@@ -428,7 +428,7 @@ paths:
       - ArticleSearchService
   /v1/content/article/thank:
     post:
-      description: 感谢文章
+      description: 感谢文章，确认后不可撤销。
       operationId: ArticleService_Thank
       requestBody:
         content:
@@ -9303,6 +9303,7 @@ components:
           - EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED
           - EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED
           - EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED
+          - EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED
           - EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE
           - EVENT_TYPE_GAME_IDLE_CLOSE_SESSION
           - EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED
@@ -9630,6 +9631,8 @@ components:
           - ECONOMY_RECORD_TYPE_ADMIN_DEDUCT
           - ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE
           - ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE
+          - ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE
+          - ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE
           format: enum
           type: string
         direction:
@@ -10195,11 +10198,11 @@ components:
       properties:
         article_id:
           type: string
-        active:
-          type: boolean
+        client_request_id:
+          type: string
       required:
-      - active
       - article_id
+      - client_request_id
       type: object
     ThankArticle_Resp:
       example:
@@ -10212,10 +10215,10 @@ components:
       properties:
         id:
           type: string
-        active:
-          type: boolean
+        client_request_id:
+          type: string
       required:
-      - active
+      - client_request_id
       - id
       type: object
     ThankComment_Resp:

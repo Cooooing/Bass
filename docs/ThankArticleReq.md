@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ArticleId** | **string** |  | 
-**Active** | **bool** |  | 
+**ClientRequestId** | **string** |  | 
 
 ## Methods
 
 ### NewThankArticleReq
 
-`func NewThankArticleReq(articleId string, active bool, ) *ThankArticleReq`
+`func NewThankArticleReq(articleId string, clientRequestId string, ) *ThankArticleReq`
 
 NewThankArticleReq instantiates a new ThankArticleReq object
 This constructor will assign default values to properties that have it defined,
@@ -46,24 +46,24 @@ and a boolean to check if the value has been set.
 SetArticleId sets ArticleId field to given value.
 
 
-### GetActive
+### GetClientRequestId
 
-`func (o *ThankArticleReq) GetActive() bool`
+`func (o *ThankArticleReq) GetClientRequestId() string`
 
-GetActive returns the Active field if non-nil, zero value otherwise.
+GetClientRequestId returns the ClientRequestId field if non-nil, zero value otherwise.
 
-### GetActiveOk
+### GetClientRequestIdOk
 
-`func (o *ThankArticleReq) GetActiveOk() (*bool, bool)`
+`func (o *ThankArticleReq) GetClientRequestIdOk() (*string, bool)`
 
-GetActiveOk returns a tuple with the Active field if it's non-nil, zero value otherwise
+GetClientRequestIdOk returns a tuple with the ClientRequestId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetActive
+### SetClientRequestId
 
-`func (o *ThankArticleReq) SetActive(v bool)`
+`func (o *ThankArticleReq) SetClientRequestId(v string)`
 
-SetActive sets Active field to given value.
+SetClientRequestId sets ClientRequestId field to given value.
 
 
 

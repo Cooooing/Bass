@@ -248,7 +248,7 @@ type ArticleService interface {
 	/*
 	Thank Method for Thank
 
-	感谢文章
+	感谢文章，确认后不可撤销。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiThankRequest
@@ -2083,7 +2083,7 @@ func (r ApiThankRequest) Execute() (*ThankArticleResp, *http.Response, error) {
 /*
 Thank Method for Thank
 
-感谢文章
+感谢文章，确认后不可撤销。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiThankRequest

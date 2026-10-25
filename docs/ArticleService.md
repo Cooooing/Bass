@@ -1104,7 +1104,7 @@ import (
 )
 
 func main() {
-	thankArticleReq := *openapiclient.NewThankArticleReq("ArticleId_example", false) // ThankArticleReq | 
+	thankArticleReq := *openapiclient.NewThankArticleReq("ArticleId_example", "ClientRequestId_example") // ThankArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

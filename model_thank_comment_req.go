@@ -22,7 +22,7 @@ var _ MappedNullable = &ThankCommentReq{}
 // ThankCommentReq struct for ThankCommentReq
 type ThankCommentReq struct {
 	Id string `json:"id"`
-	Active bool `json:"active"`
+	ClientRequestId string `json:"client_request_id"`
 }
 
 type _ThankCommentReq ThankCommentReq
@@ -31,10 +31,10 @@ type _ThankCommentReq ThankCommentReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewThankCommentReq(id string, active bool) *ThankCommentReq {
+func NewThankCommentReq(id string, clientRequestId string) *ThankCommentReq {
 	this := ThankCommentReq{}
 	this.Id = id
-	this.Active = active
+	this.ClientRequestId = clientRequestId
 	return &this
 }
 
@@ -70,28 +70,28 @@ func (o *ThankCommentReq) SetId(v string) {
 	o.Id = v
 }
 
-// GetActive returns the Active field value
-func (o *ThankCommentReq) GetActive() bool {
+// GetClientRequestId returns the ClientRequestId field value
+func (o *ThankCommentReq) GetClientRequestId() string {
 	if o == nil {
-		var ret bool
+		var ret string
 		return ret
 	}
 
-	return o.Active
+	return o.ClientRequestId
 }
 
-// GetActiveOk returns a tuple with the Active field value
+// GetClientRequestIdOk returns a tuple with the ClientRequestId field value
 // and a boolean to check if the value has been set.
-func (o *ThankCommentReq) GetActiveOk() (*bool, bool) {
+func (o *ThankCommentReq) GetClientRequestIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Active, true
+	return &o.ClientRequestId, true
 }
 
-// SetActive sets field value
-func (o *ThankCommentReq) SetActive(v bool) {
-	o.Active = v
+// SetClientRequestId sets field value
+func (o *ThankCommentReq) SetClientRequestId(v string) {
+	o.ClientRequestId = v
 }
 
 func (o ThankCommentReq) MarshalJSON() ([]byte, error) {
@@ -105,7 +105,7 @@ func (o ThankCommentReq) MarshalJSON() ([]byte, error) {
 func (o ThankCommentReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	toSerialize["active"] = o.Active
+	toSerialize["client_request_id"] = o.ClientRequestId
 	return toSerialize, nil
 }
 
@@ -115,7 +115,7 @@ func (o *ThankCommentReq) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
-		"active",
+		"client_request_id",
 	}
 
 	allProperties := make(map[string]interface{})

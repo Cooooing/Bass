@@ -59,7 +59,8 @@ Thumbs.db
 # Workstation-only deployment configuration and local documentation.
 /ops/docker/*.env
 /ops/sql/local/
-/ops/tools/
+/ops/tools/**/.env
+ops/tools/cmd/consul-backup/backups
 /ops/k8s/test/
 /ops/k8s/prod/
 /ops/k8s/dev/manifests/secrets.local.yaml

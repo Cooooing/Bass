@@ -11,7 +11,7 @@ services:
     container_name: treble
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "2324:2324"
     networks:
@@ -22,7 +22,7 @@ services:
     container_name: bff_bbs
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8001:8001"
       - "9001:9001"
@@ -34,7 +34,7 @@ services:
     container_name: realtime_hub
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8010:8010"
       - "9010:9010"
@@ -46,7 +46,7 @@ services:
     container_name: realtime_node
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8020:8020"
       - "9020:9020"
@@ -58,7 +58,7 @@ services:
     container_name: user
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8101:8101"
       - "9101:9101"
@@ -70,7 +70,7 @@ services:
     container_name: content
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8102:8102"
       - "9102:9102"
@@ -82,7 +82,7 @@ services:
     container_name: notify
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8103:8103"
       - "9103:9103"
@@ -94,7 +94,7 @@ services:
     container_name: im
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8104:8104"
       - "9104:9104"
@@ -106,7 +106,7 @@ services:
     container_name: economy
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8108:8108"
       - "9108:9108"
@@ -118,7 +118,7 @@ services:
     container_name: platform
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8201:8201"
       - "9201:9201"
@@ -130,7 +130,7 @@ services:
     container_name: scheduler
     restart: on-failure:3
     env_file:
-      - .test.env
+      - .service.env
     ports:
       - "8203:8203"
       - "9203:9203"

@@ -1628,6 +1628,7 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED: 'EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED',
     EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED: 'EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED',
     EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED: 'EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED',
+    EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED: 'EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED',
     EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE: 'EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE',
     EVENT_TYPE_GAME_IDLE_CLOSE_SESSION: 'EVENT_TYPE_GAME_IDLE_CLOSE_SESSION',
     EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED: 'EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED',
@@ -1692,6 +1693,8 @@ export const RespRecordRecordTypeEnum = {
     ECONOMY_RECORD_TYPE_ADMIN_DEDUCT: 'ECONOMY_RECORD_TYPE_ADMIN_DEDUCT',
     ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE: 'ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE',
     ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE: 'ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE',
+    ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE: 'ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE',
+    ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE: 'ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE',
 } as const;
 
 export type RespRecordRecordTypeEnum = typeof RespRecordRecordTypeEnum[keyof typeof RespRecordRecordTypeEnum];
@@ -1827,14 +1830,14 @@ export interface SetPrivateChatSessionPinnedReq {
 }
 export interface ThankArticleReq {
     'article_id': string;
-    'active': boolean;
+    'client_request_id': string;
 }
 export interface ThankArticleResp {
     'thanked'?: boolean;
 }
 export interface ThankCommentReq {
     'id': string;
-    'active': boolean;
+    'client_request_id': string;
 }
 export interface ThankCommentResp {
     'thanked'?: boolean;
@@ -3603,7 +3606,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 感谢文章
+         * 感谢文章，确认后不可撤销。
          * @param {ThankArticleReq} thankArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3940,7 +3943,7 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 感谢文章
+         * 感谢文章，确认后不可撤销。
          * @param {ThankArticleReq} thankArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4141,7 +4144,7 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.setPinnedComment(requestParameters.setPinnedArticleCommentReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 感谢文章
+         * 感谢文章，确认后不可撤销。
          * @param {ArticleServiceThankRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4312,7 +4315,7 @@ export interface ArticleServiceInterface {
     setPinnedComment(requestParameters: ArticleServiceSetPinnedCommentRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 感谢文章
+     * 感谢文章，确认后不可撤销。
      * @param {ArticleServiceThankRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -4650,7 +4653,7 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
     }
 
     /**
-     * 感谢文章
+     * 感谢文章，确认后不可撤销。
      * @param {ArticleServiceThankRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

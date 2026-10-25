@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **string** |  | [default to undefined]
-**active** | **boolean** |  | [default to undefined]
+**client_request_id** | **string** |  | [default to undefined]
 
 ## Example
 
@@ -15,7 +15,7 @@ import { ThankCommentReq } from '@bass/bbs-sdk-axios';
 
 const instance: ThankCommentReq = {
     id,
-    active,
+    client_request_id,
 };
 ```
 

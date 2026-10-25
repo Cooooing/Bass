@@ -155,6 +155,8 @@ func (*RealtimeService) deliveryProto(delivery *model.Delivery) (*realtimehubv1.
 		response.Payload = &realtimehubv1.Delivery_GlobalChatMessage{GlobalChatMessage: &realtimehubv1.GlobalChatMessageDelivery{MessageId: payload.MessageID, SenderId: payload.SenderID, MessageType: imv1enum.IMMessageType(payload.MessageType), Content: payload.Content, CreatedAt: timestamppb.New(payload.CreatedAt)}}
 	case model.GlobalChatBarrageDelivery:
 		response.Payload = &realtimehubv1.Delivery_GlobalChatBarrage{GlobalChatBarrage: &realtimehubv1.GlobalChatBarrageDelivery{BarrageId: payload.BarrageID, UserId: payload.UserID, Content: payload.Content, CreatedAt: timestamppb.New(payload.CreatedAt)}}
+	case model.GlobalChatTopicDelivery:
+		response.Payload = &realtimehubv1.Delivery_GlobalChatTopic{GlobalChatTopic: &realtimehubv1.GlobalChatTopicDelivery{TopicId: payload.TopicID, UserId: payload.UserID, Content: payload.Content, CreatedAt: timestamppb.New(payload.CreatedAt)}}
 	default:
 		return nil, fmt.Errorf("delivery payload does not match kind")
 	}

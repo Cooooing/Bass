@@ -75,3 +75,13 @@ type GlobalChatBarrageDelivery struct {
 }
 
 func (GlobalChatBarrageDelivery) deliveryPayload() {}
+
+// GlobalChatTopicDelivery 是全局聊天室话题变化的下行内容。
+type GlobalChatTopicDelivery struct {
+	TopicID   int64
+	UserID    int64
+	Content   string
+	CreatedAt time.Time
+}
+
+func (GlobalChatTopicDelivery) deliveryPayload() {}

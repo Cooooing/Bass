@@ -31,11 +31,12 @@ type GlobalChatTopicUsecase struct {
 	rateLimiter repo.GlobalChatTopicRateLimiter
 	dtm         *commonclient.DTMClient
 	branches    *commonclient.TCCBranchCaller
+	events      repo.RealtimeEventPublisher
 	business    *config.Business
 }
 
-func NewGlobalChatTopicUsecase(log *slog.Logger, topics repo.GlobalChatTopicRepo, rateLimiter repo.GlobalChatTopicRateLimiter, dtm *commonclient.DTMClient, branches *commonclient.TCCBranchCaller, business *config.Business) *GlobalChatTopicUsecase {
-	return &GlobalChatTopicUsecase{log: log, topics: topics, rateLimiter: rateLimiter, dtm: dtm, branches: branches, business: business}
+func NewGlobalChatTopicUsecase(log *slog.Logger, topics repo.GlobalChatTopicRepo, rateLimiter repo.GlobalChatTopicRateLimiter, dtm *commonclient.DTMClient, branches *commonclient.TCCBranchCaller, events repo.RealtimeEventPublisher, business *config.Business) *GlobalChatTopicUsecase {
+	return &GlobalChatTopicUsecase{log: log, topics: topics, rateLimiter: rateLimiter, dtm: dtm, branches: branches, events: events, business: business}
 }
 
 func (u *GlobalChatTopicUsecase) Get(ctx context.Context) (*model.GlobalChatTopic, error) {
@@ -107,6 +108,9 @@ func (u *GlobalChatTopicUsecase) Set(ctx context.Context, userID int64, clientRe
 	if existing == nil && topic != nil && topic.Status == enum.GlobalChatTopicStatusPublished {
 		if err = u.rateLimiter.Mark(context.WithoutCancel(ctx), userID, userInterval, globalInterval); err != nil {
 			u.log.WarnContext(ctx, "mark global chat topic rate limit failed", "user_id", userID, "error", err)
+		}
+		if err = u.events.PublishGlobalChatTopicUpdated(ctx, topic); err != nil {
+			u.log.WarnContext(ctx, "publish global chat topic event failed", "topic_id", topic.ID, "error", err)
 		}
 	}
 	return topic, nil

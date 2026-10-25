@@ -79,6 +79,27 @@ func (p *RealtimeEventPublisher) PublishGlobalChatBarrageCreated(ctx context.Con
 	return p.publish(ctx, commonenum.EventSubjectIMGlobalChatBarrageCreated, event)
 }
 
+func (p *RealtimeEventPublisher) PublishGlobalChatTopicUpdated(ctx context.Context, topic *model.GlobalChatTopic) error {
+	if topic == nil || topic.CreatedAt == nil {
+		return fmt.Errorf("global chat topic is required")
+	}
+	event := &commonenums.Event{
+		EventId:   uuid.NewString(),
+		Type:      commonenums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED,
+		Subject:   commonenums.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_TOPIC_UPDATED,
+		Timestamp: timestamppb.Now(),
+		Payload: &commonenums.Event_ImGlobalChatTopicUpdated{
+			ImGlobalChatTopicUpdated: &commonenums.IMGlobalChatTopicUpdatedPayload{
+				TopicId:   topic.ID,
+				UserId:    topic.UserID,
+				Content:   topic.Content,
+				CreatedAt: timestamppb.New(*topic.CreatedAt),
+			},
+		},
+	}
+	return p.publish(ctx, commonenum.EventSubjectIMGlobalChatTopicUpdated, event)
+}
+
 func (p *RealtimeEventPublisher) publish(ctx context.Context, subject commonenum.EventSubject, event *commonenums.Event) error {
 	payload, err := protojson.Marshal(event)
 	if err != nil {

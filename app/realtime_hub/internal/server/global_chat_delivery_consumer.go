@@ -27,6 +27,10 @@ func (c *GlobalChatDeliveryConsumer) Start(ctx context.Context) error {
 		return err
 	}
 	_, err := c.nats.Subscribe(runCtx, commonenum.EventSubjectIMGlobalChatBarrageCreated.String(), c.handle)
+	if err != nil {
+		return err
+	}
+	_, err = c.nats.Subscribe(runCtx, commonenum.EventSubjectIMGlobalChatTopicUpdated.String(), c.handle)
 	return err
 }
 
@@ -58,6 +62,13 @@ func (c *GlobalChatDeliveryConsumer) handle(ctx context.Context, message *client
 			createdAt = payload.GetCreatedAt().AsTime()
 		}
 		c.realtime.DeliverGlobalChatBarrage("bbs", payload.GetBarrageId(), payload.GetUserId(), payload.GetContent(), createdAt)
+		return nil
+	}
+	if payload := event.GetImGlobalChatTopicUpdated(); event.GetType() == commonenums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED && payload != nil && payload.GetTopicId() > 0 {
+		if payload.GetCreatedAt() != nil {
+			createdAt = payload.GetCreatedAt().AsTime()
+		}
+		c.realtime.DeliverGlobalChatTopic("bbs", payload.GetTopicId(), payload.GetUserId(), payload.GetContent(), createdAt)
 	}
 	return nil
 }

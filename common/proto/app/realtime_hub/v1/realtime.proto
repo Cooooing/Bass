@@ -61,6 +61,7 @@ message Delivery {
     PrivateChatMessageDelivery private_chat_message = 4; // 私聊消息变更。
     GlobalChatMessageDelivery global_chat_message = 5; // 全局聊天室消息变更。
     GlobalChatBarrageDelivery global_chat_barrage = 6; // 全局聊天室弹幕变更。
+    GlobalChatTopicDelivery global_chat_topic = 7; // 全局聊天室话题变更。
   }
 }
 
@@ -90,6 +91,13 @@ message GlobalChatBarrageDelivery {
   int64 user_id = 2; // 发送账号 ID。
   string content = 3; // 纯文本弹幕内容。
   google.protobuf.Timestamp created_at = 1000; // 创建时间。
+}
+
+message GlobalChatTopicDelivery {
+  int64 topic_id = 1; // 全局聊天室话题记录 ID。
+  int64 user_id = 2; // 设置话题的账号 ID。
+  string content = 3; // 话题内容。
+  google.protobuf.Timestamp created_at = 1000; // 话题设置时间。
 }
 
 message Control {

@@ -30,3 +30,10 @@ message IMGlobalChatBarrageCreatedPayload {
   string content = 3; // 纯文本弹幕内容。
   google.protobuf.Timestamp created_at = 1000; // 创建时间。
 }
+
+message IMGlobalChatTopicUpdatedPayload {
+  int64 topic_id = 1; // 全局聊天室话题记录 ID。
+  int64 user_id = 2; // 设置话题的账号 ID。
+  string content = 3; // 话题内容。
+  google.protobuf.Timestamp created_at = 1000; // 话题设置时间。
+}

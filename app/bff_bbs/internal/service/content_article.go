@@ -292,7 +292,7 @@ func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.Tha
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	v, err := s.contentArticleUsecase.ThankArticle(ctx, &usecase.ThankArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Active: req.GetActive()})
+	v, err := s.contentArticleUsecase.ThankArticle(ctx, &usecase.ThankArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), ClientRequestID: req.GetClientRequestId()})
 	return &bbscontentv1.ThankArticle_Resp{Thanked: v}, err
 }
 func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.CollectArticle_Req) (*bbscontentv1.CollectArticle_Resp, error) {

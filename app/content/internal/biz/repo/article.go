@@ -110,6 +110,7 @@ type ArticleGetReq struct {
 }
 type ArticleActionRecordRepo interface {
 	Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error)
+	TransitionStatus(ctx context.Context, clientRequestID string, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error)
 	Delete(ctx context.Context, req *ArticleActionRecordDeleteReq) (int, error)
 	Exist(ctx context.Context, req *ArticleActionRecordReq) (bool, error)
 	Get(ctx context.Context, req *ArticleActionRecordReq) (*model.ArticleActionRecord, error)
@@ -131,13 +132,15 @@ type ArticleActionRecordPageResp struct {
 }
 
 type ArticleActionRecordReq struct {
-	Page       *commonmodel.PageReq
-	ID         *int64
-	IDs        []int64
-	ArticleID  *int64
-	ArticleIDs []int64
-	UserID     *int64
-	UserIDs    []int64
-	Type       *enum.ArticleAction
-	Types      []enum.ArticleAction
+	Page            *commonmodel.PageReq
+	ID              *int64
+	IDs             []int64
+	ArticleID       *int64
+	ArticleIDs      []int64
+	UserID          *int64
+	UserIDs         []int64
+	Type            *enum.ArticleAction
+	Types           []enum.ArticleAction
+	ClientRequestID *string
+	Status          *enum.ContentActionStatus
 }

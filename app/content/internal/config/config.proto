@@ -16,14 +16,20 @@ message Bootstrap {
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
+  common.api.app.common.DTM dtm = 10;
   Business business = 21;
 }
 
 message Business {
   Article article = 1;
+  Comment comment = 2;
 
   message Article {
     google.protobuf.Duration published_edit_window = 1;
     int32 published_edit_max_view_count = 2;
+    int64 thank_points = 3; // 感谢文章时转赠的积分数量。
+  }
+  message Comment {
+    int64 thank_points = 1; // 感谢评论时转赠的积分数量。
   }
 }

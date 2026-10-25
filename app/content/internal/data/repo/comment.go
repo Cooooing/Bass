@@ -90,18 +90,22 @@ func (r *CommentRepo) UpdateRestriction(ctx context.Context, req *repo.CommentUp
 func (r *CommentRepo) AddStats(ctx context.Context, req *repo.CommentAddStatsReq) error {
 	commentID := req.CommentID
 	stats := req.Stats
-	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentID)
+	update := r.getClient(ctx).Comment.Update().Where(commentent.IDEQ(commentID))
 	if stats.ThankCount != 0 {
-		updateOne.AddThankCount(stats.ThankCount)
+		update.AddThankCount(stats.ThankCount)
 	}
 	if stats.LikeCount != 0 {
-		updateOne.AddLikeCount(stats.LikeCount)
+		update.AddLikeCount(stats.LikeCount)
 	}
 	if stats.ReplyCount != 0 {
-		updateOne.AddReplyCount(stats.ReplyCount)
+		update.AddReplyCount(stats.ReplyCount)
 	}
-	if err := updateOne.Exec(ctx); err != nil {
+	count, err := update.Save(ctx)
+	if err != nil {
 		return err
+	}
+	if count != 1 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
 	}
 	return nil
 }

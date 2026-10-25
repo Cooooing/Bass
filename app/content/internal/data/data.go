@@ -54,6 +54,11 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewNatsEventClient,
 	repo.NewMoonbreezeRepo,
 	repo.NewMoonbreezeRateLimitCache,
+	ProvideDTMConfig,
+	ProvideBusinessConfig,
+	commonClient.NewDTMClient,
+	commonClient.NewTCCBranchCaller,
+	ProvideTCCBranchExecutor,
 )
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis {
@@ -74,4 +79,11 @@ func ProvideConsul(c *config.Bootstrap) *common.Consul {
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
+}
+
+func ProvideDTMConfig(c *config.Bootstrap) *common.DTM           { return c.Dtm }
+func ProvideBusinessConfig(c *config.Bootstrap) *config.Business { return c.Business }
+
+func ProvideTCCBranchExecutor(sqlClient *commonClient.SQLClient, entClient *client.EntClient, dtm *commonClient.DTMClient) (commonClient.TCCBranchExecutor, error) {
+	return commonClient.NewTCCBranchExecutor(dtm, sqlClient.DB, sqlClient.Driver, entClient.ClientFromTx)
 }

@@ -538,7 +538,7 @@ func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Req) (*
 	if err != nil {
 		return nil, err
 	}
-	thanked, err := s.articleUsecase.Thank(ctx, &usecase.ArticleThankReq{Access: access, ArticleID: req.GetArticleId(), UserID: access.ActorUserID, Active: req.GetThanked()})
+	thanked, err := s.articleUsecase.Thank(ctx, &usecase.ArticleThankReq{Access: access, ArticleID: req.GetArticleId(), UserID: access.ActorUserID, Active: req.GetThanked(), ClientRequestID: req.GetClientRequestId()})
 	return &v1.ThankArticle_Resp{Thanked: thanked}, err
 }
 

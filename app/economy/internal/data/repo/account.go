@@ -34,14 +34,26 @@ func (r *AccountRepo) getClient(ctx context.Context) *gen.Client {
 }
 
 func (r *AccountRepo) Ensure(ctx context.Context, userID int64) (*model.Account, error) {
-	if err := r.getClient(ctx).Account.Create().
-		SetUserID(userID).
-		OnConflict().
-		DoNothing().
-		Exec(ctx); err != nil {
+	client := r.getClient(ctx)
+	row, err := client.Account.Query().
+		Where(accountant.UserIDEQ(userID), accountant.DeletedAtIsNil()).
+		Only(ctx)
+	if err == nil {
+		return r.accountModel(row), nil
+	}
+	if !gen.IsNotFound(err) {
 		return nil, err
 	}
-	return r.Get(ctx, &bizrepo.AccountGetReq{UserID: new(userID)})
+	row, err = client.Account.Create().SetUserID(userID).Save(ctx)
+	if gen.IsConstraintError(err) {
+		row, err = client.Account.Query().
+			Where(accountant.UserIDEQ(userID), accountant.DeletedAtIsNil()).
+			Only(ctx)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return r.accountModel(row), nil
 }
 
 func (r *AccountRepo) Save(ctx context.Context, account *model.Account) (*model.Account, error) {
@@ -51,17 +63,7 @@ func (r *AccountRepo) Save(ctx context.Context, account *model.Account) (*model.
 	if err != nil {
 		return nil, err
 	}
-	return &model.Account{
-		ID:            save.ID,
-		UserID:        save.UserID,
-		Balance:       save.Balance,
-		FrozenBalance: save.FrozenBalance,
-		TotalIncome:   save.TotalIncome,
-		TotalExpense:  save.TotalExpense,
-		CreatedAt:     save.CreatedAt,
-		UpdatedAt:     save.UpdatedAt,
-		DeletedAt:     save.DeletedAt,
-	}, nil
+	return r.accountModel(save), nil
 }
 
 func (r *AccountRepo) UpdateBalance(ctx context.Context, req *bizrepo.AccountUpdateBalanceReq) (*model.Account, error) {
@@ -112,17 +114,11 @@ func (r *AccountRepo) Get(ctx context.Context, req *bizrepo.AccountGetReq) (*mod
 	if err != nil {
 		return nil, err
 	}
-	return &model.Account{
-		ID:            row.ID,
-		UserID:        row.UserID,
-		Balance:       row.Balance,
-		FrozenBalance: row.FrozenBalance,
-		TotalIncome:   row.TotalIncome,
-		TotalExpense:  row.TotalExpense,
-		CreatedAt:     row.CreatedAt,
-		UpdatedAt:     row.UpdatedAt,
-		DeletedAt:     row.DeletedAt,
-	}, nil
+	return r.accountModel(row), nil
+}
+
+func (*AccountRepo) accountModel(row *gen.Account) *model.Account {
+	return &model.Account{ID: row.ID, UserID: row.UserID, Balance: row.Balance, FrozenBalance: row.FrozenBalance, TotalIncome: row.TotalIncome, TotalExpense: row.TotalExpense, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, DeletedAt: row.DeletedAt}
 }
 
 func (r *AccountRepo) List(ctx context.Context, req *bizrepo.AccountGetReq) ([]*model.Account, error) {

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// TCCArticleThankService 提供文章感谢的 TCC 分支操作。
+service TCCArticleThankService {
+  rpc Try(TCCArticleThank.Req) returns (TCCArticleThank.Resp) {} // 校验并受理文章感谢
+  rpc Confirm(TCCArticleThank.Req) returns (TCCArticleThank.Resp) {} // 确认文章感谢
+  rpc Cancel(TCCArticleThank.Req) returns (TCCArticleThank.Resp) {} // 取消待确认文章感谢
+}
+
+// TCCArticleThank 表示文章感谢 TCC 分支请求与响应。
+message TCCArticleThank {
+  message Req {
+    int64 article_id = 1; // 被感谢文章 ID
+    int64 sender_user_id = 2; // 感谢者账号 ID
+    int64 receiver_user_id = 3; // 收款文章作者账号 ID
+    string client_request_id = 4; // 客户端幂等请求 ID
+    int64 points = 5; // 本次转赠积分数量
+  }
+  message Resp {}
+}

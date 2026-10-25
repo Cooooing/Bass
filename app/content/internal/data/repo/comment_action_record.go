@@ -41,6 +41,9 @@ func (r *CommentActionRecordRepo) Save(ctx context.Context, record *model.Commen
 		SetCommentID(record.CommentID).
 		SetUserID(record.UserID).
 		SetType(commentactionrecord.Type(record.Type)).
+		SetNillableClientRequestID(record.ClientRequestID).
+		SetNillablePoints(record.Points).
+		SetStatus(commentactionrecord.Status(record.Status)).
 		Save(ctx)
 	if gen.IsConstraintError(err) {
 		return false, nil
@@ -49,6 +52,14 @@ func (r *CommentActionRecordRepo) Save(ctx context.Context, record *model.Commen
 		return false, err
 	}
 	return true, nil
+}
+
+func (r *CommentActionRecordRepo) TransitionStatus(ctx context.Context, clientRequestID string, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error) {
+	count, err := r.getClient(ctx).CommentActionRecord.Update().
+		Where(commentactionrecord.ClientRequestIDEQ(clientRequestID), commentactionrecord.StatusEQ(commentactionrecord.Status(from))).
+		SetStatus(commentactionrecord.Status(to)).
+		Save(ctx)
+	return count == 1, err
 }
 
 func (r *CommentActionRecordRepo) Delete(ctx context.Context, req *repo.CommentActionRecordDeleteReq) (int, error) {
@@ -90,7 +101,7 @@ func (r *CommentActionRecordRepo) Get(ctx context.Context, req *repo.CommentActi
 		ID:        row.ID,
 		CommentID: row.CommentID,
 		UserID:    row.UserID,
-		Type:      enum.CommentAction(row.Type),
+		Type:      enum.CommentAction(row.Type), ClientRequestID: row.ClientRequestID, Points: row.Points, Status: enum.ContentActionStatus(row.Status),
 	}, nil
 }
 
@@ -107,7 +118,7 @@ func (r *CommentActionRecordRepo) List(ctx context.Context, req *repo.CommentAct
 			ID:        row.ID,
 			CommentID: row.CommentID,
 			UserID:    row.UserID,
-			Type:      enum.CommentAction(row.Type),
+			Type:      enum.CommentAction(row.Type), ClientRequestID: row.ClientRequestID, Points: row.Points, Status: enum.ContentActionStatus(row.Status),
 		})
 	}
 	return rows, nil
@@ -154,7 +165,7 @@ func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentAct
 			ID:        row.ID,
 			CommentID: row.CommentID,
 			UserID:    row.UserID,
-			Type:      enum.CommentAction(row.Type),
+			Type:      enum.CommentAction(row.Type), ClientRequestID: row.ClientRequestID, Points: row.Points, Status: enum.ContentActionStatus(row.Status),
 		})
 	}
 	return &repo.CommentActionRecordPageResp{
@@ -197,6 +208,12 @@ func (r *CommentActionRecordRepo) getQuery(query *gen.CommentActionRecordQuery, 
 			return commentactionrecord.Type(item)
 		})
 		query = query.Where(commentactionrecord.TypeIn(dbTypes...))
+	}
+	if req.ClientRequestID != nil {
+		query = query.Where(commentactionrecord.ClientRequestIDEQ(*req.ClientRequestID))
+	}
+	if req.Status != nil {
+		query = query.Where(commentactionrecord.StatusEQ(commentactionrecord.Status(*req.Status)))
 	}
 	return query
 }

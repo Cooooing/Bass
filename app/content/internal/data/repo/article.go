@@ -219,30 +219,34 @@ func (r *ArticleRepo) UpdatePinnedComment(ctx context.Context, req *repo.Article
 func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq) error {
 	articleID := req.ArticleID
 	stats := req.Stats
-	updateOne := r.getClient(ctx).Article.UpdateOneID(articleID)
+	update := r.getClient(ctx).Article.Update().Where(articleent.IDEQ(articleID))
 	if stats.ViewCount != 0 {
-		updateOne.AddViewCount(stats.ViewCount)
+		update.AddViewCount(stats.ViewCount)
 	}
 	if stats.ThankCount != 0 {
-		updateOne.AddThankCount(stats.ThankCount)
+		update.AddThankCount(stats.ThankCount)
 	}
 	if stats.LikeCount != 0 {
-		updateOne.AddLikeCount(stats.LikeCount)
+		update.AddLikeCount(stats.LikeCount)
 	}
 	if stats.CollectCount != 0 {
-		updateOne.AddCollectCount(stats.CollectCount)
+		update.AddCollectCount(stats.CollectCount)
 	}
 	if stats.WatchCount != 0 {
-		updateOne.AddWatchCount(stats.WatchCount)
+		update.AddWatchCount(stats.WatchCount)
 	}
 	if stats.RewardCount != 0 {
-		updateOne.AddRewardCount(stats.RewardCount)
+		update.AddRewardCount(stats.RewardCount)
 	}
 	if stats.ReplyCount != 0 {
-		updateOne.AddReplyCount(stats.ReplyCount)
+		update.AddReplyCount(stats.ReplyCount)
 	}
-	if err := updateOne.Exec(ctx); err != nil {
+	count, err := update.Save(ctx)
+	if err != nil {
 		return err
+	}
+	if count != 1 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	return nil
 }

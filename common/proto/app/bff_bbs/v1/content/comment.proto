@@ -475,14 +475,14 @@ message LikeComment {
   }
 }
 
-// 感谢或取消感谢评论。
+// 感谢评论，确认后不可撤销。
 message ThankComment {
   message Req {
     int64 id = 1; // 评论 ID
-    bool active = 2; // 是否感谢
+    string client_request_id = 2; // 客户端幂等请求 ID
     option (gnostic.openapi.v3.schema) = {
       required: "id"
-      required: "active"
+      required: "client_request_id"
     };
   }
   message Resp {

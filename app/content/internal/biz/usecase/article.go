@@ -39,6 +39,7 @@ type ArticleUsecase struct {
 	viewRecordRepo       repo.ArticleViewRecordRepo
 	delayedTaskClient    repo.DelayedTaskClient
 	articleAccessUsecase *ArticleAccessUsecase
+	thankUsecase         *ArticleThankUsecase
 }
 
 func NewArticleUsecase(
@@ -58,6 +59,7 @@ func NewArticleUsecase(
 	viewRecordRepo repo.ArticleViewRecordRepo,
 	delayedTaskClient repo.DelayedTaskClient,
 	articleAccessUsecase *ArticleAccessUsecase,
+	thankUsecase *ArticleThankUsecase,
 ) *ArticleUsecase {
 	return &ArticleUsecase{
 		log:                  logger,
@@ -76,6 +78,7 @@ func NewArticleUsecase(
 		viewRecordRepo:       viewRecordRepo,
 		delayedTaskClient:    delayedTaskClient,
 		articleAccessUsecase: articleAccessUsecase,
+		thankUsecase:         thankUsecase,
 	}
 }
 
@@ -214,15 +217,18 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 }
 
 type ArticleThankReq struct {
-	Access    *model.ContentAccess
-	ArticleID int64
-	UserID    int64
-	Active    bool
+	Access          *model.ContentAccess
+	ArticleID       int64
+	UserID          int64
+	Active          bool
+	ClientRequestID string
 }
 
 func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
-	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionThank, stats: &repo.ArticleStatUpdate{ThankCount: 1}, event: d.articleThankedEvent}
-	return d.changeInteraction(ctx, interaction)
+	if !req.Active {
+		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return d.thankUsecase.Thank(ctx, req.Access, req.ArticleID, req.ClientRequestID)
 }
 
 type ArticleCollectReq struct {
@@ -280,7 +286,7 @@ func (d *ArticleUsecase) changeInteraction(ctx context.Context, interaction arti
 			return err
 		}
 		if interaction.active {
-			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{ArticleID: interaction.articleID, UserID: interaction.userID, Type: interaction.action})
+			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{ArticleID: interaction.articleID, UserID: interaction.userID, Type: interaction.action, Status: enum.ContentActionStatusPublished})
 			if err != nil || !created {
 				return err
 			}
@@ -361,6 +367,7 @@ func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) erro
 			ArticleID: articleID,
 			UserID:    userID,
 			Type:      enum.ArticleActionReward,
+			Status:    enum.ContentActionStatusPublished,
 		})
 		if err != nil || !created {
 			return err
@@ -1569,6 +1576,7 @@ func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, req *Article
 	records, err := d.actionRecordRepo.List(ctx, &repo.ArticleActionRecordReq{
 		ArticleIDs: articleIDs,
 		UserID:     new(userID),
+		Status:     new(enum.ContentActionStatusPublished),
 		Types: []enum.ArticleAction{
 			enum.ArticleActionLike,
 			enum.ArticleActionThank,

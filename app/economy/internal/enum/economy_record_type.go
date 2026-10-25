@@ -20,6 +20,8 @@ const (
 	EconomyRecordTypeAdminDeduct              EconomyRecordType = "admin_deduct"                // EconomyRecordTypeAdminDeduct 表示后台扣减
 	EconomyRecordTypeGlobalChatTopicExpense   EconomyRecordType = "global_chat_topic_expense"   // EconomyRecordTypeGlobalChatTopicExpense 表示设置全局聊天室话题支出
 	EconomyRecordTypeGlobalChatBarrageExpense EconomyRecordType = "global_chat_barrage_expense" // EconomyRecordTypeGlobalChatBarrageExpense 表示发送全局聊天室弹幕支出
+	EconomyRecordTypeArticleThankExpense      EconomyRecordType = "article_thank_expense"       // EconomyRecordTypeArticleThankExpense 表示文章感谢支出
+	EconomyRecordTypeCommentThankExpense      EconomyRecordType = "comment_thank_expense"       // EconomyRecordTypeCommentThankExpense 表示评论感谢支出
 )
 
 // EconomyRecordTypeMap 维护流水类型映射
@@ -33,6 +35,8 @@ var EconomyRecordTypeMap = commonenum.NewMapping[EconomyRecordType, v1.EconomyRe
 	EconomyRecordTypeAdminDeduct:              {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ADMIN_DEDUCT},
 	EconomyRecordTypeGlobalChatTopicExpense:   {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE},
 	EconomyRecordTypeGlobalChatBarrageExpense: {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE},
+	EconomyRecordTypeArticleThankExpense:      {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE},
+	EconomyRecordTypeCommentThankExpense:      {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE},
 })
 
 func (e EconomyRecordType) String() string {
@@ -43,7 +47,7 @@ func (e EconomyRecordType) Direction() (EconomyRecordDirection, error) {
 	switch e {
 	case EconomyRecordTypeSignInReward, EconomyRecordTypeArticleThankReward, EconomyRecordTypeCommentThankReward, EconomyRecordTypeArticleRewardIn, EconomyRecordTypeAdminAdd:
 		return EconomyRecordDirectionIncome, nil
-	case EconomyRecordTypeArticleRewardOut, EconomyRecordTypeAdminDeduct, EconomyRecordTypeGlobalChatTopicExpense, EconomyRecordTypeGlobalChatBarrageExpense:
+	case EconomyRecordTypeArticleRewardOut, EconomyRecordTypeAdminDeduct, EconomyRecordTypeGlobalChatTopicExpense, EconomyRecordTypeGlobalChatBarrageExpense, EconomyRecordTypeArticleThankExpense, EconomyRecordTypeCommentThankExpense:
 		return EconomyRecordDirectionExpense, nil
 	default:
 		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)

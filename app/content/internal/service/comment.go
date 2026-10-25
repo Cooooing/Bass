@@ -588,9 +588,10 @@ func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Req) (r
 		return nil, err
 	}
 	thankResp, err := s.commentUsecase.Thank(ctx, &usecase.CommentThankReq{
-		CommentID: req.Id,
-		Access:    access,
-		Active:    req.Thanked,
+		CommentID:       req.Id,
+		Access:          access,
+		Active:          req.Thanked,
+		ClientRequestID: req.GetClientRequestId(),
 	})
 	return &v1.ThankComment_Resp{
 		Thanked: thankResp,

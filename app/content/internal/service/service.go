@@ -17,6 +17,8 @@ var ServiceProviderSet = wire.NewSet(
 	NewOutboxService,
 	NewTagService,
 	NewMoonbreezeService,
+	NewTCCArticleThankService,
+	NewTCCCommentThankService,
 )
 
 func ProvideServices(
@@ -29,6 +31,8 @@ func ProvideServices(
 	tagService *TagService,
 	outboxService *OutboxService,
 	moonbreezeService *MoonbreezeService,
+	tccArticleThankService *TCCArticleThankService,
+	tccCommentThankService *TCCCommentThankService,
 ) []server.Service {
 	return []server.Service{
 		commonSystemService,
@@ -40,5 +44,7 @@ func ProvideServices(
 		tagService,
 		outboxService,
 		moonbreezeService,
+		tccArticleThankService,
+		tccCommentThankService,
 	}
 }

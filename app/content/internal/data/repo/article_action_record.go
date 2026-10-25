@@ -2,10 +2,8 @@ package repo
 
 import (
 	commonmodel "common/pkg/model"
-	cerrors "common/proto/gen/common/errors"
 	"context"
 
-	"common/pkg/apperror"
 	utilent "common/pkg/util/ent"
 
 	"content/internal/biz/model"
@@ -43,6 +41,9 @@ func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.Articl
 		SetArticleID(record.ArticleID).
 		SetUserID(record.UserID).
 		SetType(articleactionrecord.Type(record.Type)).
+		SetNillableClientRequestID(record.ClientRequestID).
+		SetNillablePoints(record.Points).
+		SetStatus(articleactionrecord.Status(record.Status)).
 		Save(ctx)
 	if gen.IsConstraintError(err) {
 		return false, nil
@@ -51,6 +52,14 @@ func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.Articl
 		return false, err
 	}
 	return true, nil
+}
+
+func (r *ArticleActionRecordRepo) TransitionStatus(ctx context.Context, clientRequestID string, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error) {
+	count, err := r.getClient(ctx).ArticleActionRecord.Update().
+		Where(articleactionrecord.ClientRequestIDEQ(clientRequestID), articleactionrecord.StatusEQ(articleactionrecord.Status(from))).
+		SetStatus(articleactionrecord.Status(to)).
+		Save(ctx)
+	return count == 1, err
 }
 
 func (r *ArticleActionRecordRepo) Delete(ctx context.Context, req *repo.ArticleActionRecordDeleteReq) (int, error) {
@@ -83,7 +92,7 @@ func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActi
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_ACTION_RECORD_NOT_FOUND)
+		return nil, nil
 	}
 	if err != nil {
 		return nil, err
@@ -92,7 +101,7 @@ func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActi
 		ID:        c.ID,
 		ArticleID: c.ArticleID,
 		UserID:    c.UserID,
-		Type:      enum.ArticleAction(c.Type),
+		Type:      enum.ArticleAction(c.Type), ClientRequestID: c.ClientRequestID, Points: c.Points, Status: enum.ContentActionStatus(c.Status),
 	}, nil
 }
 
@@ -109,7 +118,7 @@ func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleAct
 			ID:        list[i].ID,
 			ArticleID: list[i].ArticleID,
 			UserID:    list[i].UserID,
-			Type:      enum.ArticleAction(list[i].Type),
+			Type:      enum.ArticleAction(list[i].Type), ClientRequestID: list[i].ClientRequestID, Points: list[i].Points, Status: enum.ContentActionStatus(list[i].Status),
 		})
 	}
 	return rows, nil
@@ -155,7 +164,7 @@ func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleAct
 			ID:        list[i].ID,
 			ArticleID: list[i].ArticleID,
 			UserID:    list[i].UserID,
-			Type:      enum.ArticleAction(list[i].Type),
+			Type:      enum.ArticleAction(list[i].Type), ClientRequestID: list[i].ClientRequestID, Points: list[i].Points, Status: enum.ContentActionStatus(list[i].Status),
 		})
 	}
 	return &repo.ArticleActionRecordPageResp{
@@ -195,6 +204,12 @@ func (r *ArticleActionRecordRepo) getQuery(query *gen.ArticleActionRecordQuery, 
 			return articleactionrecord.Type(item)
 		})
 		query = query.Where(articleactionrecord.TypeIn(dbTypes...))
+	}
+	if req.ClientRequestID != nil {
+		query = query.Where(articleactionrecord.ClientRequestIDEQ(*req.ClientRequestID))
+	}
+	if req.Status != nil {
+		query = query.Where(articleactionrecord.StatusEQ(articleactionrecord.Status(*req.Status)))
 	}
 	return query
 }

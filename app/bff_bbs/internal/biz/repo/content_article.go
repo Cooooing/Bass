@@ -158,9 +158,9 @@ type LikeArticleReq struct {
 }
 
 type ThankArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Active    bool
+	UserID          int64
+	ArticleID       int64
+	ClientRequestID string
 }
 
 type CollectArticleReq struct {

@@ -511,8 +511,9 @@ func (r *ContentArticleClient) LikeArticle(ctx context.Context, req *repo.LikeAr
 
 func (r *ContentArticleClient) ThankArticle(ctx context.Context, req *repo.ThankArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Thank(ctx, &contentv1.ThankArticle_Req{
-		ArticleId: req.ArticleID,
-		Thanked:   req.Active,
+		ArticleId:       req.ArticleID,
+		Thanked:         true,
+		ClientRequestId: req.ClientRequestID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(req.UserID),

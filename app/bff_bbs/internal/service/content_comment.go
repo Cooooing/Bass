@@ -453,9 +453,9 @@ func (s *ContentCommentService) Thank(ctx context.Context, req *bbscontentv1.Tha
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.ThankComment(ctx, &usecase.ThankCommentReq{
-		UserID: user.ID,
-		ID:     req.GetId(),
-		Active: req.GetActive(),
+		UserID:          user.ID,
+		ID:              req.GetId(),
+		ClientRequestID: req.GetClientRequestId(),
 	})
 	if err != nil {
 		return nil, err

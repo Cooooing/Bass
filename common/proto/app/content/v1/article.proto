@@ -220,6 +220,7 @@ message ThankArticle {
     int64 article_id = 1; // 文章 ID
     bool thanked = 2; // 是否感谢
     ContentAccess access = 3; // 访问上下文
+    string client_request_id = 4; // 客户端幂等请求 ID
   }
   message Resp {
     bool thanked = 1; // 是否已感谢

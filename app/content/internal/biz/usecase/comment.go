@@ -29,6 +29,7 @@ type CommentUsecase struct {
 	outboxRepo              repo.OutboxEventRepo
 	outboxUsecase           *OutboxUsecase
 	moderationRecordRepo    repo.ContentModerationRecordRepo
+	thankUsecase            *CommentThankUsecase
 }
 
 func NewCommentUsecase(
@@ -41,6 +42,7 @@ func NewCommentUsecase(
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
 	moderationRecordRepo repo.ContentModerationRecordRepo,
+	thankUsecase *CommentThankUsecase,
 ) *CommentUsecase {
 	return &CommentUsecase{
 		log:                     logger,
@@ -52,6 +54,7 @@ func NewCommentUsecase(
 		outboxRepo:              outboxRepo,
 		outboxUsecase:           outboxUsecase,
 		moderationRecordRepo:    moderationRecordRepo,
+		thankUsecase:            thankUsecase,
 	}
 }
 
@@ -442,14 +445,17 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 }
 
 type CommentThankReq struct {
-	CommentID int64
-	Access    *model.ContentAccess
-	Active    bool
+	CommentID       int64
+	Access          *model.ContentAccess
+	Active          bool
+	ClientRequestID string
 }
 
 func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool, error) {
-	interaction := commentInteraction{commentID: req.CommentID, access: req.Access, active: req.Active, action: enum.CommentActionThank, stats: repo.CommentStatUpdate{ThankCount: 1}, event: d.commentThankedEvent}
-	return d.changeInteraction(ctx, interaction)
+	if !req.Active {
+		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return d.thankUsecase.Thank(ctx, req.Access, req.CommentID, req.ClientRequestID)
 }
 
 type commentInteraction struct {
@@ -480,7 +486,7 @@ func (d *CommentUsecase) changeInteraction(ctx context.Context, interaction comm
 			return err
 		}
 		if interaction.active {
-			created, err := d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{CommentID: interaction.commentID, UserID: access.ActorUserID, Type: interaction.action})
+			created, err := d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{CommentID: interaction.commentID, UserID: access.ActorUserID, Type: interaction.action, Status: enum.ContentActionStatusPublished})
 			if err != nil || !created {
 				return err
 			}
@@ -541,6 +547,7 @@ func (d *CommentUsecase) MapViewerActionStates(ctx context.Context, req *Comment
 	records, err := d.commentActionRecordRepo.List(ctx, &repo.CommentActionRecordReq{
 		CommentIDs: commentIDs,
 		UserID:     new(userID),
+		Status:     new(enum.ContentActionStatusPublished),
 		Types: []enum.CommentAction{
 			enum.CommentActionLike,
 			enum.CommentActionThank,

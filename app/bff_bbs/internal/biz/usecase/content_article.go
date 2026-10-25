@@ -552,9 +552,9 @@ type LikeArticleReq struct {
 	Active    bool
 }
 type ThankArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Active    bool
+	UserID          int64
+	ArticleID       int64
+	ClientRequestID string
 }
 type CollectArticleReq struct {
 	UserID    int64
@@ -584,7 +584,7 @@ func (u *ContentArticleUsecase) ThankArticle(ctx context.Context, req *ThankArti
 	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
 		return false, err
 	}
-	return u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+	return u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ClientRequestID: req.ClientRequestID})
 }
 
 func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error) {

@@ -25,8 +25,8 @@ func NewCharacterAbilityRepo(
 	cache *CharacterStateCache,
 ) bizrepo.CharacterAbilityRepo {
 	persistThreshold := int64(100)
-	if conf.GetGameIdle().GetCharacterAbility().GetPersistThreshold() > 0 {
-		persistThreshold = int64(conf.GetGameIdle().GetCharacterAbility().GetPersistThreshold())
+	if conf.GetBusiness().GetGameIdle().GetCharacterAbility().GetPersistThreshold() > 0 {
+		persistThreshold = int64(conf.GetBusiness().GetGameIdle().GetCharacterAbility().GetPersistThreshold())
 	}
 	return &CharacterAbilityRepo{
 		db:               db,

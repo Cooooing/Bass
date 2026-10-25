@@ -16,10 +16,10 @@ message Bootstrap {
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
-  Platform platform = 21;
+  Business business = 21;
 }
 
-message Platform {
+message Business {
   IpData ip_data = 1;
   Oss oss = 2;
   AssetEvents asset_events = 3;

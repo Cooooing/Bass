@@ -43,7 +43,7 @@ func NewDelayedTaskScheduleNatsRepo(
 	if err != nil {
 		return nil, err
 	}
-	s := conf.GetScheduler()
+	s := conf.GetBusiness()
 	streamName := s.GetStreamName()
 	if streamName == "" {
 		streamName = "SCHEDULER"

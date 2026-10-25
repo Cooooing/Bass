@@ -55,12 +55,12 @@ func NewCharacterSettlementHandler(
 	characterAbilityRepo repo.CharacterAbilityRepo,
 ) *CharacterSettlementHandler {
 	backpackPersistLimit := int64(100)
-	if conf.GetGameIdle().GetBackpack().GetPersistThreshold() > 0 {
-		backpackPersistLimit = int64(conf.GetGameIdle().GetBackpack().GetPersistThreshold())
+	if conf.GetBusiness().GetGameIdle().GetBackpack().GetPersistThreshold() > 0 {
+		backpackPersistLimit = int64(conf.GetBusiness().GetGameIdle().GetBackpack().GetPersistThreshold())
 	}
 	abilityPersistLimit := int64(100)
-	if conf.GetGameIdle().GetCharacterAbility().GetPersistThreshold() > 0 {
-		abilityPersistLimit = int64(conf.GetGameIdle().GetCharacterAbility().GetPersistThreshold())
+	if conf.GetBusiness().GetGameIdle().GetCharacterAbility().GetPersistThreshold() > 0 {
+		abilityPersistLimit = int64(conf.GetBusiness().GetGameIdle().GetCharacterAbility().GetPersistThreshold())
 	}
 	return &CharacterSettlementHandler{
 		logger:               logger,

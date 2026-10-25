@@ -24,8 +24,8 @@ func NewCharacterBackpackRepo(
 	cache *CharacterStateCache,
 ) (bizrepo.CharacterBackpackRepo, error) {
 	persistThreshold := int64(100)
-	if conf.GetGameIdle().GetBackpack().GetPersistThreshold() > 0 {
-		persistThreshold = int64(conf.GetGameIdle().GetBackpack().GetPersistThreshold())
+	if conf.GetBusiness().GetGameIdle().GetBackpack().GetPersistThreshold() > 0 {
+		persistThreshold = int64(conf.GetBusiness().GetGameIdle().GetBackpack().GetPersistThreshold())
 	}
 	return &CharacterBackpackRepo{
 		db:               db,

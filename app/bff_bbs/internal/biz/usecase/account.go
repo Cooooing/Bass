@@ -62,8 +62,8 @@ func NewAccountUsecase(
 		realtimeHub:         realtimeHub,
 		assetHashPattern:    regexp.MustCompile(`^[a-f0-9]{64}$`),
 		maxProfileImageSize: 2 * 1024 * 1024,
-		publicAPIURL:        strings.TrimRight(conf.GetPublicEndpoint().GetApiUrl(), "/"),
-		publicSiteURL:       strings.TrimRight(conf.GetPublicEndpoint().GetSiteUrl(), "/"),
+		publicAPIURL:        strings.TrimRight(conf.GetBusiness().GetPublicEndpoint().GetApiUrl(), "/"),
+		publicSiteURL:       strings.TrimRight(conf.GetBusiness().GetPublicEndpoint().GetSiteUrl(), "/"),
 	}
 }
 func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_CurrentAccount, error) {

@@ -102,10 +102,14 @@ func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) 
 	if err != nil {
 		return nil, err
 	}
+	ttl := 5 * time.Minute
+	if configuredTTL := u.conf.GetBusiness().GetAuth().GetTotp().GetTemporarySecretTtl(); configuredTTL != nil && configuredTTL.AsDuration() > 0 {
+		ttl = configuredTTL.AsDuration()
+	}
 	if err = u.totpSecretCache.Save(ctx, &repo.TotpSecretCacheSaveReq{
 		UserID: req.UserID,
 		Secret: key.Secret(),
-		TTL:    5 * time.Minute,
+		TTL:    ttl,
 	}); err != nil {
 		return nil, err
 	}

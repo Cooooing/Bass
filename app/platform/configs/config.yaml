@@ -57,7 +57,7 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
-platform:
+business:
   asset_upload_rate_limit:
     enable: true
     window: 300s

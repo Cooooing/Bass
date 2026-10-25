@@ -38,8 +38,8 @@ func NewAssetUsecase(
 	rateLimitEnabled := true
 	rateLimitWindow := 5 * time.Minute
 	rateLimitMaxCount := int64(5)
-	if conf != nil && conf.GetPlatform() != nil {
-		settings := conf.GetPlatform().GetAssetUploadRateLimit()
+	if conf != nil && conf.GetBusiness() != nil {
+		settings := conf.GetBusiness().GetAssetUploadRateLimit()
 		if settings != nil {
 			rateLimitEnabled = settings.GetEnable()
 			if settings.GetWindow() != nil && settings.GetWindow().AsDuration() > 0 {

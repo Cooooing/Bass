@@ -15,11 +15,15 @@ message Bootstrap {
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
-  WebSocket websocket = 10;
+  Business business = 10;
 }
 
-message WebSocket {
-  google.protobuf.Duration ping_interval = 1; // WS 协议层 ping 间隔
-  google.protobuf.Duration write_timeout = 2; // WS 写超时
-  common.api.app.common.WorkerPool worker_pool = 3; // WS 命令和事件处理协程池
+message Business {
+  WebSocket websocket = 1;
+
+  message WebSocket {
+    google.protobuf.Duration ping_interval = 1; // WS 协议层 ping 间隔
+    google.protobuf.Duration write_timeout = 2; // WS 写超时
+    common.api.app.common.WorkerPool worker_pool = 3; // WS 命令和事件处理协程池
+  }
 }

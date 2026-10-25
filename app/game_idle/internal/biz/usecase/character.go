@@ -37,20 +37,20 @@ func NewCharacterUsecase(
 	eventUsecase *GameIdleEventUsecase,
 ) *CharacterUsecase {
 	maxCharacterCountPerUser := int32(3)
-	if value := conf.GetGameIdle().GetCharacter().GetMaxCountPerUser(); value > 0 && value <= math.MaxInt32 {
+	if value := conf.GetBusiness().GetGameIdle().GetCharacter().GetMaxCountPerUser(); value > 0 && value <= math.MaxInt32 {
 		maxCharacterCountPerUser = int32(value)
 	}
 	defaultActionQueueCapacity := int32(3)
-	if value := conf.GetGameIdle().GetCharacter().GetDefaultActionQueueCapacity(); value > 0 && value <= math.MaxInt32 {
+	if value := conf.GetBusiness().GetGameIdle().GetCharacter().GetDefaultActionQueueCapacity(); value > 0 && value <= math.MaxInt32 {
 		defaultActionQueueCapacity = int32(value)
 	}
 	defaultMaxOfflineDuration := 8 * time.Hour
-	if conf.GetGameIdle().GetCharacter().GetDefaultMaxOfflineDuration() != nil {
-		defaultMaxOfflineDuration = conf.GetGameIdle().GetCharacter().GetDefaultMaxOfflineDuration().AsDuration()
+	if conf.GetBusiness().GetGameIdle().GetCharacter().GetDefaultMaxOfflineDuration() != nil {
+		defaultMaxOfflineDuration = conf.GetBusiness().GetGameIdle().GetCharacter().GetDefaultMaxOfflineDuration().AsDuration()
 	}
 	onlineSessionTTL := 5 * time.Minute
-	if conf.GetGameIdle().GetOnlineSession().GetTtl() != nil && conf.GetGameIdle().GetOnlineSession().GetTtl().AsDuration() > 0 {
-		onlineSessionTTL = conf.GetGameIdle().GetOnlineSession().GetTtl().AsDuration()
+	if conf.GetBusiness().GetGameIdle().GetOnlineSession().GetTtl() != nil && conf.GetBusiness().GetGameIdle().GetOnlineSession().GetTtl().AsDuration() > 0 {
+		onlineSessionTTL = conf.GetBusiness().GetGameIdle().GetOnlineSession().GetTtl().AsDuration()
 	}
 	return &CharacterUsecase{
 		characterRepo:              characterRepo,

@@ -46,7 +46,7 @@ func NewAssetEventNatsRepo(
 	if err != nil {
 		return nil, err
 	}
-	settings := conf.GetPlatform().GetAssetEvents()
+	settings := conf.GetBusiness().GetAssetEvents()
 	defaultStream := "PLATFORM_ASSET_UPLOADS"
 	defaultSubject := "storage.asset.object-created"
 	defaultConsumer := "platform-asset-upload-recorder"

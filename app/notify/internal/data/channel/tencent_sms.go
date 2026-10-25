@@ -26,16 +26,16 @@ type TencentSMSClient struct {
 func NewTencentSMSClient(
 	conf *config.Bootstrap,
 ) (*TencentSMSClient, error) {
-	if conf == nil || conf.Notify == nil || conf.Notify.Sms == nil || !conf.Notify.Sms.Enable {
+	if conf == nil || conf.Business == nil || conf.Business.Sms == nil || !conf.Business.Sms.Enable {
 		return &TencentSMSClient{
 			conf: conf,
 		}, nil
 	}
 
-	if conf.Notify.Sms.Tencent == nil {
+	if conf.Business.Sms.Tencent == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
-	tencentConf := conf.Notify.Sms.Tencent
+	tencentConf := conf.Business.Sms.Tencent
 	credential := common.NewCredential(tencentConf.SecretId, tencentConf.SecretKey)
 	clientProfile := profile.NewClientProfile()
 	clientProfile.HttpProfile.ReqMethod = "POST"
@@ -66,13 +66,13 @@ func (c *TencentSMSClient) SendTencentSMS(ctx context.Context, req *bizrepo.Tenc
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
-	if c.conf == nil || c.conf.Notify == nil || c.conf.Notify.Sms == nil || !c.conf.Notify.Sms.Enable {
+	if c.conf == nil || c.conf.Business == nil || c.conf.Business.Sms == nil || !c.conf.Business.Sms.Enable {
 		return &bizrepo.TencentSMSSendResult{
 			Status:       notifyenum.NotificationChannelStatusSucceeded,
 			ProviderResp: new("sms channel disabled, skipped provider call"),
 		}, nil
 	}
-	if c.conf.Notify.Sms.Tencent == nil || c.client == nil {
+	if c.conf.Business.Sms.Tencent == nil || c.client == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
 	if req.ProviderTemplateID == "" {

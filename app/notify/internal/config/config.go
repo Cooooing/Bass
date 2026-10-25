@@ -12,7 +12,7 @@ func NewConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstrap
 	}
 
 	if err := hot.BindProtoHotFields(
-		&c.Notify.NotificationRateLimit,
+		&c.Business.NotificationRateLimit,
 		&c.Alert.LarkWebhook,
 		&c.Event.Inbox,
 		&c.Event.DeadLetter,

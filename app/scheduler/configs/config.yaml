@@ -57,7 +57,7 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
-scheduler:
+business:
   default_execution_timeout: 30s # 30s
   stream_name: SCHEDULER
   scheduled_task_consumer_durable: scheduler-scheduled-task-executor
@@ -69,6 +69,3 @@ scheduler:
   ack_wait: 60s # 1min
   fetch_batch: 16
   fetch_wait: 2s # 2s
-  scheduled_task_concurrency: 8
-  delayed_task_concurrency: 16
-  reconcile_interval: 60s # 1min

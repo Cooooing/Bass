@@ -50,6 +50,11 @@ nats:
   enable_jet_stream: false
   stream_name: ""
   jet_stream_domain: ""
+dtm:
+  grpc_endpoint: ${DTM_GRPC_ENDPOINT:127.0.0.1:36790}
+  timeout: 5s
+  tcc_timeout_to_fail: 30s
+  retry_interval: 1s
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
@@ -57,11 +62,6 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
-dtm:
-  grpc_endpoint: ${DTM_GRPC_ENDPOINT:127.0.0.1:36790}
-  timeout: 5s
-  tcc_timeout_to_fail: 30s
-  retry_interval: 1s
 business:
   emoji_share_ttl: 604800s # 7d
   global_chat_topic_points: 16

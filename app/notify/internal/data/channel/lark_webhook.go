@@ -54,8 +54,8 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizrepo.La
 		return nil, errors.New("lark webhook client is not configured")
 	}
 	baseURL := "https://open.larksuite.com/open-apis/bot/v2/hook/"
-	if c.conf != nil && c.conf.Notify != nil && c.conf.Notify.LarkWebhook != nil && c.conf.Notify.LarkWebhook.BaseUrl != "" {
-		baseURL = c.conf.Notify.LarkWebhook.BaseUrl
+	if c.conf != nil && c.conf.Business != nil && c.conf.Business.LarkWebhook != nil && c.conf.Business.LarkWebhook.BaseUrl != "" {
+		baseURL = c.conf.Business.LarkWebhook.BaseUrl
 	}
 	requestBody := req.RequestBody
 	if strings.TrimSpace(req.Secret) != "" {

@@ -49,7 +49,7 @@ var ModuleProviderSet = wire.NewSet(
 )
 
 func ProvideTimeWheel(c *config.Bootstrap) *common.TimeWheel {
-	return c.GetTimewheel()
+	return c.GetBusiness().GetTimewheel()
 }
 
 func ProvideDatabase(c *config.Bootstrap) *common.Database {

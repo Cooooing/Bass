@@ -23,13 +23,13 @@ func NewRateLimitUsecase(
 	enabled := true
 	window := 5 * time.Minute
 	maxCount := int64(5)
-	if conf != nil && conf.Notify != nil && conf.Notify.NotificationRateLimit != nil {
-		enabled = conf.Notify.NotificationRateLimit.Enable
-		if conf.Notify.NotificationRateLimit.Window != nil && conf.Notify.NotificationRateLimit.Window.AsDuration() > 0 {
-			window = conf.Notify.NotificationRateLimit.Window.AsDuration()
+	if conf != nil && conf.Business != nil && conf.Business.NotificationRateLimit != nil {
+		enabled = conf.Business.NotificationRateLimit.Enable
+		if conf.Business.NotificationRateLimit.Window != nil && conf.Business.NotificationRateLimit.Window.AsDuration() > 0 {
+			window = conf.Business.NotificationRateLimit.Window.AsDuration()
 		}
-		if conf.Notify.NotificationRateLimit.MaxCount > 0 {
-			maxCount = conf.Notify.NotificationRateLimit.MaxCount
+		if conf.Business.NotificationRateLimit.MaxCount > 0 {
+			maxCount = conf.Business.NotificationRateLimit.MaxCount
 		}
 	}
 	return &RateLimitUsecase{

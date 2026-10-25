@@ -71,8 +71,7 @@ event:
     enable_alert: false
     scan_interval: 60s
     alert_dedup_window: 3600s
-
-notify:
+business:
   email:
     enable: false
     smtp_host: ${EMAIL_SMTP_HOST:smtp.qq.com}

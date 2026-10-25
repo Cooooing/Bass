@@ -57,12 +57,12 @@ func NewWebSocketUsecase(
 	errorResolver ErrorResolver,
 ) *WebSocketUsecase {
 	pingInterval := 30 * time.Second
-	if conf.GetWebsocket().GetPingInterval() != nil && conf.GetWebsocket().GetPingInterval().AsDuration() > 0 {
-		pingInterval = conf.GetWebsocket().GetPingInterval().AsDuration()
+	if conf.GetBusiness().GetWebsocket().GetPingInterval() != nil && conf.GetBusiness().GetWebsocket().GetPingInterval().AsDuration() > 0 {
+		pingInterval = conf.GetBusiness().GetWebsocket().GetPingInterval().AsDuration()
 	}
 	writeTimeout := time.Second
-	if conf.GetWebsocket().GetWriteTimeout() != nil && conf.GetWebsocket().GetWriteTimeout().AsDuration() > 0 {
-		writeTimeout = conf.GetWebsocket().GetWriteTimeout().AsDuration()
+	if conf.GetBusiness().GetWebsocket().GetWriteTimeout() != nil && conf.GetBusiness().GetWebsocket().GetWriteTimeout().AsDuration() > 0 {
+		writeTimeout = conf.GetBusiness().GetWebsocket().GetWriteTimeout().AsDuration()
 	}
 	return &WebSocketUsecase{
 		logger:           logger,

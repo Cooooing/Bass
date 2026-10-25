@@ -43,7 +43,7 @@ var BizProviderSet = wire.NewSet(
 )
 
 func ProvideWebSocketWorkerPool(c *config.Bootstrap) *common.WorkerPool {
-	return c.GetWebsocket().GetWorkerPool()
+	return c.GetBusiness().GetWebsocket().GetWorkerPool()
 }
 
 func ProvideWebSocketEventHandlers(

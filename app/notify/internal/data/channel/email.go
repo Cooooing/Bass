@@ -39,13 +39,13 @@ func (c *EmailClient) SendEmail(ctx context.Context, req *bizrepo.EmailRequest) 
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
-	if c.conf == nil || c.conf.Notify == nil || c.conf.Notify.Email == nil || !c.conf.Notify.Email.Enable {
+	if c.conf == nil || c.conf.Business == nil || c.conf.Business.Email == nil || !c.conf.Business.Email.Enable {
 		return &bizrepo.EmailSendResult{
 			Status:       notifyenum.NotificationChannelStatusSucceeded,
 			ProviderResp: new("email channel disabled, skipped provider call"),
 		}, nil
 	}
-	email := c.conf.Notify.Email
+	email := c.conf.Business.Email
 
 	contentType := req.ContentType
 	if contentType == "" {

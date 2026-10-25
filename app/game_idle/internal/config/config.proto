@@ -15,15 +15,19 @@ message Bootstrap {
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
-  common.api.app.common.TimeWheel timewheel = 10;
-  GameIdle game_idle = 21;
+  Business business = 21;
 }
 
-message GameIdle {
-  Backpack backpack = 3;
-  Character character = 4;
-  OnlineSession online_session = 5;
-  CharacterAbility character_ability = 6;
+message Business {
+  common.api.app.common.TimeWheel timewheel = 1;
+  GameIdle game_idle = 2;
+
+  message GameIdle {
+    Backpack backpack = 3;
+    Character character = 4;
+    OnlineSession online_session = 5;
+    CharacterAbility character_ability = 6;
+  }
 }
 
 message Backpack {

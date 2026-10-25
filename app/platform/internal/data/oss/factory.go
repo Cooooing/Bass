@@ -17,7 +17,7 @@ var ProviderSet = wire.NewSet(
 )
 
 func ProvideStorageClient(conf *config.Bootstrap) (repo.StorageClient, error) {
-	provider := conf.GetPlatform().GetOss().GetProvider()
+	provider := conf.GetBusiness().GetOss().GetProvider()
 	switch provider {
 	case enum.AssetProviderMinio.String():
 		return minio.NewMinio(conf)

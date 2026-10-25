@@ -51,10 +51,10 @@ func NewIPResolutionUsecase(
 			old.Close()
 		}
 	}
-	if !conf.GetPlatform().GetIpData().GetEnable() {
+	if !conf.GetBusiness().GetIpData().GetEnable() {
 		return u, cleanup, nil
 	}
-	ipData := u.conf.GetPlatform().GetIpData()
+	ipData := u.conf.GetBusiness().GetIpData()
 	ipv4Content, ipv4Err := u.downloadIPDataFromStorage(ctx, ipData.GetIpv4XdbPath())
 	ipv6Content, ipv6Err := u.downloadIPDataFromStorage(ctx, ipData.GetIpv6XdbPath())
 	if ipv4Err == nil && ipv6Err == nil {
@@ -146,7 +146,7 @@ func (u *IPResolutionUsecase) uploadIPDataToStorage(ctx context.Context, key str
 }
 
 func (u *IPResolutionUsecase) uploadIPDataToLocal(ctx context.Context, ipv4Content []byte, ipv6Content []byte) error {
-	ipData := u.conf.GetPlatform().GetIpData()
+	ipData := u.conf.GetBusiness().GetIpData()
 	ipv4Path := strings.TrimSpace(ipData.GetIpv4XdbPath())
 	if ipv4Path == "" {
 		return fmt.Errorf("IPv4 ip data path is empty")
@@ -269,7 +269,7 @@ func (u *IPResolutionUsecase) Get(ctx context.Context, ip string) (*commonModel.
 }
 
 func (u *IPResolutionUsecase) UpdateIPDataFromSource(ctx context.Context) error {
-	ipData := u.conf.GetPlatform().GetIpData()
+	ipData := u.conf.GetBusiness().GetIpData()
 	ipv4Content, err := u.downloadIPDataFromSource(ctx, ipData.GetIpv4SourceUrl())
 	if err != nil {
 		return fmt.Errorf("download IPv4 ip data from source: %w", err)
@@ -288,7 +288,7 @@ func (u *IPResolutionUsecase) UpdateIPDataFromSource(ctx context.Context) error 
 }
 
 func (u *IPResolutionUsecase) UpdateIPDataFromOss(ctx context.Context) error {
-	ipData := u.conf.GetPlatform().GetIpData()
+	ipData := u.conf.GetBusiness().GetIpData()
 	ipv4Content, err := u.downloadIPDataFromStorage(ctx, ipData.GetIpv4XdbPath())
 	if err != nil {
 		return fmt.Errorf("download IPv4 ip data from oss: %w", err)

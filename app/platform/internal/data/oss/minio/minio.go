@@ -32,7 +32,7 @@ type Minio struct {
 }
 
 func NewMinio(conf *config.Bootstrap) (*Minio, error) {
-	src := conf.GetPlatform().GetOss().GetMinio()
+	src := conf.GetBusiness().GetOss().GetMinio()
 	if src.GetEndpoint() == "" || src.GetAccessKey() == "" || src.GetSecretKey() == "" || src.GetBucket() == "" {
 		return nil, fmt.Errorf("minio config requires endpoint, access_key, secret_key and bucket")
 	}

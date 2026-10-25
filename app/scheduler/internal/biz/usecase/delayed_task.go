@@ -324,15 +324,15 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 		return created.Row, nil
 	}
 	schedulePrefix := u.delayedTaskScheduleSubjectPrefix
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
-		schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
+		schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
 	}
 	for _, row := range canceled {
 		_ = u.scheduleRepo.Cancel(context.WithoutCancel(ctx), fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
 	}
 	executeSubject := "scheduler.execute.delayed_task"
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskExecuteSubject() != "" {
-		executeSubject = u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
+	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskExecuteSubject() != "" {
+		executeSubject = u.conf.GetBusiness().GetDelayedTaskExecuteSubject()
 	}
 	scheduleReq := &repo.DelayedTaskScheduleReq{
 		Record:  created.Row,
@@ -372,8 +372,8 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 			return nil, err
 		}
 		schedulePrefix := u.delayedTaskScheduleSubjectPrefix
-		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
-			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+		if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
+			schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
 		}
 		for _, row := range rows {
 			_ = u.scheduleRepo.Cancel(ctx, fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
@@ -392,8 +392,8 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 	}
 	if row.Status == schedulerenum.TaskExecutionStatusCanceled {
 		schedulePrefix := u.delayedTaskScheduleSubjectPrefix
-		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
-			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+		if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
+			schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
 		}
 		_ = u.scheduleRepo.Cancel(ctx, fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
 	}
@@ -624,12 +624,12 @@ func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
 			}
 			schedulePrefix := u.delayedTaskScheduleSubjectPrefix
 			executeSubject := "scheduler.execute.delayed_task"
-			if u.conf.GetScheduler() != nil {
-				if u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
-					schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+			if u.conf.GetBusiness() != nil {
+				if u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
+					schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
 				}
-				if u.conf.GetScheduler().GetDelayedTaskExecuteSubject() != "" {
-					executeSubject = u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
+				if u.conf.GetBusiness().GetDelayedTaskExecuteSubject() != "" {
+					executeSubject = u.conf.GetBusiness().GetDelayedTaskExecuteSubject()
 				}
 			}
 			req := &repo.DelayedTaskScheduleReq{Record: row, Subject: fmt.Sprintf("%s.%d", schedulePrefix, row.ID), Target: executeSubject}

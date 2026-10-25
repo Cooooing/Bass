@@ -97,8 +97,8 @@ func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledT
 	}
 	if row.Timeout <= 0 {
 		row.Timeout = 300 * time.Second
-		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDefaultExecutionTimeout() != nil && u.conf.GetScheduler().GetDefaultExecutionTimeout().AsDuration() > 0 {
-			row.Timeout = u.conf.GetScheduler().GetDefaultExecutionTimeout().AsDuration()
+		if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDefaultExecutionTimeout() != nil && u.conf.GetBusiness().GetDefaultExecutionTimeout().AsDuration() > 0 {
+			row.Timeout = u.conf.GetBusiness().GetDefaultExecutionTimeout().AsDuration()
 		}
 	}
 	if row.MaxAttempts <= 0 {
@@ -127,12 +127,12 @@ func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledT
 	}
 	_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, saved.HandlerName.String())
 	schedulePrefix := "scheduler.schedule.scheduled_task"
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix() != "" {
-		schedulePrefix = u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix()
+	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix() != "" {
+		schedulePrefix = u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix()
 	}
 	executeSubject := "scheduler.execute.scheduled_task"
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskExecuteSubject() != "" {
-		executeSubject = u.conf.GetScheduler().GetScheduledTaskExecuteSubject()
+	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskExecuteSubject() != "" {
+		executeSubject = u.conf.GetBusiness().GetScheduledTaskExecuteSubject()
 	}
 	subject := fmt.Sprintf("%s.%d", schedulePrefix, saved.ID)
 	if saved.Enabled {
@@ -666,15 +666,15 @@ func (u *ScheduledTaskUsecase) EnsureSchedule(ctx context.Context) error {
 		return err
 	}
 	schedulePrefix := "scheduler.schedule.scheduled_task"
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix() != "" {
-		schedulePrefix = u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix()
+	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix() != "" {
+		schedulePrefix = u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix()
 	}
 	if err := u.scheduledTaskScheduleRepo.Cancel(ctx, schedulePrefix+".>"); err != nil {
 		return err
 	}
 	executeSubject := "scheduler.execute.scheduled_task"
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskExecuteSubject() != "" {
-		executeSubject = u.conf.GetScheduler().GetScheduledTaskExecuteSubject()
+	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskExecuteSubject() != "" {
+		executeSubject = u.conf.GetBusiness().GetScheduledTaskExecuteSubject()
 	}
 	enabled := true
 	rows, err := u.scheduledTaskRepo.List(ctx, &repo.ScheduledTaskGetReq{Enabled: &enabled})

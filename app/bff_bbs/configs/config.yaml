@@ -36,6 +36,7 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
-public_endpoint:
-  api_url: ${BFF_PUBLIC_URL:http://127.0.0.1:8001}
-  site_url: ${SITE_PUBLIC_URL:http://127.0.0.1:2324}
+business:
+  public_endpoint:
+    api_url: ${BFF_PUBLIC_URL:http://127.0.0.1:8001}
+    site_url: ${SITE_PUBLIC_URL:http://127.0.0.1:2324}

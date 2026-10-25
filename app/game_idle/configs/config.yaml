@@ -51,23 +51,24 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
-timewheel:
-  interval: 0.05s
-  wheel_slots: 36000
-  worker_pool:
-    core_size: 16
-    max_size: 2048
-    queue_size: 8192
-    idle_timeout: 60s
-    nonblocking: false
-game_idle:
-  backpack:
-    persist_threshold: 100
-  character:
-    max_count_per_user: 3
-    default_action_queue_capacity: 3
-    default_max_offline_duration: 86400s
-  character_ability:
-    persist_threshold: 100
-  online_session:
-    ttl: 300s
+business:
+  timewheel:
+    interval: 0.05s
+    wheel_slots: 36000
+    worker_pool:
+      core_size: 16
+      max_size: 2048
+      queue_size: 8192
+      idle_timeout: 60s
+      nonblocking: false
+  game_idle:
+    backpack:
+      persist_threshold: 100
+    character:
+      max_count_per_user: 3
+      default_action_queue_capacity: 3
+      default_max_offline_duration: 86400s
+    character_ability:
+      persist_threshold: 100
+    online_session:
+      ttl: 300s

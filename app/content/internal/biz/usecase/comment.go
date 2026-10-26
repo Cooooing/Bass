@@ -448,14 +448,13 @@ type CommentThankReq struct {
 	CommentID       int64
 	Access          *model.ContentAccess
 	Active          bool
-	ClientRequestID string
 }
 
 func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool, error) {
 	if !req.Active {
 		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return d.thankUsecase.Thank(ctx, req.Access, req.CommentID, req.ClientRequestID)
+	return d.thankUsecase.Thank(ctx, req.Access, req.CommentID)
 }
 
 type commentInteraction struct {

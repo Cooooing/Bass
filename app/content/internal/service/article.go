@@ -243,7 +243,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		value := req.GetScheduledAt().AsTime()
 		scheduledAt = &value
 	}
-	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt, PublishedCity: req.City, ClientRequestID: req.GetClientRequestId()}); err != nil {
+	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt, PublishedCity: req.City}); err != nil {
 		return nil, err
 	}
 	return &v1.PublishArticle_Resp{}, nil
@@ -538,7 +538,7 @@ func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Req) (*
 	if err != nil {
 		return nil, err
 	}
-	thanked, err := s.articleUsecase.Thank(ctx, &usecase.ArticleThankReq{Access: access, ArticleID: req.GetArticleId(), UserID: access.ActorUserID, Active: req.GetThanked(), ClientRequestID: req.GetClientRequestId()})
+	thanked, err := s.articleUsecase.Thank(ctx, &usecase.ArticleThankReq{Access: access, ArticleID: req.GetArticleId(), UserID: access.ActorUserID, Active: req.GetThanked()})
 	return &v1.ThankArticle_Resp{Thanked: thanked}, err
 }
 
@@ -604,7 +604,7 @@ func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) 
 	if err != nil {
 		return nil, err
 	}
-	rewarded, err := s.articleUsecase.Reward(ctx, &usecase.ArticleRewardReq{Access: access, ArticleID: req.GetArticleId(), ClientRequestID: req.GetClientRequestId()})
+	rewarded, err := s.articleUsecase.Reward(ctx, &usecase.ArticleRewardReq{Access: access, ArticleID: req.GetArticleId()})
 	return &v1.RewardArticle_Resp{Rewarded: rewarded}, err
 }
 

@@ -7,7 +7,6 @@ type ArticleActionRecord struct {
 	ArticleID       int64
 	UserID          int64
 	Type            enum.ArticleAction
-	ClientRequestID *string
 	Points          *int64
 	Status          enum.ContentActionStatus
 }

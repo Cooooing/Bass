@@ -479,10 +479,8 @@ message LikeComment {
 message ThankComment {
   message Req {
     int64 id = 1; // 评论 ID
-    string client_request_id = 2; // 客户端幂等请求 ID
     option (gnostic.openapi.v3.schema) = {
       required: "id"
-      required: "client_request_id"
     };
   }
   message Resp {

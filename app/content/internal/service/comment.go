@@ -591,7 +591,6 @@ func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Req) (r
 		CommentID:       req.Id,
 		Access:          access,
 		Active:          req.Thanked,
-		ClientRequestID: req.GetClientRequestId(),
 	})
 	return &v1.ThankComment_Resp{
 		Thanked: thankResp,

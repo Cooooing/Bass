@@ -50,7 +50,6 @@ type UpdateDraftArticleReq struct {
 type PublishArticleReq struct {
 	UserID          int64
 	ArticleID       int64
-	ClientRequestID string
 	ScheduledAt     *time.Time
 	City            *string
 }
@@ -161,7 +160,6 @@ type LikeArticleReq struct {
 type ThankArticleReq struct {
 	UserID          int64
 	ArticleID       int64
-	ClientRequestID string
 }
 
 type CollectArticleReq struct {
@@ -179,7 +177,6 @@ type WatchArticleReq struct {
 type RewardArticleReq struct {
 	UserID          int64
 	ArticleID       int64
-	ClientRequestID string
 }
 
 type ContentArticleClient interface {

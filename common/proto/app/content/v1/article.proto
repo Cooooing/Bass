@@ -98,7 +98,6 @@ message PublishArticle {
     optional ContentAccess access = 2; // 访问上下文
     optional google.protobuf.Timestamp scheduled_at = 3; // 定时发布时间；未来时间会注册延迟任务
     optional string city = 4; // 作者发布或设置定时时的城市快照
-    optional string client_request_id = 5; // 发布命令幂等键
   }
   message Resp {}
 }
@@ -221,7 +220,6 @@ message ThankArticle {
     int64 article_id = 1; // 文章 ID
     bool thanked = 2; // 是否感谢
     ContentAccess access = 3; // 访问上下文
-    string client_request_id = 4; // 客户端幂等请求 ID
   }
   message Resp {
     bool thanked = 1; // 是否已感谢
@@ -253,7 +251,6 @@ message WatchArticle {
 message RewardArticle {
   message Req {
     int64 article_id = 1; // 文章 ID
-    string client_request_id = 2; // 客户端幂等请求 ID
     ContentAccess access = 3; // 访问上下文
   }
   message Resp {

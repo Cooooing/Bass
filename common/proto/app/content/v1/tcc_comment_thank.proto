@@ -17,8 +17,7 @@ message TCCCommentThank {
     int64 comment_id = 1; // 被感谢评论 ID
     int64 sender_user_id = 2; // 感谢者账号 ID
     int64 receiver_user_id = 3; // 收款评论作者账号 ID
-    string client_request_id = 4; // 客户端幂等请求 ID
-    int64 points = 5; // 本次转赠积分数量
+    int64 points = 4; // 本次转赠积分数量
   }
   message Resp {}
 }

@@ -31,10 +31,7 @@ type CommentThankUsecase struct {
 func NewCommentThankUsecase(comments repo.CommentRepo, articles repo.ArticleRepo, actions repo.CommentActionRecordRepo, dtm *commonclient.DTMClient, branches *commonclient.TCCBranchCaller, business *config.Business) *CommentThankUsecase {
 	return &CommentThankUsecase{comments, articles, actions, dtm, branches, business}
 }
-func (u *CommentThankUsecase) Thank(ctx context.Context, access *model.ContentAccess, commentID int64, requestID string) (bool, error) {
-	if requestID == "" {
-		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
+func (u *CommentThankUsecase) Thank(ctx context.Context, access *model.ContentAccess, commentID int64) (bool, error) {
 	c, err := u.comments.Get(ctx, &repo.CommentGetReq{Filter: &model.CommentFilter{CommentID: &commentID}})
 	if err != nil {
 		return false, err
@@ -60,7 +57,7 @@ func (u *CommentThankUsecase) Thank(ctx context.Context, access *model.ContentAc
 	if u.business != nil && u.business.GetComment().GetThankPoints() > 0 {
 		points = u.business.GetComment().GetThankPoints()
 	}
-	req := &contentv1.TCCCommentThank_Req{CommentId: commentID, SenderUserId: actor, ReceiverUserId: *c.CreatedBy, ClientRequestId: requestID, Points: points}
+	req := &contentv1.TCCCommentThank_Req{CommentId: commentID, SenderUserId: actor, ReceiverUserId: *c.CreatedBy, Points: points}
 	transfer := &economyv1.TCCPointsTransfer_Req{FromUserId: actor, ToUserId: *c.CreatedBy, Amount: points, OutRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE, InRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD, Remark: new(fmt.Sprintf("comment thank:%d", commentID))}
 	_, err = u.dtm.InTCC(ctx, func(t *dtmgrpc.TccGrpc) error {
 		if err = u.branches.Call(ctx, t, constant.ContentServiceName.String(), req, contentv1.TCCCommentThankService_Try_FullMethodName, contentv1.TCCCommentThankService_Confirm_FullMethodName, contentv1.TCCCommentThankService_Cancel_FullMethodName, &contentv1.TCCCommentThank_Resp{}); err != nil {
@@ -85,24 +82,20 @@ func NewTCCCommentThankUsecase(logger *slog.Logger, comments repo.CommentRepo, a
 }
 func (u *TCCCommentThankUsecase) Try(ctx context.Context, r *contentv1.TCCCommentThank_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
-		if r.GetCommentId() <= 0 || r.GetSenderUserId() <= 0 || r.GetReceiverUserId() <= 0 || r.GetSenderUserId() == r.GetReceiverUserId() || r.GetClientRequestId() == "" || r.GetPoints() <= 0 {
+		if r.GetCommentId() <= 0 || r.GetSenderUserId() <= 0 || r.GetReceiverUserId() <= 0 || r.GetSenderUserId() == r.GetReceiverUserId() || r.GetPoints() <= 0 {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-		}
-		existing, err := u.actions.Get(ctx, &repo.CommentActionRecordReq{ClientRequestID: new(r.ClientRequestId)})
-		if err != nil {
-			return err
-		}
-		if existing != nil {
-			return nil
 		}
 		action := enum.CommentActionThank
 		exists, err := u.actions.Exist(ctx, &repo.CommentActionRecordReq{CommentID: new(r.CommentId), UserID: new(r.SenderUserId), Type: &action})
 		if err != nil || exists {
 			return err
 		}
-		created, err := u.actions.Save(ctx, &model.CommentActionRecord{CommentID: r.GetCommentId(), UserID: r.GetSenderUserId(), Type: action, ClientRequestID: new(r.ClientRequestId), Points: new(r.Points), Status: enum.ContentActionStatusPending})
-		if err != nil || !created {
+		created, err := u.actions.Save(ctx, &model.CommentActionRecord{CommentID: r.GetCommentId(), UserID: r.GetSenderUserId(), Type: action, Points: new(r.Points), Status: enum.ContentActionStatusPending})
+		if err != nil {
 			return err
+		}
+		if !created {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
 		}
 		return nil
 	})
@@ -110,7 +103,8 @@ func (u *TCCCommentThankUsecase) Try(ctx context.Context, r *contentv1.TCCCommen
 func (u *TCCCommentThankUsecase) Confirm(ctx context.Context, r *contentv1.TCCCommentThank_Req) error {
 	var outboxEvent *repo.OutboxEvent
 	err := u.branch.Execute(ctx, func(ctx context.Context) error {
-		changed, err := u.actions.TransitionStatus(ctx, r.GetClientRequestId(), enum.ContentActionStatusPending, enum.ContentActionStatusPublished)
+		action := enum.CommentActionThank
+		changed, err := u.actions.TransitionStatus(ctx, &repo.CommentActionRecordReq{CommentID: new(r.CommentId), UserID: new(r.SenderUserId), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusPublished)
 		if err != nil || !changed {
 			return err
 		}
@@ -130,7 +124,8 @@ func (u *TCCCommentThankUsecase) Confirm(ctx context.Context, r *contentv1.TCCCo
 }
 func (u *TCCCommentThankUsecase) Cancel(ctx context.Context, r *contentv1.TCCCommentThank_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
-		_, err := u.actions.TransitionStatus(ctx, r.GetClientRequestId(), enum.ContentActionStatusPending, enum.ContentActionStatusCanceled)
+		action := enum.CommentActionThank
+		_, err := u.actions.TransitionStatus(ctx, &repo.CommentActionRecordReq{CommentID: new(r.CommentId), UserID: new(r.SenderUserId), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusCanceled)
 		return err
 	})
 }

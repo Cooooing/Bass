@@ -41,7 +41,6 @@ func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.Articl
 		SetArticleID(record.ArticleID).
 		SetUserID(record.UserID).
 		SetType(articleactionrecord.Type(record.Type)).
-		SetNillableClientRequestID(record.ClientRequestID).
 		SetNillablePoints(record.Points).
 		SetStatus(articleactionrecord.Status(record.Status)).
 		Save(ctx)
@@ -54,11 +53,12 @@ func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.Articl
 	return true, nil
 }
 
-func (r *ArticleActionRecordRepo) TransitionStatus(ctx context.Context, clientRequestID string, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error) {
-	count, err := r.getClient(ctx).ArticleActionRecord.Update().
-		Where(articleactionrecord.ClientRequestIDEQ(clientRequestID), articleactionrecord.StatusEQ(articleactionrecord.Status(from))).
-		SetStatus(articleactionrecord.Status(to)).
-		Save(ctx)
+func (r *ArticleActionRecordRepo) TransitionStatus(ctx context.Context, req *repo.ArticleActionRecordReq, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error) {
+	update := r.getClient(ctx).ArticleActionRecord.Update().Where(articleactionrecord.StatusEQ(articleactionrecord.Status(from)))
+	if req.ArticleID != nil { update.Where(articleactionrecord.ArticleIDEQ(*req.ArticleID)) }
+	if req.UserID != nil { update.Where(articleactionrecord.UserIDEQ(*req.UserID)) }
+	if req.Type != nil { update.Where(articleactionrecord.TypeEQ(articleactionrecord.Type(*req.Type))) }
+	count, err := update.SetStatus(articleactionrecord.Status(to)).Save(ctx)
 	return count == 1, err
 }
 
@@ -101,7 +101,7 @@ func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActi
 		ID:        c.ID,
 		ArticleID: c.ArticleID,
 		UserID:    c.UserID,
-		Type:      enum.ArticleAction(c.Type), ClientRequestID: c.ClientRequestID, Points: c.Points, Status: enum.ContentActionStatus(c.Status),
+		Type:      enum.ArticleAction(c.Type), Points: c.Points, Status: enum.ContentActionStatus(c.Status),
 	}, nil
 }
 
@@ -118,7 +118,7 @@ func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleAct
 			ID:        list[i].ID,
 			ArticleID: list[i].ArticleID,
 			UserID:    list[i].UserID,
-			Type:      enum.ArticleAction(list[i].Type), ClientRequestID: list[i].ClientRequestID, Points: list[i].Points, Status: enum.ContentActionStatus(list[i].Status),
+			Type:      enum.ArticleAction(list[i].Type), Points: list[i].Points, Status: enum.ContentActionStatus(list[i].Status),
 		})
 	}
 	return rows, nil
@@ -164,7 +164,7 @@ func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleAct
 			ID:        list[i].ID,
 			ArticleID: list[i].ArticleID,
 			UserID:    list[i].UserID,
-			Type:      enum.ArticleAction(list[i].Type), ClientRequestID: list[i].ClientRequestID, Points: list[i].Points, Status: enum.ContentActionStatus(list[i].Status),
+			Type:      enum.ArticleAction(list[i].Type), Points: list[i].Points, Status: enum.ContentActionStatus(list[i].Status),
 		})
 	}
 	return &repo.ArticleActionRecordPageResp{
@@ -204,9 +204,6 @@ func (r *ArticleActionRecordRepo) getQuery(query *gen.ArticleActionRecordQuery, 
 			return articleactionrecord.Type(item)
 		})
 		query = query.Where(articleactionrecord.TypeIn(dbTypes...))
-	}
-	if req.ClientRequestID != nil {
-		query = query.Where(articleactionrecord.ClientRequestIDEQ(*req.ClientRequestID))
 	}
 	if req.Status != nil {
 		query = query.Where(articleactionrecord.StatusEQ(articleactionrecord.Status(*req.Status)))

@@ -19,7 +19,6 @@ type Article struct {
 	HasPostscript     bool
 	RewardContent     *string
 	RewardPoints      *int32
-	PublishClientRequestID *string
 	RewardSetupPoints *int64
 	PublishStatus     enum.ArticlePublishStatus
 	Visibility        enum.ArticleVisibility

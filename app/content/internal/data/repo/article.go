@@ -215,7 +215,7 @@ func (r *ArticleRepo) TryPublish(ctx context.Context, req *repo.ArticleTryPublis
 	if err != nil {
 		return err
 	}
-	if row.PublishStatus == articleent.PublishStatus(enum.ArticlePublishStatusPending) && row.PublishClientRequestID != nil && *row.PublishClientRequestID == req.ClientRequestID {
+	if row.PublishStatus == articleent.PublishStatus(enum.ArticlePublishStatusPending) {
 		return nil
 	}
 	if row.PublishStatus != articleent.PublishStatus(enum.ArticlePublishStatusDraft) {
@@ -224,7 +224,6 @@ func (r *ArticleRepo) TryPublish(ctx context.Context, req *repo.ArticleTryPublis
 	count, err := r.getClient(ctx).Article.Update().
 		Where(articleent.IDEQ(req.ArticleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusDraft))).
 		SetPublishStatus(articleent.PublishStatus(enum.ArticlePublishStatusPending)).
-		SetPublishClientRequestID(req.ClientRequestID).
 		SetNillableRewardSetupPoints(req.RewardSetupPoints).
 		Save(ctx)
 	if err != nil {
@@ -238,7 +237,7 @@ func (r *ArticleRepo) TryPublish(ctx context.Context, req *repo.ArticleTryPublis
 
 func (r *ArticleRepo) ConfirmPublish(ctx context.Context, req *repo.ArticleConfirmPublishReq) error {
 	update := r.getClient(ctx).Article.Update().
-		Where(articleent.IDEQ(req.ArticleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusPending)), articleent.PublishClientRequestIDEQ(req.ClientRequestID)).
+		Where(articleent.IDEQ(req.ArticleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusPending))).
 		SetPublishStatus(articleent.PublishStatus(enum.ArticlePublishStatusPublished)).
 		SetPublishedAt(req.PublishedAt).
 		SetNillableUpdatedBy(req.UpdatedBy)
@@ -257,9 +256,9 @@ func (r *ArticleRepo) ConfirmPublish(ctx context.Context, req *repo.ArticleConfi
 	return nil
 }
 
-func (r *ArticleRepo) CancelPublish(ctx context.Context, articleID int64, clientRequestID string) error {
+func (r *ArticleRepo) CancelPublish(ctx context.Context, articleID int64) error {
 	err := r.getClient(ctx).Article.Update().
-		Where(articleent.IDEQ(articleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusPending)), articleent.PublishClientRequestIDEQ(clientRequestID)).
+		Where(articleent.IDEQ(articleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusPending))).
 		SetPublishStatus(articleent.PublishStatus(enum.ArticlePublishStatusDraft)).
 		Exec(ctx)
 	return err

@@ -31,10 +31,7 @@ func NewArticleRewardUsecase(articles repo.ArticleRepo, actions repo.ArticleActi
 	return &ArticleRewardUsecase{articles: articles, actions: actions, dtm: dtm, branches: branches}
 }
 
-func (u *ArticleRewardUsecase) Reward(ctx context.Context, access *model.ContentAccess, articleID int64, clientRequestID string) (bool, error) {
-	if clientRequestID == "" {
-		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
+func (u *ArticleRewardUsecase) Reward(ctx context.Context, access *model.ContentAccess, articleID int64) (bool, error) {
 	article, err := u.articles.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: &articleID}})
 	if err != nil {
 		return false, err
@@ -53,7 +50,7 @@ func (u *ArticleRewardUsecase) Reward(ctx context.Context, access *model.Content
 		return exists, err
 	}
 	points := int64(*article.RewardPoints)
-	reward := &contentv1.TCCArticleReward_Req{ArticleId: articleID, SenderUserId: actor, ReceiverUserId: *article.CreatedBy, ClientRequestId: clientRequestID, Points: points}
+	reward := &contentv1.TCCArticleReward_Req{ArticleId: articleID, SenderUserId: actor, ReceiverUserId: *article.CreatedBy, Points: points}
 	transfer := &economyv1.TCCPointsTransfer_Req{
 		FromUserId:    actor,
 		ToUserId:      *article.CreatedBy,

@@ -41,7 +41,6 @@ func (CommentActionRecord) Fields() []ent.Field {
 		field.Int64("comment_id").Comment("关联的评论ID"),
 		field.Int64("user_id").Comment("执行行为的用户ID"),
 		field.Enum("type").Values(contentenum.CommentActionMap.EnumValues()...).Comment("行为类型"),
-		field.String("client_request_id").Nillable().Optional().Comment("客户端幂等请求 ID"),
 		field.Int64("points").Nillable().Optional().Comment("本次互动涉及的积分数量"),
 		field.Enum("status").Values(contentenum.ContentActionStatusMap.EnumValues()...).Default(contentenum.ContentActionStatusPublished.String()).Comment("互动命令状态"),
 	}
@@ -59,8 +58,7 @@ func (CommentActionRecord) Edges() []ent.Edge {
 func (CommentActionRecord) Indexes() []ent.Index {
 	return []ent.Index{
 		// 一个用户对一条评论的某种行为只能有一条记录
-		index.Fields("comment_id", "user_id", "type").Unique().Annotations(entsql.IndexWhere("status IN ('pending', 'published')")),
-		index.Fields("client_request_id").Unique(),
+		index.Fields("comment_id", "user_id", "type").Unique(),
 		index.Fields("user_id"),
 	}
 }

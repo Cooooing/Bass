@@ -155,7 +155,6 @@ func (u *ContentArticleUsecase) EnterArticleLottery(ctx context.Context, req *En
 type PublishArticleReq struct {
 	UserID          int64
 	ArticleID       int64
-	ClientRequestID string
 	ScheduledAt     *time.Time
 	IP              string
 }
@@ -178,7 +177,7 @@ func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *Publish
 			}
 		}
 	}
-	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ClientRequestID: req.ClientRequestID, ScheduledAt: req.ScheduledAt, City: city})
+	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ScheduledAt: req.ScheduledAt, City: city})
 }
 
 type CancelPublishArticleReq struct {
@@ -555,7 +554,6 @@ type LikeArticleReq struct {
 type ThankArticleReq struct {
 	UserID          int64
 	ArticleID       int64
-	ClientRequestID string
 }
 type CollectArticleReq struct {
 	UserID    int64
@@ -571,7 +569,6 @@ type WatchArticleReq struct {
 type RewardArticleReq struct {
 	UserID          int64
 	ArticleID       int64
-	ClientRequestID string
 }
 
 func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error) {
@@ -585,7 +582,7 @@ func (u *ContentArticleUsecase) ThankArticle(ctx context.Context, req *ThankArti
 	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
 		return false, err
 	}
-	return u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ClientRequestID: req.ClientRequestID})
+	return u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 }
 
 func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error) {
@@ -606,7 +603,7 @@ func (u *ContentArticleUsecase) RewardArticle(ctx context.Context, req *RewardAr
 	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
 		return false, err
 	}
-	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ClientRequestID: req.ClientRequestID})
+	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 }
 
 func (u *ContentArticleUsecase) ensureArticleUnblocked(ctx context.Context, userID int64, articleID int64) error {

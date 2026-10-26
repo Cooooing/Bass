@@ -477,7 +477,6 @@ func (r *ContentCommentClient) ThankComment(ctx context.Context, req *repo.Thank
 	reply, err := r.contentClient.Comment.Thank(ctx, &contentv1.ThankComment_Req{
 		Id:              req.ID,
 		Thanked:         true,
-		ClientRequestId: req.ClientRequestID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(req.UserID),

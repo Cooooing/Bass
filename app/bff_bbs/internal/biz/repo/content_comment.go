@@ -123,7 +123,6 @@ type LikeCommentReq struct {
 type ThankCommentReq struct {
 	UserID          int64
 	ID              int64
-	ClientRequestID string
 }
 
 type ContentCommentClient interface {

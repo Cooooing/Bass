@@ -244,14 +244,13 @@ type ArticleThankReq struct {
 	ArticleID       int64
 	UserID          int64
 	Active          bool
-	ClientRequestID string
 }
 
 func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
 	if !req.Active {
 		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return d.thankUsecase.Thank(ctx, req.Access, req.ArticleID, req.ClientRequestID)
+	return d.thankUsecase.Thank(ctx, req.Access, req.ArticleID)
 }
 
 type ArticleCollectReq struct {
@@ -369,11 +368,10 @@ func (*ArticleUsecase) articleCollectedEvent(userID, articleID int64) *commonenu
 type ArticleRewardReq struct {
 	Access          *model.ContentAccess
 	ArticleID       int64
-	ClientRequestID string
 }
 
 func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) (bool, error) {
-	return d.rewardUsecase.Reward(ctx, req.Access, req.ArticleID, req.ClientRequestID)
+	return d.rewardUsecase.Reward(ctx, req.Access, req.ArticleID)
 }
 
 type ArticleViewReq struct {
@@ -514,7 +512,6 @@ type ArticlePublishReq struct {
 	ArticleID       int64
 	ScheduledAt     *time.Time
 	PublishedCity   *string
-	ClientRequestID string
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
@@ -601,11 +598,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 	if err = d.validatePublishActivity(ctx, rewardSetupArticle, now); err != nil {
 		return err
 	}
-	clientRequestID := req.ClientRequestID
-	if clientRequestID == "" && access.Scope == enum.ContentAccessScopeInternalTask && req.ScheduledAt != nil {
-		clientRequestID = fmt.Sprintf("scheduled-article-publish:%d:%d", articleID, req.ScheduledAt.UTC().Unix())
-	}
-	if clientRequestID == "" || rewardSetupArticle.CreatedBy == nil {
+	if rewardSetupArticle.CreatedBy == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	var rewardSetupPoints *int64
@@ -630,7 +623,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		}
 		pollEndsAt = new(poll.EndsAt)
 	}
-	publish := &contentv1.TCCArticlePublish_Req{ArticleId: articleID, ClientRequestId: clientRequestID, OperatorUserId: *rewardSetupArticle.CreatedBy, City: req.PublishedCity, RewardSetupPoints: rewardSetupPoints, PublishedAt: timestamppb.New(now)}
+	publish := &contentv1.TCCArticlePublish_Req{ArticleId: articleID, OperatorUserId: *rewardSetupArticle.CreatedBy, City: req.PublishedCity, RewardSetupPoints: rewardSetupPoints, PublishedAt: timestamppb.New(now)}
 	_, err = d.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
 		if err = d.branches.Call(ctx, tcc, constant.ContentServiceName.String(), publish, contentv1.TCCArticlePublishService_Try_FullMethodName, contentv1.TCCArticlePublishService_Confirm_FullMethodName, contentv1.TCCArticlePublishService_Cancel_FullMethodName, &contentv1.TCCArticlePublish_Resp{}); err != nil {
 			return err

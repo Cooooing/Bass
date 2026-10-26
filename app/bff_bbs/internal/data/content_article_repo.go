@@ -96,7 +96,6 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
 	publishReq := &contentv1.PublishArticle_Req{
 		ArticleId:       req.ArticleID,
-		ClientRequestId: new(req.ClientRequestID),
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
 			ActorUserId: new(req.UserID),
@@ -514,7 +513,6 @@ func (r *ContentArticleClient) ThankArticle(ctx context.Context, req *repo.Thank
 	reply, err := r.contentClient.Article.Thank(ctx, &contentv1.ThankArticle_Req{
 		ArticleId:       req.ArticleID,
 		Thanked:         true,
-		ClientRequestId: req.ClientRequestID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(req.UserID),
@@ -559,7 +557,6 @@ func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.Watch
 func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
 		ArticleId:       req.ArticleID,
-		ClientRequestId: req.ClientRequestID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(req.UserID),

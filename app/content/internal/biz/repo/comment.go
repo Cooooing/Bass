@@ -66,7 +66,7 @@ type CommentReplyPreview struct {
 
 type CommentActionRecordRepo interface {
 	Save(ctx context.Context, record *model.CommentActionRecord) (bool, error)
-	TransitionStatus(ctx context.Context, clientRequestID string, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error)
+	TransitionStatus(ctx context.Context, req *CommentActionRecordReq, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error)
 	Delete(ctx context.Context, req *CommentActionRecordDeleteReq) (int, error)
 	Exist(ctx context.Context, req *CommentActionRecordReq) (bool, error)
 	Get(ctx context.Context, req *CommentActionRecordReq) (*model.CommentActionRecord, error)
@@ -97,6 +97,5 @@ type CommentActionRecordReq struct {
 	UserIDs         []int64
 	Type            *enum.CommentAction
 	Types           []enum.CommentAction
-	ClientRequestID *string
 	Status          *enum.ContentActionStatus
 }

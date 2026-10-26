@@ -34,10 +34,7 @@ type ArticleThankUsecase struct {
 func NewArticleThankUsecase(articles repo.ArticleRepo, actions repo.ArticleActionRecordRepo, outbox repo.OutboxEventRepo, dtm *commonclient.DTMClient, branches *commonclient.TCCBranchCaller, business *config.Business) *ArticleThankUsecase {
 	return &ArticleThankUsecase{articles: articles, actions: actions, outbox: outbox, dtm: dtm, branches: branches, business: business}
 }
-func (u *ArticleThankUsecase) Thank(ctx context.Context, access *model.ContentAccess, articleID int64, clientRequestID string) (bool, error) {
-	if clientRequestID == "" {
-		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
+func (u *ArticleThankUsecase) Thank(ctx context.Context, access *model.ContentAccess, articleID int64) (bool, error) {
 	article, err := u.articles.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: &articleID}})
 	if err != nil {
 		return false, err
@@ -59,7 +56,7 @@ func (u *ArticleThankUsecase) Thank(ctx context.Context, access *model.ContentAc
 	if u.business != nil && u.business.GetArticle().GetThankPoints() > 0 {
 		points = u.business.GetArticle().GetThankPoints()
 	}
-	req := &contentv1.TCCArticleThank_Req{ArticleId: articleID, SenderUserId: actor, ReceiverUserId: *article.CreatedBy, ClientRequestId: clientRequestID, Points: points}
+	req := &contentv1.TCCArticleThank_Req{ArticleId: articleID, SenderUserId: actor, ReceiverUserId: *article.CreatedBy, Points: points}
 	transfer := &economyv1.TCCPointsTransfer_Req{FromUserId: actor, ToUserId: *article.CreatedBy, Amount: points, OutRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE, InRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD, Remark: new(fmt.Sprintf("article thank:%d", articleID))}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
 		if err = u.branches.Call(ctx, tcc, constant.ContentServiceName.String(), req, contentv1.TCCArticleThankService_Try_FullMethodName, contentv1.TCCArticleThankService_Confirm_FullMethodName, contentv1.TCCArticleThankService_Cancel_FullMethodName, &contentv1.TCCArticleThank_Resp{}); err != nil {
@@ -85,7 +82,7 @@ func NewTCCArticleThankUsecase(logger *slog.Logger, articles repo.ArticleRepo, a
 }
 func (u *TCCArticleThankUsecase) Try(ctx context.Context, r *contentv1.TCCArticleThank_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
-		if r.GetArticleId() <= 0 || r.GetSenderUserId() <= 0 || r.GetReceiverUserId() <= 0 || r.GetSenderUserId() == r.GetReceiverUserId() || r.GetClientRequestId() == "" || r.GetPoints() <= 0 {
+		if r.GetArticleId() <= 0 || r.GetSenderUserId() <= 0 || r.GetReceiverUserId() <= 0 || r.GetSenderUserId() == r.GetReceiverUserId() || r.GetPoints() <= 0 {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		a, err := u.articles.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(r.ArticleId)}})
@@ -99,19 +96,6 @@ func (u *TCCArticleThankUsecase) Try(ctx context.Context, r *contentv1.TCCArticl
 			return err
 		}
 		action := enum.ArticleActionThank
-		existing, err := u.actions.Get(ctx, &repo.ArticleActionRecordReq{ClientRequestID: new(r.ClientRequestId)})
-		if err != nil {
-			return err
-		}
-		if existing != nil {
-			if existing.ArticleID != r.GetArticleId() || existing.UserID != r.GetSenderUserId() || existing.Type != action || existing.Points == nil || *existing.Points != r.GetPoints() {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
-			}
-			if existing.Status == enum.ContentActionStatusCanceled {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
-			}
-			return nil
-		}
 		actionExists, err := u.actions.Exist(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.ArticleId), UserID: new(r.SenderUserId), Type: &action})
 		if err != nil {
 			return err
@@ -119,9 +103,12 @@ func (u *TCCArticleThankUsecase) Try(ctx context.Context, r *contentv1.TCCArticl
 		if actionExists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
 		}
-		created, err := u.actions.Save(ctx, &model.ArticleActionRecord{ArticleID: r.GetArticleId(), UserID: r.GetSenderUserId(), Type: action, ClientRequestID: new(r.ClientRequestId), Points: new(r.Points), Status: enum.ContentActionStatusPending})
-		if err != nil || !created {
+		created, err := u.actions.Save(ctx, &model.ArticleActionRecord{ArticleID: r.GetArticleId(), UserID: r.GetSenderUserId(), Type: action, Points: new(r.Points), Status: enum.ContentActionStatusPending})
+		if err != nil {
 			return err
+		}
+		if !created {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
 		}
 		return nil
 	})
@@ -129,7 +116,8 @@ func (u *TCCArticleThankUsecase) Try(ctx context.Context, r *contentv1.TCCArticl
 func (u *TCCArticleThankUsecase) Confirm(ctx context.Context, r *contentv1.TCCArticleThank_Req) error {
 	var outboxEvent *repo.OutboxEvent
 	err := u.branch.Execute(ctx, func(ctx context.Context) error {
-		changed, err := u.actions.TransitionStatus(ctx, r.GetClientRequestId(), enum.ContentActionStatusPending, enum.ContentActionStatusPublished)
+		action := enum.ArticleActionThank
+		changed, err := u.actions.TransitionStatus(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.ArticleId), UserID: new(r.SenderUserId), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusPublished)
 		if err != nil {
 			return err
 		}
@@ -152,7 +140,8 @@ func (u *TCCArticleThankUsecase) Confirm(ctx context.Context, r *contentv1.TCCAr
 }
 func (u *TCCArticleThankUsecase) Cancel(ctx context.Context, r *contentv1.TCCArticleThank_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
-		_, err := u.actions.TransitionStatus(ctx, r.GetClientRequestId(), enum.ContentActionStatusPending, enum.ContentActionStatusCanceled)
+		action := enum.ArticleActionThank
+		_, err := u.actions.TransitionStatus(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.ArticleId), UserID: new(r.SenderUserId), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusCanceled)
 		return err
 	})
 }

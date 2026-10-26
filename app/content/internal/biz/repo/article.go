@@ -19,7 +19,7 @@ type ArticleRepo interface {
 	UpdateHasPostscript(ctx context.Context, req *ArticleUpdateHasPostscriptReq) error
 	TryPublish(ctx context.Context, req *ArticleTryPublishReq) error
 	ConfirmPublish(ctx context.Context, req *ArticleConfirmPublishReq) error
-	CancelPublish(ctx context.Context, articleID int64, clientRequestID string) error
+	CancelPublish(ctx context.Context, articleID int64) error
 	UpdatePinnedComment(ctx context.Context, req *ArticleUpdatePinnedCommentReq) error
 	AddStats(ctx context.Context, req *ArticleAddStatsReq) error
 	ReplaceTags(ctx context.Context, req *ArticleReplaceTagsReq) error
@@ -48,13 +48,11 @@ type ArticleUpdatePublishStatusReq struct {
 
 type ArticleTryPublishReq struct {
 	ArticleID         int64
-	ClientRequestID   string
 	RewardSetupPoints *int64
 }
 
 type ArticleConfirmPublishReq struct {
 	ArticleID       int64
-	ClientRequestID string
 	PublishedAt     time.Time
 	PublishedCity   *string
 	UpdatedBy       *int64
@@ -127,7 +125,7 @@ type ArticleGetReq struct {
 }
 type ArticleActionRecordRepo interface {
 	Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error)
-	TransitionStatus(ctx context.Context, clientRequestID string, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error)
+	TransitionStatus(ctx context.Context, req *ArticleActionRecordReq, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error)
 	Delete(ctx context.Context, req *ArticleActionRecordDeleteReq) (int, error)
 	Exist(ctx context.Context, req *ArticleActionRecordReq) (bool, error)
 	Get(ctx context.Context, req *ArticleActionRecordReq) (*model.ArticleActionRecord, error)
@@ -158,6 +156,5 @@ type ArticleActionRecordReq struct {
 	UserIDs         []int64
 	Type            *enum.ArticleAction
 	Types           []enum.ArticleAction
-	ClientRequestID *string
 	Status          *enum.ContentActionStatus
 }

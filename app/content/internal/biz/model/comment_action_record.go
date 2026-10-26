@@ -7,7 +7,6 @@ type CommentActionRecord struct {
 	CommentID       int64
 	UserID          int64
 	Type            enum.CommentAction
-	ClientRequestID *string
 	Points          *int64
 	Status          enum.ContentActionStatus
 }

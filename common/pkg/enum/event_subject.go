@@ -22,6 +22,7 @@ const (
 	EventSubjectContentArticlePublish        EventSubject = "content.article.published"
 	EventSubjectContentArticleLike           EventSubject = "content.article.liked"
 	EventSubjectContentArticleThank          EventSubject = "content.article.thanked"
+	EventSubjectContentArticleReward         EventSubject = "content.article.rewarded"
 	EventSubjectContentArticleCollect        EventSubject = "content.article.collected"
 	EventSubjectContentArticleWatch          EventSubject = "content.article.watched"
 	EventSubjectContentArticleAcceptAnswer   EventSubject = "content.article.accepted_answer"
@@ -60,6 +61,7 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentArticlePublish:        {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED},
 	EventSubjectContentArticleLike:           {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED},
 	EventSubjectContentArticleThank:          {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED},
+	EventSubjectContentArticleReward:         {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_REWARDED},
 	EventSubjectContentArticleCollect:        {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED},
 	EventSubjectContentArticleWatch:          {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED},
 	EventSubjectContentArticleAcceptAnswer:   {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER},

@@ -24,6 +24,7 @@ message Business {
 
   message Article {
     int64 thank_points = 3; // 感谢文章时转赠的积分数量。
+    int64 reward_setup_points = 4; // 发布含打赏区文章时扣除的积分数量。
   }
   message Comment {
     int64 thank_points = 1; // 感谢评论时转赠的积分数量。

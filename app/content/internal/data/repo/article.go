@@ -207,6 +207,64 @@ func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, req *repo.Article
 		Exec(ctx)
 }
 
+func (r *ArticleRepo) TryPublish(ctx context.Context, req *repo.ArticleTryPublishReq) error {
+	row, err := r.getClient(ctx).Article.Query().Where(articleent.IDEQ(req.ArticleID)).Only(ctx)
+	if gen.IsNotFound(err) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if err != nil {
+		return err
+	}
+	if row.PublishStatus == articleent.PublishStatus(enum.ArticlePublishStatusPending) && row.PublishClientRequestID != nil && *row.PublishClientRequestID == req.ClientRequestID {
+		return nil
+	}
+	if row.PublishStatus != articleent.PublishStatus(enum.ArticlePublishStatusDraft) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
+	}
+	count, err := r.getClient(ctx).Article.Update().
+		Where(articleent.IDEQ(req.ArticleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusDraft))).
+		SetPublishStatus(articleent.PublishStatus(enum.ArticlePublishStatusPending)).
+		SetPublishClientRequestID(req.ClientRequestID).
+		SetNillableRewardSetupPoints(req.RewardSetupPoints).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+	if count != 1 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
+	}
+	return nil
+}
+
+func (r *ArticleRepo) ConfirmPublish(ctx context.Context, req *repo.ArticleConfirmPublishReq) error {
+	update := r.getClient(ctx).Article.Update().
+		Where(articleent.IDEQ(req.ArticleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusPending)), articleent.PublishClientRequestIDEQ(req.ClientRequestID)).
+		SetPublishStatus(articleent.PublishStatus(enum.ArticlePublishStatusPublished)).
+		SetPublishedAt(req.PublishedAt).
+		SetNillableUpdatedBy(req.UpdatedBy)
+	if req.PublishedCity == nil {
+		update.ClearPublishedCity()
+	} else {
+		update.SetPublishedCity(*req.PublishedCity)
+	}
+	count, err := update.Save(ctx)
+	if err != nil {
+		return err
+	}
+	if count != 1 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
+	}
+	return nil
+}
+
+func (r *ArticleRepo) CancelPublish(ctx context.Context, articleID int64, clientRequestID string) error {
+	err := r.getClient(ctx).Article.Update().
+		Where(articleent.IDEQ(articleID), articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusPending)), articleent.PublishClientRequestIDEQ(clientRequestID)).
+		SetPublishStatus(articleent.PublishStatus(enum.ArticlePublishStatusDraft)).
+		Exec(ctx)
+	return err
+}
+
 func (r *ArticleRepo) UpdatePinnedComment(ctx context.Context, req *repo.ArticleUpdatePinnedCommentReq) error {
 	update := r.getClient(ctx).Article.UpdateOneID(req.ArticleID).SetUpdatedBy(req.UpdatedBy)
 	if req.PinnedID == nil {

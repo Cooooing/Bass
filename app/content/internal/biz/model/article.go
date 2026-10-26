@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"common/pkg/apperror"
@@ -18,6 +19,8 @@ type Article struct {
 	HasPostscript     bool
 	RewardContent     *string
 	RewardPoints      *int32
+	PublishClientRequestID *string
+	RewardSetupPoints *int64
 	PublishStatus     enum.ArticlePublishStatus
 	Visibility        enum.ArticleVisibility
 	Restriction       enum.ContentRestriction
@@ -66,6 +69,14 @@ func (a *Article) IsPublicVisible() bool {
 func (a *Article) CanCreateDraft() error {
 	if a == nil || (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA && a.Type != enum.ArticleTypePoll && a.Type != enum.ArticleTypeLottery) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
+	}
+	return a.ValidateReward()
+}
+
+// ValidateReward 要求打赏区内容与固定积分价格成对配置。
+func (a *Article) ValidateReward() error {
+	if a == nil || (a.RewardContent == nil) != (a.RewardPoints == nil) || (a.RewardContent != nil && strings.TrimSpace(*a.RewardContent) == "") || (a.RewardPoints != nil && *a.RewardPoints <= 0) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	return nil
 }

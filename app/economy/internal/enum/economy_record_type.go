@@ -11,32 +11,34 @@ import (
 type EconomyRecordType string
 
 const (
-	EconomyRecordTypeSignInReward             EconomyRecordType = "sign_in_reward"              // EconomyRecordTypeSignInReward 表示签到奖励
-	EconomyRecordTypeArticleThankReward       EconomyRecordType = "article_thank_reward"        // EconomyRecordTypeArticleThankReward 表示文章感谢奖励
-	EconomyRecordTypeCommentThankReward       EconomyRecordType = "comment_thank_reward"        // EconomyRecordTypeCommentThankReward 表示评论感谢奖励
-	EconomyRecordTypeArticleRewardOut         EconomyRecordType = "article_reward_out"          // EconomyRecordTypeArticleRewardOut 表示文章打赏支出
-	EconomyRecordTypeArticleRewardIn          EconomyRecordType = "article_reward_in"           // EconomyRecordTypeArticleRewardIn 表示文章打赏收入
-	EconomyRecordTypeAdminAdd                 EconomyRecordType = "admin_add"                   // EconomyRecordTypeAdminAdd 表示后台增加
-	EconomyRecordTypeAdminDeduct              EconomyRecordType = "admin_deduct"                // EconomyRecordTypeAdminDeduct 表示后台扣减
-	EconomyRecordTypeGlobalChatTopicExpense   EconomyRecordType = "global_chat_topic_expense"   // EconomyRecordTypeGlobalChatTopicExpense 表示设置全局聊天室话题支出
-	EconomyRecordTypeGlobalChatBarrageExpense EconomyRecordType = "global_chat_barrage_expense" // EconomyRecordTypeGlobalChatBarrageExpense 表示发送全局聊天室弹幕支出
-	EconomyRecordTypeArticleThankExpense      EconomyRecordType = "article_thank_expense"       // EconomyRecordTypeArticleThankExpense 表示文章感谢支出
-	EconomyRecordTypeCommentThankExpense      EconomyRecordType = "comment_thank_expense"       // EconomyRecordTypeCommentThankExpense 表示评论感谢支出
+	EconomyRecordTypeSignInReward              EconomyRecordType = "sign_in_reward"               // EconomyRecordTypeSignInReward 表示签到奖励
+	EconomyRecordTypeArticleThankReward        EconomyRecordType = "article_thank_reward"         // EconomyRecordTypeArticleThankReward 表示文章感谢奖励
+	EconomyRecordTypeCommentThankReward        EconomyRecordType = "comment_thank_reward"         // EconomyRecordTypeCommentThankReward 表示评论感谢奖励
+	EconomyRecordTypeArticleRewardOut          EconomyRecordType = "article_reward_out"           // EconomyRecordTypeArticleRewardOut 表示文章打赏支出
+	EconomyRecordTypeArticleRewardIn           EconomyRecordType = "article_reward_in"            // EconomyRecordTypeArticleRewardIn 表示文章打赏收入
+	EconomyRecordTypeAdminAdd                  EconomyRecordType = "admin_add"                    // EconomyRecordTypeAdminAdd 表示后台增加
+	EconomyRecordTypeAdminDeduct               EconomyRecordType = "admin_deduct"                 // EconomyRecordTypeAdminDeduct 表示后台扣减
+	EconomyRecordTypeGlobalChatTopicExpense    EconomyRecordType = "global_chat_topic_expense"    // EconomyRecordTypeGlobalChatTopicExpense 表示设置全局聊天室话题支出
+	EconomyRecordTypeGlobalChatBarrageExpense  EconomyRecordType = "global_chat_barrage_expense"  // EconomyRecordTypeGlobalChatBarrageExpense 表示发送全局聊天室弹幕支出
+	EconomyRecordTypeArticleThankExpense       EconomyRecordType = "article_thank_expense"        // EconomyRecordTypeArticleThankExpense 表示文章感谢支出
+	EconomyRecordTypeCommentThankExpense       EconomyRecordType = "comment_thank_expense"        // EconomyRecordTypeCommentThankExpense 表示评论感谢支出
+	EconomyRecordTypeArticleRewardSetupExpense EconomyRecordType = "article_reward_setup_expense" // EconomyRecordTypeArticleRewardSetupExpense 表示启用文章打赏区支出
 )
 
 // EconomyRecordTypeMap 维护流水类型映射
 var EconomyRecordTypeMap = commonenum.NewMapping[EconomyRecordType, v1.EconomyRecordType](map[EconomyRecordType]commonenum.Entry[EconomyRecordType, v1.EconomyRecordType]{
-	EconomyRecordTypeSignInReward:             {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_SIGN_IN_REWARD},
-	EconomyRecordTypeArticleThankReward:       {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD},
-	EconomyRecordTypeCommentThankReward:       {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD},
-	EconomyRecordTypeArticleRewardOut:         {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT},
-	EconomyRecordTypeArticleRewardIn:          {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN},
-	EconomyRecordTypeAdminAdd:                 {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ADMIN_ADD},
-	EconomyRecordTypeAdminDeduct:              {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ADMIN_DEDUCT},
-	EconomyRecordTypeGlobalChatTopicExpense:   {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE},
-	EconomyRecordTypeGlobalChatBarrageExpense: {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE},
-	EconomyRecordTypeArticleThankExpense:      {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE},
-	EconomyRecordTypeCommentThankExpense:      {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE},
+	EconomyRecordTypeSignInReward:              {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_SIGN_IN_REWARD},
+	EconomyRecordTypeArticleThankReward:        {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD},
+	EconomyRecordTypeCommentThankReward:        {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD},
+	EconomyRecordTypeArticleRewardOut:          {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT},
+	EconomyRecordTypeArticleRewardIn:           {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN},
+	EconomyRecordTypeAdminAdd:                  {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ADMIN_ADD},
+	EconomyRecordTypeAdminDeduct:               {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ADMIN_DEDUCT},
+	EconomyRecordTypeGlobalChatTopicExpense:    {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE},
+	EconomyRecordTypeGlobalChatBarrageExpense:  {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE},
+	EconomyRecordTypeArticleThankExpense:       {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE},
+	EconomyRecordTypeCommentThankExpense:       {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE},
+	EconomyRecordTypeArticleRewardSetupExpense: {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE},
 })
 
 func (e EconomyRecordType) String() string {
@@ -47,7 +49,7 @@ func (e EconomyRecordType) Direction() (EconomyRecordDirection, error) {
 	switch e {
 	case EconomyRecordTypeSignInReward, EconomyRecordTypeArticleThankReward, EconomyRecordTypeCommentThankReward, EconomyRecordTypeArticleRewardIn, EconomyRecordTypeAdminAdd:
 		return EconomyRecordDirectionIncome, nil
-	case EconomyRecordTypeArticleRewardOut, EconomyRecordTypeAdminDeduct, EconomyRecordTypeGlobalChatTopicExpense, EconomyRecordTypeGlobalChatBarrageExpense, EconomyRecordTypeArticleThankExpense, EconomyRecordTypeCommentThankExpense:
+	case EconomyRecordTypeArticleRewardOut, EconomyRecordTypeAdminDeduct, EconomyRecordTypeGlobalChatTopicExpense, EconomyRecordTypeGlobalChatBarrageExpense, EconomyRecordTypeArticleThankExpense, EconomyRecordTypeCommentThankExpense, EconomyRecordTypeArticleRewardSetupExpense:
 		return EconomyRecordDirectionExpense, nil
 	default:
 		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)

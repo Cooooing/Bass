@@ -84,7 +84,7 @@ func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.P
 		}
 		scheduledAt = &value
 	}
-	err := s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt, IP: server.ClientIP(ctx)})
+	err := s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), ClientRequestID: req.GetClientRequestId(), ScheduledAt: scheduledAt, IP: server.ClientIP(ctx)})
 	return &bbscontentv1.PublishArticle_Resp{}, err
 }
 
@@ -317,8 +317,8 @@ func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.Re
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err := s.contentArticleUsecase.RewardArticle(ctx, &usecase.RewardArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Points: req.GetPoints()})
-	return &bbscontentv1.RewardArticle_Resp{}, err
+	rewarded, err := s.contentArticleUsecase.RewardArticle(ctx, &usecase.RewardArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), ClientRequestID: req.GetClientRequestId()})
+	return &bbscontentv1.RewardArticle_Resp{Rewarded: rewarded}, err
 }
 
 func (s *ContentArticleService) articleListItem(row *model.ArticleListItem) *bbscontentv1.ArticleListItem {

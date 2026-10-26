@@ -37,6 +37,8 @@ func (Article) Fields() []ent.Field {
 		field.Bool("has_postscript").Comment("是否有附言").Default(false),
 		field.Text("reward_content").Comment("打赏区内容").Nillable().Optional(),
 		field.Int32("reward_points").Comment("打赏积分").Nillable().Optional(),
+		field.String("publish_client_request_id").Comment("当前发布事务的客户端幂等键").Nillable().Optional(),
+		field.Int64("reward_setup_points").Comment("发布打赏区文章时的启用积分费用快照").Nillable().Optional(),
 		field.Enum("publish_status").Values(contentenum.ArticlePublishStatusMap.EnumValues()...).Default(contentenum.ArticlePublishStatusDraft.String()).Comment("发布状态"),
 		field.Enum("visibility").Values(contentenum.ArticleVisibilityMap.EnumValues()...).Default(contentenum.ArticleVisibilityPublic.String()).Comment("可见范围"),
 		field.Enum("restriction").Values(contentenum.ContentRestrictionMap.EnumValues()...).Default(contentenum.ContentRestrictionNone.String()).Comment("治理限制"),

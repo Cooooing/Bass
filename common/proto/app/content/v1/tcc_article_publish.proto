@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// TCCArticlePublishService 提供文章发布的 TCC 分支操作。
+service TCCArticlePublishService {
+  rpc Try(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {} // 预留文章发布。
+  rpc Confirm(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {} // 确认文章发布。
+  rpc Cancel(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {} // 取消待确认文章发布。
+}
+
+// TCCArticlePublish 表示文章发布 TCC 分支的完整业务参数。
+message TCCArticlePublish {
+  message Req {
+    int64 article_id = 1; // 文章 ID。
+    string client_request_id = 2; // 发布命令幂等键。
+    int64 operator_user_id = 3; // 发起发布的账号 ID。
+    optional string city = 4; // 发布城市快照。
+    optional int64 reward_setup_points = 5; // 打赏区启用积分费用快照。
+    google.protobuf.Timestamp published_at = 6; // 实际发布时间。
+  }
+  message Resp {}
+}

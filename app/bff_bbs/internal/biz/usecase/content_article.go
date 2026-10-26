@@ -153,10 +153,11 @@ func (u *ContentArticleUsecase) EnterArticleLottery(ctx context.Context, req *En
 }
 
 type PublishArticleReq struct {
-	UserID      int64
-	ArticleID   int64
-	ScheduledAt *time.Time
-	IP          string
+	UserID          int64
+	ArticleID       int64
+	ClientRequestID string
+	ScheduledAt     *time.Time
+	IP              string
 }
 
 func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *PublishArticleReq) error {
@@ -177,7 +178,7 @@ func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *Publish
 			}
 		}
 	}
-	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ScheduledAt: req.ScheduledAt, City: city})
+	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ClientRequestID: req.ClientRequestID, ScheduledAt: req.ScheduledAt, City: city})
 }
 
 type CancelPublishArticleReq struct {
@@ -568,9 +569,9 @@ type WatchArticleReq struct {
 	Active    bool
 }
 type RewardArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Points    int32
+	UserID          int64
+	ArticleID       int64
+	ClientRequestID string
 }
 
 func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error) {
@@ -601,11 +602,11 @@ func (u *ContentArticleUsecase) WatchArticle(ctx context.Context, req *WatchArti
 	return u.contentArticleClient.WatchArticle(ctx, &repo.WatchArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 }
 
-func (u *ContentArticleUsecase) RewardArticle(ctx context.Context, req *RewardArticleReq) error {
+func (u *ContentArticleUsecase) RewardArticle(ctx context.Context, req *RewardArticleReq) (bool, error) {
 	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
-		return err
+		return false, err
 	}
-	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Points: req.Points})
+	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ClientRequestID: req.ClientRequestID})
 }
 
 func (u *ContentArticleUsecase) ensureArticleUnblocked(ctx context.Context, userID int64, articleID int64) error {

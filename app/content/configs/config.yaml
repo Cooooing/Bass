@@ -65,5 +65,6 @@ observability:
 business:
   article:
     thank_points: 20
+    reward_setup_points: 20
   comment:
     thank_points: 20

@@ -46,6 +46,7 @@ enum EventType {
   EVENT_TYPE_ARTICLE_LOTTERY_DRAWN = 2011; // 抽奖开奖
   EVENT_TYPE_ARTICLE_MENTIONED = 2017; // 在文章中提及账号
   EVENT_TYPE_POSTSCRIPT_MENTIONED = 2018; // 在附言中提及账号
+  EVENT_TYPE_ARTICLE_REWARDED = 2019; // 打赏文章打赏区
   EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED = 2012; // 关注文章新增评论
   EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED = 2013; // 关注文章新增附言
   EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED = 2014; // 关注文章回答采纳
@@ -112,6 +113,7 @@ enum EventSubject {
   EVENT_SUBJECT_ARTICLE_LOTTERY_WON = 2009; // content.article.lottery_won
   EVENT_SUBJECT_ARTICLE_POLL_ENDED = 2010; // content.article.poll_ended
   EVENT_SUBJECT_ARTICLE_LOTTERY_DRAWN = 2011; // content.article.lottery_drawn
+  EVENT_SUBJECT_ARTICLE_REWARDED = 2019; // content.article.rewarded
 
   // 内容评论事件（2100-2199）
   EVENT_SUBJECT_COMMENT_PUBLISHED = 2101; // content.comment.published
@@ -198,6 +200,7 @@ message Event {
     ArticleLotteryWonPayload article_lottery_won = 2009;
     ArticlePollEndedPayload article_poll_ended = 2010;
     ArticleLotteryDrawnPayload article_lottery_drawn = 2011;
+    ArticleRewardedPayload article_rewarded = 2019;
     CommentPublishedPayload comment_published = 2101;
     CommentLikedPayload comment_liked = 2102;
     CommentThankedPayload comment_thanked = 2103;

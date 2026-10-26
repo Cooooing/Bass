@@ -243,7 +243,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		value := req.GetScheduledAt().AsTime()
 		scheduledAt = &value
 	}
-	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt, PublishedCity: req.City}); err != nil {
+	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt, PublishedCity: req.City, ClientRequestID: req.GetClientRequestId()}); err != nil {
 		return nil, err
 	}
 	return &v1.PublishArticle_Resp{}, nil
@@ -604,7 +604,8 @@ func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) 
 	if err != nil {
 		return nil, err
 	}
-	return &v1.RewardArticle_Resp{}, s.articleUsecase.Reward(ctx, &usecase.ArticleRewardReq{Access: access, ArticleID: req.GetArticleId(), UserID: access.ActorUserID, Points: req.GetPoints()})
+	rewarded, err := s.articleUsecase.Reward(ctx, &usecase.ArticleRewardReq{Access: access, ArticleID: req.GetArticleId(), ClientRequestID: req.GetClientRequestId()})
+	return &v1.RewardArticle_Resp{Rewarded: rewarded}, err
 }
 
 func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Req) (*v1.ViewArticle_Resp, error) {
@@ -782,11 +783,23 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 	if err != nil {
 		return nil, err
 	}
+	rewarded := false
+	if access.ActorUserID > 0 {
+		states, mapErr := s.articleUsecase.MapViewerActionStates(ctx, &usecase.ArticleMapViewerActionStatesReq{ArticleIDs: []int64{row.ID}, UserID: access.ActorUserID})
+		if mapErr != nil {
+			return nil, mapErr
+		}
+		rewarded = states[row.ID] != nil && states[row.ID].Rewarded
+	}
+	rewardContent := row.RewardContent
+	if row.RewardContent != nil && (&usecase.ArticleAccessUsecase{}).CanViewRewardContent(access, row, rewarded) != nil {
+		rewardContent = nil
+	}
 	article := &v1.Article{
 		Id:                row.ID,
 		Title:             row.Title,
 		Content:           row.Content,
-		RewardContent:     row.RewardContent,
+		RewardContent:     rewardContent,
 		RewardPoints:      row.RewardPoints,
 		HasPostscript:     row.HasPostscript,
 		HasReward:         row.RewardPoints != nil,

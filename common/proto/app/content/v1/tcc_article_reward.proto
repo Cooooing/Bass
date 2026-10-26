@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// TCCArticleRewardService 提供文章打赏的 TCC 分支操作。
+service TCCArticleRewardService {
+  rpc Try(TCCArticleReward.Req) returns (TCCArticleReward.Resp) {} // 校验并受理文章打赏
+  rpc Confirm(TCCArticleReward.Req) returns (TCCArticleReward.Resp) {} // 确认文章打赏
+  rpc Cancel(TCCArticleReward.Req) returns (TCCArticleReward.Resp) {} // 取消待确认文章打赏
+}
+
+// TCCArticleReward 表示文章打赏的 TCC 分支请求与响应。
+message TCCArticleReward {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    int64 sender_user_id = 2; // 打赏者账号 ID
+    int64 receiver_user_id = 3; // 收款文章作者账号 ID
+    string client_request_id = 4; // 客户端幂等请求 ID
+    int64 points = 5; // 成交积分价格快照
+  }
+  message Resp {}
+}

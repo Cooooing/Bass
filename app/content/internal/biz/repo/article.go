@@ -17,6 +17,9 @@ type ArticleRepo interface {
 	UpdateRestriction(ctx context.Context, req *ArticleUpdateRestrictionReq) error
 	DiscardDraft(ctx context.Context, articleID int64) error
 	UpdateHasPostscript(ctx context.Context, req *ArticleUpdateHasPostscriptReq) error
+	TryPublish(ctx context.Context, req *ArticleTryPublishReq) error
+	ConfirmPublish(ctx context.Context, req *ArticleConfirmPublishReq) error
+	CancelPublish(ctx context.Context, articleID int64, clientRequestID string) error
 	UpdatePinnedComment(ctx context.Context, req *ArticleUpdatePinnedCommentReq) error
 	AddStats(ctx context.Context, req *ArticleAddStatsReq) error
 	ReplaceTags(ctx context.Context, req *ArticleReplaceTagsReq) error
@@ -41,6 +44,20 @@ type ArticleUpdatePublishStatusReq struct {
 	PublishedCity      *string
 	ClearPublishedCity bool
 	UpdatedBy          *int64
+}
+
+type ArticleTryPublishReq struct {
+	ArticleID         int64
+	ClientRequestID   string
+	RewardSetupPoints *int64
+}
+
+type ArticleConfirmPublishReq struct {
+	ArticleID       int64
+	ClientRequestID string
+	PublishedAt     time.Time
+	PublishedCity   *string
+	UpdatedBy       *int64
 }
 
 type ArticleUpdateVisibilityReq struct {

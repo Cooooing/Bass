@@ -238,8 +238,10 @@ message PublishArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
     optional google.protobuf.Timestamp scheduled_at = 2; // 可选，定时发布时间
+    string client_request_id = 3; // 必填，发布命令幂等键
     option (gnostic.openapi.v3.schema) = {
       required: "article_id"
+      required: "client_request_id"
     };
   }
   message Resp {}
@@ -428,13 +430,15 @@ message WatchArticle {
 message RewardArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
-    int32 points = 2; // 必填，打赏积分
+    string client_request_id = 2; // 必填，客户端幂等请求 ID
     option (gnostic.openapi.v3.schema) = {
       required: "article_id"
-      required: "points"
+      required: "client_request_id"
     };
   }
-  message Resp {}
+  message Resp {
+    bool rewarded = 1; // 是否已完成打赏
+  }
 }
 
 message ArticleViewerActionState {

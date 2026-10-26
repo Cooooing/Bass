@@ -1,16 +1,22 @@
 package usecase
 
 import (
+	commonclient "common/pkg/client"
+	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 	"time"
 
 	"common/pkg/apperror"
 	commonenums "common/proto/gen/common/enums"
+	contentv1 "common/proto/gen/content/v1"
+	economyv1 "common/proto/gen/economy/v1"
+	economyv1enum "common/proto/gen/economy/v1/enum"
 
 	"content/internal/biz/base"
 	"content/internal/biz/model"
@@ -18,7 +24,9 @@ import (
 	"content/internal/config"
 	"content/internal/enum"
 
+	"github.com/dtm-labs/client/dtmgrpc"
 	"github.com/samber/lo"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ArticleUsecase struct {
@@ -40,6 +48,10 @@ type ArticleUsecase struct {
 	delayedTaskClient    repo.DelayedTaskClient
 	articleAccessUsecase *ArticleAccessUsecase
 	thankUsecase         *ArticleThankUsecase
+	rewardUsecase        *ArticleRewardUsecase
+	dtm                  *commonclient.DTMClient
+	branches             *commonclient.TCCBranchCaller
+	business             *config.Business
 }
 
 func NewArticleUsecase(
@@ -60,6 +72,10 @@ func NewArticleUsecase(
 	delayedTaskClient repo.DelayedTaskClient,
 	articleAccessUsecase *ArticleAccessUsecase,
 	thankUsecase *ArticleThankUsecase,
+	rewardUsecase *ArticleRewardUsecase,
+	dtm *commonclient.DTMClient,
+	branches *commonclient.TCCBranchCaller,
+	business *config.Business,
 ) *ArticleUsecase {
 	return &ArticleUsecase{
 		log:                  logger,
@@ -79,6 +95,10 @@ func NewArticleUsecase(
 		delayedTaskClient:    delayedTaskClient,
 		articleAccessUsecase: articleAccessUsecase,
 		thankUsecase:         thankUsecase,
+		rewardUsecase:        rewardUsecase,
+		dtm:                  dtm,
+		branches:             branches,
+		business:             business,
 	}
 }
 
@@ -156,6 +176,9 @@ func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq)
 	}
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if err = article.ValidateReward(); err != nil {
+		return nil, err
 	}
 	if article.Type == enum.ArticleTypePoll {
 		if err := req.Poll.Normalize(time.Now()); err != nil {
@@ -344,42 +367,13 @@ func (*ArticleUsecase) articleCollectedEvent(userID, articleID int64) *commonenu
 }
 
 type ArticleRewardReq struct {
-	Access    *model.ContentAccess
-	ArticleID int64
-	UserID    int64
-	Points    int32
+	Access          *model.ContentAccess
+	ArticleID       int64
+	ClientRequestID string
 }
 
-func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) error {
-	articleID := req.ArticleID
-	userID := req.Access.ActorUserID
-	return d.tx(ctx, func(ctx context.Context) error {
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(articleID)},
-		})
-		if err != nil {
-			return err
-		}
-		if err = d.articleAccessUsecase.CanInteract(req.Access, article); err != nil {
-			return err
-		}
-		created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
-			ArticleID: articleID,
-			UserID:    userID,
-			Type:      enum.ArticleActionReward,
-			Status:    enum.ContentActionStatusPublished,
-		})
-		if err != nil || !created {
-			return err
-		}
-		return d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
-			ArticleID: articleID,
-			Stats: repo.ArticleStatUpdate{
-				RewardCount: 1,
-			},
-		})
-	})
-
+func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) (bool, error) {
+	return d.rewardUsecase.Reward(ctx, req.Access, req.ArticleID, req.ClientRequestID)
 }
 
 type ArticleViewReq struct {
@@ -516,10 +510,11 @@ func (d *ArticleUsecase) FlushViews(ctx context.Context, req *ArticleFlushViewsR
 }
 
 type ArticlePublishReq struct {
-	Access        *model.ContentAccess
-	ArticleID     int64
-	ScheduledAt   *time.Time
-	PublishedCity *string
+	Access          *model.ContentAccess
+	ArticleID       int64
+	ScheduledAt     *time.Time
+	PublishedCity   *string
+	ClientRequestID string
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
@@ -585,97 +580,78 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		}
 		return nil
 	}
-	var operatorUserID *int64
 	var lotteryDrawAt *time.Time
 	var pollEndsAt *time.Time
-	if access.ActorUserID > 0 {
-		operatorUserID = new(access.ActorUserID)
-	}
-	var outboxEvent *repo.OutboxEvent
-	err = d.tx(ctx, func(ctx context.Context) error {
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(articleID)},
-		})
-		if err != nil {
-			if req.ScheduledAt != nil {
-				if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND {
-					return nil
-				}
+	rewardSetupArticle, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleID)}})
+	if err != nil {
+		if req.ScheduledAt != nil {
+			if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND {
+				return nil
 			}
+		}
+		return err
+	}
+	if req.ScheduledAt != nil && access.Scope == enum.ContentAccessScopeInternalTask &&
+		(rewardSetupArticle.PublishStatus != enum.ArticlePublishStatusDraft || rewardSetupArticle.PublishedAt == nil || !rewardSetupArticle.PublishedAt.UTC().Truncate(time.Second).Equal(req.ScheduledAt.UTC().Truncate(time.Second))) {
+		return nil
+	}
+	if err = rewardSetupArticle.CanPublish(access, nil, now); err != nil {
+		return err
+	}
+	if err = d.validatePublishActivity(ctx, rewardSetupArticle, now); err != nil {
+		return err
+	}
+	clientRequestID := req.ClientRequestID
+	if clientRequestID == "" && access.Scope == enum.ContentAccessScopeInternalTask && req.ScheduledAt != nil {
+		clientRequestID = fmt.Sprintf("scheduled-article-publish:%d:%d", articleID, req.ScheduledAt.UTC().Unix())
+	}
+	if clientRequestID == "" || rewardSetupArticle.CreatedBy == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	var rewardSetupPoints *int64
+	if rewardSetupArticle.RewardContent != nil && rewardSetupArticle.RewardPoints != nil {
+		points := int64(20)
+		if d.business != nil && d.business.GetArticle().GetRewardSetupPoints() > 0 {
+			points = d.business.GetArticle().GetRewardSetupPoints()
+		}
+		rewardSetupPoints = new(points)
+	}
+	if rewardSetupArticle.Type == enum.ArticleTypeLottery {
+		lottery, lotteryErr := d.articleLotteryRepo.Get(ctx, articleID, 0)
+		if lotteryErr != nil || lottery == nil {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		lotteryDrawAt = new(lottery.DrawAt)
+	}
+	if rewardSetupArticle.Type == enum.ArticleTypePoll {
+		poll, pollErr := d.articlePollRepo.Get(ctx, articleID, 0)
+		if pollErr != nil || poll == nil {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		pollEndsAt = new(poll.EndsAt)
+	}
+	publish := &contentv1.TCCArticlePublish_Req{ArticleId: articleID, ClientRequestId: clientRequestID, OperatorUserId: *rewardSetupArticle.CreatedBy, City: req.PublishedCity, RewardSetupPoints: rewardSetupPoints, PublishedAt: timestamppb.New(now)}
+	_, err = d.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
+		if err = d.branches.Call(ctx, tcc, constant.ContentServiceName.String(), publish, contentv1.TCCArticlePublishService_Try_FullMethodName, contentv1.TCCArticlePublishService_Confirm_FullMethodName, contentv1.TCCArticlePublishService_Cancel_FullMethodName, &contentv1.TCCArticlePublish_Resp{}); err != nil {
 			return err
 		}
-		// 已取消、重设或已发布的旧延迟消息不应把当前草稿再次发布。
-		if req.ScheduledAt != nil && access.Scope == enum.ContentAccessScopeInternalTask &&
-			(article.PublishStatus != enum.ArticlePublishStatusDraft || article.PublishedAt == nil || !article.PublishedAt.UTC().Truncate(time.Second).Equal(req.ScheduledAt.UTC().Truncate(time.Second))) {
+		if rewardSetupPoints == nil {
 			return nil
 		}
-		if err = article.CanPublish(access, nil, now); err != nil {
-			return err
-		}
-		if err = d.validatePublishActivity(ctx, article, now); err != nil {
-			return err
-		}
-		if article.Type == enum.ArticleTypeLottery {
-			lottery, lotteryErr := d.articleLotteryRepo.Get(ctx, article.ID, 0)
-			if lotteryErr != nil {
-				return lotteryErr
-			}
-			if lottery == nil {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-			}
-			lotteryDrawAt = new(lottery.DrawAt)
-		}
-		if article.Type == enum.ArticleTypePoll {
-			poll, pollErr := d.articlePollRepo.Get(ctx, article.ID, 0)
-			if pollErr != nil {
-				return pollErr
-			}
-			if poll == nil {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-			}
-			pollEndsAt = new(poll.EndsAt)
-		}
-		update := &repo.ArticleUpdatePublishStatusReq{
-			ArticleID:     articleID,
-			PublishStatus: enum.ArticlePublishStatusPublished,
-			Visibility:    enum.ArticleVisibilityPublic,
-			PublishedAt:   new(now),
-			UpdatedBy:     operatorUserID,
-		}
-		if access.Scope == enum.ContentAccessScopeAuthor {
-			update.PublishedCity = req.PublishedCity
-			update.ClearPublishedCity = req.PublishedCity == nil
-		}
-		if err = d.articleRepo.UpdatePublishStatus(ctx, update); err != nil {
-			return err
-		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_PUBLISHED,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED,
-			Payload: &commonenums.Event_ArticlePublished{
-				ArticlePublished: &commonenums.ArticlePublishedPayload{
-					ArticleId: articleID,
-				},
-			},
-		})
-		return err
+		charge := &economyv1.TCCPoints_Req{UserId: *rewardSetupArticle.CreatedBy, Amount: *rewardSetupPoints, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE, Remark: new(fmt.Sprintf("article reward setup:%d", articleID))}
+		return d.branches.Call(ctx, tcc, constant.EconomyServiceName.String(), charge, economyv1.TCCPointsService_Try_FullMethodName, economyv1.TCCPointsService_Confirm_FullMethodName, economyv1.TCCPointsService_Cancel_FullMethodName, &economyv1.TCCPoints_Resp{})
 	})
 	if err != nil {
 		return err
 	}
-	if outboxEvent != nil {
-		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
-			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
-		}
-	}
 	if lotteryDrawAt != nil {
-		if registerErr := d.delayedTaskClient.RegisterLotteryDraw(ctx, articleID, *lotteryDrawAt); registerErr != nil {
-			return registerErr
+		if err = d.delayedTaskClient.RegisterLotteryDraw(ctx, articleID, *lotteryDrawAt); err != nil {
+			return err
 		}
 	}
 	if pollEndsAt != nil {
-		if registerErr := d.delayedTaskClient.RegisterPollFinish(ctx, articleID, *pollEndsAt); registerErr != nil {
-			return registerErr
+		if err = d.delayedTaskClient.RegisterPollFinish(ctx, articleID, *pollEndsAt); err != nil {
+			return err
 		}
 	}
 	if req.ScheduledAt == nil {

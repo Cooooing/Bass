@@ -95,7 +95,8 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
 	publishReq := &contentv1.PublishArticle_Req{
-		ArticleId: req.ArticleID,
+		ArticleId:       req.ArticleID,
+		ClientRequestId: new(req.ClientRequestID),
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
 			ActorUserId: new(req.UserID),
@@ -423,7 +424,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	if err != nil {
 		return nil, err
 	}
-	detail := r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()])
+	detail := r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()], req.UserID)
 	if detail.Lottery != nil {
 		winnerIDs := make([]int64, 0)
 		for _, prize := range detail.Lottery.Prizes {
@@ -555,19 +556,19 @@ func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.Watch
 	return reply.GetWatched(), nil
 }
 
-func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) error {
-	_, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
-		ArticleId: req.ArticleID,
-		Points:    req.Points,
+func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) (bool, error) {
+	reply, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
+		ArticleId:       req.ArticleID,
+		ClientRequestId: req.ClientRequestID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(req.UserID),
 		},
 	})
 	if err != nil {
-		return err
+		return false, err
 	}
-	return nil
+	return reply.GetRewarded(), nil
 }
 
 func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64, excludedUserIDs []int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*model.ArticleViewerActionState, map[int64][]*model.ArticleTag, map[int64][]*model.ArticleDomain, error) {
@@ -726,15 +727,16 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 	return out
 }
 
-func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles map[int64]*model.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *model.ArticleViewerActionState, tags []*model.ArticleTag, domains []*model.ArticleDomain) *model.ArticleDetail {
+func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles map[int64]*model.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *model.ArticleViewerActionState, tags []*model.ArticleTag, domains []*model.ArticleDomain, viewerUserID int64) *model.ArticleDetail {
 	if item == nil {
 		return nil
 	}
 	if state == nil {
 		state = &model.ArticleViewerActionState{}
 	}
+	canViewRewardContent := state.Rewarded || (item.CreatedBy != nil && *item.CreatedBy == viewerUserID)
 	var rewardContentRender *string
-	if item.RewardContent != nil {
+	if canViewRewardContent && item.RewardContent != nil {
 		rewardContentRender = new(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", item.GetId()), *item.RewardContent))
 	}
 	out := &model.ArticleDetail{
@@ -744,7 +746,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		ContentRender:       util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", item.GetId()), item.GetContent()),
 		HasPostscript:       item.GetHasPostscript(),
 		HasReward:           item.GetHasReward(),
-		RewardContent:       item.RewardContent,
+		RewardContent:       nil,
 		RewardContentRender: rewardContentRender,
 		RewardPoints:        item.RewardPoints,
 		PublishStatus:       int32(item.GetPublishStatus()),
@@ -771,6 +773,9 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		Lottery:             r.articleLottery(item.GetLottery()),
 		CreatedAt:           new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:           new(item.GetUpdatedAt().AsTime()),
+	}
+	if canViewRewardContent {
+		out.RewardContent = item.RewardContent
 	}
 	if item.GetPublishedAt() != nil {
 		out.PublishedAt = new(item.GetPublishedAt().AsTime())

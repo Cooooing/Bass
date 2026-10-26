@@ -48,10 +48,11 @@ type UpdateDraftArticleReq struct {
 }
 
 type PublishArticleReq struct {
-	UserID      int64
-	ArticleID   int64
-	ScheduledAt *time.Time
-	City        *string
+	UserID          int64
+	ArticleID       int64
+	ClientRequestID string
+	ScheduledAt     *time.Time
+	City            *string
 }
 
 type CancelPublishArticleReq struct {
@@ -176,9 +177,9 @@ type WatchArticleReq struct {
 }
 
 type RewardArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Points    int32
+	UserID          int64
+	ArticleID       int64
+	ClientRequestID string
 }
 
 type ContentArticleClient interface {
@@ -201,5 +202,5 @@ type ContentArticleClient interface {
 	ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error)
 	CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error)
 	WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error)
-	RewardArticle(ctx context.Context, req *RewardArticleReq) error
+	RewardArticle(ctx context.Context, req *RewardArticleReq) (bool, error)
 }

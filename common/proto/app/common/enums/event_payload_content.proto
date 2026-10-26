@@ -18,6 +18,11 @@ message ArticleThankedPayload {
   int64 article_id = 3;
 }
 
+message ArticleRewardedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+}
+
 message ArticleCollectedPayload {
   int64 sender_id = 1;
   int64 article_id = 3;

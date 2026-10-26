@@ -26,9 +26,6 @@ message UserLoginPayload {
   string account = 3;
   string ip = 4;
   string user_agent = 5;
-  string device_id = 6 [deprecated = true];
-  string platform = 7 [deprecated = true];
-  string request_id = 8 [deprecated = true];
   string realm = 9;
   string login_type = 10;
   string session_id = 11;

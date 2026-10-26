@@ -123,8 +123,7 @@ message GetGlobalChatTopic {
 }
 message SetGlobalChatTopic {
   message Req {
-    string client_request_id = 1; // 客户端幂等请求 ID。
-    string content = 2; // 话题内容。
+    string content = 1; // 话题内容。
   }
   message Resp {
     GlobalChatTopic topic = 1; // 话题记录。
@@ -155,8 +154,7 @@ message ListGlobalChatOnlineMembers {
 }
 message SendGlobalChatBarrage {
   message Req {
-    string client_request_id = 1; // 客户端幂等请求 ID。
-    string content = 2; // 原始弹幕内容。
+    string content = 1; // 原始弹幕内容。
   }
   message Resp {
     GlobalChatBarrage barrage = 1; // 已发布的弹幕。

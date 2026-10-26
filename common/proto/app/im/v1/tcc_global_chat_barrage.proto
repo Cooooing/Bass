@@ -12,8 +12,8 @@ service TCCGlobalChatBarrageService {
 
 message TCCSendGlobalChatBarrage {
   message Req {
-    int64 user_id = 1; // 发送账号 ID。
-    string client_request_id = 2; // 客户端幂等请求 ID。
+    int64 barrage_id = 1; // IM 预分配的弹幕记录 ID，仅用于 TCC 分支关联。
+    int64 user_id = 2; // 发送账号 ID。
     string content = 3; // 纯文本弹幕内容。
     int64 points_cost = 4; // 本次消耗积分。
   }

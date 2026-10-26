@@ -50,8 +50,7 @@ message GetGlobalChatTopic {
 message SetGlobalChatTopic {
   message Req {
     int64 user_id = 1; // 设置账号 ID。
-    string client_request_id = 2; // 客户端幂等请求 ID。
-    string content = 3; // 话题内容。
+    string content = 2; // 话题内容。
   }
   message Resp {
     GlobalChatTopic topic = 1; // 成功发布的话题记录。

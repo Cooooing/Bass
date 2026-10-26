@@ -14,8 +14,8 @@ service TCCGlobalChatTopicService {
 // TCCSetGlobalChatTopic 表示话题设置 TCC 分支的完整业务参数。
 message TCCSetGlobalChatTopic {
   message Req {
-    int64 user_id = 1; // 设置账号 ID。
-    string client_request_id = 2; // 客户端幂等请求 ID。
+    int64 topic_id = 1; // IM 预分配的话题记录 ID，仅用于 TCC 分支关联。
+    int64 user_id = 2; // 设置账号 ID。
     string content = 3; // 话题内容。
     int64 points_cost = 4; // 本次设置消耗的积分。
   }

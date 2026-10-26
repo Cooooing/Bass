@@ -76,7 +76,7 @@ func (s *GlobalChatService) GetTopic(ctx context.Context, _ *imv1.GetGlobalChatT
 }
 
 func (s *GlobalChatService) SetTopic(ctx context.Context, req *imv1.SetGlobalChatTopic_Req) (*imv1.SetGlobalChatTopic_Resp, error) {
-	topic, err := s.topic.Set(ctx, req.GetUserId(), req.GetClientRequestId(), req.GetContent())
+	topic, err := s.topic.Set(ctx, req.GetUserId(), req.GetContent())
 	if err != nil {
 		return nil, err
 	}

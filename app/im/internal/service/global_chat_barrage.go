@@ -30,7 +30,7 @@ func (s *GlobalChatBarrageService) RegisterGrpc(server *grpc.Server) {
 func (*GlobalChatBarrageService) RegisterHTTP(*http.Server) {}
 
 func (s *GlobalChatBarrageService) Send(ctx context.Context, req *imv1.SendGlobalChatBarrage_Req) (*imv1.SendGlobalChatBarrage_Resp, error) {
-	barrage, err := s.barrages.Send(ctx, req.GetUserId(), req.GetClientRequestId(), req.GetContent())
+	barrage, err := s.barrages.Send(ctx, req.GetUserId(), req.GetContent())
 	if err != nil {
 		return nil, err
 	}

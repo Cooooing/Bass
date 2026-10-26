@@ -43,27 +43,15 @@ func (u *GlobalChatTopicUsecase) Get(ctx context.Context) (*model.GlobalChatTopi
 	return u.topics.GetCurrent(ctx)
 }
 
-func (u *GlobalChatTopicUsecase) Set(ctx context.Context, userID int64, clientRequestID, content string) (*model.GlobalChatTopic, error) {
+func (u *GlobalChatTopicUsecase) Set(ctx context.Context, userID int64, content string) (*model.GlobalChatTopic, error) {
 	content = strings.TrimSpace(strings.Map(func(r rune) rune {
 		if unicode.IsControl(r) {
 			return -1
 		}
 		return r
 	}, content))
-	if userID <= 0 || clientRequestID == "" || content == "" || utf8.RuneCountInString(content) > 64 {
+	if userID <= 0 || content == "" || utf8.RuneCountInString(content) > 64 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	existing, err := u.topics.GetByClientRequestID(ctx, clientRequestID)
-	if err != nil {
-		return nil, err
-	}
-	if existing != nil {
-		if existing.Status == enum.GlobalChatTopicStatusPublished {
-			return existing, nil
-		}
-		if existing.Status == enum.GlobalChatTopicStatusCanceled || existing.UserID != userID || existing.Content != content {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
-		}
 	}
 	points := int64(16)
 	userInterval := 10 * time.Minute
@@ -79,18 +67,18 @@ func (u *GlobalChatTopicUsecase) Set(ctx context.Context, userID int64, clientRe
 			globalInterval = u.business.GetGlobalChatTopicGlobalInterval().AsDuration()
 		}
 	}
-	if existing == nil {
-		limited, err := u.rateLimiter.Limited(ctx, userID)
-		if err != nil {
-			return nil, err
-		}
-		if limited {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_GLOBAL_CHAT_TOPIC_RATE_LIMITED)
-		}
-	} else {
-		points = existing.PointsCost
+	limited, err := u.rateLimiter.Limited(ctx, userID)
+	if err != nil {
+		return nil, err
 	}
-	topicRequest := &imv1.TCCSetGlobalChatTopic_Req{UserId: userID, ClientRequestId: clientRequestID, Content: content, PointsCost: points}
+	if limited {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_GLOBAL_CHAT_TOPIC_RATE_LIMITED)
+	}
+	topicID, err := u.topics.NextID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	topicRequest := &imv1.TCCSetGlobalChatTopic_Req{TopicId: topicID, UserId: userID, Content: content, PointsCost: points}
 	pointsRequest := &economyv1.TCCPoints_Req{UserId: userID, Amount: points, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
 		if err = u.branches.Call(ctx, tcc, constant.IMServiceName.String(), topicRequest, imv1.TCCGlobalChatTopicService_Try_FullMethodName, imv1.TCCGlobalChatTopicService_Confirm_FullMethodName, imv1.TCCGlobalChatTopicService_Cancel_FullMethodName, &imv1.TCCSetGlobalChatTopic_Resp{}); err != nil {
@@ -101,11 +89,11 @@ func (u *GlobalChatTopicUsecase) Set(ctx context.Context, userID int64, clientRe
 	if err != nil {
 		return nil, err
 	}
-	topic, err := u.topics.GetByClientRequestID(ctx, clientRequestID)
+	topic, err := u.topics.Get(ctx, topicID)
 	if err != nil {
 		return nil, err
 	}
-	if existing == nil && topic != nil && topic.Status == enum.GlobalChatTopicStatusPublished {
+	if topic != nil && topic.Status == enum.GlobalChatTopicStatusPublished {
 		if err = u.rateLimiter.Mark(context.WithoutCancel(ctx), userID, userInterval, globalInterval); err != nil {
 			u.log.WarnContext(ctx, "mark global chat topic rate limit failed", "user_id", userID, "error", err)
 		}

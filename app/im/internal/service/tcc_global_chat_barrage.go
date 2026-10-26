@@ -27,21 +27,21 @@ func (s *TCCGlobalChatBarrageService) RegisterGrpc(server *grpc.Server) {
 func (*TCCGlobalChatBarrageService) RegisterHTTP(*http.Server) {}
 
 func (s *TCCGlobalChatBarrageService) Try(ctx context.Context, req *imv1.TCCSendGlobalChatBarrage_Req) (*imv1.TCCSendGlobalChatBarrage_Resp, error) {
-	if err := s.barrages.Try(ctx, req.GetUserId(), req.GetClientRequestId(), req.GetContent(), req.GetPointsCost()); err != nil {
+	if err := s.barrages.Try(ctx, req.GetBarrageId(), req.GetUserId(), req.GetContent(), req.GetPointsCost()); err != nil {
 		return nil, err
 	}
 	return &imv1.TCCSendGlobalChatBarrage_Resp{}, nil
 }
 
 func (s *TCCGlobalChatBarrageService) Confirm(ctx context.Context, req *imv1.TCCSendGlobalChatBarrage_Req) (*imv1.TCCSendGlobalChatBarrage_Resp, error) {
-	if err := s.barrages.Confirm(ctx, req.GetClientRequestId()); err != nil {
+	if err := s.barrages.Confirm(ctx, req.GetBarrageId()); err != nil {
 		return nil, err
 	}
 	return &imv1.TCCSendGlobalChatBarrage_Resp{}, nil
 }
 
 func (s *TCCGlobalChatBarrageService) Cancel(ctx context.Context, req *imv1.TCCSendGlobalChatBarrage_Req) (*imv1.TCCSendGlobalChatBarrage_Resp, error) {
-	if err := s.barrages.Cancel(ctx, req.GetClientRequestId()); err != nil {
+	if err := s.barrages.Cancel(ctx, req.GetBarrageId()); err != nil {
 		return nil, err
 	}
 	return &imv1.TCCSendGlobalChatBarrage_Resp{}, nil

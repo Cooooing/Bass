@@ -39,36 +39,22 @@ func NewGlobalChatBarrageUsecase(log *slog.Logger, barrages repo.GlobalChatBarra
 	return &GlobalChatBarrageUsecase{log: log, barrages: barrages, rateLimiter: rateLimiter, dtm: dtm, branches: branches, events: events, business: business}
 }
 
-func (u *GlobalChatBarrageUsecase) Send(ctx context.Context, userID int64, clientRequestID, content string) (*model.GlobalChatBarrage, error) {
+func (u *GlobalChatBarrageUsecase) Send(ctx context.Context, userID int64, content string) (*model.GlobalChatBarrage, error) {
 	content = strings.TrimSpace(strings.Map(func(r rune) rune {
 		if unicode.IsControl(r) {
 			return -1
 		}
 		return r
 	}, content))
-	if userID <= 0 || clientRequestID == "" || content == "" || utf8.RuneCountInString(content) > 32 {
+	if userID <= 0 || content == "" || utf8.RuneCountInString(content) > 32 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	existing, err := u.barrages.GetByClientRequestID(ctx, clientRequestID)
+	limited, err := u.rateLimiter.Limited(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	if existing != nil {
-		if existing.Status == enum.GlobalChatBarrageStatusPublished {
-			return existing, nil
-		}
-		if existing.Status == enum.GlobalChatBarrageStatusCanceled || existing.UserID != userID || existing.Content != content {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
-		}
-	}
-	if existing == nil {
-		limited, err := u.rateLimiter.Limited(ctx, userID)
-		if err != nil {
-			return nil, err
-		}
-		if limited {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_GLOBAL_CHAT_BARRAGE_RATE_LIMITED)
-		}
+	if limited {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_GLOBAL_CHAT_BARRAGE_RATE_LIMITED)
 	}
 	points := int64(5)
 	interval := 12 * time.Second
@@ -80,10 +66,11 @@ func (u *GlobalChatBarrageUsecase) Send(ctx context.Context, userID int64, clien
 			interval = u.business.GetGlobalChatBarrageUserInterval().AsDuration()
 		}
 	}
-	if existing != nil {
-		points = existing.PointsCost
+	barrageID, err := u.barrages.NextID(ctx)
+	if err != nil {
+		return nil, err
 	}
-	barrageRequest := &imv1.TCCSendGlobalChatBarrage_Req{UserId: userID, ClientRequestId: clientRequestID, Content: content, PointsCost: points}
+	barrageRequest := &imv1.TCCSendGlobalChatBarrage_Req{BarrageId: barrageID, UserId: userID, Content: content, PointsCost: points}
 	pointsRequest := &economyv1.TCCPoints_Req{UserId: userID, Amount: points, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
 		if err = u.branches.Call(ctx, tcc, constant.IMServiceName.String(), barrageRequest, imv1.TCCGlobalChatBarrageService_Try_FullMethodName, imv1.TCCGlobalChatBarrageService_Confirm_FullMethodName, imv1.TCCGlobalChatBarrageService_Cancel_FullMethodName, &imv1.TCCSendGlobalChatBarrage_Resp{}); err != nil {
@@ -94,11 +81,11 @@ func (u *GlobalChatBarrageUsecase) Send(ctx context.Context, userID int64, clien
 	if err != nil {
 		return nil, err
 	}
-	barrage, err := u.barrages.GetByClientRequestID(ctx, clientRequestID)
+	barrage, err := u.barrages.Get(ctx, barrageID)
 	if err != nil || barrage == nil {
 		return barrage, err
 	}
-	if existing == nil && barrage.Status == enum.GlobalChatBarrageStatusPublished {
+	if barrage.Status == enum.GlobalChatBarrageStatusPublished {
 		if err = u.rateLimiter.Mark(context.WithoutCancel(ctx), userID, interval); err != nil {
 			u.log.WarnContext(ctx, "mark global chat barrage rate limit failed", "user_id", userID, "error", err)
 		}

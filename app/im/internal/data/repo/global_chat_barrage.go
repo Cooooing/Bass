@@ -2,7 +2,10 @@ package repo
 
 import (
 	"context"
+	"fmt"
 
+	commonclient "common/pkg/client"
+	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
 
 	"im/internal/biz/model"
@@ -14,10 +17,13 @@ import (
 
 var _ bizrepo.GlobalChatBarrageRepo = (*GlobalChatBarrageRepo)(nil)
 
-type GlobalChatBarrageRepo struct{ db *gen.Client }
+type GlobalChatBarrageRepo struct {
+	db  *gen.Client
+	sql *commonclient.SQLClient
+}
 
-func NewGlobalChatBarrageRepo(db *gen.Client) bizrepo.GlobalChatBarrageRepo {
-	return &GlobalChatBarrageRepo{db: db}
+func NewGlobalChatBarrageRepo(db *gen.Client, sqlClient *commonclient.SQLClient) bizrepo.GlobalChatBarrageRepo {
+	return &GlobalChatBarrageRepo{db: db, sql: sqlClient}
 }
 
 func (r *GlobalChatBarrageRepo) client(ctx context.Context) *gen.Client {
@@ -27,8 +33,8 @@ func (r *GlobalChatBarrageRepo) client(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *GlobalChatBarrageRepo) GetByClientRequestID(ctx context.Context, requestID string) (*model.GlobalChatBarrage, error) {
-	row, err := r.client(ctx).GlobalChatBarrage.Query().Where(globalchatbarrage.ClientRequestIDEQ(requestID)).Only(ctx)
+func (r *GlobalChatBarrageRepo) Get(ctx context.Context, id int64) (*model.GlobalChatBarrage, error) {
+	row, err := r.client(ctx).GlobalChatBarrage.Get(ctx, id)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
@@ -38,10 +44,19 @@ func (r *GlobalChatBarrageRepo) GetByClientRequestID(ctx context.Context, reques
 	return r.model(row), nil
 }
 
+func (r *GlobalChatBarrageRepo) NextID(ctx context.Context) (int64, error) {
+	var id int64
+	err := r.sql.DB.QueryRowContext(ctx, "SELECT nextval(pg_get_serial_sequence($1, 'id'))", constant.TablePrefixIM.String()+"global_chat_barrages").Scan(&id)
+	if err != nil {
+		return 0, fmt.Errorf("allocate global chat barrage ID: %w", err)
+	}
+	return id, nil
+}
+
 func (r *GlobalChatBarrageRepo) CreatePending(ctx context.Context, item *model.GlobalChatBarrage) (*model.GlobalChatBarrage, error) {
 	row, err := r.client(ctx).GlobalChatBarrage.Create().
+		SetID(item.ID).
 		SetUserID(item.UserID).
-		SetClientRequestID(item.ClientRequestID).
 		SetContent(item.Content).
 		SetPointsCost(item.PointsCost).
 		SetStatus(globalchatbarrage.Status(enum.GlobalChatBarrageStatusPending)).
@@ -52,9 +67,9 @@ func (r *GlobalChatBarrageRepo) CreatePending(ctx context.Context, item *model.G
 	return r.model(row), nil
 }
 
-func (r *GlobalChatBarrageRepo) Publish(ctx context.Context, requestID string) (*model.GlobalChatBarrage, error) {
+func (r *GlobalChatBarrageRepo) Publish(ctx context.Context, id int64) (*model.GlobalChatBarrage, error) {
 	client := r.client(ctx)
-	row, err := client.GlobalChatBarrage.Query().Where(globalchatbarrage.ClientRequestIDEQ(requestID)).Only(ctx)
+	row, err := client.GlobalChatBarrage.Get(ctx, id)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
@@ -75,16 +90,16 @@ func (r *GlobalChatBarrageRepo) Publish(ctx context.Context, requestID string) (
 		return nil, err
 	}
 	if updated == 0 {
-		return r.GetByClientRequestID(ctx, requestID)
+		return r.Get(ctx, id)
 	}
 	row.Status = globalchatbarrage.Status(enum.GlobalChatBarrageStatusPublished)
 	return r.model(row), nil
 }
 
-func (r *GlobalChatBarrageRepo) Cancel(ctx context.Context, requestID string) error {
+func (r *GlobalChatBarrageRepo) Cancel(ctx context.Context, id int64) error {
 	_, err := r.client(ctx).GlobalChatBarrage.Update().
 		Where(
-			globalchatbarrage.ClientRequestIDEQ(requestID),
+			globalchatbarrage.IDEQ(id),
 			globalchatbarrage.StatusEQ(globalchatbarrage.Status(enum.GlobalChatBarrageStatusPending)),
 		).
 		SetStatus(globalchatbarrage.Status(enum.GlobalChatBarrageStatusCanceled)).
@@ -117,12 +132,11 @@ func (*GlobalChatBarrageRepo) model(row *gen.GlobalChatBarrage) *model.GlobalCha
 		return nil
 	}
 	return &model.GlobalChatBarrage{
-		ID:              row.ID,
-		UserID:          row.UserID,
-		ClientRequestID: row.ClientRequestID,
-		Content:         row.Content,
-		PointsCost:      row.PointsCost,
-		Status:          enum.GlobalChatBarrageStatus(row.Status),
-		CreatedAt:       row.CreatedAt,
+		ID:         row.ID,
+		UserID:     row.UserID,
+		Content:    row.Content,
+		PointsCost: row.PointsCost,
+		Status:     enum.GlobalChatBarrageStatus(row.Status),
+		CreatedAt:  row.CreatedAt,
 	}
 }

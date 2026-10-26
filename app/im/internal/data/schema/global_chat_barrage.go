@@ -24,7 +24,6 @@ func (GlobalChatBarrage) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("发送账号 ID"),
-		field.String("client_request_id").NotEmpty().Immutable().Unique().Comment("客户端幂等请求 ID"),
 		field.String("content").NotEmpty().Comment("纯文本弹幕内容"),
 		field.Int64("points_cost").Positive().Comment("本次消耗积分"),
 		field.Enum("status").Values(enum.GlobalChatBarrageStatusMap.EnumValues()...).Comment("弹幕状态"),

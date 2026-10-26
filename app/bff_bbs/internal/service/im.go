@@ -183,7 +183,7 @@ func (s *IMService) SetGlobalChatTopic(ctx context.Context, req *bffbbsv1.SetGlo
 	if err != nil {
 		return nil, err
 	}
-	resp, err := s.im.SetGlobalChatTopic(ctx, &imv1.SetGlobalChatTopic_Req{UserId: user.ID, ClientRequestId: req.GetClientRequestId(), Content: req.GetContent()})
+	resp, err := s.im.SetGlobalChatTopic(ctx, &imv1.SetGlobalChatTopic_Req{UserId: user.ID, Content: req.GetContent()})
 	if err != nil {
 		return nil, err
 	}
@@ -216,9 +216,8 @@ func (s *IMService) SendGlobalChatBarrage(ctx context.Context, req *bffbbsv1.Sen
 		return nil, err
 	}
 	response, err := s.im.SendGlobalChatBarrage(ctx, &imv1.SendGlobalChatBarrage_Req{
-		UserId:          user.ID,
-		ClientRequestId: req.GetClientRequestId(),
-		Content:         req.GetContent(),
+		UserId:  user.ID,
+		Content: req.GetContent(),
 	})
 	if err != nil {
 		return nil, err

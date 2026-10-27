@@ -414,6 +414,8 @@ pub mod revoke_private_chat_message_resp;
 pub use self::revoke_private_chat_message_resp::RevokePrivateChatMessageResp;
 pub mod reward_article_req;
 pub use self::reward_article_req::RewardArticleReq;
+pub mod reward_article_resp;
+pub use self::reward_article_resp::RewardArticleResp;
 pub mod search_articles_req;
 pub use self::search_articles_req::SearchArticlesReq;
 pub mod search_articles_resp;

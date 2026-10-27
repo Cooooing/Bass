@@ -109,6 +109,8 @@ pub enum EventType {
     EventTypeArticleMentioned,
     #[serde(rename = "EVENT_TYPE_POSTSCRIPT_MENTIONED")]
     EventTypePostscriptMentioned,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_REWARDED")]
+    EventTypeArticleRewarded,
     #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED")]
     EventTypeArticleWatchedCommentPublished,
     #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED")]

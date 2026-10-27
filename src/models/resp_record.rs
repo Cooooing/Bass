@@ -75,6 +75,8 @@ pub enum RecordType {
     EconomyRecordTypeArticleThankExpense,
     #[serde(rename = "ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE")]
     EconomyRecordTypeCommentThankExpense,
+    #[serde(rename = "ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE")]
+    EconomyRecordTypeArticleRewardSetupExpense,
 }
 
 impl Default for RecordType {

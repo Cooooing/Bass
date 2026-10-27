@@ -449,7 +449,7 @@ No authorization required
 
 ## reward
 
-> serde_json::Value reward(reward_article_req)
+> models::RewardArticleResp reward(reward_article_req)
 
 
 打赏文章
@@ -463,7 +463,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**serde_json::Value**](serde_json::Value.md)
+[**models::RewardArticleResp**](RewardArticle_Resp.md)
 
 ### Authorization
 

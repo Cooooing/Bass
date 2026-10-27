@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SetGlobalChatTopicReq {
-    #[serde(rename = "client_request_id", skip_serializing_if = "Option::is_none")]
-    pub client_request_id: Option<String>,
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
 }
@@ -22,7 +20,6 @@ pub struct SetGlobalChatTopicReq {
 impl SetGlobalChatTopicReq {
     pub fn new() -> SetGlobalChatTopicReq {
         SetGlobalChatTopicReq {
-            client_request_id: None,
             content: None,
         }
     }

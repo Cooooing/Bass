@@ -5,7 +5,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**client_request_id** | **string** |  | [optional] [default to undefined]
 **content** | **string** |  | [optional] [default to undefined]
 
 ## Example
@@ -14,7 +13,6 @@ Name | Type | Description | Notes
 import { SendGlobalChatBarrageReq } from '@bass/bbs-sdk-axios';
 
 const instance: SendGlobalChatBarrageReq = {
-    client_request_id,
     content,
 };
 ```

@@ -235,6 +235,7 @@ docs/RevokeGlobalChatMessageResp.md
 docs/RevokePrivateChatMessageReq.md
 docs/RevokePrivateChatMessageResp.md
 docs/RewardArticleReq.md
+docs/RewardArticleResp.md
 docs/SearchArticlesReq.md
 docs/SearchArticlesResp.md
 docs/SearchMentionAccountsReq.md

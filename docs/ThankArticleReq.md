@@ -6,7 +6,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **article_id** | **string** |  | [default to undefined]
-**client_request_id** | **string** |  | [default to undefined]
 
 ## Example
 
@@ -15,7 +14,6 @@ import { ThankArticleReq } from '@bass/bbs-sdk-axios';
 
 const instance: ThankArticleReq = {
     article_id,
-    client_request_id,
 };
 ```
 

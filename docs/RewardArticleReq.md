@@ -6,7 +6,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **article_id** | **string** |  | [default to undefined]
-**points** | **number** |  | [default to undefined]
 
 ## Example
 
@@ -15,7 +14,6 @@ import { RewardArticleReq } from '@bass/bbs-sdk-axios';
 
 const instance: RewardArticleReq = {
     article_id,
-    points,
 };
 ```
 

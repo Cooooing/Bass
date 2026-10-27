@@ -1614,6 +1614,7 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_ARTICLE_LOTTERY_DRAWN: 'EVENT_TYPE_ARTICLE_LOTTERY_DRAWN',
     EVENT_TYPE_ARTICLE_MENTIONED: 'EVENT_TYPE_ARTICLE_MENTIONED',
     EVENT_TYPE_POSTSCRIPT_MENTIONED: 'EVENT_TYPE_POSTSCRIPT_MENTIONED',
+    EVENT_TYPE_ARTICLE_REWARDED: 'EVENT_TYPE_ARTICLE_REWARDED',
     EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED: 'EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED',
     EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED: 'EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED',
     EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED: 'EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED',
@@ -1695,6 +1696,7 @@ export const RespRecordRecordTypeEnum = {
     ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE: 'ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE',
     ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE: 'ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE',
     ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE: 'ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE',
+    ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE: 'ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE',
 } as const;
 
 export type RespRecordRecordTypeEnum = typeof RespRecordRecordTypeEnum[keyof typeof RespRecordRecordTypeEnum];
@@ -1756,7 +1758,9 @@ export interface RevokePrivateChatMessageResp {
 }
 export interface RewardArticleReq {
     'article_id': string;
-    'points': number;
+}
+export interface RewardArticleResp {
+    'rewarded'?: boolean;
 }
 export interface SearchArticlesReq {
     'query': string;
@@ -1782,7 +1786,6 @@ export interface SendEmailOtpResp {
     'code'?: string;
 }
 export interface SendGlobalChatBarrageReq {
-    'client_request_id'?: string;
     'content'?: string;
 }
 export interface SendGlobalChatBarrageResp {
@@ -1810,7 +1813,6 @@ export interface SendPrivateChatMessageResp {
     'message'?: PrivateChatMessage;
 }
 export interface SetGlobalChatTopicReq {
-    'client_request_id'?: string;
     'content'?: string;
 }
 export interface SetGlobalChatTopicResp {
@@ -1830,14 +1832,12 @@ export interface SetPrivateChatSessionPinnedReq {
 }
 export interface ThankArticleReq {
     'article_id': string;
-    'client_request_id': string;
 }
 export interface ThankArticleResp {
     'thanked'?: boolean;
 }
 export interface ThankCommentReq {
     'id': string;
-    'client_request_id': string;
 }
 export interface ThankCommentResp {
     'thanked'?: boolean;
@@ -3924,7 +3924,7 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reward(rewardArticleReq: RewardArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async reward(rewardArticleReq: RewardArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RewardArticleResp>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.reward(rewardArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.reward']?.[localVarOperationServerIndex]?.url;
@@ -4131,7 +4131,7 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<RewardArticleResp> {
             return localVarFp.reward(requestParameters.rewardArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4304,7 +4304,7 @@ export interface ArticleServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<RewardArticleResp>;
 
     /**
      * 设置或取消当前账号文章的置顶评论。

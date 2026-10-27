@@ -754,7 +754,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **reward**
-> object reward(rewardArticleReq)
+> RewardArticleResp reward(rewardArticleReq)
 
 打赏文章
 
@@ -786,7 +786,7 @@ const { status, data } = await apiInstance.reward(
 
 ### Return type
 
-**object**
+**RewardArticleResp**
 
 ### Authorization
 

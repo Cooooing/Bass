@@ -33,45 +33,16 @@ import com.bass.bbs.ApiClient;
  * SendGlobalChatBarrageReq
  */
 @JsonPropertyOrder({
-  SendGlobalChatBarrageReq.JSON_PROPERTY_CLIENT_REQUEST_ID,
   SendGlobalChatBarrageReq.JSON_PROPERTY_CONTENT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class SendGlobalChatBarrageReq {
-  public static final String JSON_PROPERTY_CLIENT_REQUEST_ID = "client_request_id";
-  @javax.annotation.Nullable
-  private String clientRequestId;
-
   public static final String JSON_PROPERTY_CONTENT = "content";
   @javax.annotation.Nullable
   private String content;
 
   public SendGlobalChatBarrageReq() { 
   }
-
-  public SendGlobalChatBarrageReq clientRequestId(@javax.annotation.Nullable String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-    return this;
-  }
-
-  /**
-   * Get clientRequestId
-   * @return clientRequestId
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getClientRequestId() {
-    return clientRequestId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setClientRequestId(@javax.annotation.Nullable String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-  }
-
 
   public SendGlobalChatBarrageReq content(@javax.annotation.Nullable String content) {
     this.content = content;
@@ -109,20 +80,18 @@ public class SendGlobalChatBarrageReq {
       return false;
     }
     SendGlobalChatBarrageReq sendGlobalChatBarrageReq = (SendGlobalChatBarrageReq) o;
-    return Objects.equals(this.clientRequestId, sendGlobalChatBarrageReq.clientRequestId) &&
-        Objects.equals(this.content, sendGlobalChatBarrageReq.content);
+    return Objects.equals(this.content, sendGlobalChatBarrageReq.content);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(clientRequestId, content);
+    return Objects.hash(content);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SendGlobalChatBarrageReq {\n");
-    sb.append("    clientRequestId: ").append(toIndentedString(clientRequestId)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -167,11 +136,6 @@ public class SendGlobalChatBarrageReq {
     }
 
     StringJoiner joiner = new StringJoiner("&");
-
-    // add `client_request_id` to the URL query string
-    if (getClientRequestId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sclient_request_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getClientRequestId()))));
-    }
 
     // add `content` to the URL query string
     if (getContent() != null) {

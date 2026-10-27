@@ -8,7 +8,6 @@
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
 |**articleId** | **String** |  |  |
-|**clientRequestId** | **String** |  |  |
 
 
 

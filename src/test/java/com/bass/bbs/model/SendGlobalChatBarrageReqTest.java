@@ -38,14 +38,6 @@ class SendGlobalChatBarrageReqTest {
     }
 
     /**
-     * Test the property 'clientRequestId'
-     */
-    @Test
-    void clientRequestIdTest() {
-        // TODO: test clientRequestId
-    }
-
-    /**
      * Test the property 'content'
      */
     @Test

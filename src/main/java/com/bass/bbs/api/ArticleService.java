@@ -41,6 +41,7 @@ import com.bass.bbs.model.PageArticleViewHistoryReq;
 import com.bass.bbs.model.PageArticleViewHistoryResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
+import com.bass.bbs.model.RewardArticleResp;
 import com.bass.bbs.model.SetPinnedArticleCommentReq;
 import com.bass.bbs.model.ThankArticleReq;
 import com.bass.bbs.model.ThankArticleResp;
@@ -3010,10 +3011,10 @@ public class ArticleService {
    * 
    * 打赏文章
    * @param apiRequest {@link APIRewardRequest}
-   * @return Object
+   * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public Object reward(APIRewardRequest apiRequest) throws ApiException {
+  public RewardArticleResp reward(APIRewardRequest apiRequest) throws ApiException {
     return reward(apiRequest, null);
   }
 
@@ -3022,10 +3023,10 @@ public class ArticleService {
    * 打赏文章
    * @param apiRequest {@link APIRewardRequest}
    * @param headers Optional headers to include in the request
-   * @return Object
+   * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public Object reward(APIRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public RewardArticleResp reward(APIRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     RewardArticleReq rewardArticleReq = apiRequest.rewardArticleReq();
     return reward(rewardArticleReq, headers);
@@ -3035,10 +3036,10 @@ public class ArticleService {
    * 
    * 打赏文章
    * @param apiRequest {@link APIRewardRequest}
-   * @return ApiResponse&lt;Object&gt;
+   * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> rewardWithHttpInfo(APIRewardRequest apiRequest) throws ApiException {
+  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(APIRewardRequest apiRequest) throws ApiException {
     return rewardWithHttpInfo(apiRequest, null);
   }
 
@@ -3047,10 +3048,10 @@ public class ArticleService {
    * 打赏文章
    * @param apiRequest {@link APIRewardRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;Object&gt;
+   * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> rewardWithHttpInfo(APIRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(APIRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
     RewardArticleReq rewardArticleReq = apiRequest.rewardArticleReq();
     return rewardWithHttpInfo(rewardArticleReq, headers);
   }
@@ -3059,10 +3060,10 @@ public class ArticleService {
    * 
    * 打赏文章
    * @param rewardArticleReq  (required)
-   * @return Object
+   * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public Object reward(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
+  public RewardArticleResp reward(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
     return reward(rewardArticleReq, null);
   }
 
@@ -3071,11 +3072,11 @@ public class ArticleService {
    * 打赏文章
    * @param rewardArticleReq  (required)
    * @param headers Optional headers to include in the request
-   * @return Object
+   * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public Object reward(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = rewardWithHttpInfo(rewardArticleReq, headers);
+  public RewardArticleResp reward(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<RewardArticleResp> localVarResponse = rewardWithHttpInfo(rewardArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -3083,10 +3084,10 @@ public class ArticleService {
    * 
    * 打赏文章
    * @param rewardArticleReq  (required)
-   * @return ApiResponse&lt;Object&gt;
+   * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> rewardWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
+  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
     return rewardWithHttpInfo(rewardArticleReq, null);
   }
 
@@ -3095,10 +3096,10 @@ public class ArticleService {
    * 打赏文章
    * @param rewardArticleReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;Object&gt;
+   * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> rewardWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
+  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = rewardRequestBuilder(rewardArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -3114,7 +3115,7 @@ public class ArticleService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<Object>(
+          return new ApiResponse<RewardArticleResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -3124,10 +3125,10 @@ public class ArticleService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        RewardArticleResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<RewardArticleResp>() {});
         
 
-        return new ApiResponse<Object>(
+        return new ApiResponse<RewardArticleResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue

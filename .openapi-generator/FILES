@@ -235,6 +235,7 @@ docs/RevokeGlobalChatMessageResp.md
 docs/RevokePrivateChatMessageReq.md
 docs/RevokePrivateChatMessageResp.md
 docs/RewardArticleReq.md
+docs/RewardArticleResp.md
 docs/SearchArticlesReq.md
 docs/SearchArticlesResp.md
 docs/SearchMentionAccountsReq.md
@@ -531,6 +532,7 @@ src/main/java/com/bass/bbs/model/RevokeGlobalChatMessageResp.java
 src/main/java/com/bass/bbs/model/RevokePrivateChatMessageReq.java
 src/main/java/com/bass/bbs/model/RevokePrivateChatMessageResp.java
 src/main/java/com/bass/bbs/model/RewardArticleReq.java
+src/main/java/com/bass/bbs/model/RewardArticleResp.java
 src/main/java/com/bass/bbs/model/SearchArticlesReq.java
 src/main/java/com/bass/bbs/model/SearchArticlesResp.java
 src/main/java/com/bass/bbs/model/SearchMentionAccountsReq.java
@@ -805,6 +807,7 @@ src/test/java/com/bass/bbs/model/RevokeGlobalChatMessageRespTest.java
 src/test/java/com/bass/bbs/model/RevokePrivateChatMessageReqTest.java
 src/test/java/com/bass/bbs/model/RevokePrivateChatMessageRespTest.java
 src/test/java/com/bass/bbs/model/RewardArticleReqTest.java
+src/test/java/com/bass/bbs/model/RewardArticleRespTest.java
 src/test/java/com/bass/bbs/model/SearchArticlesReqTest.java
 src/test/java/com/bass/bbs/model/SearchArticlesRespTest.java
 src/test/java/com/bass/bbs/model/SearchMentionAccountsReqTest.java

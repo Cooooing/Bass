@@ -45,12 +45,4 @@ class ThankArticleReqTest {
         // TODO: test articleId
     }
 
-    /**
-     * Test the property 'clientRequestId'
-     */
-    @Test
-    void clientRequestIdTest() {
-        // TODO: test clientRequestId
-    }
-
 }

@@ -33,18 +33,13 @@ import com.bass.bbs.ApiClient;
  * RewardArticleReq
  */
 @JsonPropertyOrder({
-  RewardArticleReq.JSON_PROPERTY_ARTICLE_ID,
-  RewardArticleReq.JSON_PROPERTY_POINTS
+  RewardArticleReq.JSON_PROPERTY_ARTICLE_ID
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class RewardArticleReq {
   public static final String JSON_PROPERTY_ARTICLE_ID = "article_id";
   @javax.annotation.Nonnull
   private String articleId;
-
-  public static final String JSON_PROPERTY_POINTS = "points";
-  @javax.annotation.Nonnull
-  private Integer points;
 
   public RewardArticleReq() { 
   }
@@ -73,30 +68,6 @@ public class RewardArticleReq {
   }
 
 
-  public RewardArticleReq points(@javax.annotation.Nonnull Integer points) {
-    this.points = points;
-    return this;
-  }
-
-  /**
-   * Get points
-   * @return points
-   */
-  @javax.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_POINTS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public Integer getPoints() {
-    return points;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_POINTS, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPoints(@javax.annotation.Nonnull Integer points) {
-    this.points = points;
-  }
-
-
   /**
    * Return true if this RewardArticle_Req object is equal to o.
    */
@@ -109,13 +80,12 @@ public class RewardArticleReq {
       return false;
     }
     RewardArticleReq rewardArticleReq = (RewardArticleReq) o;
-    return Objects.equals(this.articleId, rewardArticleReq.articleId) &&
-        Objects.equals(this.points, rewardArticleReq.points);
+    return Objects.equals(this.articleId, rewardArticleReq.articleId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(articleId, points);
+    return Objects.hash(articleId);
   }
 
   @Override
@@ -123,7 +93,6 @@ public class RewardArticleReq {
     StringBuilder sb = new StringBuilder();
     sb.append("class RewardArticleReq {\n");
     sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
-    sb.append("    points: ").append(toIndentedString(points)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -171,11 +140,6 @@ public class RewardArticleReq {
     // add `article_id` to the URL query string
     if (getArticleId() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleId()))));
-    }
-
-    // add `points` to the URL query string
-    if (getPoints() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spoints%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPoints()))));
     }
 
     return joiner.toString();

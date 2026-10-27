@@ -33,45 +33,16 @@ import com.bass.bbs.ApiClient;
  * SetGlobalChatTopicReq
  */
 @JsonPropertyOrder({
-  SetGlobalChatTopicReq.JSON_PROPERTY_CLIENT_REQUEST_ID,
   SetGlobalChatTopicReq.JSON_PROPERTY_CONTENT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class SetGlobalChatTopicReq {
-  public static final String JSON_PROPERTY_CLIENT_REQUEST_ID = "client_request_id";
-  @javax.annotation.Nullable
-  private String clientRequestId;
-
   public static final String JSON_PROPERTY_CONTENT = "content";
   @javax.annotation.Nullable
   private String content;
 
   public SetGlobalChatTopicReq() { 
   }
-
-  public SetGlobalChatTopicReq clientRequestId(@javax.annotation.Nullable String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-    return this;
-  }
-
-  /**
-   * Get clientRequestId
-   * @return clientRequestId
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getClientRequestId() {
-    return clientRequestId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setClientRequestId(@javax.annotation.Nullable String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-  }
-
 
   public SetGlobalChatTopicReq content(@javax.annotation.Nullable String content) {
     this.content = content;
@@ -109,20 +80,18 @@ public class SetGlobalChatTopicReq {
       return false;
     }
     SetGlobalChatTopicReq setGlobalChatTopicReq = (SetGlobalChatTopicReq) o;
-    return Objects.equals(this.clientRequestId, setGlobalChatTopicReq.clientRequestId) &&
-        Objects.equals(this.content, setGlobalChatTopicReq.content);
+    return Objects.equals(this.content, setGlobalChatTopicReq.content);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(clientRequestId, content);
+    return Objects.hash(content);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SetGlobalChatTopicReq {\n");
-    sb.append("    clientRequestId: ").append(toIndentedString(clientRequestId)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -167,11 +136,6 @@ public class SetGlobalChatTopicReq {
     }
 
     StringJoiner joiner = new StringJoiner("&");
-
-    // add `client_request_id` to the URL query string
-    if (getClientRequestId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sclient_request_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getClientRequestId()))));
-    }
 
     // add `content` to the URL query string
     if (getContent() != null) {

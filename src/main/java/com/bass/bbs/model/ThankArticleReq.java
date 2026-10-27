@@ -33,18 +33,13 @@ import com.bass.bbs.ApiClient;
  * ThankArticleReq
  */
 @JsonPropertyOrder({
-  ThankArticleReq.JSON_PROPERTY_ARTICLE_ID,
-  ThankArticleReq.JSON_PROPERTY_CLIENT_REQUEST_ID
+  ThankArticleReq.JSON_PROPERTY_ARTICLE_ID
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ThankArticleReq {
   public static final String JSON_PROPERTY_ARTICLE_ID = "article_id";
   @javax.annotation.Nonnull
   private String articleId;
-
-  public static final String JSON_PROPERTY_CLIENT_REQUEST_ID = "client_request_id";
-  @javax.annotation.Nonnull
-  private String clientRequestId;
 
   public ThankArticleReq() { 
   }
@@ -73,30 +68,6 @@ public class ThankArticleReq {
   }
 
 
-  public ThankArticleReq clientRequestId(@javax.annotation.Nonnull String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-    return this;
-  }
-
-  /**
-   * Get clientRequestId
-   * @return clientRequestId
-   */
-  @javax.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public String getClientRequestId() {
-    return clientRequestId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setClientRequestId(@javax.annotation.Nonnull String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-  }
-
-
   /**
    * Return true if this ThankArticle_Req object is equal to o.
    */
@@ -109,13 +80,12 @@ public class ThankArticleReq {
       return false;
     }
     ThankArticleReq thankArticleReq = (ThankArticleReq) o;
-    return Objects.equals(this.articleId, thankArticleReq.articleId) &&
-        Objects.equals(this.clientRequestId, thankArticleReq.clientRequestId);
+    return Objects.equals(this.articleId, thankArticleReq.articleId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(articleId, clientRequestId);
+    return Objects.hash(articleId);
   }
 
   @Override
@@ -123,7 +93,6 @@ public class ThankArticleReq {
     StringBuilder sb = new StringBuilder();
     sb.append("class ThankArticleReq {\n");
     sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
-    sb.append("    clientRequestId: ").append(toIndentedString(clientRequestId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -171,11 +140,6 @@ public class ThankArticleReq {
     // add `article_id` to the URL query string
     if (getArticleId() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleId()))));
-    }
-
-    // add `client_request_id` to the URL query string
-    if (getClientRequestId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sclient_request_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getClientRequestId()))));
     }
 
     return joiner.toString();

@@ -2149,7 +2149,7 @@ No authorization required
 
 ## reward
 
-> Object reward(rewardRequest)
+> RewardArticleResp reward(rewardRequest)
 
 
 
@@ -2177,7 +2177,7 @@ public class Example {
             APIrewardRequest request = APIrewardRequest.newBuilder()
                 .rewardArticleReq(rewardArticleReq)
                 .build();
-            Object result = apiInstance.reward(request);
+            RewardArticleResp result = apiInstance.reward(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#reward");
@@ -2198,7 +2198,7 @@ public class Example {
 
 ### Return type
 
-**Object**
+[**RewardArticleResp**](RewardArticleResp.md)
 
 
 ### Authorization
@@ -2217,7 +2217,7 @@ No authorization required
 
 ## rewardWithHttpInfo
 
-> ApiResponse<Object> rewardWithHttpInfo(rewardRequest)
+> ApiResponse<RewardArticleResp> rewardWithHttpInfo(rewardRequest)
 
 
 
@@ -2246,7 +2246,7 @@ public class Example {
             APIrewardRequest request = APIrewardRequest.newBuilder()
                 .rewardArticleReq(rewardArticleReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.rewardWithHttpInfo(request);
+            ApiResponse<RewardArticleResp> response = apiInstance.rewardWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -2269,7 +2269,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<**Object**>
+ApiResponse<[**RewardArticleResp**](RewardArticleResp.md)>
 
 
 ### Authorization

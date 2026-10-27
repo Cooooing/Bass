@@ -37,6 +37,7 @@ import com.bass.bbs.model.PageArticleViewHistoryReq;
 import com.bass.bbs.model.PageArticleViewHistoryResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
+import com.bass.bbs.model.RewardArticleResp;
 import com.bass.bbs.model.SetPinnedArticleCommentReq;
 import com.bass.bbs.model.ThankArticleReq;
 import com.bass.bbs.model.ThankArticleResp;
@@ -373,7 +374,7 @@ public class ArticleServiceTest {
         ArticleService.APIrewardRequest request = ArticleService.APIrewardRequest.newBuilder()
           .rewardArticleReq(rewardArticleReq)
           .build();
-        Object response = 
+        RewardArticleResp response = 
         api.reward(request);
 
         // TODO: test validations

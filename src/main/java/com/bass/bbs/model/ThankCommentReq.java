@@ -33,18 +33,13 @@ import com.bass.bbs.ApiClient;
  * ThankCommentReq
  */
 @JsonPropertyOrder({
-  ThankCommentReq.JSON_PROPERTY_ID,
-  ThankCommentReq.JSON_PROPERTY_CLIENT_REQUEST_ID
+  ThankCommentReq.JSON_PROPERTY_ID
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ThankCommentReq {
   public static final String JSON_PROPERTY_ID = "id";
   @javax.annotation.Nonnull
   private String id;
-
-  public static final String JSON_PROPERTY_CLIENT_REQUEST_ID = "client_request_id";
-  @javax.annotation.Nonnull
-  private String clientRequestId;
 
   public ThankCommentReq() { 
   }
@@ -73,30 +68,6 @@ public class ThankCommentReq {
   }
 
 
-  public ThankCommentReq clientRequestId(@javax.annotation.Nonnull String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-    return this;
-  }
-
-  /**
-   * Get clientRequestId
-   * @return clientRequestId
-   */
-  @javax.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public String getClientRequestId() {
-    return clientRequestId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_CLIENT_REQUEST_ID, required = true)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setClientRequestId(@javax.annotation.Nonnull String clientRequestId) {
-    this.clientRequestId = clientRequestId;
-  }
-
-
   /**
    * Return true if this ThankComment_Req object is equal to o.
    */
@@ -109,13 +80,12 @@ public class ThankCommentReq {
       return false;
     }
     ThankCommentReq thankCommentReq = (ThankCommentReq) o;
-    return Objects.equals(this.id, thankCommentReq.id) &&
-        Objects.equals(this.clientRequestId, thankCommentReq.clientRequestId);
+    return Objects.equals(this.id, thankCommentReq.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientRequestId);
+    return Objects.hash(id);
   }
 
   @Override
@@ -123,7 +93,6 @@ public class ThankCommentReq {
     StringBuilder sb = new StringBuilder();
     sb.append("class ThankCommentReq {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    clientRequestId: ").append(toIndentedString(clientRequestId)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -171,11 +140,6 @@ public class ThankCommentReq {
     // add `id` to the URL query string
     if (getId() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sid%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getId()))));
-    }
-
-    // add `client_request_id` to the URL query string
-    if (getClientRequestId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sclient_request_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getClientRequestId()))));
     }
 
     return joiner.toString();

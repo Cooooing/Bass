@@ -9289,6 +9289,7 @@ components:
           - EVENT_TYPE_ARTICLE_LOTTERY_DRAWN
           - EVENT_TYPE_ARTICLE_MENTIONED
           - EVENT_TYPE_POSTSCRIPT_MENTIONED
+          - EVENT_TYPE_ARTICLE_REWARDED
           - EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED
           - EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED
           - EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED
@@ -9633,6 +9634,7 @@ components:
           - ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE
           - ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE
           - ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE
+          - ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE
           format: enum
           type: string
         direction:
@@ -9787,15 +9789,15 @@ components:
       properties:
         article_id:
           type: string
-        points:
-          format: int32
-          type: integer
       required:
       - article_id
-      - points
       type: object
     RewardArticle_Resp:
-      properties: {}
+      example:
+        rewarded: true
+      properties:
+        rewarded:
+          type: boolean
       type: object
     SearchArticles_Req:
       properties:
@@ -10057,8 +10059,6 @@ components:
       type: object
     SendGlobalChatBarrage_Req:
       properties:
-        client_request_id:
-          type: string
         content:
           type: string
       type: object
@@ -10145,8 +10145,6 @@ components:
       type: object
     SetGlobalChatTopic_Req:
       properties:
-        client_request_id:
-          type: string
         content:
           type: string
       type: object
@@ -10198,11 +10196,8 @@ components:
       properties:
         article_id:
           type: string
-        client_request_id:
-          type: string
       required:
       - article_id
-      - client_request_id
       type: object
     ThankArticle_Resp:
       example:
@@ -10215,10 +10210,7 @@ components:
       properties:
         id:
           type: string
-        client_request_id:
-          type: string
       required:
-      - client_request_id
       - id
       type: object
     ThankComment_Resp:

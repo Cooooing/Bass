@@ -400,6 +400,7 @@ Class | Method | HTTP request | Description
  - [RevokePrivateChatMessageReq](docs/RevokePrivateChatMessageReq.md)
  - [RevokePrivateChatMessageResp](docs/RevokePrivateChatMessageResp.md)
  - [RewardArticleReq](docs/RewardArticleReq.md)
+ - [RewardArticleResp](docs/RewardArticleResp.md)
  - [SearchArticlesReq](docs/SearchArticlesReq.md)
  - [SearchArticlesResp](docs/SearchArticlesResp.md)
  - [SearchMentionAccountsReq](docs/SearchMentionAccountsReq.md)

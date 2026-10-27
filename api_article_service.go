@@ -228,8 +228,8 @@ type ArticleService interface {
 	Reward(ctx context.Context) ApiRewardRequest
 
 	// RewardExecute executes the request
-	//  @return map[string]interface{}
-	RewardExecute(r ApiRewardRequest) (map[string]interface{}, *http.Response, error)
+	//  @return RewardArticleResp
+	RewardExecute(r ApiRewardRequest) (*RewardArticleResp, *http.Response, error)
 
 	/*
 	SetPinnedComment Method for SetPinnedComment
@@ -1856,7 +1856,7 @@ func (r ApiRewardRequest) RewardArticleReq(rewardArticleReq RewardArticleReq) Ap
 	return r
 }
 
-func (r ApiRewardRequest) Execute() (map[string]interface{}, *http.Response, error) {
+func (r ApiRewardRequest) Execute() (*RewardArticleResp, *http.Response, error) {
 	return r.ApiService.RewardExecute(r)
 }
 
@@ -1876,13 +1876,13 @@ func (a *ArticleServiceService) Reward(ctx context.Context) ApiRewardRequest {
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ArticleServiceService) RewardExecute(r ApiRewardRequest) (map[string]interface{}, *http.Response, error) {
+//  @return RewardArticleResp
+func (a *ArticleServiceService) RewardExecute(r ApiRewardRequest) (*RewardArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  *RewardArticleResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Reward")

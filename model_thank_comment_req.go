@@ -22,7 +22,6 @@ var _ MappedNullable = &ThankCommentReq{}
 // ThankCommentReq struct for ThankCommentReq
 type ThankCommentReq struct {
 	Id string `json:"id"`
-	ClientRequestId string `json:"client_request_id"`
 }
 
 type _ThankCommentReq ThankCommentReq
@@ -31,10 +30,9 @@ type _ThankCommentReq ThankCommentReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewThankCommentReq(id string, clientRequestId string) *ThankCommentReq {
+func NewThankCommentReq(id string) *ThankCommentReq {
 	this := ThankCommentReq{}
 	this.Id = id
-	this.ClientRequestId = clientRequestId
 	return &this
 }
 
@@ -70,30 +68,6 @@ func (o *ThankCommentReq) SetId(v string) {
 	o.Id = v
 }
 
-// GetClientRequestId returns the ClientRequestId field value
-func (o *ThankCommentReq) GetClientRequestId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.ClientRequestId
-}
-
-// GetClientRequestIdOk returns a tuple with the ClientRequestId field value
-// and a boolean to check if the value has been set.
-func (o *ThankCommentReq) GetClientRequestIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ClientRequestId, true
-}
-
-// SetClientRequestId sets field value
-func (o *ThankCommentReq) SetClientRequestId(v string) {
-	o.ClientRequestId = v
-}
-
 func (o ThankCommentReq) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -105,7 +79,6 @@ func (o ThankCommentReq) MarshalJSON() ([]byte, error) {
 func (o ThankCommentReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	toSerialize["client_request_id"] = o.ClientRequestId
 	return toSerialize, nil
 }
 
@@ -115,7 +88,6 @@ func (o *ThankCommentReq) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
-		"client_request_id",
 	}
 
 	allProperties := make(map[string]interface{})

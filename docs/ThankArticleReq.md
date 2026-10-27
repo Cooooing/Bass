@@ -5,13 +5,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ArticleId** | **string** |  | 
-**ClientRequestId** | **string** |  | 
 
 ## Methods
 
 ### NewThankArticleReq
 
-`func NewThankArticleReq(articleId string, clientRequestId string, ) *ThankArticleReq`
+`func NewThankArticleReq(articleId string, ) *ThankArticleReq`
 
 NewThankArticleReq instantiates a new ThankArticleReq object
 This constructor will assign default values to properties that have it defined,
@@ -44,26 +43,6 @@ and a boolean to check if the value has been set.
 `func (o *ThankArticleReq) SetArticleId(v string)`
 
 SetArticleId sets ArticleId field to given value.
-
-
-### GetClientRequestId
-
-`func (o *ThankArticleReq) GetClientRequestId() string`
-
-GetClientRequestId returns the ClientRequestId field if non-nil, zero value otherwise.
-
-### GetClientRequestIdOk
-
-`func (o *ThankArticleReq) GetClientRequestIdOk() (*string, bool)`
-
-GetClientRequestIdOk returns a tuple with the ClientRequestId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetClientRequestId
-
-`func (o *ThankArticleReq) SetClientRequestId(v string)`
-
-SetClientRequestId sets ClientRequestId field to given value.
 
 
 

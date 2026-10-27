@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ClientRequestId** | Pointer to **string** |  | [optional] 
 **Content** | Pointer to **string** |  | [optional] 
 
 ## Methods
@@ -25,31 +24,6 @@ will change when the set of required properties is changed
 NewSetGlobalChatTopicReqWithDefaults instantiates a new SetGlobalChatTopicReq object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetClientRequestId
-
-`func (o *SetGlobalChatTopicReq) GetClientRequestId() string`
-
-GetClientRequestId returns the ClientRequestId field if non-nil, zero value otherwise.
-
-### GetClientRequestIdOk
-
-`func (o *SetGlobalChatTopicReq) GetClientRequestIdOk() (*string, bool)`
-
-GetClientRequestIdOk returns a tuple with the ClientRequestId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetClientRequestId
-
-`func (o *SetGlobalChatTopicReq) SetClientRequestId(v string)`
-
-SetClientRequestId sets ClientRequestId field to given value.
-
-### HasClientRequestId
-
-`func (o *SetGlobalChatTopicReq) HasClientRequestId() bool`
-
-HasClientRequestId returns a boolean if a field has been set.
 
 ### GetContent
 

@@ -431,7 +431,7 @@ import (
 )
 
 func main() {
-	thankCommentReq := *openapiclient.NewThankCommentReq("Id_example", "ClientRequestId_example") // ThankCommentReq | 
+	thankCommentReq := *openapiclient.NewThankCommentReq("Id_example") // ThankCommentReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

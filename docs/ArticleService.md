@@ -953,7 +953,7 @@ No authorization required
 
 ## Reward
 
-> map[string]interface{} Reward(ctx).RewardArticleReq(rewardArticleReq).Execute()
+> RewardArticleResp Reward(ctx).RewardArticleReq(rewardArticleReq).Execute()
 
 
 
@@ -972,7 +972,7 @@ import (
 )
 
 func main() {
-	rewardArticleReq := *openapiclient.NewRewardArticleReq("ArticleId_example", int32(123)) // RewardArticleReq | 
+	rewardArticleReq := *openapiclient.NewRewardArticleReq("ArticleId_example") // RewardArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -981,7 +981,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Reward``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Reward`: map[string]interface{}
+	// response from `Reward`: RewardArticleResp
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Reward`: %v\n", resp)
 }
 ```
@@ -1001,7 +1001,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**RewardArticleResp**](RewardArticleResp.md)
 
 ### Authorization
 
@@ -1104,7 +1104,7 @@ import (
 )
 
 func main() {
-	thankArticleReq := *openapiclient.NewThankArticleReq("ArticleId_example", "ClientRequestId_example") // ThankArticleReq | 
+	thankArticleReq := *openapiclient.NewThankArticleReq("ArticleId_example") // ThankArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)

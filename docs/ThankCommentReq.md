@@ -5,13 +5,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | 
-**ClientRequestId** | **string** |  | 
 
 ## Methods
 
 ### NewThankCommentReq
 
-`func NewThankCommentReq(id string, clientRequestId string, ) *ThankCommentReq`
+`func NewThankCommentReq(id string, ) *ThankCommentReq`
 
 NewThankCommentReq instantiates a new ThankCommentReq object
 This constructor will assign default values to properties that have it defined,
@@ -44,26 +43,6 @@ and a boolean to check if the value has been set.
 `func (o *ThankCommentReq) SetId(v string)`
 
 SetId sets Id field to given value.
-
-
-### GetClientRequestId
-
-`func (o *ThankCommentReq) GetClientRequestId() string`
-
-GetClientRequestId returns the ClientRequestId field if non-nil, zero value otherwise.
-
-### GetClientRequestIdOk
-
-`func (o *ThankCommentReq) GetClientRequestIdOk() (*string, bool)`
-
-GetClientRequestIdOk returns a tuple with the ClientRequestId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetClientRequestId
-
-`func (o *ThankCommentReq) SetClientRequestId(v string)`
-
-SetClientRequestId sets ClientRequestId field to given value.
 
 
 

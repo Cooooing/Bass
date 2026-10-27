@@ -22,7 +22,6 @@ var _ MappedNullable = &ThankArticleReq{}
 // ThankArticleReq struct for ThankArticleReq
 type ThankArticleReq struct {
 	ArticleId string `json:"article_id"`
-	ClientRequestId string `json:"client_request_id"`
 }
 
 type _ThankArticleReq ThankArticleReq
@@ -31,10 +30,9 @@ type _ThankArticleReq ThankArticleReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewThankArticleReq(articleId string, clientRequestId string) *ThankArticleReq {
+func NewThankArticleReq(articleId string) *ThankArticleReq {
 	this := ThankArticleReq{}
 	this.ArticleId = articleId
-	this.ClientRequestId = clientRequestId
 	return &this
 }
 
@@ -70,30 +68,6 @@ func (o *ThankArticleReq) SetArticleId(v string) {
 	o.ArticleId = v
 }
 
-// GetClientRequestId returns the ClientRequestId field value
-func (o *ThankArticleReq) GetClientRequestId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.ClientRequestId
-}
-
-// GetClientRequestIdOk returns a tuple with the ClientRequestId field value
-// and a boolean to check if the value has been set.
-func (o *ThankArticleReq) GetClientRequestIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ClientRequestId, true
-}
-
-// SetClientRequestId sets field value
-func (o *ThankArticleReq) SetClientRequestId(v string) {
-	o.ClientRequestId = v
-}
-
 func (o ThankArticleReq) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -105,7 +79,6 @@ func (o ThankArticleReq) MarshalJSON() ([]byte, error) {
 func (o ThankArticleReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["article_id"] = o.ArticleId
-	toSerialize["client_request_id"] = o.ClientRequestId
 	return toSerialize, nil
 }
 
@@ -115,7 +88,6 @@ func (o *ThankArticleReq) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"article_id",
-		"client_request_id",
 	}
 
 	allProperties := make(map[string]interface{})

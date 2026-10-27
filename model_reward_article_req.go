@@ -22,7 +22,6 @@ var _ MappedNullable = &RewardArticleReq{}
 // RewardArticleReq struct for RewardArticleReq
 type RewardArticleReq struct {
 	ArticleId string `json:"article_id"`
-	Points int32 `json:"points"`
 }
 
 type _RewardArticleReq RewardArticleReq
@@ -31,10 +30,9 @@ type _RewardArticleReq RewardArticleReq
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRewardArticleReq(articleId string, points int32) *RewardArticleReq {
+func NewRewardArticleReq(articleId string) *RewardArticleReq {
 	this := RewardArticleReq{}
 	this.ArticleId = articleId
-	this.Points = points
 	return &this
 }
 
@@ -70,30 +68,6 @@ func (o *RewardArticleReq) SetArticleId(v string) {
 	o.ArticleId = v
 }
 
-// GetPoints returns the Points field value
-func (o *RewardArticleReq) GetPoints() int32 {
-	if o == nil {
-		var ret int32
-		return ret
-	}
-
-	return o.Points
-}
-
-// GetPointsOk returns a tuple with the Points field value
-// and a boolean to check if the value has been set.
-func (o *RewardArticleReq) GetPointsOk() (*int32, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Points, true
-}
-
-// SetPoints sets field value
-func (o *RewardArticleReq) SetPoints(v int32) {
-	o.Points = v
-}
-
 func (o RewardArticleReq) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -105,7 +79,6 @@ func (o RewardArticleReq) MarshalJSON() ([]byte, error) {
 func (o RewardArticleReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["article_id"] = o.ArticleId
-	toSerialize["points"] = o.Points
 	return toSerialize, nil
 }
 
@@ -115,7 +88,6 @@ func (o *RewardArticleReq) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"article_id",
-		"points",
 	}
 
 	allProperties := make(map[string]interface{})

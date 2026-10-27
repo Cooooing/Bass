@@ -5,13 +5,12 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ArticleId** | **string** |  | 
-**Points** | **int32** |  | 
 
 ## Methods
 
 ### NewRewardArticleReq
 
-`func NewRewardArticleReq(articleId string, points int32, ) *RewardArticleReq`
+`func NewRewardArticleReq(articleId string, ) *RewardArticleReq`
 
 NewRewardArticleReq instantiates a new RewardArticleReq object
 This constructor will assign default values to properties that have it defined,
@@ -44,26 +43,6 @@ and a boolean to check if the value has been set.
 `func (o *RewardArticleReq) SetArticleId(v string)`
 
 SetArticleId sets ArticleId field to given value.
-
-
-### GetPoints
-
-`func (o *RewardArticleReq) GetPoints() int32`
-
-GetPoints returns the Points field if non-nil, zero value otherwise.
-
-### GetPointsOk
-
-`func (o *RewardArticleReq) GetPointsOk() (*int32, bool)`
-
-GetPointsOk returns a tuple with the Points field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetPoints
-
-`func (o *RewardArticleReq) SetPoints(v int32)`
-
-SetPoints sets Points field to given value.
 
 
 

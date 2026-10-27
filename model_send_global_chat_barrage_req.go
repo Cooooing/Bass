@@ -19,7 +19,6 @@ var _ MappedNullable = &SendGlobalChatBarrageReq{}
 
 // SendGlobalChatBarrageReq struct for SendGlobalChatBarrageReq
 type SendGlobalChatBarrageReq struct {
-	ClientRequestId *string `json:"client_request_id,omitempty"`
 	Content *string `json:"content,omitempty"`
 }
 
@@ -38,38 +37,6 @@ func NewSendGlobalChatBarrageReq() *SendGlobalChatBarrageReq {
 func NewSendGlobalChatBarrageReqWithDefaults() *SendGlobalChatBarrageReq {
 	this := SendGlobalChatBarrageReq{}
 	return &this
-}
-
-// GetClientRequestId returns the ClientRequestId field value if set, zero value otherwise.
-func (o *SendGlobalChatBarrageReq) GetClientRequestId() string {
-	if o == nil || IsNil(o.ClientRequestId) {
-		var ret string
-		return ret
-	}
-	return *o.ClientRequestId
-}
-
-// GetClientRequestIdOk returns a tuple with the ClientRequestId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *SendGlobalChatBarrageReq) GetClientRequestIdOk() (*string, bool) {
-	if o == nil || IsNil(o.ClientRequestId) {
-		return nil, false
-	}
-	return o.ClientRequestId, true
-}
-
-// HasClientRequestId returns a boolean if a field has been set.
-func (o *SendGlobalChatBarrageReq) HasClientRequestId() bool {
-	if o != nil && !IsNil(o.ClientRequestId) {
-		return true
-	}
-
-	return false
-}
-
-// SetClientRequestId gets a reference to the given string and assigns it to the ClientRequestId field.
-func (o *SendGlobalChatBarrageReq) SetClientRequestId(v string) {
-	o.ClientRequestId = &v
 }
 
 // GetContent returns the Content field value if set, zero value otherwise.
@@ -114,9 +81,6 @@ func (o SendGlobalChatBarrageReq) MarshalJSON() ([]byte, error) {
 
 func (o SendGlobalChatBarrageReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.ClientRequestId) {
-		toSerialize["client_request_id"] = o.ClientRequestId
-	}
 	if !IsNil(o.Content) {
 		toSerialize["content"] = o.Content
 	}

@@ -967,7 +967,7 @@ No authorization required
 
 ## reward
 
-> object reward(rewardArticleReq)
+> RewardArticleResp reward(rewardArticleReq)
 
 
 
@@ -1012,7 +1012,7 @@ example().catch(console.error);
 
 ### Return type
 
-**object**
+[**RewardArticleResp**](RewardArticleResp.md)
 
 ### Authorization
 

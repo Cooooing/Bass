@@ -208,6 +208,7 @@ export * from './RevokeGlobalChatMessageResp';
 export * from './RevokePrivateChatMessageReq';
 export * from './RevokePrivateChatMessageResp';
 export * from './RewardArticleReq';
+export * from './RewardArticleResp';
 export * from './SearchArticlesReq';
 export * from './SearchArticlesResp';
 export * from './SearchMentionAccountsReq';

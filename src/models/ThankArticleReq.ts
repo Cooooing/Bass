@@ -25,12 +25,6 @@ export interface ThankArticleReq {
      * @memberof ThankArticleReq
      */
     articleId: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ThankArticleReq
-     */
-    clientRequestId: string;
 }
 
 /**
@@ -38,7 +32,6 @@ export interface ThankArticleReq {
  */
 export function instanceOfThankArticleReq(value: object): value is ThankArticleReq {
     if (!('articleId' in value) || value['articleId'] === undefined) return false;
-    if (!('clientRequestId' in value) || value['clientRequestId'] === undefined) return false;
     return true;
 }
 
@@ -53,7 +46,6 @@ export function ThankArticleReqFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'articleId': json['article_id'],
-        'clientRequestId': json['client_request_id'],
     };
 }
 
@@ -69,7 +61,6 @@ export function ThankArticleReqToJSONTyped(value?: ThankArticleReq | null, ignor
     return {
         
         'article_id': value['articleId'],
-        'client_request_id': value['clientRequestId'],
     };
 }
 

@@ -129,6 +129,11 @@ import {
     RewardArticleReqToJSON,
 } from '../models/RewardArticleReq';
 import {
+    type RewardArticleResp,
+    RewardArticleRespFromJSON,
+    RewardArticleRespToJSON,
+} from '../models/RewardArticleResp';
+import {
     type SetPinnedArticleCommentReq,
     SetPinnedArticleCommentReqFromJSON,
     SetPinnedArticleCommentReqToJSON,
@@ -579,12 +584,12 @@ export interface ArticleServiceInterface {
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    rewardRaw(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    rewardRaw(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RewardArticleResp>>;
 
     /**
      * 打赏文章
      */
-    reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RewardArticleResp>;
 
     /**
      * Creates request options for setPinnedComment without sending the request
@@ -1393,17 +1398,17 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     /**
      * 打赏文章
      */
-    async rewardRaw(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+    async rewardRaw(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RewardArticleResp>> {
         const requestOptions = await this.rewardRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse<any>(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => RewardArticleRespFromJSON(jsonValue));
     }
 
     /**
      * 打赏文章
      */
-    async reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+    async reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RewardArticleResp> {
         const response = await this.rewardRaw(requestParameters, initOverrides);
         return await response.value();
     }

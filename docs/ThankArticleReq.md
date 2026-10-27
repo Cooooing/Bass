@@ -7,7 +7,6 @@
 Name | Type
 ------------ | -------------
 `articleId` | string
-`clientRequestId` | string
 
 ## Example
 
@@ -17,7 +16,6 @@ import type { ThankArticleReq } from '@bass/bbs-sdk-fetch'
 // TODO: Update the object below with actual values
 const example = {
   "articleId": null,
-  "clientRequestId": null,
 } satisfies ThankArticleReq
 
 console.log(example)

@@ -24,12 +24,6 @@ export interface SetGlobalChatTopicReq {
      * @type {string}
      * @memberof SetGlobalChatTopicReq
      */
-    clientRequestId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SetGlobalChatTopicReq
-     */
     content?: string;
 }
 
@@ -50,7 +44,6 @@ export function SetGlobalChatTopicReqFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'clientRequestId': json['client_request_id'] == null ? undefined : json['client_request_id'],
         'content': json['content'] == null ? undefined : json['content'],
     };
 }
@@ -66,7 +59,6 @@ export function SetGlobalChatTopicReqToJSONTyped(value?: SetGlobalChatTopicReq |
 
     return {
         
-        'client_request_id': value['clientRequestId'],
         'content': value['content'],
     };
 }

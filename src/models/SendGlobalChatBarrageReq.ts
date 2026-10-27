@@ -24,12 +24,6 @@ export interface SendGlobalChatBarrageReq {
      * @type {string}
      * @memberof SendGlobalChatBarrageReq
      */
-    clientRequestId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SendGlobalChatBarrageReq
-     */
     content?: string;
 }
 
@@ -50,7 +44,6 @@ export function SendGlobalChatBarrageReqFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'clientRequestId': json['client_request_id'] == null ? undefined : json['client_request_id'],
         'content': json['content'] == null ? undefined : json['content'],
     };
 }
@@ -66,7 +59,6 @@ export function SendGlobalChatBarrageReqToJSONTyped(value?: SendGlobalChatBarrag
 
     return {
         
-        'client_request_id': value['clientRequestId'],
         'content': value['content'],
     };
 }

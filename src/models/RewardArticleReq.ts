@@ -25,12 +25,6 @@ export interface RewardArticleReq {
      * @memberof RewardArticleReq
      */
     articleId: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof RewardArticleReq
-     */
-    points: number;
 }
 
 /**
@@ -38,7 +32,6 @@ export interface RewardArticleReq {
  */
 export function instanceOfRewardArticleReq(value: object): value is RewardArticleReq {
     if (!('articleId' in value) || value['articleId'] === undefined) return false;
-    if (!('points' in value) || value['points'] === undefined) return false;
     return true;
 }
 
@@ -53,7 +46,6 @@ export function RewardArticleReqFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'articleId': json['article_id'],
-        'points': json['points'],
     };
 }
 
@@ -69,7 +61,6 @@ export function RewardArticleReqToJSONTyped(value?: RewardArticleReq | null, ign
     return {
         
         'article_id': value['articleId'],
-        'points': value['points'],
     };
 }
 

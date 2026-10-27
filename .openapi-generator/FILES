@@ -231,6 +231,7 @@ docs/RevokeGlobalChatMessageResp.md
 docs/RevokePrivateChatMessageReq.md
 docs/RevokePrivateChatMessageResp.md
 docs/RewardArticleReq.md
+docs/RewardArticleResp.md
 docs/SearchArticlesReq.md
 docs/SearchArticlesResp.md
 docs/SearchMentionAccountsReq.md
@@ -509,6 +510,7 @@ src/models/RevokeGlobalChatMessageResp.ts
 src/models/RevokePrivateChatMessageReq.ts
 src/models/RevokePrivateChatMessageResp.ts
 src/models/RewardArticleReq.ts
+src/models/RewardArticleResp.ts
 src/models/SearchArticlesReq.ts
 src/models/SearchArticlesResp.ts
 src/models/SearchMentionAccountsReq.ts

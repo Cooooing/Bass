@@ -6,7 +6,6 @@
 
 Name | Type
 ------------ | -------------
-`clientRequestId` | string
 `content` | string
 
 ## Example
@@ -16,7 +15,6 @@ import type { SetGlobalChatTopicReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "clientRequestId": null,
   "content": null,
 } satisfies SetGlobalChatTopicReq
 

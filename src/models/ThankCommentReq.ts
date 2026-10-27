@@ -25,12 +25,6 @@ export interface ThankCommentReq {
      * @memberof ThankCommentReq
      */
     id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ThankCommentReq
-     */
-    clientRequestId: string;
 }
 
 /**
@@ -38,7 +32,6 @@ export interface ThankCommentReq {
  */
 export function instanceOfThankCommentReq(value: object): value is ThankCommentReq {
     if (!('id' in value) || value['id'] === undefined) return false;
-    if (!('clientRequestId' in value) || value['clientRequestId'] === undefined) return false;
     return true;
 }
 
@@ -53,7 +46,6 @@ export function ThankCommentReqFromJSONTyped(json: any, ignoreDiscriminator: boo
     return {
         
         'id': json['id'],
-        'clientRequestId': json['client_request_id'],
     };
 }
 
@@ -69,7 +61,6 @@ export function ThankCommentReqToJSONTyped(value?: ThankCommentReq | null, ignor
     return {
         
         'id': value['id'],
-        'client_request_id': value['clientRequestId'],
     };
 }
 

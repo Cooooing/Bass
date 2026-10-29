@@ -540,7 +540,7 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 		u.runningMu.Unlock()
 	}()
 	startedAt := time.Now()
-	err = task.Execute(execCtx, record.Payload)
+	err = task.Execute(execCtx, taskimpl.Execution{Payload: record.Payload, ScheduledAt: record.ScheduledAt})
 	finishedAt := time.Now()
 	duration := finishedAt.Sub(startedAt)
 	statusValue := schedulerenum.TaskExecutionStatusSuccess

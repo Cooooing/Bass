@@ -59,9 +59,9 @@ func (t *ContentPublishScheduledArticles) DefaultDelayedTasks() []*DefaultDelaye
 	}
 }
 
-func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, payload string) error {
+func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, execution Execution) error {
 	data := &schedulerv1.PublishScheduledArticleTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	if data.GetArticleId() <= 0 || data.GetScheduledAt() == nil || !data.GetScheduledAt().IsValid() {

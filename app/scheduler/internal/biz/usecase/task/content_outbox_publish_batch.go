@@ -37,9 +37,9 @@ func (t *ContentOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask 
 	return []*DefaultDelayedTask{{Title: t.title, Description: t.description, Enabled: true, Timeout: time.Minute, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
-func (t *ContentOutboxPublishBatch) Execute(ctx context.Context, payload string) error {
+func (t *ContentOutboxPublishBatch) Execute(ctx context.Context, execution Execution) error {
 	data := &schedulerv1.OutboxPublishBatchTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	limit, timeout, maxRetry := t.defaultLimit, t.defaultTimeout, t.defaultRetry

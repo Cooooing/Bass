@@ -38,9 +38,9 @@ func (t *ContentFinishArticlePolls) DefaultDelayedTasks() []*DefaultDelayedTask 
 	return []*DefaultDelayedTask{{Title: t.Title(), Description: t.Description(), Enabled: true, Timeout: 30 * time.Second, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
-func (t *ContentFinishArticlePolls) Execute(ctx context.Context, payload string) error {
+func (t *ContentFinishArticlePolls) Execute(ctx context.Context, execution Execution) error {
 	data := &schedulerv1.FinishArticlePollTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	if data.GetArticleId() <= 0 || data.GetEndsAt() == nil || !data.GetEndsAt().IsValid() {

@@ -38,9 +38,9 @@ func (t *ContentDrawArticleLotteries) DefaultDelayedTasks() []*DefaultDelayedTas
 	return []*DefaultDelayedTask{{Title: t.Title(), Description: t.Description(), Enabled: true, Timeout: 30 * time.Second, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
-func (t *ContentDrawArticleLotteries) Execute(ctx context.Context, payload string) error {
+func (t *ContentDrawArticleLotteries) Execute(ctx context.Context, execution Execution) error {
 	data := &schedulerv1.DrawArticleLotteryTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	if data.GetArticleId() <= 0 || data.GetDrawAt() == nil || !data.GetDrawAt().IsValid() {

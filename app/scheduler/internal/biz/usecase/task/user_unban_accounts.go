@@ -57,9 +57,9 @@ func (t *UserUnbanAccounts) DefaultDelayedTasks() []*DefaultDelayedTask {
 	}
 }
 
-func (t *UserUnbanAccounts) Execute(ctx context.Context, payload string) error {
+func (t *UserUnbanAccounts) Execute(ctx context.Context, execution Execution) error {
 	data := &schedulerv1.UnbanAccountsTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	if len(data.GetUserIds()) == 0 {

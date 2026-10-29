@@ -486,7 +486,7 @@ func (u *ScheduledTaskUsecase) executeScheduledRecord(
 	currentTask, ok := u.tasks[task.HandlerName.String()]
 	var err error
 	if ok {
-		err = currentTask.Execute(execCtx, record.Payload)
+		err = currentTask.Execute(execCtx, taskimpl.Execution{Payload: record.Payload, ScheduledAt: record.ScheduledAt})
 	} else {
 		err = fmt.Errorf("unknown scheduler task handler: %s", task.HandlerName)
 	}

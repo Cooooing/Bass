@@ -66,9 +66,9 @@ func (n *Noop) DefaultDelayedTasks() []*DefaultDelayedTask {
 	}
 }
 
-func (n *Noop) Execute(ctx context.Context, payload string) error {
+func (n *Noop) Execute(ctx context.Context, execution Execution) error {
 	data := &schedulerv1.NoopTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	if data.GetSleepSeconds() > 0 {

@@ -61,9 +61,9 @@ func (t *PlatformRefreshHoliday) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return nil
 }
 
-func (t *PlatformRefreshHoliday) Execute(ctx context.Context, payload string) error {
+func (t *PlatformRefreshHoliday) Execute(ctx context.Context, execution Execution) error {
 	data := &schedulerv1.RefreshHolidayTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	start := data.GetStart()

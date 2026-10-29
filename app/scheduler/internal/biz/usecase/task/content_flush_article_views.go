@@ -61,10 +61,10 @@ func (t *ContentFlushArticleViews) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return nil
 }
 
-func (t *ContentFlushArticleViews) Execute(ctx context.Context, payload string) error {
+func (t *ContentFlushArticleViews) Execute(ctx context.Context, execution Execution) error {
 	limit := t.defaultLimit
 	data := &schedulerv1.FlushArticleViewsTaskPayload{}
-	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
 		return err
 	}
 	if data.GetLimit() > 0 {

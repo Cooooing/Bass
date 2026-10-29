@@ -3,6 +3,7 @@ package schema
 import (
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
+	userenum "user/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -36,10 +37,11 @@ func (CheckinRecord) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("账号 ID"),
-		field.Time("date").Comment("签到日期"),
-		field.Int32("online_minutes").Comment("当天在线时长，单位为分钟").Default(0),
-		field.Int32("activity").Comment("当天活跃度").Default(0),
-		field.Bool("checked").Comment("是否完成签到").Default(false),
+		field.Time("date").Comment("签到所属业务日"),
+		field.Enum("status").Values(userenum.CheckinStatusMap.EnumValues()...).Default(userenum.CheckinStatusPending.String()).Comment("自动签到事务状态"),
+		field.Int64("checkin_points").Comment("自动签到奖励积分快照").Default(0),
+		field.Int64("streak_points").Comment("连续签到奖励积分快照").Default(0),
+		field.Time("checked_at").Comment("自动签到确认时间").Optional().Nillable(),
 	}
 }
 

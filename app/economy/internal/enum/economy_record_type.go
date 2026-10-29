@@ -23,6 +23,8 @@ const (
 	EconomyRecordTypeArticleThankExpense       EconomyRecordType = "article_thank_expense"        // EconomyRecordTypeArticleThankExpense 表示文章感谢支出
 	EconomyRecordTypeCommentThankExpense       EconomyRecordType = "comment_thank_expense"        // EconomyRecordTypeCommentThankExpense 表示评论感谢支出
 	EconomyRecordTypeArticleRewardSetupExpense EconomyRecordType = "article_reward_setup_expense" // EconomyRecordTypeArticleRewardSetupExpense 表示启用文章打赏区支出
+	EconomyRecordTypeCheckinStreakReward       EconomyRecordType = "checkin_streak_reward"       // EconomyRecordTypeCheckinStreakReward 表示连续签到奖励
+	EconomyRecordTypeLivenessReward            EconomyRecordType = "liveness_reward"            // EconomyRecordTypeLivenessReward 表示活跃度奖励
 )
 
 // EconomyRecordTypeMap 维护流水类型映射
@@ -39,6 +41,8 @@ var EconomyRecordTypeMap = commonenum.NewMapping[EconomyRecordType, v1.EconomyRe
 	EconomyRecordTypeArticleThankExpense:       {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE},
 	EconomyRecordTypeCommentThankExpense:       {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE},
 	EconomyRecordTypeArticleRewardSetupExpense: {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE},
+	EconomyRecordTypeCheckinStreakReward:       {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_CHECKIN_STREAK_REWARD},
+	EconomyRecordTypeLivenessReward:            {Proto: v1.EconomyRecordType_ECONOMY_RECORD_TYPE_LIVENESS_REWARD},
 })
 
 func (e EconomyRecordType) String() string {
@@ -47,7 +51,7 @@ func (e EconomyRecordType) String() string {
 
 func (e EconomyRecordType) Direction() (EconomyRecordDirection, error) {
 	switch e {
-	case EconomyRecordTypeSignInReward, EconomyRecordTypeArticleThankReward, EconomyRecordTypeCommentThankReward, EconomyRecordTypeArticleRewardIn, EconomyRecordTypeAdminAdd:
+	case EconomyRecordTypeSignInReward, EconomyRecordTypeArticleThankReward, EconomyRecordTypeCommentThankReward, EconomyRecordTypeArticleRewardIn, EconomyRecordTypeAdminAdd, EconomyRecordTypeCheckinStreakReward, EconomyRecordTypeLivenessReward:
 		return EconomyRecordDirectionIncome, nil
 	case EconomyRecordTypeArticleRewardOut, EconomyRecordTypeAdminDeduct, EconomyRecordTypeGlobalChatTopicExpense, EconomyRecordTypeGlobalChatBarrageExpense, EconomyRecordTypeArticleThankExpense, EconomyRecordTypeCommentThankExpense, EconomyRecordTypeArticleRewardSetupExpense:
 		return EconomyRecordDirectionExpense, nil

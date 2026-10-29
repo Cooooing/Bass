@@ -445,9 +445,9 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 }
 
 type CommentThankReq struct {
-	CommentID       int64
-	Access          *model.ContentAccess
-	Active          bool
+	CommentID int64
+	Access    *model.ContentAccess
+	Active    bool
 }
 
 func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool, error) {

@@ -41,7 +41,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewLocationClient,
 	NewRelationClient,
 	NewOtpClient,
-	NewCheckinClient,
+	NewLivenessClient,
 	NewContentArticleClient,
 	NewArticleSearchRateLimitCache,
 	NewContentPostscriptClient,

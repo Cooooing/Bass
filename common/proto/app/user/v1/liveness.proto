@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "google/protobuf/timestamp.proto";
+import "user/v1/enum/liveness_reward_status.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+// LivenessService 提供用户每日活跃度查询、日结与奖励领取能力。
+service LivenessService {
+  rpc GetLiveness(GetUserLiveness.Req) returns (GetUserLiveness.Resp) {} // 查询指定业务日的活跃度。
+  rpc ClaimLivenessReward(ClaimUserLivenessReward.Req) returns (ClaimUserLivenessReward.Resp) {} // 领取指定业务日已结算的活跃奖励。
+  rpc SettleLiveness(SettleUserLiveness.Req) returns (SettleUserLiveness.Resp) {} // 结算指定业务日并自动签到。
+}
+
+
+// UserLivenessDetail 表示按来源聚合的活跃行为次数。
+message UserLivenessDetail {
+  int32 article_count = 1; // 已发布文章数。
+  int32 comment_count = 2; // 有效评论数。
+  int32 like_count = 3; // 点赞操作数。
+  int32 thank_count = 4; // 感谢操作数。
+  int32 reward_count = 5; // 打赏操作数。
+  int32 view_count = 6; // 登录浏览记录数。
+  int32 global_chat_message_count = 7; // 有效聊天室文本消息数。
+}
+
+// GetUserLiveness 查询指定业务日的活跃度。
+message GetUserLiveness {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+    google.protobuf.Timestamp date = 2; // 待查询业务日。
+  }
+  message Resp {
+    google.protobuf.Timestamp date = 1; // 实际查询的业务日。
+    int32 score = 2; // 活跃度总分。
+    int32 max_score = 3; // 每日活跃度上限。
+    int32 checkin_score = 8; // 自动签到所需的最低活跃度。
+    UserLivenessDetail detail = 4; // 各来源活跃行为明细。
+    bool settled = 5; // 该业务日是否已冻结日结结果。
+    int64 reward_points = 6; // 可领取或已领取的活跃奖励积分。
+    .common.api.app.user.v1.LivenessRewardStatus reward_status = 7; // 活跃奖励领取状态。
+  }
+}
+
+// ClaimUserLivenessReward 领取指定已结算业务日的活跃奖励。
+message ClaimUserLivenessReward {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+    google.protobuf.Timestamp date = 2; // 待领取奖励的业务日。
+  }
+  message Resp {
+    int64 reward_points = 1; // 本次领取的活跃奖励积分。
+    .common.api.app.user.v1.LivenessRewardStatus reward_status = 2; // 领取后的奖励状态。
+  }
+}
+
+// SettleUserLiveness 结算一个业务日的活跃度；达到阈值时由内部签到用例自动处理签到。
+message SettleUserLiveness {
+  message Req {
+    google.protobuf.Timestamp date = 1; // 待结算业务日。
+    int32 page_size = 2; // 单次读取并统计的账号数量。
+  }
+  message Resp {
+    int32 settled_users = 1; // 成功结算活跃度的账号数。
+    int32 checked_in_users = 2; // 成功自动签到的账号数。
+  }
+}

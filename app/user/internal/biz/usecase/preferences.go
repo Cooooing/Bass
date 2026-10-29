@@ -30,7 +30,7 @@ func (s *PreferencesUsecase) GetByUserID(ctx context.Context, userID int64) (*mo
 	return &model.Preferences{
 		UserID:      userID,
 		Language:    new(enum.LanguageZhCN),
-		Timezone:    new("Asia/Shanghai"),
+		Timezone:    new(""),
 		Theme:       new("default"),
 		MobileTheme: new("default"),
 	}, nil

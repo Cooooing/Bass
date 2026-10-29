@@ -10,6 +10,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	usecase.NewPrivateChatUsecase,
 	usecase.NewGlobalChatUsecase,
+	usecase.NewStatisticsUsecase,
 	usecase.NewGlobalChatTopicUsecase,
 	usecase.NewTCCGlobalChatTopicUsecase,
 	usecase.NewGlobalChatBarrageUsecase,

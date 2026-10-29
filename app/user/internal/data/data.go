@@ -24,6 +24,9 @@ var DataProviderSet = wire.NewSet(
 	rpc.ProvideNotifyClient,
 	rpc.ProvidePlatformClient,
 	rpc.ProvideSchedulerClient,
+	rpc.ProvideContentClient,
+	rpc.ProvideIMClient,
+	rpc.ProvideEconomyClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
@@ -34,6 +37,11 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideGenClient,
 	ProvideRedis,
 	ProvideNats,
+	ProvideBusinessConfig,
+	ProvideDTMConfig,
+	commonClient.NewDTMClient,
+	commonClient.NewTCCBranchCaller,
+	ProvideTCCBranchExecutor,
 	client.ProvideTx,
 	repo.NewAccountRepo,
 	repo.NewRelationRepo,
@@ -43,6 +51,8 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewTotpRepo,
 	repo.NewCheckinRecordRepo,
 	repo.NewCheckinStatRepo,
+	repo.NewLivenessRecordRepo,
+	repo.NewLivenessSource,
 	repo.NewLoginLogRepo,
 	repo.NewBanRecordRepo,
 	repo.NewRbacRepo,
@@ -73,4 +83,14 @@ func ProvideConsul(c *config.Bootstrap) *common.Consul {
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
+}
+
+func ProvideBusinessConfig(c *config.Bootstrap) *config.Business {
+	return c.Business
+}
+
+func ProvideDTMConfig(c *config.Bootstrap) *common.DTM { return c.Dtm }
+
+func ProvideTCCBranchExecutor(sqlClient *commonClient.SQLClient, entClient *client.EntClient, dtm *commonClient.DTMClient) (commonClient.TCCBranchExecutor, error) {
+	return commonClient.NewTCCBranchExecutor(dtm, sqlClient.DB, sqlClient.Driver, entClient.ClientFromTx)
 }

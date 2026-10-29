@@ -19,6 +19,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewCommentThankUsecase,
 	usecase.NewTCCCommentThankUsecase,
 	usecase.NewArticleUsecase,
+	usecase.NewStatisticsUsecase,
 	usecase.NewCommentUsecase,
 	usecase.NewPostscriptUsecase,
 	usecase.NewContentUsecase,

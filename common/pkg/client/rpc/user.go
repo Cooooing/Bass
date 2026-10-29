@@ -8,32 +8,36 @@ import (
 )
 
 type UserClient struct {
-	Account        userv1.AccountServiceClient
-	Auth           userv1.AuthServiceClient
-	Rbac           userv1.RbacServiceClient
-	Relation       userv1.RelationServiceClient
-	Preferences    userv1.PreferencesServiceClient
-	PrivacySetting userv1.PrivacySettingServiceClient
-	Location       userv1.LocationServiceClient
-	Otp            userv1.OtpServiceClient
-	Outbox         userv1.OutboxServiceClient
-	Checkin        userv1.CheckinServiceClient
+	Account           userv1.AccountServiceClient
+	Auth              userv1.AuthServiceClient
+	Rbac              userv1.RbacServiceClient
+	Relation          userv1.RelationServiceClient
+	Preferences       userv1.PreferencesServiceClient
+	PrivacySetting    userv1.PrivacySettingServiceClient
+	Location          userv1.LocationServiceClient
+	Otp               userv1.OtpServiceClient
+	Outbox            userv1.OutboxServiceClient
+	Liveness          userv1.LivenessServiceClient
+	TCCCheckin        userv1.TCCCheckinServiceClient
+	TCCLivenessReward userv1.TCCLivenessRewardServiceClient
 }
 
 func NewUserClient(
 	conn grpc.ClientConnInterface,
 ) *UserClient {
 	return &UserClient{
-		Account:        userv1.NewAccountServiceClient(conn),
-		Auth:           userv1.NewAuthServiceClient(conn),
-		Rbac:           userv1.NewRbacServiceClient(conn),
-		Relation:       userv1.NewRelationServiceClient(conn),
-		Preferences:    userv1.NewPreferencesServiceClient(conn),
-		PrivacySetting: userv1.NewPrivacySettingServiceClient(conn),
-		Location:       userv1.NewLocationServiceClient(conn),
-		Otp:            userv1.NewOtpServiceClient(conn),
-		Outbox:         userv1.NewOutboxServiceClient(conn),
-		Checkin:        userv1.NewCheckinServiceClient(conn),
+		Account:           userv1.NewAccountServiceClient(conn),
+		Auth:              userv1.NewAuthServiceClient(conn),
+		Rbac:              userv1.NewRbacServiceClient(conn),
+		Relation:          userv1.NewRelationServiceClient(conn),
+		Preferences:       userv1.NewPreferencesServiceClient(conn),
+		PrivacySetting:    userv1.NewPrivacySettingServiceClient(conn),
+		Location:          userv1.NewLocationServiceClient(conn),
+		Otp:               userv1.NewOtpServiceClient(conn),
+		Outbox:            userv1.NewOutboxServiceClient(conn),
+		Liveness:          userv1.NewLivenessServiceClient(conn),
+		TCCCheckin:        userv1.NewTCCCheckinServiceClient(conn),
+		TCCLivenessReward: userv1.NewTCCLivenessRewardServiceClient(conn),
 	}
 }
 
@@ -48,6 +52,8 @@ func MountUserServices[T any](conn *localrpc.Conn, services []T) {
 		conn.RegisterMatching(&userv1.LocationService_ServiceDesc, service)
 		conn.RegisterMatching(&userv1.OtpService_ServiceDesc, service)
 		conn.RegisterMatching(&userv1.OutboxService_ServiceDesc, service)
-		conn.RegisterMatching(&userv1.CheckinService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.LivenessService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.TCCCheckinService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.TCCLivenessRewardService_ServiceDesc, service)
 	}
 }

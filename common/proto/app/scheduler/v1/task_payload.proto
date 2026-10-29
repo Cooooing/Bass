@@ -29,6 +29,11 @@ message UnbanAccountsTaskPayload {
   repeated int64 user_ids = 1; // 待解封账号 ID
 }
 
+// SettleUserLivenessTaskPayload 是每日活跃度日结任务参数。
+message SettleUserLivenessTaskPayload {
+  int32 page_size = 1; // 单次读取并统计的账号数量。
+}
+
 // PublishScheduledArticleTaskPayload 是文章定时发布任务参数。
 message PublishScheduledArticleTaskPayload {
   int64 article_id = 1; // 文章 ID

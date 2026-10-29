@@ -10,6 +10,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	task.NewNoop,
 	task.NewUserUnbanAccounts,
+	task.NewUserSettleLiveness,
 	task.NewUserOutboxPublishBatch,
 	task.NewContentOutboxPublishBatch,
 	task.NewContentPublishScheduledArticles,
@@ -25,6 +26,7 @@ var BizProviderSet = wire.NewSet(
 func ProvideTasks(
 	noop *task.Noop,
 	userUnbanAccounts *task.UserUnbanAccounts,
+	userSettleLiveness *task.UserSettleLiveness,
 	userOutboxPublishBatch *task.UserOutboxPublishBatch,
 	contentOutboxPublishBatch *task.ContentOutboxPublishBatch,
 	contentPublishScheduledArticles *task.ContentPublishScheduledArticles,
@@ -36,6 +38,7 @@ func ProvideTasks(
 	return map[string]task.Task{
 		noop.HandlerName().String():                            noop,
 		userUnbanAccounts.HandlerName().String():               userUnbanAccounts,
+		userSettleLiveness.HandlerName().String():              userSettleLiveness,
 		userOutboxPublishBatch.HandlerName().String():          userOutboxPublishBatch,
 		contentOutboxPublishBatch.HandlerName().String():       contentOutboxPublishBatch,
 		contentPublishScheduledArticles.HandlerName().String(): contentPublishScheduledArticles,

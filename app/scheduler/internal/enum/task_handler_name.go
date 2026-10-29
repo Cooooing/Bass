@@ -12,6 +12,7 @@ const (
 	TaskHandlerNameNoop                            TaskHandlerName = "noop"                               // noop
 	TaskHandlerNameUserOutboxPublishBatch          TaskHandlerName = "user.outbox_publish_batch"          // user.outbox_publish_batch
 	TaskHandlerNameUserUnbanAccounts               TaskHandlerName = "user.unban_accounts"                // user.unban_accounts
+	TaskHandlerNameUserSettleLiveness              TaskHandlerName = "user.settle_liveness"               // user.settle_liveness
 	TaskHandlerNameContentOutboxPublishBatch       TaskHandlerName = "content.outbox_publish_batch"       // content.outbox_publish_batch
 	TaskHandlerNameContentPublishScheduledArticles TaskHandlerName = "content.publish_scheduled_articles" // content.publish_scheduled_articles
 	TaskHandlerNameContentFlushArticleViews        TaskHandlerName = "content.flush_article_views"        // content.flush_article_views
@@ -26,6 +27,7 @@ var TaskHandlerNameMap = commonenum.NewMapping[TaskHandlerName, schedulerv1.Sche
 		TaskHandlerNameNoop:                            {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_NOOP},
 		TaskHandlerNameUserOutboxPublishBatch:          {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_USER_OUTBOX_PUBLISH_BATCH},
 		TaskHandlerNameUserUnbanAccounts:               {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_USER_UNBAN_ACCOUNTS},
+		TaskHandlerNameUserSettleLiveness:              {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_USER_SETTLE_LIVENESS},
 		TaskHandlerNameContentOutboxPublishBatch:       {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_OUTBOX_PUBLISH_BATCH},
 		TaskHandlerNameContentPublishScheduledArticles: {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_PUBLISH_SCHEDULED_ARTICLES},
 		TaskHandlerNameContentFlushArticleViews:        {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_FLUSH_ARTICLE_VIEWS},

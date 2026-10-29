@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "google/protobuf/timestamp.proto";
+import "content/v1/enum/content_action_status.proto";
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// ContentStatisticsService 提供内容领域的内部批量事实统计能力。
+service ContentStatisticsService {
+  rpc BatchCountUserBehaviors(BatchCountContentUserBehaviors.Req) returns (BatchCountContentUserBehaviors.Resp) {} // 批量统计账号的内容行为数量。
+}
+
+// BatchCountContentUserBehaviors 批量统计内容领域内的原始行为数量。
+message BatchCountContentUserBehaviors {
+  message Req {
+    repeated int64 user_ids = 1; // 待统计的账号 ID。
+    google.protobuf.Timestamp start = 2; // 统计起点，含。
+    google.protobuf.Timestamp end = 3; // 统计终点，不含。
+    repeated .common.api.app.content.v1.enum.ContentActionStatus action_statuses = 4; // 纳入统计的互动状态。
+  }
+  message Resp {
+    repeated UserBehaviorCount rows = 1; // 各账号的内容行为数量。
+  }
+  message UserBehaviorCount {
+    int64 user_id = 1; // 账号 ID。
+    int32 article_count = 2; // 已发布文章数量。
+    int32 comment_count = 3; // 有效评论数量。
+    int32 article_like_count = 4; // 文章点赞数量。
+    int32 comment_like_count = 5; // 评论点赞数量。
+    int32 article_thank_count = 6; // 文章感谢数量。
+    int32 comment_thank_count = 7; // 评论感谢数量。
+    int32 article_reward_count = 8; // 文章打赏数量。
+    int32 view_count = 9; // 登录浏览记录数量。
+  }
+}

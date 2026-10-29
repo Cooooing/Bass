@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+// IMStatisticsService 提供即时消息领域的内部批量事实统计能力。
+service IMStatisticsService {
+  rpc BatchCountGlobalChatMessages(BatchCountGlobalChatMessages.Req) returns (BatchCountGlobalChatMessages.Resp) {} // 批量统计账号的有效聊天室文本消息数量。
+}
+
+// BatchCountGlobalChatMessages 批量统计全局聊天室消息数量。
+message BatchCountGlobalChatMessages {
+  message Req {
+    repeated int64 user_ids = 1; // 待统计的发送账号 ID。
+    google.protobuf.Timestamp start = 2; // 统计起点，含。
+    google.protobuf.Timestamp end = 3; // 统计终点，不含。
+  }
+  message Resp {
+    repeated UserMessageCount rows = 1; // 各账号的聊天室消息数量。
+
+    message UserMessageCount {
+      int64 user_id = 1; // 发送账号 ID。
+      int32 count = 2; // 未撤回普通文本消息数量。
+    }
+  }
+}

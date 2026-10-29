@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// LivenessRewardStatus 表示每日活跃奖励的领取状态。
+enum LivenessRewardStatus {
+  LIVENESS_REWARD_STATUS_UNSPECIFIED = 0; // 未指定
+  LIVENESS_REWARD_STATUS_UNCLAIMED = 1; // 未领取
+  LIVENESS_REWARD_STATUS_PENDING = 2; // 领取中
+  LIVENESS_REWARD_STATUS_COMPLETED = 3; // 已领取
+  LIVENESS_REWARD_STATUS_CANCELED = 4; // 已取消
+}

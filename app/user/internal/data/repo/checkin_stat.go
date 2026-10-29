@@ -108,7 +108,6 @@ func (r *CheckinStatRepo) get(ctx context.Context, req *repo.CheckinStatGetReq) 
 	return &model.CheckinStat{
 		ID:                 s.ID,
 		UserID:             s.UserID,
-		TotalOnlineMinutes: new(s.TotalOnlineMinutes),
 		CurrentStreak:      new(s.CurrentStreak),
 		LongestStreak:      new(s.LongestStreak),
 	}, nil
@@ -127,7 +126,6 @@ func (r *CheckinStatRepo) list(ctx context.Context, req *repo.CheckinStatGetReq)
 		result = append(result, &model.CheckinStat{
 			ID:                 s.ID,
 			UserID:             s.UserID,
-			TotalOnlineMinutes: new(s.TotalOnlineMinutes),
 			CurrentStreak:      new(s.CurrentStreak),
 			LongestStreak:      new(s.LongestStreak),
 		})
@@ -175,7 +173,6 @@ func (r *CheckinStatRepo) page(ctx context.Context, page *commonmodel.PageReq, r
 		result = append(result, &model.CheckinStat{
 			ID:                 s.ID,
 			UserID:             s.UserID,
-			TotalOnlineMinutes: new(s.TotalOnlineMinutes),
 			CurrentStreak:      new(s.CurrentStreak),
 			LongestStreak:      new(s.LongestStreak),
 		})
@@ -198,9 +195,6 @@ func (r *CheckinStatRepo) upsertStat(ctx context.Context, stat *model.CheckinSta
 		tx := r.getClient(ctx)
 		create := tx.CheckinStat.Create().
 			SetUserID(stat.UserID)
-		if stat.TotalOnlineMinutes != nil {
-			create.SetTotalOnlineMinutes(*stat.TotalOnlineMinutes)
-		}
 		if stat.CurrentStreak != nil {
 			create.SetCurrentStreak(*stat.CurrentStreak)
 		}
@@ -214,20 +208,16 @@ func (r *CheckinStatRepo) upsertStat(ctx context.Context, stat *model.CheckinSta
 		return &model.CheckinStat{
 			ID:                 saved.ID,
 			UserID:             saved.UserID,
-			TotalOnlineMinutes: new(saved.TotalOnlineMinutes),
 			CurrentStreak:      new(saved.CurrentStreak),
 			LongestStreak:      new(saved.LongestStreak),
 		}, nil
 	}
-	if stat.TotalOnlineMinutes == nil && stat.CurrentStreak == nil && stat.LongestStreak == nil {
+	if stat.CurrentStreak == nil && stat.LongestStreak == nil {
 		return existing, nil
 	}
 	stat.ID = existing.ID
 	tx := r.getClient(ctx)
 	update := tx.CheckinStat.UpdateOneID(stat.ID)
-	if stat.TotalOnlineMinutes != nil {
-		update.SetTotalOnlineMinutes(*stat.TotalOnlineMinutes)
-	}
 	if stat.CurrentStreak != nil {
 		update.SetCurrentStreak(*stat.CurrentStreak)
 	}
@@ -241,7 +231,6 @@ func (r *CheckinStatRepo) upsertStat(ctx context.Context, stat *model.CheckinSta
 	return &model.CheckinStat{
 		ID:                 saved.ID,
 		UserID:             saved.UserID,
-		TotalOnlineMinutes: new(saved.TotalOnlineMinutes),
 		CurrentStreak:      new(saved.CurrentStreak),
 		LongestStreak:      new(saved.LongestStreak),
 	}, nil

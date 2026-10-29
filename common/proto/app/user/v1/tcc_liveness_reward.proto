@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+// TCCLivenessRewardService 提供活跃奖励领取的 TCC 分支操作。
+service TCCLivenessRewardService {
+  rpc Try(TCCLivenessReward.Req) returns (TCCLivenessReward.Resp) {} // 预留活跃奖励领取状态。
+  rpc Confirm(TCCLivenessReward.Req) returns (TCCLivenessReward.Resp) {} // 确认活跃奖励已领取。
+  rpc Cancel(TCCLivenessReward.Req) returns (TCCLivenessReward.Resp) {} // 取消活跃奖励领取状态。
+}
+
+// TCCLivenessReward 表示一次活跃奖励领取的 TCC 分支参数。
+message TCCLivenessReward {
+  message Req {
+    int64 user_id = 1; // 领取账号 ID。
+    google.protobuf.Timestamp date = 2; // 已结算的业务日。
+  }
+  message Resp {}
+}

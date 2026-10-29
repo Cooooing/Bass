@@ -16,6 +16,7 @@ type ContentClient struct {
 	Postscript    contentv1.ContentPostscriptServiceClient
 	Tag           contentv1.ContentTagServiceClient
 	Moonbreeze    contentv1.ContentMoonbreezeServiceClient
+	Statistics    contentv1.ContentStatisticsServiceClient
 }
 
 func NewContentClient(
@@ -30,6 +31,7 @@ func NewContentClient(
 		Postscript:    contentv1.NewContentPostscriptServiceClient(conn),
 		Tag:           contentv1.NewContentTagServiceClient(conn),
 		Moonbreeze:    contentv1.NewContentMoonbreezeServiceClient(conn),
+		Statistics:    contentv1.NewContentStatisticsServiceClient(conn),
 	}
 }
 
@@ -43,5 +45,6 @@ func MountContentServices[T any](conn *localrpc.Conn, services []T) {
 		conn.RegisterMatching(&contentv1.ContentPostscriptService_ServiceDesc, service)
 		conn.RegisterMatching(&contentv1.ContentTagService_ServiceDesc, service)
 		conn.RegisterMatching(&contentv1.ContentMoonbreezeService_ServiceDesc, service)
+		conn.RegisterMatching(&contentv1.ContentStatisticsService_ServiceDesc, service)
 	}
 }

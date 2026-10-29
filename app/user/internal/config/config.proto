@@ -18,6 +18,7 @@ message Bootstrap {
   common.api.app.common.Observability observability = 9;
   common.api.app.common.Alert alert = 10;
   common.api.app.common.Event event = 11;
+  common.api.app.common.DTM dtm = 12;
   Business business = 21;
 }
 
@@ -25,6 +26,7 @@ message Business {
   string app = 1; // TOTP issuer 和默认应用名。
   string avatar = 2; // 默认头像 URL 模板。
   Auth auth = 3; // 认证、会话和验证码配置。
+  Liveness liveness = 4; // 活跃度结算与自动签到规则。
 
   message Auth {
     Session session = 1; // token 与会话配置。
@@ -48,5 +50,35 @@ message Business {
 
   message Totp {
     google.protobuf.Duration temporary_secret_ttl = 1; // 启用 TOTP 临时密钥有效期，例如 300s 表示 5min。
+  }
+
+  message Liveness {
+    Checkin checkin = 1; // 自动签到配置。
+    Score score = 2; // 各行为的活跃度计分规则。
+
+    message Checkin {
+      int32 minimum_score = 1; // 自动签到所需的最低活跃度。
+      int64 reward_minimum = 2; // 日常签到奖励积分的随机下限。
+      int64 reward_maximum = 3; // 日常签到奖励积分的随机上限。
+      int32 streak_interval = 4; // 获得一次连签奖励所需的连续签到天数。
+      int64 streak_reward = 5; // 每次达到连签间隔时发放的积分。
+    }
+
+    message Score {
+      int32 maximum = 1; // 每个业务日的活跃度总分上限。
+      Rule article = 2; // 已发布文章的计分规则。
+      Rule comment = 3; // 有效评论的计分规则。
+      Rule like = 4; // 文章和评论点赞合计的计分规则。
+      Rule thank = 5; // 文章和评论感谢合计的计分规则。
+      Rule reward = 6; // 文章打赏行为的计分规则。
+      Rule view = 7; // 登录浏览文章的计分规则。
+      Rule global_chat_message = 8; // 全局聊天室普通文本消息的计分规则。
+    }
+
+    message Rule {
+      int32 limit = 1; // 单日最多计分的行为数量；0 表示不设数量上限。
+      int32 count_per_unit = 2; // 获得一次积分单位需要的行为数量。
+      int32 points_per_unit = 3; // 每个积分单位获得的活跃度。
+    }
   }
 }

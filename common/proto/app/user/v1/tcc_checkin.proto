@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+// TCCCheckinService 提供自动签到的 TCC 分支操作。
+service TCCCheckinService {
+  rpc Try(TCCCheckin.Req) returns (TCCCheckin.Resp) {} // 预留自动签到状态。
+  rpc Confirm(TCCCheckin.Req) returns (TCCCheckin.Resp) {} // 确认自动签到状态。
+  rpc Cancel(TCCCheckin.Req) returns (TCCCheckin.Resp) {} // 取消自动签到状态。
+}
+
+// TCCCheckin 表示一次自动签到及连签奖励的 TCC 分支参数。
+message TCCCheckin {
+  message Req {
+    int64 user_id = 1; // 签到账号 ID。
+    google.protobuf.Timestamp date = 2; // 签到业务日。
+    int64 checkin_points = 3; // 日常签到奖励积分。
+    int64 streak_points = 4; // 连签奖励积分。
+    int32 current_streak = 5; // 本次签到后的连续签到天数。
+    int32 longest_streak = 6; // 本次签到后的最长连续签到天数。
+  }
+  message Resp {}
+}

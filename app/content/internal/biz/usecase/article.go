@@ -240,10 +240,10 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 }
 
 type ArticleThankReq struct {
-	Access          *model.ContentAccess
-	ArticleID       int64
-	UserID          int64
-	Active          bool
+	Access    *model.ContentAccess
+	ArticleID int64
+	UserID    int64
+	Active    bool
 }
 
 func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
@@ -366,8 +366,8 @@ func (*ArticleUsecase) articleCollectedEvent(userID, articleID int64) *commonenu
 }
 
 type ArticleRewardReq struct {
-	Access          *model.ContentAccess
-	ArticleID       int64
+	Access    *model.ContentAccess
+	ArticleID int64
 }
 
 func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) (bool, error) {
@@ -508,10 +508,10 @@ func (d *ArticleUsecase) FlushViews(ctx context.Context, req *ArticleFlushViewsR
 }
 
 type ArticlePublishReq struct {
-	Access          *model.ContentAccess
-	ArticleID       int64
-	ScheduledAt     *time.Time
-	PublishedCity   *string
+	Access        *model.ContentAccess
+	ArticleID     int64
+	ScheduledAt   *time.Time
+	PublishedCity *string
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {

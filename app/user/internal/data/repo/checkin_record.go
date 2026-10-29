@@ -9,6 +9,7 @@ import (
 	"user/internal/biz/repo"
 	"user/internal/data/gen"
 	"user/internal/data/gen/checkinrecord"
+	"user/internal/enum"
 )
 
 var _ repo.CheckinRecordRepo = (*CheckinRecordRepo)(nil)
@@ -109,9 +110,10 @@ func (r *CheckinRecordRepo) get(ctx context.Context, req *repo.CheckinRecordGetR
 		ID:            row.ID,
 		UserID:        row.UserID,
 		Date:          new(row.Date),
-		OnlineMinutes: new(row.OnlineMinutes),
-		Activity:      new(row.Activity),
-		Checked:       row.Checked,
+		Status:        enum.CheckinStatus(row.Status),
+		CheckinPoints: new(row.CheckinPoints),
+		StreakPoints:  new(row.StreakPoints),
+		CheckedAt:     row.CheckedAt,
 	}, nil
 }
 
@@ -129,9 +131,10 @@ func (r *CheckinRecordRepo) list(ctx context.Context, req *repo.CheckinRecordGet
 			ID:            row.ID,
 			UserID:        row.UserID,
 			Date:          new(row.Date),
-			OnlineMinutes: new(row.OnlineMinutes),
-			Activity:      new(row.Activity),
-			Checked:       row.Checked,
+			Status:        enum.CheckinStatus(row.Status),
+			CheckinPoints: new(row.CheckinPoints),
+			StreakPoints:  new(row.StreakPoints),
+			CheckedAt:     row.CheckedAt,
 		})
 	}
 	return result, nil
@@ -178,9 +181,10 @@ func (r *CheckinRecordRepo) page(ctx context.Context, page *commonmodel.PageReq,
 			ID:            row.ID,
 			UserID:        row.UserID,
 			Date:          new(row.Date),
-			OnlineMinutes: new(row.OnlineMinutes),
-			Activity:      new(row.Activity),
-			Checked:       row.Checked,
+			Status:        enum.CheckinStatus(row.Status),
+			CheckinPoints: new(row.CheckinPoints),
+			StreakPoints:  new(row.StreakPoints),
+			CheckedAt:     row.CheckedAt,
 		})
 	}
 	return result, &commonmodel.PageResp{
@@ -200,13 +204,15 @@ func (r *CheckinRecordRepo) upsertRecord(ctx context.Context, record *model.Chec
 		return nil, err
 	}
 	if existing != nil {
-		update := tx.CheckinRecord.UpdateOneID(existing.ID).
-			SetChecked(record.Checked)
-		if record.OnlineMinutes != nil {
-			update.SetOnlineMinutes(*record.OnlineMinutes)
+		update := tx.CheckinRecord.UpdateOneID(existing.ID).SetStatus(checkinrecord.Status(record.Status))
+		if record.CheckinPoints != nil {
+			update.SetCheckinPoints(*record.CheckinPoints)
 		}
-		if record.Activity != nil {
-			update.SetActivity(*record.Activity)
+		if record.StreakPoints != nil {
+			update.SetStreakPoints(*record.StreakPoints)
+		}
+		if record.CheckedAt != nil {
+			update.SetCheckedAt(*record.CheckedAt)
 		}
 		saved, err := update.Save(ctx)
 		if err != nil {
@@ -216,20 +222,24 @@ func (r *CheckinRecordRepo) upsertRecord(ctx context.Context, record *model.Chec
 			ID:            saved.ID,
 			UserID:        saved.UserID,
 			Date:          new(saved.Date),
-			OnlineMinutes: new(saved.OnlineMinutes),
-			Activity:      new(saved.Activity),
-			Checked:       saved.Checked,
+			Status:        enum.CheckinStatus(saved.Status),
+			CheckinPoints: new(saved.CheckinPoints),
+			StreakPoints:  new(saved.StreakPoints),
+			CheckedAt:     saved.CheckedAt,
 		}, nil
 	}
 	create := tx.CheckinRecord.Create().
 		SetUserID(record.UserID).
 		SetDate(*record.Date).
-		SetChecked(record.Checked)
-	if record.OnlineMinutes != nil {
-		create.SetOnlineMinutes(*record.OnlineMinutes)
+		SetStatus(checkinrecord.Status(record.Status))
+	if record.CheckinPoints != nil {
+		create.SetCheckinPoints(*record.CheckinPoints)
 	}
-	if record.Activity != nil {
-		create.SetActivity(*record.Activity)
+	if record.StreakPoints != nil {
+		create.SetStreakPoints(*record.StreakPoints)
+	}
+	if record.CheckedAt != nil {
+		create.SetCheckedAt(*record.CheckedAt)
 	}
 	saved, err := create.Save(ctx)
 	if err != nil {
@@ -239,9 +249,10 @@ func (r *CheckinRecordRepo) upsertRecord(ctx context.Context, record *model.Chec
 		ID:            saved.ID,
 		UserID:        saved.UserID,
 		Date:          new(saved.Date),
-		OnlineMinutes: new(saved.OnlineMinutes),
-		Activity:      new(saved.Activity),
-		Checked:       saved.Checked,
+		Status:        enum.CheckinStatus(saved.Status),
+		CheckinPoints: new(saved.CheckinPoints),
+		StreakPoints:  new(saved.StreakPoints),
+		CheckedAt:     saved.CheckedAt,
 	}, nil
 }
 

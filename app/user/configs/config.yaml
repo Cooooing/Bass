@@ -50,6 +50,11 @@ nats:
   enable_jet_stream: false
   stream_name: ""
   jet_stream_domain: ""
+dtm:
+  grpc_endpoint: ${DTM_GRPC_ENDPOINT:127.0.0.1:36790}
+  timeout: 5s
+  tcc_timeout_to_fail: 30s
+  retry_interval: 1s
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
@@ -72,3 +77,38 @@ business:
       max_attempts: 5
     totp:
       temporary_secret_ttl: 300s # 5min
+  liveness:
+    checkin:
+      minimum_score: 30
+      reward_minimum: 10
+      reward_maximum: 50
+      streak_interval: 10
+      streak_reward: 100
+    score:
+      maximum: 300
+      article:
+        limit: 1
+        count_per_unit: 1
+        points_per_unit: 15
+      comment:
+        limit: 5
+        count_per_unit: 1
+        points_per_unit: 5
+      like:
+        limit: 2
+        count_per_unit: 1
+        points_per_unit: 5
+      thank:
+        count_per_unit: 1
+        points_per_unit: 5
+      reward:
+        count_per_unit: 1
+        points_per_unit: 10
+      view:
+        limit: 5
+        count_per_unit: 2
+        points_per_unit: 1
+      global_chat_message:
+        limit: 20
+        count_per_unit: 1
+        points_per_unit: 5

@@ -88,14 +88,14 @@ type CommentActionRecordPageResp struct {
 }
 
 type CommentActionRecordReq struct {
-	Page            *commonmodel.PageReq
-	ID              *int64
-	IDs             []int64
-	CommentID       *int64
-	CommentIDs      []int64
-	UserID          *int64
-	UserIDs         []int64
-	Type            *enum.CommentAction
-	Types           []enum.CommentAction
-	Status          *enum.ContentActionStatus
+	Page       *commonmodel.PageReq
+	ID         *int64
+	IDs        []int64
+	CommentID  *int64
+	CommentIDs []int64
+	UserID     *int64
+	UserIDs    []int64
+	Type       *enum.CommentAction
+	Types      []enum.CommentAction
+	Status     *enum.ContentActionStatus
 }

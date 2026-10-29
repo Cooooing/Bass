@@ -55,9 +55,15 @@ func (r *CommentActionRecordRepo) Save(ctx context.Context, record *model.Commen
 
 func (r *CommentActionRecordRepo) TransitionStatus(ctx context.Context, req *repo.CommentActionRecordReq, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error) {
 	update := r.getClient(ctx).CommentActionRecord.Update().Where(commentactionrecord.StatusEQ(commentactionrecord.Status(from)))
-	if req.CommentID != nil { update.Where(commentactionrecord.CommentIDEQ(*req.CommentID)) }
-	if req.UserID != nil { update.Where(commentactionrecord.UserIDEQ(*req.UserID)) }
-	if req.Type != nil { update.Where(commentactionrecord.TypeEQ(commentactionrecord.Type(*req.Type))) }
+	if req.CommentID != nil {
+		update.Where(commentactionrecord.CommentIDEQ(*req.CommentID))
+	}
+	if req.UserID != nil {
+		update.Where(commentactionrecord.UserIDEQ(*req.UserID))
+	}
+	if req.Type != nil {
+		update.Where(commentactionrecord.TypeEQ(commentactionrecord.Type(*req.Type)))
+	}
 	count, err := update.SetStatus(commentactionrecord.Status(to)).Save(ctx)
 	return count == 1, err
 }

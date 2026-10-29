@@ -60,5 +60,6 @@ func (CommentActionRecord) Indexes() []ent.Index {
 		// 一个用户对一条评论的某种行为只能有一条记录
 		index.Fields("comment_id", "user_id", "type").Unique(),
 		index.Fields("user_id"),
+		index.Fields("user_id", "status", "created_at"),
 	}
 }

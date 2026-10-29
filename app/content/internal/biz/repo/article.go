@@ -52,10 +52,10 @@ type ArticleTryPublishReq struct {
 }
 
 type ArticleConfirmPublishReq struct {
-	ArticleID       int64
-	PublishedAt     time.Time
-	PublishedCity   *string
-	UpdatedBy       *int64
+	ArticleID     int64
+	PublishedAt   time.Time
+	PublishedCity *string
+	UpdatedBy     *int64
 }
 
 type ArticleUpdateVisibilityReq struct {
@@ -147,14 +147,14 @@ type ArticleActionRecordPageResp struct {
 }
 
 type ArticleActionRecordReq struct {
-	Page            *commonmodel.PageReq
-	ID              *int64
-	IDs             []int64
-	ArticleID       *int64
-	ArticleIDs      []int64
-	UserID          *int64
-	UserIDs         []int64
-	Type            *enum.ArticleAction
-	Types           []enum.ArticleAction
-	Status          *enum.ContentActionStatus
+	Page       *commonmodel.PageReq
+	ID         *int64
+	IDs        []int64
+	ArticleID  *int64
+	ArticleIDs []int64
+	UserID     *int64
+	UserIDs    []int64
+	Type       *enum.ArticleAction
+	Types      []enum.ArticleAction
+	Status     *enum.ContentActionStatus
 }

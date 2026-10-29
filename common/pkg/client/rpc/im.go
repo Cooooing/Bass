@@ -12,6 +12,7 @@ type IMClient struct {
 	GlobalChat        imv1.IMGlobalChatServiceClient
 	GlobalChatBarrage imv1.IMGlobalChatBarrageServiceClient
 	Emoji             imv1.IMEmojiServiceClient
+	Statistics        imv1.IMStatisticsServiceClient
 }
 
 func NewIMClient(
@@ -22,6 +23,7 @@ func NewIMClient(
 		GlobalChat:        imv1.NewIMGlobalChatServiceClient(conn),
 		GlobalChatBarrage: imv1.NewIMGlobalChatBarrageServiceClient(conn),
 		Emoji:             imv1.NewIMEmojiServiceClient(conn),
+		Statistics:        imv1.NewIMStatisticsServiceClient(conn),
 	}
 }
 
@@ -31,5 +33,6 @@ func MountIMServices[T any](conn *localrpc.Conn, services []T) {
 		conn.RegisterMatching(&imv1.IMGlobalChatService_ServiceDesc, service)
 		conn.RegisterMatching(&imv1.IMGlobalChatBarrageService_ServiceDesc, service)
 		conn.RegisterMatching(&imv1.IMEmojiService_ServiceDesc, service)
+		conn.RegisterMatching(&imv1.IMStatisticsService_ServiceDesc, service)
 	}
 }

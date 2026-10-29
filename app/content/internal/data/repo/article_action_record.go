@@ -55,9 +55,15 @@ func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.Articl
 
 func (r *ArticleActionRecordRepo) TransitionStatus(ctx context.Context, req *repo.ArticleActionRecordReq, from enum.ContentActionStatus, to enum.ContentActionStatus) (bool, error) {
 	update := r.getClient(ctx).ArticleActionRecord.Update().Where(articleactionrecord.StatusEQ(articleactionrecord.Status(from)))
-	if req.ArticleID != nil { update.Where(articleactionrecord.ArticleIDEQ(*req.ArticleID)) }
-	if req.UserID != nil { update.Where(articleactionrecord.UserIDEQ(*req.UserID)) }
-	if req.Type != nil { update.Where(articleactionrecord.TypeEQ(articleactionrecord.Type(*req.Type))) }
+	if req.ArticleID != nil {
+		update.Where(articleactionrecord.ArticleIDEQ(*req.ArticleID))
+	}
+	if req.UserID != nil {
+		update.Where(articleactionrecord.UserIDEQ(*req.UserID))
+	}
+	if req.Type != nil {
+		update.Where(articleactionrecord.TypeEQ(articleactionrecord.Type(*req.Type)))
+	}
 	count, err := update.SetStatus(articleactionrecord.Status(to)).Save(ctx)
 	return count == 1, err
 }

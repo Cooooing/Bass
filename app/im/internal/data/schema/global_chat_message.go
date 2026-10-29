@@ -35,5 +35,5 @@ func (GlobalChatMessage) Fields() []ent.Field {
 func (GlobalChatMessage) Mixin() []ent.Mixin { return []ent.Mixin{utilent.TimeAuditMixin{}} }
 
 func (GlobalChatMessage) Indexes() []ent.Index {
-	return []ent.Index{index.Fields("sender_id", "client_message_id").Unique()}
+	return []ent.Index{index.Fields("sender_id", "client_message_id").Unique(), index.Fields("sender_id", "created_at")}
 }

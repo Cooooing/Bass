@@ -35,6 +35,7 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideNats,
 	client.ProvideTx,
 	repo.NewArticleRepo,
+	repo.NewStatisticsRepo,
 	repo.NewArticleQARepo,
 	repo.NewArticlePollRepo,
 	repo.NewArticleLotteryRepo,

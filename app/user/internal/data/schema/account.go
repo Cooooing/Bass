@@ -67,6 +67,7 @@ func (Account) Edges() []ent.Edge {
 		edge.To("totp", Totp.Type),
 		edge.To("checkin_records", CheckinRecord.Type),
 		edge.To("checkin_stat", CheckinStat.Type),
+		edge.To("liveness_records", LivenessRecord.Type),
 		edge.To("login_logs", LoginLog.Type),
 	}
 }

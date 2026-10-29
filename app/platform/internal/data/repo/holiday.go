@@ -26,7 +26,7 @@ func NewHolidayClient(client *http.Client) bizrepo.HolidayClient {
 		baseURL: "https://timor.tech",
 		// timor.tech 拒绝默认的 Go-http-client User-Agent，必须显式携带一个普通 UA。
 		userAgent: "Bass/1.0 (+https://fishpi.cn)",
-		location:  time.FixedZone("Asia/Shanghai", 8*60*60),
+		location:  time.Local,
 	}
 }
 

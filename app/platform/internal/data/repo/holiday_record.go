@@ -89,7 +89,6 @@ func (r *HolidayRepo) holidayModel(entity *gen.Holiday) *model.HolidayInfo {
 }
 
 func (r *HolidayRepo) normalizeDate(date time.Time) time.Time {
-	location := time.FixedZone("Asia/Shanghai", 8*60*60)
-	local := date.In(location)
-	return time.Date(local.Year(), local.Month(), local.Day(), 0, 0, 0, 0, location)
+	local := date.In(time.Local)
+	return time.Date(local.Year(), local.Month(), local.Day(), 0, 0, 0, 0, time.Local)
 }

@@ -32,7 +32,7 @@ func NewHolidayUsecase(
 		client:      client,
 		holidayRepo: holidayRepo,
 		cacheRepo:   cacheRepo,
-		location:    time.FixedZone("Asia/Shanghai", 8*60*60),
+		location:    time.Local,
 		configTTL:   12 * time.Hour,
 	}
 }

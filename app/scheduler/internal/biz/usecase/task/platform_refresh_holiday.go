@@ -70,8 +70,7 @@ func (t *PlatformRefreshHoliday) Execute(ctx context.Context, payload string) er
 	end := data.GetEnd()
 	if start == nil && end == nil {
 		// 默认预写当天起连续三天，调用方可以通过 payload 指定其它范围。
-		location := time.FixedZone("Asia/Shanghai", 8*60*60)
-		begin := time.Now().In(location)
+		begin := time.Now().In(time.Local)
 		start = timestamppb.New(begin)
 		end = timestamppb.New(begin.AddDate(0, 0, 2))
 	}

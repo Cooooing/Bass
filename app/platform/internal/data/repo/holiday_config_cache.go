@@ -62,7 +62,7 @@ func (r *HolidayConfigCacheRepo) Get(ctx context.Context, year int) (*model.Holi
 			continue
 		}
 		entries[key] = &model.HolidayEntry{
-			Date:    time.UnixMilli(entry.DateMillis).In(time.FixedZone("Asia/Shanghai", 8*60*60)),
+			Date:    time.UnixMilli(entry.DateMillis).In(time.Local),
 			Name:    entry.Name,
 			Holiday: entry.Holiday,
 		}

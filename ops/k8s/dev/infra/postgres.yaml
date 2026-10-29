@@ -20,6 +20,9 @@ auth:
   database: "bass"
 
 primary:
+  extraEnvVars:
+    - name: TZ
+      value: Asia/Shanghai
   persistence:
     enabled: true
     size: 10Gi

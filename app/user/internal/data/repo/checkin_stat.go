@@ -106,10 +106,10 @@ func (r *CheckinStatRepo) get(ctx context.Context, req *repo.CheckinStatGetReq) 
 		return nil, err
 	}
 	return &model.CheckinStat{
-		ID:                 s.ID,
-		UserID:             s.UserID,
-		CurrentStreak:      new(s.CurrentStreak),
-		LongestStreak:      new(s.LongestStreak),
+		ID:            s.ID,
+		UserID:        s.UserID,
+		CurrentStreak: new(s.CurrentStreak),
+		LongestStreak: new(s.LongestStreak),
 	}, nil
 }
 
@@ -124,10 +124,10 @@ func (r *CheckinStatRepo) list(ctx context.Context, req *repo.CheckinStatGetReq)
 	result := make([]*model.CheckinStat, 0, len(list))
 	for _, s := range list {
 		result = append(result, &model.CheckinStat{
-			ID:                 s.ID,
-			UserID:             s.UserID,
-			CurrentStreak:      new(s.CurrentStreak),
-			LongestStreak:      new(s.LongestStreak),
+			ID:            s.ID,
+			UserID:        s.UserID,
+			CurrentStreak: new(s.CurrentStreak),
+			LongestStreak: new(s.LongestStreak),
 		})
 	}
 	return result, nil
@@ -171,10 +171,10 @@ func (r *CheckinStatRepo) page(ctx context.Context, page *commonmodel.PageReq, r
 	result := make([]*model.CheckinStat, 0, len(list))
 	for _, s := range list {
 		result = append(result, &model.CheckinStat{
-			ID:                 s.ID,
-			UserID:             s.UserID,
-			CurrentStreak:      new(s.CurrentStreak),
-			LongestStreak:      new(s.LongestStreak),
+			ID:            s.ID,
+			UserID:        s.UserID,
+			CurrentStreak: new(s.CurrentStreak),
+			LongestStreak: new(s.LongestStreak),
 		})
 	}
 	return result, &commonmodel.PageResp{
@@ -206,10 +206,10 @@ func (r *CheckinStatRepo) upsertStat(ctx context.Context, stat *model.CheckinSta
 			return nil, err
 		}
 		return &model.CheckinStat{
-			ID:                 saved.ID,
-			UserID:             saved.UserID,
-			CurrentStreak:      new(saved.CurrentStreak),
-			LongestStreak:      new(saved.LongestStreak),
+			ID:            saved.ID,
+			UserID:        saved.UserID,
+			CurrentStreak: new(saved.CurrentStreak),
+			LongestStreak: new(saved.LongestStreak),
 		}, nil
 	}
 	if stat.CurrentStreak == nil && stat.LongestStreak == nil {
@@ -217,23 +217,21 @@ func (r *CheckinStatRepo) upsertStat(ctx context.Context, stat *model.CheckinSta
 	}
 	stat.ID = existing.ID
 	tx := r.getClient(ctx)
-	update := tx.CheckinStat.UpdateOneID(stat.ID)
+	update := tx.CheckinStat.Update().Where(checkinstat.IDEQ(stat.ID))
 	if stat.CurrentStreak != nil {
 		update.SetCurrentStreak(*stat.CurrentStreak)
 	}
 	if stat.LongestStreak != nil {
 		update.SetLongestStreak(*stat.LongestStreak)
 	}
-	saved, err := update.Save(ctx)
+	count, err := update.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &model.CheckinStat{
-		ID:                 saved.ID,
-		UserID:             saved.UserID,
-		CurrentStreak:      new(saved.CurrentStreak),
-		LongestStreak:      new(saved.LongestStreak),
-	}, nil
+	if count == 0 {
+		return nil, nil
+	}
+	return r.get(ctx, &repo.CheckinStatGetReq{ID: &stat.ID})
 }
 
 func (r *CheckinStatRepo) getQuery(query *gen.CheckinStatQuery, req *repo.CheckinStatGetReq) *gen.CheckinStatQuery {

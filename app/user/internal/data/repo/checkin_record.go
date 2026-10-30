@@ -204,7 +204,7 @@ func (r *CheckinRecordRepo) upsertRecord(ctx context.Context, record *model.Chec
 		return nil, err
 	}
 	if existing != nil {
-		update := tx.CheckinRecord.UpdateOneID(existing.ID).SetStatus(checkinrecord.Status(record.Status))
+		update := tx.CheckinRecord.Update().Where(checkinrecord.IDEQ(existing.ID)).SetStatus(checkinrecord.Status(record.Status))
 		if record.CheckinPoints != nil {
 			update.SetCheckinPoints(*record.CheckinPoints)
 		}
@@ -214,19 +214,14 @@ func (r *CheckinRecordRepo) upsertRecord(ctx context.Context, record *model.Chec
 		if record.CheckedAt != nil {
 			update.SetCheckedAt(*record.CheckedAt)
 		}
-		saved, err := update.Save(ctx)
+		count, err := update.Save(ctx)
 		if err != nil {
 			return nil, err
 		}
-		return &model.CheckinRecord{
-			ID:            saved.ID,
-			UserID:        saved.UserID,
-			Date:          new(saved.Date),
-			Status:        enum.CheckinStatus(saved.Status),
-			CheckinPoints: new(saved.CheckinPoints),
-			StreakPoints:  new(saved.StreakPoints),
-			CheckedAt:     saved.CheckedAt,
-		}, nil
+		if count == 0 {
+			return nil, nil
+		}
+		return r.get(ctx, &repo.CheckinRecordGetReq{ID: &existing.ID})
 	}
 	create := tx.CheckinRecord.Create().
 		SetUserID(record.UserID).

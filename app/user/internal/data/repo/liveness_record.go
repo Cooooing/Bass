@@ -50,11 +50,18 @@ func (r *LivenessRecordRepo) Save(ctx context.Context, item *model.LivenessRecor
 	return r.model(row), nil
 }
 func (r *LivenessRecordRepo) UpdateRewardStatus(ctx context.Context, id int64, status enum.LivenessRewardStatus, claimedAt *time.Time) (*model.LivenessRecord, error) {
-	update := r.client(ctx).LivenessRecord.UpdateOneID(id).SetRewardStatus(livenessrecord.RewardStatus(status))
+	update := r.client(ctx).LivenessRecord.Update().Where(livenessrecord.IDEQ(id)).SetRewardStatus(livenessrecord.RewardStatus(status))
 	if claimedAt != nil {
 		update.SetClaimedAt(*claimedAt)
 	}
-	row, err := update.Save(ctx)
+	count, err := update.Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if count == 0 {
+		return nil, nil
+	}
+	row, err := r.client(ctx).LivenessRecord.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}

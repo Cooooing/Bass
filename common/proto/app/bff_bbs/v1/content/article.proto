@@ -117,6 +117,22 @@ service ArticleService {
     };
   }
 
+  // 查询当前账号收藏的文章。
+  rpc PageCollected(PageCollectedArticles.Req) returns (PageCollectedArticles.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/collected/page"
+      body: "*"
+    };
+  }
+
+  // 查询当前账号关注的文章。
+  rpc PageWatched(PageWatchedArticles.Req) returns (PageWatchedArticles.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/watched/page"
+      body: "*"
+    };
+  }
+
   // 查询文章详情
   rpc Get(GetArticle.Req) returns (GetArticle.Resp) {
     option (google.api.http) = {
@@ -129,6 +145,13 @@ service ArticleService {
   rpc PageViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/view-history/page"
+      body: "*"
+    };
+  }
+  // 统计当前账号收藏的文章数量。
+  rpc CountCollected(CountCollectedArticles.Req) returns (CountCollectedArticles.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/collect/count"
       body: "*"
     };
   }
@@ -354,6 +377,28 @@ message ListFollowingArticles {
   }
 }
 
+// PageCollectedArticles 分页读取当前账号收藏的文章。
+message PageCollectedArticles {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 可选，分页参数
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页结果
+    repeated ArticleListItem rows = 2; // 收藏文章列表
+  }
+}
+
+// PageWatchedArticles 分页读取当前账号关注的文章。
+message PageWatchedArticles {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 可选，分页参数
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页结果
+    repeated ArticleListItem rows = 2; // 关注文章列表
+  }
+}
+
 message PageArticleViewHistory {
   message Req {
     .common.api.app.common.PageReq page = 1; // 可选，分页参数
@@ -361,6 +406,14 @@ message PageArticleViewHistory {
   message Resp {
     repeated ArticleViewHistoryItem rows = 1;
     .common.api.app.common.PageResp page = 2;
+  }
+}
+
+// CountCollectedArticles 统计当前账号收藏的文章数量。
+message CountCollectedArticles {
+  message Req {}
+  message Resp {
+    int32 count = 1; // 当前收藏文章数量。
   }
 }
 

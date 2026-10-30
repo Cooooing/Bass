@@ -37,6 +37,9 @@ service ContentArticleService {
   rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {} // 打赏文章
   rpc View(ViewArticle.Req) returns (ViewArticle.Resp) {} // 浏览文章
   rpc PageViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {} // 分页查询当前用户浏览历史
+  rpc PageCollected(PageCollectedArticles.Req) returns (PageCollectedArticles.Resp) {} // 分页查询当前用户收藏的公开文章
+  rpc PageWatched(PageWatchedArticles.Req) returns (PageWatchedArticles.Resp) {} // 分页查询当前用户关注的公开文章
+  rpc CountCollected(CountCollectedArticles.Req) returns (CountCollectedArticles.Resp) {} // 统计账号当前收藏的文章数量。
   rpc FlushViews(FlushArticleViews.Req) returns (FlushArticleViews.Resp) {} // 刷新浏览量
   rpc MapViewerActionStates(MapArticleViewerActionStates.Req) returns (MapArticleViewerActionStates.Resp) {} // 查询互动状态
   rpc ListWatchers(ListArticleWatchers.Req) returns (ListArticleWatchers.Resp) {} // 查询文章关注账号
@@ -281,6 +284,32 @@ message PageArticleViewHistory {
   }
 }
 
+// PageCollectedArticles 分页读取当前账号仍可公开展示的收藏文章。
+message PageCollectedArticles {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
+    ContentAccess access = 2; // 当前用户访问上下文
+    repeated int64 excluded_author_ids = 3; // 读取侧排除的作者账号 ID
+  }
+  message Resp {
+    repeated Article rows = 1; // 按收藏时间倒序的文章
+    .common.api.app.common.PageResp page = 2; // 分页结果
+  }
+}
+
+// PageWatchedArticles 分页读取当前账号仍可公开展示的关注文章。
+message PageWatchedArticles {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
+    ContentAccess access = 2; // 当前用户访问上下文
+    repeated int64 excluded_author_ids = 3; // 读取侧排除的作者账号 ID
+  }
+  message Resp {
+    repeated Article rows = 1; // 按关注时间倒序的文章
+    .common.api.app.common.PageResp page = 2; // 分页结果
+  }
+}
+
 message ArticleViewHistoryItem {
   Article article = 1; // 当前仍可展示的文章
   google.protobuf.Timestamp viewed_at = 2; // 最近浏览时间
@@ -292,6 +321,16 @@ message FlushArticleViews {
   }
   message Resp {
     int32 flushed = 1; // 已刷新文章数
+  }
+}
+
+// CountCollectedArticles 统计账号当前有效的文章收藏数量。
+message CountCollectedArticles {
+  message Req {
+    int64 user_id = 1; // 待统计账号 ID。
+  }
+  message Resp {
+    int32 count = 1; // 当前有效收藏数量。
   }
 }
 

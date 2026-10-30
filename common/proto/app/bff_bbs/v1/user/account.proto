@@ -90,6 +90,13 @@ service AccountService {
       body: "*"
     };
   }
+  // 查询当前账号的积分余额和累计收支。
+  rpc GetEconomyAccount(GetAccountEconomy.Req) returns (GetAccountEconomy.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/economy/get"
+      body: "*"
+    };
+  }
   // 生成默认账号头像
   rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {
     option (google.api.http) = {

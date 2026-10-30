@@ -89,6 +89,39 @@ func (u *ContentArticleUsecase) ListFollowingArticles(ctx context.Context, userI
 	return u.ListArticles(ctx, &ListArticlesReq{UserID: userID, Page: page, Query: &ArticleQuery{AuthorIDs: authorIDs}})
 }
 
+// PageCollectedArticles 返回当前账号收藏的文章。
+func (u *ContentArticleUsecase) PageCollectedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq) (*ListArticlesResp, error) {
+	return u.pageActionArticles(ctx, userID, page, u.contentArticleClient.PageCollectedArticles)
+}
+
+// PageWatchedArticles 返回当前账号关注的文章。
+func (u *ContentArticleUsecase) PageWatchedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq) (*ListArticlesResp, error) {
+	return u.pageActionArticles(ctx, userID, page, u.contentArticleClient.PageWatchedArticles)
+}
+
+func (u *ContentArticleUsecase) pageActionArticles(ctx context.Context, userID int64, page *commonmodel.PageReq, query func(context.Context, int64, *commonmodel.PageReq, []int64) (*repo.ListArticlesResp, error)) (*ListArticlesResp, error) {
+	if userID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	excludedAuthorIDs, err := u.relationClient.ListBlockedCounterparts(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	result, err := query(ctx, userID, page, excludedAuthorIDs)
+	if err != nil {
+		return nil, err
+	}
+	return &ListArticlesResp{Rows: result.Rows, Page: result.Page}, nil
+}
+
+// CountCollectedArticles 返回当前账号收藏的文章数量。
+func (u *ContentArticleUsecase) CountCollectedArticles(ctx context.Context, userID int64) (int32, error) {
+	if userID <= 0 {
+		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	return u.contentArticleClient.CountCollectedArticles(ctx, userID)
+}
+
 type ContentArticleSave struct {
 	Title         string
 	Content       string
@@ -153,10 +186,10 @@ func (u *ContentArticleUsecase) EnterArticleLottery(ctx context.Context, req *En
 }
 
 type PublishArticleReq struct {
-	UserID          int64
-	ArticleID       int64
-	ScheduledAt     *time.Time
-	IP              string
+	UserID      int64
+	ArticleID   int64
+	ScheduledAt *time.Time
+	IP          string
 }
 
 func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *PublishArticleReq) error {
@@ -552,8 +585,8 @@ type LikeArticleReq struct {
 	Active    bool
 }
 type ThankArticleReq struct {
-	UserID          int64
-	ArticleID       int64
+	UserID    int64
+	ArticleID int64
 }
 type CollectArticleReq struct {
 	UserID    int64
@@ -567,8 +600,8 @@ type WatchArticleReq struct {
 	Active    bool
 }
 type RewardArticleReq struct {
-	UserID          int64
-	ArticleID       int64
+	UserID    int64
+	ArticleID int64
 }
 
 func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error) {

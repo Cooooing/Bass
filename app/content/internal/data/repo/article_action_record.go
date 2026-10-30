@@ -12,6 +12,7 @@ import (
 	"content/internal/data/gen/articleactionrecord"
 	"content/internal/enum"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 )
 
@@ -159,6 +160,9 @@ func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleAct
 	total, err := countQuery.Count(ctx)
 	if err != nil {
 		return nil, err
+	}
+	if req.OrderByCreatedAtDesc {
+		query = query.Order(articleactionrecord.ByCreatedAt(sql.OrderDesc()))
 	}
 	list, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {

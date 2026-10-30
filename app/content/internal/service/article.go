@@ -564,6 +564,76 @@ func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Req
 	return &v1.CollectArticle_Resp{Collected: collected}, err
 }
 
+func (s *ArticleService) CountCollected(ctx context.Context, req *v1.CountCollectedArticles_Req) (*v1.CountCollectedArticles_Resp, error) {
+	count, err := s.articleUsecase.CountCollected(ctx, req.GetUserId())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.CountCollectedArticles_Resp{Count: count}, nil
+}
+
+func (s *ArticleService) PageCollected(ctx context.Context, req *v1.PageCollectedArticles_Req) (*v1.PageCollectedArticles_Resp, error) {
+	access := &model.ContentAccess{Scope: enum.ContentAccessScopeUser}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	result, err := s.articleUsecase.PageCollected(ctx, access, commonmodel.PageReqFromProto(req.GetPage()), req.GetExcludedAuthorIds())
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*v1.Article, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		if row != nil {
+			rows = append(rows, s.articleViewHistoryArticle(row))
+		}
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = result.Page.ToProto()
+	}
+	return &v1.PageCollectedArticles_Resp{Rows: rows, Page: page}, nil
+}
+
+func (s *ArticleService) PageWatched(ctx context.Context, req *v1.PageWatchedArticles_Req) (*v1.PageWatchedArticles_Resp, error) {
+	access := &model.ContentAccess{Scope: enum.ContentAccessScopeUser}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	result, err := s.articleUsecase.PageWatched(ctx, access, commonmodel.PageReqFromProto(req.GetPage()), req.GetExcludedAuthorIds())
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*v1.Article, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		if row != nil {
+			rows = append(rows, s.articleViewHistoryArticle(row))
+		}
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = result.Page.ToProto()
+	}
+	return &v1.PageWatchedArticles_Resp{Rows: rows, Page: page}, nil
+}
+
 func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Req) (*v1.WatchArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {

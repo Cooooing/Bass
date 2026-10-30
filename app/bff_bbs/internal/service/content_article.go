@@ -228,6 +228,46 @@ func (s *ContentArticleService) ListFollowing(ctx context.Context, req *bbsconte
 	return &bbscontentv1.ListFollowingArticles_Resp{Page: page, Rows: rows}, nil
 }
 
+func (s *ContentArticleService) PageCollected(ctx context.Context, req *bbscontentv1.PageCollectedArticles_Req) (*bbscontentv1.PageCollectedArticles_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	result, err := s.contentArticleUsecase.PageCollectedArticles(ctx, user.ID, commonmodel.PageReqFromProto(req.GetPage()))
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbscontentv1.ArticleListItem, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		rows = append(rows, s.articleListItem(row))
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = result.Page.ToProto()
+	}
+	return &bbscontentv1.PageCollectedArticles_Resp{Rows: rows, Page: page}, nil
+}
+
+func (s *ContentArticleService) PageWatched(ctx context.Context, req *bbscontentv1.PageWatchedArticles_Req) (*bbscontentv1.PageWatchedArticles_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	result, err := s.contentArticleUsecase.PageWatchedArticles(ctx, user.ID, commonmodel.PageReqFromProto(req.GetPage()))
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbscontentv1.ArticleListItem, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		rows = append(rows, s.articleListItem(row))
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = result.Page.ToProto()
+	}
+	return &bbscontentv1.PageWatchedArticles_Resp{Rows: rows, Page: page}, nil
+}
+
 func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
 	var userID int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
@@ -302,6 +342,18 @@ func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.C
 	}
 	v, err := s.contentArticleUsecase.CollectArticle(ctx, &usecase.CollectArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Active: req.GetActive()})
 	return &bbscontentv1.CollectArticle_Resp{Collected: v}, err
+}
+
+func (s *ContentArticleService) CountCollected(ctx context.Context, _ *bbscontentv1.CountCollectedArticles_Req) (*bbscontentv1.CountCollectedArticles_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	count, err := s.contentArticleUsecase.CountCollectedArticles(ctx, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	return &bbscontentv1.CountCollectedArticles_Resp{Count: count}, nil
 }
 
 func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.WatchArticle_Req) (*bbscontentv1.WatchArticle_Resp, error) {

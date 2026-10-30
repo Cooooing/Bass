@@ -95,7 +95,7 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
 	publishReq := &contentv1.PublishArticle_Req{
-		ArticleId:       req.ArticleID,
+		ArticleId: req.ArticleID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
 			ActorUserId: new(req.UserID),
@@ -268,6 +268,46 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 		Page: page,
 		Rows: rows,
 	}, nil
+}
+
+func (r *ContentArticleClient) PageCollectedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*repo.ListArticlesResp, error) {
+	pageReq := commonmodel.NormalizePage(page).ToProto()
+	reply, err := r.contentClient.Article.PageCollected(ctx, &contentv1.PageCollectedArticles_Req{
+		Page: pageReq,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(userID),
+		},
+		ExcludedAuthorIds: excludedAuthorIDs,
+	})
+	if err != nil {
+		return nil, err
+	}
+	rows, err := r.articleListItems(ctx, reply.GetRows(), userID, excludedAuthorIDs)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ListArticlesResp{Rows: rows, Page: commonmodel.PageRespFromProto(reply.GetPage())}, nil
+}
+
+func (r *ContentArticleClient) PageWatchedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*repo.ListArticlesResp, error) {
+	pageReq := commonmodel.NormalizePage(page).ToProto()
+	reply, err := r.contentClient.Article.PageWatched(ctx, &contentv1.PageWatchedArticles_Req{
+		Page: pageReq,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(userID),
+		},
+		ExcludedAuthorIds: excludedAuthorIDs,
+	})
+	if err != nil {
+		return nil, err
+	}
+	rows, err := r.articleListItems(ctx, reply.GetRows(), userID, excludedAuthorIDs)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ListArticlesResp{Rows: rows, Page: commonmodel.PageRespFromProto(reply.GetPage())}, nil
 }
 
 func (r *ContentArticleClient) articleListItems(
@@ -511,8 +551,8 @@ func (r *ContentArticleClient) LikeArticle(ctx context.Context, req *repo.LikeAr
 
 func (r *ContentArticleClient) ThankArticle(ctx context.Context, req *repo.ThankArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Thank(ctx, &contentv1.ThankArticle_Req{
-		ArticleId:       req.ArticleID,
-		Thanked:         true,
+		ArticleId: req.ArticleID,
+		Thanked:   true,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(req.UserID),
@@ -539,6 +579,14 @@ func (r *ContentArticleClient) CollectArticle(ctx context.Context, req *repo.Col
 	return reply.GetCollected(), nil
 }
 
+func (r *ContentArticleClient) CountCollectedArticles(ctx context.Context, userID int64) (int32, error) {
+	response, err := r.contentClient.Article.CountCollected(ctx, &contentv1.CountCollectedArticles_Req{UserId: userID})
+	if err != nil {
+		return 0, err
+	}
+	return response.GetCount(), nil
+}
+
 func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.WatchArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Watch(ctx, &contentv1.WatchArticle_Req{
 		ArticleId: req.ArticleID,
@@ -556,7 +604,7 @@ func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.Watch
 
 func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
-		ArticleId:       req.ArticleID,
+		ArticleId: req.ArticleID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(req.UserID),

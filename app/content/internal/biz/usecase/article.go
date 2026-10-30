@@ -265,6 +265,74 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 	return d.changeInteraction(ctx, interaction)
 }
 
+// CountCollected 返回账号当前有效的文章收藏数量。
+func (d *ArticleUsecase) CountCollected(ctx context.Context, userID int64) (int32, error) {
+	if userID <= 0 {
+		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	action := enum.ArticleActionCollect
+	status := enum.ContentActionStatusPublished
+	count, err := d.actionRecordRepo.Count(ctx, &repo.ArticleActionRecordReq{UserID: &userID, Type: &action, Status: &status})
+	return int32(count), err
+}
+
+// PageCollected 返回当前账号仍可公开展示的收藏文章。
+func (d *ArticleUsecase) PageCollected(ctx context.Context, access *model.ContentAccess, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ArticlePageResp, error) {
+	return d.pageActionArticles(ctx, access, page, excludedAuthorIDs, enum.ArticleActionCollect)
+}
+
+// PageWatched 返回当前账号仍可公开展示的关注文章。
+func (d *ArticleUsecase) PageWatched(ctx context.Context, access *model.ContentAccess, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ArticlePageResp, error) {
+	return d.pageActionArticles(ctx, access, page, excludedAuthorIDs, enum.ArticleActionWatch)
+}
+
+func (d *ArticleUsecase) pageActionArticles(ctx context.Context, access *model.ContentAccess, page *commonmodel.PageReq, excludedAuthorIDs []int64, action enum.ArticleAction) (*ArticlePageResp, error) {
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	if access.Scope != enum.ContentAccessScopeUser {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+	}
+	status := enum.ContentActionStatusPublished
+	actions, err := d.actionRecordRepo.Page(ctx, &repo.ArticleActionRecordReq{
+		Page:                 page,
+		OrderByCreatedAtDesc: true,
+		UserID:               new(access.ActorUserID),
+		Type:                 &action,
+		Status:               &status,
+	})
+	if err != nil {
+		return nil, err
+	}
+	articleIDs := make([]int64, 0, len(actions.Rows))
+	for _, record := range actions.Rows {
+		if record != nil && record.ArticleID > 0 {
+			articleIDs = append(articleIDs, record.ArticleID)
+		}
+	}
+	publishStatus := enum.ArticlePublishStatusPublished
+	visibility := enum.ArticleVisibilityPublic
+	restriction := enum.ContentRestrictionNone
+	articles, err := d.articleRepo.Map(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{
+		ArticleIDs:        articleIDs,
+		PublishStatus:     &publishStatus,
+		Visibility:        &visibility,
+		Restriction:       &restriction,
+		ExcludedAuthorIDs: excludedAuthorIDs,
+	}})
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*model.Article, 0, len(actions.Rows))
+	for _, record := range actions.Rows {
+		if record != nil && articles[record.ArticleID] != nil {
+			rows = append(rows, articles[record.ArticleID])
+		}
+	}
+	return &ArticlePageResp{Rows: rows, Page: actions.Page}, nil
+}
+
 type ArticleWatchReq struct {
 	Access    *model.ContentAccess
 	ArticleID int64

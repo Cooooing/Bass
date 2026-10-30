@@ -147,14 +147,15 @@ type ArticleActionRecordPageResp struct {
 }
 
 type ArticleActionRecordReq struct {
-	Page       *commonmodel.PageReq
-	ID         *int64
-	IDs        []int64
-	ArticleID  *int64
-	ArticleIDs []int64
-	UserID     *int64
-	UserIDs    []int64
-	Type       *enum.ArticleAction
-	Types      []enum.ArticleAction
-	Status     *enum.ContentActionStatus
+	Page                 *commonmodel.PageReq
+	OrderByCreatedAtDesc bool
+	ID                   *int64
+	IDs                  []int64
+	ArticleID            *int64
+	ArticleIDs           []int64
+	UserID               *int64
+	UserIDs              []int64
+	Type                 *enum.ArticleAction
+	Types                []enum.ArticleAction
+	Status               *enum.ContentActionStatus
 }

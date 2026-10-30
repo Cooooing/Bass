@@ -48,10 +48,10 @@ type UpdateDraftArticleReq struct {
 }
 
 type PublishArticleReq struct {
-	UserID          int64
-	ArticleID       int64
-	ScheduledAt     *time.Time
-	City            *string
+	UserID      int64
+	ArticleID   int64
+	ScheduledAt *time.Time
+	City        *string
 }
 
 type CancelPublishArticleReq struct {
@@ -158,8 +158,8 @@ type LikeArticleReq struct {
 }
 
 type ThankArticleReq struct {
-	UserID          int64
-	ArticleID       int64
+	UserID    int64
+	ArticleID int64
 }
 
 type CollectArticleReq struct {
@@ -175,8 +175,8 @@ type WatchArticleReq struct {
 }
 
 type RewardArticleReq struct {
-	UserID          int64
-	ArticleID       int64
+	UserID    int64
+	ArticleID int64
 }
 
 type ContentArticleClient interface {
@@ -191,6 +191,8 @@ type ContentArticleClient interface {
 	VoteArticlePoll(ctx context.Context, req *VoteArticlePollReq) error
 	EnterArticleLottery(ctx context.Context, req *EnterArticleLotteryReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
+	PageCollectedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ListArticlesResp, error)
+	PageWatchedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ListArticlesResp, error)
 	SearchArticles(ctx context.Context, req *SearchArticlesReq) (*SearchArticlesResp, error)
 	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ArticleViewHistoryPageResp, error)
 	GetArticle(ctx context.Context, req *GetArticleReq) (*model.ArticleDetail, error)
@@ -198,6 +200,7 @@ type ContentArticleClient interface {
 	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)
 	ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error)
 	CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error)
+	CountCollectedArticles(ctx context.Context, userID int64) (int32, error)
 	WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error)
 	RewardArticle(ctx context.Context, req *RewardArticleReq) (bool, error)
 }

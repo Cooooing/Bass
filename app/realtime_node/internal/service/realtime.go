@@ -80,11 +80,17 @@ func (s *RealtimeService) HandleSSE(writer http.ResponseWriter, request *http.Re
 				return
 			}
 			flusher.Flush()
+			if err := s.realtime.RenewConnection(connectionCtx, userID, connectionID); err != nil {
+				return
+			}
 		case <-ticker.C:
 			if _, err := fmt.Fprint(writer, ":keepalive\n\n"); err != nil {
 				return
 			}
 			flusher.Flush()
+			if err := s.realtime.RenewConnection(connectionCtx, userID, connectionID); err != nil {
+				return
+			}
 		}
 	}
 }

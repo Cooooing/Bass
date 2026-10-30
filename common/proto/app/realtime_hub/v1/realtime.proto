@@ -23,6 +23,7 @@ message NodeToHub {
     BindConnection bind_connection = 2; // 绑定客户端连接。
     UnbindConnection unbind_connection = 3; // 解绑客户端连接。
     Heartbeat heartbeat = 4; // 续期 node 在线租约。
+    RenewConnection renew_connection = 5; // 续期客户端连接租约。
   }
 }
 
@@ -39,6 +40,12 @@ message BindConnection {
 }
 
 message UnbindConnection {
+  string realm = 1; // 实时域。
+  int64 user_id = 2; // 账号 ID。
+  string connection_id = 3; // node 内客户端连接标识。
+}
+
+message RenewConnection {
   string realm = 1; // 实时域。
   int64 user_id = 2; // 账号 ID。
   string connection_id = 3; // node 内客户端连接标识。

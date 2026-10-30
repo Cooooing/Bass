@@ -124,6 +124,18 @@ func (u *RealtimeUsecase) Disconnect(userID int64, connectionID string) {
 	}
 }
 
+// RenewConnection 续期仍可写入 SSE 的客户端连接租约。
+func (u *RealtimeUsecase) RenewConnection(ctx context.Context, userID int64, connectionID string) error {
+	u.mu.RLock()
+	connection := u.byID[connectionID]
+	u.mu.RUnlock()
+	if connection == nil || connection.userID != userID {
+		return fmt.Errorf("realtime connection is unavailable")
+	}
+	renew := &realtimehubv1.NodeToHub{Payload: &realtimehubv1.NodeToHub_RenewConnection{RenewConnection: &realtimehubv1.RenewConnection{Realm: u.realm, UserId: userID, ConnectionId: connectionID}}}
+	return u.enqueue(ctx, renew)
+}
+
 func (u *RealtimeUsecase) maintainStream(ctx context.Context) {
 	for ctx.Err() == nil {
 		if err := u.runStream(ctx); err != nil && ctx.Err() == nil {

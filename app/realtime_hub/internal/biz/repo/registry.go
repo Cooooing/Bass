@@ -12,6 +12,7 @@ type Registry interface {
 	RenewNode(ctx context.Context, nodeID string, group enum.NodeGroup, realms []string) (bool, error)
 	RemoveNode(ctx context.Context, nodeID string, realms []string) error
 	BindConnection(ctx context.Context, nodeID, realm string, userID int64, connectionID string) ([]model.EvictedConnection, error)
+	RenewConnection(ctx context.Context, nodeID, realm string, userID int64, connectionID string) error
 	UnbindConnection(ctx context.Context, nodeID, realm string, userID int64, connectionID string) error
 	UserNodes(ctx context.Context, realm string, userID int64) ([]string, error)
 	QueryOnline(ctx context.Context, realm string, userIDs []int64) (map[int64]bool, error)

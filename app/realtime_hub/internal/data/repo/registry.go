@@ -19,6 +19,8 @@ type Registry struct {
 	redis *client.RedisClient
 }
 
+const connectionLease = 30 * time.Second
+
 func NewRegistry(redis *client.RedisClient) bizrepo.Registry {
 	return &Registry{redis: redis}
 }
@@ -161,6 +163,26 @@ return 1`, []string{r.userConnectionsKey(realm, userID), r.userConnectionNodesKe
 	return err
 }
 
+func (r *Registry) RenewConnection(ctx context.Context, nodeID, realm string, userID int64, connectionID string) error {
+	_, err := r.redis.Client.Eval(ctx, `
+if redis.call('EXISTS', KEYS[1]) == 0 then
+  return 0
+end
+if not redis.call('ZSCORE', KEYS[2], ARGV[1]) then
+  return 0
+end
+if redis.call('HGET', KEYS[3], ARGV[1]) ~= ARGV[2] then
+  return 0
+end
+if redis.call('HGET', KEYS[4], ARGV[1]) ~= ARGV[3] then
+  return 0
+end
+redis.call('ZADD', KEYS[2], 'XX', ARGV[4], ARGV[1])
+redis.call('ZADD', KEYS[5], ARGV[4], ARGV[3])
+return 1`, []string{r.nodeKey(realm, nodeID), r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.nodeConnectionsKey(realm, nodeID), r.onlineUsersKey(realm)}, connectionID, nodeID, strconv.FormatInt(userID, 10), strconv.FormatInt(time.Now().UnixMilli(), 10)).Int()
+	return err
+}
+
 func (r *Registry) UserNodes(ctx context.Context, realm string, userID int64) ([]string, error) {
 	values, err := r.redis.Client.Eval(ctx, `
 local nodes = {}
@@ -202,17 +224,9 @@ func (r *Registry) QueryOnline(ctx context.Context, realm string, userIDs []int6
 	if len(userIDs) == 0 {
 		return map[int64]bool{}, nil
 	}
-	pipe := r.redis.Client.Pipeline()
-	commands := make([]*redis.IntCmd, 0, len(userIDs))
-	for _, userID := range userIDs {
-		commands = append(commands, pipe.ZCard(ctx, r.userConnectionsKey(realm, userID)))
-	}
-	if _, err := pipe.Exec(ctx); err != nil {
-		return nil, err
-	}
 	statusesByUserID := make(map[int64]bool, len(userIDs))
-	for index, userID := range userIDs {
-		connections, err := commands[index].Result()
+	for _, userID := range userIDs {
+		connections, err := r.activeConnectionCount(ctx, realm, userID)
 		if err != nil {
 			return nil, err
 		}
@@ -232,9 +246,41 @@ func (r *Registry) ListOnlineUsers(ctx context.Context, realm string) ([]int64, 
 		if parseErr != nil || userID <= 0 {
 			continue
 		}
-		result = append(result, userID)
+		connections, countErr := r.activeConnectionCount(ctx, realm, userID)
+		if countErr != nil {
+			return nil, countErr
+		}
+		if connections > 0 {
+			result = append(result, userID)
+		}
 	}
 	return result, nil
+}
+
+// activeConnectionCount 清理失效连接，并返回账号的有效连接数。
+func (r *Registry) activeConnectionCount(ctx context.Context, realm string, userID int64) (int64, error) {
+	connections, err := r.redis.Client.Eval(ctx, `
+local connectionIDs = redis.call('ZRANGE', KEYS[1], 0, -1)
+for _, connectionID in ipairs(connectionIDs) do
+  local nodeID = redis.call('HGET', KEYS[2], connectionID)
+  local connectedAt = redis.call('ZSCORE', KEYS[1], connectionID)
+  if not nodeID or not connectedAt or tonumber(ARGV[3]) - tonumber(connectedAt) > tonumber(ARGV[4]) or redis.call('EXISTS', ARGV[1] .. '{' .. nodeID .. '}:meta') == 0 then
+    redis.call('ZREM', KEYS[1], connectionID)
+    redis.call('HDEL', KEYS[2], connectionID)
+    if nodeID then
+      redis.call('HDEL', ARGV[1] .. '{' .. nodeID .. '}:connections', connectionID)
+    end
+  end
+end
+local count = redis.call('ZCARD', KEYS[1])
+if count == 0 then
+  redis.call('ZREM', KEYS[3], ARGV[2])
+end
+return count`, []string{r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.onlineUsersKey(realm)}, r.nodePrefix(realm), strconv.FormatInt(userID, 10), strconv.FormatInt(time.Now().UnixMilli(), 10), strconv.FormatInt(connectionLease.Milliseconds(), 10)).Int64()
+	if err != nil {
+		return 0, err
+	}
+	return connections, nil
 }
 
 func (r *Registry) IssueTicket(ctx context.Context, realm, ticket string, userID int64) error {

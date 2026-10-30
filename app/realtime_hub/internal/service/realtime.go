@@ -111,6 +111,9 @@ func (s *RealtimeService) handleNodeMessage(ctx context.Context, nodeID string, 
 	if unbind := message.GetUnbindConnection(); unbind != nil {
 		return s.realtime.UnbindConnection(ctx, nodeID, unbind.GetRealm(), unbind.GetUserId(), unbind.GetConnectionId())
 	}
+	if renew := message.GetRenewConnection(); renew != nil {
+		return s.realtime.RenewConnection(ctx, nodeID, renew.GetRealm(), renew.GetUserId(), renew.GetConnectionId())
+	}
 	if message.GetHeartbeat() != nil {
 		return s.realtime.RenewSession(ctx, nodeID, group, realms)
 	}

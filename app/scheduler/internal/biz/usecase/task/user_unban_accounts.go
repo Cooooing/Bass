@@ -57,16 +57,22 @@ func (t *UserUnbanAccounts) DefaultDelayedTasks() []*DefaultDelayedTask {
 	}
 }
 
-func (t *UserUnbanAccounts) Execute(ctx context.Context, execution Execution) error {
+func (t *UserUnbanAccounts) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.UnbanAccountsTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	if len(data.GetUserIds()) == 0 {
-		return fmt.Errorf("invalid user unban payload")
+		return nil, fmt.Errorf("invalid user unban payload")
 	}
-	_, err := t.userClient.Auth.UnbanAccounts(ctx, &userv1.UnbanAccounts_Req{
+	response, err := t.userClient.Auth.UnbanAccounts(ctx, &userv1.UnbanAccounts_Req{
 		UserIds: data.GetUserIds(),
 	})
-	return err
+	if err != nil || response == nil {
+		if err == nil {
+			err = fmt.Errorf("user unban returned an empty response")
+		}
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("user_count=%d", len(data.GetUserIds()))}, nil
 }

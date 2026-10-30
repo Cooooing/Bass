@@ -6,6 +6,7 @@ import (
 	contentv1 "common/proto/gen/content/v1"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
+	"fmt"
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
@@ -61,15 +62,18 @@ func (t *ContentFlushArticleViews) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return nil
 }
 
-func (t *ContentFlushArticleViews) Execute(ctx context.Context, execution Execution) error {
+func (t *ContentFlushArticleViews) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	limit := t.defaultLimit
 	data := &schedulerv1.FlushArticleViewsTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	if data.GetLimit() > 0 {
 		limit = data.GetLimit()
 	}
-	_, err := t.contentClient.Article.FlushViews(ctx, &contentv1.FlushArticleViews_Req{Limit: limit})
-	return err
+	response, err := t.contentClient.Article.FlushViews(ctx, &contentv1.FlushArticleViews_Req{Limit: limit})
+	if err != nil {
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("flushed=%d", response.GetFlushed())}, nil
 }

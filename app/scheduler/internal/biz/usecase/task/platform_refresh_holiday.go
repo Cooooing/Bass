@@ -6,6 +6,7 @@ import (
 	platformv1 "common/proto/gen/platform/v1"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
+	"fmt"
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
@@ -61,10 +62,10 @@ func (t *PlatformRefreshHoliday) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return nil
 }
 
-func (t *PlatformRefreshHoliday) Execute(ctx context.Context, execution Execution) error {
+func (t *PlatformRefreshHoliday) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.RefreshHolidayTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	start := data.GetStart()
 	end := data.GetEnd()
@@ -74,6 +75,12 @@ func (t *PlatformRefreshHoliday) Execute(ctx context.Context, execution Executio
 		start = timestamppb.New(begin)
 		end = timestamppb.New(begin.AddDate(0, 0, 2))
 	}
-	_, err := t.platformClient.Holiday.RefreshHoliday(ctx, &platformv1.RefreshHoliday_Req{Start: start, End: end})
-	return err
+	response, err := t.platformClient.Holiday.RefreshHoliday(ctx, &platformv1.RefreshHoliday_Req{Start: start, End: end})
+	if err != nil || response == nil {
+		if err == nil {
+			err = fmt.Errorf("holiday refresh returned an empty response")
+		}
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("start=%s end=%s", start.AsTime().Format(time.DateOnly), end.AsTime().Format(time.DateOnly))}, nil
 }

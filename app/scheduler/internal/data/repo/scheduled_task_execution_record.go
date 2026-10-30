@@ -6,7 +6,6 @@ import (
 	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"strings"
 	"time"
 
 	"scheduler/internal/biz/model"
@@ -125,10 +124,19 @@ func (r *ScheduledTaskExecutionRecordRepo) Create(
 		SetLastError(record.LastError).
 		SetTraceID(record.TraceID).
 		Save(ctx)
-	if gen.IsConstraintError(err) && strings.Contains(err.Error(), "scheduler_scheduled_task_execution_records_task_schedule_key_unique") {
-		return &bizrepo.ScheduledTaskExecutionRecordCreateResp{Conflict: true}, nil
-	}
 	if err != nil {
+		if !gen.IsConstraintError(err) {
+			return nil, err
+		}
+		triggerType := record.TriggerType
+		existing, getErr := r.Get(ctx, &bizrepo.ScheduledTaskExecutionRecordGetReq{
+			ScheduledTaskID: &record.ScheduledTaskID,
+			ScheduleKey:     &record.ScheduleKey,
+			TriggerType:     &triggerType,
+		})
+		if getErr == nil && existing != nil {
+			return &bizrepo.ScheduledTaskExecutionRecordCreateResp{Conflict: true, Row: existing}, nil
+		}
 		return nil, err
 	}
 	return &bizrepo.ScheduledTaskExecutionRecordCreateResp{Row: r.model(created), Created: true}, nil

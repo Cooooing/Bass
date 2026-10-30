@@ -38,14 +38,20 @@ func (t *ContentDrawArticleLotteries) DefaultDelayedTasks() []*DefaultDelayedTas
 	return []*DefaultDelayedTask{{Title: t.Title(), Description: t.Description(), Enabled: true, Timeout: 30 * time.Second, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
-func (t *ContentDrawArticleLotteries) Execute(ctx context.Context, execution Execution) error {
+func (t *ContentDrawArticleLotteries) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.DrawArticleLotteryTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	if data.GetArticleId() <= 0 || data.GetDrawAt() == nil || !data.GetDrawAt().IsValid() {
-		return fmt.Errorf("invalid content article lottery draw payload")
+		return nil, fmt.Errorf("invalid content article lottery draw payload")
 	}
-	_, err := t.contentClient.Article.DrawLottery(ctx, &contentv1.DrawArticleLottery_Req{ArticleId: data.GetArticleId(), DrawAt: timestamppb.New(data.GetDrawAt().AsTime())})
-	return err
+	response, err := t.contentClient.Article.DrawLottery(ctx, &contentv1.DrawArticleLottery_Req{ArticleId: data.GetArticleId(), DrawAt: timestamppb.New(data.GetDrawAt().AsTime())})
+	if err != nil || response == nil {
+		if err == nil {
+			err = fmt.Errorf("article lottery draw returned an empty response")
+		}
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("article_id=%d", data.GetArticleId())}, nil
 }

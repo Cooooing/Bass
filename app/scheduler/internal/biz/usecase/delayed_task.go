@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"common/pkg/apperror"
+	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -540,7 +541,7 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 		u.runningMu.Unlock()
 	}()
 	startedAt := time.Now()
-	err = task.Execute(execCtx, taskimpl.Execution{Payload: record.Payload, ScheduledAt: record.ScheduledAt})
+	result, err := task.Execute(execCtx, taskimpl.Execution{Payload: record.Payload, ScheduledAt: record.ScheduledAt})
 	finishedAt := time.Now()
 	duration := finishedAt.Sub(startedAt)
 	statusValue := schedulerenum.TaskExecutionStatusSuccess
@@ -565,7 +566,7 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 	if len(lastError) > 2048 {
 		lastError = lastError[:2048]
 	}
-	return u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
+	response, markErr := u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
 		ID:         record.ID,
 		WorkerID:   record.WorkerID,
 		Attempt:    record.Attempt,
@@ -574,6 +575,13 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 		Duration:   duration,
 		LastError:  lastError,
 	})
+	if markErr != nil {
+		return nil, markErr
+	}
+	if statusValue == schedulerenum.TaskExecutionStatusSuccess && result != nil {
+		u.logger.InfoContext(ctx, "delayed task completed", "handler_name", taskConfig.HandlerName, constant.LogFieldExecutionID, record.ID, "result", result.Summary)
+	}
+	return response, nil
 }
 
 type DelayedTaskExecutionRecordPageReq struct {

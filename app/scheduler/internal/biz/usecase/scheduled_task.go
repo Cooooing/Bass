@@ -484,9 +484,10 @@ func (u *ScheduledTaskUsecase) executeScheduledRecord(
 		u.runningCancelMu.Unlock()
 	}()
 	currentTask, ok := u.tasks[task.HandlerName.String()]
+	var result *taskimpl.Result
 	var err error
 	if ok {
-		err = currentTask.Execute(execCtx, taskimpl.Execution{Payload: record.Payload, ScheduledAt: record.ScheduledAt})
+		result, err = currentTask.Execute(execCtx, taskimpl.Execution{Payload: record.Payload, ScheduledAt: record.ScheduledAt})
 	} else {
 		err = fmt.Errorf("unknown scheduler task handler: %s", task.HandlerName)
 	}
@@ -535,6 +536,9 @@ func (u *ScheduledTaskUsecase) executeScheduledRecord(
 	}
 	if resp == nil {
 		return nil, nil
+	}
+	if statusValue == schedulerenum.TaskExecutionStatusSuccess && result != nil {
+		u.logger.InfoContext(ctx, "scheduled task completed", "handler_name", task.HandlerName, constant.LogFieldExecutionID, record.ID, "result", result.Summary)
 	}
 	return resp.Row, nil
 }

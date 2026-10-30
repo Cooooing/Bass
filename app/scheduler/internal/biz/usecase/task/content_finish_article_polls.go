@@ -38,14 +38,20 @@ func (t *ContentFinishArticlePolls) DefaultDelayedTasks() []*DefaultDelayedTask 
 	return []*DefaultDelayedTask{{Title: t.Title(), Description: t.Description(), Enabled: true, Timeout: 30 * time.Second, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
-func (t *ContentFinishArticlePolls) Execute(ctx context.Context, execution Execution) error {
+func (t *ContentFinishArticlePolls) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.FinishArticlePollTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	if data.GetArticleId() <= 0 || data.GetEndsAt() == nil || !data.GetEndsAt().IsValid() {
-		return fmt.Errorf("invalid content article poll finish payload")
+		return nil, fmt.Errorf("invalid content article poll finish payload")
 	}
-	_, err := t.contentClient.Article.FinishPoll(ctx, &contentv1.FinishArticlePoll_Req{ArticleId: data.GetArticleId(), EndsAt: timestamppb.New(data.GetEndsAt().AsTime())})
-	return err
+	response, err := t.contentClient.Article.FinishPoll(ctx, &contentv1.FinishArticlePoll_Req{ArticleId: data.GetArticleId(), EndsAt: timestamppb.New(data.GetEndsAt().AsTime())})
+	if err != nil || response == nil {
+		if err == nil {
+			err = fmt.Errorf("article poll finish returned an empty response")
+		}
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("article_id=%d", data.GetArticleId())}, nil
 }

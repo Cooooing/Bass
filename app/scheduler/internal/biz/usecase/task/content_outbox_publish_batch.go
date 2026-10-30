@@ -6,6 +6,7 @@ import (
 	contentv1 "common/proto/gen/content/v1"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
+	"fmt"
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
@@ -37,10 +38,10 @@ func (t *ContentOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask 
 	return []*DefaultDelayedTask{{Title: t.title, Description: t.description, Enabled: true, Timeout: time.Minute, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
-func (t *ContentOutboxPublishBatch) Execute(ctx context.Context, execution Execution) error {
+func (t *ContentOutboxPublishBatch) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.OutboxPublishBatchTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	limit, timeout, maxRetry := t.defaultLimit, t.defaultTimeout, t.defaultRetry
 	if data.GetLimit() > 0 {
@@ -52,6 +53,9 @@ func (t *ContentOutboxPublishBatch) Execute(ctx context.Context, execution Execu
 	if data.GetMaxRetry() > 0 {
 		maxRetry = data.GetMaxRetry()
 	}
-	_, err := t.contentClient.Outbox.PublishBatch(ctx, &contentv1.PublishOutboxEvents_Req{Limit: limit, PublishTimeout: durationpb.New(timeout), MaxRetry: maxRetry})
-	return err
+	response, err := t.contentClient.Outbox.PublishBatch(ctx, &contentv1.PublishOutboxEvents_Req{Limit: limit, PublishTimeout: durationpb.New(timeout), MaxRetry: maxRetry})
+	if err != nil {
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("claimed=%d published=%d failed=%d skipped=%d", response.GetClaimed(), response.GetPublished(), response.GetFailed(), response.GetSkipped())}, nil
 }

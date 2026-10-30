@@ -30,15 +30,18 @@ func (t *UserSettleLiveness) DefaultScheduledTasks() []*DefaultScheduledTask {
 	return []*DefaultScheduledTask{{Title: t.Title(), Description: t.Description(), Enabled: true, CronSpec: "0 0 1 * * ?", Payload: commonscheduler.MustMarshalPayload(&schedulerv1.SettleUserLivenessTaskPayload{PageSize: 100}), Timeout: 30 * time.Minute, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest, AllowOverlap: false}}
 }
 func (*UserSettleLiveness) DefaultDelayedTasks() []*DefaultDelayedTask { return nil }
-func (t *UserSettleLiveness) Execute(ctx context.Context, execution Execution) error {
+func (t *UserSettleLiveness) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.SettleUserLivenessTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	if execution.ScheduledAt.IsZero() {
-		return fmt.Errorf("scheduled liveness settlement requires scheduled_at")
+		return nil, fmt.Errorf("scheduled liveness settlement requires scheduled_at")
 	}
 	date := execution.ScheduledAt.In(time.Local).AddDate(0, 0, -1)
-	_, err := t.client.Liveness.SettleLiveness(ctx, &userv1.SettleUserLiveness_Req{Date: timestamppb.New(date), PageSize: data.GetPageSize()})
-	return err
+	response, err := t.client.Liveness.SettleLiveness(ctx, &userv1.SettleUserLiveness_Req{Date: timestamppb.New(date), PageSize: data.GetPageSize()})
+	if err != nil {
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("date=%s settled_users=%d checked_in_users=%d", date.Format(time.DateOnly), response.GetSettledUsers(), response.GetCheckedInUsers())}, nil
 }

@@ -13,13 +13,18 @@ type Execution struct {
 	ScheduledAt time.Time
 }
 
+// Result 是任务成功执行后可记录的业务结果摘要。
+type Result struct {
+	Summary string
+}
+
 type Task interface {
 	HandlerName() schedulerenum.TaskHandlerName
 	Title() string
 	Description() string
 	DefaultScheduledTasks() []*DefaultScheduledTask
 	DefaultDelayedTasks() []*DefaultDelayedTask
-	Execute(ctx context.Context, execution Execution) error
+	Execute(ctx context.Context, execution Execution) (*Result, error)
 }
 
 type DefaultScheduledTask struct {

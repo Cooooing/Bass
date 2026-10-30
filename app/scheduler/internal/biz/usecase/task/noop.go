@@ -4,6 +4,7 @@ import (
 	commonscheduler "common/pkg/scheduler"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -66,18 +67,18 @@ func (n *Noop) DefaultDelayedTasks() []*DefaultDelayedTask {
 	}
 }
 
-func (n *Noop) Execute(ctx context.Context, execution Execution) error {
+func (n *Noop) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.NoopTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	if data.GetSleepSeconds() > 0 {
 		select {
 		case <-time.After(time.Duration(data.GetSleepSeconds()) * time.Second):
 		case <-ctx.Done():
-			return ctx.Err()
+			return nil, ctx.Err()
 		}
 	}
 	n.logger.InfoContext(ctx, "noop task executed", "name", data.GetName(), "sleep_seconds", data.GetSleepSeconds())
-	return nil
+	return &Result{Summary: fmt.Sprintf("name=%s sleep_seconds=%d", data.GetName(), data.GetSleepSeconds())}, nil
 }

@@ -59,17 +59,23 @@ func (t *ContentPublishScheduledArticles) DefaultDelayedTasks() []*DefaultDelaye
 	}
 }
 
-func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, execution Execution) error {
+func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, execution Execution) (*Result, error) {
 	data := &schedulerv1.PublishScheduledArticleTaskPayload{}
 	if err := commonscheduler.UnmarshalPayload(execution.Payload, data); err != nil {
-		return err
+		return nil, err
 	}
 	if data.GetArticleId() <= 0 || data.GetScheduledAt() == nil || !data.GetScheduledAt().IsValid() {
-		return fmt.Errorf("invalid content publish scheduled article payload")
+		return nil, fmt.Errorf("invalid content publish scheduled article payload")
 	}
-	_, err := t.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
+	response, err := t.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
 		ArticleId:   data.GetArticleId(),
 		ScheduledAt: timestamppb.New(data.GetScheduledAt().AsTime()),
 	})
-	return err
+	if err != nil || response == nil {
+		if err == nil {
+			err = fmt.Errorf("scheduled article publish returned an empty response")
+		}
+		return nil, err
+	}
+	return &Result{Summary: fmt.Sprintf("article_id=%d", data.GetArticleId())}, nil
 }

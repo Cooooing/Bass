@@ -1,13 +1,13 @@
 
 
-# GetCheckinOverviewReq
+# CountCollectedArticlesResp
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**month** | **String** |  |  [optional] |
+|**count** | **Integer** |  |  [optional] |
 
 
 

@@ -10,16 +10,22 @@ All URIs are relative to *http://localhost*
 | [**completeProfileImageUploadWithHttpInfo**](AccountService.md#completeProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload |  |
 | [**getCurrent**](AccountService.md#getCurrent) | **POST** /v1/user/account/get-current |  |
 | [**getCurrentWithHttpInfo**](AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current |  |
+| [**getEconomyAccount**](AccountService.md#getEconomyAccount) | **POST** /v1/user/account/economy/get |  |
+| [**getEconomyAccountWithHttpInfo**](AccountService.md#getEconomyAccountWithHttpInfo) | **POST** /v1/user/account/economy/get |  |
 | [**getProfile**](AccountService.md#getProfile) | **POST** /v1/user/account/get-profile |  |
 | [**getProfileWithHttpInfo**](AccountService.md#getProfileWithHttpInfo) | **POST** /v1/user/account/get-profile |  |
 | [**listFollowers**](AccountService.md#listFollowers) | **POST** /v1/user/account/list-followers |  |
 | [**listFollowersWithHttpInfo**](AccountService.md#listFollowersWithHttpInfo) | **POST** /v1/user/account/list-followers |  |
 | [**listFollowing**](AccountService.md#listFollowing) | **POST** /v1/user/account/list-following |  |
 | [**listFollowingWithHttpInfo**](AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following |  |
+| [**listPointRecords**](AccountService.md#listPointRecords) | **POST** /v1/user/account/list-point-records |  |
+| [**listPointRecordsWithHttpInfo**](AccountService.md#listPointRecordsWithHttpInfo) | **POST** /v1/user/account/list-point-records |  |
 | [**prepareProfileImageUpload**](AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
 | [**prepareProfileImageUploadWithHttpInfo**](AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload |  |
 | [**searchMention**](AccountService.md#searchMention) | **POST** /v1/user/account/search-mention |  |
 | [**searchMentionWithHttpInfo**](AccountService.md#searchMentionWithHttpInfo) | **POST** /v1/user/account/search-mention |  |
+| [**transferPoints**](AccountService.md#transferPoints) | **POST** /v1/user/account/economy/transfer |  |
+| [**transferPointsWithHttpInfo**](AccountService.md#transferPointsWithHttpInfo) | **POST** /v1/user/account/economy/transfer |  |
 | [**updateEmail**](AccountService.md#updateEmail) | **POST** /v1/user/account/update-email |  |
 | [**updateEmailWithHttpInfo**](AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email |  |
 | [**updatePassword**](AccountService.md#updatePassword) | **POST** /v1/user/account/update-password |  |
@@ -481,6 +487,156 @@ No authorization required
 
 
 
+## getEconomyAccount
+
+> GetAccountEconomyResp getEconomyAccount(getEconomyAccountRequest)
+
+
+
+查询当前账号的积分余额和累计收支。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIgetEconomyAccountRequest request = APIgetEconomyAccountRequest.newBuilder()
+                .body(body)
+                .build();
+            GetAccountEconomyResp result = apiInstance.getEconomyAccount(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#getEconomyAccount");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| getEconomyAccountRequest | [**APIgetEconomyAccountRequest**](AccountService.md#APIgetEconomyAccountRequest)|-|-|
+
+### Return type
+
+[**GetAccountEconomyResp**](GetAccountEconomyResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## getEconomyAccountWithHttpInfo
+
+> ApiResponse<GetAccountEconomyResp> getEconomyAccountWithHttpInfo(getEconomyAccountRequest)
+
+
+
+查询当前账号的积分余额和累计收支。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIgetEconomyAccountRequest request = APIgetEconomyAccountRequest.newBuilder()
+                .body(body)
+                .build();
+            ApiResponse<GetAccountEconomyResp> response = apiInstance.getEconomyAccountWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#getEconomyAccount");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| getEconomyAccountRequest | [**APIgetEconomyAccountRequest**](AccountService.md#APIgetEconomyAccountRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**GetAccountEconomyResp**](GetAccountEconomyResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIgetEconomyAccountRequest"></a>
+## APIgetEconomyAccountRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **body** | **Object** |  | |
+
+
+
 ## getProfile
 
 > GetProfileResp getProfile(getProfileRequest)
@@ -931,6 +1087,156 @@ No authorization required
 
 
 
+## listPointRecords
+
+> ListPointRecordsResp listPointRecords(listPointRecordsRequest)
+
+
+
+查询账号公开的积分流水。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        ListPointRecordsReq listPointRecordsReq = new ListPointRecordsReq(); // ListPointRecordsReq | 
+        try {
+            APIlistPointRecordsRequest request = APIlistPointRecordsRequest.newBuilder()
+                .listPointRecordsReq(listPointRecordsReq)
+                .build();
+            ListPointRecordsResp result = apiInstance.listPointRecords(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#listPointRecords");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listPointRecordsRequest | [**APIlistPointRecordsRequest**](AccountService.md#APIlistPointRecordsRequest)|-|-|
+
+### Return type
+
+[**ListPointRecordsResp**](ListPointRecordsResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listPointRecordsWithHttpInfo
+
+> ApiResponse<ListPointRecordsResp> listPointRecordsWithHttpInfo(listPointRecordsRequest)
+
+
+
+查询账号公开的积分流水。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        ListPointRecordsReq listPointRecordsReq = new ListPointRecordsReq(); // ListPointRecordsReq | 
+        try {
+            APIlistPointRecordsRequest request = APIlistPointRecordsRequest.newBuilder()
+                .listPointRecordsReq(listPointRecordsReq)
+                .build();
+            ApiResponse<ListPointRecordsResp> response = apiInstance.listPointRecordsWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#listPointRecords");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listPointRecordsRequest | [**APIlistPointRecordsRequest**](AccountService.md#APIlistPointRecordsRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListPointRecordsResp**](ListPointRecordsResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistPointRecordsRequest"></a>
+## APIlistPointRecordsRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listPointRecordsReq** | [**ListPointRecordsReq**](ListPointRecordsReq.md) |  | |
+
+
+
 ## prepareProfileImageUpload
 
 > PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadRequest)
@@ -1228,6 +1534,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **searchMentionAccountsReq** | [**SearchMentionAccountsReq**](SearchMentionAccountsReq.md) |  | |
+
+
+
+## transferPoints
+
+> TransferAccountPointsResp transferPoints(transferPointsRequest)
+
+
+
+向指定账号转移积分。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        TransferAccountPointsReq transferAccountPointsReq = new TransferAccountPointsReq(); // TransferAccountPointsReq | 
+        try {
+            APItransferPointsRequest request = APItransferPointsRequest.newBuilder()
+                .transferAccountPointsReq(transferAccountPointsReq)
+                .build();
+            TransferAccountPointsResp result = apiInstance.transferPoints(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#transferPoints");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| transferPointsRequest | [**APItransferPointsRequest**](AccountService.md#APItransferPointsRequest)|-|-|
+
+### Return type
+
+[**TransferAccountPointsResp**](TransferAccountPointsResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## transferPointsWithHttpInfo
+
+> ApiResponse<TransferAccountPointsResp> transferPointsWithHttpInfo(transferPointsRequest)
+
+
+
+向指定账号转移积分。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        TransferAccountPointsReq transferAccountPointsReq = new TransferAccountPointsReq(); // TransferAccountPointsReq | 
+        try {
+            APItransferPointsRequest request = APItransferPointsRequest.newBuilder()
+                .transferAccountPointsReq(transferAccountPointsReq)
+                .build();
+            ApiResponse<TransferAccountPointsResp> response = apiInstance.transferPointsWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#transferPoints");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| transferPointsRequest | [**APItransferPointsRequest**](AccountService.md#APItransferPointsRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**TransferAccountPointsResp**](TransferAccountPointsResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APItransferPointsRequest"></a>
+## APItransferPointsRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **transferAccountPointsReq** | [**TransferAccountPointsReq**](TransferAccountPointsReq.md) |  | |
 
 
 

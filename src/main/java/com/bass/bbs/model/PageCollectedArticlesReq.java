@@ -19,6 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
+import com.bass.bbs.model.PageReq;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,46 +31,46 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetCheckinOverviewReq
+ * PageCollectedArticlesReq
  */
 @JsonPropertyOrder({
-  GetCheckinOverviewReq.JSON_PROPERTY_MONTH
+  PageCollectedArticlesReq.JSON_PROPERTY_PAGE
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class GetCheckinOverviewReq {
-  public static final String JSON_PROPERTY_MONTH = "month";
+public class PageCollectedArticlesReq {
+  public static final String JSON_PROPERTY_PAGE = "page";
   @javax.annotation.Nullable
-  private String month;
+  private PageReq page;
 
-  public GetCheckinOverviewReq() { 
+  public PageCollectedArticlesReq() { 
   }
 
-  public GetCheckinOverviewReq month(@javax.annotation.Nullable String month) {
-    this.month = month;
+  public PageCollectedArticlesReq page(@javax.annotation.Nullable PageReq page) {
+    this.page = page;
     return this;
   }
 
   /**
-   * Get month
-   * @return month
+   * Get page
+   * @return page
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_MONTH, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getMonth() {
-    return month;
+  public PageReq getPage() {
+    return page;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_MONTH, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMonth(@javax.annotation.Nullable String month) {
-    this.month = month;
+  public void setPage(@javax.annotation.Nullable PageReq page) {
+    this.page = page;
   }
 
 
   /**
-   * Return true if this GetCheckinOverview_Req object is equal to o.
+   * Return true if this PageCollectedArticles_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -79,20 +80,20 @@ public class GetCheckinOverviewReq {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetCheckinOverviewReq getCheckinOverviewReq = (GetCheckinOverviewReq) o;
-    return Objects.equals(this.month, getCheckinOverviewReq.month);
+    PageCollectedArticlesReq pageCollectedArticlesReq = (PageCollectedArticlesReq) o;
+    return Objects.equals(this.page, pageCollectedArticlesReq.page);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(month);
+    return Objects.hash(page);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetCheckinOverviewReq {\n");
-    sb.append("    month: ").append(toIndentedString(month)).append("\n");
+    sb.append("class PageCollectedArticlesReq {\n");
+    sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -137,9 +138,9 @@ public class GetCheckinOverviewReq {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `month` to the URL query string
-    if (getMonth() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%smonth%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getMonth()))));
+    // add `page` to the URL query string
+    if (getPage() != null) {
+      joiner.add(getPage().toUrlQueryString(prefix + "page" + suffix));
     }
 
     return joiner.toString();

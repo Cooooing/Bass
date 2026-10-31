@@ -14,6 +14,7 @@
 |**visibility** | [**ProfileVisibility**](ProfileVisibility.md) |  |  [optional] |
 |**viewerRelation** | [**ProfileRelation**](ProfileRelation.md) |  |  [optional] |
 |**online** | **Boolean** |  |  [optional] |
+|**points** | **String** |  |  [optional] |
 
 
 

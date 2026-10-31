@@ -20,6 +20,7 @@ import com.bass.bbs.Pair;
 
 import com.bass.bbs.model.CompleteProfileImageUploadAccountReq;
 import com.bass.bbs.model.CompleteProfileImageUploadAccountResp;
+import com.bass.bbs.model.GetAccountEconomyResp;
 import com.bass.bbs.model.GetCurrentAccountResp;
 import com.bass.bbs.model.GetProfileReq;
 import com.bass.bbs.model.GetProfileResp;
@@ -28,10 +29,14 @@ import com.bass.bbs.model.ListFollowersReq;
 import com.bass.bbs.model.ListFollowersResp;
 import com.bass.bbs.model.ListFollowingReq;
 import com.bass.bbs.model.ListFollowingResp;
+import com.bass.bbs.model.ListPointRecordsReq;
+import com.bass.bbs.model.ListPointRecordsResp;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountReq;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountResp;
 import com.bass.bbs.model.SearchMentionAccountsReq;
 import com.bass.bbs.model.SearchMentionAccountsResp;
+import com.bass.bbs.model.TransferAccountPointsReq;
+import com.bass.bbs.model.TransferAccountPointsResp;
 import com.bass.bbs.model.UpdateEmailAccountReq;
 import com.bass.bbs.model.UpdatePasswordAccountReq;
 import com.bass.bbs.model.UpdatePhoneAccountReq;
@@ -790,6 +795,207 @@ public class AccountService {
 
   /**
    * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param apiRequest {@link APIGetEconomyAccountRequest}
+   * @return GetAccountEconomyResp
+   * @throws ApiException if fails to make API call
+   */
+  public GetAccountEconomyResp getEconomyAccount(APIGetEconomyAccountRequest apiRequest) throws ApiException {
+    return getEconomyAccount(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param apiRequest {@link APIGetEconomyAccountRequest}
+   * @param headers Optional headers to include in the request
+   * @return GetAccountEconomyResp
+   * @throws ApiException if fails to make API call
+   */
+  public GetAccountEconomyResp getEconomyAccount(APIGetEconomyAccountRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    Object body = apiRequest.body();
+    return getEconomyAccount(body, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param apiRequest {@link APIGetEconomyAccountRequest}
+   * @return ApiResponse&lt;GetAccountEconomyResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GetAccountEconomyResp> getEconomyAccountWithHttpInfo(APIGetEconomyAccountRequest apiRequest) throws ApiException {
+    return getEconomyAccountWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param apiRequest {@link APIGetEconomyAccountRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;GetAccountEconomyResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GetAccountEconomyResp> getEconomyAccountWithHttpInfo(APIGetEconomyAccountRequest apiRequest, Map<String, String> headers) throws ApiException {
+    Object body = apiRequest.body();
+    return getEconomyAccountWithHttpInfo(body, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param body  (required)
+   * @return GetAccountEconomyResp
+   * @throws ApiException if fails to make API call
+   */
+  public GetAccountEconomyResp getEconomyAccount(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getEconomyAccount(body, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return GetAccountEconomyResp
+   * @throws ApiException if fails to make API call
+   */
+  public GetAccountEconomyResp getEconomyAccount(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetAccountEconomyResp> localVarResponse = getEconomyAccountWithHttpInfo(body, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param body  (required)
+   * @return ApiResponse&lt;GetAccountEconomyResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GetAccountEconomyResp> getEconomyAccountWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getEconomyAccountWithHttpInfo(body, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的积分余额和累计收支。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;GetAccountEconomyResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<GetAccountEconomyResp> getEconomyAccountWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getEconomyAccountRequestBuilder(body, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("getEconomyAccount", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<GetAccountEconomyResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        GetAccountEconomyResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetAccountEconomyResp>() {});
+        
+
+        return new ApiResponse<GetAccountEconomyResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder getEconomyAccountRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling getEconomyAccount");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/economy/get";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIGetEconomyAccountRequest {
+    @javax.annotation.Nonnull
+    private Object body; //  (required)
+
+    private APIGetEconomyAccountRequest(Builder builder) {
+      this.body = builder.body;
+    }
+    @javax.annotation.Nonnull
+    public Object body() {
+      return body;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private Object body;
+
+      public Builder body(@javax.annotation.Nonnull Object body) {
+        this.body = body;
+        return this;
+      }
+      public APIGetEconomyAccountRequest build() {
+        return new APIGetEconomyAccountRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
    * 按账号名获取个人主页资料。
    * @param apiRequest {@link APIGetProfileRequest}
    * @return GetProfileResp
@@ -1393,6 +1599,207 @@ public class AccountService {
 
   /**
    * 
+   * 查询账号公开的积分流水。
+   * @param apiRequest {@link APIListPointRecordsRequest}
+   * @return ListPointRecordsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPointRecordsResp listPointRecords(APIListPointRecordsRequest apiRequest) throws ApiException {
+    return listPointRecords(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询账号公开的积分流水。
+   * @param apiRequest {@link APIListPointRecordsRequest}
+   * @param headers Optional headers to include in the request
+   * @return ListPointRecordsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPointRecordsResp listPointRecords(APIListPointRecordsRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    ListPointRecordsReq listPointRecordsReq = apiRequest.listPointRecordsReq();
+    return listPointRecords(listPointRecordsReq, headers);
+  }
+
+  /**
+   * 
+   * 查询账号公开的积分流水。
+   * @param apiRequest {@link APIListPointRecordsRequest}
+   * @return ApiResponse&lt;ListPointRecordsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPointRecordsResp> listPointRecordsWithHttpInfo(APIListPointRecordsRequest apiRequest) throws ApiException {
+    return listPointRecordsWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询账号公开的积分流水。
+   * @param apiRequest {@link APIListPointRecordsRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListPointRecordsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPointRecordsResp> listPointRecordsWithHttpInfo(APIListPointRecordsRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListPointRecordsReq listPointRecordsReq = apiRequest.listPointRecordsReq();
+    return listPointRecordsWithHttpInfo(listPointRecordsReq, headers);
+  }
+
+  /**
+   * 
+   * 查询账号公开的积分流水。
+   * @param listPointRecordsReq  (required)
+   * @return ListPointRecordsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPointRecordsResp listPointRecords(@javax.annotation.Nonnull ListPointRecordsReq listPointRecordsReq) throws ApiException {
+    return listPointRecords(listPointRecordsReq, null);
+  }
+
+  /**
+   * 
+   * 查询账号公开的积分流水。
+   * @param listPointRecordsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ListPointRecordsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPointRecordsResp listPointRecords(@javax.annotation.Nonnull ListPointRecordsReq listPointRecordsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListPointRecordsResp> localVarResponse = listPointRecordsWithHttpInfo(listPointRecordsReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询账号公开的积分流水。
+   * @param listPointRecordsReq  (required)
+   * @return ApiResponse&lt;ListPointRecordsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPointRecordsResp> listPointRecordsWithHttpInfo(@javax.annotation.Nonnull ListPointRecordsReq listPointRecordsReq) throws ApiException {
+    return listPointRecordsWithHttpInfo(listPointRecordsReq, null);
+  }
+
+  /**
+   * 
+   * 查询账号公开的积分流水。
+   * @param listPointRecordsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListPointRecordsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPointRecordsResp> listPointRecordsWithHttpInfo(@javax.annotation.Nonnull ListPointRecordsReq listPointRecordsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listPointRecordsRequestBuilder(listPointRecordsReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("listPointRecords", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListPointRecordsResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListPointRecordsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListPointRecordsResp>() {});
+        
+
+        return new ApiResponse<ListPointRecordsResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder listPointRecordsRequestBuilder(@javax.annotation.Nonnull ListPointRecordsReq listPointRecordsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listPointRecordsReq' is set
+    if (listPointRecordsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listPointRecordsReq' when calling listPointRecords");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/list-point-records";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listPointRecordsReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIListPointRecordsRequest {
+    @javax.annotation.Nonnull
+    private ListPointRecordsReq listPointRecordsReq; //  (required)
+
+    private APIListPointRecordsRequest(Builder builder) {
+      this.listPointRecordsReq = builder.listPointRecordsReq;
+    }
+    @javax.annotation.Nonnull
+    public ListPointRecordsReq listPointRecordsReq() {
+      return listPointRecordsReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private ListPointRecordsReq listPointRecordsReq;
+
+      public Builder listPointRecordsReq(@javax.annotation.Nonnull ListPointRecordsReq listPointRecordsReq) {
+        this.listPointRecordsReq = listPointRecordsReq;
+        return this;
+      }
+      public APIListPointRecordsRequest build() {
+        return new APIListPointRecordsRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
    * 申请当前账号资料图片的内容寻址直传能力。
    * @param apiRequest {@link APIPrepareProfileImageUploadRequest}
    * @return PrepareProfileImageUploadAccountResp
@@ -1789,6 +2196,207 @@ public class AccountService {
       }
       public APISearchMentionRequest build() {
         return new APISearchMentionRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param apiRequest {@link APITransferPointsRequest}
+   * @return TransferAccountPointsResp
+   * @throws ApiException if fails to make API call
+   */
+  public TransferAccountPointsResp transferPoints(APITransferPointsRequest apiRequest) throws ApiException {
+    return transferPoints(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param apiRequest {@link APITransferPointsRequest}
+   * @param headers Optional headers to include in the request
+   * @return TransferAccountPointsResp
+   * @throws ApiException if fails to make API call
+   */
+  public TransferAccountPointsResp transferPoints(APITransferPointsRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    TransferAccountPointsReq transferAccountPointsReq = apiRequest.transferAccountPointsReq();
+    return transferPoints(transferAccountPointsReq, headers);
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param apiRequest {@link APITransferPointsRequest}
+   * @return ApiResponse&lt;TransferAccountPointsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<TransferAccountPointsResp> transferPointsWithHttpInfo(APITransferPointsRequest apiRequest) throws ApiException {
+    return transferPointsWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param apiRequest {@link APITransferPointsRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;TransferAccountPointsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<TransferAccountPointsResp> transferPointsWithHttpInfo(APITransferPointsRequest apiRequest, Map<String, String> headers) throws ApiException {
+    TransferAccountPointsReq transferAccountPointsReq = apiRequest.transferAccountPointsReq();
+    return transferPointsWithHttpInfo(transferAccountPointsReq, headers);
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param transferAccountPointsReq  (required)
+   * @return TransferAccountPointsResp
+   * @throws ApiException if fails to make API call
+   */
+  public TransferAccountPointsResp transferPoints(@javax.annotation.Nonnull TransferAccountPointsReq transferAccountPointsReq) throws ApiException {
+    return transferPoints(transferAccountPointsReq, null);
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param transferAccountPointsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return TransferAccountPointsResp
+   * @throws ApiException if fails to make API call
+   */
+  public TransferAccountPointsResp transferPoints(@javax.annotation.Nonnull TransferAccountPointsReq transferAccountPointsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<TransferAccountPointsResp> localVarResponse = transferPointsWithHttpInfo(transferAccountPointsReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param transferAccountPointsReq  (required)
+   * @return ApiResponse&lt;TransferAccountPointsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<TransferAccountPointsResp> transferPointsWithHttpInfo(@javax.annotation.Nonnull TransferAccountPointsReq transferAccountPointsReq) throws ApiException {
+    return transferPointsWithHttpInfo(transferAccountPointsReq, null);
+  }
+
+  /**
+   * 
+   * 向指定账号转移积分。
+   * @param transferAccountPointsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;TransferAccountPointsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<TransferAccountPointsResp> transferPointsWithHttpInfo(@javax.annotation.Nonnull TransferAccountPointsReq transferAccountPointsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = transferPointsRequestBuilder(transferAccountPointsReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("transferPoints", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<TransferAccountPointsResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        TransferAccountPointsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<TransferAccountPointsResp>() {});
+        
+
+        return new ApiResponse<TransferAccountPointsResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder transferPointsRequestBuilder(@javax.annotation.Nonnull TransferAccountPointsReq transferAccountPointsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'transferAccountPointsReq' is set
+    if (transferAccountPointsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'transferAccountPointsReq' when calling transferPoints");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/economy/transfer";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(transferAccountPointsReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APITransferPointsRequest {
+    @javax.annotation.Nonnull
+    private TransferAccountPointsReq transferAccountPointsReq; //  (required)
+
+    private APITransferPointsRequest(Builder builder) {
+      this.transferAccountPointsReq = builder.transferAccountPointsReq;
+    }
+    @javax.annotation.Nonnull
+    public TransferAccountPointsReq transferAccountPointsReq() {
+      return transferAccountPointsReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private TransferAccountPointsReq transferAccountPointsReq;
+
+      public Builder transferAccountPointsReq(@javax.annotation.Nonnull TransferAccountPointsReq transferAccountPointsReq) {
+        this.transferAccountPointsReq = transferAccountPointsReq;
+        return this;
+      }
+      public APITransferPointsRequest build() {
+        return new APITransferPointsRequest(this);
       }
     }
   }

@@ -13,6 +13,7 @@
 
 package com.bass.bbs.model;
 
+import com.bass.bbs.model.PageReq;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,25 +25,33 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for GetCheckinOverviewReq
+ * Model tests for ListPointRecordsReq
  */
-class GetCheckinOverviewReqTest {
-    private final GetCheckinOverviewReq model = new GetCheckinOverviewReq();
+class ListPointRecordsReqTest {
+    private final ListPointRecordsReq model = new ListPointRecordsReq();
 
     /**
-     * Model tests for GetCheckinOverviewReq
+     * Model tests for ListPointRecordsReq
      */
     @Test
-    void testGetCheckinOverviewReq() {
-        // TODO: test GetCheckinOverviewReq
+    void testListPointRecordsReq() {
+        // TODO: test ListPointRecordsReq
     }
 
     /**
-     * Test the property 'month'
+     * Test the property 'name'
      */
     @Test
-    void monthTest() {
-        // TODO: test month
+    void nameTest() {
+        // TODO: test name
+    }
+
+    /**
+     * Test the property 'page'
+     */
+    @Test
+    void pageTest() {
+        // TODO: test page
     }
 
 }

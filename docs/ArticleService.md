@@ -14,6 +14,8 @@ All URIs are relative to *http://localhost*
 | [**cancelPublishWithHttpInfo**](ArticleService.md#cancelPublishWithHttpInfo) | **POST** /v1/content/article/publish/cancel |  |
 | [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect |  |
 | [**collectWithHttpInfo**](ArticleService.md#collectWithHttpInfo) | **POST** /v1/content/article/collect |  |
+| [**countCollected**](ArticleService.md#countCollected) | **POST** /v1/content/article/collect/count |  |
+| [**countCollectedWithHttpInfo**](ArticleService.md#countCollectedWithHttpInfo) | **POST** /v1/content/article/collect/count |  |
 | [**createDraft**](ArticleService.md#createDraft) | **POST** /v1/content/article/draft/create |  |
 | [**createDraftWithHttpInfo**](ArticleService.md#createDraftWithHttpInfo) | **POST** /v1/content/article/draft/create |  |
 | [**discardDraft**](ArticleService.md#discardDraft) | **POST** /v1/content/article/draft/discard |  |
@@ -28,8 +30,12 @@ All URIs are relative to *http://localhost*
 | [**listFollowingWithHttpInfo**](ArticleService.md#listFollowingWithHttpInfo) | **POST** /v1/content/article/following/list |  |
 | [**listNearby**](ArticleService.md#listNearby) | **POST** /v1/content/article/nearby/list |  |
 | [**listNearbyWithHttpInfo**](ArticleService.md#listNearbyWithHttpInfo) | **POST** /v1/content/article/nearby/list |  |
+| [**pageCollected**](ArticleService.md#pageCollected) | **POST** /v1/content/article/collected/page |  |
+| [**pageCollectedWithHttpInfo**](ArticleService.md#pageCollectedWithHttpInfo) | **POST** /v1/content/article/collected/page |  |
 | [**pageViewHistory**](ArticleService.md#pageViewHistory) | **POST** /v1/content/article/view-history/page |  |
 | [**pageViewHistoryWithHttpInfo**](ArticleService.md#pageViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page |  |
+| [**pageWatched**](ArticleService.md#pageWatched) | **POST** /v1/content/article/watched/page |  |
+| [**pageWatchedWithHttpInfo**](ArticleService.md#pageWatchedWithHttpInfo) | **POST** /v1/content/article/watched/page |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**publishWithHttpInfo**](ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
@@ -794,6 +800,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **collectArticleReq** | [**CollectArticleReq**](CollectArticleReq.md) |  | |
+
+
+
+## countCollected
+
+> CountCollectedArticlesResp countCollected(countCollectedRequest)
+
+
+
+统计当前账号收藏的文章数量。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIcountCollectedRequest request = APIcountCollectedRequest.newBuilder()
+                .body(body)
+                .build();
+            CountCollectedArticlesResp result = apiInstance.countCollected(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#countCollected");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| countCollectedRequest | [**APIcountCollectedRequest**](ArticleService.md#APIcountCollectedRequest)|-|-|
+
+### Return type
+
+[**CountCollectedArticlesResp**](CountCollectedArticlesResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## countCollectedWithHttpInfo
+
+> ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(countCollectedRequest)
+
+
+
+统计当前账号收藏的文章数量。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIcountCollectedRequest request = APIcountCollectedRequest.newBuilder()
+                .body(body)
+                .build();
+            ApiResponse<CountCollectedArticlesResp> response = apiInstance.countCollectedWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#countCollected");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| countCollectedRequest | [**APIcountCollectedRequest**](ArticleService.md#APIcountCollectedRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**CountCollectedArticlesResp**](CountCollectedArticlesResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIcountCollectedRequest"></a>
+## APIcountCollectedRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **body** | **Object** |  | |
 
 
 
@@ -1847,6 +2003,156 @@ No authorization required
 
 
 
+## pageCollected
+
+> PageCollectedArticlesResp pageCollected(pageCollectedRequest)
+
+
+
+查询当前账号收藏的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageCollectedArticlesReq pageCollectedArticlesReq = new PageCollectedArticlesReq(); // PageCollectedArticlesReq | 
+        try {
+            APIpageCollectedRequest request = APIpageCollectedRequest.newBuilder()
+                .pageCollectedArticlesReq(pageCollectedArticlesReq)
+                .build();
+            PageCollectedArticlesResp result = apiInstance.pageCollected(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageCollected");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageCollectedRequest | [**APIpageCollectedRequest**](ArticleService.md#APIpageCollectedRequest)|-|-|
+
+### Return type
+
+[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## pageCollectedWithHttpInfo
+
+> ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(pageCollectedRequest)
+
+
+
+查询当前账号收藏的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageCollectedArticlesReq pageCollectedArticlesReq = new PageCollectedArticlesReq(); // PageCollectedArticlesReq | 
+        try {
+            APIpageCollectedRequest request = APIpageCollectedRequest.newBuilder()
+                .pageCollectedArticlesReq(pageCollectedArticlesReq)
+                .build();
+            ApiResponse<PageCollectedArticlesResp> response = apiInstance.pageCollectedWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageCollected");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageCollectedRequest | [**APIpageCollectedRequest**](ArticleService.md#APIpageCollectedRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIpageCollectedRequest"></a>
+## APIpageCollectedRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **pageCollectedArticlesReq** | [**PageCollectedArticlesReq**](PageCollectedArticlesReq.md) |  | |
+
+
+
 ## pageViewHistory
 
 > PageArticleViewHistoryResp pageViewHistory(pageViewHistoryRequest)
@@ -1994,6 +2300,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **pageArticleViewHistoryReq** | [**PageArticleViewHistoryReq**](PageArticleViewHistoryReq.md) |  | |
+
+
+
+## pageWatched
+
+> PageWatchedArticlesResp pageWatched(pageWatchedRequest)
+
+
+
+查询当前账号关注的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageWatchedArticlesReq pageWatchedArticlesReq = new PageWatchedArticlesReq(); // PageWatchedArticlesReq | 
+        try {
+            APIpageWatchedRequest request = APIpageWatchedRequest.newBuilder()
+                .pageWatchedArticlesReq(pageWatchedArticlesReq)
+                .build();
+            PageWatchedArticlesResp result = apiInstance.pageWatched(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageWatched");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageWatchedRequest | [**APIpageWatchedRequest**](ArticleService.md#APIpageWatchedRequest)|-|-|
+
+### Return type
+
+[**PageWatchedArticlesResp**](PageWatchedArticlesResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## pageWatchedWithHttpInfo
+
+> ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(pageWatchedRequest)
+
+
+
+查询当前账号关注的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageWatchedArticlesReq pageWatchedArticlesReq = new PageWatchedArticlesReq(); // PageWatchedArticlesReq | 
+        try {
+            APIpageWatchedRequest request = APIpageWatchedRequest.newBuilder()
+                .pageWatchedArticlesReq(pageWatchedArticlesReq)
+                .build();
+            ApiResponse<PageWatchedArticlesResp> response = apiInstance.pageWatchedWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageWatched");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageWatchedRequest | [**APIpageWatchedRequest**](ArticleService.md#APIpageWatchedRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**PageWatchedArticlesResp**](PageWatchedArticlesResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIpageWatchedRequest"></a>
+## APIpageWatchedRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **pageWatchedArticlesReq** | [**PageWatchedArticlesReq**](PageWatchedArticlesReq.md) |  | |
 
 
 

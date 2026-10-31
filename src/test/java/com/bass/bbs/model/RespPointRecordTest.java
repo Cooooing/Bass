@@ -25,41 +25,33 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for RespRecord
+ * Model tests for RespPointRecord
  */
-class RespRecordTest {
-    private final RespRecord model = new RespRecord();
+class RespPointRecordTest {
+    private final RespPointRecord model = new RespPointRecord();
 
     /**
-     * Model tests for RespRecord
+     * Model tests for RespPointRecord
      */
     @Test
-    void testRespRecord() {
-        // TODO: test RespRecord
+    void testRespPointRecord() {
+        // TODO: test RespPointRecord
     }
 
     /**
-     * Test the property 'id'
+     * Test the property 'createdAt'
      */
     @Test
-    void idTest() {
-        // TODO: test id
+    void createdAtTest() {
+        // TODO: test createdAt
     }
 
     /**
-     * Test the property 'transactionNo'
+     * Test the property 'typeLabel'
      */
     @Test
-    void transactionNoTest() {
-        // TODO: test transactionNo
-    }
-
-    /**
-     * Test the property 'recordType'
-     */
-    @Test
-    void recordTypeTest() {
-        // TODO: test recordType
+    void typeLabelTest() {
+        // TODO: test typeLabel
     }
 
     /**
@@ -79,35 +71,11 @@ class RespRecordTest {
     }
 
     /**
-     * Test the property 'balanceBefore'
-     */
-    @Test
-    void balanceBeforeTest() {
-        // TODO: test balanceBefore
-    }
-
-    /**
      * Test the property 'balanceAfter'
      */
     @Test
     void balanceAfterTest() {
         // TODO: test balanceAfter
-    }
-
-    /**
-     * Test the property 'remark'
-     */
-    @Test
-    void remarkTest() {
-        // TODO: test remark
-    }
-
-    /**
-     * Test the property 'createdAt'
-     */
-    @Test
-    void createdAtTest() {
-        // TODO: test createdAt
     }
 
 }

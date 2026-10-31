@@ -13,55 +13,52 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.RespRecord;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for GetCheckinOverviewResp
+ * Model tests for GetAccountEconomyResp
  */
-class GetCheckinOverviewRespTest {
-    private final GetCheckinOverviewResp model = new GetCheckinOverviewResp();
+class GetAccountEconomyRespTest {
+    private final GetAccountEconomyResp model = new GetAccountEconomyResp();
 
     /**
-     * Model tests for GetCheckinOverviewResp
+     * Model tests for GetAccountEconomyResp
      */
     @Test
-    void testGetCheckinOverviewResp() {
-        // TODO: test GetCheckinOverviewResp
+    void testGetAccountEconomyResp() {
+        // TODO: test GetAccountEconomyResp
     }
 
     /**
-     * Test the property 'records'
+     * Test the property 'balance'
      */
     @Test
-    void recordsTest() {
-        // TODO: test records
+    void balanceTest() {
+        // TODO: test balance
     }
 
     /**
-     * Test the property 'currentStreak'
+     * Test the property 'totalIncome'
      */
     @Test
-    void currentStreakTest() {
-        // TODO: test currentStreak
+    void totalIncomeTest() {
+        // TODO: test totalIncome
     }
 
     /**
-     * Test the property 'longestStreak'
+     * Test the property 'totalExpense'
      */
     @Test
-    void longestStreakTest() {
-        // TODO: test longestStreak
+    void totalExpenseTest() {
+        // TODO: test totalExpense
     }
 
 }

@@ -1,19 +1,19 @@
-# CheckinService
+# LivenessService
 
 All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**checkIn**](CheckinService.md#checkIn) | **POST** /v1/user/checkin/check-in |  |
-| [**checkInWithHttpInfo**](CheckinService.md#checkInWithHttpInfo) | **POST** /v1/user/checkin/check-in |  |
-| [**getOverview**](CheckinService.md#getOverview) | **POST** /v1/user/checkin/get-overview |  |
-| [**getOverviewWithHttpInfo**](CheckinService.md#getOverviewWithHttpInfo) | **POST** /v1/user/checkin/get-overview |  |
+| [**claimYesterdayReward**](LivenessService.md#claimYesterdayReward) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
+| [**claimYesterdayRewardWithHttpInfo**](LivenessService.md#claimYesterdayRewardWithHttpInfo) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
+| [**getLiveness**](LivenessService.md#getLiveness) | **GET** /v1/user/liveness |  |
+| [**getLivenessWithHttpInfo**](LivenessService.md#getLivenessWithHttpInfo) | **GET** /v1/user/liveness |  |
 
 
 
-## checkIn
+## claimYesterdayReward
 
-> CheckInResp checkIn(checkInRequest)
+> ClaimYesterdayLivenessRewardResp claimYesterdayReward(claimYesterdayRewardRequest)
 
 
 
@@ -25,24 +25,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.CheckinService;
-import com.bass.bbs.api.CheckinService.*;
+import com.bass.bbs.api.LivenessService;
+import com.bass.bbs.api.LivenessService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        CheckinService apiInstance = new CheckinService(defaultClient);
+        LivenessService apiInstance = new LivenessService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcheckInRequest request = APIcheckInRequest.newBuilder()
+            APIclaimYesterdayRewardRequest request = APIclaimYesterdayRewardRequest.newBuilder()
                 .body(body)
                 .build();
-            CheckInResp result = apiInstance.checkIn(request);
+            ClaimYesterdayLivenessRewardResp result = apiInstance.claimYesterdayReward(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CheckinService#checkIn");
+            System.err.println("Exception when calling LivenessService#claimYesterdayReward");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -56,11 +56,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| checkInRequest | [**APIcheckInRequest**](CheckinService.md#APIcheckInRequest)|-|-|
+| claimYesterdayRewardRequest | [**APIclaimYesterdayRewardRequest**](LivenessService.md#APIclaimYesterdayRewardRequest)|-|-|
 
 ### Return type
 
-[**CheckInResp**](CheckInResp.md)
+[**ClaimYesterdayLivenessRewardResp**](ClaimYesterdayLivenessRewardResp.md)
 
 
 ### Authorization
@@ -77,9 +77,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## checkInWithHttpInfo
+## claimYesterdayRewardWithHttpInfo
 
-> ApiResponse<CheckInResp> checkInWithHttpInfo(checkInRequest)
+> ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(claimYesterdayRewardRequest)
 
 
 
@@ -92,26 +92,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.CheckinService;
-import com.bass.bbs.api.CheckinService.*;
+import com.bass.bbs.api.LivenessService;
+import com.bass.bbs.api.LivenessService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        CheckinService apiInstance = new CheckinService(defaultClient);
+        LivenessService apiInstance = new LivenessService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcheckInRequest request = APIcheckInRequest.newBuilder()
+            APIclaimYesterdayRewardRequest request = APIclaimYesterdayRewardRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<CheckInResp> response = apiInstance.checkInWithHttpInfo(request);
+            ApiResponse<ClaimYesterdayLivenessRewardResp> response = apiInstance.claimYesterdayRewardWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CheckinService#checkIn");
+            System.err.println("Exception when calling LivenessService#claimYesterdayReward");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -125,11 +125,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| checkInRequest | [**APIcheckInRequest**](CheckinService.md#APIcheckInRequest)|-|-|
+| claimYesterdayRewardRequest | [**APIclaimYesterdayRewardRequest**](LivenessService.md#APIclaimYesterdayRewardRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**CheckInResp**](CheckInResp.md)>
+ApiResponse<[**ClaimYesterdayLivenessRewardResp**](ClaimYesterdayLivenessRewardResp.md)>
 
 
 ### Authorization
@@ -147,8 +147,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcheckInRequest"></a>
-## APIcheckInRequest
+<a id="APIclaimYesterdayRewardRequest"></a>
+## APIclaimYesterdayRewardRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -157,9 +157,9 @@ No authorization required
 
 
 
-## getOverview
+## getLiveness
 
-> GetCheckinOverviewResp getOverview(getOverviewRequest)
+> GetLivenessResp getLiveness()
 
 
 
@@ -171,24 +171,20 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.CheckinService;
-import com.bass.bbs.api.CheckinService.*;
+import com.bass.bbs.api.LivenessService;
+import com.bass.bbs.api.LivenessService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        CheckinService apiInstance = new CheckinService(defaultClient);
-        GetCheckinOverviewReq getCheckinOverviewReq = new GetCheckinOverviewReq(); // GetCheckinOverviewReq | 
+        LivenessService apiInstance = new LivenessService(defaultClient);
         try {
-            APIgetOverviewRequest request = APIgetOverviewRequest.newBuilder()
-                .getCheckinOverviewReq(getCheckinOverviewReq)
-                .build();
-            GetCheckinOverviewResp result = apiInstance.getOverview(request);
+            GetLivenessResp result = apiInstance.getLiveness();
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CheckinService#getOverview");
+            System.err.println("Exception when calling LivenessService#getLiveness");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -200,13 +196,11 @@ public class Example {
 
 ### Parameters
 
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| getOverviewRequest | [**APIgetOverviewRequest**](CheckinService.md#APIgetOverviewRequest)|-|-|
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetCheckinOverviewResp**](GetCheckinOverviewResp.md)
+[**GetLivenessResp**](GetLivenessResp.md)
 
 
 ### Authorization
@@ -215,7 +209,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 ### HTTP response details
@@ -223,9 +217,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getOverviewWithHttpInfo
+## getLivenessWithHttpInfo
 
-> ApiResponse<GetCheckinOverviewResp> getOverviewWithHttpInfo(getOverviewRequest)
+> ApiResponse<GetLivenessResp> getLivenessWithHttpInfo()
 
 
 
@@ -238,26 +232,22 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.CheckinService;
-import com.bass.bbs.api.CheckinService.*;
+import com.bass.bbs.api.LivenessService;
+import com.bass.bbs.api.LivenessService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        CheckinService apiInstance = new CheckinService(defaultClient);
-        GetCheckinOverviewReq getCheckinOverviewReq = new GetCheckinOverviewReq(); // GetCheckinOverviewReq | 
+        LivenessService apiInstance = new LivenessService(defaultClient);
         try {
-            APIgetOverviewRequest request = APIgetOverviewRequest.newBuilder()
-                .getCheckinOverviewReq(getCheckinOverviewReq)
-                .build();
-            ApiResponse<GetCheckinOverviewResp> response = apiInstance.getOverviewWithHttpInfo(request);
+            ApiResponse<GetLivenessResp> response = apiInstance.getLivenessWithHttpInfo();
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CheckinService#getOverview");
+            System.err.println("Exception when calling LivenessService#getLiveness");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -269,13 +259,11 @@ public class Example {
 
 ### Parameters
 
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| getOverviewRequest | [**APIgetOverviewRequest**](CheckinService.md#APIgetOverviewRequest)|-|-|
+This endpoint does not need any parameter.
 
 ### Return type
 
-ApiResponse<[**GetCheckinOverviewResp**](GetCheckinOverviewResp.md)>
+ApiResponse<[**GetLivenessResp**](GetLivenessResp.md)>
 
 
 ### Authorization
@@ -284,21 +272,11 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
-
-
-<a id="APIgetOverviewRequest"></a>
-## APIgetOverviewRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **getCheckinOverviewReq** | [**GetCheckinOverviewReq**](GetCheckinOverviewReq.md) |  | |
-
 

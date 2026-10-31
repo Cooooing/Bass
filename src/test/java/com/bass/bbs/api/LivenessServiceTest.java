@@ -14,9 +14,8 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.CheckInResp;
-import com.bass.bbs.model.GetCheckinOverviewReq;
-import com.bass.bbs.model.GetCheckinOverviewResp;
+import com.bass.bbs.model.ClaimYesterdayLivenessRewardResp;
+import com.bass.bbs.model.GetLivenessResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -28,12 +27,12 @@ import java.util.Set;
 
 
 /**
- * API tests for CheckinService
+ * API tests for LivenessService
  */
 @Disabled
-public class CheckinServiceTest {
+public class LivenessServiceTest {
 
-    private final CheckinService api = new CheckinService();
+    private final LivenessService api = new LivenessService();
 
     
     /**
@@ -45,14 +44,14 @@ public class CheckinServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void checkInTest() throws ApiException {
+    public void claimYesterdayRewardTest() throws ApiException {
         Object body = null;
         
-        CheckinService.APIcheckInRequest request = CheckinService.APIcheckInRequest.newBuilder()
+        LivenessService.APIclaimYesterdayRewardRequest request = LivenessService.APIclaimYesterdayRewardRequest.newBuilder()
           .body(body)
           .build();
-        CheckInResp response = 
-        api.checkIn(request);
+        ClaimYesterdayLivenessRewardResp response = 
+        api.claimYesterdayReward(request);
 
         // TODO: test validations
     }
@@ -66,14 +65,10 @@ public class CheckinServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getOverviewTest() throws ApiException {
-        GetCheckinOverviewReq getCheckinOverviewReq = null;
+    public void getLivenessTest() throws ApiException {
         
-        CheckinService.APIgetOverviewRequest request = CheckinService.APIgetOverviewRequest.newBuilder()
-          .getCheckinOverviewReq(getCheckinOverviewReq)
-          .build();
-        GetCheckinOverviewResp response = 
-        api.getOverview(request);
+        GetLivenessResp response = 
+        api.getLiveness();
 
         // TODO: test validations
     }

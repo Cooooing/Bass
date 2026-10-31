@@ -98,4 +98,12 @@ class ProfileTest {
         // TODO: test online
     }
 
+    /**
+     * Test the property 'points'
+     */
+    @Test
+    void pointsTest() {
+        // TODO: test points
+    }
+
 }

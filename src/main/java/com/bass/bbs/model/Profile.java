@@ -44,7 +44,8 @@ import com.bass.bbs.ApiClient;
   Profile.JSON_PROPERTY_LAST_SUCCESS_LOGIN_AT,
   Profile.JSON_PROPERTY_VISIBILITY,
   Profile.JSON_PROPERTY_VIEWER_RELATION,
-  Profile.JSON_PROPERTY_ONLINE
+  Profile.JSON_PROPERTY_ONLINE,
+  Profile.JSON_PROPERTY_POINTS
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class Profile {
@@ -75,6 +76,10 @@ public class Profile {
   public static final String JSON_PROPERTY_ONLINE = "online";
   @javax.annotation.Nullable
   private Boolean online;
+
+  public static final String JSON_PROPERTY_POINTS = "points";
+  @javax.annotation.Nullable
+  private String points;
 
   public Profile() { 
   }
@@ -247,6 +252,30 @@ public class Profile {
   }
 
 
+  public Profile points(@javax.annotation.Nullable String points) {
+    this.points = points;
+    return this;
+  }
+
+  /**
+   * Get points
+   * @return points
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_POINTS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getPoints() {
+    return points;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_POINTS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPoints(@javax.annotation.Nullable String points) {
+    this.points = points;
+  }
+
+
   /**
    * Return true if this Profile object is equal to o.
    */
@@ -265,12 +294,13 @@ public class Profile {
         Objects.equals(this.lastSuccessLoginAt, profile.lastSuccessLoginAt) &&
         Objects.equals(this.visibility, profile.visibility) &&
         Objects.equals(this.viewerRelation, profile.viewerRelation) &&
-        Objects.equals(this.online, profile.online);
+        Objects.equals(this.online, profile.online) &&
+        Objects.equals(this.points, profile.points);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(account, backgroundUrl, location, lastSuccessLoginAt, visibility, viewerRelation, online);
+    return Objects.hash(account, backgroundUrl, location, lastSuccessLoginAt, visibility, viewerRelation, online, points);
   }
 
   @Override
@@ -284,6 +314,7 @@ public class Profile {
     sb.append("    visibility: ").append(toIndentedString(visibility)).append("\n");
     sb.append("    viewerRelation: ").append(toIndentedString(viewerRelation)).append("\n");
     sb.append("    online: ").append(toIndentedString(online)).append("\n");
+    sb.append("    points: ").append(toIndentedString(points)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -361,6 +392,11 @@ public class Profile {
     // add `online` to the URL query string
     if (getOnline() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sonline%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getOnline()))));
+    }
+
+    // add `points` to the URL query string
+    if (getPoints() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spoints%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPoints()))));
     }
 
     return joiner.toString();

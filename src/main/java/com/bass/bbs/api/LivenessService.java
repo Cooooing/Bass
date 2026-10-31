@@ -18,9 +18,8 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.CheckInResp;
-import com.bass.bbs.model.GetCheckinOverviewReq;
-import com.bass.bbs.model.GetCheckinOverviewResp;
+import com.bass.bbs.model.ClaimYesterdayLivenessRewardResp;
+import com.bass.bbs.model.GetLivenessResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +47,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class CheckinService {
+public class LivenessService {
   /**
    * Utility class for extending HttpRequest.Builder functionality.
    */
@@ -77,11 +76,11 @@ public class CheckinService {
   private final Consumer<HttpResponse<InputStream>> memberVarResponseInterceptor;
   private final Consumer<HttpResponse<InputStream>> memberVarAsyncResponseInterceptor;
 
-  public CheckinService() {
+  public LivenessService() {
     this(Configuration.getDefaultApiClient());
   }
 
-  public CheckinService(ApiClient apiClient) {
+  public LivenessService(ApiClient apiClient) {
     memberVarHttpClient = apiClient.getHttpClient();
     memberVarObjectMapper = apiClient.getObjectMapper();
     memberVarBaseUri = apiClient.getBaseUri();
@@ -167,61 +166,61 @@ public class CheckinService {
   /**
    * 
    * 
-   * @param apiRequest {@link APICheckInRequest}
-   * @return CheckInResp
+   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
+   * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public CheckInResp checkIn(APICheckInRequest apiRequest) throws ApiException {
-    return checkIn(apiRequest, null);
+  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(APIClaimYesterdayRewardRequest apiRequest) throws ApiException {
+    return claimYesterdayReward(apiRequest, null);
   }
 
   /**
    * 
    * 
-   * @param apiRequest {@link APICheckInRequest}
+   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
    * @param headers Optional headers to include in the request
-   * @return CheckInResp
+   * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public CheckInResp checkIn(APICheckInRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(APIClaimYesterdayRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return checkIn(body, headers);
+    return claimYesterdayReward(body, headers);
   }
 
   /**
    * 
    * 
-   * @param apiRequest {@link APICheckInRequest}
-   * @return ApiResponse&lt;CheckInResp&gt;
+   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
+   * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CheckInResp> checkInWithHttpInfo(APICheckInRequest apiRequest) throws ApiException {
-    return checkInWithHttpInfo(apiRequest, null);
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(APIClaimYesterdayRewardRequest apiRequest) throws ApiException {
+    return claimYesterdayRewardWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 
-   * @param apiRequest {@link APICheckInRequest}
+   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;CheckInResp&gt;
+   * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CheckInResp> checkInWithHttpInfo(APICheckInRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(APIClaimYesterdayRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return checkInWithHttpInfo(body, headers);
+    return claimYesterdayRewardWithHttpInfo(body, headers);
   }
 
   /**
    * 
    * 
    * @param body  (required)
-   * @return CheckInResp
+   * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public CheckInResp checkIn(@javax.annotation.Nonnull Object body) throws ApiException {
-    return checkIn(body, null);
+  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(@javax.annotation.Nonnull Object body) throws ApiException {
+    return claimYesterdayReward(body, null);
   }
 
   /**
@@ -229,11 +228,11 @@ public class CheckinService {
    * 
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return CheckInResp
+   * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public CheckInResp checkIn(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<CheckInResp> localVarResponse = checkInWithHttpInfo(body, headers);
+  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<ClaimYesterdayLivenessRewardResp> localVarResponse = claimYesterdayRewardWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -241,11 +240,11 @@ public class CheckinService {
    * 
    * 
    * @param body  (required)
-   * @return ApiResponse&lt;CheckInResp&gt;
+   * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CheckInResp> checkInWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return checkInWithHttpInfo(body, null);
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return claimYesterdayRewardWithHttpInfo(body, null);
   }
 
   /**
@@ -253,11 +252,11 @@ public class CheckinService {
    * 
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;CheckInResp&gt;
+   * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CheckInResp> checkInWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = checkInRequestBuilder(body, headers);
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = claimYesterdayRewardRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -268,11 +267,11 @@ public class CheckinService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("checkIn", localVarResponse);
+          throw getApiException("claimYesterdayReward", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<CheckInResp>(
+          return new ApiResponse<ClaimYesterdayLivenessRewardResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -282,10 +281,10 @@ public class CheckinService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        CheckInResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CheckInResp>() {});
+        ClaimYesterdayLivenessRewardResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ClaimYesterdayLivenessRewardResp>() {});
         
 
-        return new ApiResponse<CheckInResp>(
+        return new ApiResponse<ClaimYesterdayLivenessRewardResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -304,15 +303,15 @@ public class CheckinService {
     }
   }
 
-  private HttpRequest.Builder checkInRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder claimYesterdayRewardRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling checkIn");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling claimYesterdayReward");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-    String localVarPath = "/v1/user/checkin/check-in";
+    String localVarPath = "/v1/user/liveness/yesterday-reward/claim";
 
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
@@ -337,11 +336,11 @@ public class CheckinService {
   }
 
 
-  public static final class APICheckInRequest {
+  public static final class APIClaimYesterdayRewardRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APICheckInRequest(Builder builder) {
+    private APIClaimYesterdayRewardRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -359,8 +358,8 @@ public class CheckinService {
         this.body = body;
         return this;
       }
-      public APICheckInRequest build() {
-        return new APICheckInRequest(this);
+      public APIClaimYesterdayRewardRequest build() {
+        return new APIClaimYesterdayRewardRequest(this);
       }
     }
   }
@@ -368,97 +367,44 @@ public class CheckinService {
   /**
    * 
    * 
-   * @param apiRequest {@link APIGetOverviewRequest}
-   * @return GetCheckinOverviewResp
+   * @return GetLivenessResp
    * @throws ApiException if fails to make API call
    */
-  public GetCheckinOverviewResp getOverview(APIGetOverviewRequest apiRequest) throws ApiException {
-    return getOverview(apiRequest, null);
+  public GetLivenessResp getLiveness() throws ApiException {
+    return getLiveness(null);
   }
 
   /**
    * 
    * 
-   * @param apiRequest {@link APIGetOverviewRequest}
    * @param headers Optional headers to include in the request
-   * @return GetCheckinOverviewResp
+   * @return GetLivenessResp
    * @throws ApiException if fails to make API call
    */
-  public GetCheckinOverviewResp getOverview(APIGetOverviewRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    GetCheckinOverviewReq getCheckinOverviewReq = apiRequest.getCheckinOverviewReq();
-    return getOverview(getCheckinOverviewReq, headers);
-  }
-
-  /**
-   * 
-   * 
-   * @param apiRequest {@link APIGetOverviewRequest}
-   * @return ApiResponse&lt;GetCheckinOverviewResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<GetCheckinOverviewResp> getOverviewWithHttpInfo(APIGetOverviewRequest apiRequest) throws ApiException {
-    return getOverviewWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 
-   * @param apiRequest {@link APIGetOverviewRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCheckinOverviewResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<GetCheckinOverviewResp> getOverviewWithHttpInfo(APIGetOverviewRequest apiRequest, Map<String, String> headers) throws ApiException {
-    GetCheckinOverviewReq getCheckinOverviewReq = apiRequest.getCheckinOverviewReq();
-    return getOverviewWithHttpInfo(getCheckinOverviewReq, headers);
-  }
-
-  /**
-   * 
-   * 
-   * @param getCheckinOverviewReq  (required)
-   * @return GetCheckinOverviewResp
-   * @throws ApiException if fails to make API call
-   */
-  public GetCheckinOverviewResp getOverview(@javax.annotation.Nonnull GetCheckinOverviewReq getCheckinOverviewReq) throws ApiException {
-    return getOverview(getCheckinOverviewReq, null);
-  }
-
-  /**
-   * 
-   * 
-   * @param getCheckinOverviewReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return GetCheckinOverviewResp
-   * @throws ApiException if fails to make API call
-   */
-  public GetCheckinOverviewResp getOverview(@javax.annotation.Nonnull GetCheckinOverviewReq getCheckinOverviewReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetCheckinOverviewResp> localVarResponse = getOverviewWithHttpInfo(getCheckinOverviewReq, headers);
+  public GetLivenessResp getLiveness(Map<String, String> headers) throws ApiException {
+    ApiResponse<GetLivenessResp> localVarResponse = getLivenessWithHttpInfo(headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 
-   * @param getCheckinOverviewReq  (required)
-   * @return ApiResponse&lt;GetCheckinOverviewResp&gt;
+   * @return ApiResponse&lt;GetLivenessResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCheckinOverviewResp> getOverviewWithHttpInfo(@javax.annotation.Nonnull GetCheckinOverviewReq getCheckinOverviewReq) throws ApiException {
-    return getOverviewWithHttpInfo(getCheckinOverviewReq, null);
+  public ApiResponse<GetLivenessResp> getLivenessWithHttpInfo() throws ApiException {
+    return getLivenessWithHttpInfo(null);
   }
 
   /**
    * 
    * 
-   * @param getCheckinOverviewReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCheckinOverviewResp&gt;
+   * @return ApiResponse&lt;GetLivenessResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCheckinOverviewResp> getOverviewWithHttpInfo(@javax.annotation.Nonnull GetCheckinOverviewReq getCheckinOverviewReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = getOverviewRequestBuilder(getCheckinOverviewReq, headers);
+  public ApiResponse<GetLivenessResp> getLivenessWithHttpInfo(Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getLivenessRequestBuilder(headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -469,11 +415,11 @@ public class CheckinService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("getOverview", localVarResponse);
+          throw getApiException("getLiveness", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<GetCheckinOverviewResp>(
+          return new ApiResponse<GetLivenessResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -483,10 +429,10 @@ public class CheckinService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        GetCheckinOverviewResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetCheckinOverviewResp>() {});
+        GetLivenessResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetLivenessResp>() {});
         
 
-        return new ApiResponse<GetCheckinOverviewResp>(
+        return new ApiResponse<GetLivenessResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -505,27 +451,17 @@ public class CheckinService {
     }
   }
 
-  private HttpRequest.Builder getOverviewRequestBuilder(@javax.annotation.Nonnull GetCheckinOverviewReq getCheckinOverviewReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'getCheckinOverviewReq' is set
-    if (getCheckinOverviewReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'getCheckinOverviewReq' when calling getOverview");
-    }
+  private HttpRequest.Builder getLivenessRequestBuilder(Map<String, String> headers) throws ApiException {
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-    String localVarPath = "/v1/user/checkin/get-overview";
+    String localVarPath = "/v1/user/liveness";
 
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
-    localVarRequestBuilder.header("Content-Type", "application/json");
     localVarRequestBuilder.header("Accept", "application/json");
 
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(getCheckinOverviewReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
+    localVarRequestBuilder.method("GET", HttpRequest.BodyPublishers.noBody());
     if (memberVarReadTimeout != null) {
       localVarRequestBuilder.timeout(memberVarReadTimeout);
     }
@@ -535,35 +471,6 @@ public class CheckinService {
       memberVarInterceptor.accept(localVarRequestBuilder);
     }
     return localVarRequestBuilder;
-  }
-
-
-  public static final class APIGetOverviewRequest {
-    @javax.annotation.Nonnull
-    private GetCheckinOverviewReq getCheckinOverviewReq; //  (required)
-
-    private APIGetOverviewRequest(Builder builder) {
-      this.getCheckinOverviewReq = builder.getCheckinOverviewReq;
-    }
-    @javax.annotation.Nonnull
-    public GetCheckinOverviewReq getCheckinOverviewReq() {
-      return getCheckinOverviewReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private GetCheckinOverviewReq getCheckinOverviewReq;
-
-      public Builder getCheckinOverviewReq(@javax.annotation.Nonnull GetCheckinOverviewReq getCheckinOverviewReq) {
-        this.getCheckinOverviewReq = getCheckinOverviewReq;
-        return this;
-      }
-      public APIGetOverviewRequest build() {
-        return new APIGetOverviewRequest(this);
-      }
-    }
   }
 
 }

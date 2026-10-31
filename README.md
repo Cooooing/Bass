@@ -117,16 +117,22 @@ Class | Method | HTTP request | Description
 *AccountService* | [**completeProfileImageUploadWithHttpInfo**](docs/AccountService.md#completeProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload | 
 *AccountService* | [**getCurrent**](docs/AccountService.md#getCurrent) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**getCurrentWithHttpInfo**](docs/AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current | 
+*AccountService* | [**getEconomyAccount**](docs/AccountService.md#getEconomyAccount) | **POST** /v1/user/account/economy/get | 
+*AccountService* | [**getEconomyAccountWithHttpInfo**](docs/AccountService.md#getEconomyAccountWithHttpInfo) | **POST** /v1/user/account/economy/get | 
 *AccountService* | [**getProfile**](docs/AccountService.md#getProfile) | **POST** /v1/user/account/get-profile | 
 *AccountService* | [**getProfileWithHttpInfo**](docs/AccountService.md#getProfileWithHttpInfo) | **POST** /v1/user/account/get-profile | 
 *AccountService* | [**listFollowers**](docs/AccountService.md#listFollowers) | **POST** /v1/user/account/list-followers | 
 *AccountService* | [**listFollowersWithHttpInfo**](docs/AccountService.md#listFollowersWithHttpInfo) | **POST** /v1/user/account/list-followers | 
 *AccountService* | [**listFollowing**](docs/AccountService.md#listFollowing) | **POST** /v1/user/account/list-following | 
 *AccountService* | [**listFollowingWithHttpInfo**](docs/AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following | 
+*AccountService* | [**listPointRecords**](docs/AccountService.md#listPointRecords) | **POST** /v1/user/account/list-point-records | 
+*AccountService* | [**listPointRecordsWithHttpInfo**](docs/AccountService.md#listPointRecordsWithHttpInfo) | **POST** /v1/user/account/list-point-records | 
 *AccountService* | [**prepareProfileImageUpload**](docs/AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload | 
 *AccountService* | [**prepareProfileImageUploadWithHttpInfo**](docs/AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload | 
 *AccountService* | [**searchMention**](docs/AccountService.md#searchMention) | **POST** /v1/user/account/search-mention | 
 *AccountService* | [**searchMentionWithHttpInfo**](docs/AccountService.md#searchMentionWithHttpInfo) | **POST** /v1/user/account/search-mention | 
+*AccountService* | [**transferPoints**](docs/AccountService.md#transferPoints) | **POST** /v1/user/account/economy/transfer | 
+*AccountService* | [**transferPointsWithHttpInfo**](docs/AccountService.md#transferPointsWithHttpInfo) | **POST** /v1/user/account/economy/transfer | 
 *AccountService* | [**updateEmail**](docs/AccountService.md#updateEmail) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updateEmailWithHttpInfo**](docs/AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updatePassword**](docs/AccountService.md#updatePassword) | **POST** /v1/user/account/update-password | 
@@ -147,6 +153,8 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**cancelPublishWithHttpInfo**](docs/ArticleService.md#cancelPublishWithHttpInfo) | **POST** /v1/content/article/publish/cancel | 
 *ArticleService* | [**collect**](docs/ArticleService.md#collect) | **POST** /v1/content/article/collect | 
 *ArticleService* | [**collectWithHttpInfo**](docs/ArticleService.md#collectWithHttpInfo) | **POST** /v1/content/article/collect | 
+*ArticleService* | [**countCollected**](docs/ArticleService.md#countCollected) | **POST** /v1/content/article/collect/count | 
+*ArticleService* | [**countCollectedWithHttpInfo**](docs/ArticleService.md#countCollectedWithHttpInfo) | **POST** /v1/content/article/collect/count | 
 *ArticleService* | [**createDraft**](docs/ArticleService.md#createDraft) | **POST** /v1/content/article/draft/create | 
 *ArticleService* | [**createDraftWithHttpInfo**](docs/ArticleService.md#createDraftWithHttpInfo) | **POST** /v1/content/article/draft/create | 
 *ArticleService* | [**discardDraft**](docs/ArticleService.md#discardDraft) | **POST** /v1/content/article/draft/discard | 
@@ -161,8 +169,12 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**listFollowingWithHttpInfo**](docs/ArticleService.md#listFollowingWithHttpInfo) | **POST** /v1/content/article/following/list | 
 *ArticleService* | [**listNearby**](docs/ArticleService.md#listNearby) | **POST** /v1/content/article/nearby/list | 
 *ArticleService* | [**listNearbyWithHttpInfo**](docs/ArticleService.md#listNearbyWithHttpInfo) | **POST** /v1/content/article/nearby/list | 
+*ArticleService* | [**pageCollected**](docs/ArticleService.md#pageCollected) | **POST** /v1/content/article/collected/page | 
+*ArticleService* | [**pageCollectedWithHttpInfo**](docs/ArticleService.md#pageCollectedWithHttpInfo) | **POST** /v1/content/article/collected/page | 
 *ArticleService* | [**pageViewHistory**](docs/ArticleService.md#pageViewHistory) | **POST** /v1/content/article/view-history/page | 
 *ArticleService* | [**pageViewHistoryWithHttpInfo**](docs/ArticleService.md#pageViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page | 
+*ArticleService* | [**pageWatched**](docs/ArticleService.md#pageWatched) | **POST** /v1/content/article/watched/page | 
+*ArticleService* | [**pageWatchedWithHttpInfo**](docs/ArticleService.md#pageWatchedWithHttpInfo) | **POST** /v1/content/article/watched/page | 
 *ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**publishWithHttpInfo**](docs/ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
@@ -193,10 +205,6 @@ Class | Method | HTTP request | Description
 *AuthService* | [**refreshTokenWithHttpInfo**](docs/AuthService.md#refreshTokenWithHttpInfo) | **POST** /v1/user/auth/refresh-token | 
 *AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
 *AuthService* | [**registerWithHttpInfo**](docs/AuthService.md#registerWithHttpInfo) | **POST** /v1/user/auth/register | 
-*CheckinService* | [**checkIn**](docs/CheckinService.md#checkIn) | **POST** /v1/user/checkin/check-in | 
-*CheckinService* | [**checkInWithHttpInfo**](docs/CheckinService.md#checkInWithHttpInfo) | **POST** /v1/user/checkin/check-in | 
-*CheckinService* | [**getOverview**](docs/CheckinService.md#getOverview) | **POST** /v1/user/checkin/get-overview | 
-*CheckinService* | [**getOverviewWithHttpInfo**](docs/CheckinService.md#getOverviewWithHttpInfo) | **POST** /v1/user/checkin/get-overview | 
 *CommentService* | [**callList**](docs/CommentService.md#callList) | **POST** /v1/content/comment/list | 
 *CommentService* | [**callListWithHttpInfo**](docs/CommentService.md#callListWithHttpInfo) | **POST** /v1/content/comment/list | 
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
@@ -259,6 +267,10 @@ Class | Method | HTTP request | Description
 *GlobalChatService* | [**setGlobalChatTopicWithHttpInfo**](docs/GlobalChatService.md#setGlobalChatTopicWithHttpInfo) | **POST** /v1/im/global-chat/topic/set | 
 *HolidayService* | [**getCurrent**](docs/HolidayService.md#getCurrent) | **POST** /v1/platform/holiday/get-current | 
 *HolidayService* | [**getCurrentWithHttpInfo**](docs/HolidayService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/holiday/get-current | 
+*LivenessService* | [**claimYesterdayReward**](docs/LivenessService.md#claimYesterdayReward) | **POST** /v1/user/liveness/yesterday-reward/claim | 
+*LivenessService* | [**claimYesterdayRewardWithHttpInfo**](docs/LivenessService.md#claimYesterdayRewardWithHttpInfo) | **POST** /v1/user/liveness/yesterday-reward/claim | 
+*LivenessService* | [**getLiveness**](docs/LivenessService.md#getLiveness) | **GET** /v1/user/liveness | 
+*LivenessService* | [**getLivenessWithHttpInfo**](docs/LivenessService.md#getLivenessWithHttpInfo) | **GET** /v1/user/liveness | 
 *LocationService* | [**getCurrent**](docs/LocationService.md#getCurrent) | **POST** /v1/platform/location/get-current | 
 *LocationService* | [**getCurrentWithHttpInfo**](docs/LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/location/get-current | 
 *MoonbreezeService* | [**create**](docs/MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
@@ -377,8 +389,8 @@ Class | Method | HTTP request | Description
  - [BlockRelationReq](docs/BlockRelationReq.md)
  - [CancelAccountReq](docs/CancelAccountReq.md)
  - [CancelPublishArticleReq](docs/CancelPublishArticleReq.md)
- - [CheckInResp](docs/CheckInResp.md)
  - [CheckRegistrationAvailabilityResp](docs/CheckRegistrationAvailabilityResp.md)
+ - [ClaimYesterdayLivenessRewardResp](docs/ClaimYesterdayLivenessRewardResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [CommentListItem](docs/CommentListItem.md)
@@ -388,6 +400,7 @@ Class | Method | HTTP request | Description
  - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
  - [CompleteProfileImageUploadAccountResp](docs/CompleteProfileImageUploadAccountResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
+ - [CountCollectedArticlesResp](docs/CountCollectedArticlesResp.md)
  - [CountPrivateChatUnreadResp](docs/CountPrivateChatUnreadResp.md)
  - [CountUnreadNotificationsResp](docs/CountUnreadNotificationsResp.md)
  - [CreateCommentReq](docs/CreateCommentReq.md)
@@ -413,10 +426,9 @@ Class | Method | HTTP request | Description
  - [EmojiItem](docs/EmojiItem.md)
  - [EnterArticleLotteryReq](docs/EnterArticleLotteryReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
+ - [GetAccountEconomyResp](docs/GetAccountEconomyResp.md)
  - [GetArticleReq](docs/GetArticleReq.md)
  - [GetArticleResp](docs/GetArticleResp.md)
- - [GetCheckinOverviewReq](docs/GetCheckinOverviewReq.md)
- - [GetCheckinOverviewResp](docs/GetCheckinOverviewResp.md)
  - [GetCurrentAccountResp](docs/GetCurrentAccountResp.md)
  - [GetCurrentHolidayResp](docs/GetCurrentHolidayResp.md)
  - [GetCurrentLocationResp](docs/GetCurrentLocationResp.md)
@@ -424,6 +436,7 @@ Class | Method | HTTP request | Description
  - [GetCurrentPrivacySettingResp](docs/GetCurrentPrivacySettingResp.md)
  - [GetCurrentTotpResp](docs/GetCurrentTotpResp.md)
  - [GetGlobalChatTopicResp](docs/GetGlobalChatTopicResp.md)
+ - [GetLivenessResp](docs/GetLivenessResp.md)
  - [GetProfileReq](docs/GetProfileReq.md)
  - [GetProfileResp](docs/GetProfileResp.md)
  - [GetStatusRelationReq](docs/GetStatusRelationReq.md)
@@ -477,6 +490,8 @@ Class | Method | HTTP request | Description
  - [ListNearbyArticlesResp](docs/ListNearbyArticlesResp.md)
  - [ListNotificationsReq](docs/ListNotificationsReq.md)
  - [ListNotificationsResp](docs/ListNotificationsResp.md)
+ - [ListPointRecordsReq](docs/ListPointRecordsReq.md)
+ - [ListPointRecordsResp](docs/ListPointRecordsResp.md)
  - [ListPostscriptsReq](docs/ListPostscriptsReq.md)
  - [ListPostscriptsResp](docs/ListPostscriptsResp.md)
  - [ListPrivateChatMessagesReq](docs/ListPrivateChatMessagesReq.md)
@@ -494,11 +509,15 @@ Class | Method | HTTP request | Description
  - [MoveEmojiItemResp](docs/MoveEmojiItemResp.md)
  - [PageArticleViewHistoryReq](docs/PageArticleViewHistoryReq.md)
  - [PageArticleViewHistoryResp](docs/PageArticleViewHistoryResp.md)
+ - [PageCollectedArticlesReq](docs/PageCollectedArticlesReq.md)
+ - [PageCollectedArticlesResp](docs/PageCollectedArticlesResp.md)
  - [PageMemberMoonbreezesReq](docs/PageMemberMoonbreezesReq.md)
  - [PageMoonbreezesResp](docs/PageMoonbreezesResp.md)
  - [PagePublicMoonbreezesReq](docs/PagePublicMoonbreezesReq.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
+ - [PageWatchedArticlesReq](docs/PageWatchedArticlesReq.md)
+ - [PageWatchedArticlesResp](docs/PageWatchedArticlesResp.md)
  - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
  - [PrepareMarkdownImageUploadReq](docs/PrepareMarkdownImageUploadReq.md)
  - [PrepareMarkdownImageUploadResp](docs/PrepareMarkdownImageUploadResp.md)
@@ -546,9 +565,9 @@ Class | Method | HTTP request | Description
  - [RespLocation](docs/RespLocation.md)
  - [RespNotification](docs/RespNotification.md)
  - [RespPinnedComment](docs/RespPinnedComment.md)
+ - [RespPointRecord](docs/RespPointRecord.md)
  - [RespPreference](docs/RespPreference.md)
  - [RespPrivacySetting](docs/RespPrivacySetting.md)
- - [RespRecord](docs/RespRecord.md)
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)
  - [RespTotp](docs/RespTotp.md)
@@ -581,6 +600,8 @@ Class | Method | HTTP request | Description
  - [ThankArticleResp](docs/ThankArticleResp.md)
  - [ThankCommentReq](docs/ThankCommentReq.md)
  - [ThankCommentResp](docs/ThankCommentResp.md)
+ - [TransferAccountPointsReq](docs/TransferAccountPointsReq.md)
+ - [TransferAccountPointsResp](docs/TransferAccountPointsResp.md)
  - [UnbindArticleTagsReq](docs/UnbindArticleTagsReq.md)
  - [UnblockRelationReq](docs/UnblockRelationReq.md)
  - [UnfollowRelationReq](docs/UnfollowRelationReq.md)

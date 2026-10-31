@@ -19,6 +19,7 @@ import com.bass.bbs.model.ArchiveArticleReq;
 import com.bass.bbs.model.CancelPublishArticleReq;
 import com.bass.bbs.model.CollectArticleReq;
 import com.bass.bbs.model.CollectArticleResp;
+import com.bass.bbs.model.CountCollectedArticlesResp;
 import com.bass.bbs.model.CreateDraftArticleReq;
 import com.bass.bbs.model.CreateDraftArticleResp;
 import com.bass.bbs.model.DiscardDraftArticleReq;
@@ -35,6 +36,10 @@ import com.bass.bbs.model.ListNearbyArticlesReq;
 import com.bass.bbs.model.ListNearbyArticlesResp;
 import com.bass.bbs.model.PageArticleViewHistoryReq;
 import com.bass.bbs.model.PageArticleViewHistoryResp;
+import com.bass.bbs.model.PageCollectedArticlesReq;
+import com.bass.bbs.model.PageCollectedArticlesResp;
+import com.bass.bbs.model.PageWatchedArticlesReq;
+import com.bass.bbs.model.PageWatchedArticlesResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
 import com.bass.bbs.model.RewardArticleResp;
@@ -166,6 +171,27 @@ public class ArticleServiceTest {
           .build();
         CollectArticleResp response = 
         api.collect(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 统计当前账号收藏的文章数量。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void countCollectedTest() throws ApiException {
+        Object body = null;
+        
+        ArticleService.APIcountCollectedRequest request = ArticleService.APIcountCollectedRequest.newBuilder()
+          .body(body)
+          .build();
+        CountCollectedArticlesResp response = 
+        api.countCollected(request);
 
         // TODO: test validations
     }
@@ -320,6 +346,27 @@ public class ArticleServiceTest {
     /**
      * 
      *
+     * 查询当前账号收藏的文章。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void pageCollectedTest() throws ApiException {
+        PageCollectedArticlesReq pageCollectedArticlesReq = null;
+        
+        ArticleService.APIpageCollectedRequest request = ArticleService.APIpageCollectedRequest.newBuilder()
+          .pageCollectedArticlesReq(pageCollectedArticlesReq)
+          .build();
+        PageCollectedArticlesResp response = 
+        api.pageCollected(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * 查询当前账号的浏览历史。
      *
      * @throws ApiException
@@ -334,6 +381,27 @@ public class ArticleServiceTest {
           .build();
         PageArticleViewHistoryResp response = 
         api.pageViewHistory(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询当前账号关注的文章。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void pageWatchedTest() throws ApiException {
+        PageWatchedArticlesReq pageWatchedArticlesReq = null;
+        
+        ArticleService.APIpageWatchedRequest request = ArticleService.APIpageWatchedRequest.newBuilder()
+          .pageWatchedArticlesReq(pageWatchedArticlesReq)
+          .build();
+        PageWatchedArticlesResp response = 
+        api.pageWatched(request);
 
         // TODO: test validations
     }

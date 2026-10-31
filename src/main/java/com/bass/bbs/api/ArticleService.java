@@ -23,6 +23,7 @@ import com.bass.bbs.model.ArchiveArticleReq;
 import com.bass.bbs.model.CancelPublishArticleReq;
 import com.bass.bbs.model.CollectArticleReq;
 import com.bass.bbs.model.CollectArticleResp;
+import com.bass.bbs.model.CountCollectedArticlesResp;
 import com.bass.bbs.model.CreateDraftArticleReq;
 import com.bass.bbs.model.CreateDraftArticleResp;
 import com.bass.bbs.model.DiscardDraftArticleReq;
@@ -39,6 +40,10 @@ import com.bass.bbs.model.ListNearbyArticlesReq;
 import com.bass.bbs.model.ListNearbyArticlesResp;
 import com.bass.bbs.model.PageArticleViewHistoryReq;
 import com.bass.bbs.model.PageArticleViewHistoryResp;
+import com.bass.bbs.model.PageCollectedArticlesReq;
+import com.bass.bbs.model.PageCollectedArticlesResp;
+import com.bass.bbs.model.PageWatchedArticlesReq;
+import com.bass.bbs.model.PageWatchedArticlesResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
 import com.bass.bbs.model.RewardArticleResp;
@@ -1194,6 +1199,207 @@ public class ArticleService {
       }
       public APICollectRequest build() {
         return new APICollectRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param apiRequest {@link APICountCollectedRequest}
+   * @return CountCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public CountCollectedArticlesResp countCollected(APICountCollectedRequest apiRequest) throws ApiException {
+    return countCollected(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param apiRequest {@link APICountCollectedRequest}
+   * @param headers Optional headers to include in the request
+   * @return CountCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public CountCollectedArticlesResp countCollected(APICountCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    Object body = apiRequest.body();
+    return countCollected(body, headers);
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param apiRequest {@link APICountCollectedRequest}
+   * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(APICountCollectedRequest apiRequest) throws ApiException {
+    return countCollectedWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param apiRequest {@link APICountCollectedRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(APICountCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
+    Object body = apiRequest.body();
+    return countCollectedWithHttpInfo(body, headers);
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param body  (required)
+   * @return CountCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public CountCollectedArticlesResp countCollected(@javax.annotation.Nonnull Object body) throws ApiException {
+    return countCollected(body, null);
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return CountCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public CountCollectedArticlesResp countCollected(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<CountCollectedArticlesResp> localVarResponse = countCollectedWithHttpInfo(body, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param body  (required)
+   * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return countCollectedWithHttpInfo(body, null);
+  }
+
+  /**
+   * 
+   * 统计当前账号收藏的文章数量。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = countCollectedRequestBuilder(body, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("countCollected", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<CountCollectedArticlesResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        CountCollectedArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CountCollectedArticlesResp>() {});
+        
+
+        return new ApiResponse<CountCollectedArticlesResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder countCollectedRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling countCollected");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/collect/count";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APICountCollectedRequest {
+    @javax.annotation.Nonnull
+    private Object body; //  (required)
+
+    private APICountCollectedRequest(Builder builder) {
+      this.body = builder.body;
+    }
+    @javax.annotation.Nonnull
+    public Object body() {
+      return body;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private Object body;
+
+      public Builder body(@javax.annotation.Nonnull Object body) {
+        this.body = body;
+        return this;
+      }
+      public APICountCollectedRequest build() {
+        return new APICountCollectedRequest(this);
       }
     }
   }
@@ -2607,6 +2813,207 @@ public class ArticleService {
 
   /**
    * 
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedRequest}
+   * @return PageCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageCollectedArticlesResp pageCollected(APIPageCollectedRequest apiRequest) throws ApiException {
+    return pageCollected(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedRequest}
+   * @param headers Optional headers to include in the request
+   * @return PageCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageCollectedArticlesResp pageCollected(APIPageCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    PageCollectedArticlesReq pageCollectedArticlesReq = apiRequest.pageCollectedArticlesReq();
+    return pageCollected(pageCollectedArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedRequest}
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(APIPageCollectedRequest apiRequest) throws ApiException {
+    return pageCollectedWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(APIPageCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PageCollectedArticlesReq pageCollectedArticlesReq = apiRequest.pageCollectedArticlesReq();
+    return pageCollectedWithHttpInfo(pageCollectedArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
+   * @return PageCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageCollectedArticlesResp pageCollected(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) throws ApiException {
+    return pageCollected(pageCollectedArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return PageCollectedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageCollectedArticlesResp pageCollected(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageCollectedArticlesResp> localVarResponse = pageCollectedWithHttpInfo(pageCollectedArticlesReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) throws ApiException {
+    return pageCollectedWithHttpInfo(pageCollectedArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageCollectedRequestBuilder(pageCollectedArticlesReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("pageCollected", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<PageCollectedArticlesResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        PageCollectedArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageCollectedArticlesResp>() {});
+        
+
+        return new ApiResponse<PageCollectedArticlesResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder pageCollectedRequestBuilder(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'pageCollectedArticlesReq' is set
+    if (pageCollectedArticlesReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'pageCollectedArticlesReq' when calling pageCollected");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/collected/page";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(pageCollectedArticlesReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIPageCollectedRequest {
+    @javax.annotation.Nonnull
+    private PageCollectedArticlesReq pageCollectedArticlesReq; //  (required)
+
+    private APIPageCollectedRequest(Builder builder) {
+      this.pageCollectedArticlesReq = builder.pageCollectedArticlesReq;
+    }
+    @javax.annotation.Nonnull
+    public PageCollectedArticlesReq pageCollectedArticlesReq() {
+      return pageCollectedArticlesReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private PageCollectedArticlesReq pageCollectedArticlesReq;
+
+      public Builder pageCollectedArticlesReq(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) {
+        this.pageCollectedArticlesReq = pageCollectedArticlesReq;
+        return this;
+      }
+      public APIPageCollectedRequest build() {
+        return new APIPageCollectedRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
    * 查询当前账号的浏览历史。
    * @param apiRequest {@link APIPageViewHistoryRequest}
    * @return PageArticleViewHistoryResp
@@ -2802,6 +3209,207 @@ public class ArticleService {
       }
       public APIPageViewHistoryRequest build() {
         return new APIPageViewHistoryRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedRequest}
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatched(APIPageWatchedRequest apiRequest) throws ApiException {
+    return pageWatched(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedRequest}
+   * @param headers Optional headers to include in the request
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatched(APIPageWatchedRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    PageWatchedArticlesReq pageWatchedArticlesReq = apiRequest.pageWatchedArticlesReq();
+    return pageWatched(pageWatchedArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedRequest}
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(APIPageWatchedRequest apiRequest) throws ApiException {
+    return pageWatchedWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(APIPageWatchedRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PageWatchedArticlesReq pageWatchedArticlesReq = apiRequest.pageWatchedArticlesReq();
+    return pageWatchedWithHttpInfo(pageWatchedArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatched(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq) throws ApiException {
+    return pageWatched(pageWatchedArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatched(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageWatchedArticlesResp> localVarResponse = pageWatchedWithHttpInfo(pageWatchedArticlesReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq) throws ApiException {
+    return pageWatchedWithHttpInfo(pageWatchedArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageWatchedRequestBuilder(pageWatchedArticlesReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("pageWatched", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<PageWatchedArticlesResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        PageWatchedArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageWatchedArticlesResp>() {});
+        
+
+        return new ApiResponse<PageWatchedArticlesResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder pageWatchedRequestBuilder(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'pageWatchedArticlesReq' is set
+    if (pageWatchedArticlesReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'pageWatchedArticlesReq' when calling pageWatched");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/watched/page";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(pageWatchedArticlesReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIPageWatchedRequest {
+    @javax.annotation.Nonnull
+    private PageWatchedArticlesReq pageWatchedArticlesReq; //  (required)
+
+    private APIPageWatchedRequest(Builder builder) {
+      this.pageWatchedArticlesReq = builder.pageWatchedArticlesReq;
+    }
+    @javax.annotation.Nonnull
+    public PageWatchedArticlesReq pageWatchedArticlesReq() {
+      return pageWatchedArticlesReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private PageWatchedArticlesReq pageWatchedArticlesReq;
+
+      public Builder pageWatchedArticlesReq(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq) {
+        this.pageWatchedArticlesReq = pageWatchedArticlesReq;
+        return this;
+      }
+      public APIPageWatchedRequest build() {
+        return new APIPageWatchedRequest(this);
       }
     }
   }

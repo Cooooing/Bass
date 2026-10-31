@@ -16,6 +16,7 @@ package com.bass.bbs.api;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.model.CompleteProfileImageUploadAccountReq;
 import com.bass.bbs.model.CompleteProfileImageUploadAccountResp;
+import com.bass.bbs.model.GetAccountEconomyResp;
 import com.bass.bbs.model.GetCurrentAccountResp;
 import com.bass.bbs.model.GetProfileReq;
 import com.bass.bbs.model.GetProfileResp;
@@ -24,10 +25,14 @@ import com.bass.bbs.model.ListFollowersReq;
 import com.bass.bbs.model.ListFollowersResp;
 import com.bass.bbs.model.ListFollowingReq;
 import com.bass.bbs.model.ListFollowingResp;
+import com.bass.bbs.model.ListPointRecordsReq;
+import com.bass.bbs.model.ListPointRecordsResp;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountReq;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountResp;
 import com.bass.bbs.model.SearchMentionAccountsReq;
 import com.bass.bbs.model.SearchMentionAccountsResp;
+import com.bass.bbs.model.TransferAccountPointsReq;
+import com.bass.bbs.model.TransferAccountPointsResp;
 import com.bass.bbs.model.UpdateEmailAccountReq;
 import com.bass.bbs.model.UpdatePasswordAccountReq;
 import com.bass.bbs.model.UpdatePhoneAccountReq;
@@ -118,6 +123,27 @@ public class AccountServiceTest {
     /**
      * 
      *
+     * 查询当前账号的积分余额和累计收支。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getEconomyAccountTest() throws ApiException {
+        Object body = null;
+        
+        AccountService.APIgetEconomyAccountRequest request = AccountService.APIgetEconomyAccountRequest.newBuilder()
+          .body(body)
+          .build();
+        GetAccountEconomyResp response = 
+        api.getEconomyAccount(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * 按账号名获取个人主页资料。
      *
      * @throws ApiException
@@ -181,6 +207,27 @@ public class AccountServiceTest {
     /**
      * 
      *
+     * 查询账号公开的积分流水。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listPointRecordsTest() throws ApiException {
+        ListPointRecordsReq listPointRecordsReq = null;
+        
+        AccountService.APIlistPointRecordsRequest request = AccountService.APIlistPointRecordsRequest.newBuilder()
+          .listPointRecordsReq(listPointRecordsReq)
+          .build();
+        ListPointRecordsResp response = 
+        api.listPointRecords(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * 申请当前账号资料图片的内容寻址直传能力。
      *
      * @throws ApiException
@@ -216,6 +263,27 @@ public class AccountServiceTest {
           .build();
         SearchMentionAccountsResp response = 
         api.searchMention(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 向指定账号转移积分。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void transferPointsTest() throws ApiException {
+        TransferAccountPointsReq transferAccountPointsReq = null;
+        
+        AccountService.APItransferPointsRequest request = AccountService.APItransferPointsRequest.newBuilder()
+          .transferAccountPointsReq(transferAccountPointsReq)
+          .build();
+        TransferAccountPointsResp response = 
+        api.transferPoints(request);
 
         // TODO: test validations
     }

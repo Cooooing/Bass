@@ -18,56 +18,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.OffsetDateTime;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for CheckInResp
+ * Model tests for CountCollectedArticlesResp
  */
-class CheckInRespTest {
-    private final CheckInResp model = new CheckInResp();
+class CountCollectedArticlesRespTest {
+    private final CountCollectedArticlesResp model = new CountCollectedArticlesResp();
 
     /**
-     * Model tests for CheckInResp
+     * Model tests for CountCollectedArticlesResp
      */
     @Test
-    void testCheckInResp() {
-        // TODO: test CheckInResp
+    void testCountCollectedArticlesResp() {
+        // TODO: test CountCollectedArticlesResp
     }
 
     /**
-     * Test the property 'recordId'
+     * Test the property 'count'
      */
     @Test
-    void recordIdTest() {
-        // TODO: test recordId
-    }
-
-    /**
-     * Test the property 'date'
-     */
-    @Test
-    void dateTest() {
-        // TODO: test date
-    }
-
-    /**
-     * Test the property 'currentStreak'
-     */
-    @Test
-    void currentStreakTest() {
-        // TODO: test currentStreak
-    }
-
-    /**
-     * Test the property 'longestStreak'
-     */
-    @Test
-    void longestStreakTest() {
-        // TODO: test longestStreak
+    void countTest() {
+        // TODO: test count
     }
 
 }

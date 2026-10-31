@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **Visibility** | Pointer to [**ProfileVisibility**](ProfileVisibility.md) |  | [optional] 
 **ViewerRelation** | Pointer to [**ProfileRelation**](ProfileRelation.md) |  | [optional] 
 **Online** | Pointer to **bool** |  | [optional] 
+**Points** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
@@ -205,6 +206,31 @@ SetOnline sets Online field to given value.
 `func (o *Profile) HasOnline() bool`
 
 HasOnline returns a boolean if a field has been set.
+
+### GetPoints
+
+`func (o *Profile) GetPoints() string`
+
+GetPoints returns the Points field if non-nil, zero value otherwise.
+
+### GetPointsOk
+
+`func (o *Profile) GetPointsOk() (*string, bool)`
+
+GetPointsOk returns a tuple with the Points field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPoints
+
+`func (o *Profile) SetPoints(v string)`
+
+SetPoints sets Points field to given value.
+
+### HasPoints
+
+`func (o *Profile) HasPoints() bool`
+
+HasPoints returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

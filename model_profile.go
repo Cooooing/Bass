@@ -27,6 +27,7 @@ type Profile struct {
 	Visibility *ProfileVisibility `json:"visibility,omitempty"`
 	ViewerRelation *ProfileRelation `json:"viewer_relation,omitempty"`
 	Online *bool `json:"online,omitempty"`
+	Points *string `json:"points,omitempty"`
 }
 
 // NewProfile instantiates a new Profile object
@@ -270,6 +271,38 @@ func (o *Profile) SetOnline(v bool) {
 	o.Online = &v
 }
 
+// GetPoints returns the Points field value if set, zero value otherwise.
+func (o *Profile) GetPoints() string {
+	if o == nil || IsNil(o.Points) {
+		var ret string
+		return ret
+	}
+	return *o.Points
+}
+
+// GetPointsOk returns a tuple with the Points field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Profile) GetPointsOk() (*string, bool) {
+	if o == nil || IsNil(o.Points) {
+		return nil, false
+	}
+	return o.Points, true
+}
+
+// HasPoints returns a boolean if a field has been set.
+func (o *Profile) HasPoints() bool {
+	if o != nil && !IsNil(o.Points) {
+		return true
+	}
+
+	return false
+}
+
+// SetPoints gets a reference to the given string and assigns it to the Points field.
+func (o *Profile) SetPoints(v string) {
+	o.Points = &v
+}
+
 func (o Profile) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -300,6 +333,9 @@ func (o Profile) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Online) {
 		toSerialize["online"] = o.Online
+	}
+	if !IsNil(o.Points) {
+		toSerialize["points"] = o.Points
 	}
 	return toSerialize, nil
 }

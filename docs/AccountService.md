@@ -7,11 +7,14 @@ Method | HTTP request | Description
 [**Avatar**](AccountService.md#Avatar) | **Get** /v1/user/account/avatar | 
 [**CompleteProfileImageUpload**](AccountService.md#CompleteProfileImageUpload) | **Post** /v1/user/account/complete-profile-image-upload | 
 [**GetCurrent**](AccountService.md#GetCurrent) | **Post** /v1/user/account/get-current | 
+[**GetEconomyAccount**](AccountService.md#GetEconomyAccount) | **Post** /v1/user/account/economy/get | 
 [**GetProfile**](AccountService.md#GetProfile) | **Post** /v1/user/account/get-profile | 
 [**ListFollowers**](AccountService.md#ListFollowers) | **Post** /v1/user/account/list-followers | 
 [**ListFollowing**](AccountService.md#ListFollowing) | **Post** /v1/user/account/list-following | 
+[**ListPointRecords**](AccountService.md#ListPointRecords) | **Post** /v1/user/account/list-point-records | 
 [**PrepareProfileImageUpload**](AccountService.md#PrepareProfileImageUpload) | **Post** /v1/user/account/prepare-profile-image-upload | 
 [**SearchMention**](AccountService.md#SearchMention) | **Post** /v1/user/account/search-mention | 
+[**TransferPoints**](AccountService.md#TransferPoints) | **Post** /v1/user/account/economy/transfer | 
 [**UpdateEmail**](AccountService.md#UpdateEmail) | **Post** /v1/user/account/update-email | 
 [**UpdatePassword**](AccountService.md#UpdatePassword) | **Post** /v1/user/account/update-password | 
 [**UpdatePhone**](AccountService.md#UpdatePhone) | **Post** /v1/user/account/update-phone | 
@@ -202,6 +205,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GetCurrentAccountResp**](GetCurrentAccountResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetEconomyAccount
+
+> GetAccountEconomyResp GetEconomyAccount(ctx).Body(body).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	body := map[string]interface{}{ ... } // map[string]interface{} | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.GetEconomyAccount(context.Background()).Body(body).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.GetEconomyAccount``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `GetEconomyAccount`: GetAccountEconomyResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.GetEconomyAccount`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetEconomyAccountRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | **map[string]interface{}** |  | 
+
+### Return type
+
+[**GetAccountEconomyResp**](GetAccountEconomyResp.md)
 
 ### Authorization
 
@@ -415,6 +484,72 @@ No authorization required
 [[Back to README]](../README.md)
 
 
+## ListPointRecords
+
+> ListPointRecordsResp ListPointRecords(ctx).ListPointRecordsReq(listPointRecordsReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	listPointRecordsReq := *openapiclient.NewListPointRecordsReq("Name_example") // ListPointRecordsReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.ListPointRecords(context.Background()).ListPointRecordsReq(listPointRecordsReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.ListPointRecords``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListPointRecords`: ListPointRecordsResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.ListPointRecords`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListPointRecordsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **listPointRecordsReq** | [**ListPointRecordsReq**](ListPointRecordsReq.md) |  | 
+
+### Return type
+
+[**ListPointRecordsResp**](ListPointRecordsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## PrepareProfileImageUpload
 
 > PrepareProfileImageUploadAccountResp PrepareProfileImageUpload(ctx).PrepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq).Execute()
@@ -532,6 +667,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**SearchMentionAccountsResp**](SearchMentionAccountsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## TransferPoints
+
+> TransferAccountPointsResp TransferPoints(ctx).TransferAccountPointsReq(transferAccountPointsReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	transferAccountPointsReq := *openapiclient.NewTransferAccountPointsReq("TargetName_example", "Amount_example", "IdempotencyKey_example") // TransferAccountPointsReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.TransferPoints(context.Background()).TransferAccountPointsReq(transferAccountPointsReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.TransferPoints``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `TransferPoints`: TransferAccountPointsResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.TransferPoints`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiTransferPointsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **transferAccountPointsReq** | [**TransferAccountPointsReq**](TransferAccountPointsReq.md) |  | 
+
+### Return type
+
+[**TransferAccountPointsResp**](TransferAccountPointsResp.md)
 
 ### Authorization
 

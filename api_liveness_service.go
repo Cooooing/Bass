@@ -19,80 +19,80 @@ import (
 )
 
 
-type CheckinService interface {
+type LivenessService interface {
 
 	/*
-	CheckIn Method for CheckIn
+	ClaimYesterdayReward Method for ClaimYesterdayReward
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCheckInRequest
+	@return ApiClaimYesterdayRewardRequest
 	*/
-	CheckIn(ctx context.Context) ApiCheckInRequest
+	ClaimYesterdayReward(ctx context.Context) ApiClaimYesterdayRewardRequest
 
-	// CheckInExecute executes the request
-	//  @return CheckInResp
-	CheckInExecute(r ApiCheckInRequest) (*CheckInResp, *http.Response, error)
+	// ClaimYesterdayRewardExecute executes the request
+	//  @return ClaimYesterdayLivenessRewardResp
+	ClaimYesterdayRewardExecute(r ApiClaimYesterdayRewardRequest) (*ClaimYesterdayLivenessRewardResp, *http.Response, error)
 
 	/*
-	GetOverview Method for GetOverview
+	GetLiveness Method for GetLiveness
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetOverviewRequest
+	@return ApiGetLivenessRequest
 	*/
-	GetOverview(ctx context.Context) ApiGetOverviewRequest
+	GetLiveness(ctx context.Context) ApiGetLivenessRequest
 
-	// GetOverviewExecute executes the request
-	//  @return GetCheckinOverviewResp
-	GetOverviewExecute(r ApiGetOverviewRequest) (*GetCheckinOverviewResp, *http.Response, error)
+	// GetLivenessExecute executes the request
+	//  @return GetLivenessResp
+	GetLivenessExecute(r ApiGetLivenessRequest) (*GetLivenessResp, *http.Response, error)
 }
 
-// CheckinServiceService CheckinService service
-type CheckinServiceService service
+// LivenessServiceService LivenessService service
+type LivenessServiceService service
 
-type ApiCheckInRequest struct {
+type ApiClaimYesterdayRewardRequest struct {
 	ctx context.Context
-	ApiService CheckinService
+	ApiService LivenessService
 	body *map[string]interface{}
 }
 
-func (r ApiCheckInRequest) Body(body map[string]interface{}) ApiCheckInRequest {
+func (r ApiClaimYesterdayRewardRequest) Body(body map[string]interface{}) ApiClaimYesterdayRewardRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiCheckInRequest) Execute() (*CheckInResp, *http.Response, error) {
-	return r.ApiService.CheckInExecute(r)
+func (r ApiClaimYesterdayRewardRequest) Execute() (*ClaimYesterdayLivenessRewardResp, *http.Response, error) {
+	return r.ApiService.ClaimYesterdayRewardExecute(r)
 }
 
 /*
-CheckIn Method for CheckIn
+ClaimYesterdayReward Method for ClaimYesterdayReward
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCheckInRequest
+ @return ApiClaimYesterdayRewardRequest
 */
-func (a *CheckinServiceService) CheckIn(ctx context.Context) ApiCheckInRequest {
-	return ApiCheckInRequest{
+func (a *LivenessServiceService) ClaimYesterdayReward(ctx context.Context) ApiClaimYesterdayRewardRequest {
+	return ApiClaimYesterdayRewardRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return CheckInResp
-func (a *CheckinServiceService) CheckInExecute(r ApiCheckInRequest) (*CheckInResp, *http.Response, error) {
+//  @return ClaimYesterdayLivenessRewardResp
+func (a *LivenessServiceService) ClaimYesterdayRewardExecute(r ApiClaimYesterdayRewardRequest) (*ClaimYesterdayLivenessRewardResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CheckInResp
+		localVarReturnValue  *ClaimYesterdayLivenessRewardResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CheckinServiceService.CheckIn")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LivenessServiceService.ClaimYesterdayReward")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/checkin/check-in"
+	localVarPath := localBasePath + "/v1/user/liveness/yesterday-reward/claim"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -157,60 +157,51 @@ func (a *CheckinServiceService) CheckInExecute(r ApiCheckInRequest) (*CheckInRes
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetOverviewRequest struct {
+type ApiGetLivenessRequest struct {
 	ctx context.Context
-	ApiService CheckinService
-	getCheckinOverviewReq *GetCheckinOverviewReq
+	ApiService LivenessService
 }
 
-func (r ApiGetOverviewRequest) GetCheckinOverviewReq(getCheckinOverviewReq GetCheckinOverviewReq) ApiGetOverviewRequest {
-	r.getCheckinOverviewReq = &getCheckinOverviewReq
-	return r
-}
-
-func (r ApiGetOverviewRequest) Execute() (*GetCheckinOverviewResp, *http.Response, error) {
-	return r.ApiService.GetOverviewExecute(r)
+func (r ApiGetLivenessRequest) Execute() (*GetLivenessResp, *http.Response, error) {
+	return r.ApiService.GetLivenessExecute(r)
 }
 
 /*
-GetOverview Method for GetOverview
+GetLiveness Method for GetLiveness
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetOverviewRequest
+ @return ApiGetLivenessRequest
 */
-func (a *CheckinServiceService) GetOverview(ctx context.Context) ApiGetOverviewRequest {
-	return ApiGetOverviewRequest{
+func (a *LivenessServiceService) GetLiveness(ctx context.Context) ApiGetLivenessRequest {
+	return ApiGetLivenessRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return GetCheckinOverviewResp
-func (a *CheckinServiceService) GetOverviewExecute(r ApiGetOverviewRequest) (*GetCheckinOverviewResp, *http.Response, error) {
+//  @return GetLivenessResp
+func (a *LivenessServiceService) GetLivenessExecute(r ApiGetLivenessRequest) (*GetLivenessResp, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
+		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetCheckinOverviewResp
+		localVarReturnValue  *GetLivenessResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CheckinServiceService.GetOverview")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LivenessServiceService.GetLiveness")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/checkin/get-overview"
+	localVarPath := localBasePath + "/v1/user/liveness"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.getCheckinOverviewReq == nil {
-		return localVarReturnValue, nil, reportError("getCheckinOverviewReq is required and must be specified")
-	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -226,8 +217,6 @@ func (a *CheckinServiceService) GetOverviewExecute(r ApiGetOverviewRequest) (*Ge
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	// body params
-	localVarPostBody = r.getCheckinOverviewReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

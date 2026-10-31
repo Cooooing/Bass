@@ -58,6 +58,18 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
+	t.Run("Test AccountServiceService GetEconomyAccount", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.GetEconomyAccount(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test AccountServiceService GetProfile", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
@@ -94,6 +106,18 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
+	t.Run("Test AccountServiceService ListPointRecords", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.ListPointRecords(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test AccountServiceService PrepareProfileImageUpload", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
@@ -111,6 +135,18 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 		t.Skip("skip test")  // remove to run test
 
 		resp, httpRes, err := apiClient.AccountService.SearchMention(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test AccountServiceService TransferPoints", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.TransferPoints(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

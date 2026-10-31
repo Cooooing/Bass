@@ -64,6 +64,20 @@ type AccountService interface {
 	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentAccountResp, *http.Response, error)
 
 	/*
+	GetEconomyAccount Method for GetEconomyAccount
+
+	查询当前账号的积分余额和累计收支。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGetEconomyAccountRequest
+	*/
+	GetEconomyAccount(ctx context.Context) ApiGetEconomyAccountRequest
+
+	// GetEconomyAccountExecute executes the request
+	//  @return GetAccountEconomyResp
+	GetEconomyAccountExecute(r ApiGetEconomyAccountRequest) (*GetAccountEconomyResp, *http.Response, error)
+
+	/*
 	GetProfile Method for GetProfile
 
 	按账号名获取个人主页资料。
@@ -106,6 +120,20 @@ type AccountService interface {
 	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingResp, *http.Response, error)
 
 	/*
+	ListPointRecords Method for ListPointRecords
+
+	查询账号公开的积分流水。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListPointRecordsRequest
+	*/
+	ListPointRecords(ctx context.Context) ApiListPointRecordsRequest
+
+	// ListPointRecordsExecute executes the request
+	//  @return ListPointRecordsResp
+	ListPointRecordsExecute(r ApiListPointRecordsRequest) (*ListPointRecordsResp, *http.Response, error)
+
+	/*
 	PrepareProfileImageUpload Method for PrepareProfileImageUpload
 
 	申请当前账号资料图片的内容寻址直传能力。
@@ -132,6 +160,20 @@ type AccountService interface {
 	// SearchMentionExecute executes the request
 	//  @return SearchMentionAccountsResp
 	SearchMentionExecute(r ApiSearchMentionRequest) (*SearchMentionAccountsResp, *http.Response, error)
+
+	/*
+	TransferPoints Method for TransferPoints
+
+	向指定账号转移积分。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiTransferPointsRequest
+	*/
+	TransferPoints(ctx context.Context) ApiTransferPointsRequest
+
+	// TransferPointsExecute executes the request
+	//  @return TransferAccountPointsResp
+	TransferPointsExecute(r ApiTransferPointsRequest) (*TransferAccountPointsResp, *http.Response, error)
 
 	/*
 	UpdateEmail Method for UpdateEmail
@@ -457,6 +499,116 @@ func (a *AccountServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetC
 	}
 
 	localVarPath := localBasePath + "/v1/user/account/get-current"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.body
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiGetEconomyAccountRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	body *map[string]interface{}
+}
+
+func (r ApiGetEconomyAccountRequest) Body(body map[string]interface{}) ApiGetEconomyAccountRequest {
+	r.body = &body
+	return r
+}
+
+func (r ApiGetEconomyAccountRequest) Execute() (*GetAccountEconomyResp, *http.Response, error) {
+	return r.ApiService.GetEconomyAccountExecute(r)
+}
+
+/*
+GetEconomyAccount Method for GetEconomyAccount
+
+查询当前账号的积分余额和累计收支。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetEconomyAccountRequest
+*/
+func (a *AccountServiceService) GetEconomyAccount(ctx context.Context) ApiGetEconomyAccountRequest {
+	return ApiGetEconomyAccountRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return GetAccountEconomyResp
+func (a *AccountServiceService) GetEconomyAccountExecute(r ApiGetEconomyAccountRequest) (*GetAccountEconomyResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GetAccountEconomyResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetEconomyAccount")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/economy/get"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -851,6 +1003,116 @@ func (a *AccountServiceService) ListFollowingExecute(r ApiListFollowingRequest) 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiListPointRecordsRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	listPointRecordsReq *ListPointRecordsReq
+}
+
+func (r ApiListPointRecordsRequest) ListPointRecordsReq(listPointRecordsReq ListPointRecordsReq) ApiListPointRecordsRequest {
+	r.listPointRecordsReq = &listPointRecordsReq
+	return r
+}
+
+func (r ApiListPointRecordsRequest) Execute() (*ListPointRecordsResp, *http.Response, error) {
+	return r.ApiService.ListPointRecordsExecute(r)
+}
+
+/*
+ListPointRecords Method for ListPointRecords
+
+查询账号公开的积分流水。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListPointRecordsRequest
+*/
+func (a *AccountServiceService) ListPointRecords(ctx context.Context) ApiListPointRecordsRequest {
+	return ApiListPointRecordsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListPointRecordsResp
+func (a *AccountServiceService) ListPointRecordsExecute(r ApiListPointRecordsRequest) (*ListPointRecordsResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListPointRecordsResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.ListPointRecords")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/list-point-records"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listPointRecordsReq == nil {
+		return localVarReturnValue, nil, reportError("listPointRecordsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listPointRecordsReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiPrepareProfileImageUploadRequest struct {
 	ctx context.Context
 	ApiService AccountService
@@ -1034,6 +1296,116 @@ func (a *AccountServiceService) SearchMentionExecute(r ApiSearchMentionRequest) 
 	}
 	// body params
 	localVarPostBody = r.searchMentionAccountsReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiTransferPointsRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	transferAccountPointsReq *TransferAccountPointsReq
+}
+
+func (r ApiTransferPointsRequest) TransferAccountPointsReq(transferAccountPointsReq TransferAccountPointsReq) ApiTransferPointsRequest {
+	r.transferAccountPointsReq = &transferAccountPointsReq
+	return r
+}
+
+func (r ApiTransferPointsRequest) Execute() (*TransferAccountPointsResp, *http.Response, error) {
+	return r.ApiService.TransferPointsExecute(r)
+}
+
+/*
+TransferPoints Method for TransferPoints
+
+向指定账号转移积分。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiTransferPointsRequest
+*/
+func (a *AccountServiceService) TransferPoints(ctx context.Context) ApiTransferPointsRequest {
+	return ApiTransferPointsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return TransferAccountPointsResp
+func (a *AccountServiceService) TransferPointsExecute(r ApiTransferPointsRequest) (*TransferAccountPointsResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *TransferAccountPointsResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.TransferPoints")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/economy/transfer"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.transferAccountPointsReq == nil {
+		return localVarReturnValue, nil, reportError("transferAccountPointsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.transferAccountPointsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

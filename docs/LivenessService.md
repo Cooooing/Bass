@@ -1,17 +1,17 @@
-# \CheckinService
+# \LivenessService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CheckIn**](CheckinService.md#CheckIn) | **Post** /v1/user/checkin/check-in | 
-[**GetOverview**](CheckinService.md#GetOverview) | **Post** /v1/user/checkin/get-overview | 
+[**ClaimYesterdayReward**](LivenessService.md#ClaimYesterdayReward) | **Post** /v1/user/liveness/yesterday-reward/claim | 
+[**GetLiveness**](LivenessService.md#GetLiveness) | **Get** /v1/user/liveness | 
 
 
 
-## CheckIn
+## ClaimYesterdayReward
 
-> CheckInResp CheckIn(ctx).Body(body).Execute()
+> ClaimYesterdayLivenessRewardResp ClaimYesterdayReward(ctx).Body(body).Execute()
 
 
 
@@ -32,13 +32,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CheckinService.CheckIn(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.LivenessService.ClaimYesterdayReward(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CheckinService.CheckIn``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LivenessService.ClaimYesterdayReward``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CheckIn`: CheckInResp
-	fmt.Fprintf(os.Stdout, "Response from `CheckinService.CheckIn`: %v\n", resp)
+	// response from `ClaimYesterdayReward`: ClaimYesterdayLivenessRewardResp
+	fmt.Fprintf(os.Stdout, "Response from `LivenessService.ClaimYesterdayReward`: %v\n", resp)
 }
 ```
 
@@ -48,7 +48,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCheckInRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiClaimYesterdayRewardRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -57,7 +57,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CheckInResp**](CheckInResp.md)
+[**ClaimYesterdayLivenessRewardResp**](ClaimYesterdayLivenessRewardResp.md)
 
 ### Authorization
 
@@ -73,9 +73,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## GetOverview
+## GetLiveness
 
-> GetCheckinOverviewResp GetOverview(ctx).GetCheckinOverviewReq(getCheckinOverviewReq).Execute()
+> GetLivenessResp GetLiveness(ctx).Execute()
 
 
 
@@ -92,36 +92,31 @@ import (
 )
 
 func main() {
-	getCheckinOverviewReq := *openapiclient.NewGetCheckinOverviewReq() // GetCheckinOverviewReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CheckinService.GetOverview(context.Background()).GetCheckinOverviewReq(getCheckinOverviewReq).Execute()
+	resp, r, err := apiClient.LivenessService.GetLiveness(context.Background()).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CheckinService.GetOverview``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LivenessService.GetLiveness``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetOverview`: GetCheckinOverviewResp
-	fmt.Fprintf(os.Stdout, "Response from `CheckinService.GetOverview`: %v\n", resp)
+	// response from `GetLiveness`: GetLivenessResp
+	fmt.Fprintf(os.Stdout, "Response from `LivenessService.GetLiveness`: %v\n", resp)
 }
 ```
 
 ### Path Parameters
 
-
+This endpoint does not need any parameter.
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetOverviewRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetLivenessRequest struct via the builder pattern
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **getCheckinOverviewReq** | [**GetCheckinOverviewReq**](GetCheckinOverviewReq.md) |  | 
 
 ### Return type
 
-[**GetCheckinOverviewResp**](GetCheckinOverviewResp.md)
+[**GetLivenessResp**](GetLivenessResp.md)
 
 ### Authorization
 
@@ -129,7 +124,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

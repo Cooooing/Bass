@@ -1,7 +1,7 @@
 /*
 Bass BBS API
 
-Testing CheckinServiceService
+Testing LivenessServiceService
 
 */
 
@@ -17,16 +17,16 @@ import (
 	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
 )
 
-func Test_bbs_CheckinServiceService(t *testing.T) {
+func Test_bbs_LivenessServiceService(t *testing.T) {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test CheckinServiceService CheckIn", func(t *testing.T) {
+	t.Run("Test LivenessServiceService ClaimYesterdayReward", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CheckinService.CheckIn(context.Background()).Execute()
+		resp, httpRes, err := apiClient.LivenessService.ClaimYesterdayReward(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_CheckinServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CheckinServiceService GetOverview", func(t *testing.T) {
+	t.Run("Test LivenessServiceService GetLiveness", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CheckinService.GetOverview(context.Background()).Execute()
+		resp, httpRes, err := apiClient.LivenessService.GetLiveness(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

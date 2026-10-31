@@ -78,6 +78,20 @@ type ArticleService interface {
 	CollectExecute(r ApiCollectRequest) (*CollectArticleResp, *http.Response, error)
 
 	/*
+	CountCollected Method for CountCollected
+
+	统计当前账号收藏的文章数量。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCountCollectedRequest
+	*/
+	CountCollected(ctx context.Context) ApiCountCollectedRequest
+
+	// CountCollectedExecute executes the request
+	//  @return CountCollectedArticlesResp
+	CountCollectedExecute(r ApiCountCollectedRequest) (*CountCollectedArticlesResp, *http.Response, error)
+
+	/*
 	CreateDraft Method for CreateDraft
 
 	创建文章草稿
@@ -190,6 +204,20 @@ type ArticleService interface {
 	ListNearbyExecute(r ApiListNearbyRequest) (*ListNearbyArticlesResp, *http.Response, error)
 
 	/*
+	PageCollected Method for PageCollected
+
+	查询当前账号收藏的文章。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiPageCollectedRequest
+	*/
+	PageCollected(ctx context.Context) ApiPageCollectedRequest
+
+	// PageCollectedExecute executes the request
+	//  @return PageCollectedArticlesResp
+	PageCollectedExecute(r ApiPageCollectedRequest) (*PageCollectedArticlesResp, *http.Response, error)
+
+	/*
 	PageViewHistory Method for PageViewHistory
 
 	查询当前账号的浏览历史。
@@ -202,6 +230,20 @@ type ArticleService interface {
 	// PageViewHistoryExecute executes the request
 	//  @return PageArticleViewHistoryResp
 	PageViewHistoryExecute(r ApiPageViewHistoryRequest) (*PageArticleViewHistoryResp, *http.Response, error)
+
+	/*
+	PageWatched Method for PageWatched
+
+	查询当前账号关注的文章。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiPageWatchedRequest
+	*/
+	PageWatched(ctx context.Context) ApiPageWatchedRequest
+
+	// PageWatchedExecute executes the request
+	//  @return PageWatchedArticlesResp
+	PageWatchedExecute(r ApiPageWatchedRequest) (*PageWatchedArticlesResp, *http.Response, error)
 
 	/*
 	Publish Method for Publish
@@ -708,6 +750,116 @@ func (a *ArticleServiceService) CollectExecute(r ApiCollectRequest) (*CollectArt
 	}
 	// body params
 	localVarPostBody = r.collectArticleReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiCountCollectedRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	body *map[string]interface{}
+}
+
+func (r ApiCountCollectedRequest) Body(body map[string]interface{}) ApiCountCollectedRequest {
+	r.body = &body
+	return r
+}
+
+func (r ApiCountCollectedRequest) Execute() (*CountCollectedArticlesResp, *http.Response, error) {
+	return r.ApiService.CountCollectedExecute(r)
+}
+
+/*
+CountCollected Method for CountCollected
+
+统计当前账号收藏的文章数量。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCountCollectedRequest
+*/
+func (a *ArticleServiceService) CountCollected(ctx context.Context) ApiCountCollectedRequest {
+	return ApiCountCollectedRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return CountCollectedArticlesResp
+func (a *ArticleServiceService) CountCollectedExecute(r ApiCountCollectedRequest) (*CountCollectedArticlesResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *CountCollectedArticlesResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CountCollected")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/collect/count"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.body == nil {
+		return localVarReturnValue, nil, reportError("body is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.body
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -1625,6 +1777,116 @@ func (a *ArticleServiceService) ListNearbyExecute(r ApiListNearbyRequest) (*List
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiPageCollectedRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	pageCollectedArticlesReq *PageCollectedArticlesReq
+}
+
+func (r ApiPageCollectedRequest) PageCollectedArticlesReq(pageCollectedArticlesReq PageCollectedArticlesReq) ApiPageCollectedRequest {
+	r.pageCollectedArticlesReq = &pageCollectedArticlesReq
+	return r
+}
+
+func (r ApiPageCollectedRequest) Execute() (*PageCollectedArticlesResp, *http.Response, error) {
+	return r.ApiService.PageCollectedExecute(r)
+}
+
+/*
+PageCollected Method for PageCollected
+
+查询当前账号收藏的文章。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPageCollectedRequest
+*/
+func (a *ArticleServiceService) PageCollected(ctx context.Context) ApiPageCollectedRequest {
+	return ApiPageCollectedRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PageCollectedArticlesResp
+func (a *ArticleServiceService) PageCollectedExecute(r ApiPageCollectedRequest) (*PageCollectedArticlesResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PageCollectedArticlesResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageCollected")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/collected/page"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.pageCollectedArticlesReq == nil {
+		return localVarReturnValue, nil, reportError("pageCollectedArticlesReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.pageCollectedArticlesReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiPageViewHistoryRequest struct {
 	ctx context.Context
 	ApiService ArticleService
@@ -1698,6 +1960,116 @@ func (a *ArticleServiceService) PageViewHistoryExecute(r ApiPageViewHistoryReque
 	}
 	// body params
 	localVarPostBody = r.pageArticleViewHistoryReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPageWatchedRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	pageWatchedArticlesReq *PageWatchedArticlesReq
+}
+
+func (r ApiPageWatchedRequest) PageWatchedArticlesReq(pageWatchedArticlesReq PageWatchedArticlesReq) ApiPageWatchedRequest {
+	r.pageWatchedArticlesReq = &pageWatchedArticlesReq
+	return r
+}
+
+func (r ApiPageWatchedRequest) Execute() (*PageWatchedArticlesResp, *http.Response, error) {
+	return r.ApiService.PageWatchedExecute(r)
+}
+
+/*
+PageWatched Method for PageWatched
+
+查询当前账号关注的文章。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPageWatchedRequest
+*/
+func (a *ArticleServiceService) PageWatched(ctx context.Context) ApiPageWatchedRequest {
+	return ApiPageWatchedRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PageWatchedArticlesResp
+func (a *ArticleServiceService) PageWatchedExecute(r ApiPageWatchedRequest) (*PageWatchedArticlesResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PageWatchedArticlesResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageWatched")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/watched/page"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.pageWatchedArticlesReq == nil {
+		return localVarReturnValue, nil, reportError("pageWatchedArticlesReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.pageWatchedArticlesReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

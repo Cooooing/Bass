@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**Archive**](ArticleService.md#Archive) | **Post** /v1/content/article/archive | 
 [**CancelPublish**](ArticleService.md#CancelPublish) | **Post** /v1/content/article/publish/cancel | 
 [**Collect**](ArticleService.md#Collect) | **Post** /v1/content/article/collect | 
+[**CountCollected**](ArticleService.md#CountCollected) | **Post** /v1/content/article/collect/count | 
 [**CreateDraft**](ArticleService.md#CreateDraft) | **Post** /v1/content/article/draft/create | 
 [**DiscardDraft**](ArticleService.md#DiscardDraft) | **Post** /v1/content/article/draft/discard | 
 [**EnterLottery**](ArticleService.md#EnterLottery) | **Post** /v1/content/article/lottery/entry | 
@@ -16,7 +17,9 @@ Method | HTTP request | Description
 [**List**](ArticleService.md#List) | **Post** /v1/content/article/list | 
 [**ListFollowing**](ArticleService.md#ListFollowing) | **Post** /v1/content/article/following/list | 
 [**ListNearby**](ArticleService.md#ListNearby) | **Post** /v1/content/article/nearby/list | 
+[**PageCollected**](ArticleService.md#PageCollected) | **Post** /v1/content/article/collected/page | 
 [**PageViewHistory**](ArticleService.md#PageViewHistory) | **Post** /v1/content/article/view-history/page | 
+[**PageWatched**](ArticleService.md#PageWatched) | **Post** /v1/content/article/watched/page | 
 [**Publish**](ArticleService.md#Publish) | **Post** /v1/content/article/publish | 
 [**Reward**](ArticleService.md#Reward) | **Post** /v1/content/article/reward | 
 [**SetPinnedComment**](ArticleService.md#SetPinnedComment) | **Post** /v1/content/article/comment/pin | 
@@ -276,6 +279,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CollectArticleResp**](CollectArticleResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CountCollected
+
+> CountCollectedArticlesResp CountCollected(ctx).Body(body).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	body := map[string]interface{}{ ... } // map[string]interface{} | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.CountCollected(context.Background()).Body(body).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.CountCollected``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `CountCollected`: CountCollectedArticlesResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.CountCollected`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCountCollectedRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | **map[string]interface{}** |  | 
+
+### Return type
+
+[**CountCollectedArticlesResp**](CountCollectedArticlesResp.md)
 
 ### Authorization
 
@@ -819,6 +888,72 @@ No authorization required
 [[Back to README]](../README.md)
 
 
+## PageCollected
+
+> PageCollectedArticlesResp PageCollected(ctx).PageCollectedArticlesReq(pageCollectedArticlesReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	pageCollectedArticlesReq := *openapiclient.NewPageCollectedArticlesReq() // PageCollectedArticlesReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.PageCollected(context.Background()).PageCollectedArticlesReq(pageCollectedArticlesReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.PageCollected``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PageCollected`: PageCollectedArticlesResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.PageCollected`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPageCollectedRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pageCollectedArticlesReq** | [**PageCollectedArticlesReq**](PageCollectedArticlesReq.md) |  | 
+
+### Return type
+
+[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## PageViewHistory
 
 > PageArticleViewHistoryResp PageViewHistory(ctx).PageArticleViewHistoryReq(pageArticleViewHistoryReq).Execute()
@@ -870,6 +1005,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PageArticleViewHistoryResp**](PageArticleViewHistoryResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PageWatched
+
+> PageWatchedArticlesResp PageWatched(ctx).PageWatchedArticlesReq(pageWatchedArticlesReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	pageWatchedArticlesReq := *openapiclient.NewPageWatchedArticlesReq() // PageWatchedArticlesReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.PageWatched(context.Background()).PageWatchedArticlesReq(pageWatchedArticlesReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.PageWatched``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PageWatched`: PageWatchedArticlesResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.PageWatched`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPageWatchedRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pageWatchedArticlesReq** | [**PageWatchedArticlesReq**](PageWatchedArticlesReq.md) |  | 
+
+### Return type
+
+[**PageWatchedArticlesResp**](PageWatchedArticlesResp.md)
 
 ### Authorization
 

@@ -59,8 +59,6 @@ type APIClient struct {
 
 	AuthService AuthService
 
-	CheckinService CheckinService
-
 	CommentService CommentService
 
 	DomainService DomainService
@@ -70,6 +68,8 @@ type APIClient struct {
 	GlobalChatService GlobalChatService
 
 	HolidayService HolidayService
+
+	LivenessService LivenessService
 
 	LocationService LocationService
 
@@ -115,12 +115,12 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.ArticleService = (*ArticleServiceService)(&c.common)
 	c.AssetService = (*AssetServiceService)(&c.common)
 	c.AuthService = (*AuthServiceService)(&c.common)
-	c.CheckinService = (*CheckinServiceService)(&c.common)
 	c.CommentService = (*CommentServiceService)(&c.common)
 	c.DomainService = (*DomainServiceService)(&c.common)
 	c.EmojiService = (*EmojiServiceService)(&c.common)
 	c.GlobalChatService = (*GlobalChatServiceService)(&c.common)
 	c.HolidayService = (*HolidayServiceService)(&c.common)
+	c.LivenessService = (*LivenessServiceService)(&c.common)
 	c.LocationService = (*LocationServiceService)(&c.common)
 	c.MoonbreezeService = (*MoonbreezeServiceService)(&c.common)
 	c.NotificationService = (*NotificationServiceService)(&c.common)

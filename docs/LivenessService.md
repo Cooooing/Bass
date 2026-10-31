@@ -1,30 +1,30 @@
-# CheckinService
+# LivenessService
 
 All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**checkIn**](#checkin) | **POST** /v1/user/checkin/check-in | |
-|[**getOverview**](#getoverview) | **POST** /v1/user/checkin/get-overview | |
+|[**claimYesterdayReward**](#claimyesterdayreward) | **POST** /v1/user/liveness/yesterday-reward/claim | |
+|[**getLiveness**](#getliveness) | **GET** /v1/user/liveness | |
 
-# **checkIn**
-> CheckInResp checkIn(body)
+# **claimYesterdayReward**
+> ClaimYesterdayLivenessRewardResp claimYesterdayReward(body)
 
 
 ### Example
 
 ```typescript
 import {
-    CheckinService,
+    LivenessService,
     Configuration
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new CheckinService(configuration);
+const apiInstance = new LivenessService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.checkIn(
+const { status, data } = await apiInstance.claimYesterdayReward(
     body
 );
 ```
@@ -38,7 +38,7 @@ const { status, data } = await apiInstance.checkIn(
 
 ### Return type
 
-**CheckInResp**
+**ClaimYesterdayLivenessRewardResp**
 
 ### Authorization
 
@@ -57,39 +57,31 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getOverview**
-> GetCheckinOverviewResp getOverview(getCheckinOverviewReq)
+# **getLiveness**
+> GetLivenessResp getLiveness()
 
 
 ### Example
 
 ```typescript
 import {
-    CheckinService,
-    Configuration,
-    GetCheckinOverviewReq
+    LivenessService,
+    Configuration
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
-const apiInstance = new CheckinService(configuration);
+const apiInstance = new LivenessService(configuration);
 
-let getCheckinOverviewReq: GetCheckinOverviewReq; //
-
-const { status, data } = await apiInstance.getOverview(
-    getCheckinOverviewReq
-);
+const { status, data } = await apiInstance.getLiveness();
 ```
 
 ### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **getCheckinOverviewReq** | **GetCheckinOverviewReq**|  | |
+This endpoint does not have any parameters.
 
 
 ### Return type
 
-**GetCheckinOverviewResp**
+**GetLivenessResp**
 
 ### Authorization
 
@@ -97,7 +89,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 

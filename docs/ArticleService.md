@@ -8,6 +8,7 @@ All URIs are relative to *http://localhost*
 |[**archive**](#archive) | **POST** /v1/content/article/archive | |
 |[**cancelPublish**](#cancelpublish) | **POST** /v1/content/article/publish/cancel | |
 |[**collect**](#collect) | **POST** /v1/content/article/collect | |
+|[**countCollected**](#countcollected) | **POST** /v1/content/article/collect/count | |
 |[**createDraft**](#createdraft) | **POST** /v1/content/article/draft/create | |
 |[**discardDraft**](#discarddraft) | **POST** /v1/content/article/draft/discard | |
 |[**enterLottery**](#enterlottery) | **POST** /v1/content/article/lottery/entry | |
@@ -16,7 +17,9 @@ All URIs are relative to *http://localhost*
 |[**list**](#list) | **POST** /v1/content/article/list | |
 |[**listFollowing**](#listfollowing) | **POST** /v1/content/article/following/list | |
 |[**listNearby**](#listnearby) | **POST** /v1/content/article/nearby/list | |
+|[**pageCollected**](#pagecollected) | **POST** /v1/content/article/collected/page | |
 |[**pageViewHistory**](#pageviewhistory) | **POST** /v1/content/article/view-history/page | |
+|[**pageWatched**](#pagewatched) | **POST** /v1/content/article/watched/page | |
 |[**publish**](#publish) | **POST** /v1/content/article/publish | |
 |[**reward**](#reward) | **POST** /v1/content/article/reward | |
 |[**setPinnedComment**](#setpinnedcomment) | **POST** /v1/content/article/comment/pin | |
@@ -215,6 +218,57 @@ const { status, data } = await apiInstance.collect(
 ### Return type
 
 **CollectArticleResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **countCollected**
+> CountCollectedArticlesResp countCollected(body)
+
+统计当前账号收藏的文章数量。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let body: object; //
+
+const { status, data } = await apiInstance.countCollected(
+    body
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **body** | **object**|  | |
+
+
+### Return type
+
+**CountCollectedArticlesResp**
 
 ### Authorization
 
@@ -649,6 +703,58 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **pageCollected**
+> PageCollectedArticlesResp pageCollected(pageCollectedArticlesReq)
+
+查询当前账号收藏的文章。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    PageCollectedArticlesReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let pageCollectedArticlesReq: PageCollectedArticlesReq; //
+
+const { status, data } = await apiInstance.pageCollected(
+    pageCollectedArticlesReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **pageCollectedArticlesReq** | **PageCollectedArticlesReq**|  | |
+
+
+### Return type
+
+**PageCollectedArticlesResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **pageViewHistory**
 > PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
 
@@ -683,6 +789,58 @@ const { status, data } = await apiInstance.pageViewHistory(
 ### Return type
 
 **PageArticleViewHistoryResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **pageWatched**
+> PageWatchedArticlesResp pageWatched(pageWatchedArticlesReq)
+
+查询当前账号关注的文章。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    PageWatchedArticlesReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let pageWatchedArticlesReq: PageWatchedArticlesReq; //
+
+const { status, data } = await apiInstance.pageWatched(
+    pageWatchedArticlesReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **pageWatchedArticlesReq** | **PageWatchedArticlesReq**|  | |
+
+
+### Return type
+
+**PageWatchedArticlesResp**
 
 ### Authorization
 

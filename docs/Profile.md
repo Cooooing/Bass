@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **visibility** | [**ProfileVisibility**](ProfileVisibility.md) |  | [optional] [default to undefined]
 **viewer_relation** | [**ProfileRelation**](ProfileRelation.md) |  | [optional] [default to undefined]
 **online** | **boolean** |  | [optional] [default to undefined]
+**points** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -26,6 +27,7 @@ const instance: Profile = {
     visibility,
     viewer_relation,
     online,
+    points,
 };
 ```
 

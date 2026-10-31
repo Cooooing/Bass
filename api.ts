@@ -333,16 +333,14 @@ export interface CancelAccountReq {
 export interface CancelPublishArticleReq {
     'article_id': string;
 }
-export interface CheckInResp {
-    'record_id'?: string;
-    'date'?: string;
-    'current_streak'?: number;
-    'longest_streak'?: number;
-}
 export interface CheckRegistrationAvailabilityResp {
     'name_available'?: boolean;
     'email_can_register'?: boolean;
     'phone_can_register'?: boolean;
+}
+export interface ClaimYesterdayLivenessRewardResp {
+    'reward_points'?: string;
+    'claimed'?: boolean;
 }
 export interface CollectArticleReq {
     'article_id': string;
@@ -411,6 +409,9 @@ export interface CompleteProfileImageUploadAccountResp {
 }
 export interface ConfirmEnableTotpReq {
     'code': string;
+}
+export interface CountCollectedArticlesResp {
+    'count'?: number;
 }
 export interface CountPrivateChatUnreadResp {
     'count'?: number;
@@ -504,6 +505,11 @@ export interface EnterArticleLotteryReq {
 export interface FollowRelationReq {
     'target_id': string;
 }
+export interface GetAccountEconomyResp {
+    'balance'?: string;
+    'total_income'?: string;
+    'total_expense'?: string;
+}
 export interface GetArticleReq {
     'article_id': string;
     'publish_status'?: GetArticleReqPublishStatusEnum;
@@ -520,14 +526,6 @@ export type GetArticleReqPublishStatusEnum = typeof GetArticleReqPublishStatusEn
 
 export interface GetArticleResp {
     'article'?: ArticleDetail;
-}
-export interface GetCheckinOverviewReq {
-    'month'?: string;
-}
-export interface GetCheckinOverviewResp {
-    'records'?: Array<RespRecord>;
-    'current_streak'?: number;
-    'longest_streak'?: number;
 }
 export interface GetCurrentAccountResp {
     'account'?: RespCurrentAccount;
@@ -583,6 +581,11 @@ export interface GetCurrentTotpResp {
 }
 export interface GetGlobalChatTopicResp {
     'topic'?: GlobalChatTopic;
+}
+export interface GetLivenessResp {
+    'score'?: number;
+    'max_score'?: number;
+    'checkin_score'?: number;
 }
 export interface GetProfileReq {
     'name': string;
@@ -847,6 +850,14 @@ export interface ListNotificationsResp {
     'page'?: PageResp;
     'rows'?: Array<RespNotification>;
 }
+export interface ListPointRecordsReq {
+    'name': string;
+    'page'?: PageReq;
+}
+export interface ListPointRecordsResp {
+    'rows'?: Array<RespPointRecord>;
+    'page'?: PageResp;
+}
 export interface ListPostscriptsReq {
     'article_id': string;
 }
@@ -929,6 +940,13 @@ export interface PageArticleViewHistoryResp {
     'rows'?: Array<ArticleViewHistoryItem>;
     'page'?: PageResp;
 }
+export interface PageCollectedArticlesReq {
+    'page'?: PageReq;
+}
+export interface PageCollectedArticlesResp {
+    'page'?: PageResp;
+    'rows'?: Array<ArticleListItem>;
+}
 export interface PageMemberMoonbreezesReq {
     'name'?: string;
     'cursor'?: string;
@@ -965,6 +983,13 @@ export interface PageResp {
      * 页大小
      */
     'size'?: string;
+}
+export interface PageWatchedArticlesReq {
+    'page'?: PageReq;
+}
+export interface PageWatchedArticlesResp {
+    'page'?: PageResp;
+    'rows'?: Array<ArticleListItem>;
 }
 export interface PageWatchingMoonbreezesReq {
     'cursor'?: string;
@@ -1044,6 +1069,7 @@ export interface Profile {
     'visibility'?: ProfileVisibility;
     'viewer_relation'?: ProfileRelation;
     'online'?: boolean;
+    'points'?: string;
 }
 export interface ProfileLocation {
     'country'?: string;
@@ -1643,6 +1669,22 @@ export type RespNotificationEventTypeEnum = typeof RespNotificationEventTypeEnum
 export interface RespPinnedComment {
     'thread'?: RespCommentThread;
 }
+export interface RespPointRecord {
+    'created_at'?: string;
+    'type_label'?: string;
+    'direction'?: RespPointRecordDirectionEnum;
+    'amount'?: string;
+    'balance_after'?: string;
+}
+
+export const RespPointRecordDirectionEnum = {
+    ECONOMY_RECORD_DIRECTION_UNSPECIFIED: 'ECONOMY_RECORD_DIRECTION_UNSPECIFIED',
+    ECONOMY_RECORD_DIRECTION_INCOME: 'ECONOMY_RECORD_DIRECTION_INCOME',
+    ECONOMY_RECORD_DIRECTION_EXPENSE: 'ECONOMY_RECORD_DIRECTION_EXPENSE',
+} as const;
+
+export type RespPointRecordDirectionEnum = typeof RespPointRecordDirectionEnum[keyof typeof RespPointRecordDirectionEnum];
+
 export interface RespPreference {
     'user_id'?: string;
     'timezone'?: string;
@@ -1671,43 +1713,6 @@ export interface RespPrivacySetting {
     'public_location'?: boolean;
     'public_moonbreeze_list'?: boolean;
 }
-export interface RespRecord {
-    'id'?: string;
-    'transaction_no'?: string;
-    'record_type'?: RespRecordRecordTypeEnum;
-    'direction'?: RespRecordDirectionEnum;
-    'amount'?: string;
-    'balance_before'?: string;
-    'balance_after'?: string;
-    'remark'?: string;
-    'created_at'?: string;
-}
-
-export const RespRecordRecordTypeEnum = {
-    ECONOMY_RECORD_TYPE_UNSPECIFIED: 'ECONOMY_RECORD_TYPE_UNSPECIFIED',
-    ECONOMY_RECORD_TYPE_SIGN_IN_REWARD: 'ECONOMY_RECORD_TYPE_SIGN_IN_REWARD',
-    ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD: 'ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD',
-    ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD: 'ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD',
-    ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT: 'ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT',
-    ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN: 'ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN',
-    ECONOMY_RECORD_TYPE_ADMIN_ADD: 'ECONOMY_RECORD_TYPE_ADMIN_ADD',
-    ECONOMY_RECORD_TYPE_ADMIN_DEDUCT: 'ECONOMY_RECORD_TYPE_ADMIN_DEDUCT',
-    ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE: 'ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE',
-    ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE: 'ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE',
-    ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE: 'ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE',
-    ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE: 'ECONOMY_RECORD_TYPE_COMMENT_THANK_EXPENSE',
-    ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE: 'ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE',
-} as const;
-
-export type RespRecordRecordTypeEnum = typeof RespRecordRecordTypeEnum[keyof typeof RespRecordRecordTypeEnum];
-export const RespRecordDirectionEnum = {
-    ECONOMY_RECORD_DIRECTION_UNSPECIFIED: 'ECONOMY_RECORD_DIRECTION_UNSPECIFIED',
-    ECONOMY_RECORD_DIRECTION_INCOME: 'ECONOMY_RECORD_DIRECTION_INCOME',
-    ECONOMY_RECORD_DIRECTION_EXPENSE: 'ECONOMY_RECORD_DIRECTION_EXPENSE',
-} as const;
-
-export type RespRecordDirectionEnum = typeof RespRecordDirectionEnum[keyof typeof RespRecordDirectionEnum];
-
 export interface RespRelationStatus {
     'target_id'?: string;
     'following'?: boolean;
@@ -1841,6 +1846,15 @@ export interface ThankCommentReq {
 }
 export interface ThankCommentResp {
     'thanked'?: boolean;
+}
+export interface TransferAccountPointsReq {
+    'target_name': string;
+    'amount': string;
+    'remark'?: string;
+    'idempotency_key': string;
+}
+export interface TransferAccountPointsResp {
+    'balance'?: string;
 }
 export interface UnbindArticleTagsReq {
     'article_id': string;
@@ -2046,6 +2060,40 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
+         * 查询当前账号的积分余额和累计收支。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEconomyAccount: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('getEconomyAccount', 'body', body)
+            const localVarPath = `/v1/user/account/economy/get`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 按账号名获取个人主页资料。
          * @param {GetProfileReq} getProfileReq 
          * @param {*} [options] Override http request option.
@@ -2148,6 +2196,40 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
+         * 查询账号公开的积分流水。
+         * @param {ListPointRecordsReq} listPointRecordsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPointRecords: async (listPointRecordsReq: ListPointRecordsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listPointRecordsReq' is not null or undefined
+            assertParamExists('listPointRecords', 'listPointRecordsReq', listPointRecordsReq)
+            const localVarPath = `/v1/user/account/list-point-records`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(listPointRecordsReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 申请当前账号资料图片的内容寻址直传能力。
          * @param {PrepareProfileImageUploadAccountReq} prepareProfileImageUploadAccountReq 
          * @param {*} [options] Override http request option.
@@ -2209,6 +2291,40 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(searchMentionAccountsReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 向指定账号转移积分。
+         * @param {TransferAccountPointsReq} transferAccountPointsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transferPoints: async (transferAccountPointsReq: TransferAccountPointsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'transferAccountPointsReq' is not null or undefined
+            assertParamExists('transferPoints', 'transferAccountPointsReq', transferAccountPointsReq)
+            const localVarPath = `/v1/user/account/economy/transfer`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(transferAccountPointsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2397,6 +2513,18 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 查询当前账号的积分余额和累计收支。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getEconomyAccount(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAccountEconomyResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getEconomyAccount(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.getEconomyAccount']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 按账号名获取个人主页资料。
          * @param {GetProfileReq} getProfileReq 
          * @param {*} [options] Override http request option.
@@ -2433,6 +2561,18 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 查询账号公开的积分流水。
+         * @param {ListPointRecordsReq} listPointRecordsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPointRecords(listPointRecordsReq: ListPointRecordsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListPointRecordsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPointRecords(listPointRecordsReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.listPointRecords']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 申请当前账号资料图片的内容寻址直传能力。
          * @param {PrepareProfileImageUploadAccountReq} prepareProfileImageUploadAccountReq 
          * @param {*} [options] Override http request option.
@@ -2454,6 +2594,18 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.searchMention(searchMentionAccountsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountService.searchMention']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 向指定账号转移积分。
+         * @param {TransferAccountPointsReq} transferAccountPointsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async transferPoints(transferAccountPointsReq: TransferAccountPointsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransferAccountPointsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.transferPoints(transferAccountPointsReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.transferPoints']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -2541,6 +2693,15 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
+         * 查询当前账号的积分余额和累计收支。
+         * @param {AccountServiceGetEconomyAccountRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getEconomyAccount(requestParameters: AccountServiceGetEconomyAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetAccountEconomyResp> {
+            return localVarFp.getEconomyAccount(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 按账号名获取个人主页资料。
          * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2568,6 +2729,15 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.listFollowing(requestParameters.listFollowingReq, options).then((request) => request(axios, basePath));
         },
         /**
+         * 查询账号公开的积分流水。
+         * @param {AccountServiceListPointRecordsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPointRecords(requestParameters: AccountServiceListPointRecordsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListPointRecordsResp> {
+            return localVarFp.listPointRecords(requestParameters.listPointRecordsReq, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 申请当前账号资料图片的内容寻址直传能力。
          * @param {AccountServicePrepareProfileImageUploadRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2584,6 +2754,15 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
          */
         searchMention(requestParameters: AccountServiceSearchMentionRequest, options?: RawAxiosRequestConfig): AxiosPromise<SearchMentionAccountsResp> {
             return localVarFp.searchMention(requestParameters.searchMentionAccountsReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 向指定账号转移积分。
+         * @param {AccountServiceTransferPointsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transferPoints(requestParameters: AccountServiceTransferPointsRequest, options?: RawAxiosRequestConfig): AxiosPromise<TransferAccountPointsResp> {
+            return localVarFp.transferPoints(requestParameters.transferAccountPointsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 更新当前账号邮箱
@@ -2653,6 +2832,14 @@ export interface AccountServiceInterface {
     getCurrent(requestParameters: AccountServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentAccountResp>;
 
     /**
+     * 查询当前账号的积分余额和累计收支。
+     * @param {AccountServiceGetEconomyAccountRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getEconomyAccount(requestParameters: AccountServiceGetEconomyAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetAccountEconomyResp>;
+
+    /**
      * 按账号名获取个人主页资料。
      * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2677,6 +2864,14 @@ export interface AccountServiceInterface {
     listFollowing(requestParameters: AccountServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingResp>;
 
     /**
+     * 查询账号公开的积分流水。
+     * @param {AccountServiceListPointRecordsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPointRecords(requestParameters: AccountServiceListPointRecordsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListPointRecordsResp>;
+
+    /**
      * 申请当前账号资料图片的内容寻址直传能力。
      * @param {AccountServicePrepareProfileImageUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2691,6 +2886,14 @@ export interface AccountServiceInterface {
      * @throws {RequiredError}
      */
     searchMention(requestParameters: AccountServiceSearchMentionRequest, options?: RawAxiosRequestConfig): AxiosPromise<SearchMentionAccountsResp>;
+
+    /**
+     * 向指定账号转移积分。
+     * @param {AccountServiceTransferPointsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    transferPoints(requestParameters: AccountServiceTransferPointsRequest, options?: RawAxiosRequestConfig): AxiosPromise<TransferAccountPointsResp>;
 
     /**
      * 更新当前账号邮箱
@@ -2748,6 +2951,13 @@ export interface AccountServiceGetCurrentRequest {
 }
 
 /**
+ * Request parameters for getEconomyAccount operation in AccountService.
+ */
+export interface AccountServiceGetEconomyAccountRequest {
+    readonly body: object
+}
+
+/**
  * Request parameters for getProfile operation in AccountService.
  */
 export interface AccountServiceGetProfileRequest {
@@ -2769,6 +2979,13 @@ export interface AccountServiceListFollowingRequest {
 }
 
 /**
+ * Request parameters for listPointRecords operation in AccountService.
+ */
+export interface AccountServiceListPointRecordsRequest {
+    readonly listPointRecordsReq: ListPointRecordsReq
+}
+
+/**
  * Request parameters for prepareProfileImageUpload operation in AccountService.
  */
 export interface AccountServicePrepareProfileImageUploadRequest {
@@ -2780,6 +2997,13 @@ export interface AccountServicePrepareProfileImageUploadRequest {
  */
 export interface AccountServiceSearchMentionRequest {
     readonly searchMentionAccountsReq: SearchMentionAccountsReq
+}
+
+/**
+ * Request parameters for transferPoints operation in AccountService.
+ */
+export interface AccountServiceTransferPointsRequest {
+    readonly transferAccountPointsReq: TransferAccountPointsReq
 }
 
 /**
@@ -2845,6 +3069,16 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
     }
 
     /**
+     * 查询当前账号的积分余额和累计收支。
+     * @param {AccountServiceGetEconomyAccountRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getEconomyAccount(requestParameters: AccountServiceGetEconomyAccountRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).getEconomyAccount(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 按账号名获取个人主页资料。
      * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2875,6 +3109,16 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
     }
 
     /**
+     * 查询账号公开的积分流水。
+     * @param {AccountServiceListPointRecordsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listPointRecords(requestParameters: AccountServiceListPointRecordsRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).listPointRecords(requestParameters.listPointRecordsReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 申请当前账号资料图片的内容寻址直传能力。
      * @param {AccountServicePrepareProfileImageUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2892,6 +3136,16 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
      */
     public searchMention(requestParameters: AccountServiceSearchMentionRequest, options?: RawAxiosRequestConfig) {
         return AccountServiceFp(this.configuration).searchMention(requestParameters.searchMentionAccountsReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 向指定账号转移积分。
+     * @param {AccountServiceTransferPointsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public transferPoints(requestParameters: AccountServiceTransferPointsRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).transferPoints(requestParameters.transferAccountPointsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3198,6 +3452,40 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
+         * 统计当前账号收藏的文章数量。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        countCollected: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('countCollected', 'body', body)
+            const localVarPath = `/v1/content/article/collect/count`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 创建文章草稿
          * @param {CreateDraftArticleReq} createDraftArticleReq 
          * @param {*} [options] Override http request option.
@@ -3470,6 +3758,40 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
+         * 查询当前账号收藏的文章。
+         * @param {PageCollectedArticlesReq} pageCollectedArticlesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageCollected: async (pageCollectedArticlesReq: PageCollectedArticlesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pageCollectedArticlesReq' is not null or undefined
+            assertParamExists('pageCollected', 'pageCollectedArticlesReq', pageCollectedArticlesReq)
+            const localVarPath = `/v1/content/article/collected/page`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pageCollectedArticlesReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 查询当前账号的浏览历史。
          * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
          * @param {*} [options] Override http request option.
@@ -3497,6 +3819,40 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(pageArticleViewHistoryReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询当前账号关注的文章。
+         * @param {PageWatchedArticlesReq} pageWatchedArticlesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageWatched: async (pageWatchedArticlesReq: PageWatchedArticlesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pageWatchedArticlesReq' is not null or undefined
+            assertParamExists('pageWatched', 'pageWatchedArticlesReq', pageWatchedArticlesReq)
+            const localVarPath = `/v1/content/article/watched/page`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pageWatchedArticlesReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3799,6 +4155,18 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 统计当前账号收藏的文章数量。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async countCollected(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountCollectedArticlesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.countCollected(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.countCollected']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 创建文章草稿
          * @param {CreateDraftArticleReq} createDraftArticleReq 
          * @param {*} [options] Override http request option.
@@ -3895,6 +4263,18 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 查询当前账号收藏的文章。
+         * @param {PageCollectedArticlesReq} pageCollectedArticlesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pageCollected(pageCollectedArticlesReq: PageCollectedArticlesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageCollectedArticlesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageCollected(pageCollectedArticlesReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.pageCollected']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 查询当前账号的浏览历史。
          * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
          * @param {*} [options] Override http request option.
@@ -3904,6 +4284,18 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.pageViewHistory(pageArticleViewHistoryReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.pageViewHistory']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询当前账号关注的文章。
+         * @param {PageWatchedArticlesReq} pageWatchedArticlesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pageWatched(pageWatchedArticlesReq: PageWatchedArticlesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageWatchedArticlesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageWatched(pageWatchedArticlesReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.pageWatched']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -4036,6 +4428,15 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.collect(requestParameters.collectArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
+         * 统计当前账号收藏的文章数量。
+         * @param {ArticleServiceCountCollectedRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        countCollected(requestParameters: ArticleServiceCountCollectedRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountCollectedArticlesResp> {
+            return localVarFp.countCollected(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 创建文章草稿
          * @param {ArticleServiceCreateDraftRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -4108,6 +4509,15 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.listNearby(requestParameters.listNearbyArticlesReq, options).then((request) => request(axios, basePath));
         },
         /**
+         * 查询当前账号收藏的文章。
+         * @param {ArticleServicePageCollectedRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageCollected(requestParameters: ArticleServicePageCollectedRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageCollectedArticlesResp> {
+            return localVarFp.pageCollected(requestParameters.pageCollectedArticlesReq, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 查询当前账号的浏览历史。
          * @param {ArticleServicePageViewHistoryRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -4115,6 +4525,15 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
          */
         pageViewHistory(requestParameters: ArticleServicePageViewHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageArticleViewHistoryResp> {
             return localVarFp.pageViewHistory(requestParameters.pageArticleViewHistoryReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询当前账号关注的文章。
+         * @param {ArticleServicePageWatchedRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageWatched(requestParameters: ArticleServicePageWatchedRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageWatchedArticlesResp> {
+            return localVarFp.pageWatched(requestParameters.pageWatchedArticlesReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 发布文章
@@ -4219,6 +4638,14 @@ export interface ArticleServiceInterface {
     collect(requestParameters: ArticleServiceCollectRequest, options?: RawAxiosRequestConfig): AxiosPromise<CollectArticleResp>;
 
     /**
+     * 统计当前账号收藏的文章数量。
+     * @param {ArticleServiceCountCollectedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    countCollected(requestParameters: ArticleServiceCountCollectedRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountCollectedArticlesResp>;
+
+    /**
      * 创建文章草稿
      * @param {ArticleServiceCreateDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -4283,12 +4710,28 @@ export interface ArticleServiceInterface {
     listNearby(requestParameters: ArticleServiceListNearbyRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListNearbyArticlesResp>;
 
     /**
+     * 查询当前账号收藏的文章。
+     * @param {ArticleServicePageCollectedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    pageCollected(requestParameters: ArticleServicePageCollectedRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageCollectedArticlesResp>;
+
+    /**
      * 查询当前账号的浏览历史。
      * @param {ArticleServicePageViewHistoryRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     pageViewHistory(requestParameters: ArticleServicePageViewHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageArticleViewHistoryResp>;
+
+    /**
+     * 查询当前账号关注的文章。
+     * @param {ArticleServicePageWatchedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    pageWatched(requestParameters: ArticleServicePageWatchedRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageWatchedArticlesResp>;
 
     /**
      * 发布文章
@@ -4377,6 +4820,13 @@ export interface ArticleServiceCollectRequest {
 }
 
 /**
+ * Request parameters for countCollected operation in ArticleService.
+ */
+export interface ArticleServiceCountCollectedRequest {
+    readonly body: object
+}
+
+/**
  * Request parameters for createDraft operation in ArticleService.
  */
 export interface ArticleServiceCreateDraftRequest {
@@ -4433,10 +4883,24 @@ export interface ArticleServiceListNearbyRequest {
 }
 
 /**
+ * Request parameters for pageCollected operation in ArticleService.
+ */
+export interface ArticleServicePageCollectedRequest {
+    readonly pageCollectedArticlesReq: PageCollectedArticlesReq
+}
+
+/**
  * Request parameters for pageViewHistory operation in ArticleService.
  */
 export interface ArticleServicePageViewHistoryRequest {
     readonly pageArticleViewHistoryReq: PageArticleViewHistoryReq
+}
+
+/**
+ * Request parameters for pageWatched operation in ArticleService.
+ */
+export interface ArticleServicePageWatchedRequest {
+    readonly pageWatchedArticlesReq: PageWatchedArticlesReq
 }
 
 /**
@@ -4533,6 +4997,16 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
     }
 
     /**
+     * 统计当前账号收藏的文章数量。
+     * @param {ArticleServiceCountCollectedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public countCollected(requestParameters: ArticleServiceCountCollectedRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).countCollected(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 创建文章草稿
      * @param {ArticleServiceCreateDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -4613,6 +5087,16 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
     }
 
     /**
+     * 查询当前账号收藏的文章。
+     * @param {ArticleServicePageCollectedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pageCollected(requestParameters: ArticleServicePageCollectedRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).pageCollected(requestParameters.pageCollectedArticlesReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 查询当前账号的浏览历史。
      * @param {ArticleServicePageViewHistoryRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -4620,6 +5104,16 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
      */
     public pageViewHistory(requestParameters: ArticleServicePageViewHistoryRequest, options?: RawAxiosRequestConfig) {
         return ArticleServiceFp(this.configuration).pageViewHistory(requestParameters.pageArticleViewHistoryReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询当前账号关注的文章。
+     * @param {ArticleServicePageWatchedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pageWatched(requestParameters: ArticleServicePageWatchedRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).pageWatched(requestParameters.pageWatchedArticlesReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5424,205 +5918,6 @@ export class AuthService extends BaseAPI implements AuthServiceInterface {
      */
     public register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig) {
         return AuthServiceFp(this.configuration).register(requestParameters.registerReq, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * CheckinService - axios parameter creator
- */
-export const CheckinServiceAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        checkIn: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('checkIn', 'body', body)
-            const localVarPath = `/v1/user/checkin/check-in`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {GetCheckinOverviewReq} getCheckinOverviewReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getOverview: async (getCheckinOverviewReq: GetCheckinOverviewReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'getCheckinOverviewReq' is not null or undefined
-            assertParamExists('getOverview', 'getCheckinOverviewReq', getCheckinOverviewReq)
-            const localVarPath = `/v1/user/checkin/get-overview`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getCheckinOverviewReq, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * CheckinService - functional programming interface
- */
-export const CheckinServiceFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = CheckinServiceAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async checkIn(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CheckInResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.checkIn(body, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CheckinService.checkIn']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {GetCheckinOverviewReq} getCheckinOverviewReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getOverview(getCheckinOverviewReq: GetCheckinOverviewReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCheckinOverviewResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getOverview(getCheckinOverviewReq, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CheckinService.getOverview']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * CheckinService - factory interface
- */
-export const CheckinServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = CheckinServiceFp(configuration)
-    return {
-        /**
-         * 
-         * @param {CheckinServiceCheckInRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        checkIn(requestParameters: CheckinServiceCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<CheckInResp> {
-            return localVarFp.checkIn(requestParameters.body, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {CheckinServiceGetOverviewRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getOverview(requestParameters: CheckinServiceGetOverviewRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCheckinOverviewResp> {
-            return localVarFp.getOverview(requestParameters.getCheckinOverviewReq, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * CheckinService - interface
- */
-export interface CheckinServiceInterface {
-    /**
-     * 
-     * @param {CheckinServiceCheckInRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    checkIn(requestParameters: CheckinServiceCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<CheckInResp>;
-
-    /**
-     * 
-     * @param {CheckinServiceGetOverviewRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getOverview(requestParameters: CheckinServiceGetOverviewRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCheckinOverviewResp>;
-
-}
-
-/**
- * Request parameters for checkIn operation in CheckinService.
- */
-export interface CheckinServiceCheckInRequest {
-    readonly body: object
-}
-
-/**
- * Request parameters for getOverview operation in CheckinService.
- */
-export interface CheckinServiceGetOverviewRequest {
-    readonly getCheckinOverviewReq: GetCheckinOverviewReq
-}
-
-/**
- * CheckinService - object-oriented interface
- */
-export class CheckinService extends BaseAPI implements CheckinServiceInterface {
-    /**
-     * 
-     * @param {CheckinServiceCheckInRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public checkIn(requestParameters: CheckinServiceCheckInRequest, options?: RawAxiosRequestConfig) {
-        return CheckinServiceFp(this.configuration).checkIn(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {CheckinServiceGetOverviewRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public getOverview(requestParameters: CheckinServiceGetOverviewRequest, options?: RawAxiosRequestConfig) {
-        return CheckinServiceFp(this.configuration).getOverview(requestParameters.getCheckinOverviewReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -8298,6 +8593,189 @@ export class HolidayService extends BaseAPI implements HolidayServiceInterface {
      */
     public getCurrent(requestParameters: HolidayServiceGetCurrentRequest, options?: RawAxiosRequestConfig) {
         return HolidayServiceFp(this.configuration).getCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * LivenessService - axios parameter creator
+ */
+export const LivenessServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        claimYesterdayReward: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('claimYesterdayReward', 'body', body)
+            const localVarPath = `/v1/user/liveness/yesterday-reward/claim`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLiveness: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1/user/liveness`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * LivenessService - functional programming interface
+ */
+export const LivenessServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = LivenessServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async claimYesterdayReward(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClaimYesterdayLivenessRewardResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.claimYesterdayReward(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LivenessService.claimYesterdayReward']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getLiveness(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetLivenessResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getLiveness(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LivenessService.getLiveness']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * LivenessService - factory interface
+ */
+export const LivenessServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = LivenessServiceFp(configuration)
+    return {
+        /**
+         * 
+         * @param {LivenessServiceClaimYesterdayRewardRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        claimYesterdayReward(requestParameters: LivenessServiceClaimYesterdayRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<ClaimYesterdayLivenessRewardResp> {
+            return localVarFp.claimYesterdayReward(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLiveness(options?: RawAxiosRequestConfig): AxiosPromise<GetLivenessResp> {
+            return localVarFp.getLiveness(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * LivenessService - interface
+ */
+export interface LivenessServiceInterface {
+    /**
+     * 
+     * @param {LivenessServiceClaimYesterdayRewardRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    claimYesterdayReward(requestParameters: LivenessServiceClaimYesterdayRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<ClaimYesterdayLivenessRewardResp>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getLiveness(options?: RawAxiosRequestConfig): AxiosPromise<GetLivenessResp>;
+
+}
+
+/**
+ * Request parameters for claimYesterdayReward operation in LivenessService.
+ */
+export interface LivenessServiceClaimYesterdayRewardRequest {
+    readonly body: object
+}
+
+/**
+ * LivenessService - object-oriented interface
+ */
+export class LivenessService extends BaseAPI implements LivenessServiceInterface {
+    /**
+     * 
+     * @param {LivenessServiceClaimYesterdayRewardRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public claimYesterdayReward(requestParameters: LivenessServiceClaimYesterdayRewardRequest, options?: RawAxiosRequestConfig) {
+        return LivenessServiceFp(this.configuration).claimYesterdayReward(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getLiveness(options?: RawAxiosRequestConfig) {
+        return LivenessServiceFp(this.configuration).getLiveness(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

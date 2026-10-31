@@ -1,19 +1,19 @@
-# GetCheckinOverviewReq
+# CountCollectedArticlesResp
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**month** | **string** |  | [optional] [default to undefined]
+**count** | **number** |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { GetCheckinOverviewReq } from '@bass/bbs-sdk-axios';
+import { CountCollectedArticlesResp } from '@bass/bbs-sdk-axios';
 
-const instance: GetCheckinOverviewReq = {
-    month,
+const instance: CountCollectedArticlesResp = {
+    count,
 };
 ```
 

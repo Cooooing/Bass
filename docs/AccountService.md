@@ -7,11 +7,14 @@ All URIs are relative to *http://localhost*
 |[**avatar**](#avatar) | **GET** /v1/user/account/avatar | |
 |[**completeProfileImageUpload**](#completeprofileimageupload) | **POST** /v1/user/account/complete-profile-image-upload | |
 |[**getCurrent**](#getcurrent) | **POST** /v1/user/account/get-current | |
+|[**getEconomyAccount**](#geteconomyaccount) | **POST** /v1/user/account/economy/get | |
 |[**getProfile**](#getprofile) | **POST** /v1/user/account/get-profile | |
 |[**listFollowers**](#listfollowers) | **POST** /v1/user/account/list-followers | |
 |[**listFollowing**](#listfollowing) | **POST** /v1/user/account/list-following | |
+|[**listPointRecords**](#listpointrecords) | **POST** /v1/user/account/list-point-records | |
 |[**prepareProfileImageUpload**](#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload | |
 |[**searchMention**](#searchmention) | **POST** /v1/user/account/search-mention | |
+|[**transferPoints**](#transferpoints) | **POST** /v1/user/account/economy/transfer | |
 |[**updateEmail**](#updateemail) | **POST** /v1/user/account/update-email | |
 |[**updatePassword**](#updatepassword) | **POST** /v1/user/account/update-password | |
 |[**updatePhone**](#updatephone) | **POST** /v1/user/account/update-phone | |
@@ -153,6 +156,57 @@ const { status, data } = await apiInstance.getCurrent(
 ### Return type
 
 **GetCurrentAccountResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getEconomyAccount**
+> GetAccountEconomyResp getEconomyAccount(body)
+
+查询当前账号的积分余额和累计收支。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let body: object; //
+
+const { status, data } = await apiInstance.getEconomyAccount(
+    body
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **body** | **object**|  | |
+
+
+### Return type
+
+**GetAccountEconomyResp**
 
 ### Authorization
 
@@ -327,6 +381,58 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **listPointRecords**
+> ListPointRecordsResp listPointRecords(listPointRecordsReq)
+
+查询账号公开的积分流水。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration,
+    ListPointRecordsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let listPointRecordsReq: ListPointRecordsReq; //
+
+const { status, data } = await apiInstance.listPointRecords(
+    listPointRecordsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listPointRecordsReq** | **ListPointRecordsReq**|  | |
+
+
+### Return type
+
+**ListPointRecordsResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **prepareProfileImageUpload**
 > PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadAccountReq)
 
@@ -413,6 +519,58 @@ const { status, data } = await apiInstance.searchMention(
 ### Return type
 
 **SearchMentionAccountsResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **transferPoints**
+> TransferAccountPointsResp transferPoints(transferAccountPointsReq)
+
+向指定账号转移积分。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration,
+    TransferAccountPointsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let transferAccountPointsReq: TransferAccountPointsReq; //
+
+const { status, data } = await apiInstance.transferPoints(
+    transferAccountPointsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **transferAccountPointsReq** | **TransferAccountPointsReq**|  | |
+
+
+### Return type
+
+**TransferAccountPointsResp**
 
 ### Authorization
 

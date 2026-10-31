@@ -39,9 +39,8 @@ docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
-docs/CheckInResp.md
 docs/CheckRegistrationAvailabilityResp.md
-docs/CheckinService.md
+docs/ClaimYesterdayLivenessRewardResp.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentListItem.md
@@ -52,6 +51,7 @@ docs/CompleteMarkdownImageUploadResp.md
 docs/CompleteProfileImageUploadAccountReq.md
 docs/CompleteProfileImageUploadAccountResp.md
 docs/ConfirmEnableTotpReq.md
+docs/CountCollectedArticlesResp.md
 docs/CountPrivateChatUnreadResp.md
 docs/CountUnreadNotificationsResp.md
 docs/CreateCommentReq.md
@@ -79,10 +79,9 @@ docs/EmojiItem.md
 docs/EmojiService.md
 docs/EnterArticleLotteryReq.md
 docs/FollowRelationReq.md
+docs/GetAccountEconomyResp.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
-docs/GetCheckinOverviewReq.md
-docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
 docs/GetCurrentHolidayResp.md
 docs/GetCurrentLocationResp.md
@@ -90,6 +89,7 @@ docs/GetCurrentPreferencesResp.md
 docs/GetCurrentPrivacySettingResp.md
 docs/GetCurrentTotpResp.md
 docs/GetGlobalChatTopicResp.md
+docs/GetLivenessResp.md
 docs/GetProfileReq.md
 docs/GetProfileResp.md
 docs/GetStatusRelationReq.md
@@ -145,6 +145,8 @@ docs/ListNearbyArticlesReq.md
 docs/ListNearbyArticlesResp.md
 docs/ListNotificationsReq.md
 docs/ListNotificationsResp.md
+docs/ListPointRecordsReq.md
+docs/ListPointRecordsResp.md
 docs/ListPostscriptsReq.md
 docs/ListPostscriptsResp.md
 docs/ListPrivateChatMessagesReq.md
@@ -152,6 +154,7 @@ docs/ListPrivateChatMessagesResp.md
 docs/ListPrivateChatSessionsResp.md
 docs/ListTagsReq.md
 docs/ListTagsResp.md
+docs/LivenessService.md
 docs/LocationService.md
 docs/LoginReq.md
 docs/LoginResp.md
@@ -166,11 +169,15 @@ docs/NotificationService.md
 docs/OtpService.md
 docs/PageArticleViewHistoryReq.md
 docs/PageArticleViewHistoryResp.md
+docs/PageCollectedArticlesReq.md
+docs/PageCollectedArticlesResp.md
 docs/PageMemberMoonbreezesReq.md
 docs/PageMoonbreezesResp.md
 docs/PagePublicMoonbreezesReq.md
 docs/PageReq.md
 docs/PageResp.md
+docs/PageWatchedArticlesReq.md
+docs/PageWatchedArticlesResp.md
 docs/PageWatchingMoonbreezesReq.md
 docs/PostscriptService.md
 docs/PreferencesService.md
@@ -224,9 +231,9 @@ docs/RespDomain.md
 docs/RespLocation.md
 docs/RespNotification.md
 docs/RespPinnedComment.md
+docs/RespPointRecord.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
-docs/RespRecord.md
 docs/RespRelationStatus.md
 docs/RespTag.md
 docs/RespTotp.md
@@ -260,6 +267,8 @@ docs/ThankArticleReq.md
 docs/ThankArticleResp.md
 docs/ThankCommentReq.md
 docs/ThankCommentResp.md
+docs/TransferAccountPointsReq.md
+docs/TransferAccountPointsResp.md
 docs/UnbindArticleTagsReq.md
 docs/UnblockRelationReq.md
 docs/UnfollowRelationReq.md

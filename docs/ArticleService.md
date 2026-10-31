@@ -8,6 +8,7 @@ All URIs are relative to *http://localhost*
 | [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive |  |
 | [**cancelPublish**](ArticleService.md#cancelpublish) | **POST** /v1/content/article/publish/cancel |  |
 | [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect |  |
+| [**countCollected**](ArticleService.md#countcollected) | **POST** /v1/content/article/collect/count |  |
 | [**createDraft**](ArticleService.md#createdraft) | **POST** /v1/content/article/draft/create |  |
 | [**discardDraft**](ArticleService.md#discarddraft) | **POST** /v1/content/article/draft/discard |  |
 | [**enterLottery**](ArticleService.md#enterlottery) | **POST** /v1/content/article/lottery/entry |  |
@@ -16,7 +17,9 @@ All URIs are relative to *http://localhost*
 | [**list**](ArticleService.md#list) | **POST** /v1/content/article/list |  |
 | [**listFollowing**](ArticleService.md#listfollowing) | **POST** /v1/content/article/following/list |  |
 | [**listNearby**](ArticleService.md#listnearby) | **POST** /v1/content/article/nearby/list |  |
+| [**pageCollected**](ArticleService.md#pagecollected) | **POST** /v1/content/article/collected/page |  |
 | [**pageViewHistory**](ArticleService.md#pageviewhistory) | **POST** /v1/content/article/view-history/page |  |
+| [**pageWatched**](ArticleService.md#pagewatched) | **POST** /v1/content/article/watched/page |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
 | [**setPinnedComment**](ArticleService.md#setpinnedcomment) | **POST** /v1/content/article/comment/pin |  |
@@ -276,6 +279,73 @@ example().catch(console.error);
 ### Return type
 
 [**CollectArticleResp**](CollectArticleResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## countCollected
+
+> CountCollectedArticlesResp countCollected(body)
+
+
+
+统计当前账号收藏的文章数量。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { CountCollectedRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // object
+    body: Object,
+  } satisfies CountCollectedRequest;
+
+  try {
+    const data = await api.countCollected(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **body** | `object` |  | |
+
+### Return type
+
+[**CountCollectedArticlesResp**](CountCollectedArticlesResp.md)
 
 ### Authorization
 
@@ -831,6 +901,73 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## pageCollected
+
+> PageCollectedArticlesResp pageCollected(pageCollectedArticlesReq)
+
+
+
+查询当前账号收藏的文章。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { PageCollectedRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // PageCollectedArticlesReq
+    pageCollectedArticlesReq: ...,
+  } satisfies PageCollectedRequest;
+
+  try {
+    const data = await api.pageCollected(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **pageCollectedArticlesReq** | [PageCollectedArticlesReq](PageCollectedArticlesReq.md) |  | |
+
+### Return type
+
+[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## pageViewHistory
 
 > PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
@@ -879,6 +1016,73 @@ example().catch(console.error);
 ### Return type
 
 [**PageArticleViewHistoryResp**](PageArticleViewHistoryResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## pageWatched
+
+> PageWatchedArticlesResp pageWatched(pageWatchedArticlesReq)
+
+
+
+查询当前账号关注的文章。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { PageWatchedRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // PageWatchedArticlesReq
+    pageWatchedArticlesReq: ...,
+  } satisfies PageWatchedRequest;
+
+  try {
+    const data = await api.pageWatched(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **pageWatchedArticlesReq** | [PageWatchedArticlesReq](PageWatchedArticlesReq.md) |  | |
+
+### Return type
+
+[**PageWatchedArticlesResp**](PageWatchedArticlesResp.md)
 
 ### Authorization
 

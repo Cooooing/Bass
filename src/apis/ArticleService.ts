@@ -39,6 +39,11 @@ import {
     CollectArticleRespToJSON,
 } from '../models/CollectArticleResp';
 import {
+    type CountCollectedArticlesResp,
+    CountCollectedArticlesRespFromJSON,
+    CountCollectedArticlesRespToJSON,
+} from '../models/CountCollectedArticlesResp';
+import {
     type CreateDraftArticleReq,
     CreateDraftArticleReqFromJSON,
     CreateDraftArticleReqToJSON,
@@ -119,6 +124,26 @@ import {
     PageArticleViewHistoryRespToJSON,
 } from '../models/PageArticleViewHistoryResp';
 import {
+    type PageCollectedArticlesReq,
+    PageCollectedArticlesReqFromJSON,
+    PageCollectedArticlesReqToJSON,
+} from '../models/PageCollectedArticlesReq';
+import {
+    type PageCollectedArticlesResp,
+    PageCollectedArticlesRespFromJSON,
+    PageCollectedArticlesRespToJSON,
+} from '../models/PageCollectedArticlesResp';
+import {
+    type PageWatchedArticlesReq,
+    PageWatchedArticlesReqFromJSON,
+    PageWatchedArticlesReqToJSON,
+} from '../models/PageWatchedArticlesReq';
+import {
+    type PageWatchedArticlesResp,
+    PageWatchedArticlesRespFromJSON,
+    PageWatchedArticlesRespToJSON,
+} from '../models/PageWatchedArticlesResp';
+import {
     type PublishArticleReq,
     PublishArticleReqFromJSON,
     PublishArticleReqToJSON,
@@ -190,6 +215,10 @@ export interface CollectRequest {
     collectArticleReq: CollectArticleReq;
 }
 
+export interface CountCollectedRequest {
+    body: object;
+}
+
 export interface CreateDraftRequest {
     createDraftArticleReq: CreateDraftArticleReq;
 }
@@ -222,8 +251,16 @@ export interface ListNearbyRequest {
     listNearbyArticlesReq: ListNearbyArticlesReq;
 }
 
+export interface PageCollectedRequest {
+    pageCollectedArticlesReq: PageCollectedArticlesReq;
+}
+
 export interface PageViewHistoryRequest {
     pageArticleViewHistoryReq: PageArticleViewHistoryReq;
+}
+
+export interface PageWatchedRequest {
+    pageWatchedArticlesReq: PageWatchedArticlesReq;
 }
 
 export interface PublishRequest {
@@ -348,6 +385,28 @@ export interface ArticleServiceInterface {
      * 收藏文章
      */
     collect(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectArticleResp>;
+
+    /**
+     * Creates request options for countCollected without sending the request
+     * @param {object} body 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    countCollectedRequestOpts(requestParameters: CountCollectedRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 统计当前账号收藏的文章数量。
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    countCollectedRaw(requestParameters: CountCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountCollectedArticlesResp>>;
+
+    /**
+     * 统计当前账号收藏的文章数量。
+     */
+    countCollected(requestParameters: CountCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountCollectedArticlesResp>;
 
     /**
      * Creates request options for createDraft without sending the request
@@ -526,6 +585,28 @@ export interface ArticleServiceInterface {
     listNearby(requestParameters: ListNearbyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListNearbyArticlesResp>;
 
     /**
+     * Creates request options for pageCollected without sending the request
+     * @param {PageCollectedArticlesReq} pageCollectedArticlesReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    pageCollectedRequestOpts(requestParameters: PageCollectedRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询当前账号收藏的文章。
+     * @param {PageCollectedArticlesReq} pageCollectedArticlesReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    pageCollectedRaw(requestParameters: PageCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageCollectedArticlesResp>>;
+
+    /**
+     * 查询当前账号收藏的文章。
+     */
+    pageCollected(requestParameters: PageCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageCollectedArticlesResp>;
+
+    /**
      * Creates request options for pageViewHistory without sending the request
      * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
      * @throws {RequiredError}
@@ -546,6 +627,28 @@ export interface ArticleServiceInterface {
      * 查询当前账号的浏览历史。
      */
     pageViewHistory(requestParameters: PageViewHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageArticleViewHistoryResp>;
+
+    /**
+     * Creates request options for pageWatched without sending the request
+     * @param {PageWatchedArticlesReq} pageWatchedArticlesReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    pageWatchedRequestOpts(requestParameters: PageWatchedRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询当前账号关注的文章。
+     * @param {PageWatchedArticlesReq} pageWatchedArticlesReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    pageWatchedRaw(requestParameters: PageWatchedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageWatchedArticlesResp>>;
+
+    /**
+     * 查询当前账号关注的文章。
+     */
+    pageWatched(requestParameters: PageWatchedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageWatchedArticlesResp>;
 
     /**
      * Creates request options for publish without sending the request
@@ -893,6 +996,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async collect(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectArticleResp> {
         const response = await this.collectRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for countCollected without sending the request
+     */
+    async countCollectedRequestOpts(requestParameters: CountCollectedRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling countCollected().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/collect/count`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['body'] as any,
+        };
+    }
+
+    /**
+     * 统计当前账号收藏的文章数量。
+     */
+    async countCollectedRaw(requestParameters: CountCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountCollectedArticlesResp>> {
+        const requestOptions = await this.countCollectedRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CountCollectedArticlesRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 统计当前账号收藏的文章数量。
+     */
+    async countCollected(requestParameters: CountCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountCollectedArticlesResp> {
+        const response = await this.countCollectedRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1273,6 +1423,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
+     * Creates request options for pageCollected without sending the request
+     */
+    async pageCollectedRequestOpts(requestParameters: PageCollectedRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['pageCollectedArticlesReq'] == null) {
+            throw new runtime.RequiredError(
+                'pageCollectedArticlesReq',
+                'Required parameter "pageCollectedArticlesReq" was null or undefined when calling pageCollected().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/collected/page`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PageCollectedArticlesReqToJSON(requestParameters['pageCollectedArticlesReq']),
+        };
+    }
+
+    /**
+     * 查询当前账号收藏的文章。
+     */
+    async pageCollectedRaw(requestParameters: PageCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageCollectedArticlesResp>> {
+        const requestOptions = await this.pageCollectedRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PageCollectedArticlesRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询当前账号收藏的文章。
+     */
+    async pageCollected(requestParameters: PageCollectedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageCollectedArticlesResp> {
+        const response = await this.pageCollectedRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for pageViewHistory without sending the request
      */
     async pageViewHistoryRequestOpts(requestParameters: PageViewHistoryRequest): Promise<runtime.RequestOpts> {
@@ -1316,6 +1513,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async pageViewHistory(requestParameters: PageViewHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageArticleViewHistoryResp> {
         const response = await this.pageViewHistoryRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for pageWatched without sending the request
+     */
+    async pageWatchedRequestOpts(requestParameters: PageWatchedRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['pageWatchedArticlesReq'] == null) {
+            throw new runtime.RequiredError(
+                'pageWatchedArticlesReq',
+                'Required parameter "pageWatchedArticlesReq" was null or undefined when calling pageWatched().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/watched/page`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PageWatchedArticlesReqToJSON(requestParameters['pageWatchedArticlesReq']),
+        };
+    }
+
+    /**
+     * 查询当前账号关注的文章。
+     */
+    async pageWatchedRaw(requestParameters: PageWatchedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageWatchedArticlesResp>> {
+        const requestOptions = await this.pageWatchedRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PageWatchedArticlesRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询当前账号关注的文章。
+     */
+    async pageWatched(requestParameters: PageWatchedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageWatchedArticlesResp> {
+        const response = await this.pageWatchedRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

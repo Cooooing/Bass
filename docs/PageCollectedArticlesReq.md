@@ -1,22 +1,22 @@
 
-# GetCheckinOverviewReq
+# PageCollectedArticlesReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`month` | string
+`page` | [PageReq](PageReq.md)
 
 ## Example
 
 ```typescript
-import type { GetCheckinOverviewReq } from '@bass/bbs-sdk-fetch'
+import type { PageCollectedArticlesReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "month": null,
-} satisfies GetCheckinOverviewReq
+  "page": null,
+} satisfies PageCollectedArticlesReq
 
 console.log(example)
 
@@ -25,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as GetCheckinOverviewReq
+const exampleParsed = JSON.parse(exampleJSON) as PageCollectedArticlesReq
 console.log(exampleParsed)
 ```
 

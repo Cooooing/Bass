@@ -1,38 +1,30 @@
 
-# RespRecord
+# RespPointRecord
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`id` | string
-`transactionNo` | string
-`recordType` | string
+`createdAt` | Date
+`typeLabel` | string
 `direction` | string
 `amount` | string
-`balanceBefore` | string
 `balanceAfter` | string
-`remark` | string
-`createdAt` | Date
 
 ## Example
 
 ```typescript
-import type { RespRecord } from '@bass/bbs-sdk-fetch'
+import type { RespPointRecord } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "id": null,
-  "transactionNo": null,
-  "recordType": null,
+  "createdAt": null,
+  "typeLabel": null,
   "direction": null,
   "amount": null,
-  "balanceBefore": null,
   "balanceAfter": null,
-  "remark": null,
-  "createdAt": null,
-} satisfies RespRecord
+} satisfies RespPointRecord
 
 console.log(example)
 
@@ -41,7 +33,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as RespRecord
+const exampleParsed = JSON.parse(exampleJSON) as RespPointRecord
 console.log(exampleParsed)
 ```
 

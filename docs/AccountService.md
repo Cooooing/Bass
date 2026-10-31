@@ -7,11 +7,14 @@ All URIs are relative to *http://localhost*
 | [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar |  |
 | [**completeProfileImageUpload**](AccountService.md#completeprofileimageupload) | **POST** /v1/user/account/complete-profile-image-upload |  |
 | [**getCurrent**](AccountService.md#getcurrent) | **POST** /v1/user/account/get-current |  |
+| [**getEconomyAccount**](AccountService.md#geteconomyaccount) | **POST** /v1/user/account/economy/get |  |
 | [**getProfile**](AccountService.md#getprofile) | **POST** /v1/user/account/get-profile |  |
 | [**listFollowers**](AccountService.md#listfollowers) | **POST** /v1/user/account/list-followers |  |
 | [**listFollowing**](AccountService.md#listfollowing) | **POST** /v1/user/account/list-following |  |
+| [**listPointRecords**](AccountService.md#listpointrecords) | **POST** /v1/user/account/list-point-records |  |
 | [**prepareProfileImageUpload**](AccountService.md#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
 | [**searchMention**](AccountService.md#searchmention) | **POST** /v1/user/account/search-mention |  |
+| [**transferPoints**](AccountService.md#transferpoints) | **POST** /v1/user/account/economy/transfer |  |
 | [**updateEmail**](AccountService.md#updateemail) | **POST** /v1/user/account/update-email |  |
 | [**updatePassword**](AccountService.md#updatepassword) | **POST** /v1/user/account/update-password |  |
 | [**updatePhone**](AccountService.md#updatephone) | **POST** /v1/user/account/update-phone |  |
@@ -201,6 +204,73 @@ example().catch(console.error);
 ### Return type
 
 [**GetCurrentAccountResp**](GetCurrentAccountResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getEconomyAccount
+
+> GetAccountEconomyResp getEconomyAccount(body)
+
+
+
+查询当前账号的积分余额和累计收支。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { GetEconomyAccountRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // object
+    body: Object,
+  } satisfies GetEconomyAccountRequest;
+
+  try {
+    const data = await api.getEconomyAccount(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **body** | `object` |  | |
+
+### Return type
+
+[**GetAccountEconomyResp**](GetAccountEconomyResp.md)
 
 ### Authorization
 
@@ -421,6 +491,73 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## listPointRecords
+
+> ListPointRecordsResp listPointRecords(listPointRecordsReq)
+
+
+
+查询账号公开的积分流水。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListPointRecordsRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // ListPointRecordsReq
+    listPointRecordsReq: ...,
+  } satisfies ListPointRecordsRequest;
+
+  try {
+    const data = await api.listPointRecords(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listPointRecordsReq** | [ListPointRecordsReq](ListPointRecordsReq.md) |  | |
+
+### Return type
+
+[**ListPointRecordsResp**](ListPointRecordsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## prepareProfileImageUpload
 
 > PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadAccountReq)
@@ -536,6 +673,73 @@ example().catch(console.error);
 ### Return type
 
 [**SearchMentionAccountsResp**](SearchMentionAccountsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## transferPoints
+
+> TransferAccountPointsResp transferPoints(transferAccountPointsReq)
+
+
+
+向指定账号转移积分。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { TransferPointsRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // TransferAccountPointsReq
+    transferAccountPointsReq: ...,
+  } satisfies TransferPointsRequest;
+
+  try {
+    const data = await api.transferPoints(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **transferAccountPointsReq** | [TransferAccountPointsReq](TransferAccountPointsReq.md) |  | |
+
+### Return type
+
+[**TransferAccountPointsResp**](TransferAccountPointsResp.md)
 
 ### Authorization
 

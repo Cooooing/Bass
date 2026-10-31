@@ -1,26 +1,22 @@
 
-# GetCheckinOverviewResp
+# PageWatchedArticlesReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`records` | [Array&lt;RespRecord&gt;](RespRecord.md)
-`currentStreak` | number
-`longestStreak` | number
+`page` | [PageReq](PageReq.md)
 
 ## Example
 
 ```typescript
-import type { GetCheckinOverviewResp } from '@bass/bbs-sdk-fetch'
+import type { PageWatchedArticlesReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "records": null,
-  "currentStreak": null,
-  "longestStreak": null,
-} satisfies GetCheckinOverviewResp
+  "page": null,
+} satisfies PageWatchedArticlesReq
 
 console.log(example)
 
@@ -29,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as GetCheckinOverviewResp
+const exampleParsed = JSON.parse(exampleJSON) as PageWatchedArticlesReq
 console.log(exampleParsed)
 ```
 

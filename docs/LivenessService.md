@@ -1,17 +1,17 @@
-# CheckinService
+# LivenessService
 
 All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**checkIn**](CheckinService.md#checkin) | **POST** /v1/user/checkin/check-in |  |
-| [**getOverview**](CheckinService.md#getoverview) | **POST** /v1/user/checkin/get-overview |  |
+| [**claimYesterdayReward**](LivenessService.md#claimyesterdayreward) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
+| [**getLiveness**](LivenessService.md#getliveness) | **GET** /v1/user/liveness |  |
 
 
 
-## checkIn
+## claimYesterdayReward
 
-> CheckInResp checkIn(body)
+> ClaimYesterdayLivenessRewardResp claimYesterdayReward(body)
 
 
 
@@ -20,21 +20,21 @@ All URIs are relative to *http://localhost*
 ```ts
 import {
   Configuration,
-  CheckinService,
+  LivenessService,
 } from '@bass/bbs-sdk-fetch';
-import type { CheckInRequest } from '@bass/bbs-sdk-fetch';
+import type { ClaimYesterdayRewardRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new CheckinService();
+  const api = new LivenessService();
 
   const body = {
     // object
     body: Object,
-  } satisfies CheckInRequest;
+  } satisfies ClaimYesterdayRewardRequest;
 
   try {
-    const data = await api.checkIn(body);
+    const data = await api.claimYesterdayReward(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -54,7 +54,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CheckInResp**](CheckInResp.md)
+[**ClaimYesterdayLivenessRewardResp**](ClaimYesterdayLivenessRewardResp.md)
 
 ### Authorization
 
@@ -74,9 +74,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## getOverview
+## getLiveness
 
-> GetCheckinOverviewResp getOverview(getCheckinOverviewReq)
+> GetLivenessResp getLiveness()
 
 
 
@@ -85,21 +85,16 @@ No authorization required
 ```ts
 import {
   Configuration,
-  CheckinService,
+  LivenessService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetOverviewRequest } from '@bass/bbs-sdk-fetch';
+import type { GetLivenessRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new CheckinService();
-
-  const body = {
-    // GetCheckinOverviewReq
-    getCheckinOverviewReq: ...,
-  } satisfies GetOverviewRequest;
+  const api = new LivenessService();
 
   try {
-    const data = await api.getOverview(body);
+    const data = await api.getLiveness();
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -112,14 +107,11 @@ example().catch(console.error);
 
 ### Parameters
 
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **getCheckinOverviewReq** | [GetCheckinOverviewReq](GetCheckinOverviewReq.md) |  | |
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**GetCheckinOverviewResp**](GetCheckinOverviewResp.md)
+[**GetLivenessResp**](GetLivenessResp.md)
 
 ### Authorization
 
@@ -127,7 +119,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: `application/json`
+- **Content-Type**: Not defined
 - **Accept**: `application/json`
 
 

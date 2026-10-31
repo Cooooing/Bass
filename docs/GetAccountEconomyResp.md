@@ -1,28 +1,26 @@
 
-# CheckInResp
+# GetAccountEconomyResp
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`recordId` | string
-`date` | Date
-`currentStreak` | number
-`longestStreak` | number
+`balance` | string
+`totalIncome` | string
+`totalExpense` | string
 
 ## Example
 
 ```typescript
-import type { CheckInResp } from '@bass/bbs-sdk-fetch'
+import type { GetAccountEconomyResp } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "recordId": null,
-  "date": null,
-  "currentStreak": null,
-  "longestStreak": null,
-} satisfies CheckInResp
+  "balance": null,
+  "totalIncome": null,
+  "totalExpense": null,
+} satisfies GetAccountEconomyResp
 
 console.log(example)
 
@@ -31,7 +29,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as CheckInResp
+const exampleParsed = JSON.parse(exampleJSON) as GetAccountEconomyResp
 console.log(exampleParsed)
 ```
 

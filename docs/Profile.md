@@ -13,6 +13,7 @@ Name | Type
 `visibility` | [ProfileVisibility](ProfileVisibility.md)
 `viewerRelation` | [ProfileRelation](ProfileRelation.md)
 `online` | boolean
+`points` | string
 
 ## Example
 
@@ -28,6 +29,7 @@ const example = {
   "visibility": null,
   "viewerRelation": null,
   "online": null,
+  "points": null,
 } satisfies Profile
 
 console.log(example)

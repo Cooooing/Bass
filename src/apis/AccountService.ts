@@ -24,6 +24,11 @@ import {
     CompleteProfileImageUploadAccountRespToJSON,
 } from '../models/CompleteProfileImageUploadAccountResp';
 import {
+    type GetAccountEconomyResp,
+    GetAccountEconomyRespFromJSON,
+    GetAccountEconomyRespToJSON,
+} from '../models/GetAccountEconomyResp';
+import {
     type GetCurrentAccountResp,
     GetCurrentAccountRespFromJSON,
     GetCurrentAccountRespToJSON,
@@ -64,6 +69,16 @@ import {
     ListFollowingRespToJSON,
 } from '../models/ListFollowingResp';
 import {
+    type ListPointRecordsReq,
+    ListPointRecordsReqFromJSON,
+    ListPointRecordsReqToJSON,
+} from '../models/ListPointRecordsReq';
+import {
+    type ListPointRecordsResp,
+    ListPointRecordsRespFromJSON,
+    ListPointRecordsRespToJSON,
+} from '../models/ListPointRecordsResp';
+import {
     type PrepareProfileImageUploadAccountReq,
     PrepareProfileImageUploadAccountReqFromJSON,
     PrepareProfileImageUploadAccountReqToJSON,
@@ -83,6 +98,16 @@ import {
     SearchMentionAccountsRespFromJSON,
     SearchMentionAccountsRespToJSON,
 } from '../models/SearchMentionAccountsResp';
+import {
+    type TransferAccountPointsReq,
+    TransferAccountPointsReqFromJSON,
+    TransferAccountPointsReqToJSON,
+} from '../models/TransferAccountPointsReq';
+import {
+    type TransferAccountPointsResp,
+    TransferAccountPointsRespFromJSON,
+    TransferAccountPointsRespToJSON,
+} from '../models/TransferAccountPointsResp';
 import {
     type UpdateEmailAccountReq,
     UpdateEmailAccountReqFromJSON,
@@ -121,6 +146,10 @@ export interface GetCurrentRequest {
     body: object;
 }
 
+export interface GetEconomyAccountRequest {
+    body: object;
+}
+
 export interface GetProfileRequest {
     getProfileReq: GetProfileReq;
 }
@@ -133,12 +162,20 @@ export interface ListFollowingRequest {
     listFollowingReq: ListFollowingReq;
 }
 
+export interface ListPointRecordsRequest {
+    listPointRecordsReq: ListPointRecordsReq;
+}
+
 export interface PrepareProfileImageUploadRequest {
     prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq;
 }
 
 export interface SearchMentionRequest {
     searchMentionAccountsReq: SearchMentionAccountsReq;
+}
+
+export interface TransferPointsRequest {
+    transferAccountPointsReq: TransferAccountPointsReq;
 }
 
 export interface UpdateEmailRequest {
@@ -231,6 +268,28 @@ export interface AccountServiceInterface {
     getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountResp>;
 
     /**
+     * Creates request options for getEconomyAccount without sending the request
+     * @param {object} body 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    getEconomyAccountRequestOpts(requestParameters: GetEconomyAccountRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询当前账号的积分余额和累计收支。
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    getEconomyAccountRaw(requestParameters: GetEconomyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountEconomyResp>>;
+
+    /**
+     * 查询当前账号的积分余额和累计收支。
+     */
+    getEconomyAccount(requestParameters: GetEconomyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountEconomyResp>;
+
+    /**
      * Creates request options for getProfile without sending the request
      * @param {GetProfileReq} getProfileReq 
      * @throws {RequiredError}
@@ -297,6 +356,28 @@ export interface AccountServiceInterface {
     listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingResp>;
 
     /**
+     * Creates request options for listPointRecords without sending the request
+     * @param {ListPointRecordsReq} listPointRecordsReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    listPointRecordsRequestOpts(requestParameters: ListPointRecordsRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询账号公开的积分流水。
+     * @param {ListPointRecordsReq} listPointRecordsReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    listPointRecordsRaw(requestParameters: ListPointRecordsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPointRecordsResp>>;
+
+    /**
+     * 查询账号公开的积分流水。
+     */
+    listPointRecords(requestParameters: ListPointRecordsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListPointRecordsResp>;
+
+    /**
      * Creates request options for prepareProfileImageUpload without sending the request
      * @param {PrepareProfileImageUploadAccountReq} prepareProfileImageUploadAccountReq 
      * @throws {RequiredError}
@@ -339,6 +420,28 @@ export interface AccountServiceInterface {
      * 检索可提及账号的候选项。
      */
     searchMention(requestParameters: SearchMentionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchMentionAccountsResp>;
+
+    /**
+     * Creates request options for transferPoints without sending the request
+     * @param {TransferAccountPointsReq} transferAccountPointsReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    transferPointsRequestOpts(requestParameters: TransferPointsRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 向指定账号转移积分。
+     * @param {TransferAccountPointsReq} transferAccountPointsReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    transferPointsRaw(requestParameters: TransferPointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TransferAccountPointsResp>>;
+
+    /**
+     * 向指定账号转移积分。
+     */
+    transferPoints(requestParameters: TransferPointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TransferAccountPointsResp>;
 
     /**
      * Creates request options for updateEmail without sending the request
@@ -571,6 +674,53 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
+     * Creates request options for getEconomyAccount without sending the request
+     */
+    async getEconomyAccountRequestOpts(requestParameters: GetEconomyAccountRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling getEconomyAccount().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/economy/get`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['body'] as any,
+        };
+    }
+
+    /**
+     * 查询当前账号的积分余额和累计收支。
+     */
+    async getEconomyAccountRaw(requestParameters: GetEconomyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetAccountEconomyResp>> {
+        const requestOptions = await this.getEconomyAccountRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetAccountEconomyRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询当前账号的积分余额和累计收支。
+     */
+    async getEconomyAccount(requestParameters: GetEconomyAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetAccountEconomyResp> {
+        const response = await this.getEconomyAccountRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for getProfile without sending the request
      */
     async getProfileRequestOpts(requestParameters: GetProfileRequest): Promise<runtime.RequestOpts> {
@@ -712,6 +862,53 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
+     * Creates request options for listPointRecords without sending the request
+     */
+    async listPointRecordsRequestOpts(requestParameters: ListPointRecordsRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listPointRecordsReq'] == null) {
+            throw new runtime.RequiredError(
+                'listPointRecordsReq',
+                'Required parameter "listPointRecordsReq" was null or undefined when calling listPointRecords().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/list-point-records`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListPointRecordsReqToJSON(requestParameters['listPointRecordsReq']),
+        };
+    }
+
+    /**
+     * 查询账号公开的积分流水。
+     */
+    async listPointRecordsRaw(requestParameters: ListPointRecordsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPointRecordsResp>> {
+        const requestOptions = await this.listPointRecordsRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListPointRecordsRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询账号公开的积分流水。
+     */
+    async listPointRecords(requestParameters: ListPointRecordsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListPointRecordsResp> {
+        const response = await this.listPointRecordsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for prepareProfileImageUpload without sending the request
      */
     async prepareProfileImageUploadRequestOpts(requestParameters: PrepareProfileImageUploadRequest): Promise<runtime.RequestOpts> {
@@ -802,6 +999,53 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
      */
     async searchMention(requestParameters: SearchMentionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchMentionAccountsResp> {
         const response = await this.searchMentionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for transferPoints without sending the request
+     */
+    async transferPointsRequestOpts(requestParameters: TransferPointsRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['transferAccountPointsReq'] == null) {
+            throw new runtime.RequiredError(
+                'transferAccountPointsReq',
+                'Required parameter "transferAccountPointsReq" was null or undefined when calling transferPoints().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/economy/transfer`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: TransferAccountPointsReqToJSON(requestParameters['transferAccountPointsReq']),
+        };
+    }
+
+    /**
+     * 向指定账号转移积分。
+     */
+    async transferPointsRaw(requestParameters: TransferPointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TransferAccountPointsResp>> {
+        const requestOptions = await this.transferPointsRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TransferAccountPointsRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 向指定账号转移积分。
+     */
+    async transferPoints(requestParameters: TransferPointsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TransferAccountPointsResp> {
+        const response = await this.transferPointsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

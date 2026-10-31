@@ -35,6 +35,11 @@ pub trait AccountService: Send + Sync {
     /// 获取当前账号完整资料
     async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentError>>;
 
+    /// POST /v1/user/account/economy/get
+    ///
+    /// 查询当前账号的积分余额和累计收支。
+    async fn get_economy_account<'body>(&self, body: serde_json::Value) -> Result<models::GetAccountEconomyResp, Error<GetEconomyAccountError>>;
+
     /// POST /v1/user/account/get-profile
     ///
     /// 按账号名获取个人主页资料。
@@ -50,6 +55,11 @@ pub trait AccountService: Send + Sync {
     /// 查询账号公开的关注列表。
     async fn list_following<'list_following_req>(&self, list_following_req: models::ListFollowingReq) -> Result<models::ListFollowingResp, Error<ListFollowingError>>;
 
+    /// POST /v1/user/account/list-point-records
+    ///
+    /// 查询账号公开的积分流水。
+    async fn list_point_records<'list_point_records_req>(&self, list_point_records_req: models::ListPointRecordsReq) -> Result<models::ListPointRecordsResp, Error<ListPointRecordsError>>;
+
     /// POST /v1/user/account/prepare-profile-image-upload
     ///
     /// 申请当前账号资料图片的内容寻址直传能力。
@@ -59,6 +69,11 @@ pub trait AccountService: Send + Sync {
     ///
     /// 检索可提及账号的候选项。
     async fn search_mention<'search_mention_accounts_req>(&self, search_mention_accounts_req: models::SearchMentionAccountsReq) -> Result<models::SearchMentionAccountsResp, Error<SearchMentionError>>;
+
+    /// POST /v1/user/account/economy/transfer
+    ///
+    /// 向指定账号转移积分。
+    async fn transfer_points<'transfer_account_points_req>(&self, transfer_account_points_req: models::TransferAccountPointsReq) -> Result<models::TransferAccountPointsResp, Error<TransferPointsError>>;
 
     /// POST /v1/user/account/update-email
     ///
@@ -214,6 +229,45 @@ impl AccountService for AccountServiceClient {
         }
     }
 
+    /// 查询当前账号的积分余额和累计收支。
+    async fn get_economy_account<'body>(&self, body: serde_json::Value) -> Result<models::GetAccountEconomyResp, Error<GetEconomyAccountError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/economy/get", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&body);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetAccountEconomyResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetAccountEconomyResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<GetEconomyAccountError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 按账号名获取个人主页资料。
     async fn get_profile<'get_profile_req>(&self, get_profile_req: models::GetProfileReq) -> Result<models::GetProfileResp, Error<GetProfileError>> {
         let local_var_configuration = &self.configuration;
@@ -331,6 +385,45 @@ impl AccountService for AccountServiceClient {
         }
     }
 
+    /// 查询账号公开的积分流水。
+    async fn list_point_records<'list_point_records_req>(&self, list_point_records_req: models::ListPointRecordsReq) -> Result<models::ListPointRecordsResp, Error<ListPointRecordsError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/list-point-records", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_point_records_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListPointRecordsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListPointRecordsResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListPointRecordsError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 申请当前账号资料图片的内容寻址直传能力。
     async fn prepare_profile_image_upload<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadError>> {
         let local_var_configuration = &self.configuration;
@@ -404,6 +497,45 @@ impl AccountService for AccountServiceClient {
             }
         } else {
             let local_var_entity: Option<SearchMentionError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 向指定账号转移积分。
+    async fn transfer_points<'transfer_account_points_req>(&self, transfer_account_points_req: models::TransferAccountPointsReq) -> Result<models::TransferAccountPointsResp, Error<TransferPointsError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/economy/transfer", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&transfer_account_points_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::TransferAccountPointsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::TransferAccountPointsResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<TransferPointsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -588,6 +720,13 @@ pub enum GetCurrentError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`AccountService::get_economy_account`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetEconomyAccountError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`AccountService::get_profile`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -609,6 +748,13 @@ pub enum ListFollowingError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`AccountService::list_point_records`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListPointRecordsError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`AccountService::prepare_profile_image_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -620,6 +766,13 @@ pub enum PrepareProfileImageUploadError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SearchMentionError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AccountService::transfer_points`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum TransferPointsError {
     UnknownValue(serde_json::Value),
 }
 

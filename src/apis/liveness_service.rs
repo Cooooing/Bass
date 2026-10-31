@@ -18,24 +18,24 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait CheckinService: Send + Sync {
+pub trait LivenessService: Send + Sync {
 
-    /// POST /v1/user/checkin/check-in
+    /// POST /v1/user/liveness/yesterday-reward/claim
     ///
     /// 
-    async fn check_in<'body>(&self, body: serde_json::Value) -> Result<models::CheckInResp, Error<CheckInError>>;
+    async fn claim_yesterday_reward<'body>(&self, body: serde_json::Value) -> Result<models::ClaimYesterdayLivenessRewardResp, Error<ClaimYesterdayRewardError>>;
 
-    /// POST /v1/user/checkin/get-overview
+    /// GET /v1/user/liveness
     ///
     /// 
-    async fn get_overview<'get_checkin_overview_req>(&self, get_checkin_overview_req: models::GetCheckinOverviewReq) -> Result<models::GetCheckinOverviewResp, Error<GetOverviewError>>;
+    async fn get_liveness<>(&self, ) -> Result<models::GetLivenessResp, Error<GetLivenessError>>;
 }
 
-pub struct CheckinServiceClient {
+pub struct LivenessServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl CheckinServiceClient {
+impl LivenessServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -44,13 +44,13 @@ impl CheckinServiceClient {
 
 
 #[async_trait]
-impl CheckinService for CheckinServiceClient {
-    async fn check_in<'body>(&self, body: serde_json::Value) -> Result<models::CheckInResp, Error<CheckInError>> {
+impl LivenessService for LivenessServiceClient {
+    async fn claim_yesterday_reward<'body>(&self, body: serde_json::Value) -> Result<models::ClaimYesterdayLivenessRewardResp, Error<ClaimYesterdayRewardError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/user/checkin/check-in", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/user/liveness/yesterday-reward/claim", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
@@ -73,28 +73,27 @@ impl CheckinService for CheckinServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CheckInResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CheckInResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ClaimYesterdayLivenessRewardResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ClaimYesterdayLivenessRewardResp`")))),
             }
         } else {
-            let local_var_entity: Option<CheckInError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ClaimYesterdayRewardError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn get_overview<'get_checkin_overview_req>(&self, get_checkin_overview_req: models::GetCheckinOverviewReq) -> Result<models::GetCheckinOverviewResp, Error<GetOverviewError>> {
+    async fn get_liveness<>(&self, ) -> Result<models::GetLivenessResp, Error<GetLivenessError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/user/checkin/get-overview", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+        let local_var_uri_str = format!("{}/v1/user/liveness", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&get_checkin_overview_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -111,11 +110,11 @@ impl CheckinService for CheckinServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCheckinOverviewResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCheckinOverviewResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetLivenessResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetLivenessResp`")))),
             }
         } else {
-            let local_var_entity: Option<GetOverviewError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetLivenessError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -123,17 +122,17 @@ impl CheckinService for CheckinServiceClient {
 
 }
 
-/// struct for typed errors of method [`CheckinService::check_in`]
+/// struct for typed errors of method [`LivenessService::claim_yesterday_reward`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CheckInError {
+pub enum ClaimYesterdayRewardError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`CheckinService::get_overview`]
+/// struct for typed errors of method [`LivenessService::get_liveness`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetOverviewError {
+pub enum GetLivenessError {
     UnknownValue(serde_json::Value),
 }
 

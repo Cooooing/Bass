@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive | 
 [**cancel_publish**](ArticleService.md#cancel_publish) | **POST** /v1/content/article/publish/cancel | 
 [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect | 
+[**count_collected**](ArticleService.md#count_collected) | **POST** /v1/content/article/collect/count | 
 [**create_draft**](ArticleService.md#create_draft) | **POST** /v1/content/article/draft/create | 
 [**discard_draft**](ArticleService.md#discard_draft) | **POST** /v1/content/article/draft/discard | 
 [**enter_lottery**](ArticleService.md#enter_lottery) | **POST** /v1/content/article/lottery/entry | 
@@ -16,7 +17,9 @@ Method | HTTP request | Description
 [**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
 [**list_following**](ArticleService.md#list_following) | **POST** /v1/content/article/following/list | 
 [**list_nearby**](ArticleService.md#list_nearby) | **POST** /v1/content/article/nearby/list | 
+[**page_collected**](ArticleService.md#page_collected) | **POST** /v1/content/article/collected/page | 
 [**page_view_history**](ArticleService.md#page_view_history) | **POST** /v1/content/article/view-history/page | 
+[**page_watched**](ArticleService.md#page_watched) | **POST** /v1/content/article/watched/page | 
 [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward | 
 [**set_pinned_comment**](ArticleService.md#set_pinned_comment) | **POST** /v1/content/article/comment/pin | 
@@ -134,6 +137,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::CollectArticleResp**](CollectArticle_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## count_collected
+
+> models::CountCollectedArticlesResp count_collected(body)
+
+
+统计当前账号收藏的文章数量。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**body** | **serde_json::Value** |  | [required] |
+
+### Return type
+
+[**models::CountCollectedArticlesResp**](CountCollectedArticles_Resp.md)
 
 ### Authorization
 
@@ -387,6 +420,36 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## page_collected
+
+> models::PageCollectedArticlesResp page_collected(page_collected_articles_req)
+
+
+查询当前账号收藏的文章。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**page_collected_articles_req** | [**PageCollectedArticlesReq**](PageCollectedArticlesReq.md) |  | [required] |
+
+### Return type
+
+[**models::PageCollectedArticlesResp**](PageCollectedArticles_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## page_view_history
 
 > models::PageArticleViewHistoryResp page_view_history(page_article_view_history_req)
@@ -404,6 +467,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::PageArticleViewHistoryResp**](PageArticleViewHistory_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## page_watched
+
+> models::PageWatchedArticlesResp page_watched(page_watched_articles_req)
+
+
+查询当前账号关注的文章。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**page_watched_articles_req** | [**PageWatchedArticlesReq**](PageWatchedArticlesReq.md) |  | [required] |
+
+### Return type
+
+[**models::PageWatchedArticlesResp**](PageWatchedArticles_Resp.md)
 
 ### Authorization
 

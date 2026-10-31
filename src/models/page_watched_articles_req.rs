@@ -12,15 +12,15 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetCheckinOverviewReq {
-    #[serde(rename = "month", skip_serializing_if = "Option::is_none")]
-    pub month: Option<String>,
+pub struct PageWatchedArticlesReq {
+    #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
+    pub page: Option<models::PageReq>,
 }
 
-impl GetCheckinOverviewReq {
-    pub fn new() -> GetCheckinOverviewReq {
-        GetCheckinOverviewReq {
-            month: None,
+impl PageWatchedArticlesReq {
+    pub fn new() -> PageWatchedArticlesReq {
+        PageWatchedArticlesReq {
+            page: None,
         }
     }
 }

@@ -40,6 +40,11 @@ pub trait ArticleService: Send + Sync {
     /// 收藏文章
     async fn collect<'collect_article_req>(&self, collect_article_req: models::CollectArticleReq) -> Result<models::CollectArticleResp, Error<CollectError>>;
 
+    /// POST /v1/content/article/collect/count
+    ///
+    /// 统计当前账号收藏的文章数量。
+    async fn count_collected<'body>(&self, body: serde_json::Value) -> Result<models::CountCollectedArticlesResp, Error<CountCollectedError>>;
+
     /// POST /v1/content/article/draft/create
     ///
     /// 创建文章草稿
@@ -80,10 +85,20 @@ pub trait ArticleService: Send + Sync {
     /// 查询当前账号所在城市发布的文章。
     async fn list_nearby<'list_nearby_articles_req>(&self, list_nearby_articles_req: models::ListNearbyArticlesReq) -> Result<models::ListNearbyArticlesResp, Error<ListNearbyError>>;
 
+    /// POST /v1/content/article/collected/page
+    ///
+    /// 查询当前账号收藏的文章。
+    async fn page_collected<'page_collected_articles_req>(&self, page_collected_articles_req: models::PageCollectedArticlesReq) -> Result<models::PageCollectedArticlesResp, Error<PageCollectedError>>;
+
     /// POST /v1/content/article/view-history/page
     ///
     /// 查询当前账号的浏览历史。
     async fn page_view_history<'page_article_view_history_req>(&self, page_article_view_history_req: models::PageArticleViewHistoryReq) -> Result<models::PageArticleViewHistoryResp, Error<PageViewHistoryError>>;
+
+    /// POST /v1/content/article/watched/page
+    ///
+    /// 查询当前账号关注的文章。
+    async fn page_watched<'page_watched_articles_req>(&self, page_watched_articles_req: models::PageWatchedArticlesReq) -> Result<models::PageWatchedArticlesResp, Error<PageWatchedError>>;
 
     /// POST /v1/content/article/publish
     ///
@@ -286,6 +301,45 @@ impl ArticleService for ArticleServiceClient {
             }
         } else {
             let local_var_entity: Option<CollectError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 统计当前账号收藏的文章数量。
+    async fn count_collected<'body>(&self, body: serde_json::Value) -> Result<models::CountCollectedArticlesResp, Error<CountCollectedError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/collect/count", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&body);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CountCollectedArticlesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CountCollectedArticlesResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<CountCollectedError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -603,6 +657,45 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
+    /// 查询当前账号收藏的文章。
+    async fn page_collected<'page_collected_articles_req>(&self, page_collected_articles_req: models::PageCollectedArticlesReq) -> Result<models::PageCollectedArticlesResp, Error<PageCollectedError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/collected/page", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&page_collected_articles_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageCollectedArticlesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageCollectedArticlesResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<PageCollectedError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 查询当前账号的浏览历史。
     async fn page_view_history<'page_article_view_history_req>(&self, page_article_view_history_req: models::PageArticleViewHistoryReq) -> Result<models::PageArticleViewHistoryResp, Error<PageViewHistoryError>> {
         let local_var_configuration = &self.configuration;
@@ -637,6 +730,45 @@ impl ArticleService for ArticleServiceClient {
             }
         } else {
             let local_var_entity: Option<PageViewHistoryError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 查询当前账号关注的文章。
+    async fn page_watched<'page_watched_articles_req>(&self, page_watched_articles_req: models::PageWatchedArticlesReq) -> Result<models::PageWatchedArticlesResp, Error<PageWatchedError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/watched/page", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&page_watched_articles_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageWatchedArticlesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageWatchedArticlesResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<PageWatchedError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -945,6 +1077,13 @@ pub enum CollectError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`ArticleService::count_collected`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum CountCollectedError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`ArticleService::create_draft`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -1001,10 +1140,24 @@ pub enum ListNearbyError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`ArticleService::page_collected`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PageCollectedError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`ArticleService::page_view_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum PageViewHistoryError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`ArticleService::page_watched`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PageWatchedError {
     UnknownValue(serde_json::Value),
 }
 

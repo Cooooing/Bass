@@ -7,11 +7,14 @@ Method | HTTP request | Description
 [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
 [**complete_profile_image_upload**](AccountService.md#complete_profile_image_upload) | **POST** /v1/user/account/complete-profile-image-upload | 
 [**get_current**](AccountService.md#get_current) | **POST** /v1/user/account/get-current | 
+[**get_economy_account**](AccountService.md#get_economy_account) | **POST** /v1/user/account/economy/get | 
 [**get_profile**](AccountService.md#get_profile) | **POST** /v1/user/account/get-profile | 
 [**list_followers**](AccountService.md#list_followers) | **POST** /v1/user/account/list-followers | 
 [**list_following**](AccountService.md#list_following) | **POST** /v1/user/account/list-following | 
+[**list_point_records**](AccountService.md#list_point_records) | **POST** /v1/user/account/list-point-records | 
 [**prepare_profile_image_upload**](AccountService.md#prepare_profile_image_upload) | **POST** /v1/user/account/prepare-profile-image-upload | 
 [**search_mention**](AccountService.md#search_mention) | **POST** /v1/user/account/search-mention | 
+[**transfer_points**](AccountService.md#transfer_points) | **POST** /v1/user/account/economy/transfer | 
 [**update_email**](AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
 [**update_password**](AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
 [**update_phone**](AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
@@ -96,6 +99,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::GetCurrentAccountResp**](GetCurrentAccount_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_economy_account
+
+> models::GetAccountEconomyResp get_economy_account(body)
+
+
+查询当前账号的积分余额和累计收支。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**body** | **serde_json::Value** |  | [required] |
+
+### Return type
+
+[**models::GetAccountEconomyResp**](GetAccountEconomy_Resp.md)
 
 ### Authorization
 
@@ -199,6 +232,36 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## list_point_records
+
+> models::ListPointRecordsResp list_point_records(list_point_records_req)
+
+
+查询账号公开的积分流水。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**list_point_records_req** | [**ListPointRecordsReq**](ListPointRecordsReq.md) |  | [required] |
+
+### Return type
+
+[**models::ListPointRecordsResp**](ListPointRecords_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## prepare_profile_image_upload
 
 > models::PrepareProfileImageUploadAccountResp prepare_profile_image_upload(prepare_profile_image_upload_account_req)
@@ -246,6 +309,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::SearchMentionAccountsResp**](SearchMentionAccounts_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## transfer_points
+
+> models::TransferAccountPointsResp transfer_points(transfer_account_points_req)
+
+
+向指定账号转移积分。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**transfer_account_points_req** | [**TransferAccountPointsReq**](TransferAccountPointsReq.md) |  | [required] |
+
+### Return type
+
+[**models::TransferAccountPointsResp**](TransferAccountPoints_Resp.md)
 
 ### Authorization
 

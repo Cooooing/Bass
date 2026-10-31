@@ -1,17 +1,17 @@
-# \CheckinService
+# \LivenessService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**check_in**](CheckinService.md#check_in) | **POST** /v1/user/checkin/check-in | 
-[**get_overview**](CheckinService.md#get_overview) | **POST** /v1/user/checkin/get-overview | 
+[**claim_yesterday_reward**](LivenessService.md#claim_yesterday_reward) | **POST** /v1/user/liveness/yesterday-reward/claim | 
+[**get_liveness**](LivenessService.md#get_liveness) | **GET** /v1/user/liveness | 
 
 
 
-## check_in
+## claim_yesterday_reward
 
-> models::CheckInResp check_in(body)
+> models::ClaimYesterdayLivenessRewardResp claim_yesterday_reward(body)
 
 
 ### Parameters
@@ -23,7 +23,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::CheckInResp**](CheckIn_Resp.md)
+[**models::ClaimYesterdayLivenessRewardResp**](ClaimYesterdayLivenessReward_Resp.md)
 
 ### Authorization
 
@@ -37,21 +37,18 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## get_overview
+## get_liveness
 
-> models::GetCheckinOverviewResp get_overview(get_checkin_overview_req)
+> models::GetLivenessResp get_liveness()
 
 
 ### Parameters
 
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**get_checkin_overview_req** | [**GetCheckinOverviewReq**](GetCheckinOverviewReq.md) |  | [required] |
+This endpoint does not need any parameter.
 
 ### Return type
 
-[**models::GetCheckinOverviewResp**](GetCheckinOverview_Resp.md)
+[**models::GetLivenessResp**](GetLiveness_Resp.md)
 
 ### Authorization
 
@@ -59,7 +56,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

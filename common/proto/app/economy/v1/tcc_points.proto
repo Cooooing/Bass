@@ -21,6 +21,7 @@ message TCCPoints {
     int64 amount = 2; // 积分数量
     .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 积分流水类型
     optional string remark = 4; // 流水备注
+    optional string idempotency_key = 5; // 账户范围内的幂等键
   }
 
   message Resp {

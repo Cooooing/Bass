@@ -29,6 +29,7 @@ func (Record) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("transaction_no").Comment("交易号"),
+		field.String("idempotency_key").Nillable().Optional().Comment("账户范围内的幂等键"),
 		field.Int64("user_id").Comment("用户 ID"),
 		field.Enum("record_type").Values(economyenum.EconomyRecordTypeMap.EnumValues()...).Comment("流水类型"),
 		field.Enum("direction").Values(economyenum.EconomyRecordDirectionMap.EnumValues()...).Comment("流水方向"),
@@ -48,6 +49,7 @@ func (Record) Mixin() []ent.Mixin {
 func (Record) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("transaction_no"),
+		index.Fields("user_id", "idempotency_key").Unique(),
 		index.Fields("user_id", "created_at", "id"),
 		index.Fields("record_type", "user_id", "created_at", "id"),
 	}

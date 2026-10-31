@@ -4,6 +4,7 @@ import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	"common/proto/gen/common"
+	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/economy/v1"
 	"context"
@@ -94,10 +95,11 @@ func (s *PointsService) AddPoints(ctx context.Context, req *v1.AddEconomyPoints_
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
 	}
 	resp, err := s.pointsUsecase.AddPoints(ctx, &usecase.EconomyAddPointsReq{
-		UserID:     req.GetUserId(),
-		Amount:     req.GetAmount(),
-		RecordType: recordType,
-		Remark:     req.Remark,
+		UserID:         req.GetUserId(),
+		Amount:         req.GetAmount(),
+		RecordType:     recordType,
+		Remark:         req.Remark,
+		IdempotencyKey: req.IdempotencyKey,
 	})
 	if err != nil {
 		return nil, err
@@ -112,10 +114,11 @@ func (s *PointsService) DeductPoints(ctx context.Context, req *v1.DeductEconomyP
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
 	}
 	resp, err := s.pointsUsecase.DeductPoints(ctx, &usecase.EconomyDeductPointsReq{
-		UserID:     req.GetUserId(),
-		Amount:     req.GetAmount(),
-		RecordType: recordType,
-		Remark:     req.Remark,
+		UserID:         req.GetUserId(),
+		Amount:         req.GetAmount(),
+		RecordType:     recordType,
+		Remark:         req.Remark,
+		IdempotencyKey: req.IdempotencyKey,
 	})
 	if err != nil {
 		return nil, err
@@ -134,12 +137,13 @@ func (s *PointsService) TransferPoints(ctx context.Context, req *v1.TransferEcon
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
 	}
 	resp, err := s.pointsUsecase.TransferPoints(ctx, &usecase.EconomyTransferPointsReq{
-		FromUserID:    req.GetFromUserId(),
-		ToUserID:      req.GetToUserId(),
-		Amount:        req.GetAmount(),
-		OutRecordType: outRecordType,
-		InRecordType:  inRecordType,
-		Remark:        req.Remark,
+		FromUserID:     req.GetFromUserId(),
+		ToUserID:       req.GetToUserId(),
+		Amount:         req.GetAmount(),
+		OutRecordType:  outRecordType,
+		InRecordType:   inRecordType,
+		Remark:         req.Remark,
+		IdempotencyKey: req.IdempotencyKey,
 	})
 	if err != nil {
 		return nil, err
@@ -241,6 +245,10 @@ func (s *PointsService) ListRecords(ctx context.Context, req *v1.ListEconomyReco
 	if err != nil {
 		return nil, err
 	}
+	language := req.GetLanguage()
+	if language == commonenums.Language_LANGUAGE_UNSPECIFIED {
+		language = commonenums.Language_LANGUAGE_ZH_CN
+	}
 	rows := make([]*v1.EconomyRecord, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
 		if row == nil {
@@ -257,6 +265,7 @@ func (s *PointsService) ListRecords(ctx context.Context, req *v1.ListEconomyReco
 			BalanceBefore: row.BalanceBefore,
 			BalanceAfter:  row.BalanceAfter,
 			Remark:        row.Remark,
+			TypeLabel:     row.RecordType.Label(language),
 		}
 		if row.CreatedAt != nil {
 			item.CreatedAt = timestamppb.New(*row.CreatedAt)

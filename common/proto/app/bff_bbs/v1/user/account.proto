@@ -27,6 +27,13 @@ service AccountService {
       body: "*"
     };
   }
+  // 查询账号公开的积分流水。
+  rpc ListPointRecords(ListPointRecords.Req) returns (ListPointRecords.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/list-point-records"
+      body: "*"
+    };
+  }
   // 查询账号公开的关注列表。
   rpc ListFollowing(ListFollowing.Req) returns (ListFollowing.Resp) {
     option (google.api.http) = {
@@ -97,6 +104,13 @@ service AccountService {
       body: "*"
     };
   }
+  // 向指定账号转移积分。
+  rpc TransferPoints(TransferAccountPoints.Req) returns (TransferAccountPoints.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/economy/transfer"
+      body: "*"
+    };
+  }
   // 生成默认账号头像
   rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {
     option (google.api.http) = {
@@ -151,6 +165,7 @@ message Profile {
   ProfileVisibility visibility = 5;
   ProfileRelation viewer_relation = 6;
   optional bool online = 7; // 仅本人或允许公开在线状态的账号返回。
+  optional int64 points = 8; // 仅本人或允许公开积分的账号返回。
 }
 
 message AccountProfileListItem {
@@ -183,6 +198,26 @@ message GetProfile {
   }
   message Resp {
     Profile profile = 1;
+  }
+}
+
+// ListPointRecords 查询账号公开的积分流水。
+message ListPointRecords {
+  message Req {
+    string name = 1; // 账号名，必填
+    .common.api.app.common.PageReq page = 2; // 分页参数
+    option (gnostic.openapi.v3.schema) = { required: "name" };
+  }
+  message Resp {
+    message PointRecord {
+      google.protobuf.Timestamp created_at = 1; // 记录创建时间
+      string type_label = 2; // 流水类型展示文案
+      .common.api.app.economy.v1.enum.EconomyRecordDirection direction = 3; // 收入或支出方向
+      int64 amount = 4; // 绝对变动积分
+      int64 balance_after = 5; // 变动后的积分余额
+    }
+    repeated PointRecord rows = 1; // 积分流水列表
+    .common.api.app.common.PageResp page = 2; // 分页结果
   }
 }
 
@@ -308,6 +343,24 @@ message GetAccountEconomy {
     int64 balance = 1; // 当前积分
     int64 total_income = 2; // 累计获得
     int64 total_expense = 3; // 累计消耗
+  }
+}
+
+// TransferAccountPoints 转移当前账号的积分。
+message TransferAccountPoints {
+  message Req {
+    string target_name = 1; // 收款账号名，必填
+    int64 amount = 2; // 转账积分数量，必填
+    optional string remark = 3; // 转账备注
+    string idempotency_key = 4; // 本次转账的技术幂等键，必填
+    option (gnostic.openapi.v3.schema) = {
+      required: "target_name"
+      required: "amount"
+      required: "idempotency_key"
+    };
+  }
+  message Resp {
+    int64 balance = 1; // 转账后的当前积分
   }
 }
 

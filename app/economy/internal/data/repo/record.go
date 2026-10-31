@@ -37,6 +37,7 @@ func (r *RecordRepo) getClient(ctx context.Context) *gen.Client {
 func (r *RecordRepo) Save(ctx context.Context, record *model.Record) (*model.Record, error) {
 	save, err := r.getClient(ctx).Record.Create().
 		SetTransactionNo(record.TransactionNo).
+		SetNillableIdempotencyKey(record.IdempotencyKey).
 		SetUserID(record.UserID).
 		SetRecordType(recordent.RecordType(record.RecordType)).
 		SetDirection(recordent.Direction(record.Direction)).
@@ -49,16 +50,17 @@ func (r *RecordRepo) Save(ctx context.Context, record *model.Record) (*model.Rec
 		return nil, err
 	}
 	return &model.Record{
-		ID:            save.ID,
-		TransactionNo: save.TransactionNo,
-		UserID:        save.UserID,
-		RecordType:    enum.EconomyRecordType(save.RecordType),
-		Direction:     enum.EconomyRecordDirection(save.Direction),
-		Amount:        save.Amount,
-		BalanceBefore: save.BalanceBefore,
-		BalanceAfter:  save.BalanceAfter,
-		Remark:        save.Remark,
-		CreatedAt:     save.CreatedAt,
+		ID:             save.ID,
+		TransactionNo:  save.TransactionNo,
+		IdempotencyKey: save.IdempotencyKey,
+		UserID:         save.UserID,
+		RecordType:     enum.EconomyRecordType(save.RecordType),
+		Direction:      enum.EconomyRecordDirection(save.Direction),
+		Amount:         save.Amount,
+		BalanceBefore:  save.BalanceBefore,
+		BalanceAfter:   save.BalanceAfter,
+		Remark:         save.Remark,
+		CreatedAt:      save.CreatedAt,
 	}, nil
 }
 
@@ -73,16 +75,17 @@ func (r *RecordRepo) Get(ctx context.Context, req *bizrepo.RecordGetReq) (*model
 		return nil, err
 	}
 	return &model.Record{
-		ID:            row.ID,
-		TransactionNo: row.TransactionNo,
-		UserID:        row.UserID,
-		RecordType:    enum.EconomyRecordType(row.RecordType),
-		Direction:     enum.EconomyRecordDirection(row.Direction),
-		Amount:        row.Amount,
-		BalanceBefore: row.BalanceBefore,
-		BalanceAfter:  row.BalanceAfter,
-		Remark:        row.Remark,
-		CreatedAt:     row.CreatedAt,
+		ID:             row.ID,
+		TransactionNo:  row.TransactionNo,
+		IdempotencyKey: row.IdempotencyKey,
+		UserID:         row.UserID,
+		RecordType:     enum.EconomyRecordType(row.RecordType),
+		Direction:      enum.EconomyRecordDirection(row.Direction),
+		Amount:         row.Amount,
+		BalanceBefore:  row.BalanceBefore,
+		BalanceAfter:   row.BalanceAfter,
+		Remark:         row.Remark,
+		CreatedAt:      row.CreatedAt,
 	}, nil
 }
 
@@ -95,16 +98,17 @@ func (r *RecordRepo) List(ctx context.Context, req *bizrepo.RecordGetReq) ([]*mo
 	}
 	return lo.Map(rows, func(row *gen.Record, _ int) *model.Record {
 		return &model.Record{
-			ID:            row.ID,
-			TransactionNo: row.TransactionNo,
-			UserID:        row.UserID,
-			RecordType:    enum.EconomyRecordType(row.RecordType),
-			Direction:     enum.EconomyRecordDirection(row.Direction),
-			Amount:        row.Amount,
-			BalanceBefore: row.BalanceBefore,
-			BalanceAfter:  row.BalanceAfter,
-			Remark:        row.Remark,
-			CreatedAt:     row.CreatedAt,
+			ID:             row.ID,
+			TransactionNo:  row.TransactionNo,
+			IdempotencyKey: row.IdempotencyKey,
+			UserID:         row.UserID,
+			RecordType:     enum.EconomyRecordType(row.RecordType),
+			Direction:      enum.EconomyRecordDirection(row.Direction),
+			Amount:         row.Amount,
+			BalanceBefore:  row.BalanceBefore,
+			BalanceAfter:   row.BalanceAfter,
+			Remark:         row.Remark,
+			CreatedAt:      row.CreatedAt,
 		}
 	}), nil
 }
@@ -138,16 +142,17 @@ func (r *RecordRepo) Page(ctx context.Context, req *bizrepo.RecordGetReq) (*bizr
 	return &bizrepo.RecordPageResp{
 		Rows: lo.Map(rows, func(row *gen.Record, _ int) *model.Record {
 			return &model.Record{
-				ID:            row.ID,
-				TransactionNo: row.TransactionNo,
-				UserID:        row.UserID,
-				RecordType:    enum.EconomyRecordType(row.RecordType),
-				Direction:     enum.EconomyRecordDirection(row.Direction),
-				Amount:        row.Amount,
-				BalanceBefore: row.BalanceBefore,
-				BalanceAfter:  row.BalanceAfter,
-				Remark:        row.Remark,
-				CreatedAt:     row.CreatedAt,
+				ID:             row.ID,
+				TransactionNo:  row.TransactionNo,
+				IdempotencyKey: row.IdempotencyKey,
+				UserID:         row.UserID,
+				RecordType:     enum.EconomyRecordType(row.RecordType),
+				Direction:      enum.EconomyRecordDirection(row.Direction),
+				Amount:         row.Amount,
+				BalanceBefore:  row.BalanceBefore,
+				BalanceAfter:   row.BalanceAfter,
+				Remark:         row.Remark,
+				CreatedAt:      row.CreatedAt,
 			}
 		}),
 		Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
@@ -166,6 +171,9 @@ func (r *RecordRepo) getQuery(query *gen.RecordQuery, req *bizrepo.RecordGetReq)
 	}
 	if req.TransactionNo != nil {
 		query = query.Where(recordent.TransactionNoEQ(*req.TransactionNo))
+	}
+	if req.IdempotencyKey != nil {
+		query = query.Where(recordent.IdempotencyKeyEQ(*req.IdempotencyKey))
 	}
 	if req.UserID != nil {
 		query = query.Where(recordent.UserIDEQ(*req.UserID))

@@ -75,14 +75,14 @@ func (u *CheckinUsecase) Auto(ctx context.Context, userID int64, date, previousD
 		if err := u.branches.Call(ctx, tcc, constant.UserServiceName.String(), request, userv1.TCCCheckinService_Try_FullMethodName, userv1.TCCCheckinService_Confirm_FullMethodName, userv1.TCCCheckinService_Cancel_FullMethodName, &userv1.TCCCheckin_Resp{}); err != nil {
 			return err
 		}
-		checkinReward := &economyv1.TCCPoints_Req{UserId: userID, Amount: points, RecordType: economyenum.EconomyRecordType_ECONOMY_RECORD_TYPE_SIGN_IN_REWARD, Remark: new(fmt.Sprintf("checkin:%s", date.Format(time.DateOnly)))}
+		checkinReward := &economyv1.TCCPoints_Req{UserId: userID, Amount: points, RecordType: economyenum.EconomyRecordType_ECONOMY_RECORD_TYPE_SIGN_IN_REWARD, IdempotencyKey: new(fmt.Sprintf("checkin:%s", date.Format(time.DateOnly)))}
 		if err := u.branches.Call(ctx, tcc, constant.EconomyServiceName.String(), checkinReward, economyv1.TCCPointsService_Try_FullMethodName, economyv1.TCCPointsService_Confirm_FullMethodName, economyv1.TCCPointsService_Cancel_FullMethodName, &economyv1.TCCPoints_Resp{}); err != nil {
 			return err
 		}
 		if streakPoints == 0 {
 			return nil
 		}
-		streakReward := &economyv1.TCCPoints_Req{UserId: userID, Amount: streakPoints, RecordType: economyenum.EconomyRecordType_ECONOMY_RECORD_TYPE_CHECKIN_STREAK_REWARD, Remark: new(fmt.Sprintf("checkin_streak:%s", date.Format(time.DateOnly)))}
+		streakReward := &economyv1.TCCPoints_Req{UserId: userID, Amount: streakPoints, RecordType: economyenum.EconomyRecordType_ECONOMY_RECORD_TYPE_CHECKIN_STREAK_REWARD, IdempotencyKey: new(fmt.Sprintf("checkin_streak:%s", date.Format(time.DateOnly)))}
 		return u.branches.Call(ctx, tcc, constant.EconomyServiceName.String(), streakReward, economyv1.TCCPointsService_Try_FullMethodName, economyv1.TCCPointsService_Confirm_FullMethodName, economyv1.TCCPointsService_Cancel_FullMethodName, &economyv1.TCCPoints_Resp{})
 	})
 	return err

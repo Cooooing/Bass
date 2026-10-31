@@ -8,6 +8,7 @@ import (
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
 	commonv1 "common/proto/gen/common"
+	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	economyv1enum "common/proto/gen/economy/v1/enum"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
@@ -138,6 +139,13 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 	profile := &bbsuserv1.Profile{
 		Account:    u.accountProfile(account),
 		Visibility: u.profileVisibility(privacy),
+	}
+	if viewerID == account.ID || privacy.PublicPoints == nil || *privacy.PublicPoints {
+		economyAccount, err := u.economyClient.GetAccount(ctx, account.ID)
+		if err != nil {
+			return nil, err
+		}
+		profile.Points = new(economyAccount.Balance)
 	}
 	if viewerID == account.ID || privacy.PublicOnlineStatus == nil || *privacy.PublicOnlineStatus {
 		onlineStatuses, queryErr := u.realtimeHub.Hub.QueryOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: []int64{account.ID}})
@@ -650,11 +658,59 @@ func (u *AccountUsecase) GetEconomyAccount(ctx context.Context, userID int64) (*
 	return &AccountEconomyResp{Balance: account.Balance, TotalIncome: account.TotalIncome, TotalExpense: account.TotalExpense}, nil
 }
 
+type TransferAccountPointsReq struct {
+	UserID         int64
+	TargetName     string
+	Amount         int64
+	Remark         *string
+	IdempotencyKey string
+}
+
+func (u *AccountUsecase) TransferPoints(ctx context.Context, req *TransferAccountPointsReq) (*repo.TransferEconomyPointsResp, error) {
+	target, _, err := u.accountClient.GetProfile(ctx, req.TargetName)
+	if err != nil {
+		return nil, err
+	}
+	switch bbsuserv1enum.AccountStatus(target.Status) {
+	case bbsuserv1enum.AccountStatus_ACCOUNT_STATUS_NORMAL:
+	case bbsuserv1enum.AccountStatus_ACCOUNT_STATUS_BANNED:
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
+	case bbsuserv1enum.AccountStatus_ACCOUNT_STATUS_CANCELLED:
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
+	default:
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
+	}
+	return u.economyClient.TransferPoints(ctx, &repo.TransferEconomyPointsReq{
+		FromUserID:     req.UserID,
+		ToUserID:       target.ID,
+		Amount:         req.Amount,
+		Remark:         req.Remark,
+		IdempotencyKey: req.IdempotencyKey,
+	})
+}
+
+// ListProfilePointRecords 返回账号按隐私规则可查看的积分流水。
+func (u *AccountUsecase) ListProfilePointRecords(ctx context.Context, name string, viewerID int64, page *commonmodel.PageReq, language commonenums.Language) (*ListAccountEconomyRecordsResp, error) {
+	account, _, err := u.accountClient.GetProfile(ctx, name)
+	if err != nil {
+		return nil, err
+	}
+	privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
+	if err != nil {
+		return nil, err
+	}
+	if viewerID != account.ID && privacy.PublicPoints != nil && !*privacy.PublicPoints {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+	}
+	return u.ListEconomyRecords(ctx, &ListAccountEconomyRecordsReq{UserID: account.ID, Page: page, Language: language})
+}
+
 type ListAccountEconomyRecordsReq struct {
 	UserID     int64
 	Page       *commonmodel.PageReq
 	Direction  *economyv1enum.EconomyRecordDirection
 	RecordType *economyv1enum.EconomyRecordType
+	Language   commonenums.Language
 }
 
 type ListAccountEconomyRecordsResp struct {
@@ -663,7 +719,7 @@ type ListAccountEconomyRecordsResp struct {
 }
 
 func (u *AccountUsecase) ListEconomyRecords(ctx context.Context, req *ListAccountEconomyRecordsReq) (*ListAccountEconomyRecordsResp, error) {
-	resp, err := u.economyClient.ListRecords(ctx, &repo.ListEconomyRecordsReq{UserID: req.UserID, Page: req.Page, Direction: req.Direction, RecordType: req.RecordType})
+	resp, err := u.economyClient.ListRecords(ctx, &repo.ListEconomyRecordsReq{UserID: req.UserID, Page: req.Page, Direction: req.Direction, RecordType: req.RecordType, Language: req.Language})
 	if err != nil {
 		return nil, err
 	}

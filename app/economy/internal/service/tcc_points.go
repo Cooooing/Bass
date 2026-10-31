@@ -71,10 +71,11 @@ func (*TCCPointsService) requestFromProto(request *v1.TCCPoints_Req) (*usecase.T
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
 	}
 	return &usecase.TCCPointsReq{
-		UserID:     request.GetUserId(),
-		Amount:     request.GetAmount(),
-		RecordType: recordType,
-		Remark:     request.Remark,
+		UserID:         request.GetUserId(),
+		Amount:         request.GetAmount(),
+		RecordType:     recordType,
+		Remark:         request.Remark,
+		IdempotencyKey: request.IdempotencyKey,
 	}, nil
 }
 

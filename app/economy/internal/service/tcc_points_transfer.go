@@ -75,12 +75,13 @@ func (*TCCPointsTransferService) requestFromProto(request *v1.TCCPointsTransfer_
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
 	}
 	return &usecase.TCCPointsTransferReq{
-		FromUserID:    request.GetFromUserId(),
-		ToUserID:      request.GetToUserId(),
-		Amount:        request.GetAmount(),
-		OutRecordType: outRecordType,
-		InRecordType:  inRecordType,
-		Remark:        request.Remark,
+		FromUserID:     request.GetFromUserId(),
+		ToUserID:       request.GetToUserId(),
+		Amount:         request.GetAmount(),
+		OutRecordType:  outRecordType,
+		InRecordType:   inRecordType,
+		Remark:         request.Remark,
+		IdempotencyKey: request.IdempotencyKey,
 	}, nil
 }
 

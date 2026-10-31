@@ -23,6 +23,7 @@ message TCCPointsTransfer {
     .common.api.app.economy.v1.enum.EconomyRecordType out_record_type = 4; // 转出流水类型
     .common.api.app.economy.v1.enum.EconomyRecordType in_record_type = 5; // 转入流水类型
     optional string remark = 6; // 流水备注
+    optional string idempotency_key = 7; // 转出与转入账户的幂等键
   }
 
   message Resp {

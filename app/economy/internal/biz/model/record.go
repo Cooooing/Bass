@@ -7,14 +7,15 @@ import (
 )
 
 type Record struct {
-	ID            int64
-	TransactionNo string
-	UserID        int64
-	RecordType    enum.EconomyRecordType
-	Direction     enum.EconomyRecordDirection
-	Amount        int64
-	BalanceBefore int64
-	BalanceAfter  int64
-	Remark        *string
-	CreatedAt     *time.Time
+	ID             int64
+	TransactionNo  string
+	IdempotencyKey *string
+	UserID         int64
+	RecordType     enum.EconomyRecordType
+	Direction      enum.EconomyRecordDirection
+	Amount         int64
+	BalanceBefore  int64
+	BalanceAfter   int64
+	Remark         *string
+	CreatedAt      *time.Time
 }

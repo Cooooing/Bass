@@ -23,6 +23,7 @@ type TCCPointsReq struct {
 	UserID, Amount int64
 	RecordType     enum.EconomyRecordType
 	Remark         *string
+	IdempotencyKey *string
 }
 
 type TCCPointsResp struct {
@@ -60,10 +61,11 @@ func (u *TCCPointsUsecase) Confirm(ctx context.Context, req *TCCPointsReq) (*TCC
 	err := u.tccBranch.Execute(ctx, func(ctx context.Context) error {
 		if req.RecordType.IsIncome() {
 			result, err := u.points.AddPoints(ctx, &EconomyAddPointsReq{
-				UserID:     req.UserID,
-				Amount:     req.Amount,
-				RecordType: req.RecordType,
-				Remark:     req.Remark,
+				UserID:         req.UserID,
+				Amount:         req.Amount,
+				RecordType:     req.RecordType,
+				Remark:         req.Remark,
+				IdempotencyKey: req.IdempotencyKey,
 			})
 			if err != nil {
 				return err
@@ -73,10 +75,11 @@ func (u *TCCPointsUsecase) Confirm(ctx context.Context, req *TCCPointsReq) (*TCC
 			return nil
 		}
 		result, err := u.points.CommitFrozenPoints(ctx, &EconomyCommitFrozenPointsReq{
-			UserID:     req.UserID,
-			Amount:     req.Amount,
-			RecordType: req.RecordType,
-			Remark:     req.Remark,
+			UserID:         req.UserID,
+			Amount:         req.Amount,
+			RecordType:     req.RecordType,
+			Remark:         req.Remark,
+			IdempotencyKey: req.IdempotencyKey,
 		})
 		if err != nil {
 			return err

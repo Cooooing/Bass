@@ -3,6 +3,7 @@
 package common.api.app.economy.v1;
 
 import "common/common.proto";
+import "common/enums/language.proto";
 import "economy/v1/enum/economy.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -41,6 +42,8 @@ message EconomyRecord {
   int64 balance_before = 7; // 变动前积分
   int64 balance_after = 8; // 变动后积分
   optional string remark = 9; // 备注
+  string type_label = 10; // 按查询语言生成的流水类型文案
+  optional string idempotency_key = 11; // 账户范围内的幂等键
   google.protobuf.Timestamp created_at = 1000; // 创建时间
 }
 
@@ -68,6 +71,7 @@ message AddEconomyPoints {
     int64 amount = 2; // 积分数量
     .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
     optional string remark = 4; // 备注
+    optional string idempotency_key = 5; // 账户范围内的幂等键
   }
   message Resp {
     EconomyAccount account = 1; // 最新账户
@@ -81,6 +85,7 @@ message DeductEconomyPoints {
     int64 amount = 2; // 积分数量
     .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
     optional string remark = 4; // 备注
+    optional string idempotency_key = 5; // 账户范围内的幂等键
   }
   message Resp {
     EconomyAccount account = 1; // 最新账户
@@ -96,6 +101,7 @@ message TransferEconomyPoints {
     .common.api.app.economy.v1.enum.EconomyRecordType out_record_type = 4; // 转出流水类型
     .common.api.app.economy.v1.enum.EconomyRecordType in_record_type = 5; // 转入流水类型
     optional string remark = 6; // 备注
+    optional string idempotency_key = 7; // 转出与转入账户的幂等键
   }
   message Resp {
     EconomyAccount from_account = 1; // 转出账户
@@ -111,6 +117,7 @@ message ListEconomyRecords {
     .common.api.app.common.PageReq page = 2; // 分页参数
     optional .common.api.app.economy.v1.enum.EconomyRecordDirection direction = 3; // 流水方向
     optional .common.api.app.economy.v1.enum.EconomyRecordType record_type = 4; // 流水类型
+    .common.api.app.common.enums.Language language = 5; // 流水类型文案的展示语言
   }
   message Resp {
     repeated EconomyRecord rows = 1; // 流水列表

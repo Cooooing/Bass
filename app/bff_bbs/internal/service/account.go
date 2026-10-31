@@ -7,6 +7,7 @@ import (
 	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	"common/proto/gen/common"
+	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"net/mail"
@@ -67,6 +68,33 @@ func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfi
 	return &bbsuserv1.GetProfile_Resp{
 		Profile: profile,
 	}, nil
+}
+
+func (s *AccountService) ListPointRecords(ctx context.Context, req *bbsuserv1.ListPointRecords_Req) (*bbsuserv1.ListPointRecords_Resp, error) {
+	if req == nil || strings.TrimSpace(req.GetName()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	language := commonenums.Language_LANGUAGE_ZH_CN
+	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil && user.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {
+		language = user.Language
+	}
+	result, err := s.accountUsecase.ListProfilePointRecords(ctx, strings.TrimSpace(req.GetName()), s.accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()), language)
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbsuserv1.ListPointRecords_Resp_PointRecord, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		item := &bbsuserv1.ListPointRecords_Resp_PointRecord{TypeLabel: row.TypeLabel, Direction: row.Direction, Amount: row.Amount, BalanceAfter: row.BalanceAfter}
+		if row.CreatedAt != nil {
+			item.CreatedAt = timestamppb.New(*row.CreatedAt)
+		}
+		rows = append(rows, item)
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = result.Page.ToProto()
+	}
+	return &bbsuserv1.ListPointRecords_Resp{Rows: rows, Page: page}, nil
 }
 
 func (s *AccountService) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowing_Req) (*bbsuserv1.ListFollowing_Resp, error) {
@@ -280,6 +308,34 @@ func (s *AccountService) GetEconomyAccount(ctx context.Context, req *bbsuserv1.G
 		return nil, err
 	}
 	return &bbsuserv1.GetAccountEconomy_Resp{Balance: account.Balance, TotalIncome: account.TotalIncome, TotalExpense: account.TotalExpense}, nil
+}
+
+func (s *AccountService) TransferPoints(ctx context.Context, req *bbsuserv1.TransferAccountPoints_Req) (*bbsuserv1.TransferAccountPoints_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	if req == nil || req.GetAmount() <= 0 || strings.TrimSpace(req.GetTargetName()) == "" || strings.TrimSpace(req.GetIdempotencyKey()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_AMOUNT_INVALID)
+	}
+	if utf8.RuneCountInString(req.GetRemark()) > 200 || utf8.RuneCountInString(req.GetIdempotencyKey()) > 128 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	var remark *string
+	if value := strings.TrimSpace(req.GetRemark()); value != "" {
+		remark = new(value)
+	}
+	resp, err := s.accountUsecase.TransferPoints(ctx, &usecase.TransferAccountPointsReq{
+		UserID:         user.ID,
+		TargetName:     strings.TrimSpace(req.GetTargetName()),
+		Amount:         req.GetAmount(),
+		Remark:         remark,
+		IdempotencyKey: strings.TrimSpace(req.GetIdempotencyKey()),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.TransferAccountPoints_Resp{Balance: resp.Balance}, nil
 }
 
 func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.ListAccountEconomyRecords_Req) (*bbsuserv1.ListAccountEconomyRecords_Resp, error) {

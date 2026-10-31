@@ -699,7 +699,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		if rewardSetupPoints == nil {
 			return nil
 		}
-		charge := &economyv1.TCCPoints_Req{UserId: *rewardSetupArticle.CreatedBy, Amount: *rewardSetupPoints, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE, Remark: new(fmt.Sprintf("article reward setup:%d", articleID))}
+		charge := &economyv1.TCCPoints_Req{UserId: *rewardSetupArticle.CreatedBy, Amount: *rewardSetupPoints, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE, IdempotencyKey: new(fmt.Sprintf("article reward setup:%d", articleID))}
 		return d.branches.Call(ctx, tcc, constant.EconomyServiceName.String(), charge, economyv1.TCCPointsService_Try_FullMethodName, economyv1.TCCPointsService_Confirm_FullMethodName, economyv1.TCCPointsService_Cancel_FullMethodName, &economyv1.TCCPoints_Resp{})
 	})
 	if err != nil {

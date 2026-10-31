@@ -137,7 +137,7 @@ func (u *LivenessUsecase) Claim(ctx context.Context, userID int64, date time.Tim
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
 	}
 	request := &userv1.TCCLivenessReward_Req{UserId: userID, Date: timestamppb.New(start)}
-	reward := &economyv1.TCCPoints_Req{UserId: userID, Amount: int64(row.Score), RecordType: economyenum.EconomyRecordType_ECONOMY_RECORD_TYPE_LIVENESS_REWARD, Remark: new(fmt.Sprintf("liveness:%s", start.Format(time.DateOnly)))}
+	reward := &economyv1.TCCPoints_Req{UserId: userID, Amount: int64(row.Score), RecordType: economyenum.EconomyRecordType_ECONOMY_RECORD_TYPE_LIVENESS_REWARD, IdempotencyKey: new(fmt.Sprintf("liveness:%s", start.Format(time.DateOnly)))}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
 		if err := u.branches.Call(ctx, tcc, constant.UserServiceName.String(), request, userv1.TCCLivenessRewardService_Try_FullMethodName, userv1.TCCLivenessRewardService_Confirm_FullMethodName, userv1.TCCLivenessRewardService_Cancel_FullMethodName, &userv1.TCCLivenessReward_Resp{}); err != nil {
 			return err

@@ -52,12 +52,12 @@ func (u *ArticleRewardUsecase) Reward(ctx context.Context, access *model.Content
 	points := int64(*article.RewardPoints)
 	reward := &contentv1.TCCArticleReward_Req{ArticleId: articleID, SenderUserId: actor, ReceiverUserId: *article.CreatedBy, Points: points}
 	transfer := &economyv1.TCCPointsTransfer_Req{
-		FromUserId:    actor,
-		ToUserId:      *article.CreatedBy,
-		Amount:        points,
-		OutRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT,
-		InRecordType:  economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN,
-		Remark:        new(fmt.Sprintf("article reward:%d", articleID)),
+		FromUserId:     actor,
+		ToUserId:       *article.CreatedBy,
+		Amount:         points,
+		OutRecordType:  economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT,
+		InRecordType:   economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN,
+		IdempotencyKey: new(fmt.Sprintf("article reward:%d", articleID)),
 	}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
 		if err = u.branches.Call(ctx, tcc, constant.ContentServiceName.String(), reward, contentv1.TCCArticleRewardService_Try_FullMethodName, contentv1.TCCArticleRewardService_Confirm_FullMethodName, contentv1.TCCArticleRewardService_Cancel_FullMethodName, &contentv1.TCCArticleReward_Resp{}); err != nil {

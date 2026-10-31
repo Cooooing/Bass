@@ -2,6 +2,7 @@ package repo
 
 import (
 	commonmodel "common/pkg/model"
+	commonenums "common/proto/gen/common/enums"
 	economyv1enum "common/proto/gen/economy/v1/enum"
 	"context"
 	"time"
@@ -22,6 +23,7 @@ type EconomyRecord struct {
 	BalanceBefore int64
 	BalanceAfter  int64
 	Remark        *string
+	TypeLabel     string
 	CreatedAt     *time.Time
 }
 
@@ -30,6 +32,7 @@ type ListEconomyRecordsReq struct {
 	Page       *commonmodel.PageReq
 	Direction  *economyv1enum.EconomyRecordDirection
 	RecordType *economyv1enum.EconomyRecordType
+	Language   commonenums.Language
 }
 
 type ListEconomyRecordsResp struct {
@@ -37,7 +40,20 @@ type ListEconomyRecordsResp struct {
 	Page *commonmodel.PageResp
 }
 
+type TransferEconomyPointsReq struct {
+	FromUserID     int64
+	ToUserID       int64
+	Amount         int64
+	Remark         *string
+	IdempotencyKey string
+}
+
+type TransferEconomyPointsResp struct {
+	Balance int64
+}
+
 type EconomyClient interface {
 	GetAccount(ctx context.Context, userID int64) (*EconomyAccount, error)
 	ListRecords(ctx context.Context, req *ListEconomyRecordsReq) (*ListEconomyRecordsResp, error)
+	TransferPoints(ctx context.Context, req *TransferEconomyPointsReq) (*TransferEconomyPointsResp, error)
 }

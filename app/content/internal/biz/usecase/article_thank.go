@@ -57,7 +57,7 @@ func (u *ArticleThankUsecase) Thank(ctx context.Context, access *model.ContentAc
 		points = u.business.GetArticle().GetThankPoints()
 	}
 	req := &contentv1.TCCArticleThank_Req{ArticleId: articleID, SenderUserId: actor, ReceiverUserId: *article.CreatedBy, Points: points}
-	transfer := &economyv1.TCCPointsTransfer_Req{FromUserId: actor, ToUserId: *article.CreatedBy, Amount: points, OutRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE, InRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD, Remark: new(fmt.Sprintf("article thank:%d", articleID))}
+	transfer := &economyv1.TCCPointsTransfer_Req{FromUserId: actor, ToUserId: *article.CreatedBy, Amount: points, OutRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_EXPENSE, InRecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD, IdempotencyKey: new(fmt.Sprintf("article thank:%d", articleID))}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
 		if err = u.branches.Call(ctx, tcc, constant.ContentServiceName.String(), req, contentv1.TCCArticleThankService_Try_FullMethodName, contentv1.TCCArticleThankService_Confirm_FullMethodName, contentv1.TCCArticleThankService_Cancel_FullMethodName, &contentv1.TCCArticleThank_Resp{}); err != nil {
 			return err

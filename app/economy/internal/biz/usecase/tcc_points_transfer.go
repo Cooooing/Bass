@@ -23,6 +23,7 @@ type TCCPointsTransferReq struct {
 	FromUserID, ToUserID, Amount int64
 	OutRecordType, InRecordType  enum.EconomyRecordType
 	Remark                       *string
+	IdempotencyKey               *string
 }
 
 type TCCPointsTransferResp struct {
@@ -61,12 +62,13 @@ func (u *TCCPointsTransferUsecase) Confirm(ctx context.Context, req *TCCPointsTr
 	response := &TCCPointsTransferResp{}
 	err := u.tccBranch.Execute(ctx, func(ctx context.Context) error {
 		result, err := u.points.CommitFrozenTransfer(ctx, &EconomyCommitFrozenTransferReq{
-			FromUserID:    req.FromUserID,
-			ToUserID:      req.ToUserID,
-			Amount:        req.Amount,
-			OutRecordType: req.OutRecordType,
-			InRecordType:  req.InRecordType,
-			Remark:        req.Remark,
+			FromUserID:     req.FromUserID,
+			ToUserID:       req.ToUserID,
+			Amount:         req.Amount,
+			OutRecordType:  req.OutRecordType,
+			InRecordType:   req.InRecordType,
+			Remark:         req.Remark,
+			IdempotencyKey: req.IdempotencyKey,
 		})
 		if err != nil {
 			return err

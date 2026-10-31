@@ -82,11 +82,7 @@ func (u *PointsUsecase) GetAccount(ctx context.Context, userID int64) (*model.Ac
 	if userID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	account, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: new(userID)})
-	if err != nil {
-		return nil, err
-	}
-	return account, nil
+	return u.EnsureAccount(ctx, userID)
 }
 
 func (u *PointsUsecase) EnsureAccount(ctx context.Context, userID int64) (*model.Account, error) {

@@ -34,6 +34,8 @@ docs/ArticleViewHistoryItem.md
 docs/ArticleViewerActionState.md
 docs/AssetService.md
 docs/AuthService.md
+docs/BadgeDraft.md
+docs/BadgeService.md
 docs/BeginEnableTotpResp.md
 docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
@@ -46,6 +48,10 @@ docs/CollectArticleResp.md
 docs/CommentListItem.md
 docs/CommentService.md
 docs/CommentViewerActionState.md
+docs/CompleteBadgeFontUploadReq.md
+docs/CompleteBadgeFontUploadResp.md
+docs/CompleteBadgeImageUploadReq.md
+docs/CompleteBadgeImageUploadResp.md
 docs/CompleteMarkdownImageUploadReq.md
 docs/CompleteMarkdownImageUploadResp.md
 docs/CompleteProfileImageUploadAccountReq.md
@@ -69,6 +75,7 @@ docs/CreateMoonbreezeResp.md
 docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
+docs/DeleteBadgeDraftReq.md
 docs/DeleteEmojiGroupReq.md
 docs/DeleteEmojiItemReq.md
 docs/DisableTotpReq.md
@@ -112,6 +119,7 @@ docs/ListArticleTagsReq.md
 docs/ListArticleTagsResp.md
 docs/ListArticlesReq.md
 docs/ListArticlesResp.md
+docs/ListBadgeDraftsResp.md
 docs/ListBlockedRelationsReq.md
 docs/ListBlockedRelationsResp.md
 docs/ListCommentRepliesReq.md
@@ -181,6 +189,10 @@ docs/PageWatchedArticlesResp.md
 docs/PageWatchingMoonbreezesReq.md
 docs/PostscriptService.md
 docs/PreferencesService.md
+docs/PrepareBadgeFontUploadReq.md
+docs/PrepareBadgeFontUploadResp.md
+docs/PrepareBadgeImageUploadReq.md
+docs/PrepareBadgeImageUploadResp.md
 docs/PrepareMarkdownImageUploadReq.md
 docs/PrepareMarkdownImageUploadResp.md
 docs/PrepareProfileImageUploadAccountReq.md
@@ -205,6 +217,7 @@ docs/RenameEmojiGroupReq.md
 docs/RenameEmojiGroupResp.md
 docs/RenameEmojiItemReq.md
 docs/RenameEmojiItemResp.md
+docs/RenderSpec.md
 docs/ReorderEmojiGroupsReq.md
 docs/ReorderEmojiItemsReq.md
 docs/ReqArticle.md
@@ -287,6 +300,8 @@ docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
+docs/UpsertBadgeDraftReq.md
+docs/UpsertBadgeDraftResp.md
 docs/VoteArticlePollReq.md
 docs/WatchArticleReq.md
 docs/WatchArticleResp.md

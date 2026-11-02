@@ -315,6 +315,16 @@ export interface ArticleViewerActionState {
     'rewarded'?: boolean;
     'watched'?: boolean;
 }
+/**
+ * BadgeDraft 是 Maker 可编辑的徽章草稿。
+ */
+export interface BadgeDraft {
+    'id'?: string;
+    'name'?: string;
+    'description'?: string;
+    'render_spec'?: RenderSpec;
+    'designer_user_id'?: string;
+}
 export interface BeginEnableTotpResp {
     'url'?: string;
     'qr_code'?: string;
@@ -382,6 +392,26 @@ export type CommentListItemRestrictionEnum = typeof CommentListItemRestrictionEn
 export interface CommentViewerActionState {
     'liked'?: boolean;
     'thanked'?: boolean;
+}
+/**
+ * Req 指定已上传字体的内容哈希。
+ */
+export interface CompleteBadgeFontUploadReq {
+    'hash': string;
+}
+/**
+ * Resp 返回已确认的字体资源与前端本地预览地址。
+ */
+export interface CompleteBadgeFontUploadResp {
+    'asset_id'?: string;
+    'font_url'?: string;
+}
+export interface CompleteBadgeImageUploadReq {
+    'hash': string;
+}
+export interface CompleteBadgeImageUploadResp {
+    'asset_id'?: string;
+    'image_url'?: string;
 }
 export interface CompleteMarkdownImageUploadReq {
     'hash': string;
@@ -468,6 +498,12 @@ export interface CreateTagReq {
 }
 export interface CreateTagResp {
     'tag'?: RespTag;
+}
+/**
+ * Req 指定待删除草稿。
+ */
+export interface DeleteBadgeDraftReq {
+    'draft_id'?: string;
 }
 export interface DeleteEmojiGroupReq {
     'group_id'?: string;
@@ -689,6 +725,12 @@ export interface ListArticlesReq {
 export interface ListArticlesResp {
     'page'?: PageResp;
     'rows'?: Array<ArticleListItem>;
+}
+/**
+ * Resp 返回草稿行。
+ */
+export interface ListBadgeDraftsResp {
+    'rows'?: Array<BadgeDraft>;
 }
 export interface ListBlockedRelationsReq {
     'page'?: PageReq;
@@ -995,6 +1037,32 @@ export interface PageWatchingMoonbreezesReq {
     'cursor'?: string;
     'size'?: number;
 }
+/**
+ * Req 指定待上传字体的内容寻址信息。
+ */
+export interface PrepareBadgeFontUploadReq {
+    'hash': string;
+    'mime_type': string;
+    'size': string;
+}
+/**
+ * Resp 返回已存在字体或一次直传凭证。
+ */
+export interface PrepareBadgeFontUploadResp {
+    'asset_id'?: string;
+    'upload_url'?: string;
+    'form_fields'?: { [key: string]: string; };
+}
+export interface PrepareBadgeImageUploadReq {
+    'hash': string;
+    'mime_type': string;
+    'size': string;
+}
+export interface PrepareBadgeImageUploadResp {
+    'asset_id'?: string;
+    'upload_url'?: string;
+    'form_fields'?: { [key: string]: string; };
+}
 export interface PrepareMarkdownImageUploadReq {
     'hash': string;
     'mime_type': string;
@@ -1150,6 +1218,26 @@ export interface RenameEmojiItemReq {
 }
 export interface RenameEmojiItemResp {
     'item'?: EmojiItem;
+}
+/**
+ * RenderSpec 是客户端 Maker 传递的完整渲染参数。
+ */
+export interface RenderSpec {
+    'image_asset_id'?: string;
+    'text'?: string;
+    'background_colors'?: Array<string>;
+    'text_colors'?: Array<string>;
+    'background_direction'?: string;
+    'text_direction'?: string;
+    'size'?: number;
+    'border'?: number;
+    'text_bar_length'?: number;
+    'text_size'?: number;
+    'text_bar_radius'?: number;
+    'scale'?: number;
+    'shadow'?: number;
+    'animation_seconds'?: number;
+    'font_asset_id'?: string;
 }
 export interface ReorderEmojiGroupsReq {
     'group_ids'?: Array<string>;
@@ -1939,6 +2027,21 @@ export interface UpdateTagReq {
 }
 export interface UpdateTagResp {
     'tag'?: RespTag;
+}
+/**
+ * Req 缺失 draft_id 时创建，存在时更新。
+ */
+export interface UpsertBadgeDraftReq {
+    'draft_id'?: string;
+    'name'?: string;
+    'description'?: string;
+    'render_spec'?: RenderSpec;
+}
+/**
+ * Resp 返回保存后的草稿。
+ */
+export interface UpsertBadgeDraftResp {
+    'draft'?: BadgeDraft;
 }
 export interface VoteArticlePollReq {
     'article_id': string;
@@ -5195,6 +5298,74 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
 export const AssetServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+         * @param {CompleteBadgeFontUploadReq} completeBadgeFontUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeBadgeFontUpload: async (completeBadgeFontUploadReq: CompleteBadgeFontUploadReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'completeBadgeFontUploadReq' is not null or undefined
+            assertParamExists('completeBadgeFontUpload', 'completeBadgeFontUploadReq', completeBadgeFontUploadReq)
+            const localVarPath = `/v1/asset/badge-font/complete`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(completeBadgeFontUploadReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询已由对象存储回调确认的徽章 Maker 图片。
+         * @param {CompleteBadgeImageUploadReq} completeBadgeImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeBadgeImageUpload: async (completeBadgeImageUploadReq: CompleteBadgeImageUploadReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'completeBadgeImageUploadReq' is not null or undefined
+            assertParamExists('completeBadgeImageUpload', 'completeBadgeImageUploadReq', completeBadgeImageUploadReq)
+            const localVarPath = `/v1/asset/badge-image/complete`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(completeBadgeImageUploadReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 查询已由对象存储回调确认的 Markdown 图片。
          * @param {CompleteMarkdownImageUploadReq} completeMarkdownImageUploadReq 
          * @param {*} [options] Override http request option.
@@ -5222,6 +5393,74 @@ export const AssetServiceAxiosParamCreator = function (configuration?: Configura
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(completeMarkdownImageUploadReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+         * @param {PrepareBadgeFontUploadReq} prepareBadgeFontUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareBadgeFontUpload: async (prepareBadgeFontUploadReq: PrepareBadgeFontUploadReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'prepareBadgeFontUploadReq' is not null or undefined
+            assertParamExists('prepareBadgeFontUpload', 'prepareBadgeFontUploadReq', prepareBadgeFontUploadReq)
+            const localVarPath = `/v1/asset/badge-font/prepare`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(prepareBadgeFontUploadReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 申请徽章 Maker 图片的内容寻址直传凭证。
+         * @param {PrepareBadgeImageUploadReq} prepareBadgeImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareBadgeImageUpload: async (prepareBadgeImageUploadReq: PrepareBadgeImageUploadReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'prepareBadgeImageUploadReq' is not null or undefined
+            assertParamExists('prepareBadgeImageUpload', 'prepareBadgeImageUploadReq', prepareBadgeImageUploadReq)
+            const localVarPath = `/v1/asset/badge-image/prepare`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(prepareBadgeImageUploadReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5272,6 +5511,30 @@ export const AssetServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AssetServiceAxiosParamCreator(configuration)
     return {
         /**
+         * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+         * @param {CompleteBadgeFontUploadReq} completeBadgeFontUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async completeBadgeFontUpload(completeBadgeFontUploadReq: CompleteBadgeFontUploadReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CompleteBadgeFontUploadResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.completeBadgeFontUpload(completeBadgeFontUploadReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AssetService.completeBadgeFontUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询已由对象存储回调确认的徽章 Maker 图片。
+         * @param {CompleteBadgeImageUploadReq} completeBadgeImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async completeBadgeImageUpload(completeBadgeImageUploadReq: CompleteBadgeImageUploadReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CompleteBadgeImageUploadResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.completeBadgeImageUpload(completeBadgeImageUploadReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AssetService.completeBadgeImageUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 查询已由对象存储回调确认的 Markdown 图片。
          * @param {CompleteMarkdownImageUploadReq} completeMarkdownImageUploadReq 
          * @param {*} [options] Override http request option.
@@ -5281,6 +5544,30 @@ export const AssetServiceFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.completeMarkdownImageUpload(completeMarkdownImageUploadReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AssetService.completeMarkdownImageUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+         * @param {PrepareBadgeFontUploadReq} prepareBadgeFontUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async prepareBadgeFontUpload(prepareBadgeFontUploadReq: PrepareBadgeFontUploadReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PrepareBadgeFontUploadResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.prepareBadgeFontUpload(prepareBadgeFontUploadReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AssetService.prepareBadgeFontUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 申请徽章 Maker 图片的内容寻址直传凭证。
+         * @param {PrepareBadgeImageUploadReq} prepareBadgeImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async prepareBadgeImageUpload(prepareBadgeImageUploadReq: PrepareBadgeImageUploadReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PrepareBadgeImageUploadResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.prepareBadgeImageUpload(prepareBadgeImageUploadReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AssetService.prepareBadgeImageUpload']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -5305,6 +5592,24 @@ export const AssetServiceFactory = function (configuration?: Configuration, base
     const localVarFp = AssetServiceFp(configuration)
     return {
         /**
+         * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+         * @param {AssetServiceCompleteBadgeFontUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeBadgeFontUpload(requestParameters: AssetServiceCompleteBadgeFontUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteBadgeFontUploadResp> {
+            return localVarFp.completeBadgeFontUpload(requestParameters.completeBadgeFontUploadReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询已由对象存储回调确认的徽章 Maker 图片。
+         * @param {AssetServiceCompleteBadgeImageUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeBadgeImageUpload(requestParameters: AssetServiceCompleteBadgeImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteBadgeImageUploadResp> {
+            return localVarFp.completeBadgeImageUpload(requestParameters.completeBadgeImageUploadReq, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 查询已由对象存储回调确认的 Markdown 图片。
          * @param {AssetServiceCompleteMarkdownImageUploadRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -5312,6 +5617,24 @@ export const AssetServiceFactory = function (configuration?: Configuration, base
          */
         completeMarkdownImageUpload(requestParameters: AssetServiceCompleteMarkdownImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteMarkdownImageUploadResp> {
             return localVarFp.completeMarkdownImageUpload(requestParameters.completeMarkdownImageUploadReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+         * @param {AssetServicePrepareBadgeFontUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareBadgeFontUpload(requestParameters: AssetServicePrepareBadgeFontUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareBadgeFontUploadResp> {
+            return localVarFp.prepareBadgeFontUpload(requestParameters.prepareBadgeFontUploadReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 申请徽章 Maker 图片的内容寻址直传凭证。
+         * @param {AssetServicePrepareBadgeImageUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareBadgeImageUpload(requestParameters: AssetServicePrepareBadgeImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareBadgeImageUploadResp> {
+            return localVarFp.prepareBadgeImageUpload(requestParameters.prepareBadgeImageUploadReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 申请 Markdown 图片的内容寻址直传凭证。
@@ -5330,12 +5653,44 @@ export const AssetServiceFactory = function (configuration?: Configuration, base
  */
 export interface AssetServiceInterface {
     /**
+     * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+     * @param {AssetServiceCompleteBadgeFontUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    completeBadgeFontUpload(requestParameters: AssetServiceCompleteBadgeFontUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteBadgeFontUploadResp>;
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 图片。
+     * @param {AssetServiceCompleteBadgeImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    completeBadgeImageUpload(requestParameters: AssetServiceCompleteBadgeImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteBadgeImageUploadResp>;
+
+    /**
      * 查询已由对象存储回调确认的 Markdown 图片。
      * @param {AssetServiceCompleteMarkdownImageUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     completeMarkdownImageUpload(requestParameters: AssetServiceCompleteMarkdownImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteMarkdownImageUploadResp>;
+
+    /**
+     * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+     * @param {AssetServicePrepareBadgeFontUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    prepareBadgeFontUpload(requestParameters: AssetServicePrepareBadgeFontUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareBadgeFontUploadResp>;
+
+    /**
+     * 申请徽章 Maker 图片的内容寻址直传凭证。
+     * @param {AssetServicePrepareBadgeImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    prepareBadgeImageUpload(requestParameters: AssetServicePrepareBadgeImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareBadgeImageUploadResp>;
 
     /**
      * 申请 Markdown 图片的内容寻址直传凭证。
@@ -5348,10 +5703,38 @@ export interface AssetServiceInterface {
 }
 
 /**
+ * Request parameters for completeBadgeFontUpload operation in AssetService.
+ */
+export interface AssetServiceCompleteBadgeFontUploadRequest {
+    readonly completeBadgeFontUploadReq: CompleteBadgeFontUploadReq
+}
+
+/**
+ * Request parameters for completeBadgeImageUpload operation in AssetService.
+ */
+export interface AssetServiceCompleteBadgeImageUploadRequest {
+    readonly completeBadgeImageUploadReq: CompleteBadgeImageUploadReq
+}
+
+/**
  * Request parameters for completeMarkdownImageUpload operation in AssetService.
  */
 export interface AssetServiceCompleteMarkdownImageUploadRequest {
     readonly completeMarkdownImageUploadReq: CompleteMarkdownImageUploadReq
+}
+
+/**
+ * Request parameters for prepareBadgeFontUpload operation in AssetService.
+ */
+export interface AssetServicePrepareBadgeFontUploadRequest {
+    readonly prepareBadgeFontUploadReq: PrepareBadgeFontUploadReq
+}
+
+/**
+ * Request parameters for prepareBadgeImageUpload operation in AssetService.
+ */
+export interface AssetServicePrepareBadgeImageUploadRequest {
+    readonly prepareBadgeImageUploadReq: PrepareBadgeImageUploadReq
 }
 
 /**
@@ -5366,6 +5749,26 @@ export interface AssetServicePrepareMarkdownImageUploadRequest {
  */
 export class AssetService extends BaseAPI implements AssetServiceInterface {
     /**
+     * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+     * @param {AssetServiceCompleteBadgeFontUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public completeBadgeFontUpload(requestParameters: AssetServiceCompleteBadgeFontUploadRequest, options?: RawAxiosRequestConfig) {
+        return AssetServiceFp(this.configuration).completeBadgeFontUpload(requestParameters.completeBadgeFontUploadReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 图片。
+     * @param {AssetServiceCompleteBadgeImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public completeBadgeImageUpload(requestParameters: AssetServiceCompleteBadgeImageUploadRequest, options?: RawAxiosRequestConfig) {
+        return AssetServiceFp(this.configuration).completeBadgeImageUpload(requestParameters.completeBadgeImageUploadReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 查询已由对象存储回调确认的 Markdown 图片。
      * @param {AssetServiceCompleteMarkdownImageUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -5373,6 +5776,26 @@ export class AssetService extends BaseAPI implements AssetServiceInterface {
      */
     public completeMarkdownImageUpload(requestParameters: AssetServiceCompleteMarkdownImageUploadRequest, options?: RawAxiosRequestConfig) {
         return AssetServiceFp(this.configuration).completeMarkdownImageUpload(requestParameters.completeMarkdownImageUploadReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+     * @param {AssetServicePrepareBadgeFontUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public prepareBadgeFontUpload(requestParameters: AssetServicePrepareBadgeFontUploadRequest, options?: RawAxiosRequestConfig) {
+        return AssetServiceFp(this.configuration).prepareBadgeFontUpload(requestParameters.prepareBadgeFontUploadReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申请徽章 Maker 图片的内容寻址直传凭证。
+     * @param {AssetServicePrepareBadgeImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public prepareBadgeImageUpload(requestParameters: AssetServicePrepareBadgeImageUploadRequest, options?: RawAxiosRequestConfig) {
+        return AssetServiceFp(this.configuration).prepareBadgeImageUpload(requestParameters.prepareBadgeImageUploadReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5918,6 +6341,557 @@ export class AuthService extends BaseAPI implements AuthServiceInterface {
      */
     public register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig) {
         return AuthServiceFp(this.configuration).register(requestParameters.registerReq, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * BadgeService - axios parameter creator
+ */
+export const BadgeServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * DeleteDraft 删除一个未发布草稿。
+         * @param {DeleteBadgeDraftReq} deleteBadgeDraftReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDraft: async (deleteBadgeDraftReq: DeleteBadgeDraftReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'deleteBadgeDraftReq' is not null or undefined
+            assertParamExists('deleteDraft', 'deleteBadgeDraftReq', deleteBadgeDraftReq)
+            const localVarPath = `/v1/badge/draft/delete`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deleteBadgeDraftReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * ListDrafts 返回当前登录用户的徽章草稿。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDrafts: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('listDrafts', 'body', body)
+            const localVarPath = `/v1/badge/draft/list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
+         * @param {string} [renderSpecImageAssetId] 
+         * @param {string} [renderSpecText] 
+         * @param {Array<string>} [renderSpecBackgroundColors] 
+         * @param {Array<string>} [renderSpecTextColors] 
+         * @param {string} [renderSpecBackgroundDirection] 
+         * @param {string} [renderSpecTextDirection] 
+         * @param {number} [renderSpecSize] 
+         * @param {number} [renderSpecBorder] 
+         * @param {number} [renderSpecTextBarLength] 
+         * @param {number} [renderSpecTextSize] 
+         * @param {number} [renderSpecTextBarRadius] 
+         * @param {number} [renderSpecScale] 
+         * @param {number} [renderSpecShadow] 
+         * @param {number} [renderSpecAnimationSeconds] 
+         * @param {string} [renderSpecFontAssetId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderMaker: async (renderSpecImageAssetId?: string, renderSpecText?: string, renderSpecBackgroundColors?: Array<string>, renderSpecTextColors?: Array<string>, renderSpecBackgroundDirection?: string, renderSpecTextDirection?: string, renderSpecSize?: number, renderSpecBorder?: number, renderSpecTextBarLength?: number, renderSpecTextSize?: number, renderSpecTextBarRadius?: number, renderSpecScale?: number, renderSpecShadow?: number, renderSpecAnimationSeconds?: number, renderSpecFontAssetId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1/badge/maker/render`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (renderSpecImageAssetId !== undefined) {
+                localVarQueryParameter['render_spec.image_asset_id'] = renderSpecImageAssetId;
+            }
+
+            if (renderSpecText !== undefined) {
+                localVarQueryParameter['render_spec.text'] = renderSpecText;
+            }
+
+            if (renderSpecBackgroundColors) {
+                localVarQueryParameter['render_spec.background_colors'] = renderSpecBackgroundColors;
+            }
+
+            if (renderSpecTextColors) {
+                localVarQueryParameter['render_spec.text_colors'] = renderSpecTextColors;
+            }
+
+            if (renderSpecBackgroundDirection !== undefined) {
+                localVarQueryParameter['render_spec.background_direction'] = renderSpecBackgroundDirection;
+            }
+
+            if (renderSpecTextDirection !== undefined) {
+                localVarQueryParameter['render_spec.text_direction'] = renderSpecTextDirection;
+            }
+
+            if (renderSpecSize !== undefined) {
+                localVarQueryParameter['render_spec.size'] = renderSpecSize;
+            }
+
+            if (renderSpecBorder !== undefined) {
+                localVarQueryParameter['render_spec.border'] = renderSpecBorder;
+            }
+
+            if (renderSpecTextBarLength !== undefined) {
+                localVarQueryParameter['render_spec.text_bar_length'] = renderSpecTextBarLength;
+            }
+
+            if (renderSpecTextSize !== undefined) {
+                localVarQueryParameter['render_spec.text_size'] = renderSpecTextSize;
+            }
+
+            if (renderSpecTextBarRadius !== undefined) {
+                localVarQueryParameter['render_spec.text_bar_radius'] = renderSpecTextBarRadius;
+            }
+
+            if (renderSpecScale !== undefined) {
+                localVarQueryParameter['render_spec.scale'] = renderSpecScale;
+            }
+
+            if (renderSpecShadow !== undefined) {
+                localVarQueryParameter['render_spec.shadow'] = renderSpecShadow;
+            }
+
+            if (renderSpecAnimationSeconds !== undefined) {
+                localVarQueryParameter['render_spec.animation_seconds'] = renderSpecAnimationSeconds;
+            }
+
+            if (renderSpecFontAssetId !== undefined) {
+                localVarQueryParameter['render_spec.font_asset_id'] = renderSpecFontAssetId;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
+         * @param {string} [code] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderPublished: async (code?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1/badge/render`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (code !== undefined) {
+                localVarQueryParameter['code'] = code;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * UpsertDraft 保存当前登录用户的徽章草稿。
+         * @param {UpsertBadgeDraftReq} upsertBadgeDraftReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        upsertDraft: async (upsertBadgeDraftReq: UpsertBadgeDraftReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'upsertBadgeDraftReq' is not null or undefined
+            assertParamExists('upsertDraft', 'upsertBadgeDraftReq', upsertBadgeDraftReq)
+            const localVarPath = `/v1/badge/draft/upsert`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(upsertBadgeDraftReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * BadgeService - functional programming interface
+ */
+export const BadgeServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = BadgeServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * DeleteDraft 删除一个未发布草稿。
+         * @param {DeleteBadgeDraftReq} deleteBadgeDraftReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteDraft(deleteBadgeDraftReq: DeleteBadgeDraftReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteDraft(deleteBadgeDraftReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BadgeService.deleteDraft']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * ListDrafts 返回当前登录用户的徽章草稿。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listDrafts(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListBadgeDraftsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDrafts(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BadgeService.listDrafts']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
+         * @param {string} [renderSpecImageAssetId] 
+         * @param {string} [renderSpecText] 
+         * @param {Array<string>} [renderSpecBackgroundColors] 
+         * @param {Array<string>} [renderSpecTextColors] 
+         * @param {string} [renderSpecBackgroundDirection] 
+         * @param {string} [renderSpecTextDirection] 
+         * @param {number} [renderSpecSize] 
+         * @param {number} [renderSpecBorder] 
+         * @param {number} [renderSpecTextBarLength] 
+         * @param {number} [renderSpecTextSize] 
+         * @param {number} [renderSpecTextBarRadius] 
+         * @param {number} [renderSpecScale] 
+         * @param {number} [renderSpecShadow] 
+         * @param {number} [renderSpecAnimationSeconds] 
+         * @param {string} [renderSpecFontAssetId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async renderMaker(renderSpecImageAssetId?: string, renderSpecText?: string, renderSpecBackgroundColors?: Array<string>, renderSpecTextColors?: Array<string>, renderSpecBackgroundDirection?: string, renderSpecTextDirection?: string, renderSpecSize?: number, renderSpecBorder?: number, renderSpecTextBarLength?: number, renderSpecTextSize?: number, renderSpecTextBarRadius?: number, renderSpecScale?: number, renderSpecShadow?: number, renderSpecAnimationSeconds?: number, renderSpecFontAssetId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.renderMaker(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BadgeService.renderMaker']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
+         * @param {string} [code] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async renderPublished(code?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.renderPublished(code, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BadgeService.renderPublished']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * UpsertDraft 保存当前登录用户的徽章草稿。
+         * @param {UpsertBadgeDraftReq} upsertBadgeDraftReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async upsertDraft(upsertBadgeDraftReq: UpsertBadgeDraftReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpsertBadgeDraftResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.upsertDraft(upsertBadgeDraftReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BadgeService.upsertDraft']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * BadgeService - factory interface
+ */
+export const BadgeServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = BadgeServiceFp(configuration)
+    return {
+        /**
+         * DeleteDraft 删除一个未发布草稿。
+         * @param {BadgeServiceDeleteDraftRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteDraft(requestParameters: BadgeServiceDeleteDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.deleteDraft(requestParameters.deleteBadgeDraftReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * ListDrafts 返回当前登录用户的徽章草稿。
+         * @param {BadgeServiceListDraftsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listDrafts(requestParameters: BadgeServiceListDraftsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListBadgeDraftsResp> {
+            return localVarFp.listDrafts(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
+         * @param {BadgeServiceRenderMakerRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderMaker(requestParameters: BadgeServiceRenderMakerRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp> {
+            return localVarFp.renderMaker(requestParameters.renderSpecImageAssetId, requestParameters.renderSpecText, requestParameters.renderSpecBackgroundColors, requestParameters.renderSpecTextColors, requestParameters.renderSpecBackgroundDirection, requestParameters.renderSpecTextDirection, requestParameters.renderSpecSize, requestParameters.renderSpecBorder, requestParameters.renderSpecTextBarLength, requestParameters.renderSpecTextSize, requestParameters.renderSpecTextBarRadius, requestParameters.renderSpecScale, requestParameters.renderSpecShadow, requestParameters.renderSpecAnimationSeconds, requestParameters.renderSpecFontAssetId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
+         * @param {BadgeServiceRenderPublishedRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderPublished(requestParameters: BadgeServiceRenderPublishedRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp> {
+            return localVarFp.renderPublished(requestParameters.code, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * UpsertDraft 保存当前登录用户的徽章草稿。
+         * @param {BadgeServiceUpsertDraftRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        upsertDraft(requestParameters: BadgeServiceUpsertDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertBadgeDraftResp> {
+            return localVarFp.upsertDraft(requestParameters.upsertBadgeDraftReq, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * BadgeService - interface
+ */
+export interface BadgeServiceInterface {
+    /**
+     * DeleteDraft 删除一个未发布草稿。
+     * @param {BadgeServiceDeleteDraftRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteDraft(requestParameters: BadgeServiceDeleteDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * ListDrafts 返回当前登录用户的徽章草稿。
+     * @param {BadgeServiceListDraftsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listDrafts(requestParameters: BadgeServiceListDraftsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListBadgeDraftsResp>;
+
+    /**
+     * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
+     * @param {BadgeServiceRenderMakerRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    renderMaker(requestParameters?: BadgeServiceRenderMakerRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp>;
+
+    /**
+     * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
+     * @param {BadgeServiceRenderPublishedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    renderPublished(requestParameters?: BadgeServiceRenderPublishedRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp>;
+
+    /**
+     * UpsertDraft 保存当前登录用户的徽章草稿。
+     * @param {BadgeServiceUpsertDraftRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    upsertDraft(requestParameters: BadgeServiceUpsertDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertBadgeDraftResp>;
+
+}
+
+/**
+ * Request parameters for deleteDraft operation in BadgeService.
+ */
+export interface BadgeServiceDeleteDraftRequest {
+    readonly deleteBadgeDraftReq: DeleteBadgeDraftReq
+}
+
+/**
+ * Request parameters for listDrafts operation in BadgeService.
+ */
+export interface BadgeServiceListDraftsRequest {
+    readonly body: object
+}
+
+/**
+ * Request parameters for renderMaker operation in BadgeService.
+ */
+export interface BadgeServiceRenderMakerRequest {
+    readonly renderSpecImageAssetId?: string
+
+    readonly renderSpecText?: string
+
+    readonly renderSpecBackgroundColors?: Array<string>
+
+    readonly renderSpecTextColors?: Array<string>
+
+    readonly renderSpecBackgroundDirection?: string
+
+    readonly renderSpecTextDirection?: string
+
+    readonly renderSpecSize?: number
+
+    readonly renderSpecBorder?: number
+
+    readonly renderSpecTextBarLength?: number
+
+    readonly renderSpecTextSize?: number
+
+    readonly renderSpecTextBarRadius?: number
+
+    readonly renderSpecScale?: number
+
+    readonly renderSpecShadow?: number
+
+    readonly renderSpecAnimationSeconds?: number
+
+    readonly renderSpecFontAssetId?: string
+}
+
+/**
+ * Request parameters for renderPublished operation in BadgeService.
+ */
+export interface BadgeServiceRenderPublishedRequest {
+    readonly code?: string
+}
+
+/**
+ * Request parameters for upsertDraft operation in BadgeService.
+ */
+export interface BadgeServiceUpsertDraftRequest {
+    readonly upsertBadgeDraftReq: UpsertBadgeDraftReq
+}
+
+/**
+ * BadgeService - object-oriented interface
+ */
+export class BadgeService extends BaseAPI implements BadgeServiceInterface {
+    /**
+     * DeleteDraft 删除一个未发布草稿。
+     * @param {BadgeServiceDeleteDraftRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deleteDraft(requestParameters: BadgeServiceDeleteDraftRequest, options?: RawAxiosRequestConfig) {
+        return BadgeServiceFp(this.configuration).deleteDraft(requestParameters.deleteBadgeDraftReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * ListDrafts 返回当前登录用户的徽章草稿。
+     * @param {BadgeServiceListDraftsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listDrafts(requestParameters: BadgeServiceListDraftsRequest, options?: RawAxiosRequestConfig) {
+        return BadgeServiceFp(this.configuration).listDrafts(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
+     * @param {BadgeServiceRenderMakerRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public renderMaker(requestParameters: BadgeServiceRenderMakerRequest = {}, options?: RawAxiosRequestConfig) {
+        return BadgeServiceFp(this.configuration).renderMaker(requestParameters.renderSpecImageAssetId, requestParameters.renderSpecText, requestParameters.renderSpecBackgroundColors, requestParameters.renderSpecTextColors, requestParameters.renderSpecBackgroundDirection, requestParameters.renderSpecTextDirection, requestParameters.renderSpecSize, requestParameters.renderSpecBorder, requestParameters.renderSpecTextBarLength, requestParameters.renderSpecTextSize, requestParameters.renderSpecTextBarRadius, requestParameters.renderSpecScale, requestParameters.renderSpecShadow, requestParameters.renderSpecAnimationSeconds, requestParameters.renderSpecFontAssetId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
+     * @param {BadgeServiceRenderPublishedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public renderPublished(requestParameters: BadgeServiceRenderPublishedRequest = {}, options?: RawAxiosRequestConfig) {
+        return BadgeServiceFp(this.configuration).renderPublished(requestParameters.code, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * UpsertDraft 保存当前登录用户的徽章草稿。
+     * @param {BadgeServiceUpsertDraftRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public upsertDraft(requestParameters: BadgeServiceUpsertDraftRequest, options?: RawAxiosRequestConfig) {
+        return BadgeServiceFp(this.configuration).upsertDraft(requestParameters.upsertBadgeDraftReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

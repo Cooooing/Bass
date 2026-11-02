@@ -17,9 +17,8 @@ import (
 	"image"
 	_ "image/gif"  // Register the GIF decoder for legacy badge resources.
 	_ "image/jpeg" // Register the JPEG decoder for legacy badge resources.
-	_ "image/png"  // Register the PNG decoder for legacy badge resources.
+	"image/png"
 
-	"github.com/gen2brain/webp"
 	imagedraw "golang.org/x/image/draw"
 
 	// Register the WebP decoder used by image.Decode for legacy non-GIF input.
@@ -149,7 +148,7 @@ func (u *BadgeRenderUsecase) addImage(ctx context.Context, params *badgeRenderPa
 	params.ImageColor = u.averageColor(decoded)
 	if format == "gif" {
 		params.ImageData = base64.StdEncoding.EncodeToString(content)
-		params.ImageIsGIF = true
+		params.ImageMIME = "image/gif"
 		return nil
 	}
 
@@ -161,10 +160,11 @@ func (u *BadgeRenderUsecase) addImage(ctx context.Context, params *badgeRenderPa
 		square = target
 	}
 	var converted bytes.Buffer
-	if err = webp.Encode(&converted, square); err != nil {
+	if err = png.Encode(&converted, square); err != nil {
 		return err
 	}
 	params.ImageData = base64.StdEncoding.EncodeToString(converted.Bytes())
+	params.ImageMIME = "image/png"
 	return nil
 }
 
@@ -201,12 +201,12 @@ func (u *BadgeRenderUsecase) averageColor(source image.Image) [3]uint8 {
 }
 
 // badgeRenderParams mirrors fishpi-badge-rust after the data adapter has
-// fetched an image and transcoded non-GIF bytes to lossless WebP.
+// fetched an image and transcoded non-GIF bytes to lossless PNG.
 type badgeRenderParams struct {
 	Text          string
 	ImageData     string
 	ImageColor    [3]uint8
-	ImageIsGIF    bool
+	ImageMIME     string
 	FontData      string
 	FontMIME      string
 	FontFormat    string
@@ -280,13 +280,9 @@ func (u *BadgeRenderUsecase) normalize(params badgeRenderParams) (badgeRenderDat
 	if animation == 0 {
 		animation = u.defaultAnimation
 	}
-	mime := "image/webp"
-	if params.ImageIsGIF {
-		mime = "image/gif"
-	}
 	imageData := ""
 	if params.ImageData != "" {
-		imageData = "data:" + mime + ";base64," + params.ImageData
+		imageData = "data:" + params.ImageMIME + ";base64," + params.ImageData
 	}
 	fontMIME, fontFormat := params.FontMIME, params.FontFormat
 	if params.FontData != "" && fontMIME == "" {

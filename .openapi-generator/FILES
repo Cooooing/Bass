@@ -34,6 +34,8 @@ docs/ArticleViewHistoryItem.md
 docs/ArticleViewerActionState.md
 docs/AssetService.md
 docs/AuthService.md
+docs/BadgeDraft.md
+docs/BadgeService.md
 docs/BeginEnableTotpResp.md
 docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
@@ -46,6 +48,10 @@ docs/CollectArticleResp.md
 docs/CommentListItem.md
 docs/CommentService.md
 docs/CommentViewerActionState.md
+docs/CompleteBadgeFontUploadReq.md
+docs/CompleteBadgeFontUploadResp.md
+docs/CompleteBadgeImageUploadReq.md
+docs/CompleteBadgeImageUploadResp.md
 docs/CompleteMarkdownImageUploadReq.md
 docs/CompleteMarkdownImageUploadResp.md
 docs/CompleteProfileImageUploadAccountReq.md
@@ -69,6 +75,7 @@ docs/CreateMoonbreezeResp.md
 docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
+docs/DeleteBadgeDraftReq.md
 docs/DeleteEmojiGroupReq.md
 docs/DeleteEmojiItemReq.md
 docs/DisableTotpReq.md
@@ -112,6 +119,7 @@ docs/ListArticleTagsReq.md
 docs/ListArticleTagsResp.md
 docs/ListArticlesReq.md
 docs/ListArticlesResp.md
+docs/ListBadgeDraftsResp.md
 docs/ListBlockedRelationsReq.md
 docs/ListBlockedRelationsResp.md
 docs/ListCommentRepliesReq.md
@@ -181,6 +189,10 @@ docs/PageWatchedArticlesResp.md
 docs/PageWatchingMoonbreezesReq.md
 docs/PostscriptService.md
 docs/PreferencesService.md
+docs/PrepareBadgeFontUploadReq.md
+docs/PrepareBadgeFontUploadResp.md
+docs/PrepareBadgeImageUploadReq.md
+docs/PrepareBadgeImageUploadResp.md
 docs/PrepareMarkdownImageUploadReq.md
 docs/PrepareMarkdownImageUploadResp.md
 docs/PrepareProfileImageUploadAccountReq.md
@@ -205,6 +217,7 @@ docs/RenameEmojiGroupReq.md
 docs/RenameEmojiGroupResp.md
 docs/RenameEmojiItemReq.md
 docs/RenameEmojiItemResp.md
+docs/RenderSpec.md
 docs/ReorderEmojiGroupsReq.md
 docs/ReorderEmojiItemsReq.md
 docs/ReqArticle.md
@@ -287,6 +300,8 @@ docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
+docs/UpsertBadgeDraftReq.md
+docs/UpsertBadgeDraftResp.md
 docs/VoteArticlePollReq.md
 docs/WatchArticleReq.md
 docs/WatchArticleResp.md
@@ -315,6 +330,7 @@ src/main/java/com/bass/bbs/api/ArticleSearchService.java
 src/main/java/com/bass/bbs/api/ArticleService.java
 src/main/java/com/bass/bbs/api/AssetService.java
 src/main/java/com/bass/bbs/api/AuthService.java
+src/main/java/com/bass/bbs/api/BadgeService.java
 src/main/java/com/bass/bbs/api/CommentService.java
 src/main/java/com/bass/bbs/api/DomainService.java
 src/main/java/com/bass/bbs/api/EmojiService.java
@@ -356,6 +372,7 @@ src/main/java/com/bass/bbs/model/ArticlePostscript.java
 src/main/java/com/bass/bbs/model/ArticleTag.java
 src/main/java/com/bass/bbs/model/ArticleViewHistoryItem.java
 src/main/java/com/bass/bbs/model/ArticleViewerActionState.java
+src/main/java/com/bass/bbs/model/BadgeDraft.java
 src/main/java/com/bass/bbs/model/BeginEnableTotpResp.java
 src/main/java/com/bass/bbs/model/BindArticleTagsReq.java
 src/main/java/com/bass/bbs/model/BlockRelationReq.java
@@ -367,6 +384,10 @@ src/main/java/com/bass/bbs/model/CollectArticleReq.java
 src/main/java/com/bass/bbs/model/CollectArticleResp.java
 src/main/java/com/bass/bbs/model/CommentListItem.java
 src/main/java/com/bass/bbs/model/CommentViewerActionState.java
+src/main/java/com/bass/bbs/model/CompleteBadgeFontUploadReq.java
+src/main/java/com/bass/bbs/model/CompleteBadgeFontUploadResp.java
+src/main/java/com/bass/bbs/model/CompleteBadgeImageUploadReq.java
+src/main/java/com/bass/bbs/model/CompleteBadgeImageUploadResp.java
 src/main/java/com/bass/bbs/model/CompleteMarkdownImageUploadReq.java
 src/main/java/com/bass/bbs/model/CompleteMarkdownImageUploadResp.java
 src/main/java/com/bass/bbs/model/CompleteProfileImageUploadAccountReq.java
@@ -390,6 +411,7 @@ src/main/java/com/bass/bbs/model/CreateMoonbreezeResp.java
 src/main/java/com/bass/bbs/model/CreateRealtimeTicketResp.java
 src/main/java/com/bass/bbs/model/CreateTagReq.java
 src/main/java/com/bass/bbs/model/CreateTagResp.java
+src/main/java/com/bass/bbs/model/DeleteBadgeDraftReq.java
 src/main/java/com/bass/bbs/model/DeleteEmojiGroupReq.java
 src/main/java/com/bass/bbs/model/DeleteEmojiItemReq.java
 src/main/java/com/bass/bbs/model/DisableTotpReq.java
@@ -429,6 +451,7 @@ src/main/java/com/bass/bbs/model/ListArticleTagsReq.java
 src/main/java/com/bass/bbs/model/ListArticleTagsResp.java
 src/main/java/com/bass/bbs/model/ListArticlesReq.java
 src/main/java/com/bass/bbs/model/ListArticlesResp.java
+src/main/java/com/bass/bbs/model/ListBadgeDraftsResp.java
 src/main/java/com/bass/bbs/model/ListBlockedRelationsReq.java
 src/main/java/com/bass/bbs/model/ListBlockedRelationsResp.java
 src/main/java/com/bass/bbs/model/ListCommentRepliesReq.java
@@ -491,6 +514,10 @@ src/main/java/com/bass/bbs/model/PageResp.java
 src/main/java/com/bass/bbs/model/PageWatchedArticlesReq.java
 src/main/java/com/bass/bbs/model/PageWatchedArticlesResp.java
 src/main/java/com/bass/bbs/model/PageWatchingMoonbreezesReq.java
+src/main/java/com/bass/bbs/model/PrepareBadgeFontUploadReq.java
+src/main/java/com/bass/bbs/model/PrepareBadgeFontUploadResp.java
+src/main/java/com/bass/bbs/model/PrepareBadgeImageUploadReq.java
+src/main/java/com/bass/bbs/model/PrepareBadgeImageUploadResp.java
 src/main/java/com/bass/bbs/model/PrepareMarkdownImageUploadReq.java
 src/main/java/com/bass/bbs/model/PrepareMarkdownImageUploadResp.java
 src/main/java/com/bass/bbs/model/PrepareProfileImageUploadAccountReq.java
@@ -511,6 +538,7 @@ src/main/java/com/bass/bbs/model/RenameEmojiGroupReq.java
 src/main/java/com/bass/bbs/model/RenameEmojiGroupResp.java
 src/main/java/com/bass/bbs/model/RenameEmojiItemReq.java
 src/main/java/com/bass/bbs/model/RenameEmojiItemResp.java
+src/main/java/com/bass/bbs/model/RenderSpec.java
 src/main/java/com/bass/bbs/model/ReorderEmojiGroupsReq.java
 src/main/java/com/bass/bbs/model/ReorderEmojiItemsReq.java
 src/main/java/com/bass/bbs/model/ReqArticle.java
@@ -592,6 +620,8 @@ src/main/java/com/bass/bbs/model/UpdateProfileAccountReq.java
 src/main/java/com/bass/bbs/model/UpdateProfileAccountResp.java
 src/main/java/com/bass/bbs/model/UpdateTagReq.java
 src/main/java/com/bass/bbs/model/UpdateTagResp.java
+src/main/java/com/bass/bbs/model/UpsertBadgeDraftReq.java
+src/main/java/com/bass/bbs/model/UpsertBadgeDraftResp.java
 src/main/java/com/bass/bbs/model/VoteArticlePollReq.java
 src/main/java/com/bass/bbs/model/WatchArticleReq.java
 src/main/java/com/bass/bbs/model/WatchArticleResp.java
@@ -600,6 +630,7 @@ src/test/java/com/bass/bbs/api/ArticleSearchServiceTest.java
 src/test/java/com/bass/bbs/api/ArticleServiceTest.java
 src/test/java/com/bass/bbs/api/AssetServiceTest.java
 src/test/java/com/bass/bbs/api/AuthServiceTest.java
+src/test/java/com/bass/bbs/api/BadgeServiceTest.java
 src/test/java/com/bass/bbs/api/CommentServiceTest.java
 src/test/java/com/bass/bbs/api/DomainServiceTest.java
 src/test/java/com/bass/bbs/api/EmojiServiceTest.java
@@ -640,6 +671,7 @@ src/test/java/com/bass/bbs/model/ArticlePostscriptTest.java
 src/test/java/com/bass/bbs/model/ArticleTagTest.java
 src/test/java/com/bass/bbs/model/ArticleViewHistoryItemTest.java
 src/test/java/com/bass/bbs/model/ArticleViewerActionStateTest.java
+src/test/java/com/bass/bbs/model/BadgeDraftTest.java
 src/test/java/com/bass/bbs/model/BeginEnableTotpRespTest.java
 src/test/java/com/bass/bbs/model/BindArticleTagsReqTest.java
 src/test/java/com/bass/bbs/model/BlockRelationReqTest.java
@@ -651,6 +683,10 @@ src/test/java/com/bass/bbs/model/CollectArticleReqTest.java
 src/test/java/com/bass/bbs/model/CollectArticleRespTest.java
 src/test/java/com/bass/bbs/model/CommentListItemTest.java
 src/test/java/com/bass/bbs/model/CommentViewerActionStateTest.java
+src/test/java/com/bass/bbs/model/CompleteBadgeFontUploadReqTest.java
+src/test/java/com/bass/bbs/model/CompleteBadgeFontUploadRespTest.java
+src/test/java/com/bass/bbs/model/CompleteBadgeImageUploadReqTest.java
+src/test/java/com/bass/bbs/model/CompleteBadgeImageUploadRespTest.java
 src/test/java/com/bass/bbs/model/CompleteMarkdownImageUploadReqTest.java
 src/test/java/com/bass/bbs/model/CompleteMarkdownImageUploadRespTest.java
 src/test/java/com/bass/bbs/model/CompleteProfileImageUploadAccountReqTest.java
@@ -674,6 +710,7 @@ src/test/java/com/bass/bbs/model/CreateMoonbreezeRespTest.java
 src/test/java/com/bass/bbs/model/CreateRealtimeTicketRespTest.java
 src/test/java/com/bass/bbs/model/CreateTagReqTest.java
 src/test/java/com/bass/bbs/model/CreateTagRespTest.java
+src/test/java/com/bass/bbs/model/DeleteBadgeDraftReqTest.java
 src/test/java/com/bass/bbs/model/DeleteEmojiGroupReqTest.java
 src/test/java/com/bass/bbs/model/DeleteEmojiItemReqTest.java
 src/test/java/com/bass/bbs/model/DisableTotpReqTest.java
@@ -713,6 +750,7 @@ src/test/java/com/bass/bbs/model/ListArticleTagsReqTest.java
 src/test/java/com/bass/bbs/model/ListArticleTagsRespTest.java
 src/test/java/com/bass/bbs/model/ListArticlesReqTest.java
 src/test/java/com/bass/bbs/model/ListArticlesRespTest.java
+src/test/java/com/bass/bbs/model/ListBadgeDraftsRespTest.java
 src/test/java/com/bass/bbs/model/ListBlockedRelationsReqTest.java
 src/test/java/com/bass/bbs/model/ListBlockedRelationsRespTest.java
 src/test/java/com/bass/bbs/model/ListCommentRepliesReqTest.java
@@ -775,6 +813,10 @@ src/test/java/com/bass/bbs/model/PageRespTest.java
 src/test/java/com/bass/bbs/model/PageWatchedArticlesReqTest.java
 src/test/java/com/bass/bbs/model/PageWatchedArticlesRespTest.java
 src/test/java/com/bass/bbs/model/PageWatchingMoonbreezesReqTest.java
+src/test/java/com/bass/bbs/model/PrepareBadgeFontUploadReqTest.java
+src/test/java/com/bass/bbs/model/PrepareBadgeFontUploadRespTest.java
+src/test/java/com/bass/bbs/model/PrepareBadgeImageUploadReqTest.java
+src/test/java/com/bass/bbs/model/PrepareBadgeImageUploadRespTest.java
 src/test/java/com/bass/bbs/model/PrepareMarkdownImageUploadReqTest.java
 src/test/java/com/bass/bbs/model/PrepareMarkdownImageUploadRespTest.java
 src/test/java/com/bass/bbs/model/PrepareProfileImageUploadAccountReqTest.java
@@ -795,6 +837,7 @@ src/test/java/com/bass/bbs/model/RenameEmojiGroupReqTest.java
 src/test/java/com/bass/bbs/model/RenameEmojiGroupRespTest.java
 src/test/java/com/bass/bbs/model/RenameEmojiItemReqTest.java
 src/test/java/com/bass/bbs/model/RenameEmojiItemRespTest.java
+src/test/java/com/bass/bbs/model/RenderSpecTest.java
 src/test/java/com/bass/bbs/model/ReorderEmojiGroupsReqTest.java
 src/test/java/com/bass/bbs/model/ReorderEmojiItemsReqTest.java
 src/test/java/com/bass/bbs/model/ReqArticleQueryTest.java
@@ -876,6 +919,8 @@ src/test/java/com/bass/bbs/model/UpdateProfileAccountReqTest.java
 src/test/java/com/bass/bbs/model/UpdateProfileAccountRespTest.java
 src/test/java/com/bass/bbs/model/UpdateTagReqTest.java
 src/test/java/com/bass/bbs/model/UpdateTagRespTest.java
+src/test/java/com/bass/bbs/model/UpsertBadgeDraftReqTest.java
+src/test/java/com/bass/bbs/model/UpsertBadgeDraftRespTest.java
 src/test/java/com/bass/bbs/model/VoteArticlePollReqTest.java
 src/test/java/com/bass/bbs/model/WatchArticleReqTest.java
 src/test/java/com/bass/bbs/model/WatchArticleRespTest.java

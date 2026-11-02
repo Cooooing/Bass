@@ -16,6 +16,8 @@ tags:
 - name: AssetService
 - description: 认证接口。
   name: AuthService
+- description: BadgeService 向社区客户端提供徽章预览与设计草稿管理。
+  name: BadgeService
 - description: 评论接口。
   name: CommentService
 - description: 领域 HTTP 接口。
@@ -48,6 +50,94 @@ tags:
 - description: 标签 HTTP 接口。
   name: TagService
 paths:
+  /v1/asset/badge-font/complete:
+    post:
+      description: 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+      operationId: AssetService_CompleteBadgeFontUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteBadgeFontUpload_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteBadgeFontUpload_Resp"
+          description: OK
+      tags:
+      - AssetService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/asset/badge-font/prepare:
+    post:
+      description: 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+      operationId: AssetService_PrepareBadgeFontUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrepareBadgeFontUpload_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrepareBadgeFontUpload_Resp"
+          description: OK
+      tags:
+      - AssetService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/asset/badge-image/complete:
+    post:
+      description: 查询已由对象存储回调确认的徽章 Maker 图片。
+      operationId: AssetService_CompleteBadgeImageUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteBadgeImageUpload_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteBadgeImageUpload_Resp"
+          description: OK
+      tags:
+      - AssetService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/asset/badge-image/prepare:
+    post:
+      description: 申请徽章 Maker 图片的内容寻址直传凭证。
+      operationId: AssetService_PrepareBadgeImageUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrepareBadgeImageUpload_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrepareBadgeImageUpload_Resp"
+          description: OK
+      tags:
+      - AssetService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /v1/asset/markdown-image/complete:
     post:
       description: 查询已由对象存储回调确认的 Markdown 图片。
@@ -90,6 +180,228 @@ paths:
       tags:
       - AssetService
       x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/badge/draft/delete:
+    post:
+      description: DeleteDraft 删除一个未发布草稿。
+      operationId: BadgeService_DeleteDraft
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteBadgeDraft_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteBadgeDraft_Resp"
+          description: OK
+      tags:
+      - BadgeService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/badge/draft/list:
+    post:
+      description: ListDrafts 返回当前登录用户的徽章草稿。
+      operationId: BadgeService_ListDrafts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListBadgeDrafts_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListBadgeDrafts_Resp"
+          description: OK
+      tags:
+      - BadgeService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/badge/draft/upsert:
+    post:
+      description: UpsertDraft 保存当前登录用户的徽章草稿。
+      operationId: BadgeService_UpsertDraft
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpsertBadgeDraft_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpsertBadgeDraft_Resp"
+          description: OK
+      tags:
+      - BadgeService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/badge/maker/render:
+    get:
+      description: RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
+      operationId: BadgeService_RenderMaker
+      parameters:
+      - explode: true
+        in: query
+        name: render_spec.image_asset_id
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.text
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.background_colors
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.text_colors
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.background_direction
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.text_direction
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.size
+        required: false
+        schema:
+          format: uint32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.border
+        required: false
+        schema:
+          format: uint32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.text_bar_length
+        required: false
+        schema:
+          format: uint32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.text_size
+        required: false
+        schema:
+          format: uint32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.text_bar_radius
+        required: false
+        schema:
+          format: uint32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.scale
+        required: false
+        schema:
+          format: double
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.shadow
+        required: false
+        schema:
+          format: double
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.animation_seconds
+        required: false
+        schema:
+          format: double
+          type: number
+        style: form
+      - explode: true
+        in: query
+        name: render_spec.font_asset_id
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageResp"
+          description: OK
+      tags:
+      - BadgeService
+      x-accepts:
+      - application/json
+  /v1/badge/render:
+    get:
+      description: RenderPublished 匿名返回一个已发布徽章的主站 SVG。
+      operationId: BadgeService_RenderPublished
+      parameters:
+      - explode: true
+        in: query
+        name: code
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageResp"
+          description: OK
+      tags:
+      - BadgeService
       x-accepts:
       - application/json
   /v1/content/article/answer/accept:
@@ -3871,6 +4183,45 @@ components:
         watched:
           type: boolean
       type: object
+    BadgeDraft:
+      description: BadgeDraft 是 Maker 可编辑的徽章草稿。
+      example:
+        name: name
+        render_spec:
+          border: 6
+          text_bar_length: 1
+          animation_seconds: 9.301444243932576
+          shadow: 7.061401241503109
+          background_direction: background_direction
+          text_colors:
+          - text_colors
+          - text_colors
+          scale: 2.3021358869347655
+          background_colors:
+          - background_colors
+          - background_colors
+          size: 0
+          text_size: 5
+          text_bar_radius: 5
+          text_direction: text_direction
+          font_asset_id: font_asset_id
+          image_asset_id: image_asset_id
+          text: text
+        description: description
+        id: id
+        designer_user_id: designer_user_id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        render_spec:
+          $ref: "#/components/schemas/RenderSpec"
+        designer_user_id:
+          type: string
+      type: object
     BeginEnableTotp_Req:
       properties: {}
       type: object
@@ -4084,6 +4435,42 @@ components:
           type: boolean
         thanked:
           type: boolean
+      type: object
+    CompleteBadgeFontUpload_Req:
+      description: Req 指定已上传字体的内容哈希。
+      properties:
+        hash:
+          type: string
+      required:
+      - hash
+      type: object
+    CompleteBadgeFontUpload_Resp:
+      description: Resp 返回已确认的字体资源与前端本地预览地址。
+      example:
+        asset_id: asset_id
+        font_url: font_url
+      properties:
+        asset_id:
+          type: string
+        font_url:
+          type: string
+      type: object
+    CompleteBadgeImageUpload_Req:
+      properties:
+        hash:
+          type: string
+      required:
+      - hash
+      type: object
+    CompleteBadgeImageUpload_Resp:
+      example:
+        image_url: image_url
+        asset_id: asset_id
+      properties:
+        asset_id:
+          type: string
+        image_url:
+          type: string
       type: object
     CompleteMarkdownImageUpload_Req:
       properties:
@@ -4424,6 +4811,16 @@ components:
       properties:
         tag:
           $ref: "#/components/schemas/Resp_Tag"
+      type: object
+    DeleteBadgeDraft_Req:
+      description: Req 指定待删除草稿。
+      properties:
+        draft_id:
+          type: string
+      type: object
+    DeleteBadgeDraft_Resp:
+      description: Resp 表示删除完成。
+      properties: {}
       type: object
     DeleteEmojiGroup_Req:
       properties:
@@ -5415,6 +5812,67 @@ components:
         rows:
           items:
             $ref: "#/components/schemas/ArticleListItem"
+          type: array
+      type: object
+    ListBadgeDrafts_Req:
+      properties: {}
+      type: object
+    ListBadgeDrafts_Resp:
+      description: Resp 返回草稿行。
+      example:
+        rows:
+        - name: name
+          render_spec:
+            border: 6
+            text_bar_length: 1
+            animation_seconds: 9.301444243932576
+            shadow: 7.061401241503109
+            background_direction: background_direction
+            text_colors:
+            - text_colors
+            - text_colors
+            scale: 2.3021358869347655
+            background_colors:
+            - background_colors
+            - background_colors
+            size: 0
+            text_size: 5
+            text_bar_radius: 5
+            text_direction: text_direction
+            font_asset_id: font_asset_id
+            image_asset_id: image_asset_id
+            text: text
+          description: description
+          id: id
+          designer_user_id: designer_user_id
+        - name: name
+          render_spec:
+            border: 6
+            text_bar_length: 1
+            animation_seconds: 9.301444243932576
+            shadow: 7.061401241503109
+            background_direction: background_direction
+            text_colors:
+            - text_colors
+            - text_colors
+            scale: 2.3021358869347655
+            background_colors:
+            - background_colors
+            - background_colors
+            size: 0
+            text_size: 5
+            text_bar_radius: 5
+            text_direction: text_direction
+            font_asset_id: font_asset_id
+            image_asset_id: image_asset_id
+            text: text
+          description: description
+          id: id
+          designer_user_id: designer_user_id
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/BadgeDraft"
           type: array
       type: object
     ListBlockedRelations_Req:
@@ -8605,6 +9063,66 @@ components:
           format: uint32
           type: integer
       type: object
+    PrepareBadgeFontUpload_Req:
+      description: Req 指定待上传字体的内容寻址信息。
+      properties:
+        hash:
+          type: string
+        mime_type:
+          type: string
+        size:
+          type: string
+      required:
+      - hash
+      - mime_type
+      - size
+      type: object
+    PrepareBadgeFontUpload_Resp:
+      description: Resp 返回已存在字体或一次直传凭证。
+      example:
+        form_fields:
+          key: form_fields
+        upload_url: upload_url
+        asset_id: asset_id
+      properties:
+        asset_id:
+          type: string
+        upload_url:
+          type: string
+        form_fields:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    PrepareBadgeImageUpload_Req:
+      properties:
+        hash:
+          type: string
+        mime_type:
+          type: string
+        size:
+          type: string
+      required:
+      - hash
+      - mime_type
+      - size
+      type: object
+    PrepareBadgeImageUpload_Resp:
+      example:
+        form_fields:
+          key: form_fields
+        upload_url: upload_url
+        asset_id: asset_id
+      properties:
+        asset_id:
+          type: string
+        upload_url:
+          type: string
+        form_fields:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
     PrepareMarkdownImageUpload_Req:
       properties:
         hash:
@@ -9011,6 +9529,72 @@ components:
       properties:
         item:
           $ref: "#/components/schemas/EmojiItem"
+      type: object
+    RenderSpec:
+      description: RenderSpec 是客户端 Maker 传递的完整渲染参数。
+      example:
+        border: 6
+        text_bar_length: 1
+        animation_seconds: 9.301444243932576
+        shadow: 7.061401241503109
+        background_direction: background_direction
+        text_colors:
+        - text_colors
+        - text_colors
+        scale: 2.3021358869347655
+        background_colors:
+        - background_colors
+        - background_colors
+        size: 0
+        text_size: 5
+        text_bar_radius: 5
+        text_direction: text_direction
+        font_asset_id: font_asset_id
+        image_asset_id: image_asset_id
+        text: text
+      properties:
+        image_asset_id:
+          type: string
+        text:
+          type: string
+        background_colors:
+          items:
+            type: string
+          type: array
+        text_colors:
+          items:
+            type: string
+          type: array
+        background_direction:
+          type: string
+        text_direction:
+          type: string
+        size:
+          format: uint32
+          type: integer
+        border:
+          format: uint32
+          type: integer
+        text_bar_length:
+          format: uint32
+          type: integer
+        text_size:
+          format: uint32
+          type: integer
+        text_bar_radius:
+          format: uint32
+          type: integer
+        scale:
+          format: double
+          type: number
+        shadow:
+          format: double
+          type: number
+        animation_seconds:
+          format: double
+          type: number
+        font_asset_id:
+          type: string
       type: object
     ReorderEmojiGroups_Req:
       properties:
@@ -11347,6 +11931,50 @@ components:
       properties:
         tag:
           $ref: "#/components/schemas/Resp_Tag"
+      type: object
+    UpsertBadgeDraft_Req:
+      description: Req 缺失 draft_id 时创建，存在时更新。
+      properties:
+        draft_id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        render_spec:
+          $ref: "#/components/schemas/RenderSpec"
+      type: object
+    UpsertBadgeDraft_Resp:
+      description: Resp 返回保存后的草稿。
+      example:
+        draft:
+          name: name
+          render_spec:
+            border: 6
+            text_bar_length: 1
+            animation_seconds: 9.301444243932576
+            shadow: 7.061401241503109
+            background_direction: background_direction
+            text_colors:
+            - text_colors
+            - text_colors
+            scale: 2.3021358869347655
+            background_colors:
+            - background_colors
+            - background_colors
+            size: 0
+            text_size: 5
+            text_bar_radius: 5
+            text_direction: text_direction
+            font_asset_id: font_asset_id
+            image_asset_id: image_asset_id
+            text: text
+          description: description
+          id: id
+          designer_user_id: designer_user_id
+      properties:
+        draft:
+          $ref: "#/components/schemas/BadgeDraft"
       type: object
     VoteArticlePoll_Req:
       properties:

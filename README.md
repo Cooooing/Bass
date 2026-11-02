@@ -189,8 +189,16 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**votePollWithHttpInfo**](docs/ArticleService.md#votePollWithHttpInfo) | **POST** /v1/content/article/poll/vote | 
 *ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
 *ArticleService* | [**watchWithHttpInfo**](docs/ArticleService.md#watchWithHttpInfo) | **POST** /v1/content/article/watch | 
+*AssetService* | [**completeBadgeFontUpload**](docs/AssetService.md#completeBadgeFontUpload) | **POST** /v1/asset/badge-font/complete | 
+*AssetService* | [**completeBadgeFontUploadWithHttpInfo**](docs/AssetService.md#completeBadgeFontUploadWithHttpInfo) | **POST** /v1/asset/badge-font/complete | 
+*AssetService* | [**completeBadgeImageUpload**](docs/AssetService.md#completeBadgeImageUpload) | **POST** /v1/asset/badge-image/complete | 
+*AssetService* | [**completeBadgeImageUploadWithHttpInfo**](docs/AssetService.md#completeBadgeImageUploadWithHttpInfo) | **POST** /v1/asset/badge-image/complete | 
 *AssetService* | [**completeMarkdownImageUpload**](docs/AssetService.md#completeMarkdownImageUpload) | **POST** /v1/asset/markdown-image/complete | 
 *AssetService* | [**completeMarkdownImageUploadWithHttpInfo**](docs/AssetService.md#completeMarkdownImageUploadWithHttpInfo) | **POST** /v1/asset/markdown-image/complete | 
+*AssetService* | [**prepareBadgeFontUpload**](docs/AssetService.md#prepareBadgeFontUpload) | **POST** /v1/asset/badge-font/prepare | 
+*AssetService* | [**prepareBadgeFontUploadWithHttpInfo**](docs/AssetService.md#prepareBadgeFontUploadWithHttpInfo) | **POST** /v1/asset/badge-font/prepare | 
+*AssetService* | [**prepareBadgeImageUpload**](docs/AssetService.md#prepareBadgeImageUpload) | **POST** /v1/asset/badge-image/prepare | 
+*AssetService* | [**prepareBadgeImageUploadWithHttpInfo**](docs/AssetService.md#prepareBadgeImageUploadWithHttpInfo) | **POST** /v1/asset/badge-image/prepare | 
 *AssetService* | [**prepareMarkdownImageUpload**](docs/AssetService.md#prepareMarkdownImageUpload) | **POST** /v1/asset/markdown-image/prepare | 
 *AssetService* | [**prepareMarkdownImageUploadWithHttpInfo**](docs/AssetService.md#prepareMarkdownImageUploadWithHttpInfo) | **POST** /v1/asset/markdown-image/prepare | 
 *AuthService* | [**cancelAccount**](docs/AuthService.md#cancelAccount) | **POST** /v1/user/auth/cancel-account | 
@@ -205,6 +213,16 @@ Class | Method | HTTP request | Description
 *AuthService* | [**refreshTokenWithHttpInfo**](docs/AuthService.md#refreshTokenWithHttpInfo) | **POST** /v1/user/auth/refresh-token | 
 *AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
 *AuthService* | [**registerWithHttpInfo**](docs/AuthService.md#registerWithHttpInfo) | **POST** /v1/user/auth/register | 
+*BadgeService* | [**deleteDraft**](docs/BadgeService.md#deleteDraft) | **POST** /v1/badge/draft/delete | 
+*BadgeService* | [**deleteDraftWithHttpInfo**](docs/BadgeService.md#deleteDraftWithHttpInfo) | **POST** /v1/badge/draft/delete | 
+*BadgeService* | [**listDrafts**](docs/BadgeService.md#listDrafts) | **POST** /v1/badge/draft/list | 
+*BadgeService* | [**listDraftsWithHttpInfo**](docs/BadgeService.md#listDraftsWithHttpInfo) | **POST** /v1/badge/draft/list | 
+*BadgeService* | [**renderMaker**](docs/BadgeService.md#renderMaker) | **GET** /v1/badge/maker/render | 
+*BadgeService* | [**renderMakerWithHttpInfo**](docs/BadgeService.md#renderMakerWithHttpInfo) | **GET** /v1/badge/maker/render | 
+*BadgeService* | [**renderPublished**](docs/BadgeService.md#renderPublished) | **GET** /v1/badge/render | 
+*BadgeService* | [**renderPublishedWithHttpInfo**](docs/BadgeService.md#renderPublishedWithHttpInfo) | **GET** /v1/badge/render | 
+*BadgeService* | [**upsertDraft**](docs/BadgeService.md#upsertDraft) | **POST** /v1/badge/draft/upsert | 
+*BadgeService* | [**upsertDraftWithHttpInfo**](docs/BadgeService.md#upsertDraftWithHttpInfo) | **POST** /v1/badge/draft/upsert | 
 *CommentService* | [**callList**](docs/CommentService.md#callList) | **POST** /v1/content/comment/list | 
 *CommentService* | [**callListWithHttpInfo**](docs/CommentService.md#callListWithHttpInfo) | **POST** /v1/content/comment/list | 
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
@@ -384,6 +402,7 @@ Class | Method | HTTP request | Description
  - [ArticleTag](docs/ArticleTag.md)
  - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
  - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
+ - [BadgeDraft](docs/BadgeDraft.md)
  - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
  - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
  - [BlockRelationReq](docs/BlockRelationReq.md)
@@ -395,6 +414,10 @@ Class | Method | HTTP request | Description
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [CommentListItem](docs/CommentListItem.md)
  - [CommentViewerActionState](docs/CommentViewerActionState.md)
+ - [CompleteBadgeFontUploadReq](docs/CompleteBadgeFontUploadReq.md)
+ - [CompleteBadgeFontUploadResp](docs/CompleteBadgeFontUploadResp.md)
+ - [CompleteBadgeImageUploadReq](docs/CompleteBadgeImageUploadReq.md)
+ - [CompleteBadgeImageUploadResp](docs/CompleteBadgeImageUploadResp.md)
  - [CompleteMarkdownImageUploadReq](docs/CompleteMarkdownImageUploadReq.md)
  - [CompleteMarkdownImageUploadResp](docs/CompleteMarkdownImageUploadResp.md)
  - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
@@ -418,6 +441,7 @@ Class | Method | HTTP request | Description
  - [CreateRealtimeTicketResp](docs/CreateRealtimeTicketResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
+ - [DeleteBadgeDraftReq](docs/DeleteBadgeDraftReq.md)
  - [DeleteEmojiGroupReq](docs/DeleteEmojiGroupReq.md)
  - [DeleteEmojiItemReq](docs/DeleteEmojiItemReq.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
@@ -457,6 +481,7 @@ Class | Method | HTTP request | Description
  - [ListArticleTagsResp](docs/ListArticleTagsResp.md)
  - [ListArticlesReq](docs/ListArticlesReq.md)
  - [ListArticlesResp](docs/ListArticlesResp.md)
+ - [ListBadgeDraftsResp](docs/ListBadgeDraftsResp.md)
  - [ListBlockedRelationsReq](docs/ListBlockedRelationsReq.md)
  - [ListBlockedRelationsResp](docs/ListBlockedRelationsResp.md)
  - [ListCommentRepliesReq](docs/ListCommentRepliesReq.md)
@@ -519,6 +544,10 @@ Class | Method | HTTP request | Description
  - [PageWatchedArticlesReq](docs/PageWatchedArticlesReq.md)
  - [PageWatchedArticlesResp](docs/PageWatchedArticlesResp.md)
  - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
+ - [PrepareBadgeFontUploadReq](docs/PrepareBadgeFontUploadReq.md)
+ - [PrepareBadgeFontUploadResp](docs/PrepareBadgeFontUploadResp.md)
+ - [PrepareBadgeImageUploadReq](docs/PrepareBadgeImageUploadReq.md)
+ - [PrepareBadgeImageUploadResp](docs/PrepareBadgeImageUploadResp.md)
  - [PrepareMarkdownImageUploadReq](docs/PrepareMarkdownImageUploadReq.md)
  - [PrepareMarkdownImageUploadResp](docs/PrepareMarkdownImageUploadResp.md)
  - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
@@ -539,6 +568,7 @@ Class | Method | HTTP request | Description
  - [RenameEmojiGroupResp](docs/RenameEmojiGroupResp.md)
  - [RenameEmojiItemReq](docs/RenameEmojiItemReq.md)
  - [RenameEmojiItemResp](docs/RenameEmojiItemResp.md)
+ - [RenderSpec](docs/RenderSpec.md)
  - [ReorderEmojiGroupsReq](docs/ReorderEmojiGroupsReq.md)
  - [ReorderEmojiItemsReq](docs/ReorderEmojiItemsReq.md)
  - [ReqArticle](docs/ReqArticle.md)
@@ -620,6 +650,8 @@ Class | Method | HTTP request | Description
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
+ - [UpsertBadgeDraftReq](docs/UpsertBadgeDraftReq.md)
+ - [UpsertBadgeDraftResp](docs/UpsertBadgeDraftResp.md)
  - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
  - [WatchArticleReq](docs/WatchArticleReq.md)
  - [WatchArticleResp](docs/WatchArticleResp.md)

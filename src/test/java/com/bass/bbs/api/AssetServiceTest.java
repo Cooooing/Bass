@@ -14,8 +14,16 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
+import com.bass.bbs.model.CompleteBadgeFontUploadReq;
+import com.bass.bbs.model.CompleteBadgeFontUploadResp;
+import com.bass.bbs.model.CompleteBadgeImageUploadReq;
+import com.bass.bbs.model.CompleteBadgeImageUploadResp;
 import com.bass.bbs.model.CompleteMarkdownImageUploadReq;
 import com.bass.bbs.model.CompleteMarkdownImageUploadResp;
+import com.bass.bbs.model.PrepareBadgeFontUploadReq;
+import com.bass.bbs.model.PrepareBadgeFontUploadResp;
+import com.bass.bbs.model.PrepareBadgeImageUploadReq;
+import com.bass.bbs.model.PrepareBadgeImageUploadResp;
 import com.bass.bbs.model.PrepareMarkdownImageUploadReq;
 import com.bass.bbs.model.PrepareMarkdownImageUploadResp;
 import org.junit.jupiter.api.Disabled;
@@ -40,6 +48,48 @@ public class AssetServiceTest {
     /**
      * 
      *
+     * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void completeBadgeFontUploadTest() throws ApiException {
+        CompleteBadgeFontUploadReq completeBadgeFontUploadReq = null;
+        
+        AssetService.APIcompleteBadgeFontUploadRequest request = AssetService.APIcompleteBadgeFontUploadRequest.newBuilder()
+          .completeBadgeFontUploadReq(completeBadgeFontUploadReq)
+          .build();
+        CompleteBadgeFontUploadResp response = 
+        api.completeBadgeFontUpload(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询已由对象存储回调确认的徽章 Maker 图片。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void completeBadgeImageUploadTest() throws ApiException {
+        CompleteBadgeImageUploadReq completeBadgeImageUploadReq = null;
+        
+        AssetService.APIcompleteBadgeImageUploadRequest request = AssetService.APIcompleteBadgeImageUploadRequest.newBuilder()
+          .completeBadgeImageUploadReq(completeBadgeImageUploadReq)
+          .build();
+        CompleteBadgeImageUploadResp response = 
+        api.completeBadgeImageUpload(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * 查询已由对象存储回调确认的 Markdown 图片。
      *
      * @throws ApiException
@@ -54,6 +104,48 @@ public class AssetServiceTest {
           .build();
         CompleteMarkdownImageUploadResp response = 
         api.completeMarkdownImageUpload(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void prepareBadgeFontUploadTest() throws ApiException {
+        PrepareBadgeFontUploadReq prepareBadgeFontUploadReq = null;
+        
+        AssetService.APIprepareBadgeFontUploadRequest request = AssetService.APIprepareBadgeFontUploadRequest.newBuilder()
+          .prepareBadgeFontUploadReq(prepareBadgeFontUploadReq)
+          .build();
+        PrepareBadgeFontUploadResp response = 
+        api.prepareBadgeFontUpload(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 申请徽章 Maker 图片的内容寻址直传凭证。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void prepareBadgeImageUploadTest() throws ApiException {
+        PrepareBadgeImageUploadReq prepareBadgeImageUploadReq = null;
+        
+        AssetService.APIprepareBadgeImageUploadRequest request = AssetService.APIprepareBadgeImageUploadRequest.newBuilder()
+          .prepareBadgeImageUploadReq(prepareBadgeImageUploadReq)
+          .build();
+        PrepareBadgeImageUploadResp response = 
+        api.prepareBadgeImageUpload(request);
 
         // TODO: test validations
     }

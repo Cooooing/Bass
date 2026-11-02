@@ -18,8 +18,16 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
+import com.bass.bbs.model.CompleteBadgeFontUploadReq;
+import com.bass.bbs.model.CompleteBadgeFontUploadResp;
+import com.bass.bbs.model.CompleteBadgeImageUploadReq;
+import com.bass.bbs.model.CompleteBadgeImageUploadResp;
 import com.bass.bbs.model.CompleteMarkdownImageUploadReq;
 import com.bass.bbs.model.CompleteMarkdownImageUploadResp;
+import com.bass.bbs.model.PrepareBadgeFontUploadReq;
+import com.bass.bbs.model.PrepareBadgeFontUploadResp;
+import com.bass.bbs.model.PrepareBadgeImageUploadReq;
+import com.bass.bbs.model.PrepareBadgeImageUploadResp;
 import com.bass.bbs.model.PrepareMarkdownImageUploadReq;
 import com.bass.bbs.model.PrepareMarkdownImageUploadResp;
 
@@ -163,6 +171,408 @@ public class AssetService {
       file.deleteOnExit(); // best effort cleanup
     }
     return file;
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param apiRequest {@link APICompleteBadgeFontUploadRequest}
+   * @return CompleteBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeFontUploadResp completeBadgeFontUpload(APICompleteBadgeFontUploadRequest apiRequest) throws ApiException {
+    return completeBadgeFontUpload(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param apiRequest {@link APICompleteBadgeFontUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return CompleteBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeFontUploadResp completeBadgeFontUpload(APICompleteBadgeFontUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    CompleteBadgeFontUploadReq completeBadgeFontUploadReq = apiRequest.completeBadgeFontUploadReq();
+    return completeBadgeFontUpload(completeBadgeFontUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param apiRequest {@link APICompleteBadgeFontUploadRequest}
+   * @return ApiResponse&lt;CompleteBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeFontUploadResp> completeBadgeFontUploadWithHttpInfo(APICompleteBadgeFontUploadRequest apiRequest) throws ApiException {
+    return completeBadgeFontUploadWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param apiRequest {@link APICompleteBadgeFontUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CompleteBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeFontUploadResp> completeBadgeFontUploadWithHttpInfo(APICompleteBadgeFontUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    CompleteBadgeFontUploadReq completeBadgeFontUploadReq = apiRequest.completeBadgeFontUploadReq();
+    return completeBadgeFontUploadWithHttpInfo(completeBadgeFontUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param completeBadgeFontUploadReq  (required)
+   * @return CompleteBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeFontUploadResp completeBadgeFontUpload(@javax.annotation.Nonnull CompleteBadgeFontUploadReq completeBadgeFontUploadReq) throws ApiException {
+    return completeBadgeFontUpload(completeBadgeFontUploadReq, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param completeBadgeFontUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return CompleteBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeFontUploadResp completeBadgeFontUpload(@javax.annotation.Nonnull CompleteBadgeFontUploadReq completeBadgeFontUploadReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CompleteBadgeFontUploadResp> localVarResponse = completeBadgeFontUploadWithHttpInfo(completeBadgeFontUploadReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param completeBadgeFontUploadReq  (required)
+   * @return ApiResponse&lt;CompleteBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeFontUploadResp> completeBadgeFontUploadWithHttpInfo(@javax.annotation.Nonnull CompleteBadgeFontUploadReq completeBadgeFontUploadReq) throws ApiException {
+    return completeBadgeFontUploadWithHttpInfo(completeBadgeFontUploadReq, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+   * @param completeBadgeFontUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CompleteBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeFontUploadResp> completeBadgeFontUploadWithHttpInfo(@javax.annotation.Nonnull CompleteBadgeFontUploadReq completeBadgeFontUploadReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = completeBadgeFontUploadRequestBuilder(completeBadgeFontUploadReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("completeBadgeFontUpload", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<CompleteBadgeFontUploadResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        CompleteBadgeFontUploadResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CompleteBadgeFontUploadResp>() {});
+        
+
+        return new ApiResponse<CompleteBadgeFontUploadResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder completeBadgeFontUploadRequestBuilder(@javax.annotation.Nonnull CompleteBadgeFontUploadReq completeBadgeFontUploadReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'completeBadgeFontUploadReq' is set
+    if (completeBadgeFontUploadReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'completeBadgeFontUploadReq' when calling completeBadgeFontUpload");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/asset/badge-font/complete";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(completeBadgeFontUploadReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APICompleteBadgeFontUploadRequest {
+    @javax.annotation.Nonnull
+    private CompleteBadgeFontUploadReq completeBadgeFontUploadReq; //  (required)
+
+    private APICompleteBadgeFontUploadRequest(Builder builder) {
+      this.completeBadgeFontUploadReq = builder.completeBadgeFontUploadReq;
+    }
+    @javax.annotation.Nonnull
+    public CompleteBadgeFontUploadReq completeBadgeFontUploadReq() {
+      return completeBadgeFontUploadReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private CompleteBadgeFontUploadReq completeBadgeFontUploadReq;
+
+      public Builder completeBadgeFontUploadReq(@javax.annotation.Nonnull CompleteBadgeFontUploadReq completeBadgeFontUploadReq) {
+        this.completeBadgeFontUploadReq = completeBadgeFontUploadReq;
+        return this;
+      }
+      public APICompleteBadgeFontUploadRequest build() {
+        return new APICompleteBadgeFontUploadRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param apiRequest {@link APICompleteBadgeImageUploadRequest}
+   * @return CompleteBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeImageUploadResp completeBadgeImageUpload(APICompleteBadgeImageUploadRequest apiRequest) throws ApiException {
+    return completeBadgeImageUpload(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param apiRequest {@link APICompleteBadgeImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return CompleteBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeImageUploadResp completeBadgeImageUpload(APICompleteBadgeImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    CompleteBadgeImageUploadReq completeBadgeImageUploadReq = apiRequest.completeBadgeImageUploadReq();
+    return completeBadgeImageUpload(completeBadgeImageUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param apiRequest {@link APICompleteBadgeImageUploadRequest}
+   * @return ApiResponse&lt;CompleteBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeImageUploadResp> completeBadgeImageUploadWithHttpInfo(APICompleteBadgeImageUploadRequest apiRequest) throws ApiException {
+    return completeBadgeImageUploadWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param apiRequest {@link APICompleteBadgeImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CompleteBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeImageUploadResp> completeBadgeImageUploadWithHttpInfo(APICompleteBadgeImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    CompleteBadgeImageUploadReq completeBadgeImageUploadReq = apiRequest.completeBadgeImageUploadReq();
+    return completeBadgeImageUploadWithHttpInfo(completeBadgeImageUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param completeBadgeImageUploadReq  (required)
+   * @return CompleteBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeImageUploadResp completeBadgeImageUpload(@javax.annotation.Nonnull CompleteBadgeImageUploadReq completeBadgeImageUploadReq) throws ApiException {
+    return completeBadgeImageUpload(completeBadgeImageUploadReq, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param completeBadgeImageUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return CompleteBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteBadgeImageUploadResp completeBadgeImageUpload(@javax.annotation.Nonnull CompleteBadgeImageUploadReq completeBadgeImageUploadReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CompleteBadgeImageUploadResp> localVarResponse = completeBadgeImageUploadWithHttpInfo(completeBadgeImageUploadReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param completeBadgeImageUploadReq  (required)
+   * @return ApiResponse&lt;CompleteBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeImageUploadResp> completeBadgeImageUploadWithHttpInfo(@javax.annotation.Nonnull CompleteBadgeImageUploadReq completeBadgeImageUploadReq) throws ApiException {
+    return completeBadgeImageUploadWithHttpInfo(completeBadgeImageUploadReq, null);
+  }
+
+  /**
+   * 
+   * 查询已由对象存储回调确认的徽章 Maker 图片。
+   * @param completeBadgeImageUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CompleteBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteBadgeImageUploadResp> completeBadgeImageUploadWithHttpInfo(@javax.annotation.Nonnull CompleteBadgeImageUploadReq completeBadgeImageUploadReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = completeBadgeImageUploadRequestBuilder(completeBadgeImageUploadReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("completeBadgeImageUpload", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<CompleteBadgeImageUploadResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        CompleteBadgeImageUploadResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CompleteBadgeImageUploadResp>() {});
+        
+
+        return new ApiResponse<CompleteBadgeImageUploadResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder completeBadgeImageUploadRequestBuilder(@javax.annotation.Nonnull CompleteBadgeImageUploadReq completeBadgeImageUploadReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'completeBadgeImageUploadReq' is set
+    if (completeBadgeImageUploadReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'completeBadgeImageUploadReq' when calling completeBadgeImageUpload");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/asset/badge-image/complete";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(completeBadgeImageUploadReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APICompleteBadgeImageUploadRequest {
+    @javax.annotation.Nonnull
+    private CompleteBadgeImageUploadReq completeBadgeImageUploadReq; //  (required)
+
+    private APICompleteBadgeImageUploadRequest(Builder builder) {
+      this.completeBadgeImageUploadReq = builder.completeBadgeImageUploadReq;
+    }
+    @javax.annotation.Nonnull
+    public CompleteBadgeImageUploadReq completeBadgeImageUploadReq() {
+      return completeBadgeImageUploadReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private CompleteBadgeImageUploadReq completeBadgeImageUploadReq;
+
+      public Builder completeBadgeImageUploadReq(@javax.annotation.Nonnull CompleteBadgeImageUploadReq completeBadgeImageUploadReq) {
+        this.completeBadgeImageUploadReq = completeBadgeImageUploadReq;
+        return this;
+      }
+      public APICompleteBadgeImageUploadRequest build() {
+        return new APICompleteBadgeImageUploadRequest(this);
+      }
+    }
   }
 
   /**
@@ -362,6 +772,408 @@ public class AssetService {
       }
       public APICompleteMarkdownImageUploadRequest build() {
         return new APICompleteMarkdownImageUploadRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeFontUploadRequest}
+   * @return PrepareBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeFontUploadResp prepareBadgeFontUpload(APIPrepareBadgeFontUploadRequest apiRequest) throws ApiException {
+    return prepareBadgeFontUpload(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeFontUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return PrepareBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeFontUploadResp prepareBadgeFontUpload(APIPrepareBadgeFontUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    PrepareBadgeFontUploadReq prepareBadgeFontUploadReq = apiRequest.prepareBadgeFontUploadReq();
+    return prepareBadgeFontUpload(prepareBadgeFontUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeFontUploadRequest}
+   * @return ApiResponse&lt;PrepareBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeFontUploadResp> prepareBadgeFontUploadWithHttpInfo(APIPrepareBadgeFontUploadRequest apiRequest) throws ApiException {
+    return prepareBadgeFontUploadWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeFontUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PrepareBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeFontUploadResp> prepareBadgeFontUploadWithHttpInfo(APIPrepareBadgeFontUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PrepareBadgeFontUploadReq prepareBadgeFontUploadReq = apiRequest.prepareBadgeFontUploadReq();
+    return prepareBadgeFontUploadWithHttpInfo(prepareBadgeFontUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param prepareBadgeFontUploadReq  (required)
+   * @return PrepareBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeFontUploadResp prepareBadgeFontUpload(@javax.annotation.Nonnull PrepareBadgeFontUploadReq prepareBadgeFontUploadReq) throws ApiException {
+    return prepareBadgeFontUpload(prepareBadgeFontUploadReq, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param prepareBadgeFontUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return PrepareBadgeFontUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeFontUploadResp prepareBadgeFontUpload(@javax.annotation.Nonnull PrepareBadgeFontUploadReq prepareBadgeFontUploadReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PrepareBadgeFontUploadResp> localVarResponse = prepareBadgeFontUploadWithHttpInfo(prepareBadgeFontUploadReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param prepareBadgeFontUploadReq  (required)
+   * @return ApiResponse&lt;PrepareBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeFontUploadResp> prepareBadgeFontUploadWithHttpInfo(@javax.annotation.Nonnull PrepareBadgeFontUploadReq prepareBadgeFontUploadReq) throws ApiException {
+    return prepareBadgeFontUploadWithHttpInfo(prepareBadgeFontUploadReq, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+   * @param prepareBadgeFontUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PrepareBadgeFontUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeFontUploadResp> prepareBadgeFontUploadWithHttpInfo(@javax.annotation.Nonnull PrepareBadgeFontUploadReq prepareBadgeFontUploadReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = prepareBadgeFontUploadRequestBuilder(prepareBadgeFontUploadReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("prepareBadgeFontUpload", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<PrepareBadgeFontUploadResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        PrepareBadgeFontUploadResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PrepareBadgeFontUploadResp>() {});
+        
+
+        return new ApiResponse<PrepareBadgeFontUploadResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder prepareBadgeFontUploadRequestBuilder(@javax.annotation.Nonnull PrepareBadgeFontUploadReq prepareBadgeFontUploadReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'prepareBadgeFontUploadReq' is set
+    if (prepareBadgeFontUploadReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'prepareBadgeFontUploadReq' when calling prepareBadgeFontUpload");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/asset/badge-font/prepare";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(prepareBadgeFontUploadReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIPrepareBadgeFontUploadRequest {
+    @javax.annotation.Nonnull
+    private PrepareBadgeFontUploadReq prepareBadgeFontUploadReq; //  (required)
+
+    private APIPrepareBadgeFontUploadRequest(Builder builder) {
+      this.prepareBadgeFontUploadReq = builder.prepareBadgeFontUploadReq;
+    }
+    @javax.annotation.Nonnull
+    public PrepareBadgeFontUploadReq prepareBadgeFontUploadReq() {
+      return prepareBadgeFontUploadReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private PrepareBadgeFontUploadReq prepareBadgeFontUploadReq;
+
+      public Builder prepareBadgeFontUploadReq(@javax.annotation.Nonnull PrepareBadgeFontUploadReq prepareBadgeFontUploadReq) {
+        this.prepareBadgeFontUploadReq = prepareBadgeFontUploadReq;
+        return this;
+      }
+      public APIPrepareBadgeFontUploadRequest build() {
+        return new APIPrepareBadgeFontUploadRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeImageUploadRequest}
+   * @return PrepareBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeImageUploadResp prepareBadgeImageUpload(APIPrepareBadgeImageUploadRequest apiRequest) throws ApiException {
+    return prepareBadgeImageUpload(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return PrepareBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeImageUploadResp prepareBadgeImageUpload(APIPrepareBadgeImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    PrepareBadgeImageUploadReq prepareBadgeImageUploadReq = apiRequest.prepareBadgeImageUploadReq();
+    return prepareBadgeImageUpload(prepareBadgeImageUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeImageUploadRequest}
+   * @return ApiResponse&lt;PrepareBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeImageUploadResp> prepareBadgeImageUploadWithHttpInfo(APIPrepareBadgeImageUploadRequest apiRequest) throws ApiException {
+    return prepareBadgeImageUploadWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param apiRequest {@link APIPrepareBadgeImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PrepareBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeImageUploadResp> prepareBadgeImageUploadWithHttpInfo(APIPrepareBadgeImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PrepareBadgeImageUploadReq prepareBadgeImageUploadReq = apiRequest.prepareBadgeImageUploadReq();
+    return prepareBadgeImageUploadWithHttpInfo(prepareBadgeImageUploadReq, headers);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param prepareBadgeImageUploadReq  (required)
+   * @return PrepareBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeImageUploadResp prepareBadgeImageUpload(@javax.annotation.Nonnull PrepareBadgeImageUploadReq prepareBadgeImageUploadReq) throws ApiException {
+    return prepareBadgeImageUpload(prepareBadgeImageUploadReq, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param prepareBadgeImageUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return PrepareBadgeImageUploadResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareBadgeImageUploadResp prepareBadgeImageUpload(@javax.annotation.Nonnull PrepareBadgeImageUploadReq prepareBadgeImageUploadReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PrepareBadgeImageUploadResp> localVarResponse = prepareBadgeImageUploadWithHttpInfo(prepareBadgeImageUploadReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param prepareBadgeImageUploadReq  (required)
+   * @return ApiResponse&lt;PrepareBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeImageUploadResp> prepareBadgeImageUploadWithHttpInfo(@javax.annotation.Nonnull PrepareBadgeImageUploadReq prepareBadgeImageUploadReq) throws ApiException {
+    return prepareBadgeImageUploadWithHttpInfo(prepareBadgeImageUploadReq, null);
+  }
+
+  /**
+   * 
+   * 申请徽章 Maker 图片的内容寻址直传凭证。
+   * @param prepareBadgeImageUploadReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PrepareBadgeImageUploadResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareBadgeImageUploadResp> prepareBadgeImageUploadWithHttpInfo(@javax.annotation.Nonnull PrepareBadgeImageUploadReq prepareBadgeImageUploadReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = prepareBadgeImageUploadRequestBuilder(prepareBadgeImageUploadReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("prepareBadgeImageUpload", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<PrepareBadgeImageUploadResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        PrepareBadgeImageUploadResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PrepareBadgeImageUploadResp>() {});
+        
+
+        return new ApiResponse<PrepareBadgeImageUploadResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder prepareBadgeImageUploadRequestBuilder(@javax.annotation.Nonnull PrepareBadgeImageUploadReq prepareBadgeImageUploadReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'prepareBadgeImageUploadReq' is set
+    if (prepareBadgeImageUploadReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'prepareBadgeImageUploadReq' when calling prepareBadgeImageUpload");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/asset/badge-image/prepare";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(prepareBadgeImageUploadReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIPrepareBadgeImageUploadRequest {
+    @javax.annotation.Nonnull
+    private PrepareBadgeImageUploadReq prepareBadgeImageUploadReq; //  (required)
+
+    private APIPrepareBadgeImageUploadRequest(Builder builder) {
+      this.prepareBadgeImageUploadReq = builder.prepareBadgeImageUploadReq;
+    }
+    @javax.annotation.Nonnull
+    public PrepareBadgeImageUploadReq prepareBadgeImageUploadReq() {
+      return prepareBadgeImageUploadReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private PrepareBadgeImageUploadReq prepareBadgeImageUploadReq;
+
+      public Builder prepareBadgeImageUploadReq(@javax.annotation.Nonnull PrepareBadgeImageUploadReq prepareBadgeImageUploadReq) {
+        this.prepareBadgeImageUploadReq = prepareBadgeImageUploadReq;
+        return this;
+      }
+      public APIPrepareBadgeImageUploadRequest build() {
+        return new APIPrepareBadgeImageUploadRequest(this);
       }
     }
   }

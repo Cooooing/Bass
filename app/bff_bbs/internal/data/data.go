@@ -26,6 +26,7 @@ var DataProviderSet = wire.NewSet(
 	rpc.ProvidePlatformClient,
 	rpc.ProvideRealtimeHubClient,
 	rpc.ProvideIMClient,
+	rpc.ProvideBadgeClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
@@ -51,6 +52,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewContentMoonbreezeClient,
 	NewNotificationClient,
 	NewHolidayRepo,
+	NewBadgeClient,
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {

@@ -5,6 +5,7 @@ import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
+	bffbadgev1 "common/proto/gen/bff_bbs/v1/badge"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	platformv1 "common/proto/gen/bff_bbs/v1/platform"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
@@ -28,6 +29,7 @@ import (
 
 func NewHTTPAuthMiddlewares(authClient userv1.AuthServiceClient) []middleware.Middleware {
 	publicOperations := map[string]struct{}{
+		bffbadgev1.OperationBadgeServiceRenderPublished:             {},
 		bbsuserv1.OperationAuthServiceRegister:                      {},
 		bbsuserv1.OperationAuthServiceLogin:                         {},
 		bbsuserv1.OperationAuthServiceRefreshToken:                  {},

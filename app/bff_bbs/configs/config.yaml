@@ -37,6 +37,9 @@ trace:
 observability:
   enable_metrics: true
 business:
+  badge_maker_upload:
+    max_image_bytes: ${BADGE_MAKER_MAX_IMAGE_BYTES:3145728}
+    max_font_bytes: ${BADGE_MAKER_MAX_FONT_BYTES:3145728}
   public_endpoint:
     api_url: ${BFF_PUBLIC_URL:http://127.0.0.1:8001}
     site_url: ${SITE_PUBLIC_URL:http://127.0.0.1:2324}

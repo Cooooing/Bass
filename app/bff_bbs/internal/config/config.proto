@@ -17,10 +17,17 @@ message Bootstrap {
 
   message Business {
     PublicEndpoint public_endpoint = 1;
+    BadgeMakerUpload badge_maker_upload = 2;
 
     message PublicEndpoint {
       string api_url = 1;
       string site_url = 2;
+    }
+
+    // BadgeMakerUpload 限制 Maker 图片与字体的单文件直传大小；热更新后仅影响后续上传校验。
+    message BadgeMakerUpload {
+      int64 max_image_bytes = 1; // 图片最大字节数；非正值使用 3 MiB 默认值。
+      int64 max_font_bytes = 2; // 字体最大字节数；非正值使用 3 MiB 默认值。
     }
   }
 }

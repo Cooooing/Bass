@@ -30,6 +30,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewIMService,
 	NewEmojiService,
 	NewAssetService,
+	NewBadgePreviewService,
 )
 
 func ProvideServices(
@@ -55,6 +56,7 @@ func ProvideServices(
 	imService *IMService,
 	emojiService *EmojiService,
 	assetService *AssetService,
+	badgePreviewService *BadgePreviewService,
 ) []server.Service {
 	return []server.Service{
 		commonSystemService,
@@ -79,5 +81,6 @@ func ProvideServices(
 		imService,
 		emojiService,
 		assetService,
+		badgePreviewService,
 	}
 }

@@ -1,12 +1,15 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	userv1 "common/proto/gen/user/v1"
 	"context"
-	"google.golang.org/protobuf/types/known/timestamppb"
+	"fmt"
 	"time"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 var _ repo.LivenessClient = (*LivenessClient)(nil)
@@ -26,5 +29,10 @@ func (c *LivenessClient) Claim(ctx context.Context, userID int64, date time.Time
 	if err != nil {
 		return nil, err
 	}
-	return &repo.Liveness{Score: int32(res.GetRewardPoints()), Settled: true, RewardStatus: res.GetRewardStatus()}, nil
+	points := res.GetRewardPoints()
+	const minInt32, maxInt32 = int64(-1 << 31), int64(1<<31 - 1)
+	if points < minInt32 || points > maxInt32 {
+		return nil, fmt.Errorf("liveness reward points %d exceed int32 range", points)
+	}
+	return &repo.Liveness{Score: int32(points), Settled: true, RewardStatus: res.GetRewardStatus()}, nil
 }

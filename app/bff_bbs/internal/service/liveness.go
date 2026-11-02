@@ -3,13 +3,14 @@ package service
 import (
 	"context"
 
-	"bff_bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	cerrors "common/proto/gen/common/errors"
+
+	"bff_bbs/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -29,7 +30,7 @@ func (s *LivenessService) RegisterHTTP(server *http.Server) {
 	bbsuserv1.RegisterLivenessServiceHTTPServer(server, s)
 }
 
-func livenessUser(ctx context.Context) (*commonmodel.User, error) {
+func (*LivenessService) livenessUser(ctx context.Context) (*commonmodel.User, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -38,7 +39,7 @@ func livenessUser(ctx context.Context) (*commonmodel.User, error) {
 }
 
 func (s *LivenessService) GetLiveness(ctx context.Context, _ *bbsuserv1.GetLiveness_Req) (*bbsuserv1.GetLiveness_Resp, error) {
-	user, err := livenessUser(ctx)
+	user, err := s.livenessUser(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +51,7 @@ func (s *LivenessService) GetLiveness(ctx context.Context, _ *bbsuserv1.GetLiven
 }
 
 func (s *LivenessService) ClaimYesterdayReward(ctx context.Context, _ *bbsuserv1.ClaimYesterdayLivenessReward_Req) (*bbsuserv1.ClaimYesterdayLivenessReward_Resp, error) {
-	user, err := livenessUser(ctx)
+	user, err := s.livenessUser(ctx)
 	if err != nil {
 		return nil, err
 	}

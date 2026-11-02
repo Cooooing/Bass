@@ -11,6 +11,7 @@ const (
 	PlatformServiceName  ServiceName = "platform"
 	SchedulerServiceName ServiceName = "scheduler"
 	GameIdleServiceName  ServiceName = "game_idle"
+	BadgeServiceName     ServiceName = "badge"
 )
 
 func (s ServiceName) String() string {
@@ -32,6 +33,7 @@ const (
 	TablePrefixPlatform  TablePrefix = TablePrefix(PlatformServiceName + "_")
 	TablePrefixScheduler TablePrefix = TablePrefix(SchedulerServiceName + "_")
 	TablePrefixGameIdle  TablePrefix = TablePrefix(GameIdleServiceName + "_")
+	TablePrefixBadge     TablePrefix = TablePrefix(BadgeServiceName + "_")
 )
 
 const (

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.badge.v1;
+
+option go_package = "common/proto/gen/badge/v1/enum;enum";
+
+// BadgeStatus 表示徽章生命周期。
+enum BadgeStatus {
+  // 未指定，不能持久化或渲染。
+  BADGE_STATUS_UNSPECIFIED = 0;
+  // 草稿仅允许设计者和管理业务访问。
+  BADGE_STATUS_DRAFT = 1;
+  // 已发布定义允许主站按 ID 渲染。
+  BADGE_STATUS_PUBLISHED = 2;
+}

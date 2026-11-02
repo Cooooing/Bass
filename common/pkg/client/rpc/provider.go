@@ -20,6 +20,7 @@ var LocalProviderSet = wire.NewSet(
 	ProvideLocalRealtimeHubClient,
 	ProvideLocalSchedulerClient,
 	ProvideLocalGameIdleClient,
+	ProvideLocalBadgeClient,
 )
 
 func ProvideUserClient(consul *client.ConsulClient) (*UserClient, error) {
@@ -56,6 +57,10 @@ func ProvideSchedulerClient(consul *client.ConsulClient) (*SchedulerClient, erro
 
 func ProvideGameIdleClient(consul *client.ConsulClient) (*GameIdleClient, error) {
 	return newServiceClient(consul, constant.GameIdleServiceName.String(), NewGameIdleClient)
+}
+
+func ProvideBadgeClient(consul *client.ConsulClient) (*BadgeClient, error) {
+	return newServiceClient(consul, constant.BadgeServiceName.String(), NewBadgeClient)
 }
 
 func newServiceClient[T any](consul *client.ConsulClient, service string, newFn func(grpc.ClientConnInterface) T) (T, error) {
@@ -101,4 +106,7 @@ func ProvideLocalSchedulerClient(clients *commonmodule.Clients) (*SchedulerClien
 
 func ProvideLocalGameIdleClient(clients *commonmodule.Clients) (*GameIdleClient, error) {
 	return commonmodule.Client[*GameIdleClient](clients)
+}
+func ProvideLocalBadgeClient(clients *commonmodule.Clients) (*BadgeClient, error) {
+	return commonmodule.Client[*BadgeClient](clients)
 }

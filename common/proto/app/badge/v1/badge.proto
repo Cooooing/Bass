@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package common.api.app.badge.v1;
+
+import "google/protobuf/timestamp.proto";
+import "badge/v1/enum/badge.proto";
+
+option go_package = "common/proto/gen/badge/v1;v1";
+
+// BadgeService 仅向集群内部提供徽章定义、授予和 SVG 渲染能力。
+service BadgeService {
+  rpc RenderMaker(RenderMakerBadge.Req) returns (RenderMakerBadge.Resp) {} // 供已登录用户预览完整渲染参数。
+  rpc RenderPublished(RenderPublishedBadge.Req) returns (RenderPublishedBadge.Resp) {} // 按已发布徽章编码生成主站 SVG。
+  rpc UpsertDraft(UpsertBadgeDraft.Req) returns (UpsertBadgeDraft.Resp) {} // 创建或修改设计者自己的草稿。
+  rpc DeleteDraft(DeleteBadgeDraft.Req) returns (DeleteBadgeDraft.Resp) {} // 删除草稿徽章。
+  rpc Publish(PublishBadgeDraft.Req) returns (PublishBadgeDraft.Resp) {} // 将草稿发布为可被主站渲染的徽章。
+  rpc ListDesignerDrafts(ListDesignerBadgeDrafts.Req) returns (ListDesignerBadgeDrafts.Resp) {} // 查询设计者草稿。
+  rpc Grant(GrantBadge.Req) returns (GrantBadge.Resp) {} // 批量向用户授予已发布徽章。
+  rpc Revoke(RevokeBadge.Req) returns (RevokeBadge.Resp) {} // 批量撤销用户徽章。
+  rpc UpdatePresentation(UpdateUserBadgePresentation.Req) returns (UpdateUserBadgePresentation.Resp) {} // 修改用户自己的展示设置。
+  rpc ListUserBadges(ListUserBadges.Req) returns (ListUserBadges.Resp) {} // 查询用户获得的徽章。
+}
+
+// RenderSpec 是 SVG 渲染需要的完整强类型参数。
+message RenderSpec {
+  int64 image_asset_id = 1; // Platform 已确认可用的徽章图标资源 ID。
+  string text = 2; // 文字条内容，空值表示无文字条。
+  repeated string background_colors = 3; // 背景颜色，多个颜色生成渐变。
+  repeated string text_colors = 4; // 文字颜色，空列表按渲染器规则计算。
+  string background_direction = 5; // 背景渐变方向或角度。
+  string text_direction = 6; // 文字渐变方向或角度。
+  uint32 size = 7; // 图标边长，零值采用默认值。
+  uint32 border = 8; // 图标边距，零值采用默认值。
+  uint32 text_bar_length = 9; // 文字条长度，零值自动计算。
+  uint32 text_size = 10; // 文字字号，零值采用默认值。
+  uint32 text_bar_radius = 11; // 文字条圆角，零值自动计算。
+  double scale = 12; // 整体缩放比例，零值采用默认值。
+  double shadow = 13; // 阴影强度，零值采用默认值。
+  double animation_seconds = 14; // 动画时长，零值采用默认值。
+  int64 font_asset_id = 15; // Platform 已确认可用的自定义字体资源 ID。
+}
+
+// Badge 是服务拥有的设计和发布事实。
+message Badge {
+  int64 id = 1; // 徽章主键。
+  string code = 2; // 发布后的唯一稳定编码。
+  string name = 3; // 展示名称。
+  string description = 4; // 支持变量替换的说明模板。
+  RenderSpec render_spec = 5; // 设计者设置的渲染参数。
+  int64 designer_user_id = 6; // 设计者账户 ID。
+  BadgeStatus status = 7; // 草稿或已发布状态。
+  optional google.protobuf.Timestamp created_at = 1000; // 创建时间，缺失表示历史数据未记录。
+  optional google.protobuf.Timestamp updated_at = 1001; // 最近修改时间，缺失表示历史数据未记录。
+  optional google.protobuf.Timestamp published_at = 1002; // 发布时间，草稿缺失。
+}
+
+// UserBadge 是用户获得徽章的事实及展示设置。
+message UserBadge {
+  int64 id = 1; // 用户徽章主键。
+  int64 user_id = 2; // 获得者用户 ID。
+  string badge_code = 3; // 已发布徽章稳定编码。
+  string variables_json = 4; // 模板变量 JSON 对象。
+  google.protobuf.Timestamp obtained_at = 5; // 获得或刷新时间。
+  optional google.protobuf.Timestamp expires_at = 6; // 缺失表示永久有效。
+  bool displayed = 7; // 是否公开展示。
+  int32 display_order = 8; // 用户内展示排序。
+  optional google.protobuf.Timestamp created_at = 1000; // 创建时间，缺失表示历史数据未记录。
+  optional google.protobuf.Timestamp updated_at = 1001; // 最近修改时间，缺失表示历史数据未记录。
+}
+
+// RenderMakerBadge 表示登录用户提交参数的 Maker 预览。
+message RenderMakerBadge {
+  // Req 指定认证后的设计者和预览参数。
+  message Req {
+    int64 designer_user_id = 1; // 已由 BFF 认证的设计者 ID。
+    RenderSpec render_spec = 2; // 待预览的完整渲染参数。
+  }
+  // Resp 返回渲染完成的 SVG。
+  message Resp {
+    string svg = 1; // SVG 文本。
+  }
+}
+// RenderPublishedBadge 表示主站按已发布徽章编码渲染。
+message RenderPublishedBadge {
+  // Req 指定已发布徽章编码。
+  message Req {
+    string badge_code = 1; // 已发布徽章稳定编码。
+  }
+  // Resp 返回渲染完成的 SVG。
+  message Resp {
+    string svg = 1; // SVG 文本。
+  }
+}
+// UpsertBadgeDraft 表示设计者创建或保存草稿徽章。
+message UpsertBadgeDraft {
+  // Req 未传 badge_id 时创建草稿；传入时仅能修改自己的草稿。
+  message Req {
+    int64 designer_user_id = 1; // 设计者 ID。
+    optional int64 badge_id = 2; // 待修改草稿 ID；缺失表示新建。
+    string name = 3; // 草稿名称。
+    string description = 4; // 草稿说明模板。
+    RenderSpec render_spec = 5; // 草稿渲染参数。
+  }
+  // Resp 返回新建或保存后的草稿。
+  message Resp {
+    Badge badge = 1; // 已保存草稿。
+  }
+}
+// DeleteBadgeDraft 表示删除一个未发布的草稿徽章。
+message DeleteBadgeDraft {
+  // Req 指定待删除的草稿主键。
+  message Req {
+    int64 badge_id = 1; // 待删除草稿 ID。
+    int64 designer_user_id = 2; // 已由 BFF 认证的草稿设计者 ID。
+  }
+  // Resp 表示删除完成。
+  message Resp {}
+}
+// PublishBadgeDraft 表示管理业务发布草稿。
+message PublishBadgeDraft {
+  // Req 指定待发布草稿及稳定编码。
+  message Req {
+    int64 badge_id = 1; // 待发布草稿 ID。
+    string code = 2; // 发布后的稳定编码。
+  }
+  // Resp 返回已发布定义。
+  message Resp {
+    Badge badge = 1; // 已发布徽章。
+  }
+}
+// ListDesignerBadgeDrafts 表示设计者草稿查询。
+message ListDesignerBadgeDrafts {
+  // Req 指定设计者。
+  message Req {
+    int64 designer_user_id = 1; // 设计者 ID。
+  }
+  // Resp 返回最多五条草稿。
+  message Resp {
+    repeated Badge rows = 1; // 草稿列表。
+  }
+}
+// GrantBadge 表示管理业务批量授予已发布徽章。
+message GrantBadge {
+  // Req 的每项独立承载用户、徽章和有效期，避免多个数组形成不明确的组合关系。
+  message Req {
+    repeated Item items = 1; // 待原子授予的徽章事实。
+    // Item 是一条用户徽章授予事实。
+    message Item {
+      int64 user_id = 1; // 获得者用户 ID。
+      string badge_code = 2; // 已发布徽章稳定编码。
+      string variables_json = 3; // 变量 JSON 对象。
+      optional google.protobuf.Timestamp expires_at = 4; // 到期时间，缺失表示长期有效。
+    }
+  }
+  // Resp 返回所有已保存的用户徽章。
+  message Resp {
+    repeated UserBadge rows = 1; // 已授予或刷新的用户徽章。
+  }
+}
+// RevokeBadge 表示管理业务批量撤销用户徽章。
+message RevokeBadge {
+  // Req 的每项精确指定一条待撤销的用户徽章关系。
+  message Req {
+    repeated Item items = 1; // 待原子撤销的用户徽章关系。
+    // Item 是一条待撤销的用户徽章关系。
+    message Item {
+      int64 user_id = 1; // 用户 ID。
+      string badge_code = 2; // 已发布徽章稳定编码。
+    }
+  }
+  // Resp 返回实际撤销的关系数量；不存在的关系不计入数量。
+  message Resp {
+    int64 count = 1; // 实际删除的用户徽章关系数。
+  }
+}
+// UpdateUserBadgePresentation 表示用户修改自身展示设置。
+message UpdateUserBadgePresentation {
+  // Req 指定展示设置。
+  message Req {
+    int64 user_id = 1; // 用户 ID。
+    string badge_code = 2; // 已发布徽章稳定编码。
+    bool displayed = 3; // 是否展示。
+    int32 display_order = 4; // 展示排序。
+  }
+  // Resp 返回保存后的用户徽章。
+  message Resp {
+    UserBadge user_badge = 1; // 已保存用户徽章。
+  }
+}
+// ListUserBadges 表示用户徽章查询。
+message ListUserBadges {
+  // Req 指定用户和展示过滤条件。
+  message Req {
+    int64 user_id = 1; // 用户 ID。
+    bool displayed_only = 2; // 是否仅查询展示项。
+  }
+  // Resp 返回用户有效徽章。
+  message Resp {
+    repeated UserBadge rows = 1; // 用户徽章列表。
+  }
+}

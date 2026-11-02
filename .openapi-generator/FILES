@@ -31,6 +31,8 @@ docs/ArticleViewHistoryItem.md
 docs/ArticleViewerActionState.md
 docs/AssetService.md
 docs/AuthService.md
+docs/BadgeDraft.md
+docs/BadgeService.md
 docs/BeginEnableTotpResp.md
 docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
@@ -43,6 +45,10 @@ docs/CollectArticleResp.md
 docs/CommentListItem.md
 docs/CommentService.md
 docs/CommentViewerActionState.md
+docs/CompleteBadgeFontUploadReq.md
+docs/CompleteBadgeFontUploadResp.md
+docs/CompleteBadgeImageUploadReq.md
+docs/CompleteBadgeImageUploadResp.md
 docs/CompleteMarkdownImageUploadReq.md
 docs/CompleteMarkdownImageUploadResp.md
 docs/CompleteProfileImageUploadAccountReq.md
@@ -66,6 +72,7 @@ docs/CreateMoonbreezeResp.md
 docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
+docs/DeleteBadgeDraftReq.md
 docs/DeleteEmojiGroupReq.md
 docs/DeleteEmojiItemReq.md
 docs/DisableTotpReq.md
@@ -109,6 +116,7 @@ docs/ListArticleTagsReq.md
 docs/ListArticleTagsResp.md
 docs/ListArticlesReq.md
 docs/ListArticlesResp.md
+docs/ListBadgeDraftsResp.md
 docs/ListBlockedRelationsReq.md
 docs/ListBlockedRelationsResp.md
 docs/ListCommentRepliesReq.md
@@ -178,6 +186,10 @@ docs/PageWatchedArticlesResp.md
 docs/PageWatchingMoonbreezesReq.md
 docs/PostscriptService.md
 docs/PreferencesService.md
+docs/PrepareBadgeFontUploadReq.md
+docs/PrepareBadgeFontUploadResp.md
+docs/PrepareBadgeImageUploadReq.md
+docs/PrepareBadgeImageUploadResp.md
 docs/PrepareMarkdownImageUploadReq.md
 docs/PrepareMarkdownImageUploadResp.md
 docs/PrepareProfileImageUploadAccountReq.md
@@ -202,6 +214,7 @@ docs/RenameEmojiGroupReq.md
 docs/RenameEmojiGroupResp.md
 docs/RenameEmojiItemReq.md
 docs/RenameEmojiItemResp.md
+docs/RenderSpec.md
 docs/ReorderEmojiGroupsReq.md
 docs/ReorderEmojiItemsReq.md
 docs/ReqArticle.md
@@ -284,6 +297,8 @@ docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
+docs/UpsertBadgeDraftReq.md
+docs/UpsertBadgeDraftResp.md
 docs/VoteArticlePollReq.md
 docs/WatchArticleReq.md
 docs/WatchArticleResp.md
@@ -293,6 +308,7 @@ src/apis/article_search_service.rs
 src/apis/article_service.rs
 src/apis/asset_service.rs
 src/apis/auth_service.rs
+src/apis/badge_service.rs
 src/apis/comment_service.rs
 src/apis/configuration.rs
 src/apis/domain_service.rs
@@ -336,6 +352,7 @@ src/models/article_postscript.rs
 src/models/article_tag.rs
 src/models/article_view_history_item.rs
 src/models/article_viewer_action_state.rs
+src/models/badge_draft.rs
 src/models/begin_enable_totp_resp.rs
 src/models/bind_article_tags_req.rs
 src/models/block_relation_req.rs
@@ -347,6 +364,10 @@ src/models/collect_article_req.rs
 src/models/collect_article_resp.rs
 src/models/comment_list_item.rs
 src/models/comment_viewer_action_state.rs
+src/models/complete_badge_font_upload_req.rs
+src/models/complete_badge_font_upload_resp.rs
+src/models/complete_badge_image_upload_req.rs
+src/models/complete_badge_image_upload_resp.rs
 src/models/complete_markdown_image_upload_req.rs
 src/models/complete_markdown_image_upload_resp.rs
 src/models/complete_profile_image_upload_account_req.rs
@@ -370,6 +391,7 @@ src/models/create_moonbreeze_resp.rs
 src/models/create_realtime_ticket_resp.rs
 src/models/create_tag_req.rs
 src/models/create_tag_resp.rs
+src/models/delete_badge_draft_req.rs
 src/models/delete_emoji_group_req.rs
 src/models/delete_emoji_item_req.rs
 src/models/disable_totp_req.rs
@@ -409,6 +431,7 @@ src/models/list_article_tags_req.rs
 src/models/list_article_tags_resp.rs
 src/models/list_articles_req.rs
 src/models/list_articles_resp.rs
+src/models/list_badge_drafts_resp.rs
 src/models/list_blocked_relations_req.rs
 src/models/list_blocked_relations_resp.rs
 src/models/list_comment_replies_req.rs
@@ -472,6 +495,10 @@ src/models/page_resp.rs
 src/models/page_watched_articles_req.rs
 src/models/page_watched_articles_resp.rs
 src/models/page_watching_moonbreezes_req.rs
+src/models/prepare_badge_font_upload_req.rs
+src/models/prepare_badge_font_upload_resp.rs
+src/models/prepare_badge_image_upload_req.rs
+src/models/prepare_badge_image_upload_resp.rs
 src/models/prepare_markdown_image_upload_req.rs
 src/models/prepare_markdown_image_upload_resp.rs
 src/models/prepare_profile_image_upload_account_req.rs
@@ -492,6 +519,7 @@ src/models/rename_emoji_group_req.rs
 src/models/rename_emoji_group_resp.rs
 src/models/rename_emoji_item_req.rs
 src/models/rename_emoji_item_resp.rs
+src/models/render_spec.rs
 src/models/reorder_emoji_groups_req.rs
 src/models/reorder_emoji_items_req.rs
 src/models/req_article.rs
@@ -573,6 +601,8 @@ src/models/update_profile_account_req.rs
 src/models/update_profile_account_resp.rs
 src/models/update_tag_req.rs
 src/models/update_tag_resp.rs
+src/models/upsert_badge_draft_req.rs
+src/models/upsert_badge_draft_resp.rs
 src/models/vote_article_poll_req.rs
 src/models/watch_article_req.rs
 src/models/watch_article_resp.rs

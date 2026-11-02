@@ -116,6 +116,7 @@ pub mod article_search_service;
 pub mod article_service;
 pub mod asset_service;
 pub mod auth_service;
+pub mod badge_service;
 pub mod comment_service;
 pub mod domain_service;
 pub mod emoji_service;
@@ -144,6 +145,7 @@ pub trait Api {
     fn article_service(&self) -> &dyn article_service::ArticleService;
     fn asset_service(&self) -> &dyn asset_service::AssetService;
     fn auth_service(&self) -> &dyn auth_service::AuthService;
+    fn badge_service(&self) -> &dyn badge_service::BadgeService;
     fn comment_service(&self) -> &dyn comment_service::CommentService;
     fn domain_service(&self) -> &dyn domain_service::DomainService;
     fn emoji_service(&self) -> &dyn emoji_service::EmojiService;
@@ -169,6 +171,7 @@ pub struct ApiClient {
     article_service: Box<dyn article_service::ArticleService>,
     asset_service: Box<dyn asset_service::AssetService>,
     auth_service: Box<dyn auth_service::AuthService>,
+    badge_service: Box<dyn badge_service::BadgeService>,
     comment_service: Box<dyn comment_service::CommentService>,
     domain_service: Box<dyn domain_service::DomainService>,
     emoji_service: Box<dyn emoji_service::EmojiService>,
@@ -196,6 +199,7 @@ impl ApiClient {
             article_service: Box::new(article_service::ArticleServiceClient::new(configuration.clone())),
             asset_service: Box::new(asset_service::AssetServiceClient::new(configuration.clone())),
             auth_service: Box::new(auth_service::AuthServiceClient::new(configuration.clone())),
+            badge_service: Box::new(badge_service::BadgeServiceClient::new(configuration.clone())),
             comment_service: Box::new(comment_service::CommentServiceClient::new(configuration.clone())),
             domain_service: Box::new(domain_service::DomainServiceClient::new(configuration.clone())),
             emoji_service: Box::new(emoji_service::EmojiServiceClient::new(configuration.clone())),
@@ -232,6 +236,9 @@ impl Api for ApiClient {
     }
     fn auth_service(&self) -> &dyn auth_service::AuthService {
         self.auth_service.as_ref()
+    }
+    fn badge_service(&self) -> &dyn badge_service::BadgeService {
+        self.badge_service.as_ref()
     }
     fn comment_service(&self) -> &dyn comment_service::CommentService {
         self.comment_service.as_ref()

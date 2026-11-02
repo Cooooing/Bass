@@ -20,10 +20,30 @@ use crate::apis::ContentType;
 #[async_trait]
 pub trait AssetService: Send + Sync {
 
+    /// POST /v1/asset/badge-font/complete
+    ///
+    /// 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+    async fn complete_badge_font_upload<'complete_badge_font_upload_req>(&self, complete_badge_font_upload_req: models::CompleteBadgeFontUploadReq) -> Result<models::CompleteBadgeFontUploadResp, Error<CompleteBadgeFontUploadError>>;
+
+    /// POST /v1/asset/badge-image/complete
+    ///
+    /// 查询已由对象存储回调确认的徽章 Maker 图片。
+    async fn complete_badge_image_upload<'complete_badge_image_upload_req>(&self, complete_badge_image_upload_req: models::CompleteBadgeImageUploadReq) -> Result<models::CompleteBadgeImageUploadResp, Error<CompleteBadgeImageUploadError>>;
+
     /// POST /v1/asset/markdown-image/complete
     ///
     /// 查询已由对象存储回调确认的 Markdown 图片。
     async fn complete_markdown_image_upload<'complete_markdown_image_upload_req>(&self, complete_markdown_image_upload_req: models::CompleteMarkdownImageUploadReq) -> Result<models::CompleteMarkdownImageUploadResp, Error<CompleteMarkdownImageUploadError>>;
+
+    /// POST /v1/asset/badge-font/prepare
+    ///
+    /// 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+    async fn prepare_badge_font_upload<'prepare_badge_font_upload_req>(&self, prepare_badge_font_upload_req: models::PrepareBadgeFontUploadReq) -> Result<models::PrepareBadgeFontUploadResp, Error<PrepareBadgeFontUploadError>>;
+
+    /// POST /v1/asset/badge-image/prepare
+    ///
+    /// 申请徽章 Maker 图片的内容寻址直传凭证。
+    async fn prepare_badge_image_upload<'prepare_badge_image_upload_req>(&self, prepare_badge_image_upload_req: models::PrepareBadgeImageUploadReq) -> Result<models::PrepareBadgeImageUploadResp, Error<PrepareBadgeImageUploadError>>;
 
     /// POST /v1/asset/markdown-image/prepare
     ///
@@ -45,6 +65,84 @@ impl AssetServiceClient {
 
 #[async_trait]
 impl AssetService for AssetServiceClient {
+    /// 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+    async fn complete_badge_font_upload<'complete_badge_font_upload_req>(&self, complete_badge_font_upload_req: models::CompleteBadgeFontUploadReq) -> Result<models::CompleteBadgeFontUploadResp, Error<CompleteBadgeFontUploadError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/asset/badge-font/complete", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&complete_badge_font_upload_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CompleteBadgeFontUploadResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CompleteBadgeFontUploadResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<CompleteBadgeFontUploadError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 查询已由对象存储回调确认的徽章 Maker 图片。
+    async fn complete_badge_image_upload<'complete_badge_image_upload_req>(&self, complete_badge_image_upload_req: models::CompleteBadgeImageUploadReq) -> Result<models::CompleteBadgeImageUploadResp, Error<CompleteBadgeImageUploadError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/asset/badge-image/complete", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&complete_badge_image_upload_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CompleteBadgeImageUploadResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CompleteBadgeImageUploadResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<CompleteBadgeImageUploadError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 查询已由对象存储回调确认的 Markdown 图片。
     async fn complete_markdown_image_upload<'complete_markdown_image_upload_req>(&self, complete_markdown_image_upload_req: models::CompleteMarkdownImageUploadReq) -> Result<models::CompleteMarkdownImageUploadResp, Error<CompleteMarkdownImageUploadError>> {
         let local_var_configuration = &self.configuration;
@@ -79,6 +177,84 @@ impl AssetService for AssetServiceClient {
             }
         } else {
             let local_var_entity: Option<CompleteMarkdownImageUploadError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+    async fn prepare_badge_font_upload<'prepare_badge_font_upload_req>(&self, prepare_badge_font_upload_req: models::PrepareBadgeFontUploadReq) -> Result<models::PrepareBadgeFontUploadResp, Error<PrepareBadgeFontUploadError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/asset/badge-font/prepare", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&prepare_badge_font_upload_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PrepareBadgeFontUploadResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PrepareBadgeFontUploadResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<PrepareBadgeFontUploadError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 申请徽章 Maker 图片的内容寻址直传凭证。
+    async fn prepare_badge_image_upload<'prepare_badge_image_upload_req>(&self, prepare_badge_image_upload_req: models::PrepareBadgeImageUploadReq) -> Result<models::PrepareBadgeImageUploadResp, Error<PrepareBadgeImageUploadError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/asset/badge-image/prepare", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&prepare_badge_image_upload_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PrepareBadgeImageUploadResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PrepareBadgeImageUploadResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<PrepareBadgeImageUploadError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -125,10 +301,38 @@ impl AssetService for AssetServiceClient {
 
 }
 
+/// struct for typed errors of method [`AssetService::complete_badge_font_upload`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum CompleteBadgeFontUploadError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AssetService::complete_badge_image_upload`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum CompleteBadgeImageUploadError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`AssetService::complete_markdown_image_upload`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CompleteMarkdownImageUploadError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AssetService::prepare_badge_font_upload`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PrepareBadgeFontUploadError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AssetService::prepare_badge_image_upload`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PrepareBadgeImageUploadError {
     UnknownValue(serde_json::Value),
 }
 

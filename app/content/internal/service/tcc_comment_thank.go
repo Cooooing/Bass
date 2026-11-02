@@ -2,10 +2,12 @@ package service
 
 import (
 	contentv1 "common/proto/gen/content/v1"
-	"content/internal/biz/usecase"
 	"context"
+
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
+
+	"content/internal/biz/usecase"
 )
 
 type TCCCommentThankService struct {

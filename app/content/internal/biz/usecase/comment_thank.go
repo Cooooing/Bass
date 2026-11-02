@@ -12,11 +12,13 @@ import (
 	contentv1 "common/proto/gen/content/v1"
 	economyv1 "common/proto/gen/economy/v1"
 	economyv1enum "common/proto/gen/economy/v1/enum"
+
+	"github.com/dtm-labs/client/dtmgrpc"
+
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/config"
 	"content/internal/enum"
-	"github.com/dtm-labs/client/dtmgrpc"
 )
 
 type CommentThankUsecase struct {

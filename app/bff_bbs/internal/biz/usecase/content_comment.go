@@ -599,8 +599,8 @@ func (u *ContentCommentUsecase) LikeComment(ctx context.Context, req *LikeCommen
 }
 
 type ThankCommentReq struct {
-	UserID          int64
-	ID              int64
+	UserID int64
+	ID     int64
 }
 
 func (u *ContentCommentUsecase) ThankComment(ctx context.Context, req *ThankCommentReq) (bool, error) {
@@ -608,8 +608,8 @@ func (u *ContentCommentUsecase) ThankComment(ctx context.Context, req *ThankComm
 		return false, err
 	}
 	resp, err := u.contentCommentClient.ThankComment(ctx, &repo.ThankCommentReq{
-		UserID:          req.UserID,
-		ID:              req.ID,
+		UserID: req.UserID,
+		ID:     req.ID,
 	})
 	if err != nil {
 		return false, err

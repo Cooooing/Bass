@@ -136,3 +136,15 @@ services:
       - "9203:9203"
     networks:
       - bass
+
+  badge:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/badge:latest
+    container_name: badge
+    restart: on-failure:3
+    env_file:
+      - .service.env
+    ports:
+      - "8109:8109"
+      - "9109:9109"
+    networks:
+      - bass

@@ -1,0 +1,19 @@
+<svg viewBox="0 0 {{if .Text}}{{add (add .Size .BarLength) 14}}{{else}}{{.Size}}{{end}} {{add .Size 3}}" width="{{if .Text}}{{add (add .Size .BarLength) 14}}{{else}}{{.Size}}{{end}}px" height="{{add .Size 3}}px" xmlns="http://www.w3.org/2000/svg">
+  <foreignObject x="0" y="0" width="100%" height="100%">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+      <style>
+        {{if .FontData}}@font-face { font-family: 'CustomFont'; src: url('data:{{.FontMIME}};base64,{{.FontData}}') format('{{.FontFormat}}'); }{{end}}
+        .container { display: flex; align-items: center; flex-direction: row-reverse; width: 100%; height: 100%; }
+        .img { border-radius: 99999px; background-image: url('{{.ImageData}}'); background-size: cover; background-color: #fff; width: {{sub .Size (mul 2 .Border)}}px; height: {{sub .Size (mul 2 .Border)}}px; margin: {{.Border}}px {{if .Text}}-{{div (sub .Size (mul 2 .Border)) 2}}{{else}}{{.Border}}{{end}}px {{.Border}}px {{.Border}}px; box-shadow: 0 0 {{.Border}}px rgba(0,0,0,{{.Shadow}}); z-index: 2; flex: none; }
+        .bar { border-radius: 0 {{.BarRadius}}px {{.BarRadius}}px 0; font-weight: 1000; display: flex; align-items: center; overflow: hidden; font-family: {{if .FontData}}'CustomFont',{{end}}"HarmonyOS", "Helvetica Neue", "Luxi Sans", "DejaVu Sans", "Hiragino Sans GB", "Microsoft Yahei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols" !important; height: {{sub .Size (mul 2 .Border)}}px; flex: 1; background: linear-gradient({{.BackgroundWay}}, {{.Background}}); box-shadow: 0 0 {{.Border}}px rgba(0,0,0,{{.Shadow}}); white-space: nowrap; margin: {{.Border}}px 0; margin-right: {{.Border}}px; padding-left: {{add (div .Size 2) 5}}px; font-size: {{add .FontSize 1}}px; z-index: 1; animation-duration: {{.AnimationMS}}ms; animation-name: move; animation-fill-mode: both; }
+        .shadow { position: absolute; text-shadow: .8px .8px 1px rgba(0,0,0,.5); z-index: 0; }
+        @keyframes move { from { width: 0; } to { width: {{add (sub .BarLength .Border) 5}}px; } }
+        span { background: linear-gradient({{.FontWay}}, {{.FontColor}}); background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 1.5px; z-index: 1; }
+      </style>
+      <div class="container">
+        {{if .Text}}<div class="bar"><span class="shadow">{{.Text}}</span><span>{{.Text}}</span></div>{{end}}
+        <div class="img"></div>
+      </div>
+    </html>
+  </foreignObject>
+</svg>

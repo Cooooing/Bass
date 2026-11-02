@@ -5,6 +5,7 @@ export * from './ArticleSearchService';
 export * from './ArticleService';
 export * from './AssetService';
 export * from './AuthService';
+export * from './BadgeService';
 export * from './CommentService';
 export * from './DomainService';
 export * from './EmojiService';

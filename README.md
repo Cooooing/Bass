@@ -89,7 +89,11 @@ All URIs are relative to *http://localhost*
 *ArticleService* | [**updateDraft**](docs/ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update | 
 *ArticleService* | [**votePoll**](docs/ArticleService.md#votepoll) | **POST** /v1/content/article/poll/vote | 
 *ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
+*AssetService* | [**completeBadgeFontUpload**](docs/AssetService.md#completebadgefontupload) | **POST** /v1/asset/badge-font/complete | 
+*AssetService* | [**completeBadgeImageUpload**](docs/AssetService.md#completebadgeimageupload) | **POST** /v1/asset/badge-image/complete | 
 *AssetService* | [**completeMarkdownImageUpload**](docs/AssetService.md#completemarkdownimageupload) | **POST** /v1/asset/markdown-image/complete | 
+*AssetService* | [**prepareBadgeFontUpload**](docs/AssetService.md#preparebadgefontupload) | **POST** /v1/asset/badge-font/prepare | 
+*AssetService* | [**prepareBadgeImageUpload**](docs/AssetService.md#preparebadgeimageupload) | **POST** /v1/asset/badge-image/prepare | 
 *AssetService* | [**prepareMarkdownImageUpload**](docs/AssetService.md#preparemarkdownimageupload) | **POST** /v1/asset/markdown-image/prepare | 
 *AuthService* | [**cancelAccount**](docs/AuthService.md#cancelaccount) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**checkRegistrationAvailability**](docs/AuthService.md#checkregistrationavailability) | **GET** /v1/user/auth/register-availability | 
@@ -97,6 +101,11 @@ All URIs are relative to *http://localhost*
 *AuthService* | [**logout**](docs/AuthService.md#logout) | **POST** /v1/user/auth/logout | 
 *AuthService* | [**refreshToken**](docs/AuthService.md#refreshtoken) | **POST** /v1/user/auth/refresh-token | 
 *AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
+*BadgeService* | [**deleteDraft**](docs/BadgeService.md#deletedraft) | **POST** /v1/badge/draft/delete | 
+*BadgeService* | [**listDrafts**](docs/BadgeService.md#listdrafts) | **POST** /v1/badge/draft/list | 
+*BadgeService* | [**renderMaker**](docs/BadgeService.md#rendermaker) | **GET** /v1/badge/maker/render | 
+*BadgeService* | [**renderPublished**](docs/BadgeService.md#renderpublished) | **GET** /v1/badge/render | 
+*BadgeService* | [**upsertDraft**](docs/BadgeService.md#upsertdraft) | **POST** /v1/badge/draft/upsert | 
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
 *CommentService* | [**like**](docs/CommentService.md#like) | **POST** /v1/content/comment/like | 
 *CommentService* | [**list**](docs/CommentService.md#list) | **POST** /v1/content/comment/list | 
@@ -200,6 +209,7 @@ All URIs are relative to *http://localhost*
 - [ArticleTag](docs/ArticleTag.md)
 - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
 - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
+- [BadgeDraft](docs/BadgeDraft.md)
 - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
 - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
 - [BlockRelationReq](docs/BlockRelationReq.md)
@@ -211,6 +221,10 @@ All URIs are relative to *http://localhost*
 - [CollectArticleResp](docs/CollectArticleResp.md)
 - [CommentListItem](docs/CommentListItem.md)
 - [CommentViewerActionState](docs/CommentViewerActionState.md)
+- [CompleteBadgeFontUploadReq](docs/CompleteBadgeFontUploadReq.md)
+- [CompleteBadgeFontUploadResp](docs/CompleteBadgeFontUploadResp.md)
+- [CompleteBadgeImageUploadReq](docs/CompleteBadgeImageUploadReq.md)
+- [CompleteBadgeImageUploadResp](docs/CompleteBadgeImageUploadResp.md)
 - [CompleteMarkdownImageUploadReq](docs/CompleteMarkdownImageUploadReq.md)
 - [CompleteMarkdownImageUploadResp](docs/CompleteMarkdownImageUploadResp.md)
 - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
@@ -234,6 +248,7 @@ All URIs are relative to *http://localhost*
 - [CreateRealtimeTicketResp](docs/CreateRealtimeTicketResp.md)
 - [CreateTagReq](docs/CreateTagReq.md)
 - [CreateTagResp](docs/CreateTagResp.md)
+- [DeleteBadgeDraftReq](docs/DeleteBadgeDraftReq.md)
 - [DeleteEmojiGroupReq](docs/DeleteEmojiGroupReq.md)
 - [DeleteEmojiItemReq](docs/DeleteEmojiItemReq.md)
 - [DisableTotpReq](docs/DisableTotpReq.md)
@@ -273,6 +288,7 @@ All URIs are relative to *http://localhost*
 - [ListArticleTagsResp](docs/ListArticleTagsResp.md)
 - [ListArticlesReq](docs/ListArticlesReq.md)
 - [ListArticlesResp](docs/ListArticlesResp.md)
+- [ListBadgeDraftsResp](docs/ListBadgeDraftsResp.md)
 - [ListBlockedRelationsReq](docs/ListBlockedRelationsReq.md)
 - [ListBlockedRelationsResp](docs/ListBlockedRelationsResp.md)
 - [ListCommentRepliesReq](docs/ListCommentRepliesReq.md)
@@ -335,6 +351,10 @@ All URIs are relative to *http://localhost*
 - [PageWatchedArticlesReq](docs/PageWatchedArticlesReq.md)
 - [PageWatchedArticlesResp](docs/PageWatchedArticlesResp.md)
 - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
+- [PrepareBadgeFontUploadReq](docs/PrepareBadgeFontUploadReq.md)
+- [PrepareBadgeFontUploadResp](docs/PrepareBadgeFontUploadResp.md)
+- [PrepareBadgeImageUploadReq](docs/PrepareBadgeImageUploadReq.md)
+- [PrepareBadgeImageUploadResp](docs/PrepareBadgeImageUploadResp.md)
 - [PrepareMarkdownImageUploadReq](docs/PrepareMarkdownImageUploadReq.md)
 - [PrepareMarkdownImageUploadResp](docs/PrepareMarkdownImageUploadResp.md)
 - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
@@ -355,6 +375,7 @@ All URIs are relative to *http://localhost*
 - [RenameEmojiGroupResp](docs/RenameEmojiGroupResp.md)
 - [RenameEmojiItemReq](docs/RenameEmojiItemReq.md)
 - [RenameEmojiItemResp](docs/RenameEmojiItemResp.md)
+- [RenderSpec](docs/RenderSpec.md)
 - [ReorderEmojiGroupsReq](docs/ReorderEmojiGroupsReq.md)
 - [ReorderEmojiItemsReq](docs/ReorderEmojiItemsReq.md)
 - [ReqArticle](docs/ReqArticle.md)
@@ -436,6 +457,8 @@ All URIs are relative to *http://localhost*
 - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
 - [UpdateTagReq](docs/UpdateTagReq.md)
 - [UpdateTagResp](docs/UpdateTagResp.md)
+- [UpsertBadgeDraftReq](docs/UpsertBadgeDraftReq.md)
+- [UpsertBadgeDraftResp](docs/UpsertBadgeDraftResp.md)
 - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
 - [WatchArticleReq](docs/WatchArticleReq.md)
 - [WatchArticleResp](docs/WatchArticleResp.md)

@@ -14,6 +14,26 @@
 
 import * as runtime from '../runtime';
 import {
+    type CompleteBadgeFontUploadReq,
+    CompleteBadgeFontUploadReqFromJSON,
+    CompleteBadgeFontUploadReqToJSON,
+} from '../models/CompleteBadgeFontUploadReq';
+import {
+    type CompleteBadgeFontUploadResp,
+    CompleteBadgeFontUploadRespFromJSON,
+    CompleteBadgeFontUploadRespToJSON,
+} from '../models/CompleteBadgeFontUploadResp';
+import {
+    type CompleteBadgeImageUploadReq,
+    CompleteBadgeImageUploadReqFromJSON,
+    CompleteBadgeImageUploadReqToJSON,
+} from '../models/CompleteBadgeImageUploadReq';
+import {
+    type CompleteBadgeImageUploadResp,
+    CompleteBadgeImageUploadRespFromJSON,
+    CompleteBadgeImageUploadRespToJSON,
+} from '../models/CompleteBadgeImageUploadResp';
+import {
     type CompleteMarkdownImageUploadReq,
     CompleteMarkdownImageUploadReqFromJSON,
     CompleteMarkdownImageUploadReqToJSON,
@@ -23,6 +43,26 @@ import {
     CompleteMarkdownImageUploadRespFromJSON,
     CompleteMarkdownImageUploadRespToJSON,
 } from '../models/CompleteMarkdownImageUploadResp';
+import {
+    type PrepareBadgeFontUploadReq,
+    PrepareBadgeFontUploadReqFromJSON,
+    PrepareBadgeFontUploadReqToJSON,
+} from '../models/PrepareBadgeFontUploadReq';
+import {
+    type PrepareBadgeFontUploadResp,
+    PrepareBadgeFontUploadRespFromJSON,
+    PrepareBadgeFontUploadRespToJSON,
+} from '../models/PrepareBadgeFontUploadResp';
+import {
+    type PrepareBadgeImageUploadReq,
+    PrepareBadgeImageUploadReqFromJSON,
+    PrepareBadgeImageUploadReqToJSON,
+} from '../models/PrepareBadgeImageUploadReq';
+import {
+    type PrepareBadgeImageUploadResp,
+    PrepareBadgeImageUploadRespFromJSON,
+    PrepareBadgeImageUploadRespToJSON,
+} from '../models/PrepareBadgeImageUploadResp';
 import {
     type PrepareMarkdownImageUploadReq,
     PrepareMarkdownImageUploadReqFromJSON,
@@ -34,8 +74,24 @@ import {
     PrepareMarkdownImageUploadRespToJSON,
 } from '../models/PrepareMarkdownImageUploadResp';
 
+export interface CompleteBadgeFontUploadRequest {
+    completeBadgeFontUploadReq: CompleteBadgeFontUploadReq;
+}
+
+export interface CompleteBadgeImageUploadRequest {
+    completeBadgeImageUploadReq: CompleteBadgeImageUploadReq;
+}
+
 export interface CompleteMarkdownImageUploadRequest {
     completeMarkdownImageUploadReq: CompleteMarkdownImageUploadReq;
+}
+
+export interface PrepareBadgeFontUploadRequest {
+    prepareBadgeFontUploadReq: PrepareBadgeFontUploadReq;
+}
+
+export interface PrepareBadgeImageUploadRequest {
+    prepareBadgeImageUploadReq: PrepareBadgeImageUploadReq;
 }
 
 export interface PrepareMarkdownImageUploadRequest {
@@ -49,6 +105,50 @@ export interface PrepareMarkdownImageUploadRequest {
  * @interface AssetServiceInterface
  */
 export interface AssetServiceInterface {
+    /**
+     * Creates request options for completeBadgeFontUpload without sending the request
+     * @param {CompleteBadgeFontUploadReq} completeBadgeFontUploadReq 
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    completeBadgeFontUploadRequestOpts(requestParameters: CompleteBadgeFontUploadRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+     * @param {CompleteBadgeFontUploadReq} completeBadgeFontUploadReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    completeBadgeFontUploadRaw(requestParameters: CompleteBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompleteBadgeFontUploadResp>>;
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+     */
+    completeBadgeFontUpload(requestParameters: CompleteBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteBadgeFontUploadResp>;
+
+    /**
+     * Creates request options for completeBadgeImageUpload without sending the request
+     * @param {CompleteBadgeImageUploadReq} completeBadgeImageUploadReq 
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    completeBadgeImageUploadRequestOpts(requestParameters: CompleteBadgeImageUploadRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 图片。
+     * @param {CompleteBadgeImageUploadReq} completeBadgeImageUploadReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    completeBadgeImageUploadRaw(requestParameters: CompleteBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompleteBadgeImageUploadResp>>;
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 图片。
+     */
+    completeBadgeImageUpload(requestParameters: CompleteBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteBadgeImageUploadResp>;
+
     /**
      * Creates request options for completeMarkdownImageUpload without sending the request
      * @param {CompleteMarkdownImageUploadReq} completeMarkdownImageUploadReq 
@@ -70,6 +170,50 @@ export interface AssetServiceInterface {
      * 查询已由对象存储回调确认的 Markdown 图片。
      */
     completeMarkdownImageUpload(requestParameters: CompleteMarkdownImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteMarkdownImageUploadResp>;
+
+    /**
+     * Creates request options for prepareBadgeFontUpload without sending the request
+     * @param {PrepareBadgeFontUploadReq} prepareBadgeFontUploadReq 
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    prepareBadgeFontUploadRequestOpts(requestParameters: PrepareBadgeFontUploadRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+     * @param {PrepareBadgeFontUploadReq} prepareBadgeFontUploadReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    prepareBadgeFontUploadRaw(requestParameters: PrepareBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PrepareBadgeFontUploadResp>>;
+
+    /**
+     * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+     */
+    prepareBadgeFontUpload(requestParameters: PrepareBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareBadgeFontUploadResp>;
+
+    /**
+     * Creates request options for prepareBadgeImageUpload without sending the request
+     * @param {PrepareBadgeImageUploadReq} prepareBadgeImageUploadReq 
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    prepareBadgeImageUploadRequestOpts(requestParameters: PrepareBadgeImageUploadRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 申请徽章 Maker 图片的内容寻址直传凭证。
+     * @param {PrepareBadgeImageUploadReq} prepareBadgeImageUploadReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AssetServiceInterface
+     */
+    prepareBadgeImageUploadRaw(requestParameters: PrepareBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PrepareBadgeImageUploadResp>>;
+
+    /**
+     * 申请徽章 Maker 图片的内容寻址直传凭证。
+     */
+    prepareBadgeImageUpload(requestParameters: PrepareBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareBadgeImageUploadResp>;
 
     /**
      * Creates request options for prepareMarkdownImageUpload without sending the request
@@ -99,6 +243,100 @@ export interface AssetServiceInterface {
  * 
  */
 export class AssetService extends runtime.BaseAPI implements AssetServiceInterface {
+
+    /**
+     * Creates request options for completeBadgeFontUpload without sending the request
+     */
+    async completeBadgeFontUploadRequestOpts(requestParameters: CompleteBadgeFontUploadRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['completeBadgeFontUploadReq'] == null) {
+            throw new runtime.RequiredError(
+                'completeBadgeFontUploadReq',
+                'Required parameter "completeBadgeFontUploadReq" was null or undefined when calling completeBadgeFontUpload().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/asset/badge-font/complete`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CompleteBadgeFontUploadReqToJSON(requestParameters['completeBadgeFontUploadReq']),
+        };
+    }
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+     */
+    async completeBadgeFontUploadRaw(requestParameters: CompleteBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompleteBadgeFontUploadResp>> {
+        const requestOptions = await this.completeBadgeFontUploadRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CompleteBadgeFontUploadRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+     */
+    async completeBadgeFontUpload(requestParameters: CompleteBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteBadgeFontUploadResp> {
+        const response = await this.completeBadgeFontUploadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for completeBadgeImageUpload without sending the request
+     */
+    async completeBadgeImageUploadRequestOpts(requestParameters: CompleteBadgeImageUploadRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['completeBadgeImageUploadReq'] == null) {
+            throw new runtime.RequiredError(
+                'completeBadgeImageUploadReq',
+                'Required parameter "completeBadgeImageUploadReq" was null or undefined when calling completeBadgeImageUpload().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/asset/badge-image/complete`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CompleteBadgeImageUploadReqToJSON(requestParameters['completeBadgeImageUploadReq']),
+        };
+    }
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 图片。
+     */
+    async completeBadgeImageUploadRaw(requestParameters: CompleteBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompleteBadgeImageUploadResp>> {
+        const requestOptions = await this.completeBadgeImageUploadRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CompleteBadgeImageUploadRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询已由对象存储回调确认的徽章 Maker 图片。
+     */
+    async completeBadgeImageUpload(requestParameters: CompleteBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteBadgeImageUploadResp> {
+        const response = await this.completeBadgeImageUploadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates request options for completeMarkdownImageUpload without sending the request
@@ -144,6 +382,100 @@ export class AssetService extends runtime.BaseAPI implements AssetServiceInterfa
      */
     async completeMarkdownImageUpload(requestParameters: CompleteMarkdownImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteMarkdownImageUploadResp> {
         const response = await this.completeMarkdownImageUploadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for prepareBadgeFontUpload without sending the request
+     */
+    async prepareBadgeFontUploadRequestOpts(requestParameters: PrepareBadgeFontUploadRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['prepareBadgeFontUploadReq'] == null) {
+            throw new runtime.RequiredError(
+                'prepareBadgeFontUploadReq',
+                'Required parameter "prepareBadgeFontUploadReq" was null or undefined when calling prepareBadgeFontUpload().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/asset/badge-font/prepare`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PrepareBadgeFontUploadReqToJSON(requestParameters['prepareBadgeFontUploadReq']),
+        };
+    }
+
+    /**
+     * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+     */
+    async prepareBadgeFontUploadRaw(requestParameters: PrepareBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PrepareBadgeFontUploadResp>> {
+        const requestOptions = await this.prepareBadgeFontUploadRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PrepareBadgeFontUploadRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+     */
+    async prepareBadgeFontUpload(requestParameters: PrepareBadgeFontUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareBadgeFontUploadResp> {
+        const response = await this.prepareBadgeFontUploadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for prepareBadgeImageUpload without sending the request
+     */
+    async prepareBadgeImageUploadRequestOpts(requestParameters: PrepareBadgeImageUploadRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['prepareBadgeImageUploadReq'] == null) {
+            throw new runtime.RequiredError(
+                'prepareBadgeImageUploadReq',
+                'Required parameter "prepareBadgeImageUploadReq" was null or undefined when calling prepareBadgeImageUpload().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/asset/badge-image/prepare`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PrepareBadgeImageUploadReqToJSON(requestParameters['prepareBadgeImageUploadReq']),
+        };
+    }
+
+    /**
+     * 申请徽章 Maker 图片的内容寻址直传凭证。
+     */
+    async prepareBadgeImageUploadRaw(requestParameters: PrepareBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PrepareBadgeImageUploadResp>> {
+        const requestOptions = await this.prepareBadgeImageUploadRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PrepareBadgeImageUploadRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 申请徽章 Maker 图片的内容寻址直传凭证。
+     */
+    async prepareBadgeImageUpload(requestParameters: PrepareBadgeImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareBadgeImageUploadResp> {
+        const response = await this.prepareBadgeImageUploadRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

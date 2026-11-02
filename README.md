@@ -110,7 +110,11 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**UpdateDraft**](docs/ArticleService.md#updatedraft) | **Post** /v1/content/article/draft/update | 
 *ArticleService* | [**VotePoll**](docs/ArticleService.md#votepoll) | **Post** /v1/content/article/poll/vote | 
 *ArticleService* | [**Watch**](docs/ArticleService.md#watch) | **Post** /v1/content/article/watch | 
+*AssetService* | [**CompleteBadgeFontUpload**](docs/AssetService.md#completebadgefontupload) | **Post** /v1/asset/badge-font/complete | 
+*AssetService* | [**CompleteBadgeImageUpload**](docs/AssetService.md#completebadgeimageupload) | **Post** /v1/asset/badge-image/complete | 
 *AssetService* | [**CompleteMarkdownImageUpload**](docs/AssetService.md#completemarkdownimageupload) | **Post** /v1/asset/markdown-image/complete | 
+*AssetService* | [**PrepareBadgeFontUpload**](docs/AssetService.md#preparebadgefontupload) | **Post** /v1/asset/badge-font/prepare | 
+*AssetService* | [**PrepareBadgeImageUpload**](docs/AssetService.md#preparebadgeimageupload) | **Post** /v1/asset/badge-image/prepare | 
 *AssetService* | [**PrepareMarkdownImageUpload**](docs/AssetService.md#preparemarkdownimageupload) | **Post** /v1/asset/markdown-image/prepare | 
 *AuthService* | [**CancelAccount**](docs/AuthService.md#cancelaccount) | **Post** /v1/user/auth/cancel-account | 
 *AuthService* | [**CheckRegistrationAvailability**](docs/AuthService.md#checkregistrationavailability) | **Get** /v1/user/auth/register-availability | 
@@ -118,6 +122,11 @@ Class | Method | HTTP request | Description
 *AuthService* | [**Logout**](docs/AuthService.md#logout) | **Post** /v1/user/auth/logout | 
 *AuthService* | [**RefreshToken**](docs/AuthService.md#refreshtoken) | **Post** /v1/user/auth/refresh-token | 
 *AuthService* | [**Register**](docs/AuthService.md#register) | **Post** /v1/user/auth/register | 
+*BadgeService* | [**DeleteDraft**](docs/BadgeService.md#deletedraft) | **Post** /v1/badge/draft/delete | 
+*BadgeService* | [**ListDrafts**](docs/BadgeService.md#listdrafts) | **Post** /v1/badge/draft/list | 
+*BadgeService* | [**RenderMaker**](docs/BadgeService.md#rendermaker) | **Get** /v1/badge/maker/render | 
+*BadgeService* | [**RenderPublished**](docs/BadgeService.md#renderpublished) | **Get** /v1/badge/render | 
+*BadgeService* | [**UpsertDraft**](docs/BadgeService.md#upsertdraft) | **Post** /v1/badge/draft/upsert | 
 *CommentService* | [**Create**](docs/CommentService.md#create) | **Post** /v1/content/comment/create | 
 *CommentService* | [**Like**](docs/CommentService.md#like) | **Post** /v1/content/comment/like | 
 *CommentService* | [**List**](docs/CommentService.md#list) | **Post** /v1/content/comment/list | 
@@ -221,6 +230,7 @@ Class | Method | HTTP request | Description
  - [ArticleTag](docs/ArticleTag.md)
  - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
  - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
+ - [BadgeDraft](docs/BadgeDraft.md)
  - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
  - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
  - [BlockRelationReq](docs/BlockRelationReq.md)
@@ -232,6 +242,10 @@ Class | Method | HTTP request | Description
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [CommentListItem](docs/CommentListItem.md)
  - [CommentViewerActionState](docs/CommentViewerActionState.md)
+ - [CompleteBadgeFontUploadReq](docs/CompleteBadgeFontUploadReq.md)
+ - [CompleteBadgeFontUploadResp](docs/CompleteBadgeFontUploadResp.md)
+ - [CompleteBadgeImageUploadReq](docs/CompleteBadgeImageUploadReq.md)
+ - [CompleteBadgeImageUploadResp](docs/CompleteBadgeImageUploadResp.md)
  - [CompleteMarkdownImageUploadReq](docs/CompleteMarkdownImageUploadReq.md)
  - [CompleteMarkdownImageUploadResp](docs/CompleteMarkdownImageUploadResp.md)
  - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
@@ -255,6 +269,7 @@ Class | Method | HTTP request | Description
  - [CreateRealtimeTicketResp](docs/CreateRealtimeTicketResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
+ - [DeleteBadgeDraftReq](docs/DeleteBadgeDraftReq.md)
  - [DeleteEmojiGroupReq](docs/DeleteEmojiGroupReq.md)
  - [DeleteEmojiItemReq](docs/DeleteEmojiItemReq.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
@@ -294,6 +309,7 @@ Class | Method | HTTP request | Description
  - [ListArticleTagsResp](docs/ListArticleTagsResp.md)
  - [ListArticlesReq](docs/ListArticlesReq.md)
  - [ListArticlesResp](docs/ListArticlesResp.md)
+ - [ListBadgeDraftsResp](docs/ListBadgeDraftsResp.md)
  - [ListBlockedRelationsReq](docs/ListBlockedRelationsReq.md)
  - [ListBlockedRelationsResp](docs/ListBlockedRelationsResp.md)
  - [ListCommentRepliesReq](docs/ListCommentRepliesReq.md)
@@ -356,6 +372,10 @@ Class | Method | HTTP request | Description
  - [PageWatchedArticlesReq](docs/PageWatchedArticlesReq.md)
  - [PageWatchedArticlesResp](docs/PageWatchedArticlesResp.md)
  - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
+ - [PrepareBadgeFontUploadReq](docs/PrepareBadgeFontUploadReq.md)
+ - [PrepareBadgeFontUploadResp](docs/PrepareBadgeFontUploadResp.md)
+ - [PrepareBadgeImageUploadReq](docs/PrepareBadgeImageUploadReq.md)
+ - [PrepareBadgeImageUploadResp](docs/PrepareBadgeImageUploadResp.md)
  - [PrepareMarkdownImageUploadReq](docs/PrepareMarkdownImageUploadReq.md)
  - [PrepareMarkdownImageUploadResp](docs/PrepareMarkdownImageUploadResp.md)
  - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
@@ -376,6 +396,7 @@ Class | Method | HTTP request | Description
  - [RenameEmojiGroupResp](docs/RenameEmojiGroupResp.md)
  - [RenameEmojiItemReq](docs/RenameEmojiItemReq.md)
  - [RenameEmojiItemResp](docs/RenameEmojiItemResp.md)
+ - [RenderSpec](docs/RenderSpec.md)
  - [ReorderEmojiGroupsReq](docs/ReorderEmojiGroupsReq.md)
  - [ReorderEmojiItemsReq](docs/ReorderEmojiItemsReq.md)
  - [ReqArticle](docs/ReqArticle.md)
@@ -457,6 +478,8 @@ Class | Method | HTTP request | Description
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
+ - [UpsertBadgeDraftReq](docs/UpsertBadgeDraftReq.md)
+ - [UpsertBadgeDraftResp](docs/UpsertBadgeDraftResp.md)
  - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
  - [WatchArticleReq](docs/WatchArticleReq.md)
  - [WatchArticleResp](docs/WatchArticleResp.md)

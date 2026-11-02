@@ -22,6 +22,34 @@ import (
 type AssetService interface {
 
 	/*
+	CompleteBadgeFontUpload Method for CompleteBadgeFontUpload
+
+	查询已由对象存储回调确认的徽章 Maker 自定义字体。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCompleteBadgeFontUploadRequest
+	*/
+	CompleteBadgeFontUpload(ctx context.Context) ApiCompleteBadgeFontUploadRequest
+
+	// CompleteBadgeFontUploadExecute executes the request
+	//  @return CompleteBadgeFontUploadResp
+	CompleteBadgeFontUploadExecute(r ApiCompleteBadgeFontUploadRequest) (*CompleteBadgeFontUploadResp, *http.Response, error)
+
+	/*
+	CompleteBadgeImageUpload Method for CompleteBadgeImageUpload
+
+	查询已由对象存储回调确认的徽章 Maker 图片。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCompleteBadgeImageUploadRequest
+	*/
+	CompleteBadgeImageUpload(ctx context.Context) ApiCompleteBadgeImageUploadRequest
+
+	// CompleteBadgeImageUploadExecute executes the request
+	//  @return CompleteBadgeImageUploadResp
+	CompleteBadgeImageUploadExecute(r ApiCompleteBadgeImageUploadRequest) (*CompleteBadgeImageUploadResp, *http.Response, error)
+
+	/*
 	CompleteMarkdownImageUpload Method for CompleteMarkdownImageUpload
 
 	查询已由对象存储回调确认的 Markdown 图片。
@@ -34,6 +62,34 @@ type AssetService interface {
 	// CompleteMarkdownImageUploadExecute executes the request
 	//  @return CompleteMarkdownImageUploadResp
 	CompleteMarkdownImageUploadExecute(r ApiCompleteMarkdownImageUploadRequest) (*CompleteMarkdownImageUploadResp, *http.Response, error)
+
+	/*
+	PrepareBadgeFontUpload Method for PrepareBadgeFontUpload
+
+	申请徽章 Maker 自定义字体的内容寻址直传凭证。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiPrepareBadgeFontUploadRequest
+	*/
+	PrepareBadgeFontUpload(ctx context.Context) ApiPrepareBadgeFontUploadRequest
+
+	// PrepareBadgeFontUploadExecute executes the request
+	//  @return PrepareBadgeFontUploadResp
+	PrepareBadgeFontUploadExecute(r ApiPrepareBadgeFontUploadRequest) (*PrepareBadgeFontUploadResp, *http.Response, error)
+
+	/*
+	PrepareBadgeImageUpload Method for PrepareBadgeImageUpload
+
+	申请徽章 Maker 图片的内容寻址直传凭证。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiPrepareBadgeImageUploadRequest
+	*/
+	PrepareBadgeImageUpload(ctx context.Context) ApiPrepareBadgeImageUploadRequest
+
+	// PrepareBadgeImageUploadExecute executes the request
+	//  @return PrepareBadgeImageUploadResp
+	PrepareBadgeImageUploadExecute(r ApiPrepareBadgeImageUploadRequest) (*PrepareBadgeImageUploadResp, *http.Response, error)
 
 	/*
 	PrepareMarkdownImageUpload Method for PrepareMarkdownImageUpload
@@ -52,6 +108,226 @@ type AssetService interface {
 
 // AssetServiceService AssetService service
 type AssetServiceService service
+
+type ApiCompleteBadgeFontUploadRequest struct {
+	ctx context.Context
+	ApiService AssetService
+	completeBadgeFontUploadReq *CompleteBadgeFontUploadReq
+}
+
+func (r ApiCompleteBadgeFontUploadRequest) CompleteBadgeFontUploadReq(completeBadgeFontUploadReq CompleteBadgeFontUploadReq) ApiCompleteBadgeFontUploadRequest {
+	r.completeBadgeFontUploadReq = &completeBadgeFontUploadReq
+	return r
+}
+
+func (r ApiCompleteBadgeFontUploadRequest) Execute() (*CompleteBadgeFontUploadResp, *http.Response, error) {
+	return r.ApiService.CompleteBadgeFontUploadExecute(r)
+}
+
+/*
+CompleteBadgeFontUpload Method for CompleteBadgeFontUpload
+
+查询已由对象存储回调确认的徽章 Maker 自定义字体。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCompleteBadgeFontUploadRequest
+*/
+func (a *AssetServiceService) CompleteBadgeFontUpload(ctx context.Context) ApiCompleteBadgeFontUploadRequest {
+	return ApiCompleteBadgeFontUploadRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return CompleteBadgeFontUploadResp
+func (a *AssetServiceService) CompleteBadgeFontUploadExecute(r ApiCompleteBadgeFontUploadRequest) (*CompleteBadgeFontUploadResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *CompleteBadgeFontUploadResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetServiceService.CompleteBadgeFontUpload")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/asset/badge-font/complete"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.completeBadgeFontUploadReq == nil {
+		return localVarReturnValue, nil, reportError("completeBadgeFontUploadReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.completeBadgeFontUploadReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiCompleteBadgeImageUploadRequest struct {
+	ctx context.Context
+	ApiService AssetService
+	completeBadgeImageUploadReq *CompleteBadgeImageUploadReq
+}
+
+func (r ApiCompleteBadgeImageUploadRequest) CompleteBadgeImageUploadReq(completeBadgeImageUploadReq CompleteBadgeImageUploadReq) ApiCompleteBadgeImageUploadRequest {
+	r.completeBadgeImageUploadReq = &completeBadgeImageUploadReq
+	return r
+}
+
+func (r ApiCompleteBadgeImageUploadRequest) Execute() (*CompleteBadgeImageUploadResp, *http.Response, error) {
+	return r.ApiService.CompleteBadgeImageUploadExecute(r)
+}
+
+/*
+CompleteBadgeImageUpload Method for CompleteBadgeImageUpload
+
+查询已由对象存储回调确认的徽章 Maker 图片。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCompleteBadgeImageUploadRequest
+*/
+func (a *AssetServiceService) CompleteBadgeImageUpload(ctx context.Context) ApiCompleteBadgeImageUploadRequest {
+	return ApiCompleteBadgeImageUploadRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return CompleteBadgeImageUploadResp
+func (a *AssetServiceService) CompleteBadgeImageUploadExecute(r ApiCompleteBadgeImageUploadRequest) (*CompleteBadgeImageUploadResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *CompleteBadgeImageUploadResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetServiceService.CompleteBadgeImageUpload")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/asset/badge-image/complete"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.completeBadgeImageUploadReq == nil {
+		return localVarReturnValue, nil, reportError("completeBadgeImageUploadReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.completeBadgeImageUploadReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
 
 type ApiCompleteMarkdownImageUploadRequest struct {
 	ctx context.Context
@@ -126,6 +402,226 @@ func (a *AssetServiceService) CompleteMarkdownImageUploadExecute(r ApiCompleteMa
 	}
 	// body params
 	localVarPostBody = r.completeMarkdownImageUploadReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPrepareBadgeFontUploadRequest struct {
+	ctx context.Context
+	ApiService AssetService
+	prepareBadgeFontUploadReq *PrepareBadgeFontUploadReq
+}
+
+func (r ApiPrepareBadgeFontUploadRequest) PrepareBadgeFontUploadReq(prepareBadgeFontUploadReq PrepareBadgeFontUploadReq) ApiPrepareBadgeFontUploadRequest {
+	r.prepareBadgeFontUploadReq = &prepareBadgeFontUploadReq
+	return r
+}
+
+func (r ApiPrepareBadgeFontUploadRequest) Execute() (*PrepareBadgeFontUploadResp, *http.Response, error) {
+	return r.ApiService.PrepareBadgeFontUploadExecute(r)
+}
+
+/*
+PrepareBadgeFontUpload Method for PrepareBadgeFontUpload
+
+申请徽章 Maker 自定义字体的内容寻址直传凭证。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPrepareBadgeFontUploadRequest
+*/
+func (a *AssetServiceService) PrepareBadgeFontUpload(ctx context.Context) ApiPrepareBadgeFontUploadRequest {
+	return ApiPrepareBadgeFontUploadRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PrepareBadgeFontUploadResp
+func (a *AssetServiceService) PrepareBadgeFontUploadExecute(r ApiPrepareBadgeFontUploadRequest) (*PrepareBadgeFontUploadResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PrepareBadgeFontUploadResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetServiceService.PrepareBadgeFontUpload")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/asset/badge-font/prepare"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.prepareBadgeFontUploadReq == nil {
+		return localVarReturnValue, nil, reportError("prepareBadgeFontUploadReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.prepareBadgeFontUploadReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPrepareBadgeImageUploadRequest struct {
+	ctx context.Context
+	ApiService AssetService
+	prepareBadgeImageUploadReq *PrepareBadgeImageUploadReq
+}
+
+func (r ApiPrepareBadgeImageUploadRequest) PrepareBadgeImageUploadReq(prepareBadgeImageUploadReq PrepareBadgeImageUploadReq) ApiPrepareBadgeImageUploadRequest {
+	r.prepareBadgeImageUploadReq = &prepareBadgeImageUploadReq
+	return r
+}
+
+func (r ApiPrepareBadgeImageUploadRequest) Execute() (*PrepareBadgeImageUploadResp, *http.Response, error) {
+	return r.ApiService.PrepareBadgeImageUploadExecute(r)
+}
+
+/*
+PrepareBadgeImageUpload Method for PrepareBadgeImageUpload
+
+申请徽章 Maker 图片的内容寻址直传凭证。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPrepareBadgeImageUploadRequest
+*/
+func (a *AssetServiceService) PrepareBadgeImageUpload(ctx context.Context) ApiPrepareBadgeImageUploadRequest {
+	return ApiPrepareBadgeImageUploadRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PrepareBadgeImageUploadResp
+func (a *AssetServiceService) PrepareBadgeImageUploadExecute(r ApiPrepareBadgeImageUploadRequest) (*PrepareBadgeImageUploadResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PrepareBadgeImageUploadResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AssetServiceService.PrepareBadgeImageUpload")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/asset/badge-image/prepare"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.prepareBadgeImageUploadReq == nil {
+		return localVarReturnValue, nil, reportError("prepareBadgeImageUploadReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.prepareBadgeImageUploadReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

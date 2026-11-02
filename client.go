@@ -59,6 +59,8 @@ type APIClient struct {
 
 	AuthService AuthService
 
+	BadgeService BadgeService
+
 	CommentService CommentService
 
 	DomainService DomainService
@@ -115,6 +117,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.ArticleService = (*ArticleServiceService)(&c.common)
 	c.AssetService = (*AssetServiceService)(&c.common)
 	c.AuthService = (*AuthServiceService)(&c.common)
+	c.BadgeService = (*BadgeServiceService)(&c.common)
 	c.CommentService = (*CommentServiceService)(&c.common)
 	c.DomainService = (*DomainServiceService)(&c.common)
 	c.EmojiService = (*EmojiServiceService)(&c.common)

@@ -56,6 +56,5 @@ const (
 	LogKindConsul   = "consul"
 	LogKindRedis    = "redis"
 	LogKindDatabase = "database"
-	LogKindAsynq    = "asynq"
 	LogKindLark     = "lark"
 )

@@ -80,7 +80,6 @@ require (
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/hashicorp/hcl/v2 v2.23.0 // indirect
 	github.com/hashicorp/serf v0.10.2 // indirect
-	github.com/hibiken/asynq v0.25.1 // indirect
 	github.com/klauspost/compress v1.18.6 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.11 // indirect
 	github.com/klauspost/crc32 v1.3.0 // indirect
@@ -111,7 +110,6 @@ require (
 	github.com/rs/xid v1.6.0 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sony/sonyflake/v2 v2.2.0 // indirect
-	github.com/spf13/cast v1.7.0 // indirect
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.102 // indirect
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.3.93 // indirect
 	github.com/tinylib/msgp v1.6.1 // indirect
@@ -142,7 +140,6 @@ require (
 	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
-	golang.org/x/time v0.8.0 // indirect
 	golang.org/x/tools v0.51.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260511170946-3700d4141b60 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect

@@ -64,7 +64,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: "1.26"
+          go-version: "1.27"
           cache: false
       - name: Set up Buf
         uses: bufbuild/buf-setup-action@v1
@@ -78,7 +78,7 @@ jobs:
             ~/.npm
             ~/.openapi-generator
             ~/go/bin/protoc-gen-openapi
-          key: sdk-generator-${{ runner.os }}-go1.26-openapi-v0.7.1-openapi-cli-v2.41.0-${{ hashFiles('common/proto/sdk/openapitools.json') }}
+          key: sdk-generator-${{ runner.os }}-go1.27-openapi-v0.7.1-openapi-cli-v2.41.0-${{ hashFiles('common/proto/sdk/openapitools.json') }}
       - name: Install OpenAPI plugin
         shell: bash
         run: |

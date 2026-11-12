@@ -11,7 +11,7 @@ Bass 是面向社区产品的 Go 微服务项目。系统按入口层、内部�
 
 ## 技术栈
 
-- Go 1.26、Kratos、Ent、Wire
+- Go 1.27、Kratos、Ent、Wire
 - Protobuf、gRPC、HTTP/JSON、OpenAPI、Buf
 - PostgreSQL、Redis、NATS、Consul
 

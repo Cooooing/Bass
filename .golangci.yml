@@ -3,7 +3,7 @@ version: "2"
 
 run:
   timeout: 5m
-  go: "1.26"
+  go: "1.27"
   tests: false
 
 # goimports applies Go formatting and the project import groups in one pass.

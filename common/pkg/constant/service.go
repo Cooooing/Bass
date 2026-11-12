@@ -3,15 +3,16 @@ package constant
 type ServiceName string
 
 const (
-	UserServiceName      ServiceName = "user"
-	ContentServiceName   ServiceName = "content"
-	EconomyServiceName   ServiceName = "economy"
-	NotifyServiceName    ServiceName = "notify"
-	IMServiceName        ServiceName = "im"
-	PlatformServiceName  ServiceName = "platform"
-	SchedulerServiceName ServiceName = "scheduler"
-	GameIdleServiceName  ServiceName = "game_idle"
-	BadgeServiceName     ServiceName = "badge"
+	UserServiceName        ServiceName = "user"
+	ContentServiceName     ServiceName = "content"
+	EconomyServiceName     ServiceName = "economy"
+	NotifyServiceName      ServiceName = "notify"
+	IMServiceName          ServiceName = "im"
+	PlatformServiceName    ServiceName = "platform"
+	SchedulerServiceName   ServiceName = "scheduler"
+	GameIdleServiceName    ServiceName = "game_idle"
+	BadgeServiceName       ServiceName = "badge"
+	RealtimeHubServiceName ServiceName = "realtime_hub"
 )
 
 func (s ServiceName) String() string {
@@ -36,11 +37,5 @@ const (
 	TablePrefixBadge     TablePrefix = TablePrefix(BadgeServiceName + "_")
 )
 
-const (
-	RealtimeNodeSubjectPrefix = "realtime.node."
-	RealtimeRealmBBS          = "bbs"
-)
-
-func GetRealtimeNodeSubject(realm, nodeID string) string {
-	return RealtimeNodeSubjectPrefix + realm + "." + nodeID
-}
+// RealtimeRealmBBS 标识社区入口的实时连接域。
+const RealtimeRealmBBS = "bbs"

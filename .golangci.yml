@@ -12,8 +12,8 @@ formatters:
   settings:
     goimports:
       local-prefixes:
+        - badge
         - bff_bbs
-        - bff_bbs_admin
         - bff_game_idle
         - content
         - economy
@@ -21,7 +21,8 @@ formatters:
         - im
         - notify
         - platform
-        - push_hub
+        - realtime_hub
+        - realtime_node
         - scheduler
         - user
   exclusions:

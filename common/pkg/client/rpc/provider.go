@@ -48,7 +48,7 @@ func ProvidePlatformClient(consul *client.ConsulClient) (*PlatformClient, error)
 }
 
 func ProvideRealtimeHubClient(consul *client.ConsulClient) (*RealtimeHubClient, error) {
-	return newServiceClient(consul, "realtime_hub", NewRealtimeHubClient)
+	return newServiceClient(consul, constant.RealtimeHubServiceName.String(), NewRealtimeHubClient)
 }
 
 func ProvideSchedulerClient(consul *client.ConsulClient) (*SchedulerClient, error) {

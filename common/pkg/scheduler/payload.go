@@ -22,10 +22,11 @@ func MustMarshalPayload(message proto.Message) string {
 	return payload
 }
 
-// UnmarshalPayload rejects unknown fields to keep task producers and handlers in sync.
+// UnmarshalPayload 解析持久化的任务 payload。
 func UnmarshalPayload(payload string, message proto.Message) error {
 	payload = strings.TrimSpace(payload)
 	if payload == "" {
+		// protojson 将空输入视为语法错误，空 payload 表示未设置任何字段。
 		payload = "{}"
 	}
 	return protojson.Unmarshal([]byte(payload), message)

@@ -1,8 +1,8 @@
 package model
 
 // IpInfo 是登录审计所需的 IP 地理信息。
-type IpInfo struct {
-	Ip          string
+type IpInfo struct { //nolint:revive // 字段名沿用 platform RPC 契约的 Ip/Isp 拼写，避免响应映射时做额外转换。
+	Ip          string //nolint:revive // 与 platform RPC 契约保持一致。
 	Country     string
 	Province    string
 	City        string

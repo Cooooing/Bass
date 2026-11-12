@@ -7,8 +7,9 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"fmt"
-	schedulerenum "scheduler/internal/enum"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

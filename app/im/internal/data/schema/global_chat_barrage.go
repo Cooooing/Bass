@@ -3,11 +3,13 @@ package schema
 import (
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
+
 	"im/internal/enum"
 )
 

@@ -2,12 +2,14 @@ package server
 
 import (
 	commonserver "common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	cerrors "common/proto/gen/common/errors"
 	"encoding/json"
 	"fmt"
 	"log/slog"
-	"monolith/internal/config"
 	stdhttp "net/http"
+
+	"monolith/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware"
@@ -23,14 +25,14 @@ func NewHTTPServer(
 ) *kratoshttp.Server {
 	var middlewares []middleware.Middleware
 	middlewares = append(middlewares,
-		commonserver.RequestLogContextMiddleware(),
+		servermiddleware.RequestLogContextMiddleware(),
 		recovery.Recovery(),
 	)
 	middlewares = append(middlewares, moduleMiddlewares...)
 	middlewares = append(middlewares, validate.ProtoValidate())
 
 	var opts = []kratoshttp.ServerOption{
-		kratoshttp.Filter(commonserver.HTTPAccessLogMiddleware(logger)),
+		kratoshttp.Filter(servermiddleware.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(commonserver.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(commonserver.HttpRespEncoder),

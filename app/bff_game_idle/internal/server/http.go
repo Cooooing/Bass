@@ -6,6 +6,7 @@ import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	v1 "common/proto/gen/bff_game_idle/v1"
 	"context"
 	"fmt"
@@ -33,7 +34,7 @@ func NewHTTPAuthMiddlewares(authClient *rpc.UserClient) []middleware.Middleware 
 	}
 
 	return []middleware.Middleware{
-		selector.Server(server.UserAuthMiddleware(authClient.Auth, commonenum.LoginRealmGameIdle)).Match(authRequiredMatch).Build(),
+		selector.Server(servermiddleware.UserAuthMiddleware(authClient.Auth, commonenum.LoginRealmGameIdle)).Match(authRequiredMatch).Build(),
 	}
 }
 
@@ -48,7 +49,7 @@ func NewHTTPServer(
 	_ = userClient
 	middlewares := make([]middleware.Middleware, 0, 5)
 	middlewares = append(middlewares,
-		server.RequestLogContextMiddleware(),
+		servermiddleware.RequestLogContextMiddleware(),
 		obs.ServerMiddleware(),
 		recovery.Recovery(),
 	)
@@ -56,7 +57,7 @@ func NewHTTPServer(
 	middlewares = append(middlewares, validate.ProtoValidate())
 
 	opts := []kratoshttp.ServerOption{
-		kratoshttp.Filter(server.HTTPCORSFilter(), server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
+		kratoshttp.Filter(servermiddleware.HTTPCORSFilter(), servermiddleware.HTTPTraceMiddleware(), servermiddleware.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),

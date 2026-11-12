@@ -2,7 +2,7 @@ package config
 
 import (
 	commonmodule "common/pkg/module"
-	commonserver "common/pkg/server"
+	serverconfig "common/pkg/server/config"
 	"common/proto/gen/common"
 	"fmt"
 
@@ -10,7 +10,7 @@ import (
 )
 
 func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstrap, func(), error) {
-	c, bc, hot, cleanup, err := commonserver.LoadConfig[*Bootstrap](bootstrapPath, path)
+	c, bc, hot, cleanup, err := serverconfig.LoadConfig[*Bootstrap](bootstrapPath, path)
 	if err != nil {
 		return nil, nil, cleanup, err
 	}

@@ -4,8 +4,10 @@ import (
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
 	commonserver "common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	"fmt"
 	"log/slog"
+
 	"realtime_hub/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
@@ -22,7 +24,7 @@ func NewHTTPServer(
 ) *http.Server {
 	options := []http.ServerOption{
 		http.Middleware(
-			commonserver.RequestLogContextMiddleware(),
+			servermiddleware.RequestLogContextMiddleware(),
 			observer.ServerMiddleware(),
 			recovery.Recovery(),
 			validate.ProtoValidate(),

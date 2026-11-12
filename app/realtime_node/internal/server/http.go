@@ -3,8 +3,10 @@ package server
 import (
 	commonclient "common/pkg/client"
 	commonserver "common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	"fmt"
 	"log/slog"
+
 	"realtime_node/internal/config"
 
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -12,8 +14,8 @@ import (
 
 func NewHTTPServer(config *config.Bootstrap, logger *slog.Logger, observer *commonclient.Observer, services []commonserver.Service) *http.Server {
 	options := []http.ServerOption{
-		http.Filter(commonserver.HTTPCORSFilter()),
-		http.Middleware(commonserver.RequestLogContextMiddleware(), observer.ServerMiddleware()),
+		http.Filter(servermiddleware.HTTPCORSFilter()),
+		http.Middleware(servermiddleware.RequestLogContextMiddleware(), observer.ServerMiddleware()),
 	}
 	if config.Http.GetNetwork() != "" {
 		options = append(options, http.Network(config.Http.GetNetwork()))

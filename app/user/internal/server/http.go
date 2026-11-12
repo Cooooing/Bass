@@ -4,6 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	"fmt"
 	"log/slog"
 
@@ -23,7 +24,7 @@ func NewHTTPServer(
 ) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
-			server.RequestLogContextMiddleware(),
+			servermiddleware.RequestLogContextMiddleware(),
 			obs.ServerMiddleware(),
 			recovery.Recovery(),
 			validate.ProtoValidate(),

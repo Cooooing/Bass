@@ -3,6 +3,7 @@ package server
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	"fmt"
 	"log/slog"
 	"time"
@@ -38,7 +39,7 @@ func NewGRPCServer(
 	}
 	var serverOpts = []grpc.ServerOption{
 		grpc.Middleware(
-			server.RequestLogContextMiddleware(),
+			servermiddleware.RequestLogContextMiddleware(),
 			obs.ServerMiddleware(),
 			recovery.Recovery(),
 			validate.ProtoValidate(),

@@ -5,6 +5,7 @@ import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	bffbadgev1 "common/proto/gen/bff_bbs/v1/badge"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	platformv1 "common/proto/gen/bff_bbs/v1/platform"
@@ -83,8 +84,8 @@ func NewHTTPAuthMiddlewares(authClient userv1.AuthServiceClient) []middleware.Mi
 	}
 
 	return []middleware.Middleware{
-		selector.Server(server.OptionalUserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(optionalAuthMatch).Build(),
-		selector.Server(server.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
+		selector.Server(servermiddleware.OptionalUserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(optionalAuthMatch).Build(),
+		selector.Server(servermiddleware.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
 	}
 }
 
@@ -97,7 +98,7 @@ func NewHTTPServer(
 ) *kratoshttp.Server {
 	middlewares := make([]middleware.Middleware, 0, 5)
 	middlewares = append(middlewares,
-		server.RequestLogContextMiddleware(),
+		servermiddleware.RequestLogContextMiddleware(),
 		obs.ServerMiddleware(),
 		recovery.Recovery(),
 	)
@@ -106,7 +107,7 @@ func NewHTTPServer(
 
 	errorMessages := NewBBSErrorMessages()
 	var opts = []kratoshttp.ServerOption{
-		kratoshttp.Filter(server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
+		kratoshttp.Filter(servermiddleware.HTTPTraceMiddleware(), servermiddleware.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),

@@ -3,10 +3,12 @@ package server
 import (
 	commonclient "common/pkg/client"
 	commonserver "common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	"fmt"
 	"log/slog"
-	"realtime_hub/internal/config"
 	"time"
+
+	"realtime_hub/internal/config"
 
 	kratosgrpc "github.com/go-kratos/kratos/v3/transport/grpc"
 	"google.golang.org/grpc"
@@ -15,7 +17,7 @@ import (
 
 func NewGRPCServer(config *config.Bootstrap, logger *slog.Logger, observer *commonclient.Observer, services []commonserver.Service) *kratosgrpc.Server {
 	options := []kratosgrpc.ServerOption{
-		kratosgrpc.Middleware(commonserver.RequestLogContextMiddleware(), observer.ServerMiddleware()),
+		kratosgrpc.Middleware(servermiddleware.RequestLogContextMiddleware(), observer.ServerMiddleware()),
 		kratosgrpc.Options(
 			grpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
 				MinTime:             30 * time.Second,

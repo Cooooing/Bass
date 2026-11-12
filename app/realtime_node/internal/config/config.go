@@ -1,12 +1,12 @@
 package config
 
 import (
-	commonserver "common/pkg/server"
+	serverconfig "common/pkg/server/config"
 	"common/proto/gen/common"
 )
 
 func NewConfig(bootstrapPath, path string) (*Bootstrap, *common.Bootstrap, func(), error) {
-	config, bootstrap, hot, cleanup, err := commonserver.LoadConfig[*Bootstrap](bootstrapPath, path)
+	config, bootstrap, hot, cleanup, err := serverconfig.LoadConfig[*Bootstrap](bootstrapPath, path)
 	if err != nil {
 		return nil, nil, cleanup, err
 	}

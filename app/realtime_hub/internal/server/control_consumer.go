@@ -6,6 +6,7 @@ import (
 
 	"common/pkg/client"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
+
 	"realtime_hub/internal/biz/usecase"
 
 	"google.golang.org/protobuf/encoding/protojson"

@@ -3,8 +3,9 @@ package server
 import (
 	"context"
 	"errors"
-	monolithmodule "monolith/internal/module"
 	"slices"
+
+	monolithmodule "monolith/internal/module"
 
 	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/grpc"

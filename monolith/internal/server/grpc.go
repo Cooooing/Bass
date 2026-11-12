@@ -2,10 +2,12 @@ package server
 
 import (
 	commonserver "common/pkg/server"
+	servermiddleware "common/pkg/server/middleware"
 	"fmt"
 	"log/slog"
-	"monolith/internal/config"
 	"time"
+
+	"monolith/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
@@ -34,7 +36,7 @@ func NewGRPCServer(
 	}
 	serverOpts := []grpc.ServerOption{
 		grpc.Middleware(
-			commonserver.RequestLogContextMiddleware(),
+			servermiddleware.RequestLogContextMiddleware(),
 			recovery.Recovery(),
 			validate.ProtoValidate(),
 		),

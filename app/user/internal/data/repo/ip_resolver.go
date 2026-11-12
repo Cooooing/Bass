@@ -2,9 +2,9 @@ package repo
 
 import (
 	"common/pkg/client/rpc"
-	commonModel "common/pkg/model"
 	platformv1 "common/proto/gen/platform/v1"
 	"context"
+	"user/internal/biz/model"
 
 	bizrepo "user/internal/biz/repo"
 )
@@ -21,14 +21,14 @@ func NewIPClient(
 	}
 }
 
-func (r *IPClient) Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
+func (r *IPClient) Resolve(ctx context.Context, ip string) (*model.IpInfo, error) {
 	reply, err := r.platformClient.IPResolution.ResolveIP(ctx, &platformv1.ResolveIP_Req{
 		Ip: ip,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &commonModel.IpInfo{
+	return &model.IpInfo{
 		Ip:          ip,
 		Country:     reply.GetCountry(),
 		Province:    reply.GetProvince(),

@@ -11,8 +11,8 @@ import (
 	"strings"
 	"sync"
 
-	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"platform/internal/biz/model"
 
 	"platform/internal/biz/repo"
 	"platform/internal/config"
@@ -230,12 +230,12 @@ func (u *IPResolutionUsecase) writeIPDataFile(ctx context.Context, path string, 
 	return true, nil
 }
 
-func (u *IPResolutionUsecase) Get(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
+func (u *IPResolutionUsecase) Get(ctx context.Context, ip string) (*model.IpInfo, error) {
 	def := "unknown"
 	u.mu.RLock()
 	defer u.mu.RUnlock()
 	if u.ip2region == nil || ip == "" {
-		return &commonModel.IpInfo{
+		return &model.IpInfo{
 			Ip:          ip,
 			Country:     def,
 			Province:    def,
@@ -258,7 +258,7 @@ func (u *IPResolutionUsecase) Get(ctx context.Context, ip string) (*commonModel.
 		}
 		return s
 	}
-	return &commonModel.IpInfo{
+	return &model.IpInfo{
 		Ip:          ip,
 		Country:     clean(parts[0]),
 		Province:    clean(parts[1]),

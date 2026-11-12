@@ -1,10 +1,10 @@
 package repo
 
 import (
-	commonModel "common/pkg/model"
 	"context"
+	"user/internal/biz/model"
 )
 
 type IPClient interface {
-	Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error)
+	Resolve(ctx context.Context, ip string) (*model.IpInfo, error)
 }

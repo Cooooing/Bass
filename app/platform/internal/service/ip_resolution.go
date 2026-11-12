@@ -37,6 +37,7 @@ func (s *IPResolutionService) ResolveIP(ctx context.Context, req *v1.ResolveIP_R
 		return nil, err
 	}
 	return &v1.ResolveIP_Resp{
+		Ip:          info.Ip,
 		Country:     info.Country,
 		Province:    info.Province,
 		City:        info.City,

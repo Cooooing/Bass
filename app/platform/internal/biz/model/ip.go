@@ -1,5 +1,6 @@
 package model
 
+// IpInfo 是 IP 地理解析结果的领域模型。
 type IpInfo struct {
 	Ip          string `json:"ip,omitempty"`           // ip
 	Country     string `json:"country,omitempty"`      // 国家

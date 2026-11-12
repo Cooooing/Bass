@@ -30,6 +30,8 @@ message ResolveIP {
     string isp = 4;
     // 国家代码。
     string country_code = 5;
+    // 被解析的 IP 地址。
+    string ip = 6;
   }
 }
 

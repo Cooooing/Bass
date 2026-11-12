@@ -61,7 +61,7 @@ func LoadConfig[T proto.Message](bootstrapPath string, path string) (T, *common.
 		_ = c.Close()
 		return zero, nil, nil, cleanup, fmt.Errorf("config type must be pointer to proto message: %s", typ)
 	}
-	conf, ok := reflect.New(typ.Elem()).Interface().(T)
+	conf, ok := reflect.TypeAssert[T](reflect.New(typ.Elem()))
 	if !ok {
 		_ = c.Close()
 		return zero, nil, nil, cleanup, fmt.Errorf("config type %s does not implement proto.Message", typ)

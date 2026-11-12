@@ -22,7 +22,7 @@ func NewArticleWatchCreatedHandler(
 	contentClient repo.ContentClient,
 	notifyUsecase *usecase.NotifyUsecase,
 ) *ArticleWatchCreatedHandler {
-	return &ArticleWatchCreatedHandler{articleActorHandler: articleActorHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}}
+	return &ArticleWatchCreatedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*ArticleWatchCreatedHandler) Templates() []*model.NotificationTemplateDefinition {

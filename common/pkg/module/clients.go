@@ -42,14 +42,14 @@ func (c *Clients) ResolveClient(target reflect.Type) (any, bool) {
 	return nil, false
 }
 
-// Client 按类型返回本地客户端。
-func Client[T any](clients *Clients) (T, error) {
+// Client 按类型返回本地客户端，类型参数由调用方显式给出。
+func (c *Clients) Client[T any]() (T, error) {
 	var zero T
-	if clients == nil {
+	if c == nil {
 		return zero, fmt.Errorf("module clients is required")
 	}
 	target := reflect.TypeFor[T]()
-	if client, ok := clients.ResolveClient(target); ok {
+	if client, ok := c.ResolveClient(target); ok {
 		return client.(T), nil
 	}
 	return zero, fmt.Errorf("%s module client is required", target.String())

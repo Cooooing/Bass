@@ -22,7 +22,7 @@ type ArticleMentionedHandler struct {
 }
 
 func NewArticleMentionedHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleMentionedHandler {
-	return &ArticleMentionedHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &ArticleMentionedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*ArticleMentionedHandler) Templates() []*model.NotificationTemplateDefinition {

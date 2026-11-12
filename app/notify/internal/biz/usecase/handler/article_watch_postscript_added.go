@@ -21,7 +21,7 @@ type ArticleWatchPostscriptAddedHandler struct {
 }
 
 func NewArticleWatchPostscriptAddedHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleWatchPostscriptAddedHandler {
-	return &ArticleWatchPostscriptAddedHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &ArticleWatchPostscriptAddedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*ArticleWatchPostscriptAddedHandler) Templates() []*model.NotificationTemplateDefinition {

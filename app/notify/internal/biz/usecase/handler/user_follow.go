@@ -24,9 +24,7 @@ func NewUserFollowHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *UserFollowHandler {
 	return &UserFollowHandler{
-		userClientHandler: userClientHandler{
-			userClient: userClient,
-		},
+		userClient:    userClient,
 		notifyUsecase: notifyUsecase,
 	}
 }

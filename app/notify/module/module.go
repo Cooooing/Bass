@@ -74,6 +74,6 @@ func Descriptor() commonmodule.Descriptor {
 	return commonmodule.NewDescriptor(
 		Build,
 		commonmodule.WithLocalClient(rpc.NewNotifyClient),
-		commonmodule.WithMount(rpc.MountNotifyServices[commonserver.Service]),
+		commonmodule.WithMount(rpc.MountNotifyServices),
 	)
 }

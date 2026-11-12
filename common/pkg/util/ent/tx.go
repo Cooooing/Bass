@@ -155,7 +155,7 @@ func startTx[C any](ctx context.Context, starter TxStarter[C], fn func(ctx conte
 
 	if err := fn(ctx); err != nil {
 		if rbErr := tx.Rollback(); rbErr != nil {
-			return errors.Join(rbErr, fmt.Errorf("tx rollback failed: %v", err))
+			return errors.Join(rbErr, fmt.Errorf("tx rollback failed: %w", err))
 		}
 		return err
 	}

@@ -72,41 +72,43 @@ func newServiceClient[T any](consul *client.ConsulClient, service string, newFn 
 	return newFn(conn), nil
 }
 
+// 单体模式下按类型从本地客户端集合解析模块客户端。
 func ProvideLocalUserClient(clients *commonmodule.Clients) (*UserClient, error) {
-	return commonmodule.Client[*UserClient](clients)
+	return clients.Client[*UserClient]()
 }
 
 func ProvideLocalContentClient(clients *commonmodule.Clients) (*ContentClient, error) {
-	return commonmodule.Client[*ContentClient](clients)
+	return clients.Client[*ContentClient]()
 }
 
 func ProvideLocalEconomyClient(clients *commonmodule.Clients) (*EconomyClient, error) {
-	return commonmodule.Client[*EconomyClient](clients)
+	return clients.Client[*EconomyClient]()
 }
 
 func ProvideLocalIMClient(clients *commonmodule.Clients) (*IMClient, error) {
-	return commonmodule.Client[*IMClient](clients)
+	return clients.Client[*IMClient]()
 }
 
 func ProvideLocalNotifyClient(clients *commonmodule.Clients) (*NotifyClient, error) {
-	return commonmodule.Client[*NotifyClient](clients)
+	return clients.Client[*NotifyClient]()
 }
 
 func ProvideLocalPlatformClient(clients *commonmodule.Clients) (*PlatformClient, error) {
-	return commonmodule.Client[*PlatformClient](clients)
+	return clients.Client[*PlatformClient]()
 }
 
 func ProvideLocalRealtimeHubClient(clients *commonmodule.Clients) (*RealtimeHubClient, error) {
-	return commonmodule.Client[*RealtimeHubClient](clients)
+	return clients.Client[*RealtimeHubClient]()
 }
 
 func ProvideLocalSchedulerClient(clients *commonmodule.Clients) (*SchedulerClient, error) {
-	return commonmodule.Client[*SchedulerClient](clients)
+	return clients.Client[*SchedulerClient]()
 }
 
 func ProvideLocalGameIdleClient(clients *commonmodule.Clients) (*GameIdleClient, error) {
-	return commonmodule.Client[*GameIdleClient](clients)
+	return clients.Client[*GameIdleClient]()
 }
+
 func ProvideLocalBadgeClient(clients *commonmodule.Clients) (*BadgeClient, error) {
-	return commonmodule.Client[*BadgeClient](clients)
+	return clients.Client[*BadgeClient]()
 }

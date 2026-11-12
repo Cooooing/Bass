@@ -20,7 +20,7 @@ type ArticleWatchPollEndedHandler struct {
 }
 
 func NewArticleWatchPollEndedHandler(contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleWatchPollEndedHandler {
-	return &ArticleWatchPollEndedHandler{contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &ArticleWatchPollEndedHandler{contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 func (*ArticleWatchPollEndedHandler) Templates() []*model.NotificationTemplateDefinition {
 	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleWatchedPollEnded, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_poll_ended.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_poll_ended.zh_CN.content.txt")}}}

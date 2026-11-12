@@ -162,7 +162,7 @@ func SetupTracing(ctx context.Context, serviceName string, version string, trace
 
 func (o *Observer) ServerMiddleware() middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return func(ctx context.Context, req any) (any, error) {
 			start := time.Now()
 			transportKind := "unknown"
 			operation := "unknown"
@@ -242,7 +242,7 @@ func (o *Observer) ClientMiddleware(target string) middleware.Middleware {
 		target = "unknown"
 	}
 	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return func(ctx context.Context, req any) (any, error) {
 			start := time.Now()
 			transportKind := "unknown"
 			operation := "unknown"

@@ -22,7 +22,7 @@ type ArticleLotteryWonHandler struct {
 }
 
 func NewArticleLotteryWonHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleLotteryWonHandler {
-	return &ArticleLotteryWonHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &ArticleLotteryWonHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*ArticleLotteryWonHandler) Templates() []*model.NotificationTemplateDefinition {

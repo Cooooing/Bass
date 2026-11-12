@@ -26,9 +26,9 @@ func NewArticleWatchCommentPublishedHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *ArticleWatchCommentPublishedHandler {
 	return &ArticleWatchCommentPublishedHandler{
-		userClientHandler:    userClientHandler{userClient: userClient},
-		contentClientHandler: contentClientHandler{contentClient: contentClient},
-		notifyUsecase:        notifyUsecase,
+		userClient:    userClient,
+		contentClient: contentClient,
+		notifyUsecase: notifyUsecase,
 	}
 }
 

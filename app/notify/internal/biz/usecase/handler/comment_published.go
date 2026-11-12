@@ -26,12 +26,8 @@ func NewCommentPublishedHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *CommentPublishedHandler {
 	return &CommentPublishedHandler{
-		userClientHandler: userClientHandler{
-			userClient: userClient,
-		},
-		contentClientHandler: contentClientHandler{
-			contentClient: contentClient,
-		},
+		userClient:    userClient,
+		contentClient: contentClient,
 		notifyUsecase: notifyUsecase,
 	}
 }

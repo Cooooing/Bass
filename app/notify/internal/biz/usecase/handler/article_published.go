@@ -26,12 +26,8 @@ func NewArticlePublishedHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *ArticlePublishedHandler {
 	return &ArticlePublishedHandler{
-		userClientHandler: userClientHandler{
-			userClient: userClient,
-		},
-		contentClientHandler: contentClientHandler{
-			contentClient: contentClient,
-		},
+		userClient:    userClient,
+		contentClient: contentClient,
 		notifyUsecase: notifyUsecase,
 	}
 }

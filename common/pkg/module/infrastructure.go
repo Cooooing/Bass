@@ -4,6 +4,7 @@ import (
 	commonclient "common/pkg/client"
 	"fmt"
 	"log/slog"
+	"slices"
 
 	"github.com/google/wire"
 )
@@ -31,8 +32,8 @@ func NewInfrastructure(logger *slog.Logger, config *RuntimeConfig) (*Infrastruct
 	observer := commonclient.NewObservability(logger, config.Server)
 	var cleanups []func()
 	cleanup := func() {
-		for i := len(cleanups) - 1; i >= 0; i-- {
-			cleanups[i]()
+		for _, cleanup := range slices.Backward(cleanups) {
+			cleanup()
 		}
 	}
 

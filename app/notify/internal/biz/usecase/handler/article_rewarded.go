@@ -19,7 +19,7 @@ type ArticleRewardedHandler struct {
 }
 
 func NewArticleRewardedHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleRewardedHandler {
-	return &ArticleRewardedHandler{articleActorHandler: articleActorHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}}
+	return &ArticleRewardedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (h *ArticleRewardedHandler) Templates() []*model.NotificationTemplateDefinition {

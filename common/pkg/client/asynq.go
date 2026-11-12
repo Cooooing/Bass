@@ -148,23 +148,23 @@ type asynqSlogLogger struct {
 	logger *slog.Logger
 }
 
-func (l *asynqSlogLogger) Debug(args ...interface{}) {
+func (l *asynqSlogLogger) Debug(args ...any) {
 	l.logger.Debug(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Info(args ...interface{}) {
+func (l *asynqSlogLogger) Info(args ...any) {
 	l.logger.Info(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Warn(args ...interface{}) {
+func (l *asynqSlogLogger) Warn(args ...any) {
 	l.logger.Warn(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Error(args ...interface{}) {
+func (l *asynqSlogLogger) Error(args ...any) {
 	l.logger.Error(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Fatal(args ...interface{}) {
+func (l *asynqSlogLogger) Fatal(args ...any) {
 	l.logger.Error(fmt.Sprint(args...))
 	os.Exit(1)
 }

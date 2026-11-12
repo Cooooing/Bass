@@ -46,7 +46,7 @@ func (f *HandlerFactory[T]) BuildChainByNames(names []string) (Handler[T], error
 	}
 
 	// 构建链条
-	for i := 0; i < len(handlers)-1; i++ {
+	for i := range len(handlers) - 1 {
 		handlers[i].SetNext(handlers[i+1])
 	}
 	return handlers[0], nil

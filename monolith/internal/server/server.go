@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	monolithmodule "monolith/internal/module"
+	"slices"
 
 	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -57,8 +58,8 @@ func (s *internalServer) Stop(ctx context.Context) error {
 
 func (s *internalServer) stopStarted(ctx context.Context) error {
 	var err error
-	for i := len(s.started) - 1; i >= 0; i-- {
-		if stopErr := s.started[i].Stop(ctx); stopErr != nil {
+	for _, v := range slices.Backward(s.started) {
+		if stopErr := v.Stop(ctx); stopErr != nil {
 			err = errors.Join(err, stopErr)
 		}
 	}

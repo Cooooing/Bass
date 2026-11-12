@@ -54,5 +54,5 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 }
 
 func Descriptor() commonmodule.Descriptor {
-	return commonmodule.NewDescriptor(Build, commonmodule.WithLocalClient(rpc.NewBadgeClient), commonmodule.WithMount(rpc.MountBadgeServices[server.Service]))
+	return commonmodule.NewDescriptor(Build, commonmodule.WithLocalClient(rpc.NewBadgeClient), commonmodule.WithMount(rpc.MountBadgeServices))
 }

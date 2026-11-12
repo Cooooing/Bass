@@ -33,8 +33,8 @@ func NewContentArticleClient(
 	userClient *rpc.UserClient,
 ) repo.ContentArticleClient {
 	return &ContentArticleClient{
-		accountProfileLoader: accountProfileLoader{userClient: userClient},
-		contentClient:        contentClient,
+		userClient:    userClient,
+		contentClient: contentClient,
 	}
 }
 

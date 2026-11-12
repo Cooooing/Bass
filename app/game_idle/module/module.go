@@ -90,6 +90,6 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 func Descriptor() commonmodule.Descriptor {
 	return commonmodule.NewDescriptor(
 		Build,
-		commonmodule.WithMount(rpc.MountGameIdleServices[commonserver.Service]),
+		commonmodule.WithMount(rpc.MountGameIdleServices),
 	)
 }

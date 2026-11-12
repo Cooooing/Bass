@@ -21,7 +21,7 @@ type GlobalChatMentionedHandler struct {
 }
 
 func NewGlobalChatMentionedHandler(userClient repo.UserAccountRepo, notifyUsecase *usecase.NotifyUsecase) *GlobalChatMentionedHandler {
-	return &GlobalChatMentionedHandler{userClientHandler: userClientHandler{userClient: userClient}, notifyUsecase: notifyUsecase}
+	return &GlobalChatMentionedHandler{userClient: userClient, notifyUsecase: notifyUsecase}
 }
 
 func (*GlobalChatMentionedHandler) Templates() []*model.NotificationTemplateDefinition {

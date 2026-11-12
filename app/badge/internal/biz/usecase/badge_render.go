@@ -343,7 +343,8 @@ func (*BadgeRenderUsecase) scale(value, fallback uint32, scale float64) uint32 {
 func (u *BadgeRenderUsecase) background(value string, image [3]uint8) (string, [3]uint8) {
 	if value != "" && !strings.EqualFold(value, "auto") {
 		colors := u.colors(value)
-		return strings.Join(colors, ", "), u.hex(strings.Split(value, ",")[0])
+		first, _, _ := strings.Cut(value, ",")
+		return strings.Join(colors, ", "), u.hex(first)
 	}
 	if image == [3]uint8{} {
 		image = [3]uint8{0, 123, 255}

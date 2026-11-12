@@ -470,7 +470,7 @@ func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler Message
 	if err = handler(ctx, msg); err != nil {
 		if msg.Nack != nil {
 			if nackErr := msg.Nack(); nackErr != nil {
-				err = fmt.Errorf("%w; nack: %v", err, nackErr)
+				err = fmt.Errorf("%w; nack: %w", err, nackErr)
 			}
 		}
 		return

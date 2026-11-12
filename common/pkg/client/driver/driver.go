@@ -276,15 +276,15 @@ func init() {
 		return
 	}
 	name := fn.Name()
-	if idx := strings.LastIndex(name, "."); idx >= 0 {
-		selfPkg = name[:idx]
+	if pkg, _, ok := strings.CutLast(name, "."); ok {
+		selfPkg = pkg
 	}
 }
 
 func findCaller() (callerInfo, bool) {
 	var pcs [32]uintptr
 	n := runtime.Callers(2, pcs[:])
-	for i := 0; i < n; i++ {
+	for i := range n {
 		pc := pcs[i]
 		if v, ok := callerCache.Load(pc); ok {
 			return v.(callerInfo), true

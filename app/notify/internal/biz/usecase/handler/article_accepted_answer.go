@@ -23,9 +23,9 @@ type ArticleAcceptedAnswerHandler struct {
 
 func NewArticleAcceptedAnswerHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleAcceptedAnswerHandler {
 	return &ArticleAcceptedAnswerHandler{
-		userClientHandler:    userClientHandler{userClient: userClient},
-		contentClientHandler: contentClientHandler{contentClient: contentClient},
-		notifyUsecase:        notifyUsecase,
+		userClient:    userClient,
+		contentClient: contentClient,
+		notifyUsecase: notifyUsecase,
 	}
 }
 

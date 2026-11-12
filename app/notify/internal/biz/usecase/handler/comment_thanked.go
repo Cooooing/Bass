@@ -21,7 +21,7 @@ type CommentThankedHandler struct {
 }
 
 func NewCommentThankedHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *CommentThankedHandler {
-	return &CommentThankedHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &CommentThankedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*CommentThankedHandler) Templates() []*model.NotificationTemplateDefinition {

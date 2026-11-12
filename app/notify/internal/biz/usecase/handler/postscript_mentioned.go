@@ -22,7 +22,7 @@ type PostscriptMentionedHandler struct {
 }
 
 func NewPostscriptMentionedHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *PostscriptMentionedHandler {
-	return &PostscriptMentionedHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &PostscriptMentionedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*PostscriptMentionedHandler) Templates() []*model.NotificationTemplateDefinition {

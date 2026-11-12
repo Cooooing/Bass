@@ -56,6 +56,6 @@ func Descriptor() commonmodule.Descriptor {
 	return commonmodule.NewDescriptor(
 		Build,
 		commonmodule.WithLocalClient(rpc.NewEconomyClient),
-		commonmodule.WithMount(rpc.MountEconomyServices[server.Service]),
+		commonmodule.WithMount(rpc.MountEconomyServices),
 	)
 }

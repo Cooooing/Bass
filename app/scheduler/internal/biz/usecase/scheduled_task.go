@@ -265,13 +265,11 @@ func (u *ScheduledTaskUsecase) Page(ctx context.Context, req *ScheduledTaskPageR
 		req = &ScheduledTaskPageReq{}
 	}
 	pageResp, err := u.scheduledTaskRepo.Page(ctx, &repo.ScheduledTaskPageReq{
-		Page: req.Page,
-		ScheduledTaskGetReq: repo.ScheduledTaskGetReq{
-			IDs:         req.IDs,
-			HandlerName: req.HandlerName,
-			Title:       req.Title,
-			Enabled:     req.Enabled,
-		},
+		Page:        req.Page,
+		IDs:         req.IDs,
+		HandlerName: req.HandlerName,
+		Title:       req.Title,
+		Enabled:     req.Enabled,
 	})
 	if err != nil {
 		return nil, err
@@ -318,13 +316,11 @@ func (u *ScheduledTaskUsecase) PageExecutionRecords(ctx context.Context, req *Sc
 		req = &ScheduledTaskExecutionRecordPageReq{}
 	}
 	pageResp, err := u.scheduledTaskExecutionRecordRepo.Page(ctx, &repo.ScheduledTaskExecutionRecordPageReq{
-		Page: req.Page,
-		ScheduledTaskExecutionRecordGetReq: repo.ScheduledTaskExecutionRecordGetReq{
-			IDs:             req.IDs,
-			ScheduledTaskID: req.ScheduledTaskID,
-			Status:          req.Status,
-			TriggerType:     req.TriggerType,
-		},
+		Page:            req.Page,
+		IDs:             req.IDs,
+		ScheduledTaskID: req.ScheduledTaskID,
+		Status:          req.Status,
+		TriggerType:     req.TriggerType,
 	})
 	if err != nil {
 		return nil, err

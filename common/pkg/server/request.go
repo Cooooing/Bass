@@ -16,7 +16,7 @@ func ClientIP(ctx context.Context) string {
 		}
 	}
 	for _, header := range [...]string{constant.HeaderForwardedFor, constant.HeaderRealIP, constant.HeaderClientIP} {
-		for _, item := range strings.Split(GetHeader(ctx, header), ",") {
+		for item := range strings.SplitSeq(GetHeader(ctx, header), ",") {
 			if ip := strings.TrimSpace(item); ip != "" {
 				return ip
 			}

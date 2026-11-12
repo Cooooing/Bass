@@ -2,7 +2,6 @@ package server
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -30,7 +29,7 @@ func ProtoJSONRequestDecoder(r *http.Request, v any) error {
 		return nil
 	}
 	if err := (protojson.UnmarshalOptions{DiscardUnknown: true}).Unmarshal(data, message); err != nil {
-		return kratoserrors.BadRequest("CODEC", fmt.Sprintf("body unmarshal %s", err.Error()))
+		return kratoserrors.BadRequest("CODEC", "body unmarshal "+err.Error())
 	}
 	return nil
 }

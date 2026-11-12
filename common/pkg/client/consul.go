@@ -130,7 +130,7 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 	defer cancel()
 
 	conn, err := kgrpc.NewClient(ctx,
-		kgrpc.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
+		kgrpc.WithEndpoint("discovery:///"+service),
 		kgrpc.WithDiscovery(c.reg),
 		kgrpc.WithTimeout(c.conf.DialTimeout.AsDuration()),
 		kgrpc.WithOptions(
@@ -181,7 +181,7 @@ func (c *ConsulClient) GetHealthyGRPCEndpoint(service string) (string, error) {
 			return parsed.Host, nil
 		}
 		if grpcAddress.Port > 0 {
-			return net.JoinHostPort(strings.TrimPrefix(grpcAddress.Address, "grpc://"), fmt.Sprint(grpcAddress.Port)), nil
+			return net.JoinHostPort(strings.TrimPrefix(grpcAddress.Address, "grpc://"), strconv.Itoa(grpcAddress.Port)), nil
 		}
 		return strings.TrimPrefix(grpcAddress.Address, "grpc://"), nil
 	}
@@ -201,7 +201,7 @@ func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
 	}
 
 	cl, err := khttp.NewClient(context.Background(),
-		khttp.WithEndpoint(fmt.Sprintf("discovery:///%s", service)),
+		khttp.WithEndpoint("discovery:///"+service),
 		khttp.WithDiscovery(c.reg),
 		khttp.WithMiddleware(
 			c.observer.ClientMiddleware(service),

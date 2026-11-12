@@ -266,10 +266,9 @@ func protoInsideContract(scopes []string) bool {
 }
 
 func classifyFile(filename string) (mod, layer string) {
-	if i := strings.LastIndex(filename, "/app/"); i >= 0 {
-		rest := filename[i+len("/app/"):]
-		if j := strings.Index(rest, "/"); j > 0 {
-			mod = rest[:j]
+	if _, after, ok := strings.CutLast(filename, "/app/"); ok {
+		if first, _, found := strings.Cut(after, "/"); found && first != "" {
+			mod = first
 		}
 	}
 	return mod, internalLayer(filename, mod)

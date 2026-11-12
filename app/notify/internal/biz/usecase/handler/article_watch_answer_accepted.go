@@ -21,7 +21,7 @@ type ArticleWatchAnswerAcceptedHandler struct {
 }
 
 func NewArticleWatchAnswerAcceptedHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleWatchAnswerAcceptedHandler {
-	return &ArticleWatchAnswerAcceptedHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &ArticleWatchAnswerAcceptedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*ArticleWatchAnswerAcceptedHandler) Templates() []*model.NotificationTemplateDefinition {

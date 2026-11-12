@@ -46,7 +46,7 @@ func (g *TokenGenerator[T]) Generate(data T, expire time.Duration) (string, erro
 func (g *TokenGenerator[T]) Parse(tokenStr string) (T, error) {
 	var zero T // 泛型的零值，用于返回错误时
 
-	parsedToken, err := jwt.ParseWithClaims(tokenStr, &Claims[T]{}, func(token *jwt.Token) (interface{}, error) {
+	parsedToken, err := jwt.ParseWithClaims(tokenStr, &Claims[T]{}, func(token *jwt.Token) (any, error) {
 		// 确保签名方法正确
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])

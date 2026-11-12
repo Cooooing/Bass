@@ -74,6 +74,6 @@ func Descriptor() commonmodule.Descriptor {
 	return commonmodule.NewDescriptor(
 		Build,
 		commonmodule.WithLocalClient(rpc.NewSchedulerClient),
-		commonmodule.WithMount(rpc.MountSchedulerServices[commonserver.Service]),
+		commonmodule.WithMount(rpc.MountSchedulerServices),
 	)
 }

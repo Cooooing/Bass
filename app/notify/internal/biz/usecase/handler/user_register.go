@@ -22,9 +22,7 @@ func NewUserRegisterHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *UserRegisterHandler {
 	return &UserRegisterHandler{
-		userClientHandler: userClientHandler{
-			userClient: userClient,
-		},
+		userClient:    userClient,
 		notifyUsecase: notifyUsecase,
 	}
 }

@@ -23,15 +23,9 @@ func NewArticleThankedHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *ArticleThankedHandler {
 	return &ArticleThankedHandler{
-		articleActorHandler: articleActorHandler{
-			userClientHandler: userClientHandler{
-				userClient: userClient,
-			},
-			contentClientHandler: contentClientHandler{
-				contentClient: contentClient,
-			},
-			notifyUsecase: notifyUsecase,
-		},
+		userClient:    userClient,
+		contentClient: contentClient,
+		notifyUsecase: notifyUsecase,
 	}
 }
 

@@ -23,15 +23,9 @@ func NewArticleCollectedHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *ArticleCollectedHandler {
 	return &ArticleCollectedHandler{
-		articleActorHandler: articleActorHandler{
-			userClientHandler: userClientHandler{
-				userClient: userClient,
-			},
-			contentClientHandler: contentClientHandler{
-				contentClient: contentClient,
-			},
-			notifyUsecase: notifyUsecase,
-		},
+		userClient:    userClient,
+		contentClient: contentClient,
+		notifyUsecase: notifyUsecase,
 	}
 }
 

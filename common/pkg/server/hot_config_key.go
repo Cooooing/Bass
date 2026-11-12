@@ -10,7 +10,7 @@ import (
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
-var protoMessageType = reflect.TypeOf((*proto.Message)(nil)).Elem()
+var protoMessageType = reflect.TypeFor[proto.Message]()
 
 func (m *HotConfigManager[T]) resolveProtoHotField(field any) (protoHotResolvedField, error) {
 	if m.isNilProtoMessage(m.root) {
@@ -54,7 +54,7 @@ func (m *HotConfigManager[T]) newProtoMessageLike(root proto.Message) (proto.Mes
 	if typ.Kind() != reflect.Pointer || typ.Elem().Kind() != reflect.Struct {
 		return nil, fmt.Errorf("hot config proto root must be pointer to struct: %s", typ)
 	}
-	msg, ok := reflect.New(typ.Elem()).Interface().(proto.Message)
+	msg, ok := reflect.TypeAssert[proto.Message](reflect.New(typ.Elem()))
 	if !ok {
 		return nil, fmt.Errorf("hot config proto root %s does not implement proto.Message", typ)
 	}
@@ -111,7 +111,7 @@ func (m *HotConfigManager[T]) protoFieldName(field reflect.StructField) (string,
 	if tag == "" {
 		return "", false
 	}
-	for _, part := range strings.Split(tag, ",") {
+	for part := range strings.SplitSeq(tag, ",") {
 		if name, ok := strings.CutPrefix(part, "name="); ok && name != "" {
 			return name, true
 		}

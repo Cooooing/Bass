@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"monolith/internal/catalog"
 	"monolith/internal/config"
+	"slices"
 
 	"github.com/go-kratos/kratos/v3/middleware"
 	"github.com/go-kratos/kratos/v3/transport"
@@ -70,8 +71,8 @@ func Assemble(
 
 	var cleanups []func()
 	cleanup := func() {
-		for i := len(cleanups) - 1; i >= 0; i-- {
-			cleanups[i]()
+		for _, cleanup := range slices.Backward(cleanups) {
+			cleanup()
 		}
 	}
 	infrastructure, infrastructureCleanup, err := commonmodule.NewInfrastructure(logger, config)

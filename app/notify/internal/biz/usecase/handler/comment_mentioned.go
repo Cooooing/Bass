@@ -22,7 +22,7 @@ type CommentMentionedHandler struct {
 }
 
 func NewCommentMentionedHandler(userClient repo.UserAccountRepo, contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *CommentMentionedHandler {
-	return &CommentMentionedHandler{userClientHandler: userClientHandler{userClient: userClient}, contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &CommentMentionedHandler{userClient: userClient, contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 
 func (*CommentMentionedHandler) Templates() []*model.NotificationTemplateDefinition {

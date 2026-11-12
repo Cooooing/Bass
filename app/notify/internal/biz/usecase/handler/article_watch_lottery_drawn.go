@@ -20,7 +20,7 @@ type ArticleWatchLotteryDrawnHandler struct {
 }
 
 func NewArticleWatchLotteryDrawnHandler(contentClient repo.ContentClient, notifyUsecase *usecase.NotifyUsecase) *ArticleWatchLotteryDrawnHandler {
-	return &ArticleWatchLotteryDrawnHandler{contentClientHandler: contentClientHandler{contentClient: contentClient}, notifyUsecase: notifyUsecase}
+	return &ArticleWatchLotteryDrawnHandler{contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 func (*ArticleWatchLotteryDrawnHandler) Templates() []*model.NotificationTemplateDefinition {
 	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleWatchedLotteryDrawn, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_lottery_drawn.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_lottery_drawn.zh_CN.content.txt")}}}

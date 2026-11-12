@@ -61,7 +61,7 @@ func NewWorkerPool(
 		nonblocking: conf.Nonblocking,
 	}
 	pool.running = pool.coreSize
-	for index := 0; index < pool.coreSize; index++ {
+	for range pool.coreSize {
 		go pool.runCoreWorker()
 	}
 	return pool, func() {

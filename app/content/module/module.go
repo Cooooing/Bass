@@ -65,6 +65,6 @@ func Descriptor() commonmodule.Descriptor {
 	return commonmodule.NewDescriptor(
 		Build,
 		commonmodule.WithLocalClient(rpc.NewContentClient),
-		commonmodule.WithMount(rpc.MountContentServices[server.Service]),
+		commonmodule.WithMount(rpc.MountContentServices),
 	)
 }

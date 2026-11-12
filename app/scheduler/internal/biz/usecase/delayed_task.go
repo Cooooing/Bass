@@ -212,13 +212,11 @@ func (u *DelayedTaskUsecase) Page(ctx context.Context, req *DelayedTaskPageReq) 
 		req = &DelayedTaskPageReq{}
 	}
 	resp, err := u.repo.Page(ctx, &repo.DelayedTaskPageReq{
-		Page: req.Page,
-		DelayedTaskGetReq: repo.DelayedTaskGetReq{
-			IDs:         req.IDs,
-			HandlerName: req.HandlerName,
-			Title:       req.Title,
-			Enabled:     req.Enabled,
-		},
+		Page:        req.Page,
+		IDs:         req.IDs,
+		HandlerName: req.HandlerName,
+		Title:       req.Title,
+		Enabled:     req.Enabled,
 	})
 	if err != nil {
 		return nil, err
@@ -602,13 +600,11 @@ func (u *DelayedTaskUsecase) PageExecutionRecords(ctx context.Context, req *Dela
 		req = &DelayedTaskExecutionRecordPageReq{}
 	}
 	resp, err := u.executionRepo.Page(ctx, &repo.DelayedTaskExecutionRecordPageReq{
-		Page: req.Page,
-		DelayedTaskExecutionRecordGetReq: repo.DelayedTaskExecutionRecordGetReq{
-			DelayedTaskID:  req.DelayedTaskID,
-			IdempotencyKey: req.IdempotencyKey,
-			Status:         req.Status,
-			TriggerType:    req.TriggerType,
-		},
+		Page:           req.Page,
+		DelayedTaskID:  req.DelayedTaskID,
+		IdempotencyKey: req.IdempotencyKey,
+		Status:         req.Status,
+		TriggerType:    req.TriggerType,
 	})
 	if err != nil {
 		return nil, err

@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -67,7 +68,7 @@ func (c *LarkWebhookClient) SendText(ctx context.Context, req *LarkWebhookReques
 	}
 	if strings.TrimSpace(req.Secret) != "" {
 		timestamp := time.Now().Unix()
-		body.Timestamp = fmt.Sprintf("%d", timestamp)
+		body.Timestamp = strconv.FormatInt(timestamp, 10)
 		body.Sign = c.sign(req.Secret, timestamp)
 	}
 	payload, err := json.Marshal(body)
@@ -102,7 +103,7 @@ func (c *LarkWebhookClient) SendText(ctx context.Context, req *LarkWebhookReques
 }
 
 func (c *LarkWebhookClient) sign(secret string, timestamp int64) string {
-	stringToSign := fmt.Sprintf("%d", timestamp) + "\n" + secret
+	stringToSign := strconv.FormatInt(timestamp, 10) + "\n" + secret
 	h := hmac.New(sha256.New, []byte(stringToSign))
 	_, _ = h.Write(nil)
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))

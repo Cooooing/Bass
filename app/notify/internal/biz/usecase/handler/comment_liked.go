@@ -26,12 +26,8 @@ func NewCommentLikedHandler(
 	notifyUsecase *usecase.NotifyUsecase,
 ) *CommentLikedHandler {
 	return &CommentLikedHandler{
-		userClientHandler: userClientHandler{
-			userClient: userClient,
-		},
-		contentClientHandler: contentClientHandler{
-			contentClient: contentClient,
-		},
+		userClient:    userClient,
+		contentClient: contentClient,
 		notifyUsecase: notifyUsecase,
 	}
 }

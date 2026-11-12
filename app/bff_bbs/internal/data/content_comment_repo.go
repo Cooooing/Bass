@@ -30,7 +30,7 @@ func NewContentCommentClient(
 	userClient *rpc.UserClient,
 ) repo.ContentCommentClient {
 	return &ContentCommentClient{
-		accountProfileLoader: accountProfileLoader{userClient: userClient},
+		userClient:           userClient,
 		contentClient:        contentClient,
 		restrictionConverter: enum.NewContentRestrictionConverter(),
 	}

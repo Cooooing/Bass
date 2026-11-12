@@ -58,5 +58,5 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 }
 
 func Descriptor() commonmodule.Descriptor {
-	return commonmodule.NewDescriptor(Build, commonmodule.WithLocalClient(rpc.NewRealtimeHubClient), commonmodule.WithMount(rpc.MountRealtimeHubServices[server.Service]))
+	return commonmodule.NewDescriptor(Build, commonmodule.WithLocalClient(rpc.NewRealtimeHubClient), commonmodule.WithMount(rpc.MountRealtimeHubServices))
 }

@@ -2,21 +2,21 @@ package usecase
 
 import (
 	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	"context"
 
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/enum"
 )
 
 type ContentUsecase struct {
-	tx         base.Tx
+	tx         utilent.TxFunc
 	domainRepo repo.DomainRepo
 }
 
 func NewContentUsecase(
-	tx base.Tx,
+	tx utilent.TxFunc,
 	domainRepo repo.DomainRepo,
 ) *ContentUsecase {
 	return &ContentUsecase{

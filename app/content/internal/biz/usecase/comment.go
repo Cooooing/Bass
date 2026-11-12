@@ -2,13 +2,13 @@ package usecase
 
 import (
 	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"common/pkg/apperror"
 	commonenums "common/proto/gen/common/enums"
 
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/enum"
@@ -20,7 +20,7 @@ import (
 
 type CommentUsecase struct {
 	log *slog.Logger
-	tx  base.Tx
+	tx  utilent.TxFunc
 
 	commentRepo             repo.CommentRepo
 	commentAccessUsecase    *CommentAccessUsecase
@@ -34,7 +34,7 @@ type CommentUsecase struct {
 
 func NewCommentUsecase(
 	logger *slog.Logger,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	commentRepo repo.CommentRepo,
 	commentAccessUsecase *CommentAccessUsecase,
 	commentActionRecordRepo repo.CommentActionRecordRepo,

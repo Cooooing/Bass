@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	utilent "common/pkg/util/ent"
 	"context"
 	"log/slog"
 	"time"
@@ -9,7 +10,6 @@ import (
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/enum"
@@ -17,14 +17,14 @@ import (
 
 type PrivateChatUsecase struct {
 	log       *slog.Logger
-	tx        base.Tx
+	tx        utilent.TxFunc
 	sessions  repo.PrivateChatSessionRepo
 	messages  repo.PrivateChatMessageRepo
 	relations repo.RelationClient
 	events    repo.RealtimeEventPublisher
 }
 
-func NewPrivateChatUsecase(log *slog.Logger, tx base.Tx, sessions repo.PrivateChatSessionRepo, messages repo.PrivateChatMessageRepo, relations repo.RelationClient, events repo.RealtimeEventPublisher) *PrivateChatUsecase {
+func NewPrivateChatUsecase(log *slog.Logger, tx utilent.TxFunc, sessions repo.PrivateChatSessionRepo, messages repo.PrivateChatMessageRepo, relations repo.RelationClient, events repo.RealtimeEventPublisher) *PrivateChatUsecase {
 	return &PrivateChatUsecase{log: log, tx: tx, sessions: sessions, messages: messages, relations: relations, events: events}
 }
 

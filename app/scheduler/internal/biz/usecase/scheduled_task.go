@@ -4,6 +4,7 @@ import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	cryptorand "crypto/rand"
@@ -18,7 +19,6 @@ import (
 	"sync"
 	"time"
 
-	"scheduler/internal/biz/base"
 	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/repo"
 	taskimpl "scheduler/internal/biz/usecase/task"
@@ -33,7 +33,7 @@ type ScheduledTaskUsecase struct {
 	logger                           *slog.Logger
 	conf                             *config.Bootstrap
 	cronParser                       cron.Parser
-	tx                               base.Tx
+	tx                               utilent.TxFunc
 	scheduledTaskRepo                repo.ScheduledTaskRepo
 	scheduledTaskCacheRepo           repo.ScheduledTaskCacheRepo
 	scheduledTaskScheduleRepo        repo.ScheduledTaskScheduleRepo
@@ -50,7 +50,7 @@ type ScheduledTaskUsecase struct {
 func NewScheduledTaskUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	scheduledTaskRepo repo.ScheduledTaskRepo,
 	scheduledTaskCacheRepo repo.ScheduledTaskCacheRepo,
 	scheduledTaskScheduleRepo repo.ScheduledTaskScheduleRepo,

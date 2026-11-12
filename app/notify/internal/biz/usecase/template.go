@@ -3,6 +3,7 @@ package usecase
 import (
 	"bytes"
 	"common/pkg/enum"
+	utilent "common/pkg/util/ent"
 	"context"
 	"encoding/json"
 	"errors"
@@ -11,7 +12,6 @@ import (
 	"log/slog"
 	"sort"
 
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	notifyenum "notify/internal/enum"
@@ -19,7 +19,7 @@ import (
 
 type TemplateUsecase struct {
 	log                                 *slog.Logger
-	tx                                  base.Tx
+	tx                                  utilent.TxFunc
 	notificationRuleRepo                repo.NotificationRuleRepo
 	notificationStationTemplateRepo     repo.NotificationStationTemplateRepo
 	notificationEmailTemplateRepo       repo.NotificationEmailTemplateRepo
@@ -29,7 +29,7 @@ type TemplateUsecase struct {
 
 func NewTemplateUsecase(
 	logger *slog.Logger,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	notificationRuleRepo repo.NotificationRuleRepo,
 	notificationStationTemplateRepo repo.NotificationStationTemplateRepo,
 	notificationEmailTemplateRepo repo.NotificationEmailTemplateRepo,

@@ -31,6 +31,9 @@ const (
 // TxStarter 创建事务的函数，由各模块提供。
 type TxStarter[C any] func(ctx context.Context) (Tx[C], error)
 
+// TxFunc 在事务中执行 fn，由各模块的事务实现提供。
+type TxFunc func(ctx context.Context, fn func(ctx context.Context) error, opts ...TxOption) error
+
 // Tx 事务操作接口，各模块的 *gen.Tx 均通过 wrapper 实现。
 type Tx[C any] interface {
 	Commit() error

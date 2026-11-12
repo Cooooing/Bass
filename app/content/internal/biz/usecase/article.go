@@ -5,6 +5,7 @@ import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
+	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"errors"
@@ -18,7 +19,6 @@ import (
 	economyv1 "common/proto/gen/economy/v1"
 	economyv1enum "common/proto/gen/economy/v1/enum"
 
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/config"
@@ -32,7 +32,7 @@ import (
 type ArticleUsecase struct {
 	log  *slog.Logger
 	conf *config.Bootstrap
-	tx   base.Tx
+	tx   utilent.TxFunc
 
 	articleRepo          repo.ArticleRepo
 	actionRecordRepo     repo.ArticleActionRecordRepo
@@ -57,7 +57,7 @@ type ArticleUsecase struct {
 func NewArticleUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	articleRepo repo.ArticleRepo,
 	actionRecordRepo repo.ArticleActionRecordRepo,
 	commentRepo repo.CommentRepo,

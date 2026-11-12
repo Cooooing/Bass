@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	"common/pkg/util/str"
 	commonerrors "common/proto/gen/common/errors"
 	"context"
@@ -11,7 +12,6 @@ import (
 	"strings"
 
 	"image/png"
-	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"
@@ -22,7 +22,7 @@ import (
 
 type AccountUsecase struct {
 	conf            *config.Bootstrap
-	tx              base.Tx
+	tx              utilent.TxFunc
 	accountRepo     repo.AccountRepo
 	preferencesRepo repo.PreferencesRepo
 	authCacheRepo   repo.AuthCacheRepo
@@ -34,7 +34,7 @@ type AccountUsecase struct {
 func NewAccountUsecase(
 	conf *config.Bootstrap,
 	logger *slog.Logger,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	accountRepo repo.AccountRepo,
 	preferencesRepo repo.PreferencesRepo,
 	authCacheRepo repo.AuthCacheRepo,

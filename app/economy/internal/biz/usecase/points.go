@@ -3,11 +3,11 @@ package usecase
 import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"strings"
 
-	"economy/internal/biz/base"
 	"economy/internal/biz/model"
 	"economy/internal/biz/repo"
 	"economy/internal/enum"
@@ -16,13 +16,13 @@ import (
 )
 
 type PointsUsecase struct {
-	tx                     base.Tx
+	tx                     utilent.TxFunc
 	accountRepo            repo.AccountRepo
 	recordRepo             repo.RecordRepo
-	transactionNoGenerator base.TransactionNoGenerator
+	transactionNoGenerator repo.TransactionNoGenerator
 }
 
-func NewPointsUsecase(tx base.Tx, accountRepo repo.AccountRepo, recordRepo repo.RecordRepo, transactionNoGenerator base.TransactionNoGenerator) *PointsUsecase {
+func NewPointsUsecase(tx utilent.TxFunc, accountRepo repo.AccountRepo, recordRepo repo.RecordRepo, transactionNoGenerator repo.TransactionNoGenerator) *PointsUsecase {
 	return &PointsUsecase{tx: tx, accountRepo: accountRepo, recordRepo: recordRepo, transactionNoGenerator: transactionNoGenerator}
 }
 

@@ -4,7 +4,6 @@ import (
 	utilent "common/pkg/util/ent"
 	"context"
 
-	"notify/internal/biz/base"
 	"notify/internal/data/gen"
 )
 
@@ -24,7 +23,7 @@ func (w *genTxWrapper) Client() *gen.Client {
 
 func ProvideTx(
 	db *gen.Client,
-) base.Tx {
+) utilent.TxFunc {
 	starter := func(ctx context.Context) (utilent.Tx[*gen.Client], error) {
 		tx, err := db.Tx(ctx)
 		if err != nil {

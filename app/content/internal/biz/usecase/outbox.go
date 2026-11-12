@@ -2,18 +2,18 @@ package usecase
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	"context"
 	"log/slog"
 	"math"
 	"time"
 
-	"content/internal/biz/base"
 	"content/internal/biz/repo"
 )
 
 type OutboxUsecase struct {
 	logger         *slog.Logger
-	tx             base.Tx
+	tx             utilent.TxFunc
 	outboxRepo     repo.OutboxEventRepo
 	eventClient    repo.EventClient
 	defaultLimit   int
@@ -23,7 +23,7 @@ type OutboxUsecase struct {
 
 func NewOutboxUsecase(
 	logger *slog.Logger,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	outboxRepo repo.OutboxEventRepo,
 	eventClient repo.EventClient,
 ) *OutboxUsecase {

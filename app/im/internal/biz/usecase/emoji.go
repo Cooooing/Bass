@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	utilent "common/pkg/util/ent"
 	"context"
 	cryptorand "crypto/rand"
 	"encoding/base64"
@@ -11,7 +12,6 @@ import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/config"
@@ -19,7 +19,7 @@ import (
 
 // EmojiUsecase 管理账号表情分组及临时分享快照。
 type EmojiUsecase struct {
-	tx       base.Tx
+	tx       utilent.TxFunc
 	groups   repo.EmojiGroupRepo
 	assets   repo.EmojiAssetClient
 	shares   repo.EmojiShareCache
@@ -27,7 +27,7 @@ type EmojiUsecase struct {
 }
 
 func NewEmojiUsecase(
-	tx base.Tx,
+	tx utilent.TxFunc,
 	groups repo.EmojiGroupRepo,
 	assets repo.EmojiAssetClient,
 	shares repo.EmojiShareCache,

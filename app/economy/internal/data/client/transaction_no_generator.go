@@ -5,7 +5,7 @@ import (
 	"hash/crc32"
 	"os"
 
-	"economy/internal/biz/base"
+	"economy/internal/biz/repo"
 
 	"github.com/sony/sonyflake/v2"
 )
@@ -14,7 +14,7 @@ type SonyflakeTransactionNoGenerator struct {
 	sonyflake *sonyflake.Sonyflake
 }
 
-func NewTransactionNoGenerator() (base.TransactionNoGenerator, error) {
+func NewTransactionNoGenerator() (repo.TransactionNoGenerator, error) {
 	sonyflake, err := sonyflake.New(sonyflake.Settings{
 		MachineID: func() (int, error) {
 			hostname, err := os.Hostname()

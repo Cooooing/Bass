@@ -5,6 +5,7 @@ import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
 	commonModel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	"common/pkg/util/str"
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
@@ -12,7 +13,6 @@ import (
 	"strings"
 	"time"
 
-	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"
@@ -28,7 +28,7 @@ import (
 type AuthUsecase struct {
 	conf              *config.Bootstrap
 	logger            *slog.Logger
-	tx                base.Tx
+	tx                utilent.TxFunc
 	accountRepo       repo.AccountRepo
 	prefsRepo         repo.PreferencesRepo
 	loginLogRepo      repo.LoginLogRepo
@@ -49,7 +49,7 @@ type AuthUsecase struct {
 func NewAuthUsecase(
 	conf *config.Bootstrap,
 	logger *slog.Logger,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	accountRepo repo.AccountRepo,
 	prefsRepo repo.PreferencesRepo,
 	loginLogRepo repo.LoginLogRepo,

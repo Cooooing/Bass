@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	utilent "common/pkg/util/ent"
 	"context"
 	"log/slog"
 
@@ -8,7 +9,6 @@ import (
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/enum"
@@ -16,7 +16,7 @@ import (
 
 type PostscriptUsecase struct {
 	log *slog.Logger
-	tx  base.Tx
+	tx  utilent.TxFunc
 
 	articleRepo    repo.ArticleRepo
 	postscriptRepo repo.PostscriptRepo
@@ -26,7 +26,7 @@ type PostscriptUsecase struct {
 
 func NewPostscriptUsecase(
 	logger *slog.Logger,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	articleRepo repo.ArticleRepo,
 	postscriptRepo repo.PostscriptRepo,
 	outboxRepo repo.OutboxEventRepo,

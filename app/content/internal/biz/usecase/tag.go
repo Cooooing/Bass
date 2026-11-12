@@ -2,12 +2,12 @@ package usecase
 
 import (
 	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"common/pkg/apperror"
 
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/enum"
@@ -16,13 +16,13 @@ import (
 )
 
 type TagUsecase struct {
-	tx          base.Tx
+	tx          utilent.TxFunc
 	tagRepo     repo.TagRepo
 	articleRepo repo.ArticleRepo
 }
 
 func NewTagUsecase(
-	tx base.Tx,
+	tx utilent.TxFunc,
 	tagRepo repo.TagRepo,
 	articleRepo repo.ArticleRepo,
 ) *TagUsecase {

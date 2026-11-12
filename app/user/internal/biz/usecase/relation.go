@@ -3,6 +3,7 @@ package usecase
 import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"log/slog"
@@ -10,7 +11,6 @@ import (
 	"common/pkg/apperror"
 	commonenums "common/proto/gen/common/enums"
 
-	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/enum"
@@ -18,7 +18,7 @@ import (
 
 type RelationUsecase struct {
 	logger        *slog.Logger
-	tx            base.Tx
+	tx            utilent.TxFunc
 	relationRepo  repo.RelationRepo
 	accountRepo   repo.AccountRepo
 	outboxRepo    repo.OutboxEventRepo
@@ -27,7 +27,7 @@ type RelationUsecase struct {
 
 func NewRelationUsecase(
 	logger *slog.Logger,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	relationRepo repo.RelationRepo,
 	accountRepo repo.AccountRepo,
 	outboxRepo repo.OutboxEventRepo,

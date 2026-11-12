@@ -4,7 +4,6 @@ import (
 	utilent "common/pkg/util/ent"
 	"context"
 
-	"im/internal/biz/base"
 	"im/internal/data/gen"
 )
 
@@ -14,7 +13,7 @@ func (w *txWrapper) Commit() error       { return w.tx.Commit() }
 func (w *txWrapper) Rollback() error     { return w.tx.Rollback() }
 func (w *txWrapper) Client() *gen.Client { return w.tx.Client() }
 
-func ProvideTx(db *gen.Client) base.Tx {
+func ProvideTx(db *gen.Client) utilent.TxFunc {
 	starter := func(ctx context.Context) (utilent.Tx[*gen.Client], error) {
 		tx, err := db.Tx(ctx)
 		if err != nil {

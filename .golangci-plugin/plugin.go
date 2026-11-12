@@ -315,8 +315,6 @@ func internalLayer(path, mod string) string {
 		return "config"
 	case path == "biz/model" || strings.HasPrefix(path, "biz/model/"):
 		return "biz/model"
-	case path == "biz/base" || strings.HasPrefix(path, "biz/base/"):
-		return "biz/base"
 	case path == "biz/repo" || strings.HasPrefix(path, "biz/repo/"):
 		return "biz/repo"
 	case path == "biz/usecase" || strings.HasPrefix(path, "biz/usecase/"):
@@ -343,11 +341,10 @@ var allowedLayers = map[string]map[string]bool{
 	"enum":        {"enum": true},
 	"config":      {"config": true, "enum": true},
 	"biz/model":   {"biz/model": true, "config": true, "enum": true},
-	"biz/base":    {"biz/base": true, "config": true, "enum": true},
 	"biz/repo":    {"biz/repo": true, "biz/model": true, "config": true, "enum": true},
-	"biz/usecase": {"biz/usecase": true, "biz/base": true, "biz/repo": true, "biz/model": true, "config": true, "enum": true},
+	"biz/usecase": {"biz/usecase": true, "biz/repo": true, "biz/model": true, "config": true, "enum": true},
 	"biz":         {"biz": true, "biz/usecase": true, "config": true, "enum": true},
-	"data":        {"data": true, "biz/base": true, "biz/repo": true, "biz/model": true, "config": true, "enum": true},
+	"data":        {"data": true, "biz/repo": true, "biz/model": true, "config": true, "enum": true},
 	"service":     {"service": true, "biz/usecase": true, "biz/model": true, "config": true, "enum": true},
 	"server":      {"server": true, "biz": true, "biz/usecase": true, "config": true},
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"common/pkg/apperror"
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -11,7 +12,6 @@ import (
 	"time"
 
 	"image/png"
-	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"
@@ -23,7 +23,7 @@ type TotpUsecase struct {
 	logger          *slog.Logger
 	conf            *config.Bootstrap
 	totpSecretCache repo.TotpSecretCache
-	tx              base.Tx
+	tx              utilent.TxFunc
 	totpRepo        repo.TotpRepo
 	outboxRepo      repo.OutboxEventRepo
 	outboxUsecase   *OutboxUsecase
@@ -33,7 +33,7 @@ func NewTotpUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
 	totpSecretCache repo.TotpSecretCache,
-	tx base.Tx,
+	tx utilent.TxFunc,
 	totpRepo repo.TotpRepo,
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,

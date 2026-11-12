@@ -2,7 +2,7 @@ package repo
 
 import (
 	"context"
-	"encoding/json"
+	jsonv2 "encoding/json/v2"
 	"fmt"
 	"net/http"
 	"time"
@@ -86,7 +86,8 @@ func (c *HolidayClient) getJSON(ctx context.Context, path string, target any) (e
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return fmt.Errorf("request holiday %s: status %d", path, resp.StatusCode)
 	}
-	if err = json.NewDecoder(resp.Body).Decode(target); err != nil {
+	// jsonv2 严格校验 UTF-8 并拒绝重复键，畸形响应返回错误。
+	if err = jsonv2.UnmarshalRead(resp.Body, target); err != nil {
 		return fmt.Errorf("decode holiday %s: %w", path, err)
 	}
 	return nil

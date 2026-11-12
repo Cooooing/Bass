@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bytes"
 	"common/pkg/apperror"
 	"common/pkg/client"
 	"common/pkg/constant"
@@ -12,6 +13,8 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"encoding/json"
+	"encoding/json/jsontext"
+	jsonv2 "encoding/json/v2"
 	"log/slog"
 	"net"
 	"net/http"
@@ -59,19 +62,34 @@ func HttpRespEncoder(w http.ResponseWriter, r *http.Request, data any) error {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
 		result := NewResult[json.RawMessage](int(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_SUCCESS), "success", b)
-		return json.NewEncoder(w).Encode(result)
+		return encodeJSONResponse(w, http.StatusOK, result)
 	}
 
 	if w.Header().Get("Content-Type") != "" && w.Header().Get("Content-Type") != "application/json" {
 		return nil
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	result := NewResult[any](int(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_SUCCESS), "success", data)
-	return json.NewEncoder(w).Encode(result)
+	return encodeJSONResponse(w, http.StatusOK, result)
+}
+
+// encodeJSONResponse 使用 encoding/json/v2 编码响应体，并以 statusCode 写出。
+//
+// 采用 v2 原生语义：
+//   - <, >, & 按原字符输出，不做 \u003c 形式转义
+//   - 字符串必须为合法 UTF-8，非法字节返回错误
+//
+// 响应先编码到内存，成功后再写状态码，避免 v2 编码中途失败时留下残缺 JSON。
+func encodeJSONResponse(w http.ResponseWriter, statusCode int, result any) error {
+	var buf bytes.Buffer
+	if err := jsonv2.MarshalEncode(jsontext.NewEncoder(&buf), result); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	_, err := w.Write(buf.Bytes())
+	return err
 }
 
 func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string) func(w http.ResponseWriter, r *http.Request, err error) {
@@ -116,9 +134,9 @@ func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCo
 		}
 		kratoslog.ErrorContext(r.Context(), "http error", logArgs...)
 
-		w.WriteHeader(statusCode)
 		res := NewResult[any](int(businessCode), message, errorData)
-		_ = json.NewEncoder(w).Encode(res)
+
+		_ = encodeJSONResponse(w, statusCode, res)
 	}
 }
 
@@ -134,7 +152,7 @@ func HTTPTraceMiddleware() kratoshttp.FilterFunc {
 			r.Header.Set(constant.HeaderRequestID, requestID)
 			clientIP := ""
 			for _, header := range [...]string{constant.HeaderForwardedFor, constant.HeaderRealIP, constant.HeaderClientIP} {
-				for _, item := range strings.Split(r.Header.Get(header), ",") {
+				for item := range strings.SplitSeq(r.Header.Get(header), ",") {
 					if ip := strings.TrimSpace(item); ip != "" {
 						clientIP = ip
 						break
@@ -250,7 +268,7 @@ func HTTPCORSFilter() kratoshttp.FilterFunc {
 
 func TimestampMiddleware(mode string) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return func(ctx context.Context, req any) (any, error) {
 			if mode == constant.Dev {
 				return handler(ctx, req)
 			}
@@ -263,7 +281,7 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNAUTHORIZED)
 			}
 
-			diff := time.Now().Sub(time.UnixMilli(timestamp))
+			diff := time.Since(time.UnixMilli(timestamp))
 			if diff < 0 {
 				diff = -diff
 			}
@@ -278,7 +296,7 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 
 func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return func(ctx context.Context, req any) (any, error) {
 			if mode == constant.Dev {
 				return handler(ctx, req)
 			}
@@ -299,7 +317,7 @@ func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Mi
 
 func RequestLogContextMiddleware() middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return func(ctx context.Context, req any) (any, error) {
 			attrs := make([]slog.Attr, 0, 2)
 			if requestID := GetHeader(ctx, constant.HeaderRequestID); requestID != "" {
 				attrs = append(attrs, slog.String(constant.LogFieldRequestID, requestID))
@@ -317,7 +335,7 @@ func RequestLogContextMiddleware() middleware.Middleware {
 
 func UserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.LoginRealm) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return func(ctx context.Context, req any) (any, error) {
 			const bearerPrefix = "Bearer "
 			token := GetHeader(ctx, constant.HeaderAuthentication)
 
@@ -359,7 +377,7 @@ func UserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.Lo
 
 func OptionalUserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.LoginRealm) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
+		return func(ctx context.Context, req any) (any, error) {
 			bearerPrefix := "Bearer "
 			token := GetHeader(ctx, constant.HeaderAuthentication)
 			if token == "" {

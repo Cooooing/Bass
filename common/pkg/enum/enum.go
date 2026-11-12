@@ -35,12 +35,6 @@ func (m *Mapping[E, P]) ToEnum(v P) (E, bool) {
 	return val, ok
 }
 
-// MustToEnum 将 proto 枚举值转换为内部枚举值；未知值返回零值。
-func (m *Mapping[E, P]) MustToEnum(v P) E {
-	val, _ := m.fromProto[v]
-	return val
-}
-
 // ToProto 将内部枚举值转换为 proto 枚举值。
 func (m *Mapping[E, P]) ToProto(v E) (P, bool) {
 	val, ok := m.toProto[v]
@@ -54,5 +48,7 @@ func (m *Mapping[E, P]) MustToProto(v E) P {
 
 // EnumValues 返回所有有效的内部枚举字符串值。
 func (m *Mapping[E, P]) EnumValues() []string {
-	return m.values
+	values := make([]string, len(m.values))
+	copy(values, m.values)
+	return values
 }

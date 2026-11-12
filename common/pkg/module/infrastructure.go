@@ -21,7 +21,6 @@ var InfrastructureProviderSet = wire.NewSet(
 	ProvideObserver,
 	ProvideRedisClient,
 	ProvideNatsClient,
-	commonclient.NewRedisLock,
 )
 
 // NewInfrastructure 按需创建单体共享基础设施客户端。

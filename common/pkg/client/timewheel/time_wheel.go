@@ -212,19 +212,3 @@ func (w *TimeWheel) Len() int {
 	defer w.mutex.Unlock()
 	return len(w.tasks)
 }
-
-// DelayTicks 将任务到期时间转换成相对当前时间轮的 tick 偏移。
-func (w *TimeWheel) DelayTicks(dueAt time.Time) int64 {
-	w.mutex.Lock()
-	defer w.mutex.Unlock()
-
-	if !dueAt.After(w.currentTime) {
-		return 0
-	}
-	delay := dueAt.Sub(w.currentTime)
-	ticks := int64(delay / w.tick)
-	if delay%w.tick != 0 {
-		ticks++
-	}
-	return ticks
-}

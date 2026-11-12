@@ -64,10 +64,6 @@ func WithData[T proto.Message](data T) Option {
 	}
 }
 
-func CommonInvalidArgument() *kratoserrors.Error {
-	return New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-}
-
 func BusinessCode(err error) (cerrors.BusinessErrorCode, bool) {
 	se := kratoserrors.FromError(err)
 	if se == nil {
@@ -120,14 +116,6 @@ func StatusCode(code cerrors.BusinessErrorCode) int {
 		return statusCode
 	}
 	return http.StatusInternalServerError
-}
-
-func IsInternal(err error) bool {
-	if code, ok := BusinessCode(err); ok {
-		return code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INTERNAL
-	}
-	se := kratoserrors.FromError(err)
-	return se != nil && se.Code >= http.StatusInternalServerError
 }
 
 func validBusinessCode(code cerrors.BusinessErrorCode) bool {

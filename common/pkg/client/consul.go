@@ -106,10 +106,6 @@ func (c *ConsulClient) Registrar() registry.Registrar {
 	return c.reg
 }
 
-func (c *ConsulClient) Discovery() registry.Discovery {
-	return c.reg
-}
-
 func (c *ConsulClient) RegisterService(svc *consulapi.AgentServiceRegistration) error {
 	if err := c.Client.Agent().ServiceRegister(svc); err != nil {
 		return fmt.Errorf("register %s: %w", svc.ID, err)

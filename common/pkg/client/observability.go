@@ -73,17 +73,10 @@ var (
 		},
 		[]string{"service", "direction", "subject", "status"},
 	)
-	DeadLetterAlertsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: "bass_dead_letter_alerts_total",
-			Help: "Total number of deduplicated dead letter alerts.",
-		},
-		[]string{"service", "source", "event_type", "subject"},
-	)
 )
 
 func init() {
-	prometheus.MustRegister(serverRequestsTotal, serverRequestDurationSeconds, clientRequestsTotal, clientRequestDurationSeconds, MessageRequestsTotal, MessageRequestDurationSeconds, DeadLetterAlertsTotal)
+	prometheus.MustRegister(serverRequestsTotal, serverRequestDurationSeconds, clientRequestsTotal, clientRequestDurationSeconds, MessageRequestsTotal, MessageRequestDurationSeconds)
 }
 
 type Observer struct {

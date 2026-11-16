@@ -2,7 +2,6 @@ package schema
 
 import (
 	"common/pkg/constant"
-	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
 
 	notifyenum "notify/internal/enum"
@@ -32,7 +31,7 @@ func (NotificationEmailDelivery) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("event_id").Comment("来源事件 ID").NotEmpty(),
-		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("来源事件类型"),
+		field.Enum("notification_type").Values(notifyenum.NotificationTypeMap.EnumValues()...).Comment("通知类型"),
 		field.Int64("receiver_id").Comment("接收者用户 ID").Optional().Nillable(),
 		field.String("to_email").Comment("标准化收件邮箱").NotEmpty(),
 		field.String("subject").Comment("邮件主题"),

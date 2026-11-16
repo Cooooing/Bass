@@ -47,9 +47,12 @@ nats:
   reconnect_wait: 2s
   ping_interval: 30s
   flusher_timeout: 5s
-  enable_jet_stream: false
-  stream_name: ""
-  jet_stream_domain: ""
+  consumers:
+    platform-asset-upload-recorder:
+      ack_wait: 60s
+      max_ack_pending: 32
+      pull_max_messages: 32
+      pull_expiry: 2s
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
@@ -62,12 +65,6 @@ business:
     enable: true
     window: 300s
     max_count: 5
-  asset_events:
-    stream_name: ${ASSET_EVENT_STREAM:PLATFORM_ASSET_UPLOADS}
-    subject: ${ASSET_EVENT_SUBJECT:storage.asset.object-created}
-    consumer_durable: ${ASSET_EVENT_CONSUMER_DURABLE:platform-asset-upload-recorder}
-    ack_wait: ${ASSET_EVENT_ACK_WAIT:60s}
-    max_ack_pending: ${ASSET_EVENT_MAX_ACK_PENDING:32}
   ip_data:
     enable: true
     ipv4_xdb_path: configs/ip2region/ipv4.xdb

@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 
-	commonenum "common/pkg/enum"
 	"context"
 
 	"notify/internal/biz/model"
@@ -32,10 +31,10 @@ func NewUserFollowHandler(
 func (h *UserFollowHandler) Templates() []*model.NotificationTemplateDefinition {
 	return []*model.NotificationTemplateDefinition{
 		{
-			EventType: commonenum.EventTypeUserFollow,
-			Channel:   notifyenum.NotificationChannelStation,
-			Language:  notifyenum.LanguageZhCN,
-			Enabled:   true,
+			NotificationType: notifyenum.NotificationTypeUserFollow,
+			Channel:          notifyenum.NotificationChannelStation,
+			Language:         notifyenum.LanguageZhCN,
+			Enabled:          true,
 			StationTemplate: &model.NotificationStationTemplateDefinition{
 				TitleTemplate:   notifytemplate.MustReadTemplate("station/user_follow.zh_CN.title.txt"),
 				ContentTemplate: notifytemplate.MustReadTemplate("station/user_follow.zh_CN.content.txt"),
@@ -62,13 +61,13 @@ func (h *UserFollowHandler) Handle(ctx context.Context, req *usecase.EventHandle
 		Followed: h.templateUser(payload.GetFollowedId(), users[payload.GetFollowedId()]),
 	}
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
-		EventID:      event.GetEventId(),
-		EventType:    req.EventType,
-		ActorUserID:  new(payload.GetSenderId()),
-		BusinessKey:  new(fmt.Sprintf("user-follow:v1:%d:%d", payload.GetSenderId(), payload.GetFollowedId())),
-		Language:     req.Language,
-		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
-		TemplateData: templateData,
+		EventID:          event.GetEventId(),
+		NotificationType: req.NotificationType,
+		ActorUserID:      new(payload.GetSenderId()),
+		BusinessKey:      new(fmt.Sprintf("user-follow:v1:%d:%d", payload.GetSenderId(), payload.GetFollowedId())),
+		Language:         req.Language,
+		Channels:         []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
+		TemplateData:     templateData,
 		Recipients: []*model.NotificationRecipient{
 			{UserID: payload.GetFollowedId()},
 		},

@@ -1,7 +1,6 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 	"fmt"
@@ -43,7 +42,7 @@ func (r *NotificationStationMessageRepo) Save(ctx context.Context, message *mode
 	}
 	save, err := r.getClient(ctx).NotificationStationMessage.Create().
 		SetEventID(message.EventID).
-		SetEventType(notificationstationmessage.EventType(message.EventType)).
+		SetNotificationType(notificationstationmessage.NotificationType(message.NotificationType)).
 		SetReceiverID(message.ReceiverID).
 		SetNillableBusinessKey(message.BusinessKey).
 		SetTitle(message.Title).
@@ -214,8 +213,8 @@ func (r *NotificationStationMessageRepo) getQuery(query *gen.NotificationStation
 	if req.ReceiverID != nil {
 		query = query.Where(notificationstationmessage.ReceiverIDEQ(*req.ReceiverID))
 	}
-	if req.EventType != nil {
-		query = query.Where(notificationstationmessage.EventTypeEQ(notificationstationmessage.EventType(*req.EventType)))
+	if req.NotificationType != nil {
+		query = query.Where(notificationstationmessage.NotificationTypeEQ(notificationstationmessage.NotificationType(*req.NotificationType)))
 	}
 	if req.Unread != nil {
 		if *req.Unread {
@@ -232,16 +231,16 @@ func (r *NotificationStationMessageRepo) stationMessage(item *gen.NotificationSt
 		return nil
 	}
 	return &model.NotificationStationMessage{
-		ID:          item.ID,
-		EventID:     item.EventID,
-		EventType:   commonenum.EventType(item.EventType),
-		ReceiverID:  item.ReceiverID,
-		BusinessKey: item.BusinessKey,
-		Title:       item.Title,
-		Content:     item.Content,
-		Status:      notifyenum.NotificationChannelStatus(item.Status),
-		ReadAt:      item.ReadAt,
-		CreatedAt:   item.CreatedAt,
-		UpdatedAt:   item.UpdatedAt,
+		ID:               item.ID,
+		EventID:          item.EventID,
+		NotificationType: notifyenum.NotificationType(item.NotificationType),
+		ReceiverID:       item.ReceiverID,
+		BusinessKey:      item.BusinessKey,
+		Title:            item.Title,
+		Content:          item.Content,
+		Status:           notifyenum.NotificationChannelStatus(item.Status),
+		ReadAt:           item.ReadAt,
+		CreatedAt:        item.CreatedAt,
+		UpdatedAt:        item.UpdatedAt,
 	}
 }

@@ -1,7 +1,6 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 
@@ -39,7 +38,7 @@ func (r *NotificationTencentSMSDeliveryRepo) getClient(ctx context.Context) *gen
 func (r *NotificationTencentSMSDeliveryRepo) SaveOrGet(ctx context.Context, delivery *model.NotificationTencentSMSDelivery) (*model.NotificationTencentSMSDelivery, error) {
 	save, err := r.getClient(ctx).NotificationTencentSMSDelivery.Create().
 		SetEventID(delivery.EventID).
-		SetEventType(notificationtencentsmsdelivery.EventType(delivery.EventType)).
+		SetNotificationType(notificationtencentsmsdelivery.NotificationType(delivery.NotificationType)).
 		SetNillableReceiverID(delivery.ReceiverID).
 		SetPhone(delivery.Phone).
 		SetSmsSdkAppID(delivery.SMSSDKAppID).
@@ -196,8 +195,8 @@ func (r *NotificationTencentSMSDeliveryRepo) getTencentSMSQuery(query *gen.Notif
 	if len(req.EventIDs) > 0 {
 		query = query.Where(notificationtencentsmsdelivery.EventIDIn(req.EventIDs...))
 	}
-	if req.EventType != nil {
-		query = query.Where(notificationtencentsmsdelivery.EventTypeEQ(notificationtencentsmsdelivery.EventType(*req.EventType)))
+	if req.NotificationType != nil {
+		query = query.Where(notificationtencentsmsdelivery.NotificationTypeEQ(notificationtencentsmsdelivery.NotificationType(*req.NotificationType)))
 	}
 	if req.ReceiverID != nil {
 		query = query.Where(notificationtencentsmsdelivery.ReceiverIDEQ(*req.ReceiverID))
@@ -218,7 +217,7 @@ func (r *NotificationTencentSMSDeliveryRepo) tencentSMSDelivery(item *gen.Notifi
 	return &model.NotificationTencentSMSDelivery{
 		ID:                 item.ID,
 		EventID:            item.EventID,
-		EventType:          commonenum.EventType(item.EventType),
+		NotificationType:   notifyenum.NotificationType(item.NotificationType),
 		ReceiverID:         item.ReceiverID,
 		Phone:              item.Phone,
 		SMSSDKAppID:        item.SmsSdkAppID,

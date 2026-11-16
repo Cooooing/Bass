@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -23,7 +21,7 @@ func NewArticleWatchLotteryDrawnHandler(contentClient repo.ContentClient, notify
 	return &ArticleWatchLotteryDrawnHandler{contentClient: contentClient, notifyUsecase: notifyUsecase}
 }
 func (*ArticleWatchLotteryDrawnHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleWatchedLotteryDrawn, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_lottery_drawn.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_lottery_drawn.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentArticleWatchedLotteryDrawn, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_lottery_drawn.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_lottery_drawn.zh_CN.content.txt")}}}
 }
 func (h *ArticleWatchLotteryDrawnHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
 	event := req.Event
@@ -57,5 +55,5 @@ func (h *ArticleWatchLotteryDrawnHandler) Handle(ctx context.Context, req *useca
 		}
 	}
 	businessKey := fmt.Sprintf("content:article-watch-lottery-drawn:%d", payload.GetArticleId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: commonenum.EventTypeContentArticleWatchedLotteryDrawn, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article)}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeContentArticleWatchedLotteryDrawn, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article)}, Recipients: recipients})
 }

@@ -1,12 +1,13 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
+	"context"
+
 	"badge/internal/biz/model"
 	bizrepo "badge/internal/biz/repo"
 	"badge/internal/data/gen"
 	"badge/internal/data/gen/badge"
-	commonmodel "common/pkg/model"
-	"context"
 )
 
 // BadgeRepo adapts Ent badge persistence to the business query port.

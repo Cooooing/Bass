@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	commonenum "common/pkg/enum"
+	event "common/proto/gen/common/enums/event"
 	"context"
 
 	"bff_game_idle/internal/biz/model"
@@ -27,9 +27,9 @@ type WebSocketEventResult struct {
 
 // WebSocketEventHandler 处理一种 NATS 事件。
 type WebSocketEventHandler interface {
-	Type() commonenum.EventType
+	Type() event.EventSubject
 	Handle(ctx context.Context, req *WebSocketEventReq) (*WebSocketEventResult, error)
 }
 
 // WebSocketEventHandlers 按 NATS 事件类型索引 WS 事件处理器。
-type WebSocketEventHandlers map[commonenum.EventType]WebSocketEventHandler
+type WebSocketEventHandlers map[event.EventSubject]WebSocketEventHandler

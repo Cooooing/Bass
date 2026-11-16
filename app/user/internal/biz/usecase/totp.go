@@ -5,7 +5,7 @@ import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"log/slog"
@@ -167,11 +167,10 @@ func (u *TotpUsecase) Disable(ctx context.Context, req *DisableTotpReq) error {
 			return err
 		}
 		outboxEvent, err = u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_TOTP_DISABLE,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TOTP_DISABLE,
-				Payload: &commonenums.Event_UserTotpDisable{
-					UserTotpDisable: &commonenums.UserTotpDisablePayload{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_TOTP_DISABLE,
+				Payload: &commonevent.Event_UserTotpDisable{
+					UserTotpDisable: &commonevent.UserTotpDisablePayload{
 						UserId: req.UserID,
 					},
 				},
@@ -215,11 +214,10 @@ func (u *TotpUsecase) ConfirmEnable(ctx context.Context, req *ConfirmEnableTotpR
 			return err
 		}
 		outboxEvent, err = u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_TOTP_ENABLE,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TOTP_ENABLE,
-				Payload: &commonenums.Event_UserTotpEnable{
-					UserTotpEnable: &commonenums.UserTotpEnablePayload{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_TOTP_ENABLE,
+				Payload: &commonevent.Event_UserTotpEnable{
+					UserTotpEnable: &commonevent.UserTotpEnablePayload{
 						UserId: req.UserID,
 					},
 				},

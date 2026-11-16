@@ -1,7 +1,7 @@
 package server
 
 import (
-	commonenum "common/pkg/enum"
+	event "common/proto/gen/common/enums/event"
 	"context"
 
 	"notify/internal/biz/usecase"
@@ -9,12 +9,12 @@ import (
 
 type TemplateInitializationServer struct {
 	templateUsecase *usecase.TemplateUsecase
-	eventHandlers   map[commonenum.EventType][]usecase.EventHandler
+	eventHandlers   map[event.EventSubject][]usecase.EventHandler
 }
 
 func NewTemplateInitializationServer(
 	templateUsecase *usecase.TemplateUsecase,
-	eventHandlers map[commonenum.EventType][]usecase.EventHandler,
+	eventHandlers map[event.EventSubject][]usecase.EventHandler,
 ) *TemplateInitializationServer {
 	return &TemplateInitializationServer{
 		templateUsecase: templateUsecase,

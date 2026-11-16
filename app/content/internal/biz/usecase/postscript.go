@@ -6,7 +6,7 @@ import (
 	"log/slog"
 
 	"common/pkg/apperror"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	cerrors "common/proto/gen/common/errors"
 
 	"content/internal/biz/model"
@@ -92,11 +92,10 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 		}); err != nil {
 			return err
 		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED,
-			Payload: &commonenums.Event_ArticlePostscriptAdded{
-				ArticlePostscriptAdded: &commonenums.ArticlePostscriptAddedPayload{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED,
+			Payload: &commonevent.Event_ArticlePostscriptAdded{
+				ArticlePostscriptAdded: &commonevent.ArticlePostscriptAddedPayload{
 					SenderId:     userID,
 					ArticleId:    articleID,
 					PostscriptId: save.ID,

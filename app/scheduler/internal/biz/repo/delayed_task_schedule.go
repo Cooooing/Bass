@@ -24,9 +24,9 @@ type DelayedTaskScheduleReq struct {
 }
 
 type DelayedTaskScheduleMessage struct {
-	ExecutionRecordID int64
-	ScheduleKey       string
-	ScheduledAt       time.Time
-	TriggerType       schedulerenum.TaskTriggerType
-	NumDelivered      uint64
+	ExecutionRecordID int64                         `json:"execution_record_id"`
+	TriggerType       schedulerenum.TaskTriggerType `json:"trigger_type"`
+	ScheduleKey       string                        `json:"-"`
+	ScheduledAt       time.Time                     `json:"-"`
+	NumDelivered      uint64                        `json:"-"`
 }

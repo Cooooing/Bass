@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"common/pkg/enum"
 	"common/pkg/util"
 
 	"notify/internal/biz/model"
@@ -26,7 +25,7 @@ func NewArticleMentionedHandler(userClient repo.UserAccountRepo, contentClient r
 }
 
 func (*ArticleMentionedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: enum.EventTypeContentArticleMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_mentioned.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentArticleMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_mentioned.zh_CN.content.txt")}}}
 }
 
 func (h *ArticleMentionedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -57,5 +56,5 @@ func (h *ArticleMentionedHandler) Handle(ctx context.Context, req *usecase.Event
 		}
 	}
 	businessKey := fmt.Sprintf("content:article-mention:%d", article.ID)
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: enum.EventTypeContentArticleMention, ActorUserID: new(article.AuthorID), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleMention{Article: h.articleTemplateData(article), Actor: h.templateUser(article.AuthorID, author)}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeContentArticleMention, ActorUserID: new(article.AuthorID), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleMention{Article: h.articleTemplateData(article), Actor: h.templateUser(article.AuthorID, author)}, Recipients: recipients})
 }

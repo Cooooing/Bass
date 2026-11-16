@@ -1,7 +1,7 @@
 package event
 
 import (
-	commonenum "common/pkg/enum"
+	event "common/proto/gen/common/enums/event"
 	"context"
 
 	"bff_game_idle/internal/biz/usecase"
@@ -15,8 +15,8 @@ func NewAbilityLeveledUpHandler() *AbilityLeveledUpHandler {
 	return &AbilityLeveledUpHandler{}
 }
 
-func (h *AbilityLeveledUpHandler) Type() commonenum.EventType {
-	return commonenum.EventTypeGameIdleAbilityLeveledUp
+func (h *AbilityLeveledUpHandler) Type() event.EventSubject {
+	return event.EventSubject_EVENT_SUBJECT_GAME_IDLE_ABILITY_LEVELED_UP
 }
 
 func (h *AbilityLeveledUpHandler) Handle(ctx context.Context, req *usecase.WebSocketEventReq) (*usecase.WebSocketEventResult, error) {

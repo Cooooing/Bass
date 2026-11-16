@@ -1,7 +1,6 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 
@@ -25,14 +24,14 @@ type NotificationRulePageResp struct {
 }
 
 type NotificationRuleQuery struct {
-	Page       *commonmodel.PageReq
-	ID         *int64
-	IDs        []int64
-	EventType  *commonenum.EventType
-	EventTypes []commonenum.EventType
-	Channel    *notifyenum.NotificationChannel
-	Channels   []notifyenum.NotificationChannel
-	Language   *notifyenum.Language
-	Languages  []notifyenum.Language
-	Enabled    *bool
+	Page              *commonmodel.PageReq
+	ID                *int64
+	IDs               []int64
+	NotificationType  *notifyenum.NotificationType
+	NotificationTypes []notifyenum.NotificationType
+	Channel           *notifyenum.NotificationChannel
+	Channels          []notifyenum.NotificationChannel
+	Language          *notifyenum.Language
+	Languages         []notifyenum.Language
+	Enabled           *bool
 }

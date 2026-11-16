@@ -1,7 +1,6 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 	"time"
@@ -42,12 +41,12 @@ type NotificationLarkWebhookDeliveryUpdateStatusReq struct {
 }
 
 type NotificationLarkWebhookDeliveryQuery struct {
-	Page      *commonmodel.PageReq
-	ID        *int64
-	IDs       []int64
-	EventID   *string
-	EventIDs  []string
-	EventType *commonenum.EventType
-	WebhookID *string
-	Status    *notifyenum.NotificationChannelStatus
+	Page             *commonmodel.PageReq
+	ID               *int64
+	IDs              []int64
+	EventID          *string
+	EventIDs         []string
+	NotificationType *notifyenum.NotificationType
+	WebhookID        *string
+	Status           *notifyenum.NotificationChannelStatus
 }

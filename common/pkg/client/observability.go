@@ -111,6 +111,49 @@ func (o *Observer) Service() string {
 	return o.service
 }
 
+func (o *Observer) Message(ctx context.Context, direction string, subject string) (context.Context, func(error)) {
+	if o == nil {
+		return ctx, func(error) {}
+	}
+	start := time.Now()
+	spanKind := oteltrace.SpanKindProducer
+	if direction == "consume" {
+		spanKind = oteltrace.SpanKindConsumer
+	}
+	ctx, span := o.clientTracer.Start(ctx, "nats "+direction, oteltrace.WithSpanKind(spanKind), oteltrace.WithAttributes(
+		attribute.String("messaging.system", "nats"),
+		attribute.String("messaging.destination.name", subject),
+		attribute.String("messaging.operation.name", direction),
+	))
+	return ctx, func(err error) {
+		status := "success"
+		if err != nil {
+			status = "error"
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+		}
+		span.End()
+		MessageRequestsTotal.WithLabelValues(o.service, direction, subject, status).Inc()
+		MessageRequestDurationSeconds.WithLabelValues(o.service, direction, subject, status).Observe(time.Since(start).Seconds())
+		if o.logger != nil {
+			attrs := []slog.Attr{
+				slog.String(constant.LogFieldDirection, direction),
+				slog.String(constant.LogFieldSubject, subject),
+				slog.String(constant.LogFieldStatus, status),
+				slog.Int64(constant.LogFieldLatencyMS, time.Since(start).Milliseconds()),
+			}
+			if err != nil {
+				attrs = append(attrs, slog.Any(constant.LogFieldErr, err))
+			}
+			level := slog.LevelInfo
+			if err != nil {
+				level = slog.LevelError
+			}
+			o.logger.LogAttrs(ctx, level, "nats message", attrs...)
+		}
+	}
+}
+
 func SetupTracing(ctx context.Context, serviceName string, version string, traceConf *common.Trace) (func(context.Context) error, error) {
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 

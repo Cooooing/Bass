@@ -1,8 +1,9 @@
 package repo
 
 import (
-	"bff_bbs/internal/biz/model"
 	"context"
+
+	"bff_bbs/internal/biz/model"
 )
 
 // IPResolutionClient resolves an IP address through the platform IP data service.

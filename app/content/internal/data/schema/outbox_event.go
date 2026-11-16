@@ -23,6 +23,7 @@ func (OutboxEvent) Annotations() []schema.Annotation {
 			Table: constant.TablePrefixContent.String() + "outbox_events",
 		},
 		entsql.WithComments(true),
+		entsql.Check(commonenum.EventSubjectCheck("subject", commonenum.EventStreamConfigFor(commonenum.EventStreamContent).Subjects)),
 	}
 }
 
@@ -30,8 +31,7 @@ func (OutboxEvent) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("event_id").Comment("事件幂等 ID，对应 common.enums.Event.event_id").NotEmpty().Unique(),
-		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
-		field.Enum("subject").GoType(commonenum.EventSubject("")).Values(commonenum.EventSubjectMap.EnumValues()...).Comment("NATS 主题"),
+		field.String("subject").Comment("NATS 主题"),
 		field.Text("payload").Comment("JSON 编码后的 common.enums.Event"),
 		field.JSON("headers", map[string]string{}).Comment("消息头").Default(map[string]string{}),
 		field.Enum("status").Values(commonenum.OutboxEventStatusMap.EnumValues()...).Default(commonenum.OutboxEventStatusPending.String()).Comment("投递状态"),

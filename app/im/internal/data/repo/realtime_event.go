@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
 	commonenum "common/pkg/enum"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 
 	"im/internal/biz/model"
 	bizrepo "im/internal/biz/repo"
@@ -18,10 +18,22 @@ import (
 )
 
 type RealtimeEventPublisher struct {
-	nats *client.NatsClient
+	nats *nats.Client
 }
 
-func NewRealtimeEventPublisher(nats *client.NatsClient) bizrepo.RealtimeEventPublisher {
+func (p *RealtimeEventPublisher) Ensure(ctx context.Context) error {
+	stream := commonenum.EventStreamConfigFor(commonenum.EventStreamIM)
+	return p.nats.EnsureStream(ctx, nats.StreamSpec{
+		Name:              stream.Name.String(),
+		Subjects:          stream.Subjects,
+		Retention:         stream.Retention,
+		AllowMsgSchedules: stream.AllowMsgSchedules,
+		AllowMsgTTL:       stream.AllowMsgTTL,
+		AllowRollup:       stream.AllowRollup,
+	})
+}
+
+func NewRealtimeEventPublisher(nats *nats.Client) bizrepo.RealtimeEventPublisher {
 	return &RealtimeEventPublisher{nats: nats}
 }
 
@@ -36,7 +48,7 @@ func (p *RealtimeEventPublisher) PublishPrivateChatMessageCreated(ctx context.Co
 	if message.CreatedAt == nil {
 		return fmt.Errorf("private chat message created at is required")
 	}
-	event := &commonenums.Event{EventId: uuid.NewString(), Type: commonenums.EventType_EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED, Subject: commonenums.EventSubject_EVENT_SUBJECT_IM_PRIVATE_CHAT_MESSAGE_CREATED, Timestamp: timestamppb.Now(), Payload: &commonenums.Event_ImPrivateChatMessageCreated{ImPrivateChatMessageCreated: &commonenums.IMPrivateChatMessageCreatedPayload{MessageId: message.ID, SenderId: message.SenderID, ReceiverId: message.ReceiverID, MessageType: messageType, Content: message.Content, CreatedAt: timestamppb.New(*message.CreatedAt)}}}
+	event := &commonevent.Event{EventId: uuid.NewString(), Subject: commonevent.EventSubject_EVENT_SUBJECT_IM_PRIVATE_CHAT_MESSAGE_CREATED, Timestamp: timestamppb.Now(), Payload: &commonevent.Event_ImPrivateChatMessageCreated{ImPrivateChatMessageCreated: &commonevent.IMPrivateChatMessageCreatedPayload{MessageId: message.ID, SenderId: message.SenderID, ReceiverId: message.ReceiverID, MessageType: messageType, Content: message.Content, CreatedAt: timestamppb.New(*message.CreatedAt)}}}
 	return p.publish(ctx, commonenum.EventSubjectIMPrivateChatMessageCreated, event)
 }
 
@@ -51,8 +63,13 @@ func (p *RealtimeEventPublisher) PublishGlobalChatMessageCreated(ctx context.Con
 	if message.CreatedAt == nil {
 		return fmt.Errorf("global chat message created at is required")
 	}
-	event := &commonenums.Event{EventId: uuid.NewString(), Type: commonenums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED, Subject: commonenums.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_MESSAGE_CREATED, Timestamp: timestamppb.Now(), Payload: &commonenums.Event_ImGlobalChatMessageCreated{ImGlobalChatMessageCreated: &commonenums.IMGlobalChatMessageCreatedPayload{MessageId: message.ID, SenderId: message.SenderID, MessageType: messageType, Content: message.Content, CreatedAt: timestamppb.New(*message.CreatedAt)}}}
-	return p.publish(ctx, commonenum.EventSubjectIMGlobalChatMessageCreated, event)
+	event := &commonevent.Event{EventId: uuid.NewString(), Subject: commonevent.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_MESSAGE_CREATED, Timestamp: timestamppb.Now(), Payload: &commonevent.Event_ImGlobalChatMessageCreated{ImGlobalChatMessageCreated: &commonevent.IMGlobalChatMessageCreatedPayload{MessageId: message.ID, SenderId: message.SenderID, MessageType: messageType, Content: message.Content, CreatedAt: timestamppb.New(*message.CreatedAt)}}}
+	payload, err := protojson.Marshal(event)
+	if err != nil {
+		return fmt.Errorf("marshal global chat event: %w", err)
+	}
+	_, err = p.nats.JSPublish(ctx, commonenum.EventSubjectIMGlobalChatMessageCreated.String(), &nats.Message{ID: event.EventId, Data: payload})
+	return err
 }
 
 func (p *RealtimeEventPublisher) PublishGlobalChatBarrageCreated(ctx context.Context, barrage *model.GlobalChatBarrage) error {
@@ -62,13 +79,12 @@ func (p *RealtimeEventPublisher) PublishGlobalChatBarrageCreated(ctx context.Con
 	if barrage.CreatedAt == nil {
 		return fmt.Errorf("global chat barrage created at is required")
 	}
-	event := &commonenums.Event{
+	event := &commonevent.Event{
 		EventId:   uuid.NewString(),
-		Type:      commonenums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED,
-		Subject:   commonenums.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_BARRAGE_CREATED,
+		Subject:   commonevent.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_BARRAGE_CREATED,
 		Timestamp: timestamppb.Now(),
-		Payload: &commonenums.Event_ImGlobalChatBarrageCreated{
-			ImGlobalChatBarrageCreated: &commonenums.IMGlobalChatBarrageCreatedPayload{
+		Payload: &commonevent.Event_ImGlobalChatBarrageCreated{
+			ImGlobalChatBarrageCreated: &commonevent.IMGlobalChatBarrageCreatedPayload{
 				BarrageId: barrage.ID,
 				UserId:    barrage.UserID,
 				Content:   barrage.Content,
@@ -83,13 +99,12 @@ func (p *RealtimeEventPublisher) PublishGlobalChatTopicUpdated(ctx context.Conte
 	if topic == nil || topic.CreatedAt == nil {
 		return fmt.Errorf("global chat topic is required")
 	}
-	event := &commonenums.Event{
+	event := &commonevent.Event{
 		EventId:   uuid.NewString(),
-		Type:      commonenums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED,
-		Subject:   commonenums.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_TOPIC_UPDATED,
+		Subject:   commonevent.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_TOPIC_UPDATED,
 		Timestamp: timestamppb.Now(),
-		Payload: &commonenums.Event_ImGlobalChatTopicUpdated{
-			ImGlobalChatTopicUpdated: &commonenums.IMGlobalChatTopicUpdatedPayload{
+		Payload: &commonevent.Event_ImGlobalChatTopicUpdated{
+			ImGlobalChatTopicUpdated: &commonevent.IMGlobalChatTopicUpdatedPayload{
 				TopicId:   topic.ID,
 				UserId:    topic.UserID,
 				Content:   topic.Content,
@@ -100,10 +115,10 @@ func (p *RealtimeEventPublisher) PublishGlobalChatTopicUpdated(ctx context.Conte
 	return p.publish(ctx, commonenum.EventSubjectIMGlobalChatTopicUpdated, event)
 }
 
-func (p *RealtimeEventPublisher) publish(ctx context.Context, subject commonenum.EventSubject, event *commonenums.Event) error {
+func (p *RealtimeEventPublisher) publish(ctx context.Context, subject commonenum.EventSubject, event *commonevent.Event) error {
 	payload, err := protojson.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("marshal realtime event: %w", err)
 	}
-	return p.nats.Publish(ctx, subject.String(), &client.Message{Data: payload})
+	return p.nats.Publish(ctx, subject.String(), &nats.Message{Data: payload})
 }

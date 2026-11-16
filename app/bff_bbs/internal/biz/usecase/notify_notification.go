@@ -3,7 +3,7 @@ package usecase
 import (
 	commonmodel "common/pkg/model"
 	bbsnotifyv1 "common/proto/gen/bff_bbs/v1/notify"
-	commonenums "common/proto/gen/common/enums"
+	notifyv1enum "common/proto/gen/notify/v1/enum"
 	"context"
 
 	"bff_bbs/internal/biz/repo"
@@ -62,12 +62,12 @@ func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNo
 	rows := make([]*bbsnotifyv1.ListNotifications_Resp_Notification, 0, len(reply.Rows))
 	for _, item := range reply.Rows {
 		row := &bbsnotifyv1.ListNotifications_Resp_Notification{
-			Id:         item.ID,
-			EventId:    item.EventID,
-			ReceiverId: item.ReceiverID,
-			EventType:  commonenums.EventType(item.EventType),
-			Title:      item.Title,
-			Content:    item.Content,
+			Id:               item.ID,
+			EventId:          item.EventID,
+			ReceiverId:       item.ReceiverID,
+			NotificationType: notifyv1enum.NotificationType(item.NotificationType),
+			Title:            item.Title,
+			Content:          item.Content,
 		}
 		if item.ReadAt != nil {
 			row.ReadAt = timestamppb.New(*item.ReadAt)

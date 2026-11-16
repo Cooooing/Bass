@@ -2,6 +2,7 @@ package data
 
 import (
 	commonClient "common/pkg/client"
+	nats "common/pkg/client/nats"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 
@@ -18,7 +19,7 @@ var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewObservability,
 	commonClient.NewRedisClient,
-	commonClient.NewNatsClient,
+	nats.NewClient,
 	ProvideConsul,
 	commonClient.NewConsulClient,
 	rpc.ProvideContentClient,
@@ -40,8 +41,8 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewScheduledTaskRepo,
 	repo.NewScheduledTaskVersionRepo,
 	repo.NewScheduledTaskExecutionRecordRepo,
-	repo.NewScheduledTaskScheduleNatsRepo,
-	repo.NewDelayedTaskScheduleNatsRepo,
+	repo.NewScheduledTaskScheduleRepo,
+	repo.NewDelayedTaskScheduleRepo,
 	repo.NewDelayedTaskRepo,
 	repo.NewDelayedTaskVersionRepo,
 	repo.NewDelayedTaskExecutionRecordRepo,

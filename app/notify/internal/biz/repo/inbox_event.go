@@ -22,11 +22,10 @@ type InboxEventRepo interface {
 }
 
 type InboxEventSaveProcessingReq struct {
-	EventID   string
-	EventType commonenum.EventType
-	Subject   commonenum.EventSubject
-	Payload   string
-	Now       time.Time
+	EventID string
+	Subject commonenum.EventSubject
+	Payload string
+	Now     time.Time
 }
 
 type InboxEventSaveProcessingResp struct {
@@ -58,12 +57,11 @@ type InboxEventMarkFailedReq struct {
 }
 
 type InboxEventQuery struct {
-	Page      *commonmodel.PageReq
-	ID        *int64
-	IDs       []int64
-	EventID   *string
-	EventIDs  []string
-	EventType *commonenum.EventType
-	Subject   *commonenum.EventSubject
-	Status    *commonenum.InboxEventStatus
+	Page     *commonmodel.PageReq
+	ID       *int64
+	IDs      []int64
+	EventID  *string
+	EventIDs []string
+	Subject  *commonenum.EventSubject
+	Status   *commonenum.InboxEventStatus
 }

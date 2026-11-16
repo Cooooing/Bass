@@ -2,6 +2,7 @@ package data
 
 import (
 	commonClient "common/pkg/client"
+	nats "common/pkg/client/nats"
 	"common/pkg/client/timewheel"
 	"common/proto/gen/common"
 
@@ -18,7 +19,7 @@ import (
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewObservability,
-	commonClient.NewNatsClient,
+	nats.NewClient,
 	ProvideConsul,
 	commonClient.NewConsulClient,
 )

@@ -3,9 +3,9 @@ syntax = "proto3";
 package common.api.app.notify.v1;
 
 import "common/common.proto";
-import "common/enums/event.proto";
 import "google/protobuf/timestamp.proto";
 import "notify/v1/enum/channel_status.proto";
+import "notify/v1/enum/notification_type.proto";
 
 option go_package = "common/proto/gen/notify/v1;v1";
 
@@ -19,7 +19,7 @@ message ListStationMessages {
   message Req {
     message NotificationStationMessageQueryParams {
       repeated int64 ids = 1;
-      optional common.enums.EventType event_type = 2;
+      optional NotificationType notification_type = 2;
       optional bool unread = 3;
     }
     int64 user_id = 1;
@@ -32,7 +32,7 @@ message ListStationMessages {
       google.protobuf.Timestamp updated_at = 1001;
       int64 id = 1;
       string event_id = 2;
-      common.enums.EventType event_type = 3;
+      NotificationType notification_type = 3;
       int64 receiver_id = 4;
       string title = 5;
       string content = 6;

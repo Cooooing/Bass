@@ -4,7 +4,7 @@ import (
 	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	"context"
 	"errors"
 	"fmt"
@@ -42,13 +42,9 @@ func (r *OutboxEventRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *OutboxEventRepo) Save(ctx context.Context, event *commonenums.Event) (*repo.OutboxEvent, error) {
+func (r *OutboxEventRepo) Save(ctx context.Context, event *commonevent.Event) (*repo.OutboxEvent, error) {
 	if event == nil {
 		return nil, fmt.Errorf("outbox event is nil")
-	}
-	eventType, ok := commonenum.EventTypeMap.ToEnum(event.Type)
-	if !ok {
-		return nil, fmt.Errorf("unknown event type: %s", event.Type)
 	}
 	subject, ok := commonenum.EventSubjectMap.ToEnum(event.Subject)
 	if !ok {
@@ -72,8 +68,7 @@ func (r *OutboxEventRepo) Save(ctx context.Context, event *commonenums.Event) (*
 
 	create := r.getClient(ctx).OutboxEvent.Create().
 		SetEventID(event.EventId).
-		SetEventType(outboxevent.EventType(eventType)).
-		SetSubject(subject).
+		SetSubject(subject.String()).
 		SetPayload(payload)
 	if len(headers) > 0 {
 		create.SetHeaders(headers)
@@ -85,8 +80,7 @@ func (r *OutboxEventRepo) Save(ctx context.Context, event *commonenums.Event) (*
 	return &repo.OutboxEvent{
 		ID:         saved.ID,
 		EventID:    saved.EventID,
-		EventType:  commonenum.EventType(saved.EventType),
-		Subject:    saved.Subject,
+		Subject:    commonenum.EventSubject(saved.Subject),
 		Payload:    saved.Payload,
 		Headers:    saved.Headers,
 		Status:     commonenum.OutboxEventStatus(saved.Status),
@@ -109,8 +103,7 @@ func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) 
 	return &repo.OutboxEvent{
 		ID:         event.ID,
 		EventID:    event.EventID,
-		EventType:  commonenum.EventType(event.EventType),
-		Subject:    event.Subject,
+		Subject:    commonenum.EventSubject(event.Subject),
 		Payload:    event.Payload,
 		Headers:    event.Headers,
 		Status:     commonenum.OutboxEventStatus(event.Status),
@@ -132,8 +125,7 @@ func (r *OutboxEventRepo) List(ctx context.Context, req *repo.OutboxEventGetReq)
 		result = append(result, &repo.OutboxEvent{
 			ID:         event.ID,
 			EventID:    event.EventID,
-			EventType:  commonenum.EventType(event.EventType),
-			Subject:    event.Subject,
+			Subject:    commonenum.EventSubject(event.Subject),
 			Payload:    event.Payload,
 			Headers:    event.Headers,
 			Status:     commonenum.OutboxEventStatus(event.Status),
@@ -187,8 +179,7 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq)
 		result = append(result, &repo.OutboxEvent{
 			ID:         event.ID,
 			EventID:    event.EventID,
-			EventType:  commonenum.EventType(event.EventType),
-			Subject:    event.Subject,
+			Subject:    commonenum.EventSubject(event.Subject),
 			Payload:    event.Payload,
 			Headers:    event.Headers,
 			Status:     commonenum.OutboxEventStatus(event.Status),
@@ -245,8 +236,7 @@ func (r *OutboxEventRepo) ClaimOneForPublish(ctx context.Context, req *repo.Outb
 	return &repo.OutboxEvent{
 		ID:         event.ID,
 		EventID:    event.EventID,
-		EventType:  commonenum.EventType(event.EventType),
-		Subject:    event.Subject,
+		Subject:    commonenum.EventSubject(event.Subject),
 		Payload:    event.Payload,
 		Headers:    event.Headers,
 		Status:     commonenum.OutboxEventStatus(event.Status),
@@ -293,8 +283,7 @@ func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, req *repo.OutboxE
 		claimed = append(claimed, &repo.OutboxEvent{
 			ID:         event.ID,
 			EventID:    event.EventID,
-			EventType:  commonenum.EventType(event.EventType),
-			Subject:    event.Subject,
+			Subject:    commonenum.EventSubject(event.Subject),
 			Payload:    event.Payload,
 			Headers:    event.Headers,
 			Status:     commonenum.OutboxEventStatus(event.Status),
@@ -371,7 +360,7 @@ func (r *OutboxEventRepo) getQuery(query *gen.OutboxEventQuery, req *repo.Outbox
 	if req.Subject != nil {
 		subject, ok := commonenum.EventSubjectMap.ToEnum(*req.Subject)
 		if ok {
-			query = query.Where(outboxevent.SubjectEQ(subject))
+			query = query.Where(outboxevent.SubjectEQ(subject.String()))
 		}
 	}
 	if req.Status != nil {

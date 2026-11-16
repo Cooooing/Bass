@@ -1,7 +1,6 @@
 package model
 
 import (
-	commonenum "common/pkg/enum"
 	"time"
 
 	notifyenum "notify/internal/enum"
@@ -10,7 +9,7 @@ import (
 type NotificationTencentSMSDelivery struct {
 	ID                 int64
 	EventID            string
-	EventType          commonenum.EventType
+	NotificationType   notifyenum.NotificationType
 	ReceiverID         *int64
 	Phone              string
 	SMSSDKAppID        string

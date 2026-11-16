@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"badge/internal/biz/repo"
-	badgetemplate "badge/template"
 	"bytes"
 	v1 "common/proto/gen/badge/v1"
 	"context"
@@ -13,6 +11,9 @@ import (
 	"strconv"
 	"strings"
 	texttemplate "text/template"
+
+	"badge/internal/biz/repo"
+	badgetemplate "badge/template"
 
 	"image"
 	_ "image/gif"  // Register the GIF decoder for legacy badge resources.

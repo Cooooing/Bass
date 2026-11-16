@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -34,10 +32,10 @@ func NewArticleWatchCommentPublishedHandler(
 
 func (*ArticleWatchCommentPublishedHandler) Templates() []*model.NotificationTemplateDefinition {
 	return []*model.NotificationTemplateDefinition{{
-		EventType: commonenum.EventTypeContentArticleWatchedCommentPublished,
-		Channel:   notifyenum.NotificationChannelStation,
-		Language:  notifyenum.LanguageZhCN,
-		Enabled:   true,
+		NotificationType: notifyenum.NotificationTypeContentArticleWatchedCommentPublished,
+		Channel:          notifyenum.NotificationChannelStation,
+		Language:         notifyenum.LanguageZhCN,
+		Enabled:          true,
 		StationTemplate: &model.NotificationStationTemplateDefinition{
 			TitleTemplate:   notifytemplate.MustReadTemplate("station/article_watch_comment_published.zh_CN.title.txt"),
 			ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_comment_published.zh_CN.content.txt"),
@@ -77,5 +75,5 @@ func (h *ArticleWatchCommentPublishedHandler) Handle(ctx context.Context, req *u
 		}
 	}
 	businessKey := fmt.Sprintf("content:article-watch-comment:%d", comment.ID)
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: commonenum.EventTypeContentArticleWatchedCommentPublished, ActorUserID: new(comment.UserID), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article), Actor: h.templateUser(comment.UserID, users[comment.UserID])}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeContentArticleWatchedCommentPublished, ActorUserID: new(comment.UserID), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article), Actor: h.templateUser(comment.UserID, users[comment.UserID])}, Recipients: recipients})
 }

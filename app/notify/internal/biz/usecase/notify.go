@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log/slog"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -47,14 +45,14 @@ func NewNotifyUsecase(
 }
 
 type NotifySendReq struct {
-	EventID      string
-	EventType    commonenum.EventType
-	ActorUserID  *int64
-	BusinessKey  *string
-	Language     notifyenum.Language
-	Channels     []notifyenum.NotificationChannel
-	TemplateData templatedata.NotificationTemplateData
-	Recipients   []*model.NotificationRecipient
+	EventID          string
+	NotificationType notifyenum.NotificationType
+	ActorUserID      *int64
+	BusinessKey      *string
+	Language         notifyenum.Language
+	Channels         []notifyenum.NotificationChannel
+	TemplateData     templatedata.NotificationTemplateData
+	Recipients       []*model.NotificationRecipient
 }
 
 func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
@@ -62,13 +60,13 @@ func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
 		return nil
 	}
 	notificationContext := &model.NotificationContext{
-		EventID:      req.EventID,
-		EventType:    req.EventType,
-		ActorUserID:  req.ActorUserID,
-		BusinessKey:  req.BusinessKey,
-		Language:     req.Language,
-		TemplateData: req.TemplateData,
-		Recipients:   req.Recipients,
+		EventID:          req.EventID,
+		NotificationType: req.NotificationType,
+		ActorUserID:      req.ActorUserID,
+		BusinessKey:      req.BusinessKey,
+		Language:         req.Language,
+		TemplateData:     req.TemplateData,
+		Recipients:       req.Recipients,
 	}
 	if notificationContext.ActorUserID != nil && u.userAccountRepo != nil {
 		targets := make([]int64, 0, len(notificationContext.Recipients))
@@ -93,9 +91,9 @@ func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
 		notificationContext.Recipients = filtered
 	}
 	rules, err := u.templateUsecase.ListEnabledRulesWithTemplates(ctx, &ListEnabledRulesWithTemplatesReq{
-		EventType: req.EventType,
-		Language:  req.Language,
-		Channels:  req.Channels,
+		NotificationType: req.NotificationType,
+		Language:         req.Language,
+		Channels:         req.Channels,
 	})
 	if err != nil || len(rules) == 0 {
 		return err

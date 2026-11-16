@@ -2,6 +2,7 @@ package data
 
 import (
 	commonClient "common/pkg/client"
+	nats "common/pkg/client/nats"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	"net/http"
@@ -21,7 +22,7 @@ var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewObservability,
 	commonClient.NewRedisClient,
-	commonClient.NewNatsClient,
+	nats.NewClient,
 	ProvideConsul,
 	commonClient.NewConsulClient,
 	rpc.ProvideUserClient,
@@ -36,7 +37,6 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideGenClient,
 	ProvideRedis,
 	ProvideNats,
-	ProvidePublisher,
 	wire.Value(http.DefaultClient),
 	client.ProvideTx,
 	repo.NewInboxEventRepo,
@@ -85,5 +85,3 @@ func ProvideNats(
 ) *common.Nats {
 	return c.Nats
 }
-
-func ProvidePublisher(natsClient *commonClient.NatsClient) commonClient.Publisher { return natsClient }

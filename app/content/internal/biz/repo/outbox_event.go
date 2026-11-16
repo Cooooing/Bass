@@ -3,7 +3,7 @@ package repo
 import (
 	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	"context"
 	"time"
 )
@@ -11,7 +11,6 @@ import (
 type OutboxEvent struct {
 	ID         int64
 	EventID    string
-	EventType  commonenum.EventType
 	Subject    commonenum.EventSubject
 	Payload    string
 	Headers    map[string]string
@@ -22,7 +21,7 @@ type OutboxEvent struct {
 }
 
 type OutboxEventRepo interface {
-	Save(ctx context.Context, event *commonenums.Event) (*OutboxEvent, error)
+	Save(ctx context.Context, event *commonevent.Event) (*OutboxEvent, error)
 	Get(ctx context.Context, req *OutboxEventGetReq) (*OutboxEvent, error)
 	List(ctx context.Context, req *OutboxEventGetReq) ([]*OutboxEvent, error)
 	Map(ctx context.Context, req *OutboxEventGetReq) (map[int64]*OutboxEvent, error)
@@ -45,7 +44,7 @@ type OutboxEventGetReq struct {
 	IDs      []int64
 	EventID  *string
 	EventIDs []string
-	Subject  *commonenums.EventSubject
+	Subject  *commonevent.EventSubject
 	Status   *commonenum.OutboxEventStatus
 }
 
@@ -71,11 +70,13 @@ type OutboxEventMarkFailedReq struct {
 }
 
 type EventClientMessage struct {
+	EventID string
 	Subject string
 	Payload string
 	Headers map[string]string
 }
 
 type EventClient interface {
+	Ensure(context.Context) error
 	Publish(ctx context.Context, message *EventClientMessage) error
 }

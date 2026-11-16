@@ -75,11 +75,11 @@ func (u *LarkWebhookUsecase) Process(ctx context.Context, req *LarkWebhookProces
 		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	delivery := &model.NotificationLarkWebhookDelivery{
-		EventID:     notificationContext.EventID,
-		EventType:   notificationContext.EventType,
-		WebhookID:   rendered.WebhookID,
-		RequestBody: string(requestBodyBytes),
-		Status:      notifyenum.NotificationChannelStatusProcessing,
+		EventID:          notificationContext.EventID,
+		NotificationType: notificationContext.NotificationType,
+		WebhookID:        rendered.WebhookID,
+		RequestBody:      string(requestBodyBytes),
+		Status:           notifyenum.NotificationChannelStatusProcessing,
 	}
 	saveResp, err := u.larkWebhookDeliveryRepo.SaveOrGet(ctx, delivery)
 	if err == nil {

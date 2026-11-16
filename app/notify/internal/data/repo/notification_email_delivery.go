@@ -1,7 +1,6 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 
@@ -39,7 +38,7 @@ func (r *NotificationEmailDeliveryRepo) getClient(ctx context.Context) *gen.Clie
 func (r *NotificationEmailDeliveryRepo) SaveOrGet(ctx context.Context, delivery *model.NotificationEmailDelivery) (*model.NotificationEmailDelivery, error) {
 	save, err := r.getClient(ctx).NotificationEmailDelivery.Create().
 		SetEventID(delivery.EventID).
-		SetEventType(notificationemaildelivery.EventType(delivery.EventType)).
+		SetNotificationType(notificationemaildelivery.NotificationType(delivery.NotificationType)).
 		SetNillableReceiverID(delivery.ReceiverID).
 		SetToEmail(delivery.ToEmail).
 		SetSubject(delivery.Subject).
@@ -199,8 +198,8 @@ func (r *NotificationEmailDeliveryRepo) getEmailQuery(query *gen.NotificationEma
 	if len(req.EventIDs) > 0 {
 		query = query.Where(notificationemaildelivery.EventIDIn(req.EventIDs...))
 	}
-	if req.EventType != nil {
-		query = query.Where(notificationemaildelivery.EventTypeEQ(notificationemaildelivery.EventType(*req.EventType)))
+	if req.NotificationType != nil {
+		query = query.Where(notificationemaildelivery.NotificationTypeEQ(notificationemaildelivery.NotificationType(*req.NotificationType)))
 	}
 	if req.ReceiverID != nil {
 		query = query.Where(notificationemaildelivery.ReceiverIDEQ(*req.ReceiverID))
@@ -221,7 +220,7 @@ func (r *NotificationEmailDeliveryRepo) emailDelivery(item *gen.NotificationEmai
 	return &model.NotificationEmailDelivery{
 		ID:                item.ID,
 		EventID:           item.EventID,
-		EventType:         commonenum.EventType(item.EventType),
+		NotificationType:  notifyenum.NotificationType(item.NotificationType),
 		ReceiverID:        item.ReceiverID,
 		ToEmail:           item.ToEmail,
 		Subject:           item.Subject,

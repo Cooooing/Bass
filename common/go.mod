@@ -3,9 +3,8 @@ module common
 go 1.27.0
 
 require (
-	entgo.io/ent v0.14.5
+	entgo.io/ent v0.14.7-0.20261014065818-8037bc89bcab
 	github.com/88250/lute v1.7.6
-	github.com/bytedance/gopkg v0.1.3
 	github.com/dtm-labs/client v1.18.7
 	github.com/felixge/httpsnoop v1.1.0
 	github.com/go-kratos/kratos/contrib/config/consul/v3 v3.0.0-20260626125723-668db92c2c00

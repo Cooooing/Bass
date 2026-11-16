@@ -2,7 +2,6 @@ package schema
 
 import (
 	"common/pkg/constant"
-	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
 
 	notifyenum "notify/internal/enum"
@@ -32,7 +31,7 @@ func (NotificationLarkWebhookDelivery) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.String("event_id").Comment("来源事件 ID").NotEmpty(),
-		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("来源事件类型"),
+		field.Enum("notification_type").Values(notifyenum.NotificationTypeMap.EnumValues()...).Comment("通知类型"),
 		field.String("webhook_id").Comment("Lark webhook 配置标识").NotEmpty(),
 		field.String("request_body").Comment("请求体"),
 		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(notifyenum.NotificationChannelStatusProcessing.String()).Comment("通道状态"),

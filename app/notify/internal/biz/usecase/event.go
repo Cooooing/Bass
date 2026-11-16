@@ -4,8 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	commonenum "common/pkg/enum"
-	"common/proto/gen/common/enums"
+	event "common/proto/gen/common/enums/event"
 
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"
@@ -17,19 +16,19 @@ type EventHandler interface {
 }
 
 type EventHandleReq struct {
-	Event     *enums.Event
-	EventType commonenum.EventType
-	Language  notifyenum.Language
+	Event            *event.Event
+	NotificationType notifyenum.NotificationType
+	Language         notifyenum.Language
 }
 
 type EventUsecase struct {
 	log           *slog.Logger
-	eventHandlers map[commonenum.EventType][]EventHandler
+	eventHandlers map[event.EventSubject][]EventHandler
 }
 
 func NewEventUsecase(
 	logger *slog.Logger,
-	eventHandlers map[commonenum.EventType][]EventHandler,
+	eventHandlers map[event.EventSubject][]EventHandler,
 ) *EventUsecase {
 	return &EventUsecase{
 		log:           logger,
@@ -41,7 +40,7 @@ func (u *EventUsecase) Dispatch(ctx context.Context, req *EventHandleReq) error 
 	if req == nil || req.Event == nil || req.Event.GetEventId() == "" {
 		return nil
 	}
-	for _, handler := range u.eventHandlers[req.EventType] {
+	for _, handler := range u.eventHandlers[req.Event.GetSubject()] {
 		if handler == nil {
 			continue
 		}

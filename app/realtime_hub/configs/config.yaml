@@ -40,9 +40,9 @@ nats:
   reconnect_wait: 2s
   ping_interval: 30s
   flusher_timeout: 5s
-  enable_jet_stream: false
-  stream_name: ""
-  jet_stream_domain: ""
+  core_subscription:
+    max_pending_messages: 4096
+    max_pending_bytes: 8388608
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
@@ -50,3 +50,5 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
+business:
+  connection_lease: 30s

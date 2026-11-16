@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"common/pkg/apperror"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -141,11 +141,10 @@ func (d *CommentUsecase) Add(ctx context.Context, req *CommentAddReq) (*model.Co
 		}
 		c = commentResp
 		c.ReplyUserID = replyComment.CreatedBy
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_COMMENT_PUBLISHED,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_PUBLISHED,
-			Payload: &commonenums.Event_CommentPublished{
-				CommentPublished: &commonenums.CommentPublishedPayload{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_COMMENT_PUBLISHED,
+			Payload: &commonevent.Event_CommentPublished{
+				CommentPublished: &commonevent.CommentPublishedPayload{
 					CommentId: c.ID,
 				},
 			},
@@ -407,11 +406,10 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 		}); err != nil {
 			return err
 		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_COMMENT_STATUS_UPDATED,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED,
-			Payload: &commonenums.Event_CommentStatusUpdated{
-				CommentStatusUpdated: &commonenums.CommentStatusUpdatedPayload{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED,
+			Payload: &commonevent.Event_CommentStatusUpdated{
+				CommentStatusUpdated: &commonevent.CommentStatusUpdatedPayload{
 					SenderId:    access.ActorUserID,
 					CommentId:   commentID,
 					Action:      action.String(),
@@ -440,7 +438,7 @@ type CommentLikeReq struct {
 }
 
 func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, error) {
-	interaction := commentInteraction{commentID: req.CommentID, access: req.Access, active: req.Active, action: enum.CommentActionLike, stats: repo.CommentStatUpdate{LikeCount: 1}, event: d.commentLikedEvent}
+	interaction := commentInteraction{commentID: req.CommentID, access: req.Access, active: req.Active, action: enum.CommentActionLike, stats: repo.CommentStatUpdate{LikeCount: 1}, eventSubject: commonevent.EventSubject_EVENT_SUBJECT_COMMENT_LIKED}
 	return d.changeInteraction(ctx, interaction)
 }
 
@@ -458,12 +456,12 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 }
 
 type commentInteraction struct {
-	commentID int64
-	access    *model.ContentAccess
-	active    bool
-	action    enum.CommentAction
-	stats     repo.CommentStatUpdate
-	event     func(int64, int64) *commonenums.Event
+	commentID    int64
+	access       *model.ContentAccess
+	active       bool
+	action       enum.CommentAction
+	stats        repo.CommentStatUpdate
+	eventSubject commonevent.EventSubject
 }
 
 func (d *CommentUsecase) changeInteraction(ctx context.Context, interaction commentInteraction) (bool, error) {
@@ -492,7 +490,7 @@ func (d *CommentUsecase) changeInteraction(ctx context.Context, interaction comm
 			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: interaction.commentID, Stats: interaction.stats}); err != nil {
 				return err
 			}
-			outboxEvent, err = d.outboxRepo.Save(ctx, interaction.event(access.ActorUserID, interaction.commentID))
+			outboxEvent, err = d.outboxRepo.Save(ctx, d.commentInteractionEvent(interaction, access.ActorUserID))
 			return err
 		}
 		deleted, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{CommentID: interaction.commentID, UserID: access.ActorUserID, Action: interaction.action})
@@ -519,12 +517,15 @@ func (*CommentUsecase) negateCommentStats(stats repo.CommentStatUpdate) repo.Com
 	return stats
 }
 
-func (*CommentUsecase) commentLikedEvent(userID, commentID int64) *commonenums.Event {
-	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_COMMENT_LIKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED, Payload: &commonenums.Event_CommentLiked{CommentLiked: &commonenums.CommentLikedPayload{SenderId: userID, CommentId: commentID}}}
+func (*CommentUsecase) commentInteractionEvent(interaction commentInteraction, userID int64) *commonevent.Event {
+	if interaction.eventSubject != commonevent.EventSubject_EVENT_SUBJECT_COMMENT_LIKED {
+		return nil
+	}
+	return &commonevent.Event{Subject: interaction.eventSubject, Payload: &commonevent.Event_CommentLiked{CommentLiked: &commonevent.CommentLikedPayload{SenderId: userID, CommentId: interaction.commentID}}}
 }
 
-func (*CommentUsecase) commentThankedEvent(userID, commentID int64) *commonenums.Event {
-	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_COMMENT_THANKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_THANKED, Payload: &commonenums.Event_CommentThanked{CommentThanked: &commonenums.CommentThankedPayload{SenderId: userID, CommentId: commentID}}}
+func (*CommentUsecase) commentThankedEvent(userID, commentID int64) *commonevent.Event {
+	return &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_COMMENT_THANKED, Payload: &commonevent.Event_CommentThanked{CommentThanked: &commonevent.CommentThankedPayload{SenderId: userID, CommentId: commentID}}}
 }
 
 type CommentMapViewerActionStatesReq struct {

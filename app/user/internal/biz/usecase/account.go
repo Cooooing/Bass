@@ -103,12 +103,23 @@ func (s *AccountUsecase) CheckAvailability(ctx context.Context, availability *mo
 	return result, nil
 }
 
-func (s *AccountUsecase) List(ctx context.Context, query *repo.AccountGetReq) ([]*model.Account, error) {
-	return s.accountRepo.List(ctx, query)
+func (s *AccountUsecase) List(ctx context.Context, query *model.AccountListQuery) ([]*model.Account, error) {
+	return s.accountRepo.List(ctx, s.accountGetRequest(query))
 }
 
-func (s *AccountUsecase) Map(ctx context.Context, query *repo.AccountGetReq) (map[int64]*model.Account, error) {
-	return s.accountRepo.Map(ctx, query)
+func (s *AccountUsecase) Map(ctx context.Context, query *model.AccountListQuery) (map[int64]*model.Account, error) {
+	return s.accountRepo.Map(ctx, s.accountGetRequest(query))
+}
+
+func (*AccountUsecase) accountGetRequest(query *model.AccountListQuery) *repo.AccountGetReq {
+	if query == nil {
+		return &repo.AccountGetReq{}
+	}
+	return &repo.AccountGetReq{
+		UserIDs:         query.UserIDs,
+		Names:           query.Names,
+		ExcludedUserIDs: query.ExcludedUserIDs,
+	}
 }
 
 func (s *AccountUsecase) SearchMention(ctx context.Context, query string, page *commonmodel.PageReq, excludedUserIDs []int64) (*repo.AccountPageResp, error) {

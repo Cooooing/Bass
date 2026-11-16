@@ -40,14 +40,14 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 	rows := make([]*repo.Notification, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
 		row := &repo.Notification{
-			ID:         item.GetId(),
-			EventID:    item.GetEventId(),
-			ReceiverID: item.GetReceiverId(),
-			EventType:  int32(item.GetEventType()),
-			Title:      item.GetTitle(),
-			Content:    item.GetContent(),
-			CreatedAt:  new(item.GetCreatedAt().AsTime()),
-			UpdatedAt:  new(item.GetUpdatedAt().AsTime()),
+			ID:               item.GetId(),
+			EventID:          item.GetEventId(),
+			ReceiverID:       item.GetReceiverId(),
+			NotificationType: int32(item.GetNotificationType()),
+			Title:            item.GetTitle(),
+			Content:          item.GetContent(),
+			CreatedAt:        new(item.GetCreatedAt().AsTime()),
+			UpdatedAt:        new(item.GetUpdatedAt().AsTime()),
 		}
 		if item.GetReadAt() != nil {
 			row.ReadAt = new(item.GetReadAt().AsTime())

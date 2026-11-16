@@ -131,7 +131,7 @@ func (u *RealtimeUsecase) DeliverPrivateChatMessage(ctx context.Context, realm s
 	return u.Deliver(ctx, realm, receiverID, enum.DeliveryKindPrivateChatMessage, payload)
 }
 
-// DeliverGlobalChatMessage 将全局聊天室变化广播给实时域中的每个本机 node。
+// DeliverGlobalChatMessage 将全局聊天室消息广播给实时域中的每个本机 node。
 func (u *RealtimeUsecase) DeliverGlobalChatMessage(realm string, messageID, senderID int64, messageType int32, content string, createdAt time.Time) {
 	message := &model.NodeMessage{Delivery: &model.Delivery{Kind: enum.DeliveryKindGlobalChatMessage, Payload: model.GlobalChatMessageDelivery{MessageID: messageID, SenderID: senderID, MessageType: messageType, Content: content, CreatedAt: createdAt}}}
 	u.mu.RLock()

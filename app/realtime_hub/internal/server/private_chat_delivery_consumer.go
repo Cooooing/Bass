@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
 	commonenum "common/pkg/enum"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 
 	"realtime_hub/internal/biz/usecase"
 
@@ -16,32 +16,43 @@ import (
 
 // PrivateChatDeliveryConsumer 消费私聊事件并路由给消息双方。
 type PrivateChatDeliveryConsumer struct {
-	nats     client.Subscriber
-	realtime *usecase.RealtimeUsecase
-	cancel   context.CancelFunc
+	nats         *nats.Client
+	realtime     *usecase.RealtimeUsecase
+	subscription *nats.Subscription
+	cancel       context.CancelFunc
 }
 
 func (c *PrivateChatDeliveryConsumer) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	c.cancel = cancel
-	_, err := c.nats.Subscribe(runCtx, commonenum.EventSubjectIMPrivateChatMessageCreated.String(), c.handle)
-	return err
+	subscription, err := c.nats.Subscribe(runCtx, commonenum.EventSubjectIMPrivateChatMessageCreated.String(), c.handle)
+	if err != nil {
+		cancel()
+		return err
+	}
+	c.subscription = subscription
+	return nil
 }
 
 func (c *PrivateChatDeliveryConsumer) Stop(context.Context) error {
 	if c.cancel != nil {
 		c.cancel()
 	}
+	if c.subscription != nil {
+		err := c.subscription.Unsubscribe()
+		c.subscription = nil
+		return err
+	}
 	return nil
 }
 
-func (c *PrivateChatDeliveryConsumer) handle(ctx context.Context, message *client.Message) error {
-	event := &commonenums.Event{}
+func (c *PrivateChatDeliveryConsumer) handle(ctx context.Context, message *nats.Message) error {
+	event := &commonevent.Event{}
 	if err := protojson.Unmarshal(message.Data, event); err != nil {
 		return fmt.Errorf("decode private chat delivery event: %w", err)
 	}
 	payload := event.GetImPrivateChatMessageCreated()
-	if event.GetType() != commonenums.EventType_EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED || payload == nil {
+	if event.GetSubject() != commonevent.EventSubject_EVENT_SUBJECT_IM_PRIVATE_CHAT_MESSAGE_CREATED || payload == nil {
 		return nil
 	}
 	if payload.GetMessageId() <= 0 || payload.GetSenderId() <= 0 || payload.GetReceiverId() <= 0 {

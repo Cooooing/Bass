@@ -3,10 +3,10 @@ syntax = "proto3";
 package common.api.app.bff_bbs.v1.notify;
 
 import "common/common.proto";
-import "common/enums/event.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "notify/v1/enum/notification_type.proto";
 
 option go_package = "common/proto/gen/bff_bbs/v1/notify;notify";
 
@@ -47,7 +47,7 @@ message ListNotifications {
       int64 id = 1; // 通知 ID
       string event_id = 2; // 来源事件 ID
       int64 receiver_id = 3; // 接收账号 ID
-      common.enums.EventType event_type = 4; // 来源事件类型
+      .common.api.app.notify.v1.NotificationType notification_type = 4; // 通知类型
       string title = 5; // 通知标题
       string content = 6; // 通知内容
       google.protobuf.Timestamp read_at = 7; // 已读时间

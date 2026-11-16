@@ -42,7 +42,6 @@ func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxE
 	if req.EventID == "" {
 		return nil, fmt.Errorf("event id is required")
 	}
-	eventType := req.EventType
 	if _, ok := commonenum.EventSubjectMap.ToProto(req.Subject); !ok {
 		return nil, fmt.Errorf("unknown event subject: %s", req.Subject)
 	}
@@ -50,8 +49,7 @@ func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxE
 	client := r.getClient(ctx)
 	save, err := client.InboxEvent.Create().
 		SetEventID(req.EventID).
-		SetEventType(inboxevent.EventType(eventType)).
-		SetSubject(req.Subject).
+		SetSubject(req.Subject.String()).
 		SetPayload(req.Payload).
 		SetStatus(inboxevent.Status(commonenum.InboxEventStatusProcessing)).
 		SetAttemptCount(1).
@@ -276,11 +274,8 @@ func (r *InboxEventRepo) getQuery(query *gen.InboxEventQuery, req *bizrepo.Inbox
 	if len(req.EventIDs) > 0 {
 		query = query.Where(inboxevent.EventIDIn(req.EventIDs...))
 	}
-	if req.EventType != nil {
-		query = query.Where(inboxevent.EventTypeEQ(inboxevent.EventType(*req.EventType)))
-	}
 	if req.Subject != nil {
-		query = query.Where(inboxevent.SubjectEQ(*req.Subject))
+		query = query.Where(inboxevent.SubjectEQ(req.Subject.String()))
 	}
 	if req.Status != nil {
 		query = query.Where(inboxevent.StatusEQ(inboxevent.Status(*req.Status)))
@@ -295,8 +290,7 @@ func (r *InboxEventRepo) inboxEvent(row *gen.InboxEvent) *model.InboxEvent {
 	return &model.InboxEvent{
 		ID:                  row.ID,
 		EventID:             row.EventID,
-		EventType:           commonenum.EventType(row.EventType),
-		Subject:             row.Subject,
+		Subject:             commonenum.EventSubject(row.Subject),
 		Payload:             row.Payload,
 		Status:              commonenum.InboxEventStatus(row.Status),
 		AttemptCount:        row.AttemptCount,

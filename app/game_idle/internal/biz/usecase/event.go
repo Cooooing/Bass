@@ -3,8 +3,9 @@ package usecase
 import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	"context"
+	"fmt"
 	"log/slog"
 	"strconv"
 	"time"
@@ -34,17 +35,16 @@ func NewGameIdleEventUsecase(logger *slog.Logger, gameIdleEventRepo repo.GameIdl
 }
 
 func (u *GameIdleEventUsecase) PublishCloseSession(ctx context.Context, event *model.CharacterCloseSessionEvent) error {
-	reason := commonenums.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_UNSPECIFIED
+	reason := commonevent.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_UNSPECIFIED
 	switch event.Reason {
 	case enum.CharacterCloseSessionReasonOccupied:
-		reason = commonenums.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_OCCUPIED
+		reason = commonevent.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_OCCUPIED
 	case enum.CharacterCloseSessionReasonTimeout:
-		reason = commonenums.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_TIMEOUT
+		reason = commonevent.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_TIMEOUT
 	}
-	return u.publish(ctx, &commonenums.Event{
-		Type: commonenums.EventType_EVENT_TYPE_GAME_IDLE_CLOSE_SESSION,
-		Payload: &commonenums.Event_GameIdleCloseSession{
-			GameIdleCloseSession: &commonenums.GameIdleCloseSessionPayload{
+	return u.publish(ctx, &commonevent.Event{
+		Payload: &commonevent.Event_GameIdleCloseSession{
+			GameIdleCloseSession: &commonevent.GameIdleCloseSessionPayload{
 				SessionId:       event.SessionID,
 				Reason:          reason,
 				Message:         event.Message,
@@ -65,11 +65,10 @@ func (u *GameIdleEventUsecase) PublishChatMessage(ctx context.Context, message *
 	if message.ReceiverCharacterID != nil {
 		receiverCharacterID = *message.ReceiverCharacterID
 	}
-	return u.publish(ctx, &commonenums.Event{
-		Type:      commonenums.EventType_EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE,
+	return u.publish(ctx, &commonevent.Event{
 		Timestamp: timestamppb.New(createdAt),
-		Payload: &commonenums.Event_GameIdleChatMessage{
-			GameIdleChatMessage: &commonenums.GameIdleChatMessagePayload{
+		Payload: &commonevent.Event_GameIdleChatMessage{
+			GameIdleChatMessage: &commonevent.GameIdleChatMessagePayload{
 				MessageId:           message.ID,
 				ChannelType:         message.ChannelType.String(),
 				ChannelId:           message.ChannelID,
@@ -86,29 +85,28 @@ func (u *GameIdleEventUsecase) PublishChatMessage(ctx context.Context, message *
 }
 
 func (u *GameIdleEventUsecase) PublishActionCompleted(ctx context.Context, event *model.ActionCompletedEvent) {
-	itemChanges := make([]*commonenums.GameIdleItemChange, 0, len(event.ItemChanges))
+	itemChanges := make([]*commonevent.GameIdleItemChange, 0, len(event.ItemChanges))
 	for _, item := range event.ItemChanges {
-		itemChanges = append(itemChanges, &commonenums.GameIdleItemChange{
+		itemChanges = append(itemChanges, &commonevent.GameIdleItemChange{
 			ItemId:        item.ItemID,
 			QuantityDelta: item.QuantityDelta,
 			QuantityAfter: item.QuantityAfter,
 		})
 	}
-	abilityChanges := make([]*commonenums.GameIdleAbilityChange, 0, len(event.AbilityChanges))
+	abilityChanges := make([]*commonevent.GameIdleAbilityChange, 0, len(event.AbilityChanges))
 	for _, ability := range event.AbilityChanges {
-		abilityChanges = append(abilityChanges, &commonenums.GameIdleAbilityChange{
+		abilityChanges = append(abilityChanges, &commonevent.GameIdleAbilityChange{
 			AbilityId: ability.AbilityID,
 			ExpDelta:  ability.ExpDelta,
 			ExpAfter:  ability.ExpAfter,
 		})
 	}
-	err := u.publish(ctx, &commonenums.Event{
-		Type:      commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED,
+	err := u.publish(ctx, &commonevent.Event{
 		Timestamp: timestamppb.New(event.CompletedAt),
-		Payload: &commonenums.Event_GameIdleActionCompleted{
-			GameIdleActionCompleted: &commonenums.GameIdleActionCompletedPayload{
+		Payload: &commonevent.Event_GameIdleActionCompleted{
+			GameIdleActionCompleted: &commonevent.GameIdleActionCompletedPayload{
 				CharacterId: event.CharacterID,
-				Action: &commonenums.GameIdleActionCompletedAction{
+				Action: &commonevent.GameIdleActionCompletedAction{
 					ActionId:       event.ActionID,
 					TimesFinished:  event.TimesFinished,
 					TimesRemaining: event.TimesRemaining,
@@ -131,10 +129,9 @@ func (u *GameIdleEventUsecase) PublishAbilityLeveledUp(ctx context.Context, even
 	if event == nil {
 		return
 	}
-	err := u.publish(ctx, &commonenums.Event{
-		Type: commonenums.EventType_EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP,
-		Payload: &commonenums.Event_GameIdleAbilityLeveledUp{
-			GameIdleAbilityLeveledUp: &commonenums.GameIdleAbilityLeveledUpPayload{
+	err := u.publish(ctx, &commonevent.Event{
+		Payload: &commonevent.Event_GameIdleAbilityLeveledUp{
+			GameIdleAbilityLeveledUp: &commonevent.GameIdleAbilityLeveledUpPayload{
 				CharacterId:  event.CharacterID,
 				AbilityId:    event.AbilityID,
 				Level:        event.Level,
@@ -151,20 +148,19 @@ func (u *GameIdleEventUsecase) PublishAbilityLeveledUp(ctx context.Context, even
 }
 
 func (u *GameIdleEventUsecase) PublishActionQueueUpdated(ctx context.Context, queue *model.CharacterActionQueue) {
-	items := make([]*commonenums.GameIdleActionQueueItem, 0, len(queue.Items))
+	items := make([]*commonevent.GameIdleActionQueueItem, 0, len(queue.Items))
 	for _, item := range queue.Items {
-		items = append(items, &commonenums.GameIdleActionQueueItem{
+		items = append(items, &commonevent.GameIdleActionQueueItem{
 			ActionId:  item.ActionID,
 			Times:     item.Times,
 			CreatedAt: timestamppb.New(item.CreatedAt),
 		})
 	}
 	updatedAt := time.Now()
-	err := u.publish(ctx, &commonenums.Event{
-		Type:      commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED,
+	err := u.publish(ctx, &commonevent.Event{
 		Timestamp: timestamppb.New(updatedAt),
-		Payload: &commonenums.Event_GameIdleActionQueueUpdated{
-			GameIdleActionQueueUpdated: &commonenums.GameIdleActionQueueUpdatedPayload{
+		Payload: &commonevent.Event_GameIdleActionQueueUpdated{
+			GameIdleActionQueueUpdated: &commonevent.GameIdleActionQueueUpdatedPayload{
 				CharacterId: queue.CharacterID,
 				Items:       items,
 				UpdatedAt:   timestamppb.New(updatedAt),
@@ -178,10 +174,14 @@ func (u *GameIdleEventUsecase) PublishActionQueueUpdated(ctx context.Context, qu
 	}
 }
 
-func (u *GameIdleEventUsecase) publish(ctx context.Context, event *commonenums.Event, header map[string]string) error {
+func (u *GameIdleEventUsecase) publish(ctx context.Context, event *commonevent.Event, header map[string]string) error {
 	eventID := uuid.NewString()
 	event.EventId = eventID
-	event.Subject = commonenums.EventSubject_EVENT_SUBJECT_GAME_IDLE
+	subject, err := u.eventSubject(event)
+	if err != nil {
+		return err
+	}
+	event.Subject = commonenum.EventSubjectMap.MustToProto(subject)
 	if event.Timestamp == nil {
 		event.Timestamp = timestamppb.Now()
 	}
@@ -194,8 +194,25 @@ func (u *GameIdleEventUsecase) publish(ctx context.Context, event *commonenums.E
 		return err
 	}
 	return u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEventMessage{
-		Subject: commonenum.EventSubjectGameIdle.String(),
+		Subject: subject.String(),
 		Data:    payload,
 		Header:  header,
 	})
+}
+
+func (u *GameIdleEventUsecase) eventSubject(event *commonevent.Event) (commonenum.EventSubject, error) {
+	switch event.GetPayload().(type) {
+	case *commonevent.Event_GameIdleChatMessage:
+		return commonenum.EventSubjectGameIdleChatMessage, nil
+	case *commonevent.Event_GameIdleCloseSession:
+		return commonenum.EventSubjectGameIdleCloseSession, nil
+	case *commonevent.Event_GameIdleActionCompleted:
+		return commonenum.EventSubjectGameIdleActionCompleted, nil
+	case *commonevent.Event_GameIdleAbilityLeveledUp:
+		return commonenum.EventSubjectGameIdleAbilityLeveledUp, nil
+	case *commonevent.Event_GameIdleActionQueueUpdated:
+		return commonenum.EventSubjectGameIdleActionQueueUpdated, nil
+	default:
+		return "", fmt.Errorf("unsupported game idle event payload")
+	}
 }

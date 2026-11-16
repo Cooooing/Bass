@@ -38,7 +38,7 @@ func NewLivenessUsecase(source repo.LivenessSource, records repo.LivenessRecordR
 }
 
 // livenessWindow 将任意时间规整为本机时区下的业务日半开区间 [start, end)。
-func livenessWindow(date time.Time) (time.Time, time.Time) {
+func (*LivenessUsecase) livenessWindow(date time.Time) (time.Time, time.Time) {
 	local := date.In(time.Local)
 	start := time.Date(local.Year(), local.Month(), local.Day(), 0, 0, 0, 0, time.Local)
 	return start, start.AddDate(0, 0, 1)
@@ -58,7 +58,7 @@ func (u *LivenessUsecase) livenessRule() (*config.Business_Liveness, error) {
 	return rule, nil
 }
 
-func livenessScore(rule *config.Business_Liveness_Rule, count int32) int32 {
+func (*LivenessUsecase) livenessScore(rule *config.Business_Liveness_Rule, count int32) int32 {
 	if rule.GetLimit() > 0 {
 		count = min(count, rule.GetLimit())
 	}
@@ -72,13 +72,13 @@ func (u *LivenessUsecase) score(detail *model.LivenessDetail) (int32, error) {
 		return 0, err
 	}
 	score := rule.GetScore()
-	article := livenessScore(score.GetArticle(), detail.ArticleCount)
-	comment := livenessScore(score.GetComment(), detail.CommentCount)
-	like := livenessScore(score.GetLike(), detail.LikeCount)
-	thank := livenessScore(score.GetThank(), detail.ThankCount)
-	reward := livenessScore(score.GetReward(), detail.RewardCount)
-	view := livenessScore(score.GetView(), detail.ViewCount)
-	chat := livenessScore(score.GetGlobalChatMessage(), detail.GlobalChatMessageCount)
+	article := u.livenessScore(score.GetArticle(), detail.ArticleCount)
+	comment := u.livenessScore(score.GetComment(), detail.CommentCount)
+	like := u.livenessScore(score.GetLike(), detail.LikeCount)
+	thank := u.livenessScore(score.GetThank(), detail.ThankCount)
+	reward := u.livenessScore(score.GetReward(), detail.RewardCount)
+	view := u.livenessScore(score.GetView(), detail.ViewCount)
+	chat := u.livenessScore(score.GetGlobalChatMessage(), detail.GlobalChatMessageCount)
 	return min(article+comment+like+thank+reward+view+chat, score.GetMaximum()), nil
 }
 
@@ -105,7 +105,7 @@ func (u *LivenessUsecase) Get(ctx context.Context, userID int64, date time.Time)
 	if userID <= 0 {
 		return 0, nil, nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	start, end := livenessWindow(date)
+	start, end := u.livenessWindow(date)
 	record, err := u.records.Get(ctx, userID, start)
 	if err != nil {
 		return 0, nil, nil, err
@@ -127,7 +127,7 @@ func (u *LivenessUsecase) Get(ctx context.Context, userID int64, date time.Time)
 
 // Claim 领取指定业务日的活跃奖励。
 func (u *LivenessUsecase) Claim(ctx context.Context, userID int64, date time.Time) (*model.LivenessRecord, error) {
-	start, _ := livenessWindow(date)
+	start, _ := u.livenessWindow(date)
 	row, err := u.records.Get(ctx, userID, start)
 	if err != nil {
 		return nil, err
@@ -154,7 +154,7 @@ func (u *LivenessUsecase) Settle(ctx context.Context, date time.Time, pageSize i
 	if pageSize <= 0 || pageSize > 1000 {
 		return 0, 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	start, end := livenessWindow(date)
+	start, end := u.livenessWindow(date)
 	normal := enum.AccountStatusNormal
 	page := int64(1)
 	rule, err := u.livenessRule()

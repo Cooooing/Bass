@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
 	commonenum "common/pkg/enum"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 
 	"realtime_hub/internal/biz/usecase"
 
@@ -15,32 +15,43 @@ import (
 
 // NotificationDeliveryConsumer 消费站内信事件并路由 notification 下行消息。
 type NotificationDeliveryConsumer struct {
-	nats     client.Subscriber
-	realtime *usecase.RealtimeUsecase
-	cancel   context.CancelFunc
+	nats         *nats.Client
+	realtime     *usecase.RealtimeUsecase
+	subscription *nats.Subscription
+	cancel       context.CancelFunc
 }
 
 func (c *NotificationDeliveryConsumer) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	c.cancel = cancel
-	_, err := c.nats.Subscribe(runCtx, commonenum.EventSubjectNotifyStationMessagesCreated.String(), c.handle)
-	return err
+	subscription, err := c.nats.Subscribe(runCtx, commonenum.EventSubjectNotifyStationMessagesCreated.String(), c.handle)
+	if err != nil {
+		cancel()
+		return err
+	}
+	c.subscription = subscription
+	return nil
 }
 
 func (c *NotificationDeliveryConsumer) Stop(context.Context) error {
 	if c.cancel != nil {
 		c.cancel()
 	}
+	if c.subscription != nil {
+		err := c.subscription.Unsubscribe()
+		c.subscription = nil
+		return err
+	}
 	return nil
 }
 
-func (c *NotificationDeliveryConsumer) handle(ctx context.Context, message *client.Message) error {
-	event := &commonenums.Event{}
+func (c *NotificationDeliveryConsumer) handle(ctx context.Context, message *nats.Message) error {
+	event := &commonevent.Event{}
 	if err := protojson.Unmarshal(message.Data, event); err != nil {
 		return fmt.Errorf("decode notification delivery event: %w", err)
 	}
 	payload := event.GetNotifyStationMessagesCreated()
-	if event.GetType() != commonenums.EventType_EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED || payload == nil {
+	if event.GetSubject() != commonevent.EventSubject_EVENT_SUBJECT_NOTIFY_STATION_MESSAGES_CREATED || payload == nil {
 		return nil
 	}
 	if payload.GetNotificationId() <= 0 {

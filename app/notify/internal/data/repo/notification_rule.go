@@ -1,7 +1,6 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 
@@ -39,12 +38,12 @@ func (r *NotificationRuleRepo) getClient(ctx context.Context) *gen.Client {
 
 func (r *NotificationRuleRepo) Upsert(ctx context.Context, rule *model.NotificationRule) (*model.NotificationRule, error) {
 	err := r.getClient(ctx).NotificationRule.Create().
-		SetEventType(notificationrule.EventType(rule.EventType)).
+		SetNotificationType(notificationrule.NotificationType(rule.NotificationType)).
 		SetChannel(notificationrule.Channel(rule.Channel)).
 		SetLanguage(notificationrule.Language(rule.Language)).
 		SetEnabled(rule.Enabled).
 		OnConflict(
-			entsql.ConflictColumns(notificationrule.FieldEventType, notificationrule.FieldChannel, notificationrule.FieldLanguage),
+			entsql.ConflictColumns(notificationrule.FieldNotificationType, notificationrule.FieldChannel, notificationrule.FieldLanguage),
 			entsql.ConflictWhere(entsql.IsNull(notificationrule.FieldDeletedAt)),
 		).
 		UpdateEnabled().
@@ -54,9 +53,9 @@ func (r *NotificationRuleRepo) Upsert(ctx context.Context, rule *model.Notificat
 		return nil, err
 	}
 	return r.Get(ctx, &bizrepo.NotificationRuleQuery{
-		EventType: &rule.EventType,
-		Channel:   &rule.Channel,
-		Language:  &rule.Language,
+		NotificationType: &rule.NotificationType,
+		Channel:          &rule.Channel,
+		Language:         &rule.Language,
 	})
 }
 
@@ -70,7 +69,7 @@ func (r *NotificationRuleRepo) BulkUpsert(ctx context.Context, rules []*model.No
 			continue
 		}
 		creates = append(creates, r.getClient(ctx).NotificationRule.Create().
-			SetEventType(notificationrule.EventType(rule.EventType)).
+			SetNotificationType(notificationrule.NotificationType(rule.NotificationType)).
 			SetChannel(notificationrule.Channel(rule.Channel)).
 			SetLanguage(notificationrule.Language(rule.Language)).
 			SetEnabled(rule.Enabled))
@@ -80,7 +79,7 @@ func (r *NotificationRuleRepo) BulkUpsert(ctx context.Context, rules []*model.No
 	}
 	return r.getClient(ctx).NotificationRule.CreateBulk(creates...).
 		OnConflict(
-			entsql.ConflictColumns(notificationrule.FieldEventType, notificationrule.FieldChannel, notificationrule.FieldLanguage),
+			entsql.ConflictColumns(notificationrule.FieldNotificationType, notificationrule.FieldChannel, notificationrule.FieldLanguage),
 			entsql.ConflictWhere(entsql.IsNull(notificationrule.FieldDeletedAt)),
 		).
 		UpdateEnabled().
@@ -107,13 +106,13 @@ func (r *NotificationRuleRepo) List(ctx context.Context, req *bizrepo.Notificati
 	rules := make([]*model.NotificationRule, 0, len(list))
 	for _, item := range list {
 		rules = append(rules, &model.NotificationRule{
-			ID:        item.ID,
-			EventType: commonenum.EventType(item.EventType),
-			Channel:   notifyenum.NotificationChannel(item.Channel),
-			Language:  notifyenum.Language(item.Language),
-			Enabled:   item.Enabled,
-			CreatedAt: item.CreatedAt,
-			UpdatedAt: item.UpdatedAt,
+			ID:               item.ID,
+			NotificationType: notifyenum.NotificationType(item.NotificationType),
+			Channel:          notifyenum.NotificationChannel(item.Channel),
+			Language:         notifyenum.Language(item.Language),
+			Enabled:          item.Enabled,
+			CreatedAt:        item.CreatedAt,
+			UpdatedAt:        item.UpdatedAt,
 		})
 	}
 	return rules, nil
@@ -165,13 +164,13 @@ func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.Notificati
 	rules := make([]*model.NotificationRule, 0, len(list))
 	for _, item := range list {
 		rules = append(rules, &model.NotificationRule{
-			ID:        item.ID,
-			EventType: commonenum.EventType(item.EventType),
-			Channel:   notifyenum.NotificationChannel(item.Channel),
-			Language:  notifyenum.Language(item.Language),
-			Enabled:   item.Enabled,
-			CreatedAt: item.CreatedAt,
-			UpdatedAt: item.UpdatedAt,
+			ID:               item.ID,
+			NotificationType: notifyenum.NotificationType(item.NotificationType),
+			Channel:          notifyenum.NotificationChannel(item.Channel),
+			Language:         notifyenum.Language(item.Language),
+			Enabled:          item.Enabled,
+			CreatedAt:        item.CreatedAt,
+			UpdatedAt:        item.UpdatedAt,
 		})
 	}
 	return &bizrepo.NotificationRulePageResp{
@@ -195,15 +194,15 @@ func (r *NotificationRuleRepo) getQuery(query *gen.NotificationRuleQuery, req *b
 	if len(req.IDs) > 0 {
 		query = query.Where(notificationrule.IDIn(req.IDs...))
 	}
-	if req.EventType != nil {
-		query = query.Where(notificationrule.EventTypeEQ(notificationrule.EventType(*req.EventType)))
+	if req.NotificationType != nil {
+		query = query.Where(notificationrule.NotificationTypeEQ(notificationrule.NotificationType(*req.NotificationType)))
 	}
-	if len(req.EventTypes) > 0 {
-		values := make([]notificationrule.EventType, 0, len(req.EventTypes))
-		for _, item := range req.EventTypes {
-			values = append(values, notificationrule.EventType(item))
+	if len(req.NotificationTypes) > 0 {
+		values := make([]notificationrule.NotificationType, 0, len(req.NotificationTypes))
+		for _, item := range req.NotificationTypes {
+			values = append(values, notificationrule.NotificationType(item))
 		}
-		query = query.Where(notificationrule.EventTypeIn(values...))
+		query = query.Where(notificationrule.NotificationTypeIn(values...))
 	}
 	if req.Channel != nil {
 		query = query.Where(notificationrule.ChannelEQ(notificationrule.Channel(*req.Channel)))

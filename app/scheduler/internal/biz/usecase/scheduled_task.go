@@ -3,6 +3,7 @@ package usecase
 import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
@@ -31,7 +32,6 @@ import (
 
 type ScheduledTaskUsecase struct {
 	logger                           *slog.Logger
-	conf                             *config.Bootstrap
 	cronParser                       cron.Parser
 	tx                               utilent.TxFunc
 	scheduledTaskRepo                repo.ScheduledTaskRepo
@@ -45,11 +45,11 @@ type ScheduledTaskUsecase struct {
 	runningWG                        sync.WaitGroup
 	workerID                         string
 	clockSkewGrace                   time.Duration
+	defaultExecutionTimeout          time.Duration
 }
 
 func NewScheduledTaskUsecase(
 	logger *slog.Logger,
-	conf *config.Bootstrap,
 	tx utilent.TxFunc,
 	scheduledTaskRepo repo.ScheduledTaskRepo,
 	scheduledTaskCacheRepo repo.ScheduledTaskCacheRepo,
@@ -57,14 +57,18 @@ func NewScheduledTaskUsecase(
 	scheduledTaskVersionRepo repo.ScheduledTaskVersionRepo,
 	executionRepo repo.ScheduledTaskExecutionRecordRepo,
 	tasks map[string]taskimpl.Task,
+	conf *config.Bootstrap,
 ) *ScheduledTaskUsecase {
+	defaultExecutionTimeout := 30 * time.Second
+	if conf != nil && conf.GetBusiness() != nil && conf.GetBusiness().GetDefaultExecutionTimeout() != nil && conf.GetBusiness().GetDefaultExecutionTimeout().AsDuration() > 0 {
+		defaultExecutionTimeout = conf.GetBusiness().GetDefaultExecutionTimeout().AsDuration()
+	}
 	workerID := "scheduler"
 	if host, err := os.Hostname(); err == nil && host != "" {
 		workerID = host
 	}
 	return &ScheduledTaskUsecase{
 		logger:                           logger,
-		conf:                             conf,
 		cronParser:                       cron.NewParser(cron.Second | cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow),
 		tx:                               tx,
 		scheduledTaskRepo:                scheduledTaskRepo,
@@ -76,6 +80,7 @@ func NewScheduledTaskUsecase(
 		runningCancels:                   make(map[int64]context.CancelFunc),
 		workerID:                         workerID,
 		clockSkewGrace:                   10 * time.Second,
+		defaultExecutionTimeout:          defaultExecutionTimeout,
 	}
 }
 
@@ -96,10 +101,7 @@ func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledT
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if row.Timeout <= 0 {
-		row.Timeout = 300 * time.Second
-		if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDefaultExecutionTimeout() != nil && u.conf.GetBusiness().GetDefaultExecutionTimeout().AsDuration() > 0 {
-			row.Timeout = u.conf.GetBusiness().GetDefaultExecutionTimeout().AsDuration()
-		}
+		row.Timeout = u.defaultExecutionTimeout
 	}
 	if row.MaxAttempts <= 0 {
 		row.MaxAttempts = 1
@@ -126,14 +128,8 @@ func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledT
 		return nil, err
 	}
 	_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, saved.HandlerName.String())
-	schedulePrefix := "scheduler.schedule.scheduled_task"
-	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix() != "" {
-		schedulePrefix = u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix()
-	}
-	executeSubject := "scheduler.execute.scheduled_task"
-	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskExecuteSubject() != "" {
-		executeSubject = u.conf.GetBusiness().GetScheduledTaskExecuteSubject()
-	}
+	schedulePrefix := commonenum.SchedulerScheduledTaskScheduleSubjectPrefix
+	executeSubject := commonenum.SchedulerScheduledTaskExecuteSubject
 	subject := fmt.Sprintf("%s.%d", schedulePrefix, saved.ID)
 	if saved.Enabled {
 		err = u.scheduledTaskScheduleRepo.Schedule(
@@ -665,17 +661,11 @@ func (u *ScheduledTaskUsecase) EnsureSchedule(ctx context.Context) error {
 	if err := u.scheduledTaskScheduleRepo.Ensure(ctx); err != nil {
 		return err
 	}
-	schedulePrefix := "scheduler.schedule.scheduled_task"
-	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix() != "" {
-		schedulePrefix = u.conf.GetBusiness().GetScheduledTaskScheduleSubjectPrefix()
-	}
+	schedulePrefix := commonenum.SchedulerScheduledTaskScheduleSubjectPrefix
 	if err := u.scheduledTaskScheduleRepo.Cancel(ctx, schedulePrefix+".>"); err != nil {
 		return err
 	}
-	executeSubject := "scheduler.execute.scheduled_task"
-	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetScheduledTaskExecuteSubject() != "" {
-		executeSubject = u.conf.GetBusiness().GetScheduledTaskExecuteSubject()
-	}
+	executeSubject := commonenum.SchedulerScheduledTaskExecuteSubject
 	enabled := true
 	rows, err := u.scheduledTaskRepo.List(ctx, &repo.ScheduledTaskGetReq{Enabled: &enabled})
 	if err != nil {

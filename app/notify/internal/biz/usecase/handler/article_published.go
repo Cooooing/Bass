@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -33,7 +31,7 @@ func NewArticlePublishedHandler(
 }
 
 func (h *ArticlePublishedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticlePublish, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_published.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_published.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentArticlePublish, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_published.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_published.zh_CN.content.txt")}}}
 }
 
 func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -65,12 +63,12 @@ func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.Event
 	}
 	if article == nil || article.AuthorID == 0 || h.userClient == nil {
 		return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
-			EventID:      event.GetEventId(),
-			EventType:    req.EventType,
-			ActorUserID:  new(article.AuthorID),
-			Language:     req.Language,
-			Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
-			TemplateData: templateData,
+			EventID:          event.GetEventId(),
+			NotificationType: req.NotificationType,
+			ActorUserID:      new(article.AuthorID),
+			Language:         req.Language,
+			Channels:         []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
+			TemplateData:     templateData,
 		})
 	}
 	followerResp, err := h.userClient.ListFollowerIDs(ctx, article.AuthorID)
@@ -87,13 +85,13 @@ func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.Event
 		})
 	}
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
-		EventID:      event.GetEventId(),
-		EventType:    req.EventType,
-		ActorUserID:  new(article.AuthorID),
-		BusinessKey:  new(fmt.Sprintf("content:article-published:%d", article.ID)),
-		Language:     req.Language,
-		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
-		TemplateData: templateData,
-		Recipients:   recipients,
+		EventID:          event.GetEventId(),
+		NotificationType: req.NotificationType,
+		ActorUserID:      new(article.AuthorID),
+		BusinessKey:      new(fmt.Sprintf("content:article-published:%d", article.ID)),
+		Language:         req.Language,
+		Channels:         []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
+		TemplateData:     templateData,
+		Recipients:       recipients,
 	})
 }

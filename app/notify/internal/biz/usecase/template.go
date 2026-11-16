@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"bytes"
-	"common/pkg/enum"
 	utilent "common/pkg/util/ent"
+	event "common/proto/gen/common/enums/event"
 	"context"
 	"encoding/json"
 	"errors"
@@ -57,9 +57,9 @@ type TemplatePreviewResp struct {
 }
 
 type ListEnabledRulesWithTemplatesReq struct {
-	EventType enum.EventType
-	Language  notifyenum.Language
-	Channels  []notifyenum.NotificationChannel
+	NotificationType notifyenum.NotificationType
+	Language         notifyenum.Language
+	Channels         []notifyenum.NotificationChannel
 }
 
 func (u *TemplateUsecase) Preview(ctx context.Context, req *TemplatePreviewReq) (*TemplatePreviewResp, error) {
@@ -101,10 +101,10 @@ func (u *TemplateUsecase) ListEnabledRulesWithTemplates(ctx context.Context, req
 		return nil, nil
 	}
 	rules, err := u.notificationRuleRepo.List(ctx, &repo.NotificationRuleQuery{
-		EventType: &req.EventType,
-		Language:  &req.Language,
-		Channels:  req.Channels,
-		Enabled:   new(true),
+		NotificationType: &req.NotificationType,
+		Language:         &req.Language,
+		Channels:         req.Channels,
+		Enabled:          new(true),
 	})
 	if err != nil || len(rules) == 0 {
 		return rules, err
@@ -173,14 +173,14 @@ func (u *TemplateUsecase) ListEnabledRulesWithTemplates(ctx context.Context, req
 	return rules, nil
 }
 
-func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandlers map[enum.EventType][]EventHandler) error {
+func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandlers map[event.EventSubject][]EventHandler) error {
 	if u == nil || u.notificationRuleRepo == nil {
 		return nil
 	}
 	defaultTemplates := make(map[string]*model.NotificationTemplateDefinition)
 	defaultTemplateKeys := make([]string, 0)
 	defaultRules := make([]*model.NotificationRule, 0)
-	eventTypes := make([]enum.EventType, 0)
+	notificationTypes := make([]notifyenum.NotificationType, 0)
 	channels := make([]notifyenum.NotificationChannel, 0)
 	languages := make([]notifyenum.Language, 0)
 	for _, handlers := range eventHandlers {
@@ -192,19 +192,19 @@ func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandler
 				if tpl == nil {
 					continue
 				}
-				key := fmt.Sprintf("%s:%s:%s", tpl.EventType, tpl.Channel, tpl.Language)
+				key := fmt.Sprintf("%s:%s:%s", tpl.NotificationType, tpl.Channel, tpl.Language)
 				if _, ok := defaultTemplates[key]; ok {
 					continue
 				}
 				defaultTemplates[key] = tpl
 				defaultTemplateKeys = append(defaultTemplateKeys, key)
 				defaultRules = append(defaultRules, &model.NotificationRule{
-					EventType: tpl.EventType,
-					Channel:   tpl.Channel,
-					Language:  tpl.Language,
-					Enabled:   tpl.Enabled,
+					NotificationType: tpl.NotificationType,
+					Channel:          tpl.Channel,
+					Language:         tpl.Language,
+					Enabled:          tpl.Enabled,
 				})
-				eventTypes = append(eventTypes, tpl.EventType)
+				notificationTypes = append(notificationTypes, tpl.NotificationType)
 				channels = append(channels, tpl.Channel)
 				languages = append(languages, tpl.Language)
 			}
@@ -219,16 +219,16 @@ func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandler
 			return err
 		}
 		rules, err := u.notificationRuleRepo.List(txCtx, &repo.NotificationRuleQuery{
-			EventTypes: eventTypes,
-			Channels:   channels,
-			Languages:  languages,
+			NotificationTypes: notificationTypes,
+			Channels:          channels,
+			Languages:         languages,
 		})
 		if err != nil {
 			return err
 		}
 		rulesByKey := make(map[string]*model.NotificationRule, len(rules))
 		for _, rule := range rules {
-			rulesByKey[fmt.Sprintf("%s:%s:%s", rule.EventType, rule.Channel, rule.Language)] = rule
+			rulesByKey[fmt.Sprintf("%s:%s:%s", rule.NotificationType, rule.Channel, rule.Language)] = rule
 		}
 		stationTemplates := make([]*model.NotificationStationTemplate, 0)
 		emailTemplates := make([]*model.NotificationEmailTemplate, 0)
@@ -238,7 +238,7 @@ func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandler
 			tpl := defaultTemplates[key]
 			rule := rulesByKey[key]
 			if rule == nil || rule.ID == 0 {
-				return fmt.Errorf("notification rule not saved: event_type=%s channel=%s language=%s", tpl.EventType, tpl.Channel, tpl.Language)
+				return fmt.Errorf("notification rule not saved: notification_type=%s channel=%s language=%s", tpl.NotificationType, tpl.Channel, tpl.Language)
 			}
 			switch tpl.Channel {
 			case notifyenum.NotificationChannelStation:

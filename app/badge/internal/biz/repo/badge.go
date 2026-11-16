@@ -1,9 +1,10 @@
 package repo
 
 import (
-	"badge/internal/biz/model"
 	commonmodel "common/pkg/model"
 	"context"
+
+	"badge/internal/biz/model"
 )
 
 // BadgeRepo persists badges owned by the badge domain.

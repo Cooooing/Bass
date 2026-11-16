@@ -101,7 +101,7 @@ func (u *TencentSMSUsecase) Process(ctx context.Context, req *TencentSMSProcessR
 		}
 		delivery := &model.NotificationTencentSMSDelivery{
 			EventID:            notificationContext.EventID,
-			EventType:          notificationContext.EventType,
+			NotificationType:   notificationContext.NotificationType,
 			Phone:              phone,
 			SMSSDKAppID:        rendered.SMSSDKAppID,
 			SignName:           rendered.SignName,

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"common/pkg/enum"
 	"common/pkg/util"
 
 	"notify/internal/biz/model"
@@ -26,7 +25,7 @@ func NewPostscriptMentionedHandler(userClient repo.UserAccountRepo, contentClien
 }
 
 func (*PostscriptMentionedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: enum.EventTypeContentPostscriptMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/postscript_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/postscript_mentioned.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentPostscriptMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/postscript_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/postscript_mentioned.zh_CN.content.txt")}}}
 }
 
 func (h *PostscriptMentionedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -65,5 +64,5 @@ func (h *PostscriptMentionedHandler) Handle(ctx context.Context, req *usecase.Ev
 		}
 	}
 	businessKey := fmt.Sprintf("content:postscript-mention:%d", postscript.ID)
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: enum.EventTypeContentPostscriptMention, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.PostscriptMention{Article: h.articleTemplateData(article), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeContentPostscriptMention, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.PostscriptMention{Article: h.articleTemplateData(article), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: recipients})
 }

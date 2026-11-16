@@ -47,9 +47,6 @@ nats:
   reconnect_wait: 2s
   ping_interval: 30s
   flusher_timeout: 5s
-  enable_jet_stream: false
-  stream_name: ""
-  jet_stream_domain: ""
 dtm:
   grpc_endpoint: ${DTM_GRPC_ENDPOINT:127.0.0.1:36790}
   timeout: 5s

@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
@@ -27,10 +25,10 @@ func NewArticleWatchCreatedHandler(
 
 func (*ArticleWatchCreatedHandler) Templates() []*model.NotificationTemplateDefinition {
 	return []*model.NotificationTemplateDefinition{{
-		EventType: commonenum.EventTypeContentArticleWatch,
-		Channel:   notifyenum.NotificationChannelStation,
-		Language:  notifyenum.LanguageZhCN,
-		Enabled:   true,
+		NotificationType: notifyenum.NotificationTypeContentArticleWatch,
+		Channel:          notifyenum.NotificationChannelStation,
+		Language:         notifyenum.LanguageZhCN,
+		Enabled:          true,
 		StationTemplate: &model.NotificationStationTemplateDefinition{
 			TitleTemplate:   notifytemplate.MustReadTemplate("station/article_watched.zh_CN.title.txt"),
 			ContentTemplate: notifytemplate.MustReadTemplate("station/article_watched.zh_CN.content.txt"),
@@ -52,5 +50,5 @@ func (h *ArticleWatchCreatedHandler) Handle(ctx context.Context, req *usecase.Ev
 		return err
 	}
 	businessKey := fmt.Sprintf("content:article-watched:%d:%d", payload.GetArticleId(), payload.GetSenderId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: req.EventType, ActorUserID: notificationContext.ActorUserID, BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: notificationContext.TemplateData, Recipients: notificationContext.Recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: req.NotificationType, ActorUserID: notificationContext.ActorUserID, BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: notificationContext.TemplateData, Recipients: notificationContext.Recipients})
 }

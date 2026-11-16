@@ -1,84 +1,15 @@
 syntax = "proto3";
 
-package common.api.app.common.enums;
+package common.api.app.common.enums.event;
 
-import "common/enums/event_payload_content.proto";
-import "common/enums/event_payload_game_idle.proto";
-import "common/enums/event_payload_im.proto";
-import "common/enums/event_payload_notify.proto";
-import "common/enums/event_payload_user.proto";
+import "common/enums/event/event_payload_content.proto";
+import "common/enums/event/event_payload_game_idle.proto";
+import "common/enums/event/event_payload_im.proto";
+import "common/enums/event/event_payload_notify.proto";
+import "common/enums/event/event_payload_user.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "common/proto/gen/common/enums;enums";
-
-// 事件类型 — 每个服务预留 1000，内部按业务细分
-enum EventType {
-  EVENT_TYPE_UNSPECIFIED = 0;
-
-  // 用户事件（1000-1999）
-  EVENT_TYPE_USER_FOLLOW = 1001; // 关注用户
-  EVENT_TYPE_USER_UNFOLLOW = 1002; // 取消关注用户
-  EVENT_TYPE_USER_REGISTER = 1003; // 用户注册
-  EVENT_TYPE_USER_LOGIN = 1004; // 用户登录
-  EVENT_TYPE_USER_LOGOUT = 1005; // 用户登出
-  EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE = 1006; // 用户邮箱验证码
-  EVENT_TYPE_USER_PHONE_VERIFICATION_CODE = 1007; // 用户手机号验证码
-  EVENT_TYPE_USER_BLOCK = 1010; // 拉黑用户
-  EVENT_TYPE_USER_UNBLOCK = 1011; // 取消拉黑用户
-  EVENT_TYPE_USER_TOTP_ENABLE = 1012; // 启用 TOTP 认证
-  EVENT_TYPE_USER_TOTP_DISABLE = 1013; // 停用 TOTP 认证
-  EVENT_TYPE_USER_ACCOUNT_CANCELLED = 1014; // 用户账号注销
-  EVENT_TYPE_USER_ACCOUNT_BANNED = 1015; // 用户账号封禁
-  EVENT_TYPE_USER_ACCOUNT_UNBANNED = 1016; // 用户账号解封
-  EVENT_TYPE_USER_CHECKIN_COMPLETED = 1017; // 用户完成签到
-
-  // 内容文章事件（2000-2099）
-  EVENT_TYPE_ARTICLE_PUBLISHED = 2001; // 发布文章
-  EVENT_TYPE_ARTICLE_LIKED = 2002; // 点赞文章
-  EVENT_TYPE_ARTICLE_THANKED = 2003; // 感谢文章
-  EVENT_TYPE_ARTICLE_COLLECTED = 2004; // 收藏文章
-  EVENT_TYPE_ARTICLE_WATCHED = 2005; // 关注文章动态
-  EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER = 2006; // 采纳答案
-  EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED = 2007; // 添加文章附言
-  EVENT_TYPE_ARTICLE_STATUS_UPDATED = 2008; // 更新文章状态
-  EVENT_TYPE_ARTICLE_LOTTERY_WON = 2009; // 抽奖中奖
-  EVENT_TYPE_ARTICLE_POLL_ENDED = 2010; // 投票截止
-  EVENT_TYPE_ARTICLE_LOTTERY_DRAWN = 2011; // 抽奖开奖
-  EVENT_TYPE_ARTICLE_MENTIONED = 2017; // 在文章中提及账号
-  EVENT_TYPE_POSTSCRIPT_MENTIONED = 2018; // 在附言中提及账号
-  EVENT_TYPE_ARTICLE_REWARDED = 2019; // 打赏文章打赏区
-  EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED = 2012; // 关注文章新增评论
-  EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED = 2013; // 关注文章新增附言
-  EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED = 2014; // 关注文章回答采纳
-  EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED = 2015; // 关注文章投票截止
-  EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN = 2016; // 关注文章抽奖开奖
-
-  // 内容评论事件（2100-2199）
-  EVENT_TYPE_COMMENT_PUBLISHED = 2101; // 发布评论
-  EVENT_TYPE_COMMENT_LIKED = 2102; // 点赞评论
-  EVENT_TYPE_COMMENT_THANKED = 2103; // 感谢评论
-  EVENT_TYPE_COMMENT_STATUS_UPDATED = 2104; // 更新评论状态
-  EVENT_TYPE_COMMENT_MENTIONED = 2105; // 在评论中提及账号
-
-  // 即时通讯事件（3000-3999）
-  EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED = 3001; // 创建私聊消息
-  EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED = 3002; // 创建全局聊天室消息
-  EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED = 3003; // 在全局聊天室中提及账号
-  EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED = 3004; // 创建全局聊天室弹幕
-  EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED = 3005; // 更新全局聊天室话题
-
-  // 挂机游戏事件（5000-5999）
-  EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE = 5001; // 挂机游戏聊天消息
-  EVENT_TYPE_GAME_IDLE_CLOSE_SESSION = 5002; // 挂机游戏关闭会话
-  EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED = 5003; // 挂机游戏行动完成
-  EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP = 5004; // 挂机游戏能力升级
-  EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED = 5005; // 挂机游戏行动队列更新
-
-  // 平台事件（4000-4999）
-
-  // 通知事件（6000-6999）
-  EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED = 6001; // 创建站内信
-}
+option go_package = "common/proto/gen/common/enums/event;event";
 
 // 事件主题 — 内部映射为实际 MQ subject。
 enum EventSubject {
@@ -129,6 +60,11 @@ enum EventSubject {
 
   // 挂机游戏事件（5000-5999）
   EVENT_SUBJECT_GAME_IDLE = 5000; // game_idle
+  EVENT_SUBJECT_GAME_IDLE_CHAT_MESSAGE = 5001; // game_idle.chat_message
+  EVENT_SUBJECT_GAME_IDLE_CLOSE_SESSION = 5002; // game_idle.close_session
+  EVENT_SUBJECT_GAME_IDLE_ACTION_COMPLETED = 5003; // game_idle.action_completed
+  EVENT_SUBJECT_GAME_IDLE_ABILITY_LEVELED_UP = 5004; // game_idle.ability_leveled_up
+  EVENT_SUBJECT_GAME_IDLE_ACTION_QUEUE_UPDATED = 5005; // game_idle.action_queue_updated
 
   // 平台事件（4000-4999）
 
@@ -136,10 +72,23 @@ enum EventSubject {
   EVENT_SUBJECT_NOTIFY_STATION_MESSAGES_CREATED = 6001; // notify.station_messages.created
 }
 
-// 事件消费队列组 — 映射为 NATS queue group。
-enum EventQueueGroup {
-  EVENT_QUEUE_GROUP_UNSPECIFIED = 0;
-  EVENT_QUEUE_GROUP_NOTIFY = 1; // notify
+// 事件消费组对应 JetStream durable 名称。
+enum EventConsumer {
+  EVENT_CONSUMER_UNSPECIFIED = 0; // 未指定消费者
+  EVENT_CONSUMER_NOTIFY = 1; // 通知消费者
+  EVENT_CONSUMER_SCHEDULER_SCHEDULED_TASK = 2; // 定时任务消费者
+  EVENT_CONSUMER_SCHEDULER_DELAYED_TASK = 3; // 延迟任务消费者
+  EVENT_CONSUMER_PLATFORM_ASSET_UPLOAD = 4; // 资产上传消费者
+}
+
+// 事件流标识 JetStream 中受应用管理的消息边界。
+enum EventStream {
+  EVENT_STREAM_UNSPECIFIED = 0; // 未指定流
+  EVENT_STREAM_USER = 1; // 用户领域事件流
+  EVENT_STREAM_CONTENT = 2; // 内容领域事件流
+  EVENT_STREAM_IM = 3; // 即时通信领域事件流
+  EVENT_STREAM_SCHEDULER_TASKS = 4; // 调度任务流
+  EVENT_STREAM_PLATFORM_ASSET_UPLOADS = 5; // 平台资产上传流
 }
 
 // outbox 事件投递状态。
@@ -166,13 +115,11 @@ enum InboxEventStatus {
 message Event {
   // 幂等标识
   string event_id = 1;
-  // 事件类型
-  EventType type = 2;
   // 事件主题
   EventSubject subject = 4;
   // 事件发生时间
   google.protobuf.Timestamp timestamp = 3;
-  // 业务数据，类型与 type 对应；字段号必须和 EventType 数值一致。
+  // 业务数据与 subject 对应。
   oneof payload {
     UserFollowPayload user_follow = 1001;
     UserUnfollowPayload user_unfollow = 1002;

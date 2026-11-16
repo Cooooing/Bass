@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
@@ -30,7 +28,7 @@ func NewArticleThankedHandler(
 }
 
 func (h *ArticleThankedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleThank, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_thanked.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_thanked.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentArticleThank, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_thanked.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_thanked.zh_CN.content.txt")}}}
 }
 
 func (h *ArticleThankedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -51,13 +49,13 @@ func (h *ArticleThankedHandler) Handle(ctx context.Context, req *usecase.EventHa
 		return err
 	}
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
-		EventID:      event.GetEventId(),
-		EventType:    req.EventType,
-		ActorUserID:  notificationContext.ActorUserID,
-		BusinessKey:  new(fmt.Sprintf("content:article-thanked:%d:%d", payload.GetArticleId(), payload.GetSenderId())),
-		Language:     req.Language,
-		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
-		TemplateData: notificationContext.TemplateData,
-		Recipients:   notificationContext.Recipients,
+		EventID:          event.GetEventId(),
+		NotificationType: req.NotificationType,
+		ActorUserID:      notificationContext.ActorUserID,
+		BusinessKey:      new(fmt.Sprintf("content:article-thanked:%d:%d", payload.GetArticleId(), payload.GetSenderId())),
+		Language:         req.Language,
+		Channels:         []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
+		TemplateData:     notificationContext.TemplateData,
+		Recipients:       notificationContext.Recipients,
 	})
 }

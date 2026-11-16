@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"common/pkg/enum"
 	"common/pkg/util"
 
 	"notify/internal/biz/model"
@@ -25,7 +24,7 @@ func NewGlobalChatMentionedHandler(userClient repo.UserAccountRepo, notifyUsecas
 }
 
 func (*GlobalChatMentionedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: enum.EventTypeIMGlobalChatMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/global_chat_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/global_chat_mentioned.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeIMGlobalChatMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/global_chat_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/global_chat_mentioned.zh_CN.content.txt")}}}
 }
 
 func (h *GlobalChatMentionedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -52,5 +51,5 @@ func (h *GlobalChatMentionedHandler) Handle(ctx context.Context, req *usecase.Ev
 		}
 	}
 	businessKey := fmt.Sprintf("im:global-chat-mention:%d", payload.GetMessageId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: enum.EventTypeIMGlobalChatMention, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.GlobalChatMention{Actor: h.templateUser(payload.GetSenderId(), actor)}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeIMGlobalChatMention, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.GlobalChatMention{Actor: h.templateUser(payload.GetSenderId(), actor)}, Recipients: recipients})
 }

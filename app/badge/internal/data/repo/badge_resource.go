@@ -1,13 +1,14 @@
 package repo
 
 import (
-	"badge/internal/biz/repo"
 	"common/pkg/client/rpc"
 	platformv1 "common/proto/gen/platform/v1"
 	"context"
 	"fmt"
 	"io"
 	"net/http"
+
+	"badge/internal/biz/repo"
 )
 
 // BadgeResourceRepo reads image and font bytes for Platform-confirmed assets.

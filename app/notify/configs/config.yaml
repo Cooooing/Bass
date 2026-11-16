@@ -47,9 +47,12 @@ nats:
   reconnect_wait: 2s
   ping_interval: 30s
   flusher_timeout: 5s
-  enable_jet_stream: false
-  stream_name: ""
-  jet_stream_domain: ""
+  consumers:
+    notify:
+      ack_wait: 30s
+      max_ack_pending: 100
+      pull_max_messages: 100
+      pull_expiry: 2s
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}

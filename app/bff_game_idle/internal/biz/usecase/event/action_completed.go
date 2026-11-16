@@ -1,7 +1,7 @@
 package event
 
 import (
-	commonenum "common/pkg/enum"
+	event "common/proto/gen/common/enums/event"
 	"context"
 
 	"bff_game_idle/internal/biz/usecase"
@@ -15,8 +15,8 @@ func NewActionCompletedHandler() *ActionCompletedHandler {
 	return &ActionCompletedHandler{}
 }
 
-func (h *ActionCompletedHandler) Type() commonenum.EventType {
-	return commonenum.EventTypeGameIdleActionCompleted
+func (h *ActionCompletedHandler) Type() event.EventSubject {
+	return event.EventSubject_EVENT_SUBJECT_GAME_IDLE_ACTION_COMPLETED
 }
 
 func (h *ActionCompletedHandler) Handle(ctx context.Context, req *usecase.WebSocketEventReq) (*usecase.WebSocketEventResult, error) {

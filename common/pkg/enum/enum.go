@@ -1,5 +1,7 @@
 package enum
 
+import "sort"
+
 // Mapping 维护内部 string 枚举与生成的 proto 枚举之间的双向映射。
 // 内部包应持久化 string 值，只在 API 边界转换为 proto 值。
 type Mapping[E ~string, P ~int32] struct {
@@ -26,6 +28,7 @@ func NewMapping[E ~string, P ~int32](entries map[E]Entry[E, P]) *Mapping[E, P] {
 		m.fromProto[protoVal] = val
 		m.values = append(m.values, string(val))
 	}
+	sort.Strings(m.values)
 	return m
 }
 

@@ -2,6 +2,7 @@ package data
 
 import (
 	commonClient "common/pkg/client"
+	nats "common/pkg/client/nats"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	userv1 "common/proto/gen/user/v1"
@@ -19,7 +20,7 @@ var DataProviderSet = wire.NewSet(
 	ProvideRedis,
 	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
-	commonClient.NewNatsClient,
+	nats.NewClient,
 	rpc.ProvideUserClient,
 	rpc.ProvideGameIdleClient,
 )

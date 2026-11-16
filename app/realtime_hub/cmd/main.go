@@ -8,8 +8,9 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-	"realtime_hub/internal/config"
 	"time"
+
+	"realtime_hub/internal/config"
 
 	"github.com/go-kratos/kratos/v3"
 	"github.com/go-kratos/kratos/v3/transport"

@@ -1,36 +1,51 @@
 package repo
 
 import (
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
+	commonenum "common/pkg/enum"
 	"context"
 	"fmt"
 
 	"content/internal/biz/repo"
 )
 
-var _ repo.EventClient = (*NatsEventClient)(nil)
+var _ repo.EventClient = (*EventClient)(nil)
 
-type NatsEventClient struct {
-	natsClient *client.NatsClient
+type EventClient struct {
+	natsClient *nats.Client
 }
 
-func NewNatsEventClient(
-	natsClient *client.NatsClient,
+func (p *EventClient) Ensure(ctx context.Context) error {
+	stream := commonenum.EventStreamConfigFor(commonenum.EventStreamContent)
+	return p.natsClient.EnsureStream(ctx, nats.StreamSpec{
+		Name:              stream.Name.String(),
+		Subjects:          stream.Subjects,
+		Retention:         stream.Retention,
+		AllowMsgSchedules: stream.AllowMsgSchedules,
+		AllowMsgTTL:       stream.AllowMsgTTL,
+		AllowRollup:       stream.AllowRollup,
+	})
+}
+
+func NewEventClient(
+	natsClient *nats.Client,
 ) repo.EventClient {
-	return &NatsEventClient{
+	return &EventClient{
 		natsClient: natsClient,
 	}
 }
 
-func (p *NatsEventClient) Publish(ctx context.Context, msg *repo.EventClientMessage) error {
-	if msg == nil {
-		return fmt.Errorf("event message is nil")
+func (p *EventClient) Publish(ctx context.Context, msg *repo.EventClientMessage) error {
+	if msg == nil || msg.EventID == "" {
+		return fmt.Errorf("event message and event id are required")
 	}
-	if err := p.natsClient.Publish(ctx, msg.Subject, &client.Message{
+	_, err := p.natsClient.JSPublish(ctx, msg.Subject, &nats.Message{
+		ID:      msg.EventID,
 		Subject: msg.Subject,
 		Data:    []byte(msg.Payload),
 		Header:  msg.Headers,
-	}); err != nil {
+	})
+	if err != nil {
 		return err
 	}
 	return nil

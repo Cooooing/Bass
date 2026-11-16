@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -25,7 +23,7 @@ func NewArticleWatchPostscriptAddedHandler(userClient repo.UserAccountRepo, cont
 }
 
 func (*ArticleWatchPostscriptAddedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleWatchedPostscriptAdded, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_postscript_added.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_postscript_added.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentArticleWatchedPostscriptAdded, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_postscript_added.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_postscript_added.zh_CN.content.txt")}}}
 }
 
 func (h *ArticleWatchPostscriptAddedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -56,5 +54,5 @@ func (h *ArticleWatchPostscriptAddedHandler) Handle(ctx context.Context, req *us
 		}
 	}
 	businessKey := fmt.Sprintf("content:article-watch-postscript:%d", payload.GetPostscriptId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: commonenum.EventTypeContentArticleWatchedPostscriptAdded, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeContentArticleWatchedPostscriptAdded, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: recipients})
 }

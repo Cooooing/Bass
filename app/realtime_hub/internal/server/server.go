@@ -1,7 +1,7 @@
 package server
 
 import (
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
 
 	"realtime_hub/internal/biz/usecase"
 
@@ -24,17 +24,21 @@ func ProvideServers(
 	return []transport.Server{notificationConsumer, privateChatConsumer, globalChatConsumer, controlConsumer, grpcServer, httpServer}
 }
 
-func NewPrivateChatDeliveryConsumer(nats client.Subscriber, realtime *usecase.RealtimeUsecase) *PrivateChatDeliveryConsumer {
+func NewPrivateChatDeliveryConsumer(nats *nats.Client, realtime *usecase.RealtimeUsecase) *PrivateChatDeliveryConsumer {
 	return &PrivateChatDeliveryConsumer{nats: nats, realtime: realtime}
 }
 
-func NewGlobalChatDeliveryConsumer(nats client.Subscriber, realtime *usecase.RealtimeUsecase) *GlobalChatDeliveryConsumer {
+func NewGlobalChatDeliveryConsumer(nats *nats.Client, realtime *usecase.RealtimeUsecase) *GlobalChatDeliveryConsumer {
 	return &GlobalChatDeliveryConsumer{nats: nats, realtime: realtime}
 }
 
 func NewNotificationDeliveryConsumer(
-	nats client.Subscriber,
+	nats *nats.Client,
 	realtime *usecase.RealtimeUsecase,
 ) *NotificationDeliveryConsumer {
 	return &NotificationDeliveryConsumer{nats: nats, realtime: realtime}
+}
+
+func NewControlConsumer(nats *nats.Client, realtime *usecase.RealtimeUsecase) *ControlConsumer {
+	return &ControlConsumer{nats: nats, realtime: realtime}
 }

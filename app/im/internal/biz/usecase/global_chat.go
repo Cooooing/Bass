@@ -25,6 +25,8 @@ func NewGlobalChatUsecase(log *slog.Logger, messages repo.GlobalChatMessageRepo,
 	return &GlobalChatUsecase{log: log, messages: messages, mutes: mutes, events: events}
 }
 
+func (u *GlobalChatUsecase) EnsureEventStream(ctx context.Context) error { return u.events.Ensure(ctx) }
+
 func (u *GlobalChatUsecase) Send(ctx context.Context, senderID int64, clientMessageID, content string) (*model.GlobalChatMessage, error) {
 	if senderID <= 0 || clientMessageID == "" || content == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

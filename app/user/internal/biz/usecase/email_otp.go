@@ -4,7 +4,7 @@ import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	"common/pkg/util/str"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"log/slog"
@@ -100,11 +100,10 @@ func (u *EmailOtpUsecase) SendEmailOtp(ctx context.Context, req *SendEmailOtpReq
 		return nil, err
 	}
 	outboxEvent, err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-		Event: &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
-			Payload: &commonenums.Event_UserEmailVerificationCode{
-				UserEmailVerificationCode: &commonenums.UserEmailVerificationCodePayload{
+		Event: &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
+			Payload: &commonevent.Event_UserEmailVerificationCode{
+				UserEmailVerificationCode: &commonevent.UserEmailVerificationCodePayload{
 					Email:          email,
 					Code:           code,
 					ExpiresSeconds: int64(codeTTL.Seconds()),

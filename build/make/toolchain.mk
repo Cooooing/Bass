@@ -13,7 +13,7 @@ init:
 	@go install github.com/envoyproxy/protoc-gen-validate@v1.3.3
 	@go install github.com/google/gnostic/cmd/protoc-gen-openapi@v0.7.1
 	@go install github.com/google/wire/cmd/wire@v0.7.0
-	@go install entgo.io/ent/cmd/ent@v0.14.5
+	@go install entgo.io/ent/cmd/ent@v0.14.7-0.20261014065818-8037bc89bcab
 	@go install github.com/bufbuild/buf/cmd/buf@v1.50.0
 
 endif

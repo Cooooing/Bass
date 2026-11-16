@@ -8,6 +8,7 @@ import (
 	utilent "common/pkg/util/ent"
 	"common/pkg/util/str"
 	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"strings"
@@ -178,11 +179,10 @@ func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 				return err
 			}
 			outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				Event: &commonenums.Event{
-					Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
-					Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,
-					Payload: &commonenums.Event_UserRegister{
-						UserRegister: &commonenums.UserRegisterPayload{
+				Event: &commonevent.Event{
+					Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_REGISTER,
+					Payload: &commonevent.Event_UserRegister{
+						UserRegister: &commonevent.UserRegisterPayload{
 							UserId: created.ID,
 						},
 					},
@@ -237,11 +237,10 @@ func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 				return err
 			}
 			outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				Event: &commonenums.Event{
-					Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
-					Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,
-					Payload: &commonenums.Event_UserRegister{
-						UserRegister: &commonenums.UserRegisterPayload{UserId: created.ID},
+				Event: &commonevent.Event{
+					Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_REGISTER,
+					Payload: &commonevent.Event_UserRegister{
+						UserRegister: &commonevent.UserRegisterPayload{UserId: created.ID},
 					},
 				},
 			})
@@ -386,11 +385,10 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	audit.Status = enum.LoginStatusSuccess
 	audit.SessionID = tokenPair.SessionID
 	outboxEvent, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-		Event: &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGIN,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGIN,
-			Payload: &commonenums.Event_UserLogin{
-				UserLogin: &commonenums.UserLoginPayload{
+		Event: &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_LOGIN,
+			Payload: &commonevent.Event_UserLogin{
+				UserLogin: &commonevent.UserLoginPayload{
 					UserId:     account.ID,
 					Name:       account.Name,
 					Account:    audit.AccountInput,
@@ -710,11 +708,10 @@ func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm comm
 		return err
 	}
 	outboxEvent, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-		Event: &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGOUT,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGOUT,
-			Payload: &commonenums.Event_UserLogout{
-				UserLogout: &commonenums.UserLogoutPayload{
+		Event: &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_LOGOUT,
+			Payload: &commonevent.Event_UserLogout{
+				UserLogout: &commonevent.UserLogoutPayload{
 					UserId:    claims.UserID,
 					Name:      claims.Name,
 					SessionId: claims.SessionID,
@@ -819,11 +816,10 @@ func (s *AuthUsecase) CancelAccount(ctx context.Context, req *CancelAccountReq) 
 			return err
 		}
 		outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_ACCOUNT_CANCELLED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_CANCELLED,
-				Payload: &commonenums.Event_UserAccountCancelled{
-					UserAccountCancelled: &commonenums.UserAccountCancelledPayload{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_CANCELLED,
+				Payload: &commonevent.Event_UserAccountCancelled{
+					UserAccountCancelled: &commonevent.UserAccountCancelledPayload{
 						UserId: req.UserID,
 					},
 				},
@@ -883,7 +879,7 @@ func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanA
 		if err := s.authCacheRepo.DeleteUserRbacPermissions(ctx, req.UserID); err != nil {
 			return err
 		}
-		payload := &commonenums.UserAccountBannedPayload{
+		payload := &commonevent.UserAccountBannedPayload{
 			UserId:        req.UserID,
 			OperatorId:    req.OperatorID,
 			OperatorRealm: req.OperatorRealm.String(),
@@ -894,10 +890,9 @@ func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanA
 			payload.BannedUntilUnixSeconds = req.BannedUntil.Unix()
 		}
 		outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_ACCOUNT_BANNED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_BANNED,
-				Payload: &commonenums.Event_UserAccountBanned{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_BANNED,
+				Payload: &commonevent.Event_UserAccountBanned{
 					UserAccountBanned: payload,
 				},
 			},

@@ -39,6 +39,10 @@ func NewOutboxUsecase(
 	}
 }
 
+func (u *OutboxUsecase) EnsureEventStream(ctx context.Context) error {
+	return u.eventClient.Ensure(ctx)
+}
+
 type PublishOutboxEventReq struct {
 	ID             int64
 	PublishTimeout time.Duration
@@ -148,6 +152,7 @@ func (u *OutboxUsecase) PublishBatch(ctx context.Context, req *PublishOutboxEven
 
 func (u *OutboxUsecase) publishClaimedEvent(ctx context.Context, event *model.OutboxEvent, maxRetry int32) (bool, error) {
 	err := u.eventClient.Publish(ctx, &repo.EventClientMessage{
+		EventID: event.EventID,
 		Subject: event.Subject.String(),
 		Payload: event.Payload,
 		Headers: event.Headers,

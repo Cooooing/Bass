@@ -1,9 +1,9 @@
 package channel
 
 import (
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
 	commonenum "common/pkg/enum"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	"context"
 	"time"
 
@@ -20,13 +20,13 @@ import (
 type StationUsecase struct {
 	log                *slog.Logger
 	stationMessageRepo repo.NotificationStationMessageRepo
-	publisher          client.Publisher
+	publisher          *nats.Client
 }
 
 func NewStationUsecase(
 	log *slog.Logger,
 	stationMessageRepo repo.NotificationStationMessageRepo,
-	publisher client.Publisher,
+	publisher *nats.Client,
 ) *StationUsecase {
 	return &StationUsecase{
 		log:                log,
@@ -65,13 +65,13 @@ func (u *StationUsecase) Process(ctx context.Context, req *StationProcessReq) (n
 			continue
 		}
 		message, err := u.stationMessageRepo.Save(ctx, &model.NotificationStationMessage{
-			EventID:     notificationContext.EventID,
-			EventType:   notificationContext.EventType,
-			ReceiverID:  recipient.UserID,
-			BusinessKey: notificationContext.BusinessKey,
-			Title:       rendered.Title,
-			Content:     rendered.Content,
-			Status:      notifyenum.NotificationChannelStatusSucceeded,
+			EventID:          notificationContext.EventID,
+			NotificationType: notificationContext.NotificationType,
+			ReceiverID:       recipient.UserID,
+			BusinessKey:      notificationContext.BusinessKey,
+			Title:            rendered.Title,
+			Content:          rendered.Content,
+			Status:           notifyenum.NotificationChannelStatusSucceeded,
 		})
 		if err != nil {
 			return notifyenum.NotificationChannelStatusInternalError, err
@@ -101,13 +101,12 @@ func (u *StationUsecase) publishStationMessagesCreated(ctx context.Context, even
 	if u.publisher == nil || eventID == "" || notificationID <= 0 || len(receiverIDs) == 0 {
 		return nil
 	}
-	event := &commonenums.Event{
+	event := &commonevent.Event{
 		EventId:   eventID,
-		Type:      commonenums.EventType_EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED,
-		Subject:   commonenums.EventSubject_EVENT_SUBJECT_NOTIFY_STATION_MESSAGES_CREATED,
+		Subject:   commonevent.EventSubject_EVENT_SUBJECT_NOTIFY_STATION_MESSAGES_CREATED,
 		Timestamp: timestamppb.New(time.Now()),
-		Payload: &commonenums.Event_NotifyStationMessagesCreated{
-			NotifyStationMessagesCreated: &commonenums.NotifyStationMessagesCreatedPayload{
+		Payload: &commonevent.Event_NotifyStationMessagesCreated{
+			NotifyStationMessagesCreated: &commonevent.NotifyStationMessagesCreatedPayload{
 				NotificationId: notificationID,
 				ReceiverIds:    receiverIDs,
 			},
@@ -117,5 +116,5 @@ func (u *StationUsecase) publishStationMessagesCreated(ctx context.Context, even
 	if err != nil {
 		return err
 	}
-	return u.publisher.Publish(ctx, commonenum.EventSubjectNotifyStationMessagesCreated.String(), &client.Message{Data: data})
+	return u.publisher.Publish(ctx, commonenum.EventSubjectNotifyStationMessagesCreated.String(), &nats.Message{Data: data})
 }

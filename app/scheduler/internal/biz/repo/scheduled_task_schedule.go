@@ -22,12 +22,12 @@ type ScheduledTaskScheduleReq struct {
 	Target        string
 }
 type ScheduledTaskScheduleMessage struct {
-	ScheduledTaskID      int64
-	ScheduledTaskVersion int64
-	ScheduleKey          string
-	ScheduledAt          time.Time
-	TriggerType          schedulerenum.TaskTriggerType
-	NumDelivered         uint64
-	StreamSequence       uint64
-	LatestForSubject     bool
+	ScheduledTaskID      int64                         `json:"scheduled_task_id"`
+	ScheduledTaskVersion int64                         `json:"scheduled_task_version"`
+	TriggerType          schedulerenum.TaskTriggerType `json:"trigger_type"`
+	ScheduleKey          string                        `json:"-"`
+	ScheduledAt          time.Time                     `json:"-"`
+	NumDelivered         uint64                        `json:"-"`
+	StreamSequence       uint64                        `json:"-"`
+	LatestForSubject     bool                          `json:"-"`
 }

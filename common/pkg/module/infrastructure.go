@@ -2,6 +2,7 @@ package module
 
 import (
 	commonclient "common/pkg/client"
+	"common/pkg/client/nats"
 	"fmt"
 	"log/slog"
 	"slices"
@@ -13,7 +14,7 @@ import (
 type Infrastructure struct {
 	observer *commonclient.Observer
 	redis    *commonclient.RedisClient
-	nats     *commonclient.NatsClient
+	nats     *nats.Client
 }
 
 // InfrastructureProviderSet 提供模块化单体模式下复用的基础设施客户端。
@@ -47,7 +48,7 @@ func NewInfrastructure(logger *slog.Logger, config *RuntimeConfig) (*Infrastruct
 		cleanups = append(cleanups, redisCleanup)
 	}
 	if config.Nats != nil {
-		natsClient, natsCleanup, err := commonclient.NewNatsClient(logger, config.Nats, observer)
+		natsClient, natsCleanup, err := nats.NewClient(config.Nats, observer)
 		if err != nil {
 			cleanup()
 			return nil, func() {}, err
@@ -75,7 +76,7 @@ func ProvideRedisClient(infra *Infrastructure) (*commonclient.RedisClient, error
 }
 
 // ProvideNatsClient 返回单体共享 NATS 客户端。
-func ProvideNatsClient(infra *Infrastructure) (*commonclient.NatsClient, error) {
+func ProvideNatsClient(infra *Infrastructure) (*nats.Client, error) {
 	if infra == nil || infra.nats == nil {
 		return nil, fmt.Errorf("monolith nats client is required")
 	}

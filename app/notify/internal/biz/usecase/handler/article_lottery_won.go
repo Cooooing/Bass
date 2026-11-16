@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -26,7 +24,7 @@ func NewArticleLotteryWonHandler(userClient repo.UserAccountRepo, contentClient 
 }
 
 func (*ArticleLotteryWonHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleLotteryWon, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_lottery_won.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_lottery_won.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentArticleLotteryWon, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_lottery_won.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_lottery_won.zh_CN.content.txt")}}}
 }
 
 func (h *ArticleLotteryWonHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -47,5 +45,5 @@ func (h *ArticleLotteryWonHandler) Handle(ctx context.Context, req *usecase.Even
 		return err
 	}
 	businessKey := fmt.Sprintf("content:article-lottery-won:%d:%d", payload.GetArticleId(), payload.GetWinnerId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: req.EventType, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleLotteryWon{Article: h.articleTemplateData(article), Author: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()]), Prize: fmt.Sprintf("奖项 #%d", payload.GetPrizeId())}, Recipients: []*model.NotificationRecipient{{UserID: payload.GetWinnerId()}}})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: req.NotificationType, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleLotteryWon{Article: h.articleTemplateData(article), Author: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()]), Prize: fmt.Sprintf("奖项 #%d", payload.GetPrizeId())}, Recipients: []*model.NotificationRecipient{{UserID: payload.GetWinnerId()}}})
 }

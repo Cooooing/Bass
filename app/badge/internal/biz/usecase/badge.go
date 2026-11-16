@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"badge/internal/biz/model"
-	"badge/internal/biz/repo"
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -10,6 +8,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"badge/internal/biz/model"
+	"badge/internal/biz/repo"
 )
 
 type BadgeUsecase struct {

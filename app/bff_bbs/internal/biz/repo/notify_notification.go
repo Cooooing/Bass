@@ -13,15 +13,15 @@ type NotificationClient interface {
 }
 
 type Notification struct {
-	ID         int64
-	EventID    string
-	ReceiverID int64
-	EventType  int32
-	Title      string
-	Content    string
-	ReadAt     *time.Time
-	CreatedAt  *time.Time
-	UpdatedAt  *time.Time
+	ID               int64
+	EventID          string
+	ReceiverID       int64
+	NotificationType int32
+	Title            string
+	Content          string
+	ReadAt           *time.Time
+	CreatedAt        *time.Time
+	UpdatedAt        *time.Time
 }
 
 type ListNotificationsReq struct {

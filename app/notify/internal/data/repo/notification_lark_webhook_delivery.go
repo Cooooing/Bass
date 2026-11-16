@@ -1,7 +1,6 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 
@@ -39,7 +38,7 @@ func (r *NotificationLarkWebhookDeliveryRepo) getClient(ctx context.Context) *ge
 func (r *NotificationLarkWebhookDeliveryRepo) SaveOrGet(ctx context.Context, delivery *model.NotificationLarkWebhookDelivery) (*model.NotificationLarkWebhookDelivery, error) {
 	save, err := r.getClient(ctx).NotificationLarkWebhookDelivery.Create().
 		SetEventID(delivery.EventID).
-		SetEventType(notificationlarkwebhookdelivery.EventType(delivery.EventType)).
+		SetNotificationType(notificationlarkwebhookdelivery.NotificationType(delivery.NotificationType)).
 		SetWebhookID(delivery.WebhookID).
 		SetRequestBody(delivery.RequestBody).
 		SetStatus(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusProcessing)).
@@ -190,8 +189,8 @@ func (r *NotificationLarkWebhookDeliveryRepo) getLarkWebhookQuery(query *gen.Not
 	if len(req.EventIDs) > 0 {
 		query = query.Where(notificationlarkwebhookdelivery.EventIDIn(req.EventIDs...))
 	}
-	if req.EventType != nil {
-		query = query.Where(notificationlarkwebhookdelivery.EventTypeEQ(notificationlarkwebhookdelivery.EventType(*req.EventType)))
+	if req.NotificationType != nil {
+		query = query.Where(notificationlarkwebhookdelivery.NotificationTypeEQ(notificationlarkwebhookdelivery.NotificationType(*req.NotificationType)))
 	}
 	if req.WebhookID != nil {
 		query = query.Where(notificationlarkwebhookdelivery.WebhookIDEQ(*req.WebhookID))
@@ -207,18 +206,18 @@ func (r *NotificationLarkWebhookDeliveryRepo) larkWebhookDelivery(item *gen.Noti
 		return nil
 	}
 	return &model.NotificationLarkWebhookDelivery{
-		ID:            item.ID,
-		EventID:       item.EventID,
-		EventType:     commonenum.EventType(item.EventType),
-		WebhookID:     item.WebhookID,
-		RequestBody:   item.RequestBody,
-		Status:        notifyenum.NotificationChannelStatus(item.Status),
-		AttemptCount:  item.AttemptCount,
-		LastAttemptAt: item.LastAttemptAt,
-		HTTPStatus:    item.HTTPStatus,
-		RespBody:      item.RespBody,
-		SentAt:        item.SentAt,
-		CreatedAt:     item.CreatedAt,
-		UpdatedAt:     item.UpdatedAt,
+		ID:               item.ID,
+		EventID:          item.EventID,
+		NotificationType: notifyenum.NotificationType(item.NotificationType),
+		WebhookID:        item.WebhookID,
+		RequestBody:      item.RequestBody,
+		Status:           notifyenum.NotificationChannelStatus(item.Status),
+		AttemptCount:     item.AttemptCount,
+		LastAttemptAt:    item.LastAttemptAt,
+		HTTPStatus:       item.HTTPStatus,
+		RespBody:         item.RespBody,
+		SentAt:           item.SentAt,
+		CreatedAt:        item.CreatedAt,
+		UpdatedAt:        item.UpdatedAt,
 	}
 }

@@ -1,9 +1,9 @@
 package data
 
 import (
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
 	commonenum "common/pkg/enum"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	"context"
 	"time"
 
@@ -16,34 +16,33 @@ import (
 var _ repo.WebSocketEventRepo = (*WebSocketEventRepo)(nil)
 
 type WebSocketEventRepo struct {
-	natsClient *client.NatsClient
+	natsClient *nats.Client
 }
 
 type WebSocketEventSubscription struct {
-	subscriptions []client.Unsubscriber
+	subscriptions []*nats.Subscription
 }
 
-func NewWebSocketEventRepo(natsClient *client.NatsClient) repo.WebSocketEventRepo {
+func NewWebSocketEventRepo(natsClient *nats.Client) repo.WebSocketEventRepo {
 	return &WebSocketEventRepo{
 		natsClient: natsClient,
 	}
 }
 
 func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSocketEventHandler) (repo.WebSocketEventSubscription, error) {
-	subscription, err := r.natsClient.Subscribe(ctx, commonenum.EventSubjectGameIdle.String(), func(ctx context.Context, msg *client.Message) error {
-		event := &commonenums.Event{}
+	subscription, err := r.natsClient.Subscribe(ctx, commonenum.EventSubjectGameIdle.String()+".>", func(ctx context.Context, msg *nats.Message) error {
+		event := &commonevent.Event{}
 		if err := proto.Unmarshal(msg.Data, event); err != nil {
 			return err
 		}
-		switch event.GetType() {
-		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE:
+		switch event.GetSubject() {
+		case commonevent.EventSubject_EVENT_SUBJECT_GAME_IDLE_CHAT_MESSAGE:
 			payload := event.GetGameIdleChatMessage()
 			var createdAt *time.Time
 			if payload.GetCreatedAt() != nil {
 				createdAt = new(payload.GetCreatedAt().AsTime())
 			}
 			return handler(ctx, &model.WebSocketEvent{
-				Type: commonenum.EventTypeGameIdleChatMessage,
 				ChatMessage: &model.WebSocketChatMessage{
 					MessageID:           payload.GetMessageId(),
 					ChannelType:         payload.GetChannelType(),
@@ -55,17 +54,16 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					CreatedAt:           createdAt,
 				},
 			})
-		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_CLOSE_SESSION:
+		case commonevent.EventSubject_EVENT_SUBJECT_GAME_IDLE_CLOSE_SESSION:
 			payload := event.GetGameIdleCloseSession()
 			reason := "unknown"
 			switch payload.GetReason() {
-			case commonenums.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_OCCUPIED:
+			case commonevent.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_OCCUPIED:
 				reason = "occupied"
-			case commonenums.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_TIMEOUT:
+			case commonevent.GameIdleCloseSessionReason_GAME_IDLE_CLOSE_SESSION_REASON_TIMEOUT:
 				reason = "timeout"
 			}
 			return handler(ctx, &model.WebSocketEvent{
-				Type: commonenum.EventTypeGameIdleCloseSession,
 				CloseSession: &model.WebSocketCloseSession{
 					SessionID:       payload.GetSessionId(),
 					Reason:          reason,
@@ -73,7 +71,7 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					ShouldReconnect: payload.GetShouldReconnect(),
 				},
 			})
-		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED:
+		case commonevent.EventSubject_EVENT_SUBJECT_GAME_IDLE_ACTION_COMPLETED:
 			payload := event.GetGameIdleActionCompleted()
 			action := payload.GetAction()
 			var startedAt *time.Time
@@ -101,7 +99,6 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 				})
 			}
 			return handler(ctx, &model.WebSocketEvent{
-				Type: commonenum.EventTypeGameIdleActionCompleted,
 				ActionCompleted: &model.WebSocketActionCompleted{
 					CharacterID: payload.GetCharacterId(),
 					Action: &model.WebSocketCompletedAction{
@@ -115,10 +112,9 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					AbilityChanges: abilityChanges,
 				},
 			})
-		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP:
+		case commonevent.EventSubject_EVENT_SUBJECT_GAME_IDLE_ABILITY_LEVELED_UP:
 			payload := event.GetGameIdleAbilityLeveledUp()
 			return handler(ctx, &model.WebSocketEvent{
-				Type: commonenum.EventTypeGameIdleAbilityLeveledUp,
 				AbilityLeveledUp: &model.WebSocketAbilityLeveledUp{
 					CharacterID:  payload.GetCharacterId(),
 					AbilityID:    payload.GetAbilityId(),
@@ -127,7 +123,7 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					NextLevelExp: payload.GetNextLevelExp(),
 				},
 			})
-		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED:
+		case commonevent.EventSubject_EVENT_SUBJECT_GAME_IDLE_ACTION_QUEUE_UPDATED:
 			payload := event.GetGameIdleActionQueueUpdated()
 			items := make([]*model.ActionQueueItem, 0, len(payload.GetItems()))
 			for _, item := range payload.GetItems() {
@@ -138,7 +134,6 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 				})
 			}
 			return handler(ctx, &model.WebSocketEvent{
-				Type: commonenum.EventTypeGameIdleActionQueueUpdated,
 				ActionQueueUpdated: &model.ActionQueue{
 					CharacterID: payload.GetCharacterId(),
 					Items:       items,
@@ -152,7 +147,7 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 		return nil, err
 	}
 	return &WebSocketEventSubscription{
-		subscriptions: []client.Unsubscriber{subscription},
+		subscriptions: []*nats.Subscription{subscription},
 	}, nil
 }
 

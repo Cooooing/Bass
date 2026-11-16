@@ -1,7 +1,6 @@
 package service
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"common/proto/gen/common"
 	v1 "common/proto/gen/notify/v1"
@@ -46,9 +45,10 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 	}
 	if req != nil && req.Query != nil {
 		query.IDs = req.Query.GetIds()
-		if req.Query.EventType != nil {
-			if eventType, ok := commonenum.EventTypeMap.ToEnum(*req.Query.EventType); ok {
-				query.EventType = &eventType
+		if req.Query.NotificationType != nil {
+			notificationType, ok := notifyenum.NotificationTypeMap.ToEnum(*req.Query.NotificationType)
+			if ok {
+				query.NotificationType = &notificationType
 			}
 		}
 		query.Unread = req.Query.Unread
@@ -75,7 +75,7 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 			Title:      row.Title,
 			Content:    row.Content,
 		}
-		item.EventType = commonenum.EventTypeMap.MustToProto(row.EventType)
+		item.NotificationType = notifyenum.NotificationTypeMap.MustToProto(row.NotificationType)
 		item.Status = notifyenum.NotificationChannelStatusMap.MustToProto(row.Status)
 		if row.CreatedAt != nil {
 			item.CreatedAt = timestamppb.New(*row.CreatedAt)

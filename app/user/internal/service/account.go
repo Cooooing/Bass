@@ -16,7 +16,6 @@ import (
 	"unicode/utf8"
 
 	"user/internal/biz/model"
-	"user/internal/biz/repo"
 	"user/internal/biz/usecase"
 	"user/internal/enum"
 
@@ -120,7 +119,7 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 			Rows: []*v1.AccountInfo{},
 		}, nil
 	}
-	res, err := s.accountUsecase.List(ctx, &repo.AccountGetReq{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
+	res, err := s.accountUsecase.List(ctx, &model.AccountListQuery{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +172,7 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 			Accounts: map[int64]*v1.AccountInfo{},
 		}, nil
 	}
-	res, err := s.accountUsecase.Map(ctx, &repo.AccountGetReq{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
+	res, err := s.accountUsecase.Map(ctx, &model.AccountListQuery{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
 	if err != nil {
 		return nil, err
 	}

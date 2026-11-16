@@ -1,7 +1,7 @@
 package biz
 
 import (
-	commonenum "common/pkg/enum"
+	event "common/proto/gen/common/enums/event"
 
 	"notify/internal/biz/usecase"
 	channelusecase "notify/internal/biz/usecase/channel"
@@ -37,7 +37,6 @@ var BizProviderSet = wire.NewSet(
 	handler.NewUserFollowHandler,
 	handler.NewUserVerificationCodeHandler,
 	ProvideEventHandlers,
-	ProvideEventSubjects,
 
 	usecase.NewConsumerUsecase,
 	usecase.NewEventUsecase,
@@ -75,52 +74,28 @@ func ProvideEventHandlers(
 	userFollowHandler *handler.UserFollowHandler,
 	userRegisterHandler *handler.UserRegisterHandler,
 	userVerificationCodeHandler *handler.UserVerificationCodeHandler,
-) map[commonenum.EventType][]usecase.EventHandler {
-	eventHandlers := map[commonenum.EventType][]usecase.EventHandler{
-		commonenum.EventTypeContentArticleCollect:       {articleCollectedHandler},
-		commonenum.EventTypeContentArticleLike:          {articleLikedHandler},
-		commonenum.EventTypeContentArticlePublish:       {articlePublishedHandler, articleMentionedHandler},
-		commonenum.EventTypeContentArticleThank:         {articleThankedHandler},
-		commonenum.EventTypeContentArticleReward:        {articleRewardedHandler},
-		commonenum.EventTypeContentArticleWatch:         {articleWatchCreatedHandler},
-		commonenum.EventTypeContentArticleAcceptAnswer:  {articleAcceptedAnswerHandler, articleWatchAnswerAcceptedHandler},
-		commonenum.EventTypeContentArticleLotteryWon:    {articleLotteryWonHandler},
-		commonenum.EventTypeContentArticleLotteryDrawn:  {articleWatchLotteryDrawnHandler},
-		commonenum.EventTypeContentArticlePollEnded:     {articleWatchPollEndedHandler},
-		commonenum.EventTypeContentArticlePostscriptAdd: {articleWatchPostscriptAddedHandler, postscriptMentionedHandler},
-		commonenum.EventTypeContentCommentLike:          {commentLikedHandler},
-		commonenum.EventTypeContentCommentThank:         {commentThankedHandler},
-		commonenum.EventTypeContentCommentPublish:       {commentPublishedHandler, articleWatchCommentPublishedHandler, commentMentionedHandler},
-		commonenum.EventTypeIMGlobalChatMessageCreated:  {globalChatMentionedHandler},
-		commonenum.EventTypeUserFollow:                  {userFollowHandler},
-		commonenum.EventTypeUserRegister:                {userRegisterHandler},
-		commonenum.EventTypeUserEmailVerificationCode:   {userVerificationCodeHandler},
-		commonenum.EventTypeUserPhoneVerificationCode:   {userVerificationCodeHandler},
+) map[event.EventSubject][]usecase.EventHandler {
+	eventHandlers := map[event.EventSubject][]usecase.EventHandler{
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED:              {articleCollectedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED:                  {articleLikedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED:              {articlePublishedHandler, articleMentionedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED:                {articleThankedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_REWARDED:               {articleRewardedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED:                {articleWatchCreatedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER:        {articleAcceptedAnswerHandler, articleWatchAnswerAcceptedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_WON:            {articleLotteryWonHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_DRAWN:          {articleWatchLotteryDrawnHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_POLL_ENDED:             {articleWatchPollEndedHandler},
+		event.EventSubject_EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED:       {articleWatchPostscriptAddedHandler, postscriptMentionedHandler},
+		event.EventSubject_EVENT_SUBJECT_COMMENT_LIKED:                  {commentLikedHandler},
+		event.EventSubject_EVENT_SUBJECT_COMMENT_THANKED:                {commentThankedHandler},
+		event.EventSubject_EVENT_SUBJECT_COMMENT_PUBLISHED:              {commentPublishedHandler, articleWatchCommentPublishedHandler, commentMentionedHandler},
+		event.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_MESSAGE_CREATED: {globalChatMentionedHandler},
+		event.EventSubject_EVENT_SUBJECT_USER_FOLLOW:                    {userFollowHandler},
+		event.EventSubject_EVENT_SUBJECT_USER_REGISTER:                  {userRegisterHandler},
+		event.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE:   {userVerificationCodeHandler},
+		event.EventSubject_EVENT_SUBJECT_USER_PHONE_VERIFICATION_CODE:   {userVerificationCodeHandler},
 	}
 
 	return eventHandlers
-}
-
-func ProvideEventSubjects() []commonenum.EventSubject {
-	return []commonenum.EventSubject{
-		commonenum.EventSubjectContentArticleCollect,
-		commonenum.EventSubjectContentArticleLike,
-		commonenum.EventSubjectContentArticlePublish,
-		commonenum.EventSubjectContentArticleThank,
-		commonenum.EventSubjectContentArticleReward,
-		commonenum.EventSubjectContentArticleWatch,
-		commonenum.EventSubjectContentArticleAcceptAnswer,
-		commonenum.EventSubjectContentArticlePostscriptAdd,
-		commonenum.EventSubjectContentArticleLotteryWon,
-		commonenum.EventSubjectContentArticleLotteryDrawn,
-		commonenum.EventSubjectContentArticlePollEnded,
-		commonenum.EventSubjectContentCommentLike,
-		commonenum.EventSubjectContentCommentThank,
-		commonenum.EventSubjectContentCommentPublish,
-		commonenum.EventSubjectIMGlobalChatMessageCreated,
-		commonenum.EventSubjectUserFollow,
-		commonenum.EventSubjectUserRegister,
-		commonenum.EventSubjectUserEmailVerificationCode,
-		commonenum.EventSubjectUserPhoneVerificationCode,
-	}
 }

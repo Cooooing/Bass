@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"common/pkg/client"
+	nats "common/pkg/client/nats"
 	"context"
 
 	"game_idle/internal/biz/model"
@@ -12,17 +12,17 @@ var _ bizrepo.GameIdleEventRepo = (*GameIdleEventRepo)(nil)
 
 // GameIdleEventRepo 发布已经编码完成的挂机游戏事件消息。
 type GameIdleEventRepo struct {
-	natsClient *client.NatsClient
+	natsClient *nats.Client
 }
 
-func NewGameIdleEventRepo(natsClient *client.NatsClient) bizrepo.GameIdleEventRepo {
+func NewGameIdleEventRepo(natsClient *nats.Client) bizrepo.GameIdleEventRepo {
 	return &GameIdleEventRepo{
 		natsClient: natsClient,
 	}
 }
 
 func (r *GameIdleEventRepo) Publish(ctx context.Context, message *model.GameIdleEventMessage) error {
-	return r.natsClient.Publish(ctx, message.Subject, &client.Message{
+	return r.natsClient.Publish(ctx, message.Subject, &nats.Message{
 		Subject: message.Subject,
 		Data:    message.Data,
 		Header:  message.Header,

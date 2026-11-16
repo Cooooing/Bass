@@ -1,13 +1,13 @@
 package usecase
 
 import (
-	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
 	"time"
 
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
+	notifyenum "notify/internal/enum"
 )
 
 type StationMessageUsecase struct {
@@ -23,11 +23,11 @@ func NewStationMessageUsecase(
 }
 
 type StationMessagePageReq struct {
-	Page       *commonmodel.PageReq
-	IDs        []int64
-	ReceiverID *int64
-	EventType  *commonenum.EventType
-	Unread     *bool
+	Page             *commonmodel.PageReq
+	IDs              []int64
+	ReceiverID       *int64
+	NotificationType *notifyenum.NotificationType
+	Unread           *bool
 }
 
 type StationMessagePageResp struct {
@@ -40,11 +40,11 @@ func (u *StationMessageUsecase) Page(ctx context.Context, req *StationMessagePag
 		req = &StationMessagePageReq{}
 	}
 	pageResp, err := u.stationMessageRepo.Page(ctx, &repo.NotificationStationMessageQuery{
-		Page:       req.Page,
-		IDs:        req.IDs,
-		ReceiverID: req.ReceiverID,
-		EventType:  req.EventType,
-		Unread:     req.Unread,
+		Page:             req.Page,
+		IDs:              req.IDs,
+		ReceiverID:       req.ReceiverID,
+		NotificationType: req.NotificationType,
+		Unread:           req.Unread,
 	})
 	if err != nil {
 		return nil, err

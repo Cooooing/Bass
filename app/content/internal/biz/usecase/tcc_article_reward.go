@@ -6,7 +6,7 @@ import (
 
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	cerrors "common/proto/gen/common/errors"
 	contentv1 "common/proto/gen/content/v1"
 
@@ -64,7 +64,7 @@ func (u *TCCArticleRewardUsecase) Confirm(ctx context.Context, req *contentv1.TC
 		if err = u.articles.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: req.GetArticleId(), Stats: repo.ArticleStatUpdate{RewardCount: 1}}); err != nil {
 			return err
 		}
-		event, err = u.outbox.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_REWARDED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_REWARDED, Payload: &commonenums.Event_ArticleRewarded{ArticleRewarded: &commonenums.ArticleRewardedPayload{SenderId: req.GetSenderUserId(), ArticleId: req.GetArticleId()}}})
+		event, err = u.outbox.Save(ctx, &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_REWARDED, Payload: &commonevent.Event_ArticleRewarded{ArticleRewarded: &commonevent.ArticleRewardedPayload{SenderId: req.GetSenderUserId(), ArticleId: req.GetArticleId()}}})
 		return err
 	})
 	if err != nil || event == nil || u.publisher == nil {

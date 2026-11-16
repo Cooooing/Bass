@@ -1,7 +1,7 @@
 package model
 
 import (
-	commonenum "common/pkg/enum"
+	event "common/proto/gen/common/enums/event"
 	"time"
 )
 
@@ -34,7 +34,7 @@ type WebSocketChatMessage struct {
 }
 
 type WebSocketEvent struct {
-	Type               commonenum.EventType
+	Type               event.EventSubject
 	ChatMessage        *WebSocketChatMessage
 	CloseSession       *WebSocketCloseSession
 	ActionCompleted    *WebSocketActionCompleted

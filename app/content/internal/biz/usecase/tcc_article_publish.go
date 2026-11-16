@@ -5,7 +5,7 @@ import (
 
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	cerrors "common/proto/gen/common/errors"
 	contentv1 "common/proto/gen/content/v1"
 
@@ -37,7 +37,7 @@ func (u *TCCArticlePublishUsecase) Confirm(ctx context.Context, req *contentv1.T
 		if err := u.articles.ConfirmPublish(ctx, &repo.ArticleConfirmPublishReq{ArticleID: req.GetArticleId(), PublishedAt: req.GetPublishedAt().AsTime(), PublishedCity: req.City, UpdatedBy: new(req.OperatorUserId)}); err != nil {
 			return err
 		}
-		_, err := u.outbox.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_PUBLISHED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED, Payload: &commonenums.Event_ArticlePublished{ArticlePublished: &commonenums.ArticlePublishedPayload{ArticleId: req.GetArticleId()}}})
+		_, err := u.outbox.Save(ctx, &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED, Payload: &commonevent.Event_ArticlePublished{ArticlePublished: &commonevent.ArticlePublishedPayload{ArticleId: req.GetArticleId()}}})
 		return err
 	})
 }

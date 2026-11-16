@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -25,7 +23,7 @@ func NewArticleWatchAnswerAcceptedHandler(userClient repo.UserAccountRepo, conte
 }
 
 func (*ArticleWatchAnswerAcceptedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleWatchedAnswerAccepted, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_answer_accepted.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_answer_accepted.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentArticleWatchedAnswerAccepted, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_watch_answer_accepted.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_watch_answer_accepted.zh_CN.content.txt")}}}
 }
 
 func (h *ArticleWatchAnswerAcceptedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -56,5 +54,5 @@ func (h *ArticleWatchAnswerAcceptedHandler) Handle(ctx context.Context, req *use
 		}
 	}
 	businessKey := fmt.Sprintf("content:article-watch-answer-accepted:%d", payload.GetCommentId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: commonenum.EventTypeContentArticleWatchedAnswerAccepted, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeContentArticleWatchedAnswerAccepted, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleWatchActivity{Article: h.articleTemplateData(article), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: recipients})
 }

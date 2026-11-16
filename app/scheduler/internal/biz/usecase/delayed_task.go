@@ -3,6 +3,7 @@ package usecase
 import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
@@ -22,32 +23,28 @@ import (
 	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/repo"
 	taskimpl "scheduler/internal/biz/usecase/task"
-	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
 
 	"github.com/google/uuid"
 )
 
 type DelayedTaskUsecase struct {
-	logger                           *slog.Logger
-	conf                             *config.Bootstrap
-	tx                               utilent.TxFunc
-	repo                             repo.DelayedTaskRepo
-	delayedTaskCacheRepo             repo.DelayedTaskCacheRepo
-	versionRepo                      repo.DelayedTaskVersionRepo
-	executionRepo                    repo.DelayedTaskExecutionRecordRepo
-	scheduleRepo                     repo.DelayedTaskScheduleRepo
-	tasks                            map[string]taskimpl.Task
-	workerID                         string
-	runningMu                        sync.Mutex
-	runningCancel                    map[int64]context.CancelFunc
-	clockSkewGrace                   time.Duration
-	delayedTaskScheduleSubjectPrefix string
+	logger               *slog.Logger
+	tx                   utilent.TxFunc
+	repo                 repo.DelayedTaskRepo
+	delayedTaskCacheRepo repo.DelayedTaskCacheRepo
+	versionRepo          repo.DelayedTaskVersionRepo
+	executionRepo        repo.DelayedTaskExecutionRecordRepo
+	scheduleRepo         repo.DelayedTaskScheduleRepo
+	tasks                map[string]taskimpl.Task
+	workerID             string
+	runningMu            sync.Mutex
+	runningCancel        map[int64]context.CancelFunc
+	clockSkewGrace       time.Duration
 }
 
 func NewDelayedTaskUsecase(
 	logger *slog.Logger,
-	conf *config.Bootstrap,
 	tx utilent.TxFunc,
 	delayedTaskRepo repo.DelayedTaskRepo,
 	delayedTaskCacheRepo repo.DelayedTaskCacheRepo,
@@ -61,19 +58,17 @@ func NewDelayedTaskUsecase(
 		workerID = host
 	}
 	return &DelayedTaskUsecase{
-		logger:                           logger,
-		conf:                             conf,
-		tx:                               tx,
-		repo:                             delayedTaskRepo,
-		delayedTaskCacheRepo:             delayedTaskCacheRepo,
-		versionRepo:                      versionRepo,
-		executionRepo:                    executionRepo,
-		scheduleRepo:                     scheduleRepo,
-		tasks:                            tasks,
-		workerID:                         workerID,
-		runningCancel:                    make(map[int64]context.CancelFunc),
-		clockSkewGrace:                   10 * time.Second,
-		delayedTaskScheduleSubjectPrefix: "scheduler.schedule.delayed_task_execution",
+		logger:               logger,
+		tx:                   tx,
+		repo:                 delayedTaskRepo,
+		delayedTaskCacheRepo: delayedTaskCacheRepo,
+		versionRepo:          versionRepo,
+		executionRepo:        executionRepo,
+		scheduleRepo:         scheduleRepo,
+		tasks:                tasks,
+		workerID:             workerID,
+		runningCancel:        make(map[int64]context.CancelFunc),
+		clockSkewGrace:       10 * time.Second,
 	}
 }
 
@@ -322,17 +317,11 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	if created.Conflict {
 		return created.Row, nil
 	}
-	schedulePrefix := u.delayedTaskScheduleSubjectPrefix
-	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
-		schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
-	}
+	schedulePrefix := commonenum.SchedulerDelayedTaskScheduleSubjectPrefix
 	for _, row := range canceled {
 		_ = u.scheduleRepo.Cancel(context.WithoutCancel(ctx), fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
 	}
-	executeSubject := "scheduler.execute.delayed_task"
-	if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskExecuteSubject() != "" {
-		executeSubject = u.conf.GetBusiness().GetDelayedTaskExecuteSubject()
-	}
+	executeSubject := commonenum.SchedulerDelayedTaskExecuteSubject
 	scheduleReq := &repo.DelayedTaskScheduleReq{
 		Record:  created.Row,
 		Subject: fmt.Sprintf("%s.%d", schedulePrefix, created.Row.ID),
@@ -370,10 +359,7 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 		if err != nil || len(rows) == 0 {
 			return nil, err
 		}
-		schedulePrefix := u.delayedTaskScheduleSubjectPrefix
-		if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
-			schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
-		}
+		schedulePrefix := commonenum.SchedulerDelayedTaskScheduleSubjectPrefix
 		for _, row := range rows {
 			_ = u.scheduleRepo.Cancel(ctx, fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
 		}
@@ -390,10 +376,7 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 		return row, err
 	}
 	if row.Status == schedulerenum.TaskExecutionStatusCanceled {
-		schedulePrefix := u.delayedTaskScheduleSubjectPrefix
-		if u.conf.GetBusiness() != nil && u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
-			schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
-		}
+		schedulePrefix := commonenum.SchedulerDelayedTaskScheduleSubjectPrefix
 		_ = u.scheduleRepo.Cancel(ctx, fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
 	}
 	u.runningMu.Lock()
@@ -626,16 +609,8 @@ func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
 			if err != nil || task == nil {
 				continue
 			}
-			schedulePrefix := u.delayedTaskScheduleSubjectPrefix
-			executeSubject := "scheduler.execute.delayed_task"
-			if u.conf.GetBusiness() != nil {
-				if u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix() != "" {
-					schedulePrefix = u.conf.GetBusiness().GetDelayedTaskScheduleSubjectPrefix()
-				}
-				if u.conf.GetBusiness().GetDelayedTaskExecuteSubject() != "" {
-					executeSubject = u.conf.GetBusiness().GetDelayedTaskExecuteSubject()
-				}
-			}
+			schedulePrefix := commonenum.SchedulerDelayedTaskScheduleSubjectPrefix
+			executeSubject := commonenum.SchedulerDelayedTaskExecuteSubject
 			req := &repo.DelayedTaskScheduleReq{Record: row, Subject: fmt.Sprintf("%s.%d", schedulePrefix, row.ID), Target: executeSubject}
 			if row.ScheduledAt.After(time.Now()) && row.TriggerType == schedulerenum.TaskTriggerTypeSchedule {
 				_ = u.scheduleRepo.Schedule(context.WithoutCancel(ctx), req)

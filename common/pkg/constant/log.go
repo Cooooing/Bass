@@ -21,7 +21,6 @@ const (
 	LogFieldArgsCount      = "args_count"
 	LogFieldTxID           = "tx_id"
 	LogFieldEventID        = "event_id"
-	LogFieldEventType      = "event_type"
 	LogFieldService        = "service"
 	LogFieldServiceName    = "service.name"
 	LogFieldServiceVersion = "service.version"

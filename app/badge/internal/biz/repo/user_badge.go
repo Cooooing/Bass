@@ -1,9 +1,10 @@
 package repo
 
 import (
-	"badge/internal/biz/model"
 	commonmodel "common/pkg/model"
 	"context"
+
+	"badge/internal/biz/model"
 )
 
 // UserBadgeRepo persists a user's display state and awarded badge facts.

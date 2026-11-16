@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"common/pkg/enum"
 	"common/pkg/util"
 
 	"notify/internal/biz/model"
@@ -26,7 +25,7 @@ func NewCommentMentionedHandler(userClient repo.UserAccountRepo, contentClient r
 }
 
 func (*CommentMentionedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: enum.EventTypeContentCommentMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/comment_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/comment_mentioned.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentCommentMention, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/comment_mentioned.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/comment_mentioned.zh_CN.content.txt")}}}
 }
 
 func (h *CommentMentionedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -71,5 +70,5 @@ func (h *CommentMentionedHandler) Handle(ctx context.Context, req *usecase.Event
 		}
 	}
 	businessKey := fmt.Sprintf("content:comment-mention:%d", comment.ID)
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: enum.EventTypeContentCommentMention, ActorUserID: new(comment.UserID), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.CommentMention{Comment: h.commentTemplateData(comment), Actor: h.templateUser(comment.UserID, users[comment.UserID])}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeContentCommentMention, ActorUserID: new(comment.UserID), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.CommentMention{Comment: h.commentTemplateData(comment), Actor: h.templateUser(comment.UserID, users[comment.UserID])}, Recipients: recipients})
 }

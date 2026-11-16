@@ -95,13 +95,13 @@ func (u *EmailUsecase) Process(ctx context.Context, req *EmailProcessReq) (notif
 			continue
 		}
 		delivery := &model.NotificationEmailDelivery{
-			EventID:     notificationContext.EventID,
-			EventType:   notificationContext.EventType,
-			ToEmail:     toEmail,
-			Subject:     rendered.Subject,
-			Body:        rendered.Body,
-			ContentType: rendered.ContentType,
-			Status:      notifyenum.NotificationChannelStatusProcessing,
+			EventID:          notificationContext.EventID,
+			NotificationType: notificationContext.NotificationType,
+			ToEmail:          toEmail,
+			Subject:          rendered.Subject,
+			Body:             rendered.Body,
+			ContentType:      rendered.ContentType,
+			Status:           notifyenum.NotificationChannelStatusProcessing,
 		}
 		if recipient.UserID != 0 {
 			delivery.ReceiverID = new(recipient.UserID)

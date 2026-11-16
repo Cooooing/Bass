@@ -3,7 +3,7 @@ package repo
 import (
 	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	"context"
 	"time"
 
@@ -12,7 +12,7 @@ import (
 
 // OutboxEventSave defines an outbox event to persist.
 type OutboxEventSave struct {
-	Event *commonenums.Event
+	Event *commonevent.Event
 }
 
 type OutboxEventRepo interface {
@@ -33,7 +33,7 @@ type OutboxEventGetReq struct {
 	IDs      []int64
 	EventID  *string
 	EventIDs []string
-	Subject  *commonenums.EventSubject
+	Subject  *commonevent.EventSubject
 	Status   *commonenum.OutboxEventStatus
 }
 
@@ -69,11 +69,13 @@ type OutboxEventMarkFailedReq struct {
 }
 
 type EventClientMessage struct {
+	EventID string
 	Subject string
 	Payload string
 	Headers map[string]string
 }
 
 type EventClient interface {
+	Ensure(context.Context) error
 	Publish(ctx context.Context, message *EventClientMessage) error
 }

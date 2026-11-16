@@ -2,7 +2,6 @@ package schema
 
 import (
 	"common/pkg/constant"
-	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
 
 	notifyenum "notify/internal/enum"
@@ -15,7 +14,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// NotificationRule 保存事件类型、通道和语言维度的通知启用规则。
+// NotificationRule 保存通知类型、通道和语言维度的启用规则。
 type NotificationRule struct {
 	ent.Schema
 }
@@ -32,7 +31,7 @@ func (NotificationRule) Annotations() []schema.Annotation {
 func (NotificationRule) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
+		field.Enum("notification_type").Values(notifyenum.NotificationTypeMap.EnumValues()...).Comment("通知类型"),
 		field.Enum("channel").Values(notifyenum.NotificationChannelMap.EnumValues()...).Comment("通知通道"),
 		field.Enum("language").Values(notifyenum.LanguageMap.EnumValues()...).Default(notifyenum.LanguageZhCN.String()).Comment("语言"),
 		field.Bool("enabled").Comment("是否启用").Default(false),
@@ -48,8 +47,8 @@ func (NotificationRule) Mixin() []ent.Mixin {
 
 func (NotificationRule) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("event_type", "channel", "language").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
-		index.Fields("event_type", "language", "enabled").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("notification_type", "channel", "language").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("notification_type", "language", "enabled").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }
 

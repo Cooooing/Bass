@@ -9,7 +9,7 @@ import (
 	"log/slog"
 
 	"common/pkg/apperror"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -103,11 +103,10 @@ func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) er
 			return err
 		}
 		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_FOLLOW,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_FOLLOW,
-				Payload: &commonenums.Event_UserFollow{
-					UserFollow: &commonenums.UserFollowPayload{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_FOLLOW,
+				Payload: &commonevent.Event_UserFollow{
+					UserFollow: &commonevent.UserFollowPayload{
 						SenderId:   req.ActorID,
 						FollowedId: req.TargetID,
 					},
@@ -186,11 +185,10 @@ func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq
 			return err
 		}
 		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_UNFOLLOW,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNFOLLOW,
-				Payload: &commonenums.Event_UserUnfollow{
-					UserUnfollow: &commonenums.UserUnfollowPayload{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_UNFOLLOW,
+				Payload: &commonevent.Event_UserUnfollow{
+					UserUnfollow: &commonevent.UserUnfollowPayload{
 						SenderId:   req.ActorID,
 						FollowedId: req.TargetID,
 					},
@@ -251,11 +249,10 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 			return err
 		}
 		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_BLOCK,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_BLOCK,
-				Payload: &commonenums.Event_UserBlock{
-					UserBlock: &commonenums.UserBlockPayload{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_BLOCK,
+				Payload: &commonevent.Event_UserBlock{
+					UserBlock: &commonevent.UserBlockPayload{
 						SenderId:  req.ActorID,
 						BlockedId: req.TargetID,
 					},
@@ -360,11 +357,10 @@ func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) 
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_NOT_FOUND)
 		}
 		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_UNBLOCK,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNBLOCK,
-				Payload: &commonenums.Event_UserUnblock{
-					UserUnblock: &commonenums.UserUnblockPayload{
+			Event: &commonevent.Event{
+				Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_UNBLOCK,
+				Payload: &commonevent.Event_UserUnblock{
+					UserUnblock: &commonevent.UserUnblockPayload{
 						SenderId:    req.ActorID,
 						UnblockedId: req.TargetID,
 					},

@@ -1,7 +1,7 @@
 package event
 
 import (
-	commonenum "common/pkg/enum"
+	event "common/proto/gen/common/enums/event"
 	"context"
 
 	"bff_game_idle/internal/biz/usecase"
@@ -15,8 +15,8 @@ func NewChatMessageHandler() *ChatMessageHandler {
 	return &ChatMessageHandler{}
 }
 
-func (h *ChatMessageHandler) Type() commonenum.EventType {
-	return commonenum.EventTypeGameIdleChatMessage
+func (h *ChatMessageHandler) Type() event.EventSubject {
+	return event.EventSubject_EVENT_SUBJECT_GAME_IDLE_CHAT_MESSAGE
 }
 
 func (h *ChatMessageHandler) Handle(ctx context.Context, req *usecase.WebSocketEventReq) (*usecase.WebSocketEventResult, error) {

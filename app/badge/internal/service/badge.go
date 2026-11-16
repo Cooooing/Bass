@@ -1,14 +1,15 @@
 package service
 
 import (
-	"badge/internal/biz/model"
-	"badge/internal/biz/usecase"
 	"common/pkg/apperror"
 	v1 "common/proto/gen/badge/v1"
 	badgeenum "common/proto/gen/badge/v1/enum"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"time"
+
+	"badge/internal/biz/model"
+	"badge/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	transporthttp "github.com/go-kratos/kratos/v3/transport/http"

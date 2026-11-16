@@ -1,13 +1,14 @@
 package data
 
 import (
+	commonclient "common/pkg/client"
+	"common/pkg/client/rpc"
+	"common/proto/gen/common"
+
 	"badge/internal/config"
 	"badge/internal/data/client"
 	"badge/internal/data/gen"
 	"badge/internal/data/repo"
-	commonclient "common/pkg/client"
-	"common/pkg/client/rpc"
-	"common/proto/gen/common"
 
 	"github.com/google/wire"
 )

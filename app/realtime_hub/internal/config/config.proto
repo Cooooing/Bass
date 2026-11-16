@@ -1,6 +1,7 @@
 syntax = "proto3";
 package kratos.api.realtime_hub.config;
 import "common/config.proto";
+import "google/protobuf/duration.proto";
 option go_package = "realtime_hub/internal/config;config";
 message Bootstrap {
   common.api.app.common.Server server = 1;
@@ -11,4 +12,9 @@ message Bootstrap {
   common.api.app.common.Nats nats = 6;
   common.api.app.common.Trace trace = 7;
   common.api.app.common.Observability observability = 8;
+  Business business = 9;
+}
+
+message Business {
+  google.protobuf.Duration connection_lease = 1; // 节点和连接登记租期
 }

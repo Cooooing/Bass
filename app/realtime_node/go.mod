@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	entgo.io/ent v0.14.5 // indirect
+	entgo.io/ent v0.14.7-0.20261014065818-8037bc89bcab // indirect
 	github.com/88250/lute v1.7.6 // indirect
 	github.com/alecthomas/chroma v0.10.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect

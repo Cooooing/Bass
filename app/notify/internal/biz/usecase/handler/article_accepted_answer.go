@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -31,10 +29,10 @@ func NewArticleAcceptedAnswerHandler(userClient repo.UserAccountRepo, contentCli
 
 func (*ArticleAcceptedAnswerHandler) Templates() []*model.NotificationTemplateDefinition {
 	return []*model.NotificationTemplateDefinition{{
-		EventType: commonenum.EventTypeContentArticleAcceptAnswer,
-		Channel:   notifyenum.NotificationChannelStation,
-		Language:  notifyenum.LanguageZhCN,
-		Enabled:   true,
+		NotificationType: notifyenum.NotificationTypeContentArticleAcceptAnswer,
+		Channel:          notifyenum.NotificationChannelStation,
+		Language:         notifyenum.LanguageZhCN,
+		Enabled:          true,
 		StationTemplate: &model.NotificationStationTemplateDefinition{
 			TitleTemplate:   notifytemplate.MustReadTemplate("station/article_answer_accepted.zh_CN.title.txt"),
 			ContentTemplate: notifytemplate.MustReadTemplate("station/article_answer_accepted.zh_CN.content.txt"),
@@ -63,5 +61,5 @@ func (h *ArticleAcceptedAnswerHandler) Handle(ctx context.Context, req *usecase.
 		return err
 	}
 	businessKey := fmt.Sprintf("content:article-answer-accepted:%d:%d", payload.GetArticleId(), payload.GetCommentId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), EventType: req.EventType, ActorUserID: new(payload.GetSenderId()), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleAnswerAccepted{Comment: h.commentTemplateData(comment), Author: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: []*model.NotificationRecipient{{UserID: comment.UserID}}})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: req.NotificationType, ActorUserID: new(payload.GetSenderId()), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.ArticleAnswerAccepted{Comment: h.commentTemplateData(comment), Author: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: []*model.NotificationRecipient{{UserID: comment.UserID}}})
 }

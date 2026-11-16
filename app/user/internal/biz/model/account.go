@@ -6,6 +6,13 @@ import (
 	"user/internal/enum"
 )
 
+// AccountListQuery 定义账号列表和映射查询的业务筛选条件。
+type AccountListQuery struct {
+	UserIDs         []int64
+	Names           []string
+	ExcludedUserIDs []int64
+}
+
 type Account struct {
 	ID                int64
 	Name              string

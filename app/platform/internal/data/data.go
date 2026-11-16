@@ -2,6 +2,7 @@ package data
 
 import (
 	commonClient "common/pkg/client"
+	nats "common/pkg/client/nats"
 	"common/proto/gen/common"
 
 	"platform/internal/config"
@@ -20,7 +21,7 @@ var DataProviderSet = wire.NewSet(
 	ProvideRedis,
 	commonClient.NewRedisClient,
 	ProvideNats,
-	commonClient.NewNatsClient,
+	nats.NewClient,
 	ProvideConsul,
 	commonClient.NewConsulClient,
 )
@@ -35,7 +36,7 @@ var ModuleProviderSet = wire.NewSet(
 	client.ProvideTx,
 	repo.NewAssetRepo,
 	repo.NewAssetUploadRateLimitCache,
-	repo.NewAssetEventNatsRepo,
+	repo.NewAssetEventRepo,
 	repo.NewHolidayClient,
 	repo.NewHolidayConfigCacheRepo,
 	repo.NewHolidayRepo,

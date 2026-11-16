@@ -2,7 +2,6 @@ package model
 
 import (
 	"bytes"
-	commonenum "common/pkg/enum"
 	"context"
 	"text/template"
 
@@ -10,10 +9,10 @@ import (
 )
 
 type NotificationTemplateDefinition struct {
-	EventType commonenum.EventType
-	Channel   notifyenum.NotificationChannel
-	Language  notifyenum.Language
-	Enabled   bool
+	NotificationType notifyenum.NotificationType
+	Channel          notifyenum.NotificationChannel
+	Language         notifyenum.Language
+	Enabled          bool
 
 	StationTemplate     *NotificationStationTemplateDefinition
 	EmailTemplate       *NotificationEmailTemplateDefinition

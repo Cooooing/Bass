@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"common/pkg/apperror"
-	commonenums "common/proto/gen/common/enums"
+	commonevent "common/proto/gen/common/enums/event"
 	contentv1 "common/proto/gen/content/v1"
 	economyv1 "common/proto/gen/economy/v1"
 	economyv1enum "common/proto/gen/economy/v1/enum"
@@ -235,7 +235,7 @@ type ArticleLikeReq struct {
 }
 
 func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, error) {
-	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionLike, stats: &repo.ArticleStatUpdate{LikeCount: 1}, event: d.articleLikedEvent}
+	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionLike, stats: &repo.ArticleStatUpdate{LikeCount: 1}, eventSubject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED}
 	return d.changeInteraction(ctx, interaction)
 }
 
@@ -261,7 +261,7 @@ type ArticleCollectReq struct {
 }
 
 func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (bool, error) {
-	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionCollect, stats: &repo.ArticleStatUpdate{CollectCount: 1}, event: d.articleCollectedEvent}
+	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionCollect, stats: &repo.ArticleStatUpdate{CollectCount: 1}, eventSubject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED}
 	return d.changeInteraction(ctx, interaction)
 }
 
@@ -342,27 +342,25 @@ type ArticleWatchReq struct {
 
 func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool, error) {
 	interaction := articleInteraction{
-		access:    req.Access,
-		articleID: req.ArticleID,
-		userID:    req.Access.ActorUserID,
-		active:    req.Active,
-		action:    enum.ArticleActionWatch,
-		stats:     &repo.ArticleStatUpdate{WatchCount: 1},
-		event: func(userID, articleID int64) *commonenums.Event {
-			return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_WATCHED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED, Payload: &commonenums.Event_ArticleWatched{ArticleWatched: &commonenums.ArticleWatchedPayload{SenderId: userID, ArticleId: articleID}}}
-		},
+		access:       req.Access,
+		articleID:    req.ArticleID,
+		userID:       req.Access.ActorUserID,
+		active:       req.Active,
+		action:       enum.ArticleActionWatch,
+		stats:        &repo.ArticleStatUpdate{WatchCount: 1},
+		eventSubject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED,
 	}
 	return d.changeInteraction(ctx, interaction)
 }
 
 type articleInteraction struct {
-	access    *model.ContentAccess
-	articleID int64
-	userID    int64
-	active    bool
-	action    enum.ArticleAction
-	stats     *repo.ArticleStatUpdate
-	event     func(int64, int64) *commonenums.Event
+	access       *model.ContentAccess
+	articleID    int64
+	userID       int64
+	active       bool
+	action       enum.ArticleAction
+	stats        *repo.ArticleStatUpdate
+	eventSubject commonevent.EventSubject
 }
 
 func (d *ArticleUsecase) changeInteraction(ctx context.Context, interaction articleInteraction) (bool, error) {
@@ -385,10 +383,10 @@ func (d *ArticleUsecase) changeInteraction(ctx context.Context, interaction arti
 					return err
 				}
 			}
-			if interaction.event == nil {
+			if interaction.eventSubject == commonevent.EventSubject_EVENT_SUBJECT_UNSPECIFIED {
 				return nil
 			}
-			outboxEvent, err = d.outboxRepo.Save(ctx, interaction.event(interaction.userID, interaction.articleID))
+			outboxEvent, err = d.outboxRepo.Save(ctx, d.articleInteractionEvent(interaction))
 			return err
 		}
 		deleted, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{ArticleID: interaction.articleID, UserID: interaction.userID, Action: interaction.action})
@@ -421,16 +419,21 @@ func (*ArticleUsecase) negateArticleStats(stats repo.ArticleStatUpdate) repo.Art
 	return stats
 }
 
-func (*ArticleUsecase) articleLikedEvent(userID, articleID int64) *commonenums.Event {
-	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_LIKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED, Payload: &commonenums.Event_ArticleLiked{ArticleLiked: &commonenums.ArticleLikedPayload{SenderId: userID, ArticleId: articleID}}}
+func (*ArticleUsecase) articleInteractionEvent(interaction articleInteraction) *commonevent.Event {
+	switch interaction.eventSubject {
+	case commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED:
+		return &commonevent.Event{Subject: interaction.eventSubject, Payload: &commonevent.Event_ArticleLiked{ArticleLiked: &commonevent.ArticleLikedPayload{SenderId: interaction.userID, ArticleId: interaction.articleID}}}
+	case commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED:
+		return &commonevent.Event{Subject: interaction.eventSubject, Payload: &commonevent.Event_ArticleCollected{ArticleCollected: &commonevent.ArticleCollectedPayload{SenderId: interaction.userID, ArticleId: interaction.articleID}}}
+	case commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED:
+		return &commonevent.Event{Subject: interaction.eventSubject, Payload: &commonevent.Event_ArticleWatched{ArticleWatched: &commonevent.ArticleWatchedPayload{SenderId: interaction.userID, ArticleId: interaction.articleID}}}
+	default:
+		return nil
+	}
 }
 
-func (*ArticleUsecase) articleThankedEvent(userID, articleID int64) *commonenums.Event {
-	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_THANKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED, Payload: &commonenums.Event_ArticleThanked{ArticleThanked: &commonenums.ArticleThankedPayload{SenderId: userID, ArticleId: articleID}}}
-}
-
-func (*ArticleUsecase) articleCollectedEvent(userID, articleID int64) *commonenums.Event {
-	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_COLLECTED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED, Payload: &commonenums.Event_ArticleCollected{ArticleCollected: &commonenums.ArticleCollectedPayload{SenderId: userID, ArticleId: articleID}}}
+func (*ArticleUsecase) articleThankedEvent(userID, articleID int64) *commonevent.Event {
+	return &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED, Payload: &commonevent.Event_ArticleThanked{ArticleThanked: &commonevent.ArticleThankedPayload{SenderId: userID, ArticleId: articleID}}}
 }
 
 type ArticleRewardReq struct {
@@ -843,11 +846,10 @@ func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdat
 		}); err != nil {
 			return err
 		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
-			Payload: &commonenums.Event_ArticleStatusUpdated{
-				ArticleStatusUpdated: &commonenums.ArticleStatusUpdatedPayload{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
+			Payload: &commonevent.Event_ArticleStatusUpdated{
+				ArticleStatusUpdated: &commonevent.ArticleStatusUpdatedPayload{
 					SenderId:      userID,
 					ArticleId:     articleID,
 					Action:        "visibility_updated",
@@ -946,7 +948,7 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, access *model.Content
 		if err = d.articleQARepo.Accept(ctx, articleID, commentID, time.Now().UTC()); err != nil {
 			return err
 		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER, Payload: &commonenums.Event_ArticleAcceptedAnswer{ArticleAcceptedAnswer: &commonenums.ArticleAcceptedAnswerPayload{SenderId: access.ActorUserID, ArticleId: articleID, CommentId: commentID}}})
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER, Payload: &commonevent.Event_ArticleAcceptedAnswer{ArticleAcceptedAnswer: &commonevent.ArticleAcceptedAnswerPayload{SenderId: access.ActorUserID, ArticleId: articleID, CommentId: commentID}}})
 		return err
 	})
 	if err != nil {
@@ -1022,11 +1024,10 @@ func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUp
 		}); err != nil {
 			return err
 		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
-			Payload: &commonenums.Event_ArticleStatusUpdated{
-				ArticleStatusUpdated: &commonenums.ArticleStatusUpdatedPayload{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
+			Payload: &commonevent.Event_ArticleStatusUpdated{
+				ArticleStatusUpdated: &commonevent.ArticleStatusUpdatedPayload{
 					SenderId:      userID,
 					ArticleId:     articleID,
 					Action:        action,
@@ -1188,11 +1189,10 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 		}); err != nil {
 			return err
 		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
-			Payload: &commonenums.Event_ArticleStatusUpdated{
-				ArticleStatusUpdated: &commonenums.ArticleStatusUpdatedPayload{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{
+			Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
+			Payload: &commonevent.Event_ArticleStatusUpdated{
+				ArticleStatusUpdated: &commonevent.ArticleStatusUpdatedPayload{
 					SenderId:      userID,
 					ArticleId:     articleID,
 					Action:        action.String(),
@@ -1255,7 +1255,7 @@ func (d *ArticleUsecase) FinishPoll(ctx context.Context, req *ArticleFinishPollR
 		if poll == nil || !poll.EndsAt.UTC().Equal(req.EndsAt.UTC()) || time.Now().UTC().Before(poll.EndsAt) {
 			return nil
 		}
-		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_POLL_ENDED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_POLL_ENDED, Payload: &commonenums.Event_ArticlePollEnded{ArticlePollEnded: &commonenums.ArticlePollEndedPayload{SenderId: *article.CreatedBy, ArticleId: article.ID}}})
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_POLL_ENDED, Payload: &commonevent.Event_ArticlePollEnded{ArticlePollEnded: &commonevent.ArticlePollEndedPayload{SenderId: *article.CreatedBy, ArticleId: article.ID}}})
 		return err
 	})
 	if err != nil {
@@ -1339,13 +1339,13 @@ func (d *ArticleUsecase) DrawLottery(ctx context.Context, req *ArticleDrawLotter
 			if winner == nil || winner.UserID <= 0 {
 				continue
 			}
-			event, saveErr := d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_LOTTERY_WON, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_WON, Payload: &commonenums.Event_ArticleLotteryWon{ArticleLotteryWon: &commonenums.ArticleLotteryWonPayload{SenderId: *article.CreatedBy, ArticleId: article.ID, PrizeId: winner.PrizeID, WinnerId: winner.UserID}}})
+			event, saveErr := d.outboxRepo.Save(ctx, &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_WON, Payload: &commonevent.Event_ArticleLotteryWon{ArticleLotteryWon: &commonevent.ArticleLotteryWonPayload{SenderId: *article.CreatedBy, ArticleId: article.ID, PrizeId: winner.PrizeID, WinnerId: winner.UserID}}})
 			if saveErr != nil {
 				return saveErr
 			}
 			outboxEvents = append(outboxEvents, event)
 		}
-		event, saveErr := d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_LOTTERY_DRAWN, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_DRAWN, Payload: &commonenums.Event_ArticleLotteryDrawn{ArticleLotteryDrawn: &commonenums.ArticleLotteryDrawnPayload{SenderId: *article.CreatedBy, ArticleId: article.ID}}})
+		event, saveErr := d.outboxRepo.Save(ctx, &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_DRAWN, Payload: &commonevent.Event_ArticleLotteryDrawn{ArticleLotteryDrawn: &commonevent.ArticleLotteryDrawnPayload{SenderId: *article.CreatedBy, ArticleId: article.ID}}})
 		if saveErr != nil {
 			return saveErr
 		}

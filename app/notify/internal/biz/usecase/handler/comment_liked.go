@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	commonenum "common/pkg/enum"
-
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
@@ -33,7 +31,7 @@ func NewCommentLikedHandler(
 }
 
 func (h *CommentLikedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentCommentLike, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/comment_liked.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/comment_liked.zh_CN.content.txt")}}}
+	return []*model.NotificationTemplateDefinition{{NotificationType: notifyenum.NotificationTypeContentCommentLike, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/comment_liked.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/comment_liked.zh_CN.content.txt")}}}
 }
 
 func (h *CommentLikedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -87,13 +85,13 @@ func (h *CommentLikedHandler) Handle(ctx context.Context, req *usecase.EventHand
 		})
 	}
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
-		EventID:      event.GetEventId(),
-		EventType:    req.EventType,
-		ActorUserID:  new(payload.GetSenderId()),
-		BusinessKey:  new(fmt.Sprintf("content:comment-liked:%d:%d", payload.GetCommentId(), payload.GetSenderId())),
-		Language:     req.Language,
-		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
-		TemplateData: templateData,
-		Recipients:   recipients,
+		EventID:          event.GetEventId(),
+		NotificationType: req.NotificationType,
+		ActorUserID:      new(payload.GetSenderId()),
+		BusinessKey:      new(fmt.Sprintf("content:comment-liked:%d:%d", payload.GetCommentId(), payload.GetSenderId())),
+		Language:         req.Language,
+		Channels:         []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
+		TemplateData:     templateData,
+		Recipients:       recipients,
 	})
 }

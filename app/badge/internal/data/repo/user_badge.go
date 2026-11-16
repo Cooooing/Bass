@@ -1,14 +1,15 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
+	"context"
+	"time"
+
 	"badge/internal/biz/model"
 	bizrepo "badge/internal/biz/repo"
 	"badge/internal/data/gen"
 	"badge/internal/data/gen/predicate"
 	"badge/internal/data/gen/userbadge"
-	commonmodel "common/pkg/model"
-	"context"
-	"time"
 )
 
 type UserBadgeRepo struct{ db *gen.Client }

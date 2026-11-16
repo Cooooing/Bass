@@ -8,28 +8,33 @@ import (
 	"time"
 
 	"common/pkg/client"
+
 	"realtime_hub/internal/biz/model"
 	bizrepo "realtime_hub/internal/biz/repo"
+	"realtime_hub/internal/config"
 	"realtime_hub/internal/enum"
 
 	"github.com/redis/go-redis/v9"
 )
 
 type Registry struct {
-	redis *client.RedisClient
+	redis           *client.RedisClient
+	connectionLease time.Duration
 }
 
-const connectionLease = 30 * time.Second
-
-func NewRegistry(redis *client.RedisClient) bizrepo.Registry {
-	return &Registry{redis: redis}
+func NewRegistry(redis *client.RedisClient, business *config.Business) bizrepo.Registry {
+	connectionLease := 30 * time.Second
+	if business.GetConnectionLease() != nil && business.GetConnectionLease().AsDuration() > 0 {
+		connectionLease = business.GetConnectionLease().AsDuration()
+	}
+	return &Registry{redis: redis, connectionLease: connectionLease}
 }
 
 func (r *Registry) RegisterNode(ctx context.Context, nodeID string, group enum.NodeGroup, realms []string) error {
 	pipe := r.redis.Client.TxPipeline()
 	for _, realm := range realms {
 		pipe.HSet(ctx, r.nodeKey(realm, nodeID), "group", string(group), "registered_at_ms", time.Now().UnixMilli())
-		pipe.PExpire(ctx, r.nodeKey(realm, nodeID), 30*time.Second)
+		pipe.PExpire(ctx, r.nodeKey(realm, nodeID), r.connectionLease)
 	}
 	_, err := pipe.Exec(ctx)
 	return err
@@ -45,11 +50,11 @@ if redis.call('HGET', KEYS[1], 'has_connections') == '1' and redis.call('EXISTS'
   return 0
 end
 redis.call('HSET', KEYS[1], 'group', ARGV[1])
-redis.call('PEXPIRE', KEYS[1], 30000)
+redis.call('PEXPIRE', KEYS[1], ARGV[2])
 if redis.call('EXISTS', KEYS[2]) == 1 then
-  redis.call('PEXPIRE', KEYS[2], 30000)
+  redis.call('PEXPIRE', KEYS[2], ARGV[2])
 end
-return 1`, []string{r.nodeKey(realm, nodeID), r.nodeConnectionsKey(realm, nodeID)}, string(group)).Int()
+return 1`, []string{r.nodeKey(realm, nodeID), r.nodeConnectionsKey(realm, nodeID)}, string(group), strconv.FormatInt(r.connectionLease.Milliseconds(), 10)).Int()
 		if err != nil {
 			return false, err
 		}
@@ -109,7 +114,7 @@ redis.call('HSET', KEYS[3], ARGV[2], ARGV[3])
 redis.call('HSET', KEYS[4], ARGV[2], ARGV[4])
 redis.call('ZADD', KEYS[5], ARGV[1], ARGV[4])
 redis.call('HSET', KEYS[1], 'has_connections', '1')
-redis.call('PEXPIRE', KEYS[4], 30000)
+redis.call('PEXPIRE', KEYS[4], ARGV[7])
 local evicted = {}
 while redis.call('ZCARD', KEYS[2]) > 5 do
   local oldest = redis.call('ZRANGE', KEYS[2], 0, 0)[1]
@@ -125,7 +130,7 @@ while redis.call('ZCARD', KEYS[2]) > 5 do
     table.insert(evicted, oldest)
   end
 end
-return evicted`, []string{r.nodeKey(realm, nodeID), r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.nodeConnectionsKey(realm, nodeID), r.onlineUsersKey(realm)}, strconv.FormatInt(time.Now().UnixMilli(), 10), connectionID, nodeID, strconv.FormatInt(userID, 10), r.nodePrefix(realm), r.nodePrefix(realm)).Result()
+return evicted`, []string{r.nodeKey(realm, nodeID), r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.nodeConnectionsKey(realm, nodeID), r.onlineUsersKey(realm)}, strconv.FormatInt(time.Now().UnixMilli(), 10), connectionID, nodeID, strconv.FormatInt(userID, 10), r.nodePrefix(realm), r.nodePrefix(realm), strconv.FormatInt(r.connectionLease.Milliseconds(), 10)).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -276,7 +281,7 @@ local count = redis.call('ZCARD', KEYS[1])
 if count == 0 then
   redis.call('ZREM', KEYS[3], ARGV[2])
 end
-return count`, []string{r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.onlineUsersKey(realm)}, r.nodePrefix(realm), strconv.FormatInt(userID, 10), strconv.FormatInt(time.Now().UnixMilli(), 10), strconv.FormatInt(connectionLease.Milliseconds(), 10)).Int64()
+return count`, []string{r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.onlineUsersKey(realm)}, r.nodePrefix(realm), strconv.FormatInt(userID, 10), strconv.FormatInt(time.Now().UnixMilli(), 10), strconv.FormatInt(r.connectionLease.Milliseconds(), 10)).Int64()
 	if err != nil {
 		return 0, err
 	}

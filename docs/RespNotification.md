@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Id** | Pointer to **string** |  | [optional] 
 **EventId** | Pointer to **string** |  | [optional] 
 **ReceiverId** | Pointer to **string** |  | [optional] 
-**EventType** | Pointer to **string** |  | [optional] 
+**NotificationType** | Pointer to **string** |  | [optional] 
 **Title** | Pointer to **string** |  | [optional] 
 **Content** | Pointer to **string** |  | [optional] 
 **ReadAt** | Pointer to **time.Time** |  | [optional] 
@@ -108,30 +108,30 @@ SetReceiverId sets ReceiverId field to given value.
 
 HasReceiverId returns a boolean if a field has been set.
 
-### GetEventType
+### GetNotificationType
 
-`func (o *RespNotification) GetEventType() string`
+`func (o *RespNotification) GetNotificationType() string`
 
-GetEventType returns the EventType field if non-nil, zero value otherwise.
+GetNotificationType returns the NotificationType field if non-nil, zero value otherwise.
 
-### GetEventTypeOk
+### GetNotificationTypeOk
 
-`func (o *RespNotification) GetEventTypeOk() (*string, bool)`
+`func (o *RespNotification) GetNotificationTypeOk() (*string, bool)`
 
-GetEventTypeOk returns a tuple with the EventType field if it's non-nil, zero value otherwise
+GetNotificationTypeOk returns a tuple with the NotificationType field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetEventType
+### SetNotificationType
 
-`func (o *RespNotification) SetEventType(v string)`
+`func (o *RespNotification) SetNotificationType(v string)`
 
-SetEventType sets EventType field to given value.
+SetNotificationType sets NotificationType field to given value.
 
-### HasEventType
+### HasNotificationType
 
-`func (o *RespNotification) HasEventType() bool`
+`func (o *RespNotification) HasNotificationType() bool`
 
-HasEventType returns a boolean if a field has been set.
+HasNotificationType returns a boolean if a field has been set.
 
 ### GetTitle
 

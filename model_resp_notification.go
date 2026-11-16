@@ -23,7 +23,7 @@ type RespNotification struct {
 	Id *string `json:"id,omitempty"`
 	EventId *string `json:"event_id,omitempty"`
 	ReceiverId *string `json:"receiver_id,omitempty"`
-	EventType *string `json:"event_type,omitempty"`
+	NotificationType *string `json:"notification_type,omitempty"`
 	Title *string `json:"title,omitempty"`
 	Content *string `json:"content,omitempty"`
 	ReadAt *time.Time `json:"read_at,omitempty"`
@@ -144,36 +144,36 @@ func (o *RespNotification) SetReceiverId(v string) {
 	o.ReceiverId = &v
 }
 
-// GetEventType returns the EventType field value if set, zero value otherwise.
-func (o *RespNotification) GetEventType() string {
-	if o == nil || IsNil(o.EventType) {
+// GetNotificationType returns the NotificationType field value if set, zero value otherwise.
+func (o *RespNotification) GetNotificationType() string {
+	if o == nil || IsNil(o.NotificationType) {
 		var ret string
 		return ret
 	}
-	return *o.EventType
+	return *o.NotificationType
 }
 
-// GetEventTypeOk returns a tuple with the EventType field value if set, nil otherwise
+// GetNotificationTypeOk returns a tuple with the NotificationType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespNotification) GetEventTypeOk() (*string, bool) {
-	if o == nil || IsNil(o.EventType) {
+func (o *RespNotification) GetNotificationTypeOk() (*string, bool) {
+	if o == nil || IsNil(o.NotificationType) {
 		return nil, false
 	}
-	return o.EventType, true
+	return o.NotificationType, true
 }
 
-// HasEventType returns a boolean if a field has been set.
-func (o *RespNotification) HasEventType() bool {
-	if o != nil && !IsNil(o.EventType) {
+// HasNotificationType returns a boolean if a field has been set.
+func (o *RespNotification) HasNotificationType() bool {
+	if o != nil && !IsNil(o.NotificationType) {
 		return true
 	}
 
 	return false
 }
 
-// SetEventType gets a reference to the given string and assigns it to the EventType field.
-func (o *RespNotification) SetEventType(v string) {
-	o.EventType = &v
+// SetNotificationType gets a reference to the given string and assigns it to the NotificationType field.
+func (o *RespNotification) SetNotificationType(v string) {
+	o.NotificationType = &v
 }
 
 // GetTitle returns the Title field value if set, zero value otherwise.
@@ -355,8 +355,8 @@ func (o RespNotification) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ReceiverId) {
 		toSerialize["receiver_id"] = o.ReceiverId
 	}
-	if !IsNil(o.EventType) {
-		toSerialize["event_type"] = o.EventType
+	if !IsNil(o.NotificationType) {
+		toSerialize["notification_type"] = o.NotificationType
 	}
 	if !IsNil(o.Title) {
 		toSerialize["title"] = o.Title

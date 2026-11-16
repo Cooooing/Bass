@@ -9,7 +9,7 @@ Name | Type
 `id` | string
 `eventId` | string
 `receiverId` | string
-`eventType` | string
+`notificationType` | string
 `title` | string
 `content` | string
 `readAt` | Date
@@ -26,7 +26,7 @@ const example = {
   "id": null,
   "eventId": null,
   "receiverId": null,
-  "eventType": null,
+  "notificationType": null,
   "title": null,
   "content": null,
   "readAt": null,

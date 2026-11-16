@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **id** | **string** |  | [optional] [default to undefined]
 **event_id** | **string** |  | [optional] [default to undefined]
 **receiver_id** | **string** |  | [optional] [default to undefined]
-**event_type** | **string** |  | [optional] [default to undefined]
+**notification_type** | **string** |  | [optional] [default to undefined]
 **title** | **string** |  | [optional] [default to undefined]
 **content** | **string** |  | [optional] [default to undefined]
 **read_at** | **string** |  | [optional] [default to undefined]
@@ -24,7 +24,7 @@ const instance: RespNotification = {
     id,
     event_id,
     receiver_id,
-    event_type,
+    notification_type,
     title,
     content,
     read_at,

@@ -19,8 +19,8 @@ pub struct RespNotification {
     pub event_id: Option<String>,
     #[serde(rename = "receiver_id", skip_serializing_if = "Option::is_none")]
     pub receiver_id: Option<String>,
-    #[serde(rename = "event_type", skip_serializing_if = "Option::is_none")]
-    pub event_type: Option<EventType>,
+    #[serde(rename = "notification_type", skip_serializing_if = "Option::is_none")]
+    pub notification_type: Option<NotificationType>,
     #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
@@ -39,7 +39,7 @@ impl RespNotification {
             id: None,
             event_id: None,
             receiver_id: None,
-            event_type: None,
+            notification_type: None,
             title: None,
             content: None,
             read_at: None,
@@ -50,114 +50,62 @@ impl RespNotification {
 }
 /// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum EventType {
-    #[serde(rename = "EVENT_TYPE_UNSPECIFIED")]
-    EventTypeUnspecified,
-    #[serde(rename = "EVENT_TYPE_USER_FOLLOW")]
-    EventTypeUserFollow,
-    #[serde(rename = "EVENT_TYPE_USER_UNFOLLOW")]
-    EventTypeUserUnfollow,
-    #[serde(rename = "EVENT_TYPE_USER_REGISTER")]
-    EventTypeUserRegister,
-    #[serde(rename = "EVENT_TYPE_USER_LOGIN")]
-    EventTypeUserLogin,
-    #[serde(rename = "EVENT_TYPE_USER_LOGOUT")]
-    EventTypeUserLogout,
-    #[serde(rename = "EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE")]
-    EventTypeUserEmailVerificationCode,
-    #[serde(rename = "EVENT_TYPE_USER_PHONE_VERIFICATION_CODE")]
-    EventTypeUserPhoneVerificationCode,
-    #[serde(rename = "EVENT_TYPE_USER_BLOCK")]
-    EventTypeUserBlock,
-    #[serde(rename = "EVENT_TYPE_USER_UNBLOCK")]
-    EventTypeUserUnblock,
-    #[serde(rename = "EVENT_TYPE_USER_TOTP_ENABLE")]
-    EventTypeUserTotpEnable,
-    #[serde(rename = "EVENT_TYPE_USER_TOTP_DISABLE")]
-    EventTypeUserTotpDisable,
-    #[serde(rename = "EVENT_TYPE_USER_ACCOUNT_CANCELLED")]
-    EventTypeUserAccountCancelled,
-    #[serde(rename = "EVENT_TYPE_USER_ACCOUNT_BANNED")]
-    EventTypeUserAccountBanned,
-    #[serde(rename = "EVENT_TYPE_USER_ACCOUNT_UNBANNED")]
-    EventTypeUserAccountUnbanned,
-    #[serde(rename = "EVENT_TYPE_USER_CHECKIN_COMPLETED")]
-    EventTypeUserCheckinCompleted,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_PUBLISHED")]
-    EventTypeArticlePublished,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_LIKED")]
-    EventTypeArticleLiked,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_THANKED")]
-    EventTypeArticleThanked,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_COLLECTED")]
-    EventTypeArticleCollected,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED")]
-    EventTypeArticleWatched,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER")]
-    EventTypeArticleAcceptedAnswer,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED")]
-    EventTypeArticlePostscriptAdded,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_STATUS_UPDATED")]
-    EventTypeArticleStatusUpdated,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_LOTTERY_WON")]
-    EventTypeArticleLotteryWon,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_POLL_ENDED")]
-    EventTypeArticlePollEnded,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_LOTTERY_DRAWN")]
-    EventTypeArticleLotteryDrawn,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_MENTIONED")]
-    EventTypeArticleMentioned,
-    #[serde(rename = "EVENT_TYPE_POSTSCRIPT_MENTIONED")]
-    EventTypePostscriptMentioned,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_REWARDED")]
-    EventTypeArticleRewarded,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED")]
-    EventTypeArticleWatchedCommentPublished,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED")]
-    EventTypeArticleWatchedPostscriptAdded,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED")]
-    EventTypeArticleWatchedAnswerAccepted,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED")]
-    EventTypeArticleWatchedPollEnded,
-    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN")]
-    EventTypeArticleWatchedLotteryDrawn,
-    #[serde(rename = "EVENT_TYPE_COMMENT_PUBLISHED")]
-    EventTypeCommentPublished,
-    #[serde(rename = "EVENT_TYPE_COMMENT_LIKED")]
-    EventTypeCommentLiked,
-    #[serde(rename = "EVENT_TYPE_COMMENT_THANKED")]
-    EventTypeCommentThanked,
-    #[serde(rename = "EVENT_TYPE_COMMENT_STATUS_UPDATED")]
-    EventTypeCommentStatusUpdated,
-    #[serde(rename = "EVENT_TYPE_COMMENT_MENTIONED")]
-    EventTypeCommentMentioned,
-    #[serde(rename = "EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED")]
-    EventTypeImPrivateChatMessageCreated,
-    #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED")]
-    EventTypeImGlobalChatMessageCreated,
-    #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED")]
-    EventTypeImGlobalChatMentioned,
-    #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED")]
-    EventTypeImGlobalChatBarrageCreated,
-    #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED")]
-    EventTypeImGlobalChatTopicUpdated,
-    #[serde(rename = "EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE")]
-    EventTypeGameIdleChatMessage,
-    #[serde(rename = "EVENT_TYPE_GAME_IDLE_CLOSE_SESSION")]
-    EventTypeGameIdleCloseSession,
-    #[serde(rename = "EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED")]
-    EventTypeGameIdleActionCompleted,
-    #[serde(rename = "EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP")]
-    EventTypeGameIdleAbilityLeveledUp,
-    #[serde(rename = "EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED")]
-    EventTypeGameIdleActionQueueUpdated,
-    #[serde(rename = "EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED")]
-    EventTypeNotifyStationMessagesCreated,
+pub enum NotificationType {
+    #[serde(rename = "NOTIFICATION_TYPE_UNSPECIFIED")]
+    NotificationTypeUnspecified,
+    #[serde(rename = "NOTIFICATION_TYPE_USER_FOLLOW")]
+    NotificationTypeUserFollow,
+    #[serde(rename = "NOTIFICATION_TYPE_USER_REGISTER")]
+    NotificationTypeUserRegister,
+    #[serde(rename = "NOTIFICATION_TYPE_USER_EMAIL_VERIFICATION_CODE")]
+    NotificationTypeUserEmailVerificationCode,
+    #[serde(rename = "NOTIFICATION_TYPE_USER_PHONE_VERIFICATION_CODE")]
+    NotificationTypeUserPhoneVerificationCode,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_PUBLISHED")]
+    NotificationTypeArticlePublished,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_LIKED")]
+    NotificationTypeArticleLiked,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_THANKED")]
+    NotificationTypeArticleThanked,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_COLLECTED")]
+    NotificationTypeArticleCollected,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_WATCHED")]
+    NotificationTypeArticleWatched,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_ACCEPTED_ANSWER")]
+    NotificationTypeArticleAcceptedAnswer,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_LOTTERY_WON")]
+    NotificationTypeArticleLotteryWon,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED")]
+    NotificationTypeArticleWatchedCommentPublished,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED")]
+    NotificationTypeArticleWatchedPostscriptAdded,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED")]
+    NotificationTypeArticleWatchedAnswerAccepted,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_WATCHED_POLL_ENDED")]
+    NotificationTypeArticleWatchedPollEnded,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN")]
+    NotificationTypeArticleWatchedLotteryDrawn,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_MENTIONED")]
+    NotificationTypeArticleMentioned,
+    #[serde(rename = "NOTIFICATION_TYPE_POSTSCRIPT_MENTIONED")]
+    NotificationTypePostscriptMentioned,
+    #[serde(rename = "NOTIFICATION_TYPE_ARTICLE_REWARDED")]
+    NotificationTypeArticleRewarded,
+    #[serde(rename = "NOTIFICATION_TYPE_COMMENT_PUBLISHED")]
+    NotificationTypeCommentPublished,
+    #[serde(rename = "NOTIFICATION_TYPE_COMMENT_LIKED")]
+    NotificationTypeCommentLiked,
+    #[serde(rename = "NOTIFICATION_TYPE_COMMENT_THANKED")]
+    NotificationTypeCommentThanked,
+    #[serde(rename = "NOTIFICATION_TYPE_COMMENT_MENTIONED")]
+    NotificationTypeCommentMentioned,
+    #[serde(rename = "NOTIFICATION_TYPE_IM_GLOBAL_CHAT_MENTIONED")]
+    NotificationTypeImGlobalChatMentioned,
 }
 
-impl Default for EventType {
-    fn default() -> EventType {
-        Self::EventTypeUnspecified
+impl Default for NotificationType {
+    fn default() -> NotificationType {
+        Self::NotificationTypeUnspecified
     }
 }
 

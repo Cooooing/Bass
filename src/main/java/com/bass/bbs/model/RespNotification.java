@@ -37,7 +37,7 @@ import com.bass.bbs.ApiClient;
   RespNotification.JSON_PROPERTY_ID,
   RespNotification.JSON_PROPERTY_EVENT_ID,
   RespNotification.JSON_PROPERTY_RECEIVER_ID,
-  RespNotification.JSON_PROPERTY_EVENT_TYPE,
+  RespNotification.JSON_PROPERTY_NOTIFICATION_TYPE,
   RespNotification.JSON_PROPERTY_TITLE,
   RespNotification.JSON_PROPERTY_CONTENT,
   RespNotification.JSON_PROPERTY_READ_AT,
@@ -59,114 +59,62 @@ public class RespNotification {
   private String receiverId;
 
   /**
-   * Gets or Sets eventType
+   * Gets or Sets notificationType
    */
-  public enum EventTypeEnum {
-    EVENT_TYPE_UNSPECIFIED(String.valueOf("EVENT_TYPE_UNSPECIFIED")),
+  public enum NotificationTypeEnum {
+    NOTIFICATION_TYPE_UNSPECIFIED(String.valueOf("NOTIFICATION_TYPE_UNSPECIFIED")),
     
-    EVENT_TYPE_USER_FOLLOW(String.valueOf("EVENT_TYPE_USER_FOLLOW")),
+    NOTIFICATION_TYPE_USER_FOLLOW(String.valueOf("NOTIFICATION_TYPE_USER_FOLLOW")),
     
-    EVENT_TYPE_USER_UNFOLLOW(String.valueOf("EVENT_TYPE_USER_UNFOLLOW")),
+    NOTIFICATION_TYPE_USER_REGISTER(String.valueOf("NOTIFICATION_TYPE_USER_REGISTER")),
     
-    EVENT_TYPE_USER_REGISTER(String.valueOf("EVENT_TYPE_USER_REGISTER")),
+    NOTIFICATION_TYPE_USER_EMAIL_VERIFICATION_CODE(String.valueOf("NOTIFICATION_TYPE_USER_EMAIL_VERIFICATION_CODE")),
     
-    EVENT_TYPE_USER_LOGIN(String.valueOf("EVENT_TYPE_USER_LOGIN")),
+    NOTIFICATION_TYPE_USER_PHONE_VERIFICATION_CODE(String.valueOf("NOTIFICATION_TYPE_USER_PHONE_VERIFICATION_CODE")),
     
-    EVENT_TYPE_USER_LOGOUT(String.valueOf("EVENT_TYPE_USER_LOGOUT")),
+    NOTIFICATION_TYPE_ARTICLE_PUBLISHED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_PUBLISHED")),
     
-    EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE(String.valueOf("EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE")),
+    NOTIFICATION_TYPE_ARTICLE_LIKED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_LIKED")),
     
-    EVENT_TYPE_USER_PHONE_VERIFICATION_CODE(String.valueOf("EVENT_TYPE_USER_PHONE_VERIFICATION_CODE")),
+    NOTIFICATION_TYPE_ARTICLE_THANKED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_THANKED")),
     
-    EVENT_TYPE_USER_BLOCK(String.valueOf("EVENT_TYPE_USER_BLOCK")),
+    NOTIFICATION_TYPE_ARTICLE_COLLECTED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_COLLECTED")),
     
-    EVENT_TYPE_USER_UNBLOCK(String.valueOf("EVENT_TYPE_USER_UNBLOCK")),
+    NOTIFICATION_TYPE_ARTICLE_WATCHED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_WATCHED")),
     
-    EVENT_TYPE_USER_TOTP_ENABLE(String.valueOf("EVENT_TYPE_USER_TOTP_ENABLE")),
+    NOTIFICATION_TYPE_ARTICLE_ACCEPTED_ANSWER(String.valueOf("NOTIFICATION_TYPE_ARTICLE_ACCEPTED_ANSWER")),
     
-    EVENT_TYPE_USER_TOTP_DISABLE(String.valueOf("EVENT_TYPE_USER_TOTP_DISABLE")),
+    NOTIFICATION_TYPE_ARTICLE_LOTTERY_WON(String.valueOf("NOTIFICATION_TYPE_ARTICLE_LOTTERY_WON")),
     
-    EVENT_TYPE_USER_ACCOUNT_CANCELLED(String.valueOf("EVENT_TYPE_USER_ACCOUNT_CANCELLED")),
+    NOTIFICATION_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED")),
     
-    EVENT_TYPE_USER_ACCOUNT_BANNED(String.valueOf("EVENT_TYPE_USER_ACCOUNT_BANNED")),
+    NOTIFICATION_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED")),
     
-    EVENT_TYPE_USER_ACCOUNT_UNBANNED(String.valueOf("EVENT_TYPE_USER_ACCOUNT_UNBANNED")),
+    NOTIFICATION_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED")),
     
-    EVENT_TYPE_USER_CHECKIN_COMPLETED(String.valueOf("EVENT_TYPE_USER_CHECKIN_COMPLETED")),
+    NOTIFICATION_TYPE_ARTICLE_WATCHED_POLL_ENDED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_WATCHED_POLL_ENDED")),
     
-    EVENT_TYPE_ARTICLE_PUBLISHED(String.valueOf("EVENT_TYPE_ARTICLE_PUBLISHED")),
+    NOTIFICATION_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN(String.valueOf("NOTIFICATION_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN")),
     
-    EVENT_TYPE_ARTICLE_LIKED(String.valueOf("EVENT_TYPE_ARTICLE_LIKED")),
+    NOTIFICATION_TYPE_ARTICLE_MENTIONED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_MENTIONED")),
     
-    EVENT_TYPE_ARTICLE_THANKED(String.valueOf("EVENT_TYPE_ARTICLE_THANKED")),
+    NOTIFICATION_TYPE_POSTSCRIPT_MENTIONED(String.valueOf("NOTIFICATION_TYPE_POSTSCRIPT_MENTIONED")),
     
-    EVENT_TYPE_ARTICLE_COLLECTED(String.valueOf("EVENT_TYPE_ARTICLE_COLLECTED")),
+    NOTIFICATION_TYPE_ARTICLE_REWARDED(String.valueOf("NOTIFICATION_TYPE_ARTICLE_REWARDED")),
     
-    EVENT_TYPE_ARTICLE_WATCHED(String.valueOf("EVENT_TYPE_ARTICLE_WATCHED")),
+    NOTIFICATION_TYPE_COMMENT_PUBLISHED(String.valueOf("NOTIFICATION_TYPE_COMMENT_PUBLISHED")),
     
-    EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER(String.valueOf("EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER")),
+    NOTIFICATION_TYPE_COMMENT_LIKED(String.valueOf("NOTIFICATION_TYPE_COMMENT_LIKED")),
     
-    EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED(String.valueOf("EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED")),
+    NOTIFICATION_TYPE_COMMENT_THANKED(String.valueOf("NOTIFICATION_TYPE_COMMENT_THANKED")),
     
-    EVENT_TYPE_ARTICLE_STATUS_UPDATED(String.valueOf("EVENT_TYPE_ARTICLE_STATUS_UPDATED")),
+    NOTIFICATION_TYPE_COMMENT_MENTIONED(String.valueOf("NOTIFICATION_TYPE_COMMENT_MENTIONED")),
     
-    EVENT_TYPE_ARTICLE_LOTTERY_WON(String.valueOf("EVENT_TYPE_ARTICLE_LOTTERY_WON")),
-    
-    EVENT_TYPE_ARTICLE_POLL_ENDED(String.valueOf("EVENT_TYPE_ARTICLE_POLL_ENDED")),
-    
-    EVENT_TYPE_ARTICLE_LOTTERY_DRAWN(String.valueOf("EVENT_TYPE_ARTICLE_LOTTERY_DRAWN")),
-    
-    EVENT_TYPE_ARTICLE_MENTIONED(String.valueOf("EVENT_TYPE_ARTICLE_MENTIONED")),
-    
-    EVENT_TYPE_POSTSCRIPT_MENTIONED(String.valueOf("EVENT_TYPE_POSTSCRIPT_MENTIONED")),
-    
-    EVENT_TYPE_ARTICLE_REWARDED(String.valueOf("EVENT_TYPE_ARTICLE_REWARDED")),
-    
-    EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED(String.valueOf("EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED")),
-    
-    EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED(String.valueOf("EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED")),
-    
-    EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED(String.valueOf("EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED")),
-    
-    EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED(String.valueOf("EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED")),
-    
-    EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN(String.valueOf("EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN")),
-    
-    EVENT_TYPE_COMMENT_PUBLISHED(String.valueOf("EVENT_TYPE_COMMENT_PUBLISHED")),
-    
-    EVENT_TYPE_COMMENT_LIKED(String.valueOf("EVENT_TYPE_COMMENT_LIKED")),
-    
-    EVENT_TYPE_COMMENT_THANKED(String.valueOf("EVENT_TYPE_COMMENT_THANKED")),
-    
-    EVENT_TYPE_COMMENT_STATUS_UPDATED(String.valueOf("EVENT_TYPE_COMMENT_STATUS_UPDATED")),
-    
-    EVENT_TYPE_COMMENT_MENTIONED(String.valueOf("EVENT_TYPE_COMMENT_MENTIONED")),
-    
-    EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED(String.valueOf("EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED")),
-    
-    EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED(String.valueOf("EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED")),
-    
-    EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED(String.valueOf("EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED")),
-    
-    EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED(String.valueOf("EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED")),
-    
-    EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED(String.valueOf("EVENT_TYPE_IM_GLOBAL_CHAT_TOPIC_UPDATED")),
-    
-    EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE(String.valueOf("EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE")),
-    
-    EVENT_TYPE_GAME_IDLE_CLOSE_SESSION(String.valueOf("EVENT_TYPE_GAME_IDLE_CLOSE_SESSION")),
-    
-    EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED(String.valueOf("EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED")),
-    
-    EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP(String.valueOf("EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP")),
-    
-    EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED(String.valueOf("EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED")),
-    
-    EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED(String.valueOf("EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED"));
+    NOTIFICATION_TYPE_IM_GLOBAL_CHAT_MENTIONED(String.valueOf("NOTIFICATION_TYPE_IM_GLOBAL_CHAT_MENTIONED"));
 
     private String value;
 
-    EventTypeEnum(String value) {
+    NotificationTypeEnum(String value) {
       this.value = value;
     }
 
@@ -181,8 +129,8 @@ public class RespNotification {
     }
 
     @JsonCreator
-    public static EventTypeEnum fromValue(String value) {
-      for (EventTypeEnum b : EventTypeEnum.values()) {
+    public static NotificationTypeEnum fromValue(String value) {
+      for (NotificationTypeEnum b : NotificationTypeEnum.values()) {
         if (b.value.equals(value)) {
           return b;
         }
@@ -191,9 +139,9 @@ public class RespNotification {
     }
   }
 
-  public static final String JSON_PROPERTY_EVENT_TYPE = "event_type";
+  public static final String JSON_PROPERTY_NOTIFICATION_TYPE = "notification_type";
   @javax.annotation.Nullable
-  private EventTypeEnum eventType;
+  private NotificationTypeEnum notificationType;
 
   public static final String JSON_PROPERTY_TITLE = "title";
   @javax.annotation.Nullable
@@ -290,27 +238,27 @@ public class RespNotification {
   }
 
 
-  public RespNotification eventType(@javax.annotation.Nullable EventTypeEnum eventType) {
-    this.eventType = eventType;
+  public RespNotification notificationType(@javax.annotation.Nullable NotificationTypeEnum notificationType) {
+    this.notificationType = notificationType;
     return this;
   }
 
   /**
-   * Get eventType
-   * @return eventType
+   * Get notificationType
+   * @return notificationType
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_EVENT_TYPE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_NOTIFICATION_TYPE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public EventTypeEnum getEventType() {
-    return eventType;
+  public NotificationTypeEnum getNotificationType() {
+    return notificationType;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_EVENT_TYPE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_NOTIFICATION_TYPE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEventType(@javax.annotation.Nullable EventTypeEnum eventType) {
-    this.eventType = eventType;
+  public void setNotificationType(@javax.annotation.Nullable NotificationTypeEnum notificationType) {
+    this.notificationType = notificationType;
   }
 
 
@@ -449,7 +397,7 @@ public class RespNotification {
     return Objects.equals(this.id, respNotification.id) &&
         Objects.equals(this.eventId, respNotification.eventId) &&
         Objects.equals(this.receiverId, respNotification.receiverId) &&
-        Objects.equals(this.eventType, respNotification.eventType) &&
+        Objects.equals(this.notificationType, respNotification.notificationType) &&
         Objects.equals(this.title, respNotification.title) &&
         Objects.equals(this.content, respNotification.content) &&
         Objects.equals(this.readAt, respNotification.readAt) &&
@@ -459,7 +407,7 @@ public class RespNotification {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, eventId, receiverId, eventType, title, content, readAt, createdAt, updatedAt);
+    return Objects.hash(id, eventId, receiverId, notificationType, title, content, readAt, createdAt, updatedAt);
   }
 
   @Override
@@ -469,7 +417,7 @@ public class RespNotification {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    eventId: ").append(toIndentedString(eventId)).append("\n");
     sb.append("    receiverId: ").append(toIndentedString(receiverId)).append("\n");
-    sb.append("    eventType: ").append(toIndentedString(eventType)).append("\n");
+    sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    readAt: ").append(toIndentedString(readAt)).append("\n");
@@ -534,9 +482,9 @@ public class RespNotification {
       joiner.add(String.format(java.util.Locale.ROOT, "%sreceiver_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getReceiverId()))));
     }
 
-    // add `event_type` to the URL query string
-    if (getEventType() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sevent_type%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getEventType()))));
+    // add `notification_type` to the URL query string
+    if (getNotificationType() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%snotification_type%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getNotificationType()))));
     }
 
     // add `title` to the URL query string

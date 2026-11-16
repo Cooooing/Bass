@@ -63,11 +63,11 @@ class RespNotificationTest {
     }
 
     /**
-     * Test the property 'eventType'
+     * Test the property 'notificationType'
      */
     @Test
-    void eventTypeTest() {
-        // TODO: test eventType
+    void notificationTypeTest() {
+        // TODO: test notificationType
     }
 
     /**

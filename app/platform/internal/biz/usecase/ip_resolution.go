@@ -65,10 +65,9 @@ func NewIPResolutionUsecase(
 		}
 		return u, cleanup, nil
 	}
-	u.log.Warn("download ip data from oss failed, use source", "ipv4_error", ipv4Err, "ipv6_error", ipv6Err)
-	err := u.UpdateIPDataFromSource(ctx)
-	if err != nil {
-		return u, cleanup, fmt.Errorf("update ip data from source: %w", err)
+	u.log.Warn("download ip data from object storage failed, use local cache", "ipv4_error", ipv4Err, "ipv6_error", ipv6Err)
+	if err := u.loadIPDataFromLocal(ctx); err != nil {
+		u.log.Warn("load local ip data cache failed, IP resolution is unavailable", "error", err)
 	}
 	return u, cleanup, nil
 }
@@ -206,6 +205,27 @@ func (u *IPResolutionUsecase) uploadIPDataToLocal(ctx context.Context, ipv4Conte
 		old.Close()
 	}
 	return nil
+}
+
+func (u *IPResolutionUsecase) loadIPDataFromLocal(ctx context.Context) error {
+	ipData := u.conf.GetBusiness().GetIpData()
+	ipv4Path := strings.TrimSpace(ipData.GetIpv4XdbPath())
+	if ipv4Path == "" {
+		return fmt.Errorf("IPv4 ip data path is empty")
+	}
+	ipv6Path := strings.TrimSpace(ipData.GetIpv6XdbPath())
+	if ipv6Path == "" {
+		return fmt.Errorf("IPv6 ip data path is empty")
+	}
+	ipv4Content, err := os.ReadFile(ipv4Path)
+	if err != nil {
+		return fmt.Errorf("read local IPv4 ip data %s: %w", ipv4Path, err)
+	}
+	ipv6Content, err := os.ReadFile(ipv6Path)
+	if err != nil {
+		return fmt.Errorf("read local IPv6 ip data %s: %w", ipv6Path, err)
+	}
+	return u.uploadIPDataToLocal(ctx, ipv4Content, ipv6Content)
 }
 
 func (u *IPResolutionUsecase) writeIPDataFile(ctx context.Context, path string, content []byte) (bool, error) {

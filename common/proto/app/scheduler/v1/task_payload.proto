@@ -57,3 +57,6 @@ message RefreshHolidayTaskPayload {
   google.protobuf.Timestamp start = 1; // 刷新起始日期；为空时使用当天
   google.protobuf.Timestamp end = 2; // 刷新结束日期；为空时等于起始日期
 }
+
+// RefreshIPDataTaskPayload 是 IP 地理数据刷新的空任务参数。
+message RefreshIPDataTaskPayload {}

@@ -45,8 +45,8 @@ services:
       retries: 5
 
   postgres:
-    # 原镜像：postgres:18.4
-    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/postgres:18.4
+    # 原镜像：postgres:18.4-alpine
+    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/postgres:18.4-alpine
     restart: on-failure:3
     environment:
       TZ: Asia/Shanghai
@@ -66,8 +66,8 @@ services:
       retries: 5
 
   redis:
-    # 原镜像：redis:8.8.1
-    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/redis:8.8.1
+    # 原镜像：redis:8.8.1-alpine
+    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/redis:8.8.1-alpine
     restart: on-failure:3
     command:
       - redis-server
@@ -92,8 +92,8 @@ services:
       retries: 5
 
   nats:
-    # 原镜像：nats:2.14.2
-    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/nats:2.14.2
+    # 原镜像：nats:2.14.2-alpine
+    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/nats:2.14.2-alpine
     restart: on-failure:3
     environment:
       - TZ=Asia/Shanghai
@@ -174,8 +174,8 @@ services:
       - bass
 
   dtm-init:
-    # 原镜像：postgres:18.4
-    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/postgres:18.4
+    # 原镜像：postgres:18.4-alpine
+    image: registry.cn-hangzhou.aliyuncs.com/docker-middleware/postgres:18.4-alpine
     restart: "no"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}

@@ -186,10 +186,10 @@ set -a && source ops/docker/.env && set +a && (cd ops/tools && go run ./cmd/cons
 
 ### 4. 从源码启动服务
 
-首次使用时全局执行一次 `make init` 安装锁定版本的代码生成工具，并启用仓库的 Git 提交信息模板。随后生成代码并启动需要开发的服务；以下示例启动社区 BFF：
+首次使用时全局执行一次 `make init` 安装锁定版本的代码生成工具。随后生成代码并启动需要开发的服务；以下示例启动社区 BFF：
 
 ```bash
-make init                         # 首次使用时全局执行一次；同时启用 Git 提交信息模板
+make init                         # 首次使用时全局执行一次
 make gen
 set -a && source ops/docker/.env && set +a && (cd app/bff_bbs && go run ./cmd)
 ```
@@ -222,7 +222,7 @@ docker compose -f compose-observability.yaml up -d
 ## 日常开发命令
 
 ```bash
-make init                         # 首次使用时全局安装锁定版本的生成工具，并启用 Git 提交信息模板
+make init                         # 首次使用时全局安装锁定版本的生成工具
 make api                          # 生成共享 Protobuf 产物
 make gen                          # 生成所有服务产物
 make build                        # 构建所有服务二进制

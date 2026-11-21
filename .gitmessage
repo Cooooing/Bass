@@ -1,0 +1,12 @@
+# <type>(<scope>): <subject>
+#
+# type: feat, fix, refactor, docs, test, build, ci, chore, perf
+# scope: optional affected area, for example user, platform, docker, readme
+# subject: imperative, concise, and without a trailing period
+#
+# Explain why this change is needed and any relevant implementation detail.
+#
+# Closes #<issue-number>
+#
+# Verification:
+# - <command or check>

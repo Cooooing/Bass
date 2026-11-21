@@ -5,6 +5,7 @@ TOOLCHAIN_MK_INCLUDED := 1
 .PHONY: init
 init:
 	@echo "[init] installing pinned development tools..."
+	@git -C $(ROOT_DIR) config --local commit.template "$(ROOT_DIR)/.gitmessage"
 	@go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
 	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
 	@go install github.com/go-kratos/kratos/cmd/kratos/v3@v3.0.0-20260626125723-668db92c2c00

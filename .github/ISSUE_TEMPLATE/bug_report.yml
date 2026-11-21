@@ -1,0 +1,53 @@
+name: Bug report
+description: 报告可复现的缺陷
+title: "fix: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请提供最小可复现信息。不要提交凭据、访问令牌或包含个人数据的日志。
+  - type: textarea
+    id: summary
+    attributes:
+      label: 问题描述
+      description: 实际发生了什么，以及期望发生什么？
+      placeholder: 清晰描述现象与预期行为。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      description: 提供可以稳定复现问题的最小步骤。
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 日志或截图
+      description: 请先移除密钥、令牌、Cookie、邮箱、手机号等敏感信息。
+  - type: dropdown
+    id: impact
+    attributes:
+      label: 影响范围
+      options:
+        - 阻塞使用或数据正确性
+        - 核心功能受影响
+        - 局部功能受影响
+        - 仅影响开发或测试环境
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: 环境信息
+      description: 例如提交 SHA、部署环境、浏览器或操作系统版本。
+      placeholder: "commit: abc1234; environment: dev"
+    validations:
+      required: true

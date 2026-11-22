@@ -1,5 +1,5 @@
 # Run with: docker compose --env-file .middleware.env -f compose-middleware.yaml up -d
-name: bass-infra
+name: bass-middleware
 
 networks:
   bass:
@@ -39,7 +39,7 @@ services:
     networks:
       - bass
     healthcheck:
-      test: [ "CMD", "consul", "info", "-token=${CONSUL_ACL_MASTER_TOKEN}" ]
+      test: [ "CMD-SHELL", "CONSUL_HTTP_TOKEN=\"$$CONSUL_HTTP_TOKEN\" consul info >/dev/null" ]
       interval: 10s
       timeout: 5s
       retries: 5

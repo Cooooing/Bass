@@ -269,6 +269,16 @@ func (u *IPResolutionUsecase) Get(ctx context.Context, ip string) (*model.IpInfo
 	if err != nil {
 		return nil, fmt.Errorf("resolve IP: %w", err)
 	}
+	if strings.TrimSpace(region) == "" {
+		return &model.IpInfo{
+			Ip:          ip,
+			Country:     def,
+			Province:    def,
+			City:        def,
+			ISP:         def,
+			CountryCode: def,
+		}, nil
+	}
 	parts := strings.Split(region, "|")
 	if len(parts) < 5 {
 		return nil, fmt.Errorf("invalid IP region: %s", region)

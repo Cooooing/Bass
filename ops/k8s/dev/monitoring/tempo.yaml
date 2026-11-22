@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 30Gi
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -37,7 +37,7 @@ data:
 
     compactor:
       compaction:
-        block_retention: 168h
+        block_retention: 2160h
 
     storage:
       trace:

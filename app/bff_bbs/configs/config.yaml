@@ -30,12 +30,12 @@ redis:
   conn_max_idle_time: 300s
   conn_max_life_time: 900s
 trace:
-  enable_otel: false
+  enable_otel: ${ENABLE_OTEL:false}
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
   insecure: true
-  sampler: 1
+  sampler: ${OTEL_SAMPLER:0.1}
 observability:
-  enable_metrics: true
+  enable_metrics: ${ENABLE_METRICS:true}
 business:
   badge_maker_upload:
     max_image_bytes: ${BADGE_MAKER_MAX_IMAGE_BYTES:3145728}

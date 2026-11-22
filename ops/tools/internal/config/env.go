@@ -97,9 +97,42 @@ func resolveYAMLNode(node *yaml.Node, path []string, loader kratosconfig.Config)
 		if err != nil {
 			return fmt.Errorf("resolve %s: %w", strings.Join(path, "."), err)
 		}
-		node.Value = value
+		if err := setResolvedScalar(node, value); err != nil {
+			return fmt.Errorf("parse %s: %w", strings.Join(path, "."), err)
+		}
 	}
 	return nil
+}
+
+// setResolvedScalar restores the type declared by a placeholder's default value.
+func setResolvedScalar(node *yaml.Node, value string) error {
+	tag, style, err := placeholderScalarType(node.Value)
+	if err != nil {
+		return err
+	}
+	node.Value = value
+	node.Tag = tag
+	node.Style = style
+	return nil
+}
+
+func placeholderScalarType(placeholder string) (string, yaml.Style, error) {
+	_, defaultValue, hasDefault := strings.Cut(strings.TrimSuffix(strings.TrimPrefix(placeholder, "${"), "}"), ":")
+	if !hasDefault {
+		return "!!str", 0, nil
+	}
+	var document yaml.Node
+	if err := yaml.Unmarshal([]byte("value: "+defaultValue+"\n"), &document); err != nil {
+		return "", 0, err
+	}
+	if len(document.Content) != 1 || len(document.Content[0].Content) != 2 {
+		return "", 0, fmt.Errorf("expected a scalar value")
+	}
+	defaultScalar := document.Content[0].Content[1]
+	if defaultScalar.Kind != yaml.ScalarNode {
+		return "", 0, fmt.Errorf("expected a scalar value")
+	}
+	return defaultScalar.Tag, defaultScalar.Style, nil
 }
 
 // FindPath resolves a repository-relative path by walking upward from the current directory.

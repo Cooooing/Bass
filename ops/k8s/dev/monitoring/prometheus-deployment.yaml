@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 20Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -35,7 +35,7 @@ spec:
           args:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.path=/prometheus
-            - --storage.tsdb.retention.time=15d
+            - --storage.tsdb.retention.time=90d
             - --web.enable-lifecycle
           ports:
             - containerPort: 9090
@@ -81,7 +81,7 @@ metadata:
     app: prometheus
     k8s-app: prometheus
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: prometheus
   ports:

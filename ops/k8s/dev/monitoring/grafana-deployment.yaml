@@ -30,12 +30,51 @@ data:
         type: tempo
         access: proxy
         url: http://tempo:3200
-        editable: true
+        editable: false
         jsonData:
-          tracesToLogs:
-            datasourceUid: ""
+          tracesToLogsV2:
+            datasourceUid: Loki
+            tags: [ "service.name" ]
+            filterByTraceID: true
+            filterBySpanID: false
+            spanStartTimeShift: "-1h"
+            spanEndTimeShift: "1h"
+            customQuery: true
+            query: '{service_name="${__span.tags["service.name"]}"} | json | trace_id="${__trace.traceId}"'
           serviceMap:
             datasourceUid: Prometheus
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki:3100
+        editable: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-provisioning
+  namespace: monitoring
+data:
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: bass
+        orgId: 1
+        folder: Bass
+        type: file
+        disableDeletion: true
+        editable: false
+        options:
+          path: /etc/grafana/dashboards
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: monitoring
+data:
+  bass-runtime.json: |
+    {"annotations":{"list":[]},"editable":false,"panels":[{"datasource":{"type":"prometheus","uid":"Prometheus"},"fieldConfig":{"defaults":{"unit":"reqps"},"overrides":[]},"gridPos":{"h":8,"w":8,"x":0,"y":0},"id":1,"targets":[{"expr":"sum by (service) (rate(bass_server_Reqs_total[5m]))","legendFormat":"{{service}}"}],"title":"Request rate","type":"timeseries"},{"datasource":{"type":"prometheus","uid":"Prometheus"},"fieldConfig":{"defaults":{"unit":"percentunit"},"overrides":[]},"gridPos":{"h":8,"w":8,"x":8,"y":0},"id":2,"targets":[{"expr":"sum by (service) (rate(bass_server_Reqs_total{status_code=~\"5..\"}[5m])) / sum by (service) (rate(bass_server_Reqs_total[5m]))","legendFormat":"{{service}}"}],"title":"Server error rate","type":"timeseries"},{"datasource":{"type":"prometheus","uid":"Prometheus"},"fieldConfig":{"defaults":{"unit":"s"},"overrides":[]},"gridPos":{"h":8,"w":8,"x":16,"y":0},"id":3,"targets":[{"expr":"histogram_quantile(0.95, sum by (le, service) (rate(bass_server_Req_duration_seconds_bucket[5m])))","legendFormat":"{{service}}"}],"title":"P95 server latency","type":"timeseries"}],"schemaVersion":39,"tags":["bass","runtime"],"title":"Bass Runtime","uid":"bass-runtime","version":1}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -78,6 +117,10 @@ spec:
           volumeMounts:
             - name: datasources
               mountPath: /etc/grafana/provisioning/datasources
+            - name: dashboard-provisioning
+              mountPath: /etc/grafana/provisioning/dashboards
+            - name: dashboards
+              mountPath: /etc/grafana/dashboards
             - name: data
               mountPath: /var/lib/grafana
           resources:
@@ -103,6 +146,12 @@ spec:
         - name: datasources
           configMap:
             name: grafana-datasources
+        - name: dashboards
+          configMap:
+            name: grafana-dashboards
+        - name: dashboard-provisioning
+          configMap:
+            name: grafana-dashboard-provisioning
         - name: data
           persistentVolumeClaim:
             claimName: grafana-data

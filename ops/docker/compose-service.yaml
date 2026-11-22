@@ -1,3 +1,4 @@
+# Run with: docker compose -f compose-service.yaml up -d
 name: bass-application
 
 networks:
@@ -10,6 +11,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
     container_name: treble
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -21,6 +24,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/bff_bbs:latest
     container_name: bff_bbs
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -33,6 +38,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/realtime_hub:latest
     container_name: realtime_hub
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -45,6 +52,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/realtime_node:latest
     container_name: realtime_node
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -57,6 +66,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
     container_name: user
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -69,6 +80,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/content:latest
     container_name: content
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -81,6 +94,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/notify:latest
     container_name: notify
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -93,6 +108,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/im:latest
     container_name: im
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -105,6 +122,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/economy:latest
     container_name: economy
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -117,6 +136,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/platform:latest
     container_name: platform
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -129,6 +150,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/scheduler:latest
     container_name: scheduler
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:
@@ -141,6 +164,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/badge:latest
     container_name: badge
     restart: on-failure:3
+    labels:
+      observability.grafana.com/logs: "true"
     env_file:
       - .service.env
     ports:

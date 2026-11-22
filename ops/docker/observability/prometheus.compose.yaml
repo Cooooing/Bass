@@ -1,0 +1,74 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: observability
+    static_configs:
+      - targets: [ "prometheus:9090", "tempo:3200", "loki:3100" ]
+
+  - job_name: bass-services
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - bff_bbs:8001
+          - realtime_hub:8010
+          - realtime_node:8020
+          - user:8101
+          - content:8102
+          - notify:8103
+          - im:8104
+          - economy:8108
+          - platform:8201
+          - scheduler:8203
+          - badge:8109
+
+  # Optional exporters are discovered through Docker DNS. When the optional
+  # compose file is not running, these jobs have no targets rather than down
+  # targets.
+  - job_name: postgres
+    dns_sd_configs:
+      - names: [ "postgres-exporter" ]
+        type: A
+        port: 9187
+
+  - job_name: redis
+    dns_sd_configs:
+      - names: [ "redis-exporter" ]
+        type: A
+        port: 9121
+
+  - job_name: consul
+    dns_sd_configs:
+      - names: [ "consul-exporter" ]
+        type: A
+        port: 9107
+
+  - job_name: nats
+    dns_sd_configs:
+      - names: [ "nats-exporter" ]
+        type: A
+        port: 7777
+
+  - job_name: minio
+    metrics_path: /minio/v2/metrics/cluster
+    static_configs:
+      - targets: [ "minio:9000" ]
+
+  - job_name: middleware-health
+    metrics_path: /probe
+    params:
+      module: [ http_2xx ]
+    static_configs:
+      - targets:
+          - http://consul:8500/v1/status/leader
+          - http://dtm:36789/
+          - http://minio:9000/minio/health/live
+          - http://nats:8222/varz
+    relabel_configs:
+      - source_labels: [ __address__ ]
+        target_label: __param_target
+      - source_labels: [ __param_target ]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115

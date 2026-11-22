@@ -41,12 +41,14 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("find app configuration: %w", err)
 	}
+	fmt.Printf("syncing local configuration from %s to Consul (address=%s, datacenter=%s, prefix=%s)\n", root, address, datacenter, prefix)
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	keys, err := consul.Sync(ctx, address, datacenter, os.Getenv("CONSUL_TOKEN"), prefix, root)
 	if err != nil {
 		return err
 	}
+	fmt.Printf("synced %d local configuration files to Consul (address=%s, datacenter=%s, prefix=%s)\n", len(keys), address, datacenter, prefix)
 	for _, key := range keys {
 		fmt.Println(key)
 	}

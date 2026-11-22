@@ -1,0 +1,20 @@
+{
+  "annotations": { "list": [] },
+  "editable": false,
+  "panels": [
+    { "id": 1, "title": "Scrape Target Availability", "type": "timeseries", "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }, "targets": [{ "expr": "up", "legendFormat": "{{job}} {{instance}}" }] },
+    { "id": 2, "title": "Scrape Duration", "type": "timeseries", "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] }, "targets": [{ "expr": "scrape_duration_seconds", "legendFormat": "{{job}} {{instance}}" }] },
+    { "id": 3, "title": "Prometheus Active Series", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 0, "y": 8 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }, "targets": [{ "expr": "prometheus_tsdb_head_series", "legendFormat": "series" }, { "expr": "prometheus_tsdb_head_chunks", "legendFormat": "chunks" }] },
+    { "id": 4, "title": "Prometheus WAL Size", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 8, "y": 8 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] }, "targets": [{ "expr": "prometheus_tsdb_wal_storage_size_bytes", "legendFormat": "WAL" }, { "expr": "prometheus_tsdb_head_chunks_storage_size_bytes", "legendFormat": "head chunks" }] },
+    { "id": 5, "title": "Loki Ingestion Rate", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 16, "y": 8 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] }, "targets": [{ "expr": "sum(rate(loki_distributor_lines_received_total[5m]))", "legendFormat": "log lines" }, { "expr": "sum(rate(loki_distributor_bytes_received_total[5m]))", "legendFormat": "bytes" }] },
+    { "id": 6, "title": "Loki WAL and Streams", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 0, "y": 16 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] }, "targets": [{ "expr": "loki_ingester_wal_bytes_in_use", "legendFormat": "WAL bytes" }, { "expr": "loki_ingester_memory_streams", "legendFormat": "memory streams" }] },
+    { "id": 7, "title": "Tempo Trace Ingestion", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 8, "y": 16 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] }, "targets": [{ "expr": "sum(rate(tempo_distributor_traces_per_batch_sum[5m]))", "legendFormat": "traces" }, { "expr": "sum(rate(tempo_distributor_push_duration_seconds_count[5m]))", "legendFormat": "push batches" }] },
+    { "id": 8, "title": "Tempo Metrics Generator Queue", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 16, "y": 16 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "short" }, "overrides": [] }, "targets": [{ "expr": "tempo_metrics_generator_processor_local_blocks_complete_queue_length", "legendFormat": "complete queue" }, { "expr": "tempo_metrics_generator_processor_local_blocks_failed_flushes_total", "legendFormat": "failed flushes" }] }
+  ],
+  "schemaVersion": 39,
+  "tags": ["bass", "observability", "health"],
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "Bass Observability Health",
+  "uid": "bass-observability-health",
+  "version": 1
+}

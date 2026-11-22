@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: bass
+    orgId: 1
+    folder: Bass
+    type: file
+    disableDeletion: true
+    editable: false
+    options:
+      path: /etc/grafana/dashboards

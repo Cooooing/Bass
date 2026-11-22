@@ -19,7 +19,7 @@ dev/
 ├── manifests/       # Namespace、Secret、Traefik HTTP/TCP 路由
 ├── infra/           # Consul/PostgreSQL/Redis/NATS/MinIO Helm values
 ├── ingress/         # Traefik Helm values
-└── monitoring/      # Prometheus、Grafana、Tempo、OTel Collector 等监控栈，单独部署
+└── monitoring/      # Tempo、Prometheus、Loki、Alloy、Grafana 最小观测栈，单独部署
 ```
 
 ## 部署中间件和入口配置

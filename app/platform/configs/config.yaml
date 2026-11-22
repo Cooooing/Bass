@@ -54,12 +54,12 @@ nats:
       pull_max_messages: 32
       pull_expiry: 2s
 trace:
-  enable_otel: false
+  enable_otel: ${ENABLE_OTEL:false}
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
   insecure: true
-  sampler: 1
+  sampler: ${OTEL_SAMPLER:0.1}
 observability:
-  enable_metrics: true
+  enable_metrics: ${ENABLE_METRICS:true}
 business:
   asset_upload_rate_limit:
     enable: true

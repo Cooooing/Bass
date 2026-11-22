@@ -1,0 +1,19 @@
+{
+  "annotations": { "list": [] },
+  "editable": false,
+  "panels": [
+    { "id": 1, "title": "Error Logs", "type": "logs", "gridPos": { "h": 10, "w": 12, "x": 0, "y": 0 }, "datasource": { "uid": "Loki" }, "options": { "dedupStrategy": "none", "enableLogDetails": true, "prettifyJSON": true, "showCommonLabels": false, "showLabels": true, "sortOrder": "Descending", "wrapLogMessage": true }, "targets": [{ "expr": "{service_name=~\"$service\",level=~\"warn|error\",kind=~\"$kind\",transport=~\"$transport\"}", "refId": "A" }] },
+    { "id": 2, "title": "Error Log Rate by Service", "type": "timeseries", "gridPos": { "h": 10, "w": 12, "x": 12, "y": 0 }, "datasource": { "uid": "Loki" }, "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] }, "targets": [{ "expr": "sum by (service_name, operation) (rate({service_name=~\"$service\",level=~\"warn|error\",kind=~\"$kind\",transport=~\"$transport\"}[5m]))", "legendFormat": "{{service_name}} {{operation}}", "refId": "A" }] },
+    { "id": 3, "title": "Span Rate", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 0, "y": 10 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] }, "targets": [{ "expr": "sum by (service) (rate(traces_spanmetrics_calls_total{service=~\"$service\"}[5m]))", "legendFormat": "{{service}}" }] },
+    { "id": 4, "title": "Span Error Rate", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 8, "y": 10 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "percentunit" }, "overrides": [] }, "targets": [{ "expr": "sum by (service) (rate(traces_spanmetrics_calls_total{service=~\"$service\",status_code=\"STATUS_CODE_ERROR\"}[5m])) / sum by (service) (rate(traces_spanmetrics_calls_total{service=~\"$service\"}[5m]))", "legendFormat": "{{service}}" }] },
+    { "id": 5, "title": "P95 Span RT", "type": "timeseries", "gridPos": { "h": 8, "w": 8, "x": 16, "y": 10 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] }, "targets": [{ "expr": "histogram_quantile(0.95, sum by (le, service) (rate(traces_spanmetrics_latency_bucket{service=~\"$service\"}[5m])))", "legendFormat": "{{service}}" }] },
+    { "id": 6, "title": "Service Graph Request Rate", "type": "timeseries", "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] }, "targets": [{ "expr": "sum by (client, server) (rate(traces_service_graph_request_total[5m]))", "legendFormat": "{{client}} -> {{server}}" }] },
+    { "id": 7, "title": "Service Graph Failed Requests", "type": "timeseries", "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 }, "datasource": { "uid": "Prometheus" }, "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] }, "targets": [{ "expr": "sum by (client, server) (rate(traces_service_graph_request_failed_total[5m]))", "legendFormat": "{{client}} -> {{server}}" }] }
+  ],
+  "schemaVersion": 39,
+  "templating": { "list": [{ "name": "service", "label": "Service", "type": "query", "datasource": { "uid": "Loki" }, "query": "label_values(service_name)", "definition": "label_values(service_name)", "includeAll": true, "multi": true, "allValue": ".*" }, { "name": "kind", "label": "Kind", "type": "query", "datasource": { "uid": "Loki" }, "query": "label_values(kind)", "definition": "label_values(kind)", "includeAll": true, "multi": true, "allValue": ".*" }, { "name": "transport", "label": "Transport", "type": "query", "datasource": { "uid": "Loki" }, "query": "label_values(transport)", "definition": "label_values(transport)", "includeAll": true, "multi": true, "allValue": ".*" }] },
+  "time": { "from": "now-6h", "to": "now" },
+  "title": "Bass Logs And Traces",
+  "uid": "bass-logs-traces",
+  "version": 1
+}

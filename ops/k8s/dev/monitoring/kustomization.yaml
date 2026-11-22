@@ -8,7 +8,6 @@ resources:
   - prometheus-configmap.yaml
   - prometheus-deployment.yaml
   - tempo.yaml
-  - otel-collector.yaml
+  - loki.yaml
+  - alloy.yaml
   - grafana-deployment.yaml
-  - kube-state-metrics.yaml
-  - node-exporter.yaml

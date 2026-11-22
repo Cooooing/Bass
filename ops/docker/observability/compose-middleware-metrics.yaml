@@ -1,0 +1,54 @@
+# Run with: docker compose --env-file ../.middleware.env -f compose-observability.yaml -f compose-middleware-metrics.yaml -p bass-observability up -d
+# Optional middleware metric collectors. Prometheus discovers these services
+# over the shared Docker network when they are running.
+name: bass-observability
+
+networks:
+  bass:
+    driver: bridge
+    external: true
+
+services:
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.17.1
+    restart: on-failure:3
+    environment:
+      DATA_SOURCE_URI: postgres:5432/${POSTGRES_DB}?sslmode=disable
+      DATA_SOURCE_USER: ${POSTGRES_USER}
+      DATA_SOURCE_PASS: ${POSTGRES_PASSWORD}
+    networks:
+      - bass
+    mem_limit: 64m
+
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.74.0
+    restart: on-failure:3
+    environment:
+      REDIS_ADDR: redis://redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    networks:
+      - bass
+    mem_limit: 64m
+
+  nats-exporter:
+    image: natsio/prometheus-nats-exporter:0.16.0
+    restart: on-failure:3
+    command:
+      - -varz
+      - -connz
+      - -jsz
+      - streams
+      - http://nats:8222
+    networks:
+      - bass
+    mem_limit: 32m
+
+  consul-exporter:
+    image: prom/consul-exporter:v0.13.0
+    restart: on-failure:3
+    command: [ "--consul.server=consul:8500" ]
+    environment:
+      CONSUL_HTTP_TOKEN: ${CONSUL_ACL_MASTER_TOKEN}
+    networks:
+      - bass
+    mem_limit: 32m

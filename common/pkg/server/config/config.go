@@ -49,7 +49,10 @@ func LoadConfig[T proto.Message](bootstrapPath string, path string) (T, *common.
 			return zero, nil, nil, cleanup, err
 		}
 	} else {
-		c = config.New(config.WithSource(env.NewSource(""), file.NewSource(path)))
+		c = config.New(
+			config.WithSource(env.NewSource(""), file.NewSource(path)),
+			config.WithResolver(resolvePlaceholders),
+		)
 		if err = c.Load(); err != nil {
 			_ = c.Close()
 			return zero, nil, nil, cleanup, err
@@ -86,7 +89,10 @@ func LoadConfig[T proto.Message](bootstrapPath string, path string) (T, *common.
 }
 
 func loadBootstrap(path string) (*common.Bootstrap, error) {
-	c := config.New(config.WithSource(env.NewSource(""), file.NewSource(path)))
+	c := config.New(
+		config.WithSource(env.NewSource(""), file.NewSource(path)),
+		config.WithResolver(resolvePlaceholders),
+	)
 	defer func(c config.Config) {
 		_ = c.Close()
 	}(c)

@@ -1,0 +1,117 @@
+# Run with: docker compose -f compose-observability.yaml -p bass-observability up -d
+name: bass-observability
+
+networks:
+  bass:
+    driver: bridge
+    external: true
+
+services:
+  tempo:
+    image: grafana/tempo:2.8.1
+    restart: on-failure:3
+    command: [ "-config.file=/etc/tempo/tempo.yaml" ]
+    volumes:
+      - ./tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo_data:/var/tempo
+    networks:
+      - bass
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3200/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    mem_limit: 256m
+
+  prometheus:
+    image: prom/prometheus:v3.4.1
+    restart: on-failure:3
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=90d
+      - --web.enable-remote-write-receiver
+    volumes:
+      - ./prometheus.compose.yaml:/etc/prometheus/prometheus.yaml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - bass
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:9090/-/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    mem_limit: 512m
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.27.0
+    restart: on-failure:3
+    networks:
+      - bass
+    mem_limit: 32m
+
+  loki:
+    image: grafana/loki:3.4.2
+    restart: on-failure:3
+    command: [ "-config.file=/etc/loki/loki.yaml" ]
+    volumes:
+      - ./loki.yaml:/etc/loki/loki.yaml:ro
+      - loki_data:/loki
+    networks:
+      - bass
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3100/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    mem_limit: 256m
+
+  alloy:
+    image: grafana/alloy:v1.9.2
+    restart: on-failure:3
+    command: [ "run", "--server.http.listen-addr=0.0.0.0:12345", "/etc/alloy/config.alloy" ]
+    depends_on:
+      loki:
+        condition: service_healthy
+    volumes:
+      - ./alloy.docker.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - bass
+    mem_limit: 128m
+
+  grafana:
+    image: grafana/grafana:11.6.0
+    restart: on-failure:3
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      tempo:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
+    environment:
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    networks:
+      - bass
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/api/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    mem_limit: 256m
+
+volumes:
+  tempo_data:
+  prometheus_data:
+  loki_data:
+  grafana_data:

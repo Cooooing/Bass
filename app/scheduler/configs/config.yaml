@@ -59,12 +59,12 @@ nats:
       pull_max_messages: 16
       pull_expiry: 2s
 trace:
-  enable_otel: false
+  enable_otel: ${ENABLE_OTEL:false}
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
   insecure: true
-  sampler: 1
+  sampler: ${OTEL_SAMPLER:0.1}
 observability:
-  enable_metrics: true
+  enable_metrics: ${ENABLE_METRICS:true}
 business:
   default_execution_timeout: 30s
   schedule_ttl: 315360000s

@@ -1,0 +1,72 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+}
+
+discovery.relabel "bass_containers" {
+  targets = discovery.docker.containers.targets
+
+  rule {
+    source_labels = ["__meta_docker_container_label_observability_grafana_com_logs"]
+    action        = "keep"
+    regex         = "true"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_label_com_docker_compose_service"]
+    target_label  = "service_name"
+  }
+
+  rule {
+    target_label = "environment"
+    replacement  = "docker"
+  }
+}
+
+loki.process "bass" {
+  forward_to = [loki.write.default.receiver]
+
+  stage.json {
+    expressions = {
+      level       = "level",
+      kind        = "kind",
+      transport   = "transport",
+      operation   = "operation",
+      target      = "target",
+      direction   = "direction",
+      subject     = "subject",
+      status_code = "status_code",
+      method      = "method",
+    }
+  }
+
+  stage.labels {
+    values = {
+      level       = "",
+      kind        = "",
+      transport   = "",
+      operation   = "",
+      target      = "",
+      direction   = "",
+      subject     = "",
+      status_code = "",
+      method      = "",
+    }
+  }
+}
+
+loki.source.docker "containers" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.bass_containers.output
+  forward_to = [loki.process.bass.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

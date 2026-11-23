@@ -1,73 +1,120 @@
 syntax = "proto3";
-package kratos.api.platform.config;
+package kratos.api.platform.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "platform/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 数据库配置。
   common.api.app.common.v1.Database database = 5;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 6;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 业务运行配置。
   Business business = 21;
 }
 
+// 业务运行配置。
 message Business {
+  // ip_data 配置。
   IpData ip_data = 1;
+  // oss 配置。
   Oss oss = 2;
+  // asset_upload_rate_limit 配置。
   AssetUploadRateLimit asset_upload_rate_limit = 4;
 
-  // Limits issuance of direct-upload credentials per authenticated uploader.
-  // It does not limit existing content-addressed assets that need no upload.
+  // 限制每个已认证上传者申请直传凭证的频率。
+  // 不限制无需上传的既有内容寻址资源。
   message AssetUploadRateLimit {
+    // enable 配置。
     bool enable = 1;
+    // window 配置。
     google.protobuf.Duration window = 2;
+    // max_count 配置。
     int64 max_count = 3;
   }
 
+  // IpData 配置。
   message IpData {
+    // enable 配置。
     bool enable = 1;
+    // ipv4_xdb_path 配置。
     string ipv4_xdb_path = 2;
+    // ipv6_xdb_path 配置。
     string ipv6_xdb_path = 3;
+    // cache_policy 配置。
     string cache_policy = 4;
+    // ipv4_source_url 配置。
     string ipv4_source_url = 5;
+    // ipv6_source_url 配置。
     string ipv6_source_url = 6;
   }
 
+  // Oss 配置。
   message Oss {
+    // provider 配置。
     string provider = 1;
+    // qiniu 配置。
     Qiniu qiniu = 10;
+    // minio 配置。
     Minio minio = 11;
 
+    // Qiniu 配置。
     message Qiniu {
+      // access_key 配置。
       string access_key = 1;
+      // secret_key 配置。
       string secret_key = 2;
+      // bucket 配置。
       string bucket = 3;
+      // timeout 配置。
       google.protobuf.Duration timeout = 4;
+      // size_min 配置。
       int64 size_min = 5;
+      // size_max 配置。
       int64 size_max = 6;
+      // callback_url 配置。
       string callback_url = 7;
+      // increment_audit 配置。
       bool increment_audit = 8;
+      // increment_audit_callback_url 配置。
       string increment_audit_callback_url = 9;
     }
 
+    // Minio 配置。
     message Minio {
+      // endpoint 配置。
       string endpoint = 1;
+      // access_key 配置。
       string access_key = 2;
+      // secret_key 配置。
       string secret_key = 3;
+      // bucket 配置。
       string bucket = 4;
+      // use_ssl 配置。
       bool use_ssl = 5;
+      // timeout 配置。
       google.protobuf.Duration timeout = 6;
-      // Endpoint visible to browsers. It is intentionally separate from the
-      // service-internal endpoint (for example, a Docker service hostname).
+      // 浏览器可访问的端点，与服务内部端点分离。
+      // 内部端点例如 Docker 服务主机名。
       string browser_endpoint = 7;
+      // browser_use_ssl 配置。
       bool browser_use_ssl = 8;
     }
   }

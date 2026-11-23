@@ -1,23 +1,37 @@
 syntax = "proto3";
-package kratos.api.monolith.config;
+package kratos.api.monolith.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/struct.proto";
 
 option go_package = "monolith/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 数据库配置。
   common.api.app.common.v1.Database database = 5;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 6;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // DTM 分布式事务配置。
   common.api.app.common.v1.DTM dtm = 10;
+  // 告警配置。
   common.api.app.common.v1.Alert alert = 11;
+  // 事件配置。
   common.api.app.common.v1.Event event = 12;
+  // 模块扩展配置。
   map<string, google.protobuf.Struct> modules = 21;
 }

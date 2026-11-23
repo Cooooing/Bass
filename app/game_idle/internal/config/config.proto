@@ -1,49 +1,77 @@
 syntax = "proto3";
-package kratos.api.game_idle.config;
+package kratos.api.game_idle.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "game_idle/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 数据库配置。
   common.api.app.common.v1.Database database = 5;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 业务运行配置。
   Business business = 21;
 }
 
+// 业务运行配置。
 message Business {
+  // timewheel 配置。
   common.api.app.common.v1.TimeWheel timewheel = 1;
+  // game_idle 配置。
   GameIdle game_idle = 2;
 
+  // GameIdle 配置。
   message GameIdle {
+    // backpack 配置。
     Backpack backpack = 3;
+    // character 配置。
     Character character = 4;
+    // online_session 配置。
     OnlineSession online_session = 5;
+    // character_ability 配置。
     CharacterAbility character_ability = 6;
   }
 }
 
+// Backpack 配置。
 message Backpack {
+  // persist_threshold 配置。
   uint32 persist_threshold = 1;
 }
 
+// Character 配置。
 message Character {
+  // max_count_per_user 配置。
   uint32 max_count_per_user = 1;
+  // default_action_queue_capacity 配置。
   uint32 default_action_queue_capacity = 2;
+  // default_max_offline_duration 配置。
   google.protobuf.Duration default_max_offline_duration = 3;
 }
 
+// OnlineSession 配置。
 message OnlineSession {
-  google.protobuf.Duration ttl = 1; // 角色在线会话 TTL
+  // 角色在线会话 TTL
+  google.protobuf.Duration ttl = 1;
 }
 
+// CharacterAbility 配置。
 message CharacterAbility {
-  uint32 persist_threshold = 1; // 能力经验缓存持久化阈值
+  // 能力经验缓存持久化阈值
+  uint32 persist_threshold = 1;
 }

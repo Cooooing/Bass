@@ -1,84 +1,140 @@
 syntax = "proto3";
-package kratos.api.user.config;
+package kratos.api.user.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "user/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 数据库配置。
   common.api.app.common.v1.Database database = 5;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 6;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 告警配置。
   common.api.app.common.v1.Alert alert = 10;
+  // 事件配置。
   common.api.app.common.v1.Event event = 11;
+  // DTM 分布式事务配置。
   common.api.app.common.v1.DTM dtm = 12;
+  // 业务运行配置。
   Business business = 21;
 }
 
+// 业务运行配置。
 message Business {
-  string app = 1; // TOTP issuer 和默认应用名。
-  string avatar = 2; // 默认头像 URL 模板。
-  Auth auth = 3; // 认证、会话和验证码配置。
-  Liveness liveness = 4; // 活跃度结算与自动签到规则。
+  // TOTP issuer 和默认应用名。
+  string app = 1;
+  // 默认头像 URL 模板。
+  string avatar = 2;
+  // 认证、会话和验证码配置。
+  Auth auth = 3;
+  // 活跃度结算与自动签到规则。
+  Liveness liveness = 4;
 
+  // Auth 配置。
   message Auth {
-    Session session = 1; // token 与会话配置。
-    VerificationCode verification_code = 2; // 邮箱/手机验证码配置。
-    Totp totp = 3; // TOTP 配置。
+    // token 与会话配置。
+    Session session = 1;
+    // 邮箱/手机验证码配置。
+    VerificationCode verification_code = 2;
+    // TOTP 配置。
+    Totp totp = 3;
   }
 
+  // Session 配置。
   message Session {
-    string secret = 1; // access/refresh JWT 签名密钥。
-    google.protobuf.Duration access_token_ttl = 2; // access token 有效期，例如 900s 表示 15min。
-    google.protobuf.Duration refresh_token_ttl = 3; // refresh token 空闲有效期，例如 2592000s 表示 30d。
-    google.protobuf.Duration session_ttl = 4; // session 最长生命周期，例如 15552000s 表示 180d。
-    int32 max_sessions = 5; // 同一用户同一 realm 最大 session 数，未配置或小于等于 0 时默认 5。
+    // access/refresh JWT 签名密钥。
+    string secret = 1;
+    // access token 有效期，例如 900s 表示 15min。
+    google.protobuf.Duration access_token_ttl = 2;
+    // refresh token 空闲有效期，例如 2592000s 表示 30d。
+    google.protobuf.Duration refresh_token_ttl = 3;
+    // session 最长生命周期，例如 15552000s 表示 180d。
+    google.protobuf.Duration session_ttl = 4;
+    // 同一用户同一 realm 最大 session 数，未配置或小于等于 0 时默认 5。
+    int32 max_sessions = 5;
   }
 
+  // VerificationCode 配置。
   message VerificationCode {
-    google.protobuf.Duration code_ttl = 1; // 验证码有效期，例如 300s 表示 5min。
-    int32 max_attempts = 3; // 单个验证码最大校验次数。
+    // 验证码有效期，例如 300s 表示 5min。
+    google.protobuf.Duration code_ttl = 1;
+    // 单个验证码最大校验次数。
+    int32 max_attempts = 3;
     reserved 4;
   }
 
+  // Totp 配置。
   message Totp {
-    google.protobuf.Duration temporary_secret_ttl = 1; // 启用 TOTP 临时密钥有效期，例如 300s 表示 5min。
+    // 启用 TOTP 临时密钥有效期，例如 300s 表示 5min。
+    google.protobuf.Duration temporary_secret_ttl = 1;
   }
 
+  // Liveness 配置。
   message Liveness {
-    Checkin checkin = 1; // 自动签到配置。
-    Score score = 2; // 各行为的活跃度计分规则。
+    // 自动签到配置。
+    Checkin checkin = 1;
+    // 各行为的活跃度计分规则。
+    Score score = 2;
 
+    // Checkin 配置。
     message Checkin {
-      int32 minimum_score = 1; // 自动签到所需的最低活跃度。
-      int64 reward_minimum = 2; // 日常签到奖励积分的随机下限。
-      int64 reward_maximum = 3; // 日常签到奖励积分的随机上限。
-      int32 streak_interval = 4; // 获得一次连签奖励所需的连续签到天数。
-      int64 streak_reward = 5; // 每次达到连签间隔时发放的积分。
+      // 自动签到所需的最低活跃度。
+      int32 minimum_score = 1;
+      // 日常签到奖励积分的随机下限。
+      int64 reward_minimum = 2;
+      // 日常签到奖励积分的随机上限。
+      int64 reward_maximum = 3;
+      // 获得一次连签奖励所需的连续签到天数。
+      int32 streak_interval = 4;
+      // 每次达到连签间隔时发放的积分。
+      int64 streak_reward = 5;
     }
 
+    // Score 配置。
     message Score {
-      int32 maximum = 1; // 每个业务日的活跃度总分上限。
-      Rule article = 2; // 已发布文章的计分规则。
-      Rule comment = 3; // 有效评论的计分规则。
-      Rule like = 4; // 文章和评论点赞合计的计分规则。
-      Rule thank = 5; // 文章和评论感谢合计的计分规则。
-      Rule reward = 6; // 文章打赏行为的计分规则。
-      Rule view = 7; // 登录浏览文章的计分规则。
-      Rule global_chat_message = 8; // 全局聊天室普通文本消息的计分规则。
+      // 每个业务日的活跃度总分上限。
+      int32 maximum = 1;
+      // 已发布文章的计分规则。
+      Rule article = 2;
+      // 有效评论的计分规则。
+      Rule comment = 3;
+      // 文章和评论点赞合计的计分规则。
+      Rule like = 4;
+      // 文章和评论感谢合计的计分规则。
+      Rule thank = 5;
+      // 文章打赏行为的计分规则。
+      Rule reward = 6;
+      // 登录浏览文章的计分规则。
+      Rule view = 7;
+      // 全局聊天室普通文本消息的计分规则。
+      Rule global_chat_message = 8;
     }
 
+    // Rule 配置。
     message Rule {
-      int32 limit = 1; // 单日最多计分的行为数量；0 表示不设数量上限。
-      int32 count_per_unit = 2; // 获得一次积分单位需要的行为数量。
-      int32 points_per_unit = 3; // 每个积分单位获得的活跃度。
+      // 单日最多计分的行为数量；0 表示不设数量上限。
+      int32 limit = 1;
+      // 获得一次积分单位需要的行为数量。
+      int32 count_per_unit = 2;
+      // 每个积分单位获得的活跃度。
+      int32 points_per_unit = 3;
     }
   }
 }

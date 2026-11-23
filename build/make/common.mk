@@ -11,8 +11,6 @@ PROTO_DIR := $(COMMON_DIR)/proto/app
 COMMON_PROTO_DIR := $(COMMON_DIR)/proto/app/common
 PROTO_GEN_DIR := $(COMMON_DIR)/proto/gen
 BUF_DIR := $(COMMON_DIR)/proto/buf
-BUF_CONFIG_DIR := $(PROTO_DIR)
-BUF_CONFIG := $(BUF_CONFIG_DIR)/buf.yaml
 BUF_GEN_API := $(BUF_DIR)/gen.api.yaml
 BUF_GEN_CONFIG := $(BUF_DIR)/gen.config.yaml
 BUF_GEN_OPENAPI := $(BUF_DIR)/gen.openapi.yaml
@@ -30,6 +28,6 @@ api-clean:
 api: api-clean
 	@echo "[api] buf generate..."
 	@mkdir -p $(PROTO_GEN_DIR)
-	@cd $(ROOT_DIR) && $(BUF) generate $(BUF_CONFIG_DIR) --template $(BUF_GEN_API)
+	@cd $(ROOT_DIR) && $(BUF) generate $(PROTO_DIR) --template $(BUF_GEN_API)
 
 endif

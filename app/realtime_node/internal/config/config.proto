@@ -1,16 +1,23 @@
 syntax = "proto3";
 
-package kratos.api.realtime_node.config;
+package kratos.api.realtime_node.config.v1;
 
 import "common/v1/config.proto";
 
 option go_package = "realtime_node/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 5;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 6;
 }

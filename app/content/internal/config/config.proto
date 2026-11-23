@@ -1,33 +1,53 @@
 syntax = "proto3";
-package kratos.api.content.config;
+package kratos.api.content.config.v1;
 
 import "common/v1/config.proto";
 
 option go_package = "content/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 数据库配置。
   common.api.app.common.v1.Database database = 5;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 6;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // DTM 分布式事务配置。
   common.api.app.common.v1.DTM dtm = 10;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 业务运行配置。
   Business business = 21;
 }
 
+// 业务运行配置。
 message Business {
+  // article 配置。
   Article article = 1;
+  // comment 配置。
   Comment comment = 2;
 
+  // Article 配置。
   message Article {
-    int64 thank_points = 3; // 感谢文章时转赠的积分数量。
-    int64 reward_setup_points = 4; // 发布含打赏区文章时扣除的积分数量。
+    // 感谢文章时转赠的积分数量。
+    int64 thank_points = 3;
+    // 发布含打赏区文章时扣除的积分数量。
+    int64 reward_setup_points = 4;
   }
+  // Comment 配置。
   message Comment {
-    int64 thank_points = 1; // 感谢评论时转赠的积分数量。
+    // 感谢评论时转赠的积分数量。
+    int64 thank_points = 1;
   }
 }

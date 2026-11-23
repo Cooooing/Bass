@@ -1,64 +1,107 @@
 syntax = "proto3";
-package kratos.api.notify.config;
+package kratos.api.notify.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "notify/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 数据库配置。
   common.api.app.common.v1.Database database = 5;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 6;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 告警配置。
   common.api.app.common.v1.Alert alert = 10;
+  // 事件配置。
   common.api.app.common.v1.Event event = 11;
+  // 业务运行配置。
   Business business = 21;
 }
 
+// 业务运行配置。
 message Business {
+  // email 配置。
   Email email = 1;
+  // sms 配置。
   Sms sms = 2;
+  // lark_webhook 配置。
   LarkWebhook lark_webhook = 3;
+  // notification_rate_limit 配置。
   NotificationRateLimit notification_rate_limit = 4;
 
+  // Email 配置。
   message Email {
+    // enable 配置。
     bool enable = 1;
+    // smtp_host 配置。
     string smtp_host = 2;
+    // smtp_port 配置。
     uint32 smtp_port = 3;
+    // username 配置。
     string username = 4;
+    // password 配置。
     string password = 5;
+    // from_email 配置。
     string from_email = 6;
+    // from_name 配置。
     string from_name = 7;
   }
 
+  // Sms 配置。
   message Sms {
+    // provider 配置。
     string provider = 1;
+    // tencent 配置。
     TencentSmsConfig tencent = 2;
-    bool enable = 3; // 是否启用短信通道。
+    // 是否启用短信通道。
+    bool enable = 3;
 
+    // TencentSmsConfig 配置。
     message TencentSmsConfig {
+      // secret_id 配置。
       string secret_id = 1;
+      // secret_key 配置。
       string secret_key = 2;
+      // diyu 配置。
       string diyu = 3;
+      // sms_sdk_app_id 配置。
       string sms_sdk_app_id = 4;
+      // sign_name 配置。
       string sign_name = 5;
+      // template_id 配置。
       string template_id = 6;
     }
   }
 
+  // LarkWebhook 配置。
   message LarkWebhook {
+    // base_url 配置。
     string base_url = 1;
   }
 
+  // NotificationRateLimit 配置。
   message NotificationRateLimit {
-    bool enable = 1; // 是否启用邮件和短信发送限流。
-    google.protobuf.Duration window = 2; // 限流统计窗口。
-    int64 max_count = 3; // 单个收件目标在窗口内允许的最大发送次数。
+    // 是否启用邮件和短信发送限流。
+    bool enable = 1;
+    // 限流统计窗口。
+    google.protobuf.Duration window = 2;
+    // 单个收件目标在窗口内允许的最大发送次数。
+    int64 max_count = 3;
   }
 }

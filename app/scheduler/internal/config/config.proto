@@ -1,25 +1,39 @@
 syntax = "proto3";
-package kratos.api.scheduler.config;
+package kratos.api.scheduler.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "scheduler/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // 数据库配置。
   common.api.app.common.v1.Database database = 5;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 6;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 业务运行配置。
   Business business = 21;
 }
 
+// 业务运行配置。
 message Business {
-  google.protobuf.Duration default_execution_timeout = 1; // 未指定任务超时时使用的执行上限
-  google.protobuf.Duration schedule_ttl = 2; // 调度定义在 JetStream 中的最长保留时间
+  // 未指定任务超时时使用的执行上限
+  google.protobuf.Duration default_execution_timeout = 1;
+  // 调度定义在 JetStream 中的最长保留时间
+  google.protobuf.Duration schedule_ttl = 2;
 }

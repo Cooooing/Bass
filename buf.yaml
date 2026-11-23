@@ -1,7 +1,9 @@
 version: v2
 
 modules:
-  - path: .
+  - path: common/proto/app
+  - path: app
+  - path: monolith
 
 deps:
   - buf.build/gnostic/gnostic
@@ -19,10 +21,10 @@ lint:
     - RPC_REQUEST_RESPONSE_UNIQUE
     - RPC_REQUEST_STANDARD_NAME
     - RPC_RESPONSE_STANDARD_NAME
-  # 业务成功码固定为 0，不适用未指定零值后缀约定。
   ignore_only:
+    # 业务成功码固定为 0，不适用未指定零值后缀约定。
     ENUM_ZERO_VALUE_SUFFIX:
-      - common/errors/v1/business_error_code.proto
+      - common/proto/app/common/errors/v1/business_error_code.proto
     # 该文件与 Kratos 的扩展协议保持兼容，package 名称不可加版本后缀。
     PACKAGE_VERSION_SUFFIX:
-      - errors/errors.proto
+      - common/proto/app/errors/errors.proto

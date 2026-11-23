@@ -1,29 +1,45 @@
 syntax = "proto3";
-package kratos.api.bff_game_idle.config;
+package kratos.api.bff_game_idle.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "bff_game_idle/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 5;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 7;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 业务运行配置。
   Business business = 10;
 }
 
+// 业务运行配置。
 message Business {
+  // websocket 配置。
   WebSocket websocket = 1;
 
+  // WebSocket 配置。
   message WebSocket {
-    google.protobuf.Duration ping_interval = 1; // WS 协议层 ping 间隔
-    google.protobuf.Duration write_timeout = 2; // WS 写超时
-    common.api.app.common.v1.WorkerPool worker_pool = 3; // WS 命令和事件处理协程池
+    // WS 协议层 ping 间隔
+    google.protobuf.Duration ping_interval = 1;
+    // WS 写超时
+    google.protobuf.Duration write_timeout = 2;
+    // WS 命令和事件处理协程池
+    common.api.app.common.v1.WorkerPool worker_pool = 3;
   }
 }

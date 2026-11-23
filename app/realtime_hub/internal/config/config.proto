@@ -1,22 +1,35 @@
 syntax = "proto3";
-package kratos.api.realtime_hub.config;
+package kratos.api.realtime_hub.config.v1;
 
 import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "realtime_hub/internal/config;config";
+
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 5;
+  // NATS 配置。
   common.api.app.common.v1.Nats nats = 6;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 7;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 8;
+  // 业务运行配置。
   Business business = 9;
 }
 
+// 业务运行配置。
 message Business {
-  google.protobuf.Duration connection_lease = 1; // 节点和连接登记租期
+  // 节点和连接登记租期
+  google.protobuf.Duration connection_lease = 1;
 }

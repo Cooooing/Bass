@@ -84,8 +84,10 @@ lint:
 .PHONY: proto-lint
 proto-lint:
 	@cd $(ROOT_DIR)/.golangci-plugin && go run ./cmd/proto-contract-lint --root $(PROTO_DIR)
-	@cd $(PROTO_DIR) && $(BUF) lint
+	@cd $(ROOT_DIR) && $(BUF) lint
 	@$(BUF) format -w $(PROTO_DIR)
+	@$(BUF) format -w $(APP_DIR)
+	@$(BUF) format -w $(ROOT_DIR)/monolith
 
 # --- Help ---
 .PHONY: help

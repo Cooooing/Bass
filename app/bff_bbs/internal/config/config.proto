@@ -1,33 +1,50 @@
 syntax = "proto3";
-package kratos.api.bff_bbs.config;
+package kratos.api.bff_bbs.config.v1;
 
 import "common/v1/config.proto";
 
 option go_package = "bff_bbs/internal/config;config";
 
+// 服务启动配置。
 message Bootstrap {
+  // 服务基础信息配置。
   common.api.app.common.v1.Server server = 1;
+  // HTTP 服务配置。
   common.api.app.common.v1.HTTP http = 2;
+  // gRPC 服务配置。
   common.api.app.common.v1.GRPC grpc = 3;
+  // Consul 服务发现配置。
   common.api.app.common.v1.Consul consul = 4;
+  // Redis 配置。
   common.api.app.common.v1.Redis redis = 6;
+  // 链路追踪配置。
   common.api.app.common.v1.Trace trace = 8;
+  // 可观测性配置。
   common.api.app.common.v1.Observability observability = 9;
+  // 业务运行配置。
   Business business = 10;
 
+  // 业务运行配置。
   message Business {
+    // public_endpoint 配置。
     PublicEndpoint public_endpoint = 1;
+    // badge_maker_upload 配置。
     BadgeMakerUpload badge_maker_upload = 2;
 
+    // PublicEndpoint 配置。
     message PublicEndpoint {
+      // api_url 配置。
       string api_url = 1;
+      // site_url 配置。
       string site_url = 2;
     }
 
     // BadgeMakerUpload 限制 Maker 图片与字体的单文件直传大小；热更新后仅影响后续上传校验。
     message BadgeMakerUpload {
-      int64 max_image_bytes = 1; // 图片最大字节数；非正值使用 3 MiB 默认值。
-      int64 max_font_bytes = 2; // 字体最大字节数；非正值使用 3 MiB 默认值。
+      // 图片最大字节数；非正值使用 3 MiB 默认值。
+      int64 max_image_bytes = 1;
+      // 字体最大字节数；非正值使用 3 MiB 默认值。
+      int64 max_font_bytes = 2;
     }
   }
 }

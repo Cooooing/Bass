@@ -37,7 +37,7 @@ doc-clean:
 doc: doc-clean
 	@echo "[doc] buf generate openapi..."
 	@mkdir -p $(BFF_OPENAPI_DIR)
-	@cd $(ROOT_DIR) && $(BUF) generate $(BUF_CONFIG_DIR) --path common/proto/app/$(BFF_SERVER) --template $(BUF_GEN_OPENAPI) --output $(BFF_OPENAPI_DIR)
+	@cd $(ROOT_DIR) && $(BUF) generate $(PROTO_DIR) --path $(PROTO_DIR)/$(BFF_SERVER) --template $(BUF_GEN_OPENAPI) --output $(BFF_OPENAPI_DIR)
 
 # Clean generated SDK artifacts.
 .PHONY: sdk-clean

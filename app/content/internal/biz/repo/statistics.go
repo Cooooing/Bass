@@ -10,5 +10,5 @@ import (
 
 // StatisticsRepo 批量读取内容领域的原始行为数量。
 type StatisticsRepo interface {
-	BatchCountUserBehaviors(context.Context, []int64, time.Time, time.Time, []enum.ContentActionStatus) ([]*model.UserBehaviorCount, error)
+	BatchCountUserBehaviors(ctx context.Context, userIDs []int64, start, end time.Time, statuses []enum.ContentActionStatus) ([]*model.UserBehaviorCount, error)
 }

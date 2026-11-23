@@ -650,7 +650,7 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 		for _, item := range rows.GetRows() {
 			values = append(values, &model.ArticleTag{ID: item.GetId(), Code: item.GetCode(), Name: item.GetName(), Icon: item.Icon, DomainID: item.DomainId})
 			if item.DomainId != nil {
-				domainIDs = append(domainIDs, *item.DomainId)
+				domainIDs = append(domainIDs, item.GetDomainId())
 			}
 		}
 		articleTags[articleID] = values
@@ -708,11 +708,11 @@ func (r *ContentArticleClient) articleProfileIDs(item *contentv1.Article, lastCo
 	}
 	userIDs := make([]int64, 0, 2)
 	if item.CreatedBy != nil {
-		userIDs = append(userIDs, *item.CreatedBy)
+		userIDs = append(userIDs, item.GetCreatedBy())
 	}
 	if lastComment != nil && lastComment.CreatedBy != nil {
 
-		userIDs = append(userIDs, *lastComment.CreatedBy)
+		userIDs = append(userIDs, lastComment.GetCreatedBy())
 	}
 	return userIDs
 }
@@ -761,12 +761,12 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 	out.CreatedBy = item.CreatedBy
 	out.UpdatedBy = item.UpdatedBy
 	if item.CreatedBy != nil {
-		out.AuthorUser = profiles[*item.CreatedBy]
+		out.AuthorUser = profiles[item.GetCreatedBy()]
 	}
 	if lastComment != nil {
 		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
-			out.LastReplyUser = profiles[*lastComment.CreatedBy]
+			out.LastReplyUser = profiles[lastComment.GetCreatedBy()]
 		}
 	}
 	return out
@@ -779,10 +779,10 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 	if state == nil {
 		state = &model.ArticleViewerActionState{}
 	}
-	canViewRewardContent := state.Rewarded || (item.CreatedBy != nil && *item.CreatedBy == viewerUserID)
+	canViewRewardContent := state.Rewarded || (item.CreatedBy != nil && item.GetCreatedBy() == viewerUserID)
 	var rewardContentRender *string
 	if canViewRewardContent && item.RewardContent != nil {
-		rewardContentRender = new(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", item.GetId()), *item.RewardContent))
+		rewardContentRender = new(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", item.GetId()), item.GetRewardContent()))
 	}
 	out := &model.ArticleDetail{
 		ID:                  item.GetId(),
@@ -831,12 +831,12 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 	out.CreatedBy = item.CreatedBy
 	out.UpdatedBy = item.UpdatedBy
 	if item.CreatedBy != nil {
-		out.AuthorUser = profiles[*item.CreatedBy]
+		out.AuthorUser = profiles[item.GetCreatedBy()]
 	}
 	if lastComment != nil {
 		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
-			out.LastReplyUser = profiles[*lastComment.CreatedBy]
+			out.LastReplyUser = profiles[lastComment.GetCreatedBy()]
 		}
 	}
 	return out

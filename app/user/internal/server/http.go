@@ -30,14 +30,14 @@ func NewHTTPServer(
 			validate.ProtoValidate(),
 		),
 	}
-	if c.Http.Network != "" {
-		opts = append(opts, http.Network(c.Http.Network))
+	if c.GetHttp().GetNetwork() != "" {
+		opts = append(opts, http.Network(c.GetHttp().GetNetwork()))
 	}
-	if c.Http.Host != "" && c.Http.Port != 0 {
-		opts = append(opts, http.Address(fmt.Sprintf("%s:%d", c.Http.Host, c.Http.Port)))
+	if c.GetHttp().GetHost() != "" && c.GetHttp().GetPort() != 0 {
+		opts = append(opts, http.Address(fmt.Sprintf("%s:%d", c.GetHttp().GetHost(), c.GetHttp().GetPort())))
 	}
-	if c.Http.Timeout != nil {
-		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
+	if c.GetHttp().GetTimeout() != nil {
+		opts = append(opts, http.Timeout(c.GetHttp().GetTimeout().AsDuration()))
 	}
 	srv := http.NewServer(opts...)
 	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {

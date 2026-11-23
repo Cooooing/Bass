@@ -36,16 +36,16 @@ var ModuleProviderSet = wire.NewSet(
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
-	return c.Consul
+	return c.GetConsul()
 }
 
 // ProvideDTMConfig 从模块启动配置中提取 DTM 配置。
 func ProvideDTMConfig(c *config.Bootstrap) *common.DTM {
-	return c.Dtm
+	return c.GetDtm()
 }
 
 func ProvideDatabase(c *config.Bootstrap) *common.Database {
-	return c.Database
+	return c.GetDatabase()
 }
 
 func ProvideGenClient(c *client.EntClient) *gen.Client {

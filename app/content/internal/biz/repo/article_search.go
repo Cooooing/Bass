@@ -5,11 +5,10 @@ import (
 	"time"
 )
 
-// ArticleSearchRepo queries public articles through the configured search backend.
-// The port keeps Content's public search contract independent from PostgreSQL,
-// Elasticsearch, or another future index implementation.
+// ArticleSearchRepo 通过已配置的搜索后端查询公开文章。
+// 该端口使 Content 的公开搜索契约独立于 PostgreSQL、Elasticsearch 或未来的索引实现。
 type ArticleSearchRepo interface {
-	SearchPublic(context.Context, *SearchPublicArticlesReq) (*SearchPublicArticlesResp, error)
+	SearchPublic(ctx context.Context, req *SearchPublicArticlesReq) (*SearchPublicArticlesResp, error)
 }
 
 type SearchPublicArticlesReq struct {
@@ -29,7 +28,7 @@ type ArticleSearchRow struct {
 	PublishedAt time.Time
 }
 
-// ArticleSearchCursor represents the stable sort tuple for one search query.
+// ArticleSearchCursor 表示一次搜索查询的稳定排序元组。
 type ArticleSearchCursor struct {
 	Rank        int
 	PublishedAt time.Time

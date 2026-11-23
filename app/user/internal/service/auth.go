@@ -395,8 +395,8 @@ func (s *AuthService) BanAccount(ctx context.Context, req *v1.BanAccount_Req) (*
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	var bannedUntil *time.Time
-	if req.BannedUntil != nil {
-		bannedUntil = new(req.BannedUntil.AsTime())
+	if req.GetBannedUntil() != nil {
+		bannedUntil = new(req.GetBannedUntil().AsTime())
 	}
 	res, err := s.authUsecase.BanAccount(ctx, &usecase.BanAccountReq{
 		UserID:        req.GetUserId(),

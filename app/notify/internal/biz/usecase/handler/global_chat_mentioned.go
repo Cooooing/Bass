@@ -51,5 +51,5 @@ func (h *GlobalChatMentionedHandler) Handle(ctx context.Context, req *usecase.Ev
 		}
 	}
 	businessKey := fmt.Sprintf("im:global-chat-mention:%d", payload.GetMessageId())
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeIMGlobalChatMention, ActorUserID: new(payload.SenderId), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.GlobalChatMention{Actor: h.templateUser(payload.GetSenderId(), actor)}, Recipients: recipients})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: notifyenum.NotificationTypeIMGlobalChatMention, ActorUserID: new(payload.GetSenderId()), BusinessKey: &businessKey, Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.GlobalChatMention{Actor: h.templateUser(payload.GetSenderId(), actor)}, Recipients: recipients})
 }

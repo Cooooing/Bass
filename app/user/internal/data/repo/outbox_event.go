@@ -49,14 +49,14 @@ func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) (
 	if req.Event == nil {
 		return nil, fmt.Errorf("outbox event is nil")
 	}
-	subject, ok := commonenum.EventSubjectMap.ToEnum(req.Event.Subject)
+	subject, ok := commonenum.EventSubjectMap.ToEnum(req.Event.GetSubject())
 	if !ok {
-		return nil, fmt.Errorf("unknown event subject: %s", req.Event.Subject)
+		return nil, fmt.Errorf("unknown event subject: %s", req.Event.GetSubject())
 	}
-	if req.Event.EventId == "" {
+	if req.Event.GetEventId() == "" {
 		req.Event.EventId = uuid.NewString()
 	}
-	if req.Event.Timestamp == nil {
+	if req.Event.GetTimestamp() == nil {
 		req.Event.Timestamp = timestamppb.Now()
 	}
 	payloadBytes, err := protojson.MarshalOptions{
@@ -70,7 +70,7 @@ func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) (
 	otel.GetTextMapPropagator().Inject(ctx, propagation.MapCarrier(headers))
 
 	create := r.getClient(ctx).OutboxEvent.Create().
-		SetEventID(req.Event.EventId).
+		SetEventID(req.Event.GetEventId()).
 		SetSubject(subject.String()).
 		SetPayload(payload)
 	if len(headers) > 0 {

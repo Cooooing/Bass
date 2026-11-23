@@ -85,7 +85,7 @@ func (u *TCCArticleThankUsecase) Try(ctx context.Context, r *contentv1.TCCArticl
 		if r.GetArticleId() <= 0 || r.GetSenderUserId() <= 0 || r.GetReceiverUserId() <= 0 || r.GetSenderUserId() == r.GetReceiverUserId() || r.GetPoints() <= 0 {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		a, err := u.articles.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(r.ArticleId)}})
+		a, err := u.articles.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(r.GetArticleId())}})
 		if err != nil {
 			return err
 		}
@@ -96,14 +96,14 @@ func (u *TCCArticleThankUsecase) Try(ctx context.Context, r *contentv1.TCCArticl
 			return err
 		}
 		action := enum.ArticleActionThank
-		actionExists, err := u.actions.Exist(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.ArticleId), UserID: new(r.SenderUserId), Type: &action})
+		actionExists, err := u.actions.Exist(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.GetArticleId()), UserID: new(r.GetSenderUserId()), Type: &action})
 		if err != nil {
 			return err
 		}
 		if actionExists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
 		}
-		created, err := u.actions.Save(ctx, &model.ArticleActionRecord{ArticleID: r.GetArticleId(), UserID: r.GetSenderUserId(), Type: action, Points: new(r.Points), Status: enum.ContentActionStatusPending})
+		created, err := u.actions.Save(ctx, &model.ArticleActionRecord{ArticleID: r.GetArticleId(), UserID: r.GetSenderUserId(), Type: action, Points: new(r.GetPoints()), Status: enum.ContentActionStatusPending})
 		if err != nil {
 			return err
 		}
@@ -117,7 +117,7 @@ func (u *TCCArticleThankUsecase) Confirm(ctx context.Context, r *contentv1.TCCAr
 	var outboxEvent *repo.OutboxEvent
 	err := u.branch.Execute(ctx, func(ctx context.Context) error {
 		action := enum.ArticleActionThank
-		changed, err := u.actions.TransitionStatus(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.ArticleId), UserID: new(r.SenderUserId), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusPublished)
+		changed, err := u.actions.TransitionStatus(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.GetArticleId()), UserID: new(r.GetSenderUserId()), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusPublished)
 		if err != nil {
 			return err
 		}
@@ -141,7 +141,7 @@ func (u *TCCArticleThankUsecase) Confirm(ctx context.Context, r *contentv1.TCCAr
 func (u *TCCArticleThankUsecase) Cancel(ctx context.Context, r *contentv1.TCCArticleThank_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
 		action := enum.ArticleActionThank
-		_, err := u.actions.TransitionStatus(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.ArticleId), UserID: new(r.SenderUserId), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusCanceled)
+		_, err := u.actions.TransitionStatus(ctx, &repo.ArticleActionRecordReq{ArticleID: new(r.GetArticleId()), UserID: new(r.GetSenderUserId()), Type: &action}, enum.ContentActionStatusPending, enum.ContentActionStatusCanceled)
 		return err
 	})
 }

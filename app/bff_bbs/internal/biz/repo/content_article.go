@@ -120,7 +120,7 @@ type SearchArticlesResp struct {
 }
 
 type ArticleSearchRateLimitCache interface {
-	Allow(context.Context, *ArticleSearchRateLimitReq) (bool, error)
+	Allow(ctx context.Context, req *ArticleSearchRateLimitReq) (bool, error)
 }
 
 type ArticleSearchRateLimitReq struct {

@@ -34,7 +34,7 @@ func (u *TCCArticlePublishUsecase) Try(ctx context.Context, req *contentv1.TCCAr
 
 func (u *TCCArticlePublishUsecase) Confirm(ctx context.Context, req *contentv1.TCCArticlePublish_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
-		if err := u.articles.ConfirmPublish(ctx, &repo.ArticleConfirmPublishReq{ArticleID: req.GetArticleId(), PublishedAt: req.GetPublishedAt().AsTime(), PublishedCity: req.City, UpdatedBy: new(req.OperatorUserId)}); err != nil {
+		if err := u.articles.ConfirmPublish(ctx, &repo.ArticleConfirmPublishReq{ArticleID: req.GetArticleId(), PublishedAt: req.GetPublishedAt().AsTime(), PublishedCity: req.City, UpdatedBy: new(req.GetOperatorUserId())}); err != nil {
 			return err
 		}
 		_, err := u.outbox.Save(ctx, &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED, Payload: &commonevent.Event_ArticlePublished{ArticlePublished: &commonevent.ArticlePublishedPayload{ArticleId: req.GetArticleId()}}})

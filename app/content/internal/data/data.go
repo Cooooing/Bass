@@ -64,11 +64,11 @@ var ModuleProviderSet = wire.NewSet(
 )
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis {
-	return c.Redis
+	return c.GetRedis()
 }
 
 func ProvideDatabase(c *config.Bootstrap) *common.Database {
-	return c.Database
+	return c.GetDatabase()
 }
 
 func ProvideGenClient(c *client.EntClient) *gen.Client {
@@ -76,15 +76,15 @@ func ProvideGenClient(c *client.EntClient) *gen.Client {
 }
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
-	return c.Consul
+	return c.GetConsul()
 }
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
-	return c.Nats
+	return c.GetNats()
 }
 
-func ProvideDTMConfig(c *config.Bootstrap) *common.DTM           { return c.Dtm }
-func ProvideBusinessConfig(c *config.Bootstrap) *config.Business { return c.Business }
+func ProvideDTMConfig(c *config.Bootstrap) *common.DTM           { return c.GetDtm() }
+func ProvideBusinessConfig(c *config.Bootstrap) *config.Business { return c.GetBusiness() }
 
 func ProvideTCCBranchExecutor(sqlClient *commonClient.SQLClient, entClient *client.EntClient, dtm *commonClient.DTMClient) (commonClient.TCCBranchExecutor, error) {
 	return commonClient.NewTCCBranchExecutor(dtm, sqlClient.DB, sqlClient.Driver, entClient.ClientFromTx)

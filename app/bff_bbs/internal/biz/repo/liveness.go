@@ -15,6 +15,6 @@ type Liveness struct {
 	RewardStatus userenum.LivenessRewardStatus
 }
 type LivenessClient interface {
-	Get(context.Context, int64, time.Time) (*Liveness, error)
-	Claim(context.Context, int64, time.Time) (*Liveness, error)
+	Get(ctx context.Context, userID int64, date time.Time) (*Liveness, error)
+	Claim(ctx context.Context, userID int64, date time.Time) (*Liveness, error)
 }

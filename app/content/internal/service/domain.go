@@ -40,11 +40,11 @@ func NewDomainService(
 }
 
 func (s *DomainService) BatchCreateDomains(ctx context.Context, req *v1.BatchCreateDomains_Req) (*v1.BatchCreateDomains_Resp, error) {
-	if req.UserId <= 0 || len(req.Domains) == 0 {
+	if req.GetUserId() <= 0 || len(req.GetDomains()) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	domains := make([]*model.Domain, 0, len(req.Domains))
-	for _, item := range req.Domains {
+	domains := make([]*model.Domain, 0, len(req.GetDomains()))
+	for _, item := range req.GetDomains() {
 		domainStatus, ok := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(item.Status, contentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED))
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
@@ -93,23 +93,23 @@ func (s *DomainService) BatchCreateDomains(ctx context.Context, req *v1.BatchCre
 }
 
 func (s *DomainService) UpdateDomain(ctx context.Context, req *v1.UpdateDomain_Req) (*v1.UpdateDomain_Resp, error) {
-	if req.Domain == nil || req.UserId <= 0 || req.Domain.Id <= 0 {
+	if req.GetDomain() == nil || req.GetUserId() <= 0 || req.GetDomain().GetId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	domainStatus, ok := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(req.Domain.Status, contentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED))
+	domainStatus, ok := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(req.GetDomain().Status, contentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED))
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 	}
 	data, err := s.contentUsecase.Update(ctx, &model.Domain{
-		ID:          req.Domain.GetId(),
-		Code:        req.Domain.GetCode(),
-		Name:        req.Domain.GetName(),
-		Description: req.Domain.Description,
+		ID:          req.GetDomain().GetId(),
+		Code:        req.GetDomain().GetCode(),
+		Name:        req.GetDomain().GetName(),
+		Description: req.GetDomain().Description,
 		Status:      domainStatus,
-		URL:         req.Domain.Url,
-		Icon:        req.Domain.Icon,
-		IsNav:       req.Domain.GetIsNav(),
-		Sort:        req.Domain.GetSort(),
+		URL:         req.GetDomain().Url,
+		Icon:        req.GetDomain().Icon,
+		IsNav:       req.GetDomain().GetIsNav(),
+		Sort:        req.GetDomain().GetSort(),
 		UpdatedBy:   &req.UserId,
 	})
 	if err != nil {
@@ -141,7 +141,7 @@ func (s *DomainService) MapDomains(ctx context.Context, req *v1.MapDomains_Req) 
 	req = util.OrDefault(req, &v1.MapDomains_Req{})
 	var status *enum.DomainStatus
 	if req.Status != nil {
-		value, ok := enum.DomainStatusMap.ToEnum(*req.Status)
+		value, ok := enum.DomainStatusMap.ToEnum(req.GetStatus())
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 		}
@@ -173,7 +173,7 @@ func (s *DomainService) ListDomains(ctx context.Context, req *v1.ListDomains_Req
 	}
 	var domainStatus *enum.DomainStatus
 	if query.Status != nil {
-		status, ok := enum.DomainStatusMap.ToEnum(*query.Status)
+		status, ok := enum.DomainStatusMap.ToEnum(query.GetStatus())
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 		}
@@ -229,7 +229,7 @@ func (s *DomainService) PageDomains(ctx context.Context, req *v1.PageDomains_Req
 	}
 	var domainStatus *enum.DomainStatus
 	if query.Status != nil {
-		status, ok := enum.DomainStatusMap.ToEnum(*query.Status)
+		status, ok := enum.DomainStatusMap.ToEnum(query.GetStatus())
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 		}

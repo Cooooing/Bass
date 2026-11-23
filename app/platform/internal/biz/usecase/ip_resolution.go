@@ -26,6 +26,7 @@ type IPResolutionUsecase struct {
 	log           *slog.Logger
 	httpClient    *http.Client
 	storageClient repo.StorageClient
+	ipDataDir     string
 	mu            sync.RWMutex
 	ip2region     *service.Ip2Region
 }
@@ -42,6 +43,7 @@ func NewIPResolutionUsecase(
 		log:           logger,
 		httpClient:    httpClient,
 		storageClient: storageClient,
+		ipDataDir:     "configs/ip2region",
 	}
 	cleanup := func() {
 		u.mu.Lock()
@@ -147,13 +149,13 @@ func (u *IPResolutionUsecase) uploadIPDataToStorage(ctx context.Context, key str
 
 func (u *IPResolutionUsecase) uploadIPDataToLocal(ctx context.Context, ipv4Content []byte, ipv6Content []byte) error {
 	ipData := u.conf.GetBusiness().GetIpData()
-	ipv4Path := strings.TrimSpace(ipData.GetIpv4XdbPath())
-	if ipv4Path == "" {
-		return fmt.Errorf("IPv4 ip data path is empty")
+	ipv4Path, err := u.localIPDataPath(ipData.GetIpv4XdbPath())
+	if err != nil {
+		return fmt.Errorf("validate IPv4 ip data path: %w", err)
 	}
-	ipv6Path := strings.TrimSpace(ipData.GetIpv6XdbPath())
-	if ipv6Path == "" {
-		return fmt.Errorf("IPv6 ip data path is empty")
+	ipv6Path, err := u.localIPDataPath(ipData.GetIpv6XdbPath())
+	if err != nil {
+		return fmt.Errorf("validate IPv6 ip data path: %w", err)
 	}
 	if len(ipv4Content) == 0 && len(ipv6Content) == 0 {
 		return fmt.Errorf("ip data content is empty")
@@ -209,18 +211,20 @@ func (u *IPResolutionUsecase) uploadIPDataToLocal(ctx context.Context, ipv4Conte
 
 func (u *IPResolutionUsecase) loadIPDataFromLocal(ctx context.Context) error {
 	ipData := u.conf.GetBusiness().GetIpData()
-	ipv4Path := strings.TrimSpace(ipData.GetIpv4XdbPath())
-	if ipv4Path == "" {
-		return fmt.Errorf("IPv4 ip data path is empty")
+	ipv4Path, err := u.localIPDataPath(ipData.GetIpv4XdbPath())
+	if err != nil {
+		return fmt.Errorf("validate IPv4 ip data path: %w", err)
 	}
-	ipv6Path := strings.TrimSpace(ipData.GetIpv6XdbPath())
-	if ipv6Path == "" {
-		return fmt.Errorf("IPv6 ip data path is empty")
+	ipv6Path, err := u.localIPDataPath(ipData.GetIpv6XdbPath())
+	if err != nil {
+		return fmt.Errorf("validate IPv6 ip data path: %w", err)
 	}
+	// #nosec G304 -- 路径已限制为项目内 configs/ip2region 的 .xdb 数据文件。
 	ipv4Content, err := os.ReadFile(ipv4Path)
 	if err != nil {
 		return fmt.Errorf("read local IPv4 ip data %s: %w", ipv4Path, err)
 	}
+	// #nosec G304 -- 路径已限制为项目内 configs/ip2region 的 .xdb 数据文件。
 	ipv6Content, err := os.ReadFile(ipv6Path)
 	if err != nil {
 		return fmt.Errorf("read local IPv6 ip data %s: %w", ipv6Path, err)
@@ -241,6 +245,7 @@ func (u *IPResolutionUsecase) writeIPDataFile(ctx context.Context, path string, 
 		return false, fmt.Errorf("create ip data dir %s: %w", filepath.Dir(path), err)
 	}
 	tmpPath := path + ".tmp"
+	// #nosec G703 -- path 已由 localIPDataPath 验证，tmpPath 仅追加固定后缀。
 	if err := os.WriteFile(tmpPath, content, 0o600); err != nil {
 		return false, fmt.Errorf("write ip data temp file %s: %w", tmpPath, err)
 	}
@@ -249,6 +254,19 @@ func (u *IPResolutionUsecase) writeIPDataFile(ctx context.Context, path string, 
 		return false, fmt.Errorf("replace ip data file %s: %w", path, err)
 	}
 	return true, nil
+}
+
+// localIPDataPath 仅接受项目内 IP 数据目录的相对 xdb 文件，阻止配置穿越到任意路径。
+func (u *IPResolutionUsecase) localIPDataPath(path string) (string, error) {
+	path = filepath.Clean(strings.TrimSpace(path))
+	if path == "." || filepath.IsAbs(path) || filepath.Ext(path) != ".xdb" {
+		return "", fmt.Errorf("invalid local ip data path")
+	}
+	relativePath, err := filepath.Rel(u.ipDataDir, path)
+	if err != nil || relativePath == ".." || strings.HasPrefix(relativePath, ".."+string(filepath.Separator)) {
+		return "", fmt.Errorf("ip data path must be under %s", u.ipDataDir)
+	}
+	return path, nil
 }
 
 func (u *IPResolutionUsecase) Get(ctx context.Context, ip string) (*model.IpInfo, error) {

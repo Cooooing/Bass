@@ -9,12 +9,12 @@ import (
 
 // UserBadgeRepo persists a user's display state and awarded badge facts.
 type UserBadgeRepo interface {
-	Get(context.Context, *UserBadgeGetReq) (*model.UserBadge, error)
-	List(context.Context, *UserBadgeGetReq) ([]*model.UserBadge, error)
-	Page(context.Context, *UserBadgeGetReq) (*UserBadgePageResp, error)
-	Grant(context.Context, []*model.UserBadge) ([]*model.UserBadge, error)
-	Revoke(context.Context, []*model.UserBadge) (int, error)
-	UpdatePresentation(context.Context, int64, int64, bool, int32) (*model.UserBadge, error)
+	Get(ctx context.Context, req *UserBadgeGetReq) (*model.UserBadge, error)
+	List(ctx context.Context, req *UserBadgeGetReq) ([]*model.UserBadge, error)
+	Page(ctx context.Context, req *UserBadgeGetReq) (*UserBadgePageResp, error)
+	Grant(ctx context.Context, userBadges []*model.UserBadge) ([]*model.UserBadge, error)
+	Revoke(ctx context.Context, userBadges []*model.UserBadge) (int, error)
+	UpdatePresentation(ctx context.Context, userID, badgeID int64, displayed bool, position int32) (*model.UserBadge, error)
 }
 
 // UserBadgeGetReq describes reusable user badge query conditions.

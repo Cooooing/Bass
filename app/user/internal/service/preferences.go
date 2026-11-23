@@ -59,8 +59,8 @@ func (s *PreferencesService) GetPreferences(ctx context.Context, req *v1.GetPref
 func (s *PreferencesService) UpdatePreferences(ctx context.Context, req *v1.UpdatePreferences_Req) (*v1.UpdatePreferences_Resp, error) {
 	var language *enum.Language
 	if req.Language != nil {
-		if *req.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {
-			value, ok := enum.LanguageMap.ToEnum(*req.Language)
+		if req.GetLanguage() != commonenums.Language_LANGUAGE_UNSPECIFIED {
+			value, ok := enum.LanguageMap.ToEnum(req.GetLanguage())
 			if !ok {
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PREFERENCE_INVALID)
 			}

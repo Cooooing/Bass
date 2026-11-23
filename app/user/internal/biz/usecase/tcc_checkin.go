@@ -33,7 +33,7 @@ func (u *TCCCheckinUsecase) Try(ctx context.Context, req *userv1.TCCCheckin_Req)
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		date := req.GetDate().AsTime()
-		record, err := u.records.Get(ctx, &repo.CheckinRecordGetReq{UserID: new(req.UserId), Date: &date})
+		record, err := u.records.Get(ctx, &repo.CheckinRecordGetReq{UserID: new(req.GetUserId()), Date: &date})
 		if err != nil || (record != nil && record.Status != enum.CheckinStatusCanceled) {
 			return err
 		}
@@ -48,7 +48,7 @@ func (u *TCCCheckinUsecase) Try(ctx context.Context, req *userv1.TCCCheckin_Req)
 func (u *TCCCheckinUsecase) Confirm(ctx context.Context, req *userv1.TCCCheckin_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
 		date := req.GetDate().AsTime()
-		record, err := u.records.Get(ctx, &repo.CheckinRecordGetReq{UserID: new(req.UserId), Date: &date})
+		record, err := u.records.Get(ctx, &repo.CheckinRecordGetReq{UserID: new(req.GetUserId()), Date: &date})
 		if err != nil {
 			return err
 		}
@@ -75,7 +75,7 @@ func (u *TCCCheckinUsecase) Confirm(ctx context.Context, req *userv1.TCCCheckin_
 func (u *TCCCheckinUsecase) Cancel(ctx context.Context, req *userv1.TCCCheckin_Req) error {
 	return u.branch.Execute(ctx, func(ctx context.Context) error {
 		date := req.GetDate().AsTime()
-		record, err := u.records.Get(ctx, &repo.CheckinRecordGetReq{UserID: new(req.UserId), Date: &date})
+		record, err := u.records.Get(ctx, &repo.CheckinRecordGetReq{UserID: new(req.GetUserId()), Date: &date})
 		if err != nil {
 			return err
 		}

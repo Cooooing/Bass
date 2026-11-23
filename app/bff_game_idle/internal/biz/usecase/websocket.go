@@ -290,7 +290,8 @@ func (u *WebSocketUsecase) Disconnect(ctx context.Context, connection *WebSocket
 	u.lock.Unlock()
 
 	if online {
-		cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		// 离线清理不能随 WebSocket 请求取消而中断，但保留调用方写入的上下文值。
+		cleanupCtx, cancel := context.WithTimeout(context.WithoutCancel(ctx), 3*time.Second)
 		defer cancel()
 		_ = u.characterUsecase.Offline(cleanupCtx, &OfflineCharacterReq{
 			CharacterID: connection.CharacterID,

@@ -2,6 +2,7 @@
 
 ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 APP_DIR := $(ROOT_DIR)/app
+LINT_BINARY := $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE)
 
 # Auto-discover modules with Makefile under app.
 MODULES ?= $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
@@ -77,9 +78,14 @@ sdk-clean:
 		$(MAKE) -C $(APP_DIR)/$$module sdk-clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-.PHONY: lint
-lint:
+.PHONY: lint lint-plugin
+lint: lint-plugin
 	@$(foreach module,$(MODULES),echo "---- [$(module)] ----" && $(MAKE) -C $(APP_DIR)/$(module) lint IGNORE_ERROR=$(IGNORE_ERROR) && ) echo "[lint] all app modules passed"
+
+# 定制插件也由自身产出的 linter 校验，避免质量门禁脱离被检查范围。
+lint-plugin:
+	@$(MAKE) -C $(APP_DIR)/$(firstword $(MODULES)) lint-toolchain IGNORE_ERROR=$(IGNORE_ERROR)
+	@cd $(ROOT_DIR)/.golangci-plugin && $(LINT_BINARY) run --allow-parallel-runners --config $(ROOT_DIR)/.golangci.yml ./...
 
 .PHONY: proto-lint
 proto-lint:

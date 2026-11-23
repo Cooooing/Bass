@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"math"
 	"time"
 
 	"content/internal/biz/model"
@@ -44,14 +45,14 @@ func (r *StatisticsRepo) BatchCountUserBehaviors(ctx context.Context, userIDs []
 		return nil, err
 	}
 	for _, item := range creators {
-		counts[item.UserID].ArticleCount = int32(item.Count)
+		counts[item.UserID].ArticleCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 	}
 	creators = nil
 	if err := r.db.Comment.Query().Where(comment.CreatedByIn(userIDs...), comment.CreatedAtGTE(start), comment.CreatedAtLT(end), comment.DeletedAtIsNil()).GroupBy(comment.FieldCreatedBy).Aggregate(gen.Count()).Scan(ctx, &creators); err != nil {
 		return nil, err
 	}
 	for _, item := range creators {
-		counts[item.UserID].CommentCount = int32(item.Count)
+		counts[item.UserID].CommentCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 	}
 	rows = nil
 	articleStatuses := make([]articleactionrecord.Status, 0, len(actionStatuses))
@@ -66,11 +67,11 @@ func (r *StatisticsRepo) BatchCountUserBehaviors(ctx context.Context, userIDs []
 	for _, item := range rows {
 		switch enum.ArticleAction(item.Type) {
 		case enum.ArticleActionLike:
-			counts[item.UserID].ArticleLikeCount = int32(item.Count)
+			counts[item.UserID].ArticleLikeCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 		case enum.ArticleActionThank:
-			counts[item.UserID].ArticleThankCount = int32(item.Count)
+			counts[item.UserID].ArticleThankCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 		case enum.ArticleActionReward:
-			counts[item.UserID].ArticleRewardCount = int32(item.Count)
+			counts[item.UserID].ArticleRewardCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 		}
 	}
 	rows = nil
@@ -80,9 +81,9 @@ func (r *StatisticsRepo) BatchCountUserBehaviors(ctx context.Context, userIDs []
 	for _, item := range rows {
 		switch enum.CommentAction(item.Type) {
 		case enum.CommentActionLike:
-			counts[item.UserID].CommentLikeCount = int32(item.Count)
+			counts[item.UserID].CommentLikeCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 		case enum.CommentActionThank:
-			counts[item.UserID].CommentThankCount = int32(item.Count)
+			counts[item.UserID].CommentThankCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 		}
 	}
 	rows = nil
@@ -90,7 +91,7 @@ func (r *StatisticsRepo) BatchCountUserBehaviors(ctx context.Context, userIDs []
 		return nil, err
 	}
 	for _, item := range rows {
-		counts[item.UserID].ViewCount = int32(item.Count)
+		counts[item.UserID].ViewCount = int32(min(item.Count, math.MaxInt32)) // #nosec G115 -- count 已限制为 MaxInt32。
 	}
 	result := make([]*model.UserBehaviorCount, 0, len(userIDs))
 	for _, userID := range userIDs {

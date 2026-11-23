@@ -79,7 +79,7 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 			if profileErr != nil {
 				return nil, profileErr
 			}
-			reply.Profile.AvatarURL = profile.Account.AvatarUrl
+			reply.Profile.AvatarURL = profile.GetAccount().AvatarUrl
 		}
 		account = &bbsuserv1.GetCurrentAccount_Resp_CurrentAccount{}
 		if profile := reply.Profile; profile != nil {

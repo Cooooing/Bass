@@ -71,7 +71,7 @@ func (r *AccountClient) GetProfile(ctx context.Context, name string) (*model.Acc
 	if err != nil {
 		return nil, nil, err
 	}
-	return r.accountProfile(reply.GetAccount().GetBasic()), r.timestampValue(reply.LastSuccessLoginAt), nil
+	return r.accountProfile(reply.GetAccount().GetBasic()), r.timestampValue(reply.GetLastSuccessLoginAt()), nil
 }
 
 func (r *AccountClient) MapProfileAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.AccountProfile, error) {

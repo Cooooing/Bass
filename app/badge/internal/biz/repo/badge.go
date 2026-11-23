@@ -9,12 +9,12 @@ import (
 
 // BadgeRepo persists badges owned by the badge domain.
 type BadgeRepo interface {
-	Get(context.Context, *BadgeGetReq) (*model.Badge, error)
-	List(context.Context, *BadgeGetReq) ([]*model.Badge, error)
-	Page(context.Context, *BadgeGetReq) (*BadgePageResp, error)
-	Create(context.Context, *model.Badge) (*model.Badge, error)
-	Update(context.Context, *model.Badge) (*model.Badge, error)
-	Delete(context.Context, int64) error
+	Get(ctx context.Context, req *BadgeGetReq) (*model.Badge, error)
+	List(ctx context.Context, req *BadgeGetReq) ([]*model.Badge, error)
+	Page(ctx context.Context, req *BadgeGetReq) (*BadgePageResp, error)
+	Create(ctx context.Context, badge *model.Badge) (*model.Badge, error)
+	Update(ctx context.Context, badge *model.Badge) (*model.Badge, error)
+	Delete(ctx context.Context, badgeID int64) error
 }
 
 // BadgeGetReq describes reusable badge query conditions.

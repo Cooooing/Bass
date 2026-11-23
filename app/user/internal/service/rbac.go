@@ -148,8 +148,8 @@ func (s *RbacService) GrantRbacRole(ctx context.Context, req *v1.GrantRbacRole_R
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	var expiresAt *time.Time
-	if req.ExpiresAt != nil {
-		expiresAt = new(req.ExpiresAt.AsTime())
+	if req.GetExpiresAt() != nil {
+		expiresAt = new(req.GetExpiresAt().AsTime())
 	}
 	return &v1.GrantRbacRole_Resp{}, s.rbacUsecase.GrantRole(ctx, req.GetUserId(), req.GetRoleId(), req.GetGrantedBy(), expiresAt)
 }

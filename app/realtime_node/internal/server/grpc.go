@@ -31,8 +31,8 @@ func NewGRPCServer(config *config.Bootstrap, logger *slog.Logger, observer *comm
 			}),
 		),
 	}
-	if config.Grpc.GetHost() != "" && config.Grpc.GetPort() != 0 {
-		options = append(options, kratosgrpc.Address(fmt.Sprintf("%s:%d", config.Grpc.GetHost(), config.Grpc.GetPort())))
+	if config.GetGrpc().GetHost() != "" && config.GetGrpc().GetPort() != 0 {
+		options = append(options, kratosgrpc.Address(fmt.Sprintf("%s:%d", config.GetGrpc().GetHost(), config.GetGrpc().GetPort())))
 	}
 	server := kratosgrpc.NewServer(options...)
 	for _, service := range services {

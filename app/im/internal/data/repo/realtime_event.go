@@ -68,7 +68,7 @@ func (p *RealtimeEventPublisher) PublishGlobalChatMessageCreated(ctx context.Con
 	if err != nil {
 		return fmt.Errorf("marshal global chat event: %w", err)
 	}
-	_, err = p.nats.JSPublish(ctx, commonenum.EventSubjectIMGlobalChatMessageCreated.String(), &nats.Message{ID: event.EventId, Data: payload})
+	_, err = p.nats.JSPublish(ctx, commonenum.EventSubjectIMGlobalChatMessageCreated.String(), &nats.Message{ID: event.GetEventId(), Data: payload})
 	return err
 }
 

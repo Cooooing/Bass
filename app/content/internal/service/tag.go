@@ -40,11 +40,11 @@ func NewTagService(
 }
 
 func (s *TagService) BatchCreateTags(ctx context.Context, req *v1.BatchCreateTags_Req) (*v1.BatchCreateTags_Resp, error) {
-	if req.UserId <= 0 || len(req.Tags) == 0 {
+	if req.GetUserId() <= 0 || len(req.GetTags()) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	tags := make([]*model.Tag, 0, len(req.Tags))
-	for _, item := range req.Tags {
+	tags := make([]*model.Tag, 0, len(req.GetTags()))
+	for _, item := range req.GetTags() {
 		tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(item.Status, contentv1enum.TagStatus_TAG_STATUS_ENABLED))
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
@@ -92,21 +92,21 @@ func (s *TagService) BatchCreateTags(ctx context.Context, req *v1.BatchCreateTag
 }
 
 func (s *TagService) UpdateTag(ctx context.Context, req *v1.UpdateTag_Req) (*v1.UpdateTag_Resp, error) {
-	if req.Tag == nil || req.TagId <= 0 || req.UserId <= 0 {
+	if req.GetTag() == nil || req.GetTagId() <= 0 || req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(req.Tag.Status, contentv1enum.TagStatus_TAG_STATUS_ENABLED))
+	tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(req.GetTag().Status, contentv1enum.TagStatus_TAG_STATUS_ENABLED))
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
 	data, err := s.tagUsecase.Update(ctx, &model.Tag{
-		ID:          req.TagId,
-		Code:        req.Tag.GetCode(),
-		Name:        req.Tag.GetName(),
-		Description: req.Tag.Description,
-		DomainID:    req.Tag.DomainId,
-		Icon:        req.Tag.Icon,
-		Sort:        req.Tag.GetSort(),
+		ID:          req.GetTagId(),
+		Code:        req.GetTag().GetCode(),
+		Name:        req.GetTag().GetName(),
+		Description: req.GetTag().Description,
+		DomainID:    req.GetTag().DomainId,
+		Icon:        req.GetTag().Icon,
+		Sort:        req.GetTag().GetSort(),
 		Status:      tagStatus,
 		UpdatedBy:   &req.UserId,
 	})
@@ -136,7 +136,7 @@ func (s *TagService) UpdateTag(ctx context.Context, req *v1.UpdateTag_Req) (*v1.
 }
 
 func (s *TagService) BindArticleTags(ctx context.Context, req *v1.BindArticleTags_Req) (*v1.BindArticleTags_Resp, error) {
-	if req.ArticleId <= 0 || req.UserId <= 0 || len(req.TagIds) == 0 {
+	if req.GetArticleId() <= 0 || req.GetUserId() <= 0 || len(req.GetTagIds()) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if err := s.tagUsecase.BindArticle(ctx, &usecase.ArticleTagReq{
@@ -151,7 +151,7 @@ func (s *TagService) BindArticleTags(ctx context.Context, req *v1.BindArticleTag
 }
 
 func (s *TagService) UnbindArticleTags(ctx context.Context, req *v1.UnbindArticleTags_Req) (*v1.UnbindArticleTags_Resp, error) {
-	if req.ArticleId <= 0 || req.UserId <= 0 || len(req.TagIds) == 0 {
+	if req.GetArticleId() <= 0 || req.GetUserId() <= 0 || len(req.GetTagIds()) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if err := s.tagUsecase.UnbindArticle(ctx, &usecase.ArticleTagReq{
@@ -166,7 +166,7 @@ func (s *TagService) UnbindArticleTags(ctx context.Context, req *v1.UnbindArticl
 }
 
 func (s *TagService) ListArticleTags(ctx context.Context, req *v1.ListArticleTags_Req) (*v1.ListArticleTags_Resp, error) {
-	if req.ArticleId <= 0 {
+	if req.GetArticleId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	rows, err := s.tagUsecase.ListArticleTags(ctx, req.GetArticleId())
@@ -203,7 +203,7 @@ func (s *TagService) MapTags(ctx context.Context, req *v1.MapTags_Req) (*v1.MapT
 	req = util.OrDefault(req, &v1.MapTags_Req{})
 	var status *enum.TagStatus
 	if req.Status != nil {
-		value, ok := enum.TagStatusMap.ToEnum(*req.Status)
+		value, ok := enum.TagStatusMap.ToEnum(req.GetStatus())
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}
@@ -232,7 +232,7 @@ func (s *TagService) MapArticleTags(ctx context.Context, req *v1.MapArticleTags_
 	req = util.OrDefault(req, &v1.MapArticleTags_Req{})
 	var status *enum.TagStatus
 	if req.Status != nil {
-		value, ok := enum.TagStatusMap.ToEnum(*req.Status)
+		value, ok := enum.TagStatusMap.ToEnum(req.GetStatus())
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}
@@ -268,7 +268,7 @@ func (s *TagService) ListTags(ctx context.Context, req *v1.ListTags_Req) (*v1.Li
 	}
 	var tagStatus *enum.TagStatus
 	if query.Status != nil {
-		status, ok := enum.TagStatusMap.ToEnum(*query.Status)
+		status, ok := enum.TagStatusMap.ToEnum(query.GetStatus())
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}
@@ -323,7 +323,7 @@ func (s *TagService) PageTags(ctx context.Context, req *v1.PageTags_Req) (*v1.Pa
 	}
 	var tagStatus *enum.TagStatus
 	if query.Status != nil {
-		status, ok := enum.TagStatusMap.ToEnum(*query.Status)
+		status, ok := enum.TagStatusMap.ToEnum(query.GetStatus())
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}

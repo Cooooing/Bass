@@ -46,5 +46,5 @@ func (h *CommentThankedHandler) Handle(ctx context.Context, req *usecase.EventHa
 	if err != nil {
 		return err
 	}
-	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: req.NotificationType, ActorUserID: new(payload.SenderId), BusinessKey: new(fmt.Sprintf("content:comment-thanked:%d:%d", payload.GetCommentId(), payload.GetSenderId())), Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.CommentLiked{Comment: h.commentTemplateData(comment), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: []*model.NotificationRecipient{{UserID: comment.UserID}}})
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{EventID: event.GetEventId(), NotificationType: req.NotificationType, ActorUserID: new(payload.GetSenderId()), BusinessKey: new(fmt.Sprintf("content:comment-thanked:%d:%d", payload.GetCommentId(), payload.GetSenderId())), Language: req.Language, Channels: []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation}, TemplateData: templatedata.CommentLiked{Comment: h.commentTemplateData(comment), Actor: h.templateUser(payload.GetSenderId(), users[payload.GetSenderId()])}, Recipients: []*model.NotificationRecipient{{UserID: comment.UserID}}})
 }

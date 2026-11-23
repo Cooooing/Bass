@@ -541,10 +541,10 @@ func (r *ContentCommentClient) commentProfileIDs(item *contentv1.PageComments_Re
 	}
 	userIDs := make([]int64, 0, 2)
 	if item.CreatedBy != nil {
-		userIDs = append(userIDs, *item.CreatedBy)
+		userIDs = append(userIDs, item.GetCreatedBy())
 	}
 	if item.ReplyUserId != nil {
-		userIDs = append(userIDs, *item.ReplyUserId)
+		userIDs = append(userIDs, item.GetReplyUserId())
 	}
 	return userIDs
 }
@@ -578,10 +578,10 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp
 	out.CreatedBy = item.CreatedBy
 	out.UpdatedBy = item.UpdatedBy
 	if item.CreatedBy != nil {
-		out.User = profiles[*item.CreatedBy]
+		out.User = profiles[item.GetCreatedBy()]
 	}
 	if item.ReplyUserId != nil {
-		out.ReplyUser = profiles[*item.ReplyUserId]
+		out.ReplyUser = profiles[item.GetReplyUserId()]
 	}
 	if article != nil {
 		out.Article = &model.ArticleBrief{
@@ -618,10 +618,10 @@ func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_C
 	out.CreatedBy = item.CreatedBy
 	out.UpdatedBy = item.UpdatedBy
 	if item.CreatedBy != nil {
-		out.User = profiles[*item.CreatedBy]
+		out.User = profiles[item.GetCreatedBy()]
 	}
 	if item.ReplyUserId != nil {
-		out.ReplyUser = profiles[*item.ReplyUserId]
+		out.ReplyUser = profiles[item.GetReplyUserId()]
 	}
 	return out
 }

@@ -26,24 +26,24 @@ type TencentSMSClient struct {
 func NewTencentSMSClient(
 	conf *config.Bootstrap,
 ) (*TencentSMSClient, error) {
-	if conf == nil || conf.Business == nil || conf.Business.Sms == nil || !conf.Business.Sms.Enable {
+	if conf == nil || conf.GetBusiness() == nil || conf.GetBusiness().GetSms() == nil || !conf.GetBusiness().GetSms().GetEnable() {
 		return &TencentSMSClient{
 			conf: conf,
 		}, nil
 	}
 
-	if conf.Business.Sms.Tencent == nil {
+	if conf.GetBusiness().GetSms().GetTencent() == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
-	tencentConf := conf.Business.Sms.Tencent
-	credential := common.NewCredential(tencentConf.SecretId, tencentConf.SecretKey)
+	tencentConf := conf.GetBusiness().GetSms().GetTencent()
+	credential := common.NewCredential(tencentConf.GetSecretId(), tencentConf.GetSecretKey())
 	clientProfile := profile.NewClientProfile()
 	clientProfile.HttpProfile.ReqMethod = "POST"
 	clientProfile.HttpProfile.ReqTimeout = 10
 	clientProfile.HttpProfile.Endpoint = "sms.tencentcloudapi.com"
 	clientProfile.SignMethod = "HmacSHA1"
 
-	region := tencentConf.Diyu
+	region := tencentConf.GetDiyu()
 	if region == "" {
 		region = "ap-beijing"
 	}
@@ -66,13 +66,13 @@ func (c *TencentSMSClient) SendTencentSMS(ctx context.Context, req *bizrepo.Tenc
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
-	if c.conf == nil || c.conf.Business == nil || c.conf.Business.Sms == nil || !c.conf.Business.Sms.Enable {
+	if c.conf == nil || c.conf.GetBusiness() == nil || c.conf.GetBusiness().GetSms() == nil || !c.conf.GetBusiness().GetSms().GetEnable() {
 		return &bizrepo.TencentSMSSendResult{
 			Status:       notifyenum.NotificationChannelStatusSucceeded,
 			ProviderResp: new("sms channel disabled, skipped provider call"),
 		}, nil
 	}
-	if c.conf.Business.Sms.Tencent == nil || c.client == nil {
+	if c.conf.GetBusiness().GetSms().GetTencent() == nil || c.client == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
 	if req.ProviderTemplateID == "" {

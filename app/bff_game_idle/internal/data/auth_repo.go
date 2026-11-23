@@ -86,14 +86,14 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*model.LoginT
 		AccessToken:  reply.GetAccessToken(),
 		RefreshToken: reply.GetRefreshToken(),
 	}
-	if reply.AccessTokenExpiresAt != nil {
-		token.AccessTokenExpiresAt = new(reply.AccessTokenExpiresAt.AsTime())
+	if reply.GetAccessTokenExpiresAt() != nil {
+		token.AccessTokenExpiresAt = new(reply.GetAccessTokenExpiresAt().AsTime())
 	}
-	if reply.RefreshTokenExpiresAt != nil {
-		token.RefreshTokenExpiresAt = new(reply.RefreshTokenExpiresAt.AsTime())
+	if reply.GetRefreshTokenExpiresAt() != nil {
+		token.RefreshTokenExpiresAt = new(reply.GetRefreshTokenExpiresAt().AsTime())
 	}
-	if reply.SessionExpiresAt != nil {
-		token.SessionExpiresAt = new(reply.SessionExpiresAt.AsTime())
+	if reply.GetSessionExpiresAt() != nil {
+		token.SessionExpiresAt = new(reply.GetSessionExpiresAt().AsTime())
 	}
 	if account := reply.GetAccount(); account != nil && account.GetBasic() != nil {
 		basic := account.GetBasic()

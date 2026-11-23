@@ -1092,7 +1092,7 @@ func (*ArticleService) articleQueryFilter(queryParams *v1.ArticleQueryParams) (*
 	query.DomainID = queryParams.DomainId
 	query.ArticleIDs = queryParams.GetArticleIds()
 	query.AuthorID = queryParams.AuthorId
-	query.AuthorIDs = queryParams.AuthorIds
+	query.AuthorIDs = queryParams.GetAuthorIds()
 	query.PublishedCity = queryParams.PublishedCity
 	query.ExcludedAuthorIDs = queryParams.GetExcludedAuthorIds()
 	if queryParams.Type != nil {

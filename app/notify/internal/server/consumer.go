@@ -112,19 +112,19 @@ func (c *Consumer) handle(ctx context.Context, msg *nats.Message) error {
 		c.log.Error("unmarshal event failed", "subject", msg.Subject, "error", err)
 		return err
 	}
-	if message.EventId == "" {
+	if message.GetEventId() == "" {
 		c.log.Error("event id is empty", "subject", msg.Subject)
 		return errors.New("event id is required")
 	}
 	eventSubject := commonenum.EventSubject(msg.Subject)
 	if _, ok := commonenum.EventSubjectMap.ToProto(eventSubject); !ok {
 		err := fmt.Errorf("unknown event subject: %s", msg.Subject)
-		c.log.Error("event subject invalid", "event_id", message.EventId, "subject", msg.Subject, "error", err)
+		c.log.Error("event subject invalid", "event_id", message.GetEventId(), "subject", msg.Subject, "error", err)
 		return err
 	}
-	if expectedSubject, ok := commonenum.EventSubjectMap.ToEnum(message.Subject); !ok || expectedSubject != eventSubject {
-		err := fmt.Errorf("event subject mismatch: subject=%s event_subject=%s", msg.Subject, message.Subject.String())
-		c.log.Error("event subject mismatch", "event_id", message.EventId, "subject", msg.Subject, "error", err)
+	if expectedSubject, ok := commonenum.EventSubjectMap.ToEnum(message.GetSubject()); !ok || expectedSubject != eventSubject {
+		err := fmt.Errorf("event subject mismatch: subject=%s event_subject=%s", msg.Subject, message.GetSubject().String())
+		c.log.Error("event subject mismatch", "event_id", message.GetEventId(), "subject", msg.Subject, "error", err)
 		return err
 	}
 	err := c.consumerUsecase.Handle(ctx, &usecase.ConsumerHandleReq{
@@ -133,7 +133,7 @@ func (c *Consumer) handle(ctx context.Context, msg *nats.Message) error {
 		Payload: string(payload),
 	})
 	if err != nil {
-		c.log.Error("notify event handling failed", "event_id", message.EventId, "subject", msg.Subject, "error", err)
+		c.log.Error("notify event handling failed", "event_id", message.GetEventId(), "subject", msg.Subject, "error", err)
 	}
 	return err
 }

@@ -39,26 +39,26 @@ func (c *EmailClient) SendEmail(ctx context.Context, req *bizrepo.EmailRequest) 
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
-	if c.conf == nil || c.conf.Business == nil || c.conf.Business.Email == nil || !c.conf.Business.Email.Enable {
+	if c.conf == nil || c.conf.GetBusiness() == nil || c.conf.GetBusiness().GetEmail() == nil || !c.conf.GetBusiness().GetEmail().GetEnable() {
 		return &bizrepo.EmailSendResult{
 			Status:       notifyenum.NotificationChannelStatusSucceeded,
 			ProviderResp: new("email channel disabled, skipped provider call"),
 		}, nil
 	}
-	email := c.conf.Business.Email
+	email := c.conf.GetBusiness().GetEmail()
 
 	contentType := req.ContentType
 	if contentType == "" {
 		contentType = "text/html"
 	}
 	message := gomail.NewMessage()
-	message.SetAddressHeader("From", email.FromEmail, email.FromName)
+	message.SetAddressHeader("From", email.GetFromEmail(), email.GetFromName())
 	message.SetHeader("To", req.ToEmail)
 	message.SetHeader("Subject", req.Subject)
 	message.SetBody(contentType, req.Body)
 
-	dialer := gomail.NewDialer(email.SmtpHost, int(email.SmtpPort), email.Username, email.Password)
-	dialer.SSL = email.SmtpPort == 465
+	dialer := gomail.NewDialer(email.GetSmtpHost(), int(email.GetSmtpPort()), email.GetUsername(), email.GetPassword())
+	dialer.SSL = email.GetSmtpPort() == 465
 
 	if err := dialer.DialAndSend(message); err != nil {
 		return &bizrepo.EmailSendResult{

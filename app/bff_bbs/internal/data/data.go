@@ -56,11 +56,11 @@ var ModuleProviderSet = wire.NewSet(
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
-	return c.Consul
+	return c.GetConsul()
 }
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis {
-	return c.Redis
+	return c.GetRedis()
 }
 
 func ProvideUserAuthClient(userClient *rpc.UserClient) userv1.AuthServiceClient {

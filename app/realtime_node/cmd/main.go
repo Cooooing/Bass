@@ -40,7 +40,7 @@ func main() {
 		panic(err)
 	}
 	defer confCleanup()
-	Name, Version = c.Server.Name, c.Server.Version
+	Name, Version = c.GetServer().GetName(), c.GetServer().GetVersion()
 	ctx := context.Background()
 	shutdownTracing, err := commonClient.SetupTracing(ctx, Name, Version, c.GetTrace())
 	if err != nil {

@@ -41,14 +41,14 @@ func (r *CharacterRepo) Create(ctx context.Context, req *repo.CreateCharacterReq
 		ActionQueueCapacity: row.GetActionQueueCapacity(),
 		MaxOfflineSeconds:   row.GetMaxOfflineSeconds(),
 	}
-	if row.CreatedAt != nil {
-		out.CreatedAt = new(row.CreatedAt.AsTime())
+	if row.GetCreatedAt() != nil {
+		out.CreatedAt = new(row.GetCreatedAt().AsTime())
 	}
-	if row.UpdatedAt != nil {
-		out.UpdatedAt = new(row.UpdatedAt.AsTime())
+	if row.GetUpdatedAt() != nil {
+		out.UpdatedAt = new(row.GetUpdatedAt().AsTime())
 	}
-	if row.LastOfflineAt != nil {
-		out.LastOfflineAt = new(row.LastOfflineAt.AsTime())
+	if row.GetLastOfflineAt() != nil {
+		out.LastOfflineAt = new(row.GetLastOfflineAt().AsTime())
 	}
 	return out, nil
 }
@@ -71,14 +71,14 @@ func (r *CharacterRepo) List(ctx context.Context, req *repo.ListCharacterReq) ([
 			ActionQueueCapacity: row.GetActionQueueCapacity(),
 			MaxOfflineSeconds:   row.GetMaxOfflineSeconds(),
 		}
-		if row.CreatedAt != nil {
-			item.CreatedAt = new(row.CreatedAt.AsTime())
+		if row.GetCreatedAt() != nil {
+			item.CreatedAt = new(row.GetCreatedAt().AsTime())
 		}
-		if row.UpdatedAt != nil {
-			item.UpdatedAt = new(row.UpdatedAt.AsTime())
+		if row.GetUpdatedAt() != nil {
+			item.UpdatedAt = new(row.GetUpdatedAt().AsTime())
 		}
-		if row.LastOfflineAt != nil {
-			item.LastOfflineAt = new(row.LastOfflineAt.AsTime())
+		if row.GetLastOfflineAt() != nil {
+			item.LastOfflineAt = new(row.GetLastOfflineAt().AsTime())
 		}
 		rows = append(rows, item)
 	}

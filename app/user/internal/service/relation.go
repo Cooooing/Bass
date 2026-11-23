@@ -166,7 +166,7 @@ func (s *RelationService) MapRelationStatuses(ctx context.Context, req *v1.MapRe
 	req = util.OrDefault(req, &v1.MapRelationStatuses_Req{})
 	res, err := s.relationUsecase.MapStatus(ctx, &usecase.MapRelationStatusReq{
 		ActorID:   req.GetActorId(),
-		TargetIDs: req.TargetIds,
+		TargetIDs: req.GetTargetIds(),
 	})
 	if err != nil {
 		return nil, err

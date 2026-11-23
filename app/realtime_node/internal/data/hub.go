@@ -5,6 +5,7 @@ import (
 
 	"common/pkg/client/rpc"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
+
 	"realtime_node/internal/biz/repo"
 )
 

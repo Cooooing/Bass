@@ -10,6 +10,7 @@ import (
 	imv1enum "common/proto/gen/im/enum/v1"
 	realtimehubv1enum "common/proto/gen/realtime_hub/enum/v1"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
+
 	"realtime_node/internal/biz/model"
 	"realtime_node/internal/biz/repo"
 	"realtime_node/internal/enum"
@@ -360,6 +361,7 @@ func (u *RealtimeUsecase) enqueue(ctx context.Context, message *realtimehubv1.No
 	case <-ctx.Done():
 		return ctx.Err()
 	case <-runCtx.Done():
+		//nolint:contextcheck // runCtx 是节点生命周期上下文，独立于发送请求的取消信号。
 		return context.Cause(runCtx)
 	}
 }

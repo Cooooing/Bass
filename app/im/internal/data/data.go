@@ -58,20 +58,20 @@ var ModuleProviderSet = wire.NewSet(
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
-	return c.Consul
+	return c.GetConsul()
 }
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
-	return c.Nats
+	return c.GetNats()
 }
 
 func ProvideDatabase(c *config.Bootstrap) *common.Database {
-	return c.Database
+	return c.GetDatabase()
 }
 
-func ProvideRedis(c *config.Bootstrap) *common.Redis             { return c.Redis }
-func ProvideDTMConfig(c *config.Bootstrap) *common.DTM           { return c.Dtm }
-func ProvideBusinessConfig(c *config.Bootstrap) *config.Business { return c.Business }
+func ProvideRedis(c *config.Bootstrap) *common.Redis             { return c.GetRedis() }
+func ProvideDTMConfig(c *config.Bootstrap) *common.DTM           { return c.GetDtm() }
+func ProvideBusinessConfig(c *config.Bootstrap) *config.Business { return c.GetBusiness() }
 
 func ProvideGenClient(c *client.EntClient) *gen.Client {
 	return c.Client

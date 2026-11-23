@@ -43,15 +43,15 @@ func (s *StationMessageService) ListStationMessages(ctx context.Context, req *v1
 	query := &usecase.StationMessagePageReq{
 		ReceiverID: new(req.GetUserId()),
 	}
-	if req != nil && req.Query != nil {
-		query.IDs = req.Query.GetIds()
+	if req != nil && req.GetQuery() != nil {
+		query.IDs = req.GetQuery().GetIds()
 		if req.Query.NotificationType != nil {
-			notificationType, ok := notifyenum.NotificationTypeMap.ToEnum(*req.Query.NotificationType)
+			notificationType, ok := notifyenum.NotificationTypeMap.ToEnum(req.GetQuery().GetNotificationType())
 			if ok {
 				query.NotificationType = &notificationType
 			}
 		}
-		query.Unread = req.Query.Unread
+		query.Unread = req.GetQuery().Unread
 	}
 	var pageReq *commonmodel.PageReq
 	if req != nil {
@@ -104,12 +104,12 @@ func (s *StationMessageService) MarkReadStationMessage(ctx context.Context, req 
 	}
 	var startTime *time.Time
 	var endTime *time.Time
-	if req != nil && req.CreatedTimeRange != nil {
-		if req.CreatedTimeRange.Start != nil {
-			startTime = new(req.CreatedTimeRange.Start.AsTime())
+	if req != nil && req.GetCreatedTimeRange() != nil {
+		if req.GetCreatedTimeRange().GetStart() != nil {
+			startTime = new(req.GetCreatedTimeRange().GetStart().AsTime())
 		}
-		if req.CreatedTimeRange.End != nil {
-			endTime = new(req.CreatedTimeRange.End.AsTime())
+		if req.GetCreatedTimeRange().GetEnd() != nil {
+			endTime = new(req.GetCreatedTimeRange().GetEnd().AsTime())
 		}
 	}
 	var ids []int64

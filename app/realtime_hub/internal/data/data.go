@@ -16,17 +16,17 @@ var DataProviderSet = wire.NewSet(ModuleProviderSet, commonclient.NewObservabili
 var ModuleProviderSet = wire.NewSet(ProvideRedis, ProvideBusiness, datarepo.NewRegistry, datarepo.NewControlPublisher)
 
 func ProvideRedis(config *config.Bootstrap) *common.Redis {
-	return config.Redis
+	return config.GetRedis()
 }
 
 func ProvideBusiness(config *config.Bootstrap) *config.Business {
-	return config.Business
+	return config.GetBusiness()
 }
 
 func ProvideNats(config *config.Bootstrap) *common.Nats {
-	return config.Nats
+	return config.GetNats()
 }
 
 func ProvideConsul(config *config.Bootstrap) *common.Consul {
-	return config.Consul
+	return config.GetConsul()
 }

@@ -54,7 +54,7 @@ func ProvideTimeWheel(c *config.Bootstrap) *common.TimeWheel {
 }
 
 func ProvideDatabase(c *config.Bootstrap) *common.Database {
-	return c.Database
+	return c.GetDatabase()
 }
 
 func ProvideGenClient(c *client.EntClient) *gen.Client {
@@ -66,9 +66,9 @@ func ProvideCharacterStateRepo(cache *repo.CharacterStateCache) bizrepo.Characte
 }
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
-	return c.Nats
+	return c.GetNats()
 }
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
-	return c.Consul
+	return c.GetConsul()
 }

@@ -162,7 +162,7 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 		query.Level = req.Query.Level
 		query.UserID = req.Query.UserId
 		if req.Query.Order != nil {
-			query.Order = new(int32(*req.Query.Order))
+			query.Order = new(int32(req.Query.GetOrder()))
 		}
 	}
 	if query.UserID != nil && req.UserID != *query.UserID {

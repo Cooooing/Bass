@@ -32,13 +32,13 @@ func NewEmailUsecase(
 	rateLimitEnabled := true
 	rateLimitWindow := 5 * time.Minute
 	rateLimitMaxCount := int64(5)
-	if conf != nil && conf.Business != nil && conf.Business.NotificationRateLimit != nil {
-		rateLimitEnabled = conf.Business.NotificationRateLimit.Enable
-		if conf.Business.NotificationRateLimit.Window != nil && conf.Business.NotificationRateLimit.Window.AsDuration() > 0 {
-			rateLimitWindow = conf.Business.NotificationRateLimit.Window.AsDuration()
+	if conf != nil && conf.GetBusiness() != nil && conf.GetBusiness().GetNotificationRateLimit() != nil {
+		rateLimitEnabled = conf.GetBusiness().GetNotificationRateLimit().GetEnable()
+		if conf.GetBusiness().GetNotificationRateLimit().GetWindow() != nil && conf.GetBusiness().GetNotificationRateLimit().GetWindow().AsDuration() > 0 {
+			rateLimitWindow = conf.GetBusiness().GetNotificationRateLimit().GetWindow().AsDuration()
 		}
-		if conf.Business.NotificationRateLimit.MaxCount > 0 {
-			rateLimitMaxCount = conf.Business.NotificationRateLimit.MaxCount
+		if conf.GetBusiness().GetNotificationRateLimit().GetMaxCount() > 0 {
+			rateLimitMaxCount = conf.GetBusiness().GetNotificationRateLimit().GetMaxCount()
 		}
 	}
 	return &EmailUsecase{

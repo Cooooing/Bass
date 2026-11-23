@@ -127,22 +127,22 @@ func (s *AccountService) UpdateProfileAccount(ctx context.Context, req *bbsuserv
 	}
 
 	if req.Nickname != nil {
-		value := strings.TrimSpace(*req.Nickname)
+		value := strings.TrimSpace(req.GetNickname())
 		req.Nickname = new(value)
 	}
 	if req.Url != nil {
-		value := strings.TrimSpace(*req.Url)
+		value := strings.TrimSpace(req.GetUrl())
 		parsed, err := url.ParseRequestURI(value)
 		if (value != "" && (err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") || parsed.Host == "")) || utf8.RuneCountInString(value) > 2048 {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 		req.Url = new(value)
 	}
-	if req.Introduction != nil && utf8.RuneCountInString(*req.Introduction) > 512 {
+	if req.Introduction != nil && utf8.RuneCountInString(req.GetIntroduction()) > 512 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
 	if req.Mbti != nil {
-		value := strings.ToUpper(strings.TrimSpace(*req.Mbti))
+		value := strings.ToUpper(strings.TrimSpace(req.GetMbti()))
 		if value != "" && !s.mbtiRe.MatchString(value) {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}

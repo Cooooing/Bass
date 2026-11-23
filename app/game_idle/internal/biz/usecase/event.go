@@ -182,7 +182,7 @@ func (u *GameIdleEventUsecase) publish(ctx context.Context, event *commonevent.E
 		return err
 	}
 	event.Subject = commonenum.EventSubjectMap.MustToProto(subject)
-	if event.Timestamp == nil {
+	if event.GetTimestamp() == nil {
 		event.Timestamp = timestamppb.Now()
 	}
 	if header == nil {

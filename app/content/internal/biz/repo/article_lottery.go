@@ -16,12 +16,12 @@ func (*ArticleLotteryClosedError) Error() string {
 
 // ArticleLotteryRepo 保存抽奖配置、报名和开奖结果。
 type ArticleLotteryRepo interface {
-	SaveDraft(context.Context, int64, *model.ArticleLotteryDraft) error
-	DeleteDraft(context.Context, int64) error
-	Get(context.Context, int64, int64) (*model.ArticleLottery, error)
-	SetEntry(context.Context, int64, int64, bool, time.Time) error
-	Draw(context.Context, int64, time.Time) ([]*ArticleLotteryWinner, error)
-	ListParticipantUserIDs(context.Context, int64) ([]int64, error)
+	SaveDraft(ctx context.Context, articleID int64, draft *model.ArticleLotteryDraft) error
+	DeleteDraft(ctx context.Context, articleID int64) error
+	Get(ctx context.Context, articleID, userID int64) (*model.ArticleLottery, error)
+	SetEntry(ctx context.Context, articleID, userID int64, joined bool, now time.Time) error
+	Draw(ctx context.Context, articleID int64, now time.Time) ([]*ArticleLotteryWinner, error)
+	ListParticipantUserIDs(ctx context.Context, articleID int64) ([]int64, error)
 }
 
 // ArticleLotteryWinner 是一次开奖产生的中奖记录。

@@ -115,14 +115,14 @@ func NewHTTPServer(
 			return errorMessages.Resolve(r, code, data)
 		})),
 	}
-	if c.Http.Network != "" {
-		opts = append(opts, kratoshttp.Network(c.Http.Network))
+	if c.GetHttp().GetNetwork() != "" {
+		opts = append(opts, kratoshttp.Network(c.GetHttp().GetNetwork()))
 	}
-	if c.Http.Host != "" && c.Http.Port != 0 {
-		opts = append(opts, kratoshttp.Address(fmt.Sprintf("%s:%d", c.Http.Host, c.Http.Port)))
+	if c.GetHttp().GetHost() != "" && c.GetHttp().GetPort() != 0 {
+		opts = append(opts, kratoshttp.Address(fmt.Sprintf("%s:%d", c.GetHttp().GetHost(), c.GetHttp().GetPort())))
 	}
-	if c.Http.Timeout != nil {
-		opts = append(opts, kratoshttp.Timeout(c.Http.Timeout.AsDuration()))
+	if c.GetHttp().GetTimeout() != nil {
+		opts = append(opts, kratoshttp.Timeout(c.GetHttp().GetTimeout().AsDuration()))
 	}
 	srv := kratoshttp.NewServer(opts...)
 	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {

@@ -30,14 +30,14 @@ func NewHTTPServer(
 			validate.ProtoValidate(),
 		),
 	}
-	if config.Http.GetNetwork() != "" {
-		options = append(options, http.Network(config.Http.GetNetwork()))
+	if config.GetHttp().GetNetwork() != "" {
+		options = append(options, http.Network(config.GetHttp().GetNetwork()))
 	}
-	if config.Http.GetHost() != "" && config.Http.GetPort() != 0 {
-		options = append(options, http.Address(fmt.Sprintf("%s:%d", config.Http.GetHost(), config.Http.GetPort())))
+	if config.GetHttp().GetHost() != "" && config.GetHttp().GetPort() != 0 {
+		options = append(options, http.Address(fmt.Sprintf("%s:%d", config.GetHttp().GetHost(), config.GetHttp().GetPort())))
 	}
-	if config.Http.GetTimeout() != nil {
-		options = append(options, http.Timeout(config.Http.GetTimeout().AsDuration()))
+	if config.GetHttp().GetTimeout() != nil {
+		options = append(options, http.Timeout(config.GetHttp().GetTimeout().AsDuration()))
 	}
 	server := http.NewServer(options...)
 	if config.GetObservability().GetEnableMetrics() {

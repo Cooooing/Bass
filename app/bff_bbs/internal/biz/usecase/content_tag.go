@@ -127,7 +127,7 @@ func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*Li
 		query.Description = req.Query.Description
 		query.DomainID = req.Query.DomainId
 		if req.Query.Status != nil {
-			query.Status = new(int32(*req.Query.Status))
+			query.Status = new(int32(req.Query.GetStatus()))
 		}
 	}
 	if query.Status == nil {

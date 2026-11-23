@@ -149,11 +149,11 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
 			}
-			if basic.CreatedAt != nil {
-				account.Profile.CreatedAt = new(basic.CreatedAt.AsTime())
+			if basic.GetCreatedAt() != nil {
+				account.Profile.CreatedAt = new(basic.GetCreatedAt().AsTime())
 			}
-			if basic.UpdatedAt != nil {
-				account.Profile.UpdatedAt = new(basic.UpdatedAt.AsTime())
+			if basic.GetUpdatedAt() != nil {
+				account.Profile.UpdatedAt = new(basic.GetUpdatedAt().AsTime())
 			}
 		}
 		if contact := reply.GetAccount().GetContact(); contact != nil {
@@ -169,14 +169,14 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 		AccessToken:  reply.GetAccessToken(),
 		RefreshToken: reply.GetRefreshToken(),
 	}
-	if reply.AccessTokenExpiresAt != nil {
-		token.AccessTokenExpiresAt = new(reply.AccessTokenExpiresAt.AsTime())
+	if reply.GetAccessTokenExpiresAt() != nil {
+		token.AccessTokenExpiresAt = new(reply.GetAccessTokenExpiresAt().AsTime())
 	}
-	if reply.RefreshTokenExpiresAt != nil {
-		token.RefreshTokenExpiresAt = new(reply.RefreshTokenExpiresAt.AsTime())
+	if reply.GetRefreshTokenExpiresAt() != nil {
+		token.RefreshTokenExpiresAt = new(reply.GetRefreshTokenExpiresAt().AsTime())
 	}
-	if reply.SessionExpiresAt != nil {
-		token.SessionExpiresAt = new(reply.SessionExpiresAt.AsTime())
+	if reply.GetSessionExpiresAt() != nil {
+		token.SessionExpiresAt = new(reply.GetSessionExpiresAt().AsTime())
 	}
 	return &repo.LoginResp{
 		Token:   token,
@@ -196,14 +196,14 @@ func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo
 		AccessToken:  reply.GetAccessToken(),
 		RefreshToken: reply.GetRefreshToken(),
 	}
-	if reply.AccessTokenExpiresAt != nil {
-		token.AccessTokenExpiresAt = new(reply.AccessTokenExpiresAt.AsTime())
+	if reply.GetAccessTokenExpiresAt() != nil {
+		token.AccessTokenExpiresAt = new(reply.GetAccessTokenExpiresAt().AsTime())
 	}
-	if reply.RefreshTokenExpiresAt != nil {
-		token.RefreshTokenExpiresAt = new(reply.RefreshTokenExpiresAt.AsTime())
+	if reply.GetRefreshTokenExpiresAt() != nil {
+		token.RefreshTokenExpiresAt = new(reply.GetRefreshTokenExpiresAt().AsTime())
 	}
-	if reply.SessionExpiresAt != nil {
-		token.SessionExpiresAt = new(reply.SessionExpiresAt.AsTime())
+	if reply.GetSessionExpiresAt() != nil {
+		token.SessionExpiresAt = new(reply.GetSessionExpiresAt().AsTime())
 	}
 	return token, nil
 }

@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"math"
 	"time"
 
 	"common/pkg/apperror"
@@ -273,7 +274,7 @@ func (d *ArticleUsecase) CountCollected(ctx context.Context, userID int64) (int3
 	action := enum.ArticleActionCollect
 	status := enum.ContentActionStatusPublished
 	count, err := d.actionRecordRepo.Count(ctx, &repo.ArticleActionRecordReq{UserID: &userID, Type: &action, Status: &status})
-	return int32(count), err
+	return int32(min(count, math.MaxInt32)), err // #nosec G115 -- count 已限制为 MaxInt32。
 }
 
 // PageCollected 返回当前账号仍可公开展示的收藏文章。

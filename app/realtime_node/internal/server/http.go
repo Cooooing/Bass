@@ -17,11 +17,11 @@ func NewHTTPServer(config *config.Bootstrap, logger *slog.Logger, observer *comm
 		http.Filter(servermiddleware.HTTPCORSFilter()),
 		http.Middleware(servermiddleware.RequestLogContextMiddleware(), observer.ServerMiddleware()),
 	}
-	if config.Http.GetNetwork() != "" {
-		options = append(options, http.Network(config.Http.GetNetwork()))
+	if config.GetHttp().GetNetwork() != "" {
+		options = append(options, http.Network(config.GetHttp().GetNetwork()))
 	}
-	if config.Http.GetHost() != "" && config.Http.GetPort() != 0 {
-		options = append(options, http.Address(fmt.Sprintf("%s:%d", config.Http.GetHost(), config.Http.GetPort())))
+	if config.GetHttp().GetHost() != "" && config.GetHttp().GetPort() != 0 {
+		options = append(options, http.Address(fmt.Sprintf("%s:%d", config.GetHttp().GetHost(), config.GetHttp().GetPort())))
 	}
 	options = append(options, http.Timeout(0))
 	server := http.NewServer(options...)

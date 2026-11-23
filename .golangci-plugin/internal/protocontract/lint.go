@@ -34,6 +34,7 @@ func Check(root string) ([]Violation, error) {
 		if entry.IsDir() || filepath.Ext(path) != ".proto" {
 			return nil
 		}
+		//nolint:gosec // path 由受 root 限制的 WalkDir 生成。
 		data, err := os.ReadFile(path)
 		if err != nil {
 			return err
@@ -129,14 +130,14 @@ func (c *fileChecker) checkUnaryRPC(rpc *ast.RPCNode) {
 	output := string(rpc.Output.MessageType.AsIdentifier())
 	operation, inputKind, inputOK := c.operationType(input)
 	outputOperation, outputKind, outputOK := c.operationType(output)
-	if !inputOK || inputKind != "Req" || operation != rpc.Name.Val {
+	if !inputOK || inputKind != operationRequest || operation != rpc.Name.Val {
 		c.add(rpc.Input.MessageType, ruleRPCRequest, rpc.Name.Val, rpc.Name.Val, input)
 	}
-	if !outputOK || outputKind != "Resp" || outputOperation != rpc.Name.Val {
+	if !outputOK || outputKind != operationResponse || outputOperation != rpc.Name.Val {
 		c.add(rpc.Output.MessageType, ruleRPCResponse, rpc.Name.Val, rpc.Name.Val, output)
 		return
 	}
-	if !inputOK || inputKind != "Req" || operation != rpc.Name.Val {
+	if !inputOK || inputKind != operationRequest || operation != rpc.Name.Val {
 		return
 	}
 	container := c.messages[operation]
@@ -160,11 +161,11 @@ func (c *fileChecker) checkOperationContainer(container *ast.MessageNode) {
 			continue
 		}
 		found[nested.Name.Val] = true
-		if nested.Name.Val != "Req" && nested.Name.Val != "Resp" {
+		if nested.Name.Val != operationRequest && nested.Name.Val != operationResponse {
 			c.add(nested, ruleExtraMember, container.Name.Val, nested.Name.Val)
 		}
 	}
-	for _, required := range []string{"Req", "Resp"} {
+	for _, required := range []string{operationRequest, operationResponse} {
 		if !found[required] {
 			c.add(container, ruleMissingMember, container.Name.Val, required)
 		}
@@ -201,7 +202,7 @@ func (c *fileChecker) checkTCCService(service *ast.ServiceNode) {
 		}
 		operation, inputKind, inputOK := c.operationType(string(rpc.Input.MessageType.AsIdentifier()))
 		outputOperation, outputKind, outputOK := c.operationType(string(rpc.Output.MessageType.AsIdentifier()))
-		if !inputOK || inputKind != "Req" || !outputOK || outputKind != "Resp" || operation != outputOperation {
+		if !inputOK || inputKind != operationRequest || !outputOK || outputKind != operationResponse || operation != outputOperation {
 			c.add(rpc, ruleTCCParameter, rpc.Name.Val)
 			continue
 		}
@@ -224,7 +225,7 @@ func (c *fileChecker) checkTCCService(service *ast.ServiceNode) {
 
 func (c *fileChecker) operationType(value string) (string, string, bool) {
 	operation, kind, ok := strings.Cut(value, ".")
-	return operation, kind, ok && operation != "" && (kind == "Req" || kind == "Resp") && !strings.Contains(kind, ".")
+	return operation, kind, ok && operation != "" && (kind == operationRequest || kind == operationResponse) && !strings.Contains(kind, ".")
 }
 
 func (c *fileChecker) isTCCFile() bool { return strings.HasPrefix(filepath.Base(c.path), "tcc_") }

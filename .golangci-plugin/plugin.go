@@ -7,7 +7,6 @@ import (
 	"go/token"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -37,56 +36,85 @@ var bassAnalyzer = &analysis.Analyzer{
 	Run:  runBassArch,
 }
 
+const (
+	layerEnum       = "enum"
+	layerConfig     = "config"
+	layerBizModel   = "biz/model"
+	layerBizRepo    = "biz/repo"
+	layerBizUsecase = "biz/usecase"
+	layerBiz        = "biz"
+	layerData       = "data"
+	layerService    = "service"
+	layerServer     = "server"
+)
+
 func runBassArch(pass *analysis.Pass) (any, error) {
-	if violations := protoContractViolations(); len(violations) > 0 {
-		pass.Reportf(pass.Files[0].Package, "Proto 契约规范: %s", violations[0])
-	}
 	for _, f := range pass.Files {
-		filename := filepath.ToSlash(pass.Fset.Position(f.Pos()).Filename)
-		if strings.HasSuffix(filename, "_test.go") {
-			continue
-		}
-		mod, layer := classifyFile(filename)
-
-		if mod != "" && layer != "" {
-			for _, imp := range f.Imports {
-				pkg, err := strconv.Unquote(imp.Path.Value)
-				if err != nil {
-					continue
-				}
-				for _, msg := range depViolations(pkg, mod, layer) {
-					pass.Reportf(imp.Pos(), "%s", msg)
-				}
-			}
-		}
-		if mod != "" && internalLayer(filename, mod) == "enum" && !isGeneratedFile(filename) {
-			validateEnumFile(pass, f)
-		}
-		if mod != "" && strings.Contains(filename, "/internal/") && internalLayer(filename, mod) != "enum" && !isGeneratedFile(filename) {
-			validatePackageState(pass, f)
-		}
-		if mod != "" && strings.Contains(filename, "/internal/data/schema/") && !isGeneratedFile(filename) {
-			validateEntSchemaFile(pass, f)
-		}
-
-		if mod != "" && strings.Contains(filename, "/internal/") && !isGeneratedFile(filename) {
-			for _, decl := range f.Decls {
-				fd, ok := decl.(*ast.FuncDecl)
-				if !ok {
-					continue
-				}
-				if fd.Recv == nil && !isAllowedPackageFunc(fd.Name.Name) {
-					pass.Reportf(fd.Pos(),
-						"结构规范: internal 禁止无 receiver 的包级函数: %s；请挂到对应 struct 方法上",
-						fd.Name.Name)
-				}
-				if fd.Recv != nil && !ast.IsExported(fd.Name.Name) && isTransparentMethod(fd) {
-					pass.Reportf(fd.Pos(), "结构规范: 禁止无语义的薄方法: %s；请直接调用目标方法或在此承载转换、校验、编排等业务语义", fd.Name.Name)
-				}
-			}
-		}
+		validateBassFile(pass, f)
 	}
 	return nil, nil
+}
+
+// validateBassFile 仅检查 app 服务模块的手写 Go 文件。
+func validateBassFile(pass *analysis.Pass, file *ast.File) {
+	filename := filepath.ToSlash(pass.Fset.Position(file.Pos()).Filename)
+	if strings.HasSuffix(filename, "_test.go") {
+		return
+	}
+	mod, layer := classifyFile(filename)
+	if mod == "" {
+		return
+	}
+	validateLayerImports(pass, file, mod, layer)
+	if isGeneratedFile(filename) || !strings.Contains(filename, "/internal/") {
+		return
+	}
+	validateInternalFile(pass, file, filename, mod)
+}
+
+func validateLayerImports(pass *analysis.Pass, file *ast.File, mod, layer string) {
+	if layer == "" {
+		return
+	}
+	for _, imp := range file.Imports {
+		pkg, err := strconv.Unquote(imp.Path.Value)
+		if err != nil {
+			continue
+		}
+		for _, msg := range depViolations(pkg, mod, layer) {
+			pass.Reportf(imp.Pos(), "%s", msg)
+		}
+	}
+}
+
+func validateInternalFile(pass *analysis.Pass, file *ast.File, filename, mod string) {
+	layer := internalLayer(filename, mod)
+	if layer == layerEnum {
+		validateEnumFile(pass, file)
+		return
+	}
+	validatePackageState(pass, file)
+	if strings.Contains(filename, "/internal/data/schema/") {
+		validateEntSchemaFile(pass, file)
+	}
+	validateInternalFunctions(pass, file)
+}
+
+func validateInternalFunctions(pass *analysis.Pass, file *ast.File) {
+	for _, decl := range file.Decls {
+		fd, ok := decl.(*ast.FuncDecl)
+		if !ok {
+			continue
+		}
+		if fd.Recv == nil && !isAllowedPackageFunc(fd.Name.Name) {
+			pass.Reportf(fd.Pos(),
+				"结构规范: internal 禁止无 receiver 的包级函数: %s；请挂到对应 struct 方法上",
+				fd.Name.Name)
+		}
+		if fd.Recv != nil && !ast.IsExported(fd.Name.Name) && isTransparentMethod(fd) {
+			pass.Reportf(fd.Pos(), "结构规范: 禁止无语义的薄方法: %s；请直接调用目标方法或在此承载转换、校验、编排等业务语义", fd.Name.Name)
+		}
+	}
 }
 
 func validateEntSchemaFile(pass *analysis.Pass, file *ast.File) {
@@ -201,70 +229,6 @@ func isNilGuard(stmt ast.Stmt) bool {
 	return ok && len(returnStmt.Results) > 0
 }
 
-var (
-	protoRulesOnce sync.Once
-	protoRules     []string
-)
-
-var (
-	protoMessagePattern = regexp.MustCompile(`\bmessage\s+(\w+)\s*\{`)
-	protoFieldPattern   = regexp.MustCompile(`^\s*(?:repeated\s+|optional\s+)?([.\w]+)\s+\w+\s*=\s*\d+`)
-)
-
-func protoContractViolations() []string {
-	protoRulesOnce.Do(func() {
-		root := repoRoot()
-		if root == "" {
-			return
-		}
-		_ = filepath.WalkDir(filepath.Join(root, "common", "proto", "app"), func(path string, entry os.DirEntry, err error) error {
-			if err != nil || entry.IsDir() || filepath.Ext(path) != ".proto" {
-				return nil
-			}
-			protoRules = append(protoRules, findProtoContractViolations(path)...)
-			return nil
-		})
-	})
-	return protoRules
-}
-
-func findProtoContractViolations(path string) []string {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil
-	}
-	var violations []string
-	depth := 0
-	var scopes []string
-	for lineNumber, rawLine := range strings.Split(string(data), "\n") {
-		line := strings.TrimSpace(strings.Split(rawLine, "//")[0])
-		if match := protoMessagePattern.FindStringSubmatch(line); len(match) == 2 {
-			scopes = append(scopes, match[1])
-			depth++
-			continue
-		}
-		if protoInsideContract(scopes) {
-			if match := protoFieldPattern.FindStringSubmatch(line); len(match) == 2 && (strings.Contains(match[1], ".Req.") || strings.Contains(match[1], ".Resp.")) {
-				violations = append(violations, filepath.ToSlash(path)+":"+strconv.Itoa(lineNumber+1)+" Req/Resp 不得引用其他 Req/Resp 的内嵌消息；请提取到同级 model 包")
-			}
-		}
-		depth += strings.Count(line, "{") - strings.Count(line, "}")
-		for len(scopes) > depth {
-			scopes = scopes[:len(scopes)-1]
-		}
-	}
-	return violations
-}
-
-func protoInsideContract(scopes []string) bool {
-	for _, scope := range scopes {
-		if scope == "Req" || scope == "Resp" {
-			return true
-		}
-	}
-	return false
-}
-
 func classifyFile(filename string) (mod, layer string) {
 	if _, after, ok := strings.CutLast(filename, "/app/"); ok {
 		if first, _, found := strings.Cut(after, "/"); found && first != "" {
@@ -309,24 +273,24 @@ func internalLayer(path, mod string) string {
 	}
 	path = strings.TrimPrefix(path, "internal/")
 	switch {
-	case path == "enum" || strings.HasPrefix(path, "enum/"):
-		return "enum"
-	case path == "config" || strings.HasPrefix(path, "config/"):
-		return "config"
-	case path == "biz/model" || strings.HasPrefix(path, "biz/model/"):
-		return "biz/model"
-	case path == "biz/repo" || strings.HasPrefix(path, "biz/repo/"):
-		return "biz/repo"
-	case path == "biz/usecase" || strings.HasPrefix(path, "biz/usecase/"):
-		return "biz/usecase"
-	case path == "biz" || strings.HasPrefix(path, "biz/"):
-		return "biz"
-	case path == "data" || strings.HasPrefix(path, "data/"):
-		return "data"
-	case path == "service" || strings.HasPrefix(path, "service/"):
-		return "service"
-	case path == "server" || strings.HasPrefix(path, "server/"):
-		return "server"
+	case path == layerEnum || strings.HasPrefix(path, layerEnum+"/"):
+		return layerEnum
+	case path == layerConfig || strings.HasPrefix(path, layerConfig+"/"):
+		return layerConfig
+	case path == layerBizModel || strings.HasPrefix(path, layerBizModel+"/"):
+		return layerBizModel
+	case path == layerBizRepo || strings.HasPrefix(path, layerBizRepo+"/"):
+		return layerBizRepo
+	case path == layerBizUsecase || strings.HasPrefix(path, layerBizUsecase+"/"):
+		return layerBizUsecase
+	case path == layerBiz || strings.HasPrefix(path, layerBiz+"/"):
+		return layerBiz
+	case path == layerData || strings.HasPrefix(path, layerData+"/"):
+		return layerData
+	case path == layerService || strings.HasPrefix(path, layerService+"/"):
+		return layerService
+	case path == layerServer || strings.HasPrefix(path, layerServer+"/"):
+		return layerServer
 	default:
 		return "other"
 	}
@@ -338,15 +302,15 @@ func layerAllows(source, target string) bool {
 }
 
 var allowedLayers = map[string]map[string]bool{
-	"enum":        {"enum": true},
-	"config":      {"config": true, "enum": true},
-	"biz/model":   {"biz/model": true, "config": true, "enum": true},
-	"biz/repo":    {"biz/repo": true, "biz/model": true, "config": true, "enum": true},
-	"biz/usecase": {"biz/usecase": true, "biz/repo": true, "biz/model": true, "config": true, "enum": true},
-	"biz":         {"biz": true, "biz/usecase": true, "config": true, "enum": true},
-	"data":        {"data": true, "biz/repo": true, "biz/model": true, "config": true, "enum": true},
-	"service":     {"service": true, "biz/usecase": true, "biz/model": true, "config": true, "enum": true},
-	"server":      {"server": true, "biz": true, "biz/usecase": true, "config": true},
+	layerEnum:       {layerEnum: true},
+	layerConfig:     {layerConfig: true, layerEnum: true},
+	layerBizModel:   {layerBizModel: true, layerConfig: true, layerEnum: true},
+	layerBizRepo:    {layerBizRepo: true, layerBizModel: true, layerConfig: true, layerEnum: true},
+	layerBizUsecase: {layerBizUsecase: true, layerBizRepo: true, layerBizModel: true, layerConfig: true, layerEnum: true},
+	layerBiz:        {layerBiz: true, layerBizUsecase: true, layerConfig: true, layerEnum: true},
+	layerData:       {layerData: true, layerBizRepo: true, layerBizModel: true, layerConfig: true, layerEnum: true},
+	layerService:    {layerService: true, layerBizUsecase: true, layerBizModel: true, layerConfig: true, layerEnum: true},
+	layerServer:     {layerServer: true, layerBiz: true, layerBizUsecase: true, layerConfig: true},
 }
 
 func validateEnumFile(pass *analysis.Pass, file *ast.File) {
@@ -619,15 +583,21 @@ func protoEnumValues(importPath, typeName string) ([]string, bool) {
 	if root == "" || !strings.HasPrefix(importPath, "common/") {
 		return nil, false
 	}
-	packages, err := parser.ParseDir(token.NewFileSet(), filepath.Join(root, filepath.FromSlash(importPath)), nil, 0)
+	directory := filepath.Join(root, filepath.FromSlash(importPath))
+	entries, err := os.ReadDir(directory)
 	if err != nil {
 		return nil, false
 	}
-	for _, pkg := range packages {
-		for _, file := range pkg.Files {
-			if values := protoConsts(file, typeName); len(values) > 0 {
-				return values, true
-			}
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".go" {
+			continue
+		}
+		file, parseErr := parser.ParseFile(token.NewFileSet(), filepath.Join(directory, entry.Name()), nil, 0)
+		if parseErr != nil {
+			continue
+		}
+		if values := protoConsts(file, typeName); len(values) > 0 {
+			return values, true
 		}
 	}
 	return nil, false

@@ -161,16 +161,16 @@ func (s *ContentArticleService) ListArticles(ctx context.Context, req *bbsconten
 		q := req.GetQuery()
 		query = &usecase.ArticleQuery{TagID: q.TagId, DomainID: q.DomainId, AuthorID: q.AuthorId}
 		if q.Type != nil {
-			query.Type = new(int32(*q.Type))
+			query.Type = new(int32(q.GetType()))
 		}
 		if q.Order != nil {
-			query.Order = new(int32(*q.Order))
+			query.Order = new(int32(q.GetOrder()))
 		}
 		if q.PublishStatus != nil {
-			query.PublishStatus = new(int32(*q.PublishStatus))
+			query.PublishStatus = new(int32(q.GetPublishStatus()))
 		}
 		if q.Visibility != nil {
-			query.Visibility = new(int32(*q.Visibility))
+			query.Visibility = new(int32(q.GetVisibility()))
 		}
 	}
 	resp, err := s.contentArticleUsecase.ListArticles(ctx, &usecase.ListArticlesReq{UserID: userID, Page: commonmodel.PageReqFromProto(req.GetPage()), Query: query})

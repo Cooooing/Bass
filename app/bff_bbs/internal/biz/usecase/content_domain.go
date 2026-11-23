@@ -133,7 +133,7 @@ func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomains
 		query.Icon = req.Query.Icon
 		query.IsNav = req.Query.IsNav
 		if req.Query.Status != nil {
-			query.Status = new(int32(*req.Query.Status))
+			query.Status = new(int32(req.Query.GetStatus()))
 		}
 	}
 	if query.Status == nil {

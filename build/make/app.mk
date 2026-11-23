@@ -10,6 +10,10 @@ SERVER := $(notdir $(CURDIR))
 APP_DIR := $(ROOT_DIR)/app/$(SERVER)
 INTERNAL_DIR := $(APP_DIR)/internal
 BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"app"}],"deps":["buf.build/googleapis/googleapis"]}'
+LINT_BINARY := $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE)
+# 使用 Git 跟踪文件生成依赖列表，避免 Windows 的 find.exe 与 Unix find 参数不兼容。
+# glob 路径限定在插件目录，防止 app 源码变更触发定制 linter 重建。
+LINT_PLUGIN_SOURCES := $(addprefix $(ROOT_DIR)/,$(shell git -C $(ROOT_DIR) ls-files -- .golangci-plugin/go.mod .golangci-plugin/go.sum ':(glob).golangci-plugin/**/*.go'))
 
 IGNORE_ERROR ?= 0
 MODULE_GEN_TARGETS := cfg wire
@@ -68,21 +72,20 @@ gen: gen-clean
 		$(MAKE) $$target IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
+
+# 插件源码、模块依赖或 linter 配置变更后，自动重建定制二进制。
 .PHONY: lint-toolchain
-ifeq ($(wildcard $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE)),)
-lint-toolchain:
+lint-toolchain: $(LINT_BINARY)
+
+$(LINT_BINARY): $(ROOT_DIR)/.custom-gcl.yml $(ROOT_DIR)/.golangci.yml $(LINT_PLUGIN_SOURCES)
 	@echo "[lint] building bass-golangci-lint v2.14.0..."
 	@go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0
 	@cd $(ROOT_DIR) && $(subst \,/,$(shell go env GOPATH))/bin/golangci-lint$(shell go env GOEXE) custom
-else
-lint-toolchain:
-	@echo "[lint] using $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE)"
-endif
 
 .PHONY: lint
 lint: lint-toolchain
 	@echo "[lint] $(SERVER)..."
-	@cd $(APP_DIR) && $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE) run --allow-parallel-runners --fix --issues-exit-code=0 ./... || echo "[lint] fix pass did not complete; continuing strict verification"
-	@cd $(APP_DIR) && $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE) run --allow-parallel-runners ./...
+	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners --fix --issues-exit-code=0 ./... || echo "[lint] fix pass did not complete; continuing strict verification"
+	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners ./...
 
 endif

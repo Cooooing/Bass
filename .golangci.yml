@@ -1,16 +1,20 @@
-# Shared Go quality rules. Use bass-golangci-lint: it contains bassarch.
+# 全仓共享 Go 质量门禁；必须使用内置 bassarch 的 bass-golangci-lint。
 version: "2"
 
 run:
+  # 单次 lint 的总时限，避免本地或 CI 检查无限等待。
   timeout: 5m
+  # 按仓库目标 Go 版本启用对应语言与标准库检查。
   go: "1.27"
+  # 测试代码的质量策略独立收敛，当前只检查生产代码。
   tests: false
 
-# goimports applies Go formatting and the project import groups in one pass.
+# goimports 同时格式化代码、移除无用 import，并按本地模块分组。
 formatters:
   enable: [goimports]
   settings:
     goimports:
+      # 服务模块名作为本地 import 前缀，形成独立 import 分组。
       local-prefixes:
         - badge
         - bff_bbs
@@ -26,101 +30,192 @@ formatters:
         - scheduler
         - user
   exclusions:
+    # 生成代码格式由生成器负责，不按手写代码格式化。
     generated: lax
+    # 发布 SDK 是外部工具产物，不纳入格式化范围。
     paths: ['(^|/)gen-sdk(/|$)']
 
 linters:
+  # 启用 errcheck、govet、ineffassign、staticcheck、unused 五项基础正确性规则。
   default: standard
   enable:
+    # 命名、错误文本、context、断言与早返回风格。
     - revive
+    # 常见英文拼写错误。
     - misspell
+    # 禁止标识符使用非 ASCII 字符。
     - asciicheck
+    # 检查双向 Unicode 控制字符。
     - bidichk
+    # Go 1.13 兼容的错误包装和比较。
     - errorlint
+    # JSON 编码类型与错误处理。
     - errchkjson
+    # HTTP 响应体关闭。
     - bodyclose
+    # HTTP 请求传递 context。
     - noctx
+    # 当前 Go 版本的惯用 API 和语法。
     - modernize
+    # 循环变量被闭包捕获时的兼容性风险。
     - copyloopvar
+    # Go 1.22 整数 range 建议。
     - intrange
+    # 标准库已有变量与常量替换建议。
     - usestdlibvars
+    # 直接字符串格式化 API 建议。
     - perfsprint
+    # 圈复杂度限制。
     - gocyclo
+    # 函数长度限制。
     - funlen
+    # 条件嵌套复杂度限制。
     - nestif
+    # 大段复制实现检测。
     - dupl
+    # 禁止不符合项目技术栈的 import。
     - depguard
+    # 禁止库代码直接打印和 Fatal。
     - forbidigo
+    # 项目级分层、enum 和 internal 结构约束。
     - bassarch
+    # 路径、弱随机数、命令注入等安全问题。
     - gosec
+    # 无意义类型转换。
     - unconvert
+    # 无意义中间赋值。
     - wastedassign
+    # error 非 nil 分支不能返回 nil。
     - nilerr
+    # //nolint 指令格式、规则名和说明。
     - nolintlint
+    # 重复字符串常量。
     - goconst
+    # 额外的正确性、性能和可读性问题。
     - gocritic
+    # slice 容量预分配建议。
     - prealloc
+    # 禁止遮蔽 Go 预声明标识符。
     - predeclared
+    # 禁止重新赋值包级变量。
     - reassign
+    # receiver 指针和值类型一致性。
     - recvcheck
+    # 错误分支不得返回无关 nil。
     - nilnesserr
+    # 循环和闭包中 context 生命周期。
     - fatcontext
+    # 以标准库替换已稳定的 x/exp API。
     - exptostd
+    # HTTP Header 规范大小写。
     - canonicalheader
+    # duration 单位相乘错误。
     - durationcheck
+    # //go: 编译器指令格式。
     - gocheckcompilerdirectives
+    # sum type switch 的穷尽性。
     - gochecksumtype
+    # 结构化日志键值对使用。
     - loggercheck
+    # 非零长度 slice 仅用于 append 的浪费。
     - makezero
+    # strings 和 bytes API 的镜像误用。
     - mirror
+    # host:port 拼接必须使用 net.JoinHostPort。
     - nosprintfhostport
+    # SQL Rows.Err 必须检查。
     - rowserrcheck
+    # log/slog 调用风格。
     - sloglint
+    # SQL Rows、Stmt 等资源关闭。
     - sqlclosecheck
+    # 禁止 SELECT *，要求显式字段。
     - unqueryvet
+    # 下游调用必须继承入参 context。
+    - contextcheck
+    # OpenTelemetry span 和 context 生命周期。
+    - spancheck
+    # Prometheus 指标命名、单位和类型。
+    - promlinter
+    # 认知复杂度限制，补足路径复杂度。
+    - gocognit
+    # 接口方法参数必须命名。
+    - inamedparam
+    # Proto 消息统一 GetXxx 访问，保证 nil 安全。
+    - protogetter
 
   settings:
     errchkjson:
+      # json.Encoder 的受控写入错误由调用边界处理，不重复要求检查。
       check-error-free-encoding: false
     gocyclo:
-      min-complexity: 50
-    # Its Errorf autofix does not update imports safely.
+      # 超过 32 的路径复杂度必须拆分。
+      min-complexity: 32
+    gocognit:
+      # 超过 32 的认知复杂度必须减少分支或职责。
+      min-complexity: 32
     perfsprint:
+      # Errorf 自动修复无法可靠维护 import，关闭该子修复。
       errorf: false
     funlen:
-      lines: 300
-      statements: 150
+      # 超过 256 行或 128 条语句的函数必须按职责拆分。
+      lines: 256
+      statements: 128
     nestif:
-      min-complexity: 35
+      # 嵌套 if 复杂度超过 16 时必须降低嵌套。
+      min-complexity: 16
     dupl:
-      threshold: 512
+      # 连续 256 个 token 重复时报告复制实现。
+      threshold: 256
     goconst:
+      # 长度至少 3 且出现至少 3 次的字符串是常量候选。
       min-len: 3
       min-occurrences: 3
+    inamedparam:
+      # 单参数接口常用于表达第三方形状，不强制添加无实际用途的名称。
+      skip-single-param: true
     revive:
+      # 只启用本项目需要的命名、错误、context 和断言规则。
       rules:
+        # 导出标识符和缩写遵循 Go 命名规范。
         - name: var-naming
+        # 同一类型的方法 receiver 使用一致名称。
         - name: receiver-naming
+        # error 变量和类型使用一致命名。
         - name: error-naming
+        # 非导出标识符使用驼峰命名。
         - name: unexported-naming
+        # context 必须为函数的首个参数。
         - name: context-as-argument
+        # context.WithValue 的 key 使用自定义类型。
         - name: context-keys-type
+        # 自增自减使用 ++ 或 --。
         - name: increment-decrement
+        # 禁止 dot import。
         - name: dot-imports
+        # 禁止没有业务理由的 blank import。
         - name: blank-imports
+        # error 文本使用小写且不带结尾标点。
         - name: error-strings
+        # 新代码使用 any 替代 interface{}。
         - name: use-any
+        # 通过早返回降低嵌套。
         - name: early-return
+        # 类型断言必须处理失败分支。
         - name: unchecked-type-assertion
     depguard:
       rules:
         biz-layer:
+          # 只禁止明确不允许的依赖，其余依赖不强制白名单。
           list-mode: lax
+          # 仅检查业务层。
           files: ["**/internal/biz/**/*.go"]
           deny:
             - { pkg: "github.com/go-kratos/kratos/v3/transport", desc: "biz 不得依赖传输层框架" }
         shared-stack:
+          # 只禁止已淘汰或会分裂技术栈的依赖。
           list-mode: lax
+          # 覆盖服务 internal 与 server 层。
           files: ["**/internal/**/*.go", "**/server/**/*.go"]
           deny:
             - { pkg: "github.com/pkg/errors", desc: "统一使用标准库 errors" }
@@ -134,29 +229,40 @@ linters:
             - { pkg: "github.com/golang/protobuf", desc: "统一使用 google.golang.org/protobuf" }
     custom:
       bassarch:
+        # 通过 golangci 插件模块加载项目级规则。
         type: module
+        # 在 golangci 输出中展示的规则说明。
         description: 包级函数与分层依赖约束
     forbidigo:
       forbid:
         - { pattern: '^(fmt\.Println|fmt\.Printf)$', msg: "库代码禁止直接打印" }
         - { pattern: '^log\.Fatal(f|ln)?$', msg: "库代码禁止 Fatal 终止进程" }
     gosec:
+      # G104 与 errcheck 重复，由 errcheck 统一报告。
       excludes: [G104]
 
   exclusions:
+    # 生成代码只保留基础编译正确性检查。
     generated: lax
+    # 发布 SDK 为外部生成物，不纳入手写代码质量规则。
     paths: ['(^|/)gen-sdk(/|$)']
     rules:
+      # Wire 与 protobuf 生成文件不适用手写代码的安全、长度和风格检查。
       - path: '(wire_gen\.go$|\.pb\.go$)'
         linters: [gosec, funlen, dupl, revive, forbidigo, noctx]
+      # 错误码文案映射天然较长，豁免函数长度限制。
       - path: '(^|/)error_message\.go$'
         linters: [funlen]
+      # 进程入口允许 fmt 输出启动和诊断信息。
       - path: '(^|/)cmd/.*\.go$'
         linters: [forbidigo]
 
 issues:
+  # 不截断单个 linter 的问题，完整展示基线。
   max-issues-per-linter: 0
+  # 不合并相同诊断，避免隐藏重复位置。
   max-same-issues: 0
 
 severity:
+  # 未单独分级的问题全部作为阻断错误。
   default: error

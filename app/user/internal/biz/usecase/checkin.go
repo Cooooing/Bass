@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"context"
-	"math/rand/v2"
+	cryptorand "crypto/rand"
+	"fmt"
+	"math/big"
 	"time"
 
 	"common/pkg/apperror"
@@ -41,7 +43,12 @@ func (u *CheckinUsecase) Auto(ctx context.Context, userID int64, date, previousD
 	if rule == nil || rule.GetRewardMinimum() <= 0 || rule.GetRewardMaximum() < rule.GetRewardMinimum() || rule.GetStreakInterval() <= 0 || rule.GetStreakReward() < 0 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	points := rule.GetRewardMinimum() + rand.Int64N(rule.GetRewardMaximum()-rule.GetRewardMinimum()+1)
+	pointsRange := rule.GetRewardMaximum() - rule.GetRewardMinimum() + 1
+	pointsOffset, err := cryptorand.Int(cryptorand.Reader, big.NewInt(pointsRange))
+	if err != nil {
+		return fmt.Errorf("generate checkin reward points: %w", err)
+	}
+	points := rule.GetRewardMinimum() + pointsOffset.Int64()
 	record, err := u.records.Get(ctx, &repo.CheckinRecordGetReq{UserID: &userID, Date: &date})
 	if err != nil || (record != nil && record.Status != enum.CheckinStatusCanceled) {
 		return err

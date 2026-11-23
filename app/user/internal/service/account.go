@@ -113,13 +113,13 @@ func (s *AccountService) GetAccount(ctx context.Context, req *v1.GetAccount_Req)
 
 func (s *AccountService) ListAccounts(ctx context.Context, req *v1.ListAccounts_Req) (*v1.ListAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.ListAccounts_Req{})
-	query := util.OrDefault(req.Query, &v1.ListAccounts_Req_AccountQuery{})
-	if len(query.UserIds) == 0 && len(query.Names) == 0 {
+	query := util.OrDefault(req.GetQuery(), &v1.ListAccounts_Req_AccountQuery{})
+	if len(query.GetUserIds()) == 0 && len(query.GetNames()) == 0 {
 		return &v1.ListAccounts_Resp{
 			Rows: []*v1.AccountInfo{},
 		}, nil
 	}
-	res, err := s.accountUsecase.List(ctx, &model.AccountListQuery{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
+	res, err := s.accountUsecase.List(ctx, &model.AccountListQuery{UserIDs: query.GetUserIds(), Names: query.GetNames(), ExcludedUserIDs: query.GetExcludedUserIds()})
 	if err != nil {
 		return nil, err
 	}
@@ -166,13 +166,13 @@ func (s *AccountService) ListAccounts(ctx context.Context, req *v1.ListAccounts_
 
 func (s *AccountService) MapAccounts(ctx context.Context, req *v1.MapAccounts_Req) (*v1.MapAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.MapAccounts_Req{})
-	query := util.OrDefault(req.Query, &v1.MapAccounts_Req_AccountQuery{})
-	if len(query.UserIds) == 0 && len(query.Names) == 0 {
+	query := util.OrDefault(req.GetQuery(), &v1.MapAccounts_Req_AccountQuery{})
+	if len(query.GetUserIds()) == 0 && len(query.GetNames()) == 0 {
 		return &v1.MapAccounts_Resp{
 			Accounts: map[int64]*v1.AccountInfo{},
 		}, nil
 	}
-	res, err := s.accountUsecase.Map(ctx, &model.AccountListQuery{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
+	res, err := s.accountUsecase.Map(ctx, &model.AccountListQuery{UserIDs: query.GetUserIds(), Names: query.GetNames(), ExcludedUserIDs: query.GetExcludedUserIds()})
 	if err != nil {
 		return nil, err
 	}

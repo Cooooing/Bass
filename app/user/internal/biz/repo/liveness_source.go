@@ -9,5 +9,5 @@ import (
 
 // LivenessSource 从其他领域读取指定账号在业务日内的有效活跃事实。
 type LivenessSource interface {
-	BatchGet(context.Context, []int64, time.Time, time.Time) (map[int64]*model.LivenessDetail, error)
+	BatchGet(ctx context.Context, userIDs []int64, start, end time.Time) (map[int64]*model.LivenessDetail, error)
 }

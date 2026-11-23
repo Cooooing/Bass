@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.badge.v1;
+
+import "common/v1/common.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/badge/v1;badge";
+
+// BadgeService 向社区客户端提供徽章预览与设计草稿管理。
+service BadgeService {
+  // RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
+  rpc RenderMakerBadge(RenderMakerBadge.Req) returns (RenderMakerBadge.Resp) {
+    option (google.api.http) = {get: "/v1/badge/maker/render"};
+  }
+  // RenderPublished 匿名返回一个已发布徽章的主站 SVG。
+  rpc RenderPublishedBadge(RenderPublishedBadge.Req) returns (RenderPublishedBadge.Resp) {
+    option (google.api.http) = {get: "/v1/badge/render"};
+  }
+  // UpsertDraft 保存当前登录用户的徽章草稿。
+  rpc UpsertBadgeDraft(UpsertBadgeDraft.Req) returns (UpsertBadgeDraft.Resp) {
+    option (google.api.http) = {
+      post: "/v1/badge/draft/upsert"
+      body: "*"
+    };
+  }
+  // ListDrafts 返回当前登录用户的徽章草稿。
+  rpc ListBadgeDrafts(ListBadgeDrafts.Req) returns (ListBadgeDrafts.Resp) {
+    option (google.api.http) = {
+      post: "/v1/badge/draft/list"
+      body: "*"
+    };
+  }
+  // DeleteDraft 删除一个未发布草稿。
+  rpc DeleteBadgeDraft(DeleteBadgeDraft.Req) returns (DeleteBadgeDraft.Resp) {
+    option (google.api.http) = {
+      post: "/v1/badge/draft/delete"
+      body: "*"
+    };
+  }
+}
+
+// RenderSpec 是客户端 Maker 传递的完整渲染参数。
+message RenderSpec {
+  // Platform 已确认可用的徽章图标资源 ID。
+  int64 image_asset_id = 1;
+  // 文字条内容。
+  string text = 2;
+  // 背景颜色列表。
+  repeated string background_colors = 3;
+  // 文字颜色列表。
+  repeated string text_colors = 4;
+  // 背景渐变方向或角度。
+  string background_direction = 5;
+  // 文字渐变方向或角度。
+  string text_direction = 6;
+  // 图标边长。
+  uint32 size = 7;
+  // 图标边距。
+  uint32 border = 8;
+  // 文字条长度。
+  uint32 text_bar_length = 9;
+  // 文字字号。
+  uint32 text_size = 10;
+  // 文字条圆角。
+  uint32 text_bar_radius = 11;
+  // 整体缩放比例。
+  double scale = 12;
+  // 阴影强度。
+  double shadow = 13;
+  // 动画时长。
+  double animation_seconds = 14;
+  // Platform 已确认可用的自定义字体资源 ID。
+  int64 font_asset_id = 15;
+}
+
+// RenderMakerBadge 表示登录用户的 Maker SVG 预览请求。
+message RenderMakerBadge {
+  // Req 不携带用户 ID，BFF 从认证上下文注入设计者主体。
+  message Req {
+    // 待预览的完整渲染参数。
+    RenderSpec render_spec = 1;
+  }
+  // Resp 通过 raw_body 返回 SVG 原始字节及内容类型。
+  message Resp {
+    // 协议字段。
+    .common.api.app.common.v1.ImageResp raw_body = 1;
+  }
+}
+
+// RenderPublishedBadge 表示主站按 code 查询已发布徽章 SVG 的请求。
+message RenderPublishedBadge {
+  // Req 的 code 由 HTTP 查询参数 code 绑定。
+  message Req {
+    // 已发布徽章稳定编码。
+    string code = 1;
+  }
+  // Resp 通过 raw_body 返回 SVG 原始字节及内容类型。
+  message Resp {
+    // 协议字段。
+    .common.api.app.common.v1.ImageResp raw_body = 1;
+  }
+}
+
+// BadgeDraft 是 Maker 可编辑的徽章草稿。
+message BadgeDraft {
+  // 草稿主键。
+  int64 id = 1;
+  // 草稿名称。
+  string name = 2;
+  // 草稿说明。
+  string description = 3;
+  // 草稿渲染参数。
+  RenderSpec render_spec = 4;
+  // 设计者用户 ID。
+  int64 designer_user_id = 5;
+}
+
+// UpsertBadgeDraft 表示创建或保存当前用户草稿。
+message UpsertBadgeDraft {
+  // Req 缺失 draft_id 时创建，存在时更新。
+  message Req {
+    // 待保存草稿 ID。
+    optional int64 draft_id = 1;
+    // 草稿名称。
+    string name = 2;
+    // 草稿说明。
+    string description = 3;
+    // 草稿渲染参数。
+    RenderSpec render_spec = 4;
+  }
+  // Resp 返回保存后的草稿。
+  message Resp {
+    // 已保存草稿。
+    BadgeDraft draft = 1;
+  }
+}
+
+// ListBadgeDrafts 表示草稿箱查询。
+message ListBadgeDrafts {
+  // 请求参数。
+  message Req {}
+  // Resp 返回草稿行。
+  message Resp {
+    // 草稿列表。
+    repeated BadgeDraft rows = 1;
+  }
+}
+
+// DeleteBadgeDraft 表示删除草稿。
+message DeleteBadgeDraft {
+  // Req 指定待删除草稿。
+  message Req {
+    // 草稿 ID。
+    int64 draft_id = 1;
+  }
+  // Resp 表示删除完成。
+  message Resp {}
+}

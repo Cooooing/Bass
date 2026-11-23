@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/game_idle/v1/enum"
+	v1 "common/proto/gen/game_idle/enum/v1"
 )
 
 // ItemID 表示有特殊业务语义的物品编码。

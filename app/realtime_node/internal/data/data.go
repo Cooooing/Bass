@@ -3,7 +3,7 @@ package data
 import (
 	commonclient "common/pkg/client"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"realtime_node/internal/config"
 
 	"github.com/google/wire"

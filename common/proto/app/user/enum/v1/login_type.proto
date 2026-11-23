@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common.api.app.user.enum.v1;
+
+option go_package = "common/proto/gen/user/enum/v1;enum";
+
+// LoginType 表示登录方式。
+enum LoginType {
+  // 未指定
+  LOGIN_TYPE_UNSPECIFIED = 0;
+  // 密码登录
+  LOGIN_TYPE_PASSWORD = 1;
+  // 邮箱验证码登录
+  LOGIN_TYPE_EMAIL = 2;
+  // 手机验证码登录
+  LOGIN_TYPE_PHONE = 3;
+}

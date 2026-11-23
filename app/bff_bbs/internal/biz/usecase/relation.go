@@ -3,7 +3,7 @@ package usecase
 import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"bff_bbs/internal/biz/model"

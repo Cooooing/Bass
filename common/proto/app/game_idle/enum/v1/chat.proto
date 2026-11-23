@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.enum.v1;
+
+option go_package = "common/proto/gen/game_idle/enum/v1;enum";
+
+// ChatChannelType 表示挂机游戏聊天频道类型。
+enum ChatChannelType {
+  // 未指定
+  CHAT_CHANNEL_TYPE_UNSPECIFIED = 0;
+  // 世界频道
+  CHAT_CHANNEL_TYPE_WORLD = 1;
+}
+
+// ChatMessageStatus 表示挂机游戏聊天消息状态。
+enum ChatMessageStatus {
+  // 未指定
+  CHAT_MESSAGE_STATUS_UNSPECIFIED = 0;
+  // 正常
+  CHAT_MESSAGE_STATUS_NORMAL = 1;
+  // 已删除
+  CHAT_MESSAGE_STATUS_DELETED = 2;
+}

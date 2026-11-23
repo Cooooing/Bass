@@ -3,7 +3,7 @@ package timewheel
 import (
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"context"
 	"fmt"
 	"log/slog"

@@ -1,0 +1,186 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.platform.v1;
+
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/platform/v1;platform";
+
+// 服务定义。
+service AssetService {
+  // 申请 Markdown 图片的内容寻址直传凭证。
+  rpc PrepareMarkdownImageUpload(PrepareMarkdownImageUpload.Req) returns (PrepareMarkdownImageUpload.Resp) {
+    option (google.api.http) = {
+      post: "/v1/asset/markdown-image/prepare"
+      body: "*"
+    };
+  }
+  // 查询已由对象存储回调确认的 Markdown 图片。
+  rpc CompleteMarkdownImageUpload(CompleteMarkdownImageUpload.Req) returns (CompleteMarkdownImageUpload.Resp) {
+    option (google.api.http) = {
+      post: "/v1/asset/markdown-image/complete"
+      body: "*"
+    };
+  }
+  // 申请徽章 Maker 图片的内容寻址直传凭证。
+  rpc PrepareBadgeImageUpload(PrepareBadgeImageUpload.Req) returns (PrepareBadgeImageUpload.Resp) {
+    option (google.api.http) = {
+      post: "/v1/asset/badge-image/prepare"
+      body: "*"
+    };
+  }
+  // 查询已由对象存储回调确认的徽章 Maker 图片。
+  rpc CompleteBadgeImageUpload(CompleteBadgeImageUpload.Req) returns (CompleteBadgeImageUpload.Resp) {
+    option (google.api.http) = {
+      post: "/v1/asset/badge-image/complete"
+      body: "*"
+    };
+  }
+  // 申请徽章 Maker 自定义字体的内容寻址直传凭证。
+  rpc PrepareBadgeFontUpload(PrepareBadgeFontUpload.Req) returns (PrepareBadgeFontUpload.Resp) {
+    option (google.api.http) = {
+      post: "/v1/asset/badge-font/prepare"
+      body: "*"
+    };
+  }
+  // 查询已由对象存储回调确认的徽章 Maker 自定义字体。
+  rpc CompleteBadgeFontUpload(CompleteBadgeFontUpload.Req) returns (CompleteBadgeFontUpload.Resp) {
+    option (google.api.http) = {
+      post: "/v1/asset/badge-font/complete"
+      body: "*"
+    };
+  }
+}
+
+// 协议消息。
+message PrepareMarkdownImageUpload {
+  // 请求参数。
+  message Req {
+    // 文件 SHA-256，小写十六进制。
+    string hash = 1;
+    // 上传 MIME 类型。
+    string mime_type = 2;
+    // 文件大小，最大 5 MiB。
+    int64 size = 3;
+    option (gnostic.openapi.v3.schema) = {
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
+  }
+  // 响应结果。
+  message Resp {
+    // 已存在资源的 ID。
+    optional int64 asset_id = 1;
+    // 新资源的 MinIO multipart POST 地址。
+    string upload_url = 2;
+    // MinIO multipart POST 表单字段。
+    map<string, string> form_fields = 3;
+  }
+}
+
+// 协议消息。
+message CompleteMarkdownImageUpload {
+  // 请求参数。
+  message Req {
+    // 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
+    string hash = 1;
+    option (gnostic.openapi.v3.schema) = {required: "hash"};
+  }
+  // 响应结果。
+  message Resp {
+    // 已确认资源的 ID。
+    int64 asset_id = 1;
+    // 前端本地预览使用的公开图片地址。
+    string image_url = 2;
+  }
+}
+
+// 协议消息。
+message PrepareBadgeImageUpload {
+  // 请求参数。
+  message Req {
+    // 文件 SHA-256，小写十六进制。
+    string hash = 1;
+    // 上传图片 MIME 类型。
+    string mime_type = 2;
+    // 文件大小，最大 5 MiB。
+    int64 size = 3;
+    option (gnostic.openapi.v3.schema) = {
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
+  }
+  // 响应结果。
+  message Resp {
+    // 已存在资源的 ID。
+    optional int64 asset_id = 1;
+    // 新资源的 MinIO multipart POST 地址。
+    string upload_url = 2;
+    // MinIO multipart POST 表单字段。
+    map<string, string> form_fields = 3;
+  }
+}
+
+// 协议消息。
+message CompleteBadgeImageUpload {
+  // 请求参数。
+  message Req {
+    // 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
+    string hash = 1;
+    option (gnostic.openapi.v3.schema) = {required: "hash"};
+  }
+  // 响应结果。
+  message Resp {
+    // 已确认资源的 ID。
+    int64 asset_id = 1;
+    // 可公开访问的图片地址。
+    string image_url = 2;
+  }
+}
+
+// PrepareBadgeFontUpload 表示徽章 Maker 字体的上传凭证请求。
+message PrepareBadgeFontUpload {
+  // Req 指定待上传字体的内容寻址信息。
+  message Req {
+    // 文件 SHA-256，小写十六进制。
+    string hash = 1;
+    // 上传字体 MIME 类型。
+    string mime_type = 2;
+    // 文件大小，最大 5 MiB。
+    int64 size = 3;
+    option (gnostic.openapi.v3.schema) = {
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
+  }
+  // Resp 返回已存在字体或一次直传凭证。
+  message Resp {
+    // 已存在资源的 ID。
+    optional int64 asset_id = 1;
+    // 新资源的 MinIO multipart POST 地址。
+    string upload_url = 2;
+    // MinIO multipart POST 表单字段。
+    map<string, string> form_fields = 3;
+  }
+}
+
+// CompleteBadgeFontUpload 表示字体直传完成确认请求。
+message CompleteBadgeFontUpload {
+  // Req 指定已上传字体的内容哈希。
+  message Req {
+    // 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
+    string hash = 1;
+    option (gnostic.openapi.v3.schema) = {required: "hash"};
+  }
+  // Resp 返回已确认的字体资源与前端本地预览地址。
+  message Resp {
+    // 已确认资源的 ID。
+    int64 asset_id = 1;
+    // 前端本地预览可用的字体公开地址。
+    string font_url = 2;
+  }
+}

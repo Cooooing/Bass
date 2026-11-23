@@ -4,7 +4,7 @@ import (
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"encoding/json"
 	"log/slog"

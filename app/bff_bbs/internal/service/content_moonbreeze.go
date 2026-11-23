@@ -6,9 +6,9 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/server"
 	"common/pkg/util"
-	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
-	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
-	cerrors "common/proto/gen/common/errors"
+	bbscontentv1 "common/proto/gen/bff_bbs/content/v1"
+	bbsuserv1enum "common/proto/gen/bff_bbs/user/enum/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"bff_bbs/internal/biz/model"

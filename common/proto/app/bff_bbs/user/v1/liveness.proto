@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.user.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/user/v1;user";
+
+// LivenessService 提供当前业务日活跃度查询和前一日活跃奖励领取入口。
+service LivenessService {
+  // 服务方法。
+  rpc GetLiveness(GetLiveness.Req) returns (GetLiveness.Resp) {
+    option (google.api.http) = {get: "/v1/user/liveness"};
+    // 查询当前业务日的实时活跃度。
+  }
+  // 服务方法。
+  rpc ClaimYesterdayLivenessReward(ClaimYesterdayLivenessReward.Req) returns (ClaimYesterdayLivenessReward.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/liveness/yesterday-reward/claim"
+      body: "*"
+    };
+    // 领取前一业务日已结算的活跃奖励。
+  }
+}
+
+// GetLiveness 查询当前业务日实时活跃度。
+message GetLiveness {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {
+    // 当前活跃度总分。
+    int32 score = 1;
+    // 每日活跃度上限。
+    int32 max_score = 2;
+    // 自动签到所需的最低活跃度。
+    int32 checkin_score = 3;
+  }
+}
+
+// ClaimYesterdayLivenessReward 领取前一业务日的活跃奖励。
+message ClaimYesterdayLivenessReward {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {
+    // 本次领取的积分。
+    int64 reward_points = 1;
+    // 是否已成功领取。
+    bool claimed = 2;
+  }
+}

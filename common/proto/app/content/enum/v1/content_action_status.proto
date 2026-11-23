@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common.api.app.content.enum.v1;
+
+option go_package = "common/proto/gen/content/enum/v1;enum";
+
+// ContentActionStatus 表示需要异步确认的内容互动命令状态。
+enum ContentActionStatus {
+  // 枚举值。
+  CONTENT_ACTION_STATUS_UNSPECIFIED = 0;
+  // 已受理，等待确认。
+  CONTENT_ACTION_STATUS_PENDING = 1;
+  // 已完成并对外生效。
+  CONTENT_ACTION_STATUS_PUBLISHED = 2;
+  // 已取消，不对外生效。
+  CONTENT_ACTION_STATUS_CANCELED = 3;
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.notify.enum.v1;
+
+option go_package = "common/proto/gen/notify/enum/v1;enum";
+
+// 枚举定义。
+enum SMSType {
+  // 枚举值。
+  SMS_TYPE_UNSPECIFIED = 0;
+  // 枚举值。
+  SMS_TYPE_TENCENT = 1;
+}

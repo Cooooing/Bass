@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/game_idle/v1/enum"
+	v1 "common/proto/gen/game_idle/enum/v1"
 )
 
 // ActionStopReason 表示行动结算后是否继续执行队首行动。

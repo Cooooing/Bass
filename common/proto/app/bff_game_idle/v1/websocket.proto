@@ -6,28 +6,51 @@ import "google/api/annotations.proto";
 
 option go_package = "common/proto/gen/bff_game_idle/v1;v1";
 
+// 枚举定义。
 enum WebSocketMessageType {
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_UNSPECIFIED = 0;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_SESSION_CLOSE = 1;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_COMMAND_FAILED = 2;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CHAT_MESSAGE_RECEIVED = 3;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_COMPLETED = 4;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_QUEUE_UPDATED = 5;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ABILITY_LEVELED_UP = 6;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_INIT_COMPLETED = 7;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CONFIG_COMPLETED = 8;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CONFIG_VERSION_COMPLETED = 9;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_DETAIL_COMPLETED = 10;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CHARACTER_ONLINE_COMPLETED = 11;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_INIT_GET = 12;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CONFIG_GET = 13;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CONFIG_VERSION = 14;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_DETAIL_GET = 15;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CHARACTER_ONLINE = 16;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_CHAT_MESSAGE_SEND = 17;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_ADD = 18;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_MOVE = 19;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_REMOVE = 20;
+  // 枚举值。
   WEB_SOCKET_MESSAGE_TYPE_ACTION_CLEAR = 21;
 }
 
@@ -42,58 +65,90 @@ service WebSocketService {
   }
 }
 
+// 协议消息。
 message CreateWebSocketTicket {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
+    // 角色 ID
+    int64 character_id = 1;
   }
 
+  // 响应结果。
   message Resp {
-    int64 character_id = 1; // 角色 ID
-    string ticket = 2; // WS 连接凭证
-    int64 expires_in_seconds = 3; // 剩余有效秒数
-    string path = 4; // WS 连接路径
+    // 角色 ID
+    int64 character_id = 1;
+    // WS 连接凭证
+    string ticket = 2;
+    // 剩余有效秒数
+    int64 expires_in_seconds = 3;
+    // WS 连接路径
+    string path = 4;
   }
 }
 
 // WebSocketCommand 是客户端上行命令。
 message WebSocketCommand {
-  string type = 1; // 命令类型
-  WebSocketCommandPayload payload = 2; // 命令参数
+  // 命令类型
+  string type = 1;
+  // 命令参数
+  WebSocketCommandPayload payload = 2;
 }
 
 // WebSocketCommandPayload 是客户端上行命令参数。
 message WebSocketCommandPayload {
+  // 联合字段。
   oneof data {
+    // 协议字段。
     ChatMessageSendWebSocketPayload chat_message_send = 1;
+    // 协议字段。
     ActionAddWebSocketPayload action_add = 4;
+    // 协议字段。
     ActionMoveWebSocketPayload action_move = 5;
+    // 协议字段。
     ActionRemoveWebSocketPayload action_remove = 6;
+    // 协议字段。
     ActionDetailGetWebSocketPayload action_detail_get = 7;
   }
 }
 
+// 协议消息。
 message ChatMessageSendWebSocketPayload {
-  string channel_type = 1; // 频道类型
-  string channel_id = 2; // 频道标识
-  int64 receiver_character_id = 3; // 接收角色 ID，非私聊为 0
-  string content = 4; // 消息内容
+  // 频道类型
+  string channel_type = 1;
+  // 频道标识
+  string channel_id = 2;
+  // 接收角色 ID，非私聊为 0
+  int64 receiver_character_id = 3;
+  // 消息内容
+  string content = 4;
 }
 
+// 协议消息。
 message ActionAddWebSocketPayload {
-  string action_id = 1; // 行动编码
-  int64 times = 2; // 执行次数，-1 表示无限
-  optional int32 position = 3; // 插入位置，从 0 开始；空值表示追加到队尾
+  // 行动编码
+  string action_id = 1;
+  // 执行次数，-1 表示无限
+  int64 times = 2;
+  // 插入位置，从 0 开始；空值表示追加到队尾
+  optional int32 position = 3;
 }
 
+// 协议消息。
 message ActionMoveWebSocketPayload {
-  int32 current_position = 1; // 当前位置，从 0 开始
-  int32 target_position = 2; // 目标位置，从 0 开始
+  // 当前位置，从 0 开始
+  int32 current_position = 1;
+  // 目标位置，从 0 开始
+  int32 target_position = 2;
 }
 
+// 协议消息。
 message ActionRemoveWebSocketPayload {
-  int32 position = 1; // 移除位置，从 0 开始
+  // 移除位置，从 0 开始
+  int32 position = 1;
 }
 
+// 协议消息。
 message ActionDetailGetWebSocketPayload {
-  string action_id = 1; // 行动编码
+  // 行动编码
+  string action_id = 1;
 }

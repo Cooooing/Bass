@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common.api.app.im.enum.v1;
+
+option go_package = "common/proto/gen/im/enum/v1;enum";
+
+// 枚举定义。
+enum GlobalChatBarrageStatus {
+  // 未指定状态。
+  GLOBAL_CHAT_BARRAGE_STATUS_UNSPECIFIED = 0;
+  // 等待事务确认。
+  GLOBAL_CHAT_BARRAGE_STATUS_PENDING = 1;
+  // 已发布。
+  GLOBAL_CHAT_BARRAGE_STATUS_PUBLISHED = 2;
+  // 已取消。
+  GLOBAL_CHAT_BARRAGE_STATUS_CANCELED = 3;
+}

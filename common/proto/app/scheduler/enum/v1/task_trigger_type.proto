@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.enum.v1;
+
+option go_package = "common/proto/gen/scheduler/enum/v1;enum";
+
+// 枚举定义。
+enum SchedulerTaskTriggerType {
+  // 未指定。
+  SCHEDULER_TASK_TRIGGER_TYPE_UNSPECIFIED = 0;
+  // 调度触发。
+  SCHEDULER_TASK_TRIGGER_TYPE_SCHEDULE = 1;
+  // 手动触发。
+  SCHEDULER_TASK_TRIGGER_TYPE_MANUAL = 2;
+}

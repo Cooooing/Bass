@@ -10,9 +10,11 @@ option java_package = "com.github.kratos.errors";
 option objc_class_prefix = "KratosErrors";
 
 extend google.protobuf.EnumOptions {
+  // 协议字段。
   optional int32 default_code = 1108;
 }
 
 extend google.protobuf.EnumValueOptions {
+  // 协议字段。
   optional int32 code = 1109;
 }

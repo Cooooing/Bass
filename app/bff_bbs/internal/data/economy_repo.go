@@ -3,8 +3,8 @@ package data
 import (
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
+	economyv1enum "common/proto/gen/economy/enum/v1"
 	economyv1 "common/proto/gen/economy/v1"
-	economyv1enum "common/proto/gen/economy/v1/enum"
 	"context"
 
 	"bff_bbs/internal/biz/repo"

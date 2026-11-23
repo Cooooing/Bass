@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"github.com/nats-io/nats.go/jetstream"
 	"go.opentelemetry.io/otel"

@@ -7,8 +7,8 @@ import (
 	"platform/internal/biz/usecase"
 	"platform/internal/enum"
 
+	platformenum "common/proto/gen/platform/enum/v1"
 	v1 "common/proto/gen/platform/v1"
-	platformenum "common/proto/gen/platform/v1/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	transporthttp "github.com/go-kratos/kratos/v3/transport/http"

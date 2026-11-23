@@ -3,7 +3,7 @@ package service
 import (
 	"common/pkg/apperror"
 	commonenum "common/pkg/enum"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	v1 "common/proto/gen/user/v1"
 	"context"
 	"strings"

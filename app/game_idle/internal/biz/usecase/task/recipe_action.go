@@ -3,7 +3,7 @@ package task
 import (
 	"common/pkg/apperror"
 	"common/pkg/client/timewheel"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"time"
 

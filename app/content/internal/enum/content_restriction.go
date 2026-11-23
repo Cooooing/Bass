@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/content/v1/enum"
+	v1 "common/proto/gen/content/enum/v1"
 )
 
 // ContentRestriction 表示内容的管理限制状态。

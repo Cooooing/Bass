@@ -1,7 +1,7 @@
 package module
 
 import (
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"fmt"
 
 	"google.golang.org/protobuf/encoding/protojson"

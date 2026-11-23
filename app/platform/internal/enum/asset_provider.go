@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/platform/v1/enum"
+	v1 "common/proto/gen/platform/enum/v1"
 )
 
 type AssetProvider string

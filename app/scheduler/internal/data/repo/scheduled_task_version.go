@@ -3,7 +3,7 @@ package repo
 import (
 	"common/pkg/apperror"
 	utilent "common/pkg/util/ent"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"time"
 

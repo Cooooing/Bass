@@ -1,6 +1,6 @@
 package enum
 
-import event "common/proto/gen/common/enums/event"
+import event "common/proto/gen/common/enums/event/v1"
 
 // EventConsumer identifies a JetStream durable consumer.
 type EventConsumer string

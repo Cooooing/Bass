@@ -5,7 +5,7 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/server"
 	"common/pkg/util"
-	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
+	bbscontentv1 "common/proto/gen/bff_bbs/content/v1"
 	"context"
 
 	"bff_bbs/internal/biz/usecase"

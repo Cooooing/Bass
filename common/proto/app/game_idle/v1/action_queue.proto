@@ -6,69 +6,109 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
+// 服务定义。
 service ActionQueueService {
+  // 服务方法。
   rpc ListActionQueue(ListActionQueue.Req) returns (ListActionQueue.Resp) {}
+  // 服务方法。
   rpc AddAction(AddAction.Req) returns (AddAction.Resp) {}
+  // 服务方法。
   rpc MoveAction(MoveAction.Req) returns (MoveAction.Resp) {}
+  // 服务方法。
   rpc RemoveAction(RemoveAction.Req) returns (RemoveAction.Resp) {}
+  // 服务方法。
   rpc ClearActionQueue(ClearActionQueue.Req) returns (ClearActionQueue.Resp) {}
 }
 
+// 协议消息。
 message ListActionQueue {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
+    // 角色 ID
+    int64 character_id = 1;
   }
 
+  // 响应结果。
   message Resp {
-    ActionQueue queue = 1; // 行动队列
+    // 行动队列
+    ActionQueue queue = 1;
   }
 }
 
+// 协议消息。
 message AddAction {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
-    string action_id = 2; // 行动编码
-    int64 times = 3; // 执行次数，-1 表示无限
-    optional int32 position = 4; // 插入位置，从 0 开始；空值表示追加到队尾
+    // 角色 ID
+    int64 character_id = 1;
+    // 行动编码
+    string action_id = 2;
+    // 执行次数，-1 表示无限
+    int64 times = 3;
+    // 插入位置，从 0 开始；空值表示追加到队尾
+    optional int32 position = 4;
   }
 
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message MoveAction {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
-    int32 current_position = 2; // 当前位置，从 0 开始
-    int32 target_position = 3; // 目标位置，从 0 开始
+    // 角色 ID
+    int64 character_id = 1;
+    // 当前位置，从 0 开始
+    int32 current_position = 2;
+    // 目标位置，从 0 开始
+    int32 target_position = 3;
   }
 
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message RemoveAction {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
-    int32 position = 2; // 移除位置，从 0 开始
+    // 角色 ID
+    int64 character_id = 1;
+    // 移除位置，从 0 开始
+    int32 position = 2;
   }
 
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message ClearActionQueue {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
+    // 角色 ID
+    int64 character_id = 1;
   }
 
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message ActionQueue {
-  int64 character_id = 1; // 角色 ID
-  repeated ActionQueueItem items = 2; // 有序行动列表
+  // 角色 ID
+  int64 character_id = 1;
+  // 有序行动列表
+  repeated ActionQueueItem items = 2;
 }
 
+// 协议消息。
 message ActionQueueItem {
-  string action_id = 1; // 行动编码
-  int64 times = 2; // 剩余执行次数
-  google.protobuf.Timestamp created_at = 3; // 创建时间
+  // 行动编码
+  string action_id = 1;
+  // 剩余执行次数
+  int64 times = 2;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 3;
 }

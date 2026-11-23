@@ -5,8 +5,8 @@ import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	bbsnotifyv1 "common/proto/gen/bff_bbs/v1/notify"
-	cerrors "common/proto/gen/common/errors"
+	bbsnotifyv1 "common/proto/gen/bff_bbs/notify/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"bff_bbs/internal/biz/usecase"

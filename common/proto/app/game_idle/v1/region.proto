@@ -4,30 +4,47 @@ package common.api.app.game_idle.v1;
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
+// 服务定义。
 service RegionService {
+  // 服务方法。
   rpc ListRegions(ListRegions.Req) returns (ListRegions.Resp) {}
+  // 服务方法。
   rpc RefreshRegions(RefreshRegions.Req) returns (RefreshRegions.Resp) {}
 }
 
+// 协议消息。
 message ListRegions {
+  // 请求参数。
   message Req {}
 
+  // 响应结果。
   message Resp {
-    repeated Region rows = 1; // 区域列表
+    // 区域列表
+    repeated Region rows = 1;
   }
 }
 
+// 协议消息。
 message RefreshRegions {
+  // 请求参数。
   message Req {}
 
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message Region {
-  string region_id = 1; // 区域编码
-  string name = 2; // 区域名称
-  string description = 3; // 区域描述
-  string action_kind = 4; // 归属行动类型
-  bool enabled = 5; // 是否启用
-  int32 sort = 6; // 排序值
+  // 区域编码
+  string region_id = 1;
+  // 区域名称
+  string name = 2;
+  // 区域描述
+  string description = 3;
+  // 归属行动类型
+  string action_kind = 4;
+  // 是否启用
+  bool enabled = 5;
+  // 排序值
+  int32 sort = 6;
 }

@@ -3,7 +3,7 @@ package usecase
 import (
 	"bytes"
 	utilent "common/pkg/util/ent"
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 	"context"
 	"encoding/json"
 	"errors"

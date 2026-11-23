@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/game_idle/v1/enum"
+	v1 "common/proto/gen/game_idle/enum/v1"
 )
 
 // CharacterStatus 表示挂机游戏角色状态。

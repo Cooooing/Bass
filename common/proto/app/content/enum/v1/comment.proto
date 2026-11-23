@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package common.api.app.content.enum.v1;
+
+option go_package = "common/proto/gen/content/enum/v1;enum";
+
+// CommentAction 表示评论互动行为类型。
+enum CommentAction {
+  // 未指定
+  COMMENT_ACTION_UNSPECIFIED = 0;
+  // 点赞
+  COMMENT_ACTION_LIKE = 1;
+  // 回复
+  COMMENT_ACTION_REPLY = 3;
+  // 感谢
+  COMMENT_ACTION_THANK = 4;
+}
+
+// CommentOrder 表示评论列表排序方式。
+enum CommentOrder {
+  // 未指定
+  COMMENT_ORDER_UNSPECIFIED = 0;
+  // 最新
+  COMMENT_ORDER_NEWEST = 1;
+  // 最热
+  COMMENT_ORDER_HOTTEST = 2;
+  // 最早
+  COMMENT_ORDER_OLDEST = 3;
+}

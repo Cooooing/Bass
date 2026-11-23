@@ -4,7 +4,7 @@ import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
 	"common/pkg/server"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"realtime_hub/internal/biz"
 	"realtime_hub/internal/config"

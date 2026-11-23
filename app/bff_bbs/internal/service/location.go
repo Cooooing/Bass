@@ -2,7 +2,7 @@ package service
 
 import (
 	"common/pkg/server"
-	platformv1 "common/proto/gen/bff_bbs/v1/platform"
+	platformv1 "common/proto/gen/bff_bbs/platform/v1"
 	"context"
 
 	"bff_bbs/internal/biz/usecase"

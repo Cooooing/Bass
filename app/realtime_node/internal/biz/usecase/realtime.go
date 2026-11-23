@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	imv1enum "common/proto/gen/im/v1/enum"
+	imv1enum "common/proto/gen/im/enum/v1"
+	realtimehubv1enum "common/proto/gen/realtime_hub/enum/v1"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
-	realtimehubv1enum "common/proto/gen/realtime_hub/v1/enum"
 	"realtime_node/internal/biz/model"
 	"realtime_node/internal/biz/repo"
 	"realtime_node/internal/enum"

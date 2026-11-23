@@ -8,9 +8,9 @@ import (
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
+	economyenum "common/proto/gen/economy/enum/v1"
 	economyv1 "common/proto/gen/economy/v1"
-	economyenum "common/proto/gen/economy/v1/enum"
 	userv1 "common/proto/gen/user/v1"
 
 	"user/internal/biz/repo"

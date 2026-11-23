@@ -2,7 +2,7 @@ package config
 
 import (
 	serverconfig "common/pkg/server/config"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 )
 
 // LoadConfig 加载本模块配置，并注册可热更新配置。

@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package common.api.app.common.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/common/v1;common";
+
+// 协议消息。
+message PageReq {
+  // 页码
+  int64 page = 1;
+  // 页大小
+  int64 size = 2;
+}
+
+// 协议消息。
+message PageResp {
+  // 总数
+  int64 total = 1;
+  // 页码
+  int64 page = 2;
+  // 页大小
+  int64 size = 3;
+}
+
+// 协议消息。
+message TimeRange {
+  // 开始
+  google.protobuf.Timestamp start = 1;
+  // 结束
+  google.protobuf.Timestamp end = 2;
+}
+
+// 协议消息。
+message Int32Range {
+  // 开始
+  optional int32 start = 1;
+  // 结束
+  optional int32 end = 2;
+}
+
+// 协议消息。
+message Int64Range {
+  // 开始
+  optional int64 start = 1;
+  // 结束
+  optional int64 end = 2;
+}
+
+// 协议消息。
+message ImageResp {
+  // 图片数据
+  bytes data = 1;
+  // 图片类型
+  string content_type = 2;
+}

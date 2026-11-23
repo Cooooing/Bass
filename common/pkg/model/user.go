@@ -1,6 +1,6 @@
 package model
 
-import commonenums "common/proto/gen/common/enums"
+import commonenums "common/proto/gen/common/enums/v1"
 
 type User struct {
 	// ID 是账号 ID。

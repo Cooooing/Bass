@@ -4,7 +4,7 @@
 package main
 
 import (
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"game_idle/internal/biz"
 	"game_idle/internal/config"
 	"game_idle/internal/data"

@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package common.api.app.common.enums.event.v1;
+
+option go_package = "common/proto/gen/common/enums/event/v1;event";
+
+// 协议消息。
+message ArticlePublishedPayload {
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticleLikedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticleThankedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticleRewardedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticleCollectedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticleWatchedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticleAcceptedAnswerPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+  // 协议字段。
+  int64 comment_id = 4;
+}
+
+// 协议消息。
+message ArticleLotteryWonPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+  // 协议字段。
+  int64 prize_id = 4;
+  // 协议字段。
+  int64 winner_id = 5;
+}
+
+// 协议消息。
+message ArticlePollEndedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticleLotteryDrawnPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+}
+
+// 协议消息。
+message ArticlePostscriptAddedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+  // 协议字段。
+  int64 postscript_id = 4;
+}
+
+// 协议消息。
+message ArticleStatusUpdatedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 article_id = 3;
+  // 协议字段。
+  string action = 5;
+  // 协议字段。
+  string publish_status = 6;
+  // 协议字段。
+  string visibility = 7;
+  // 协议字段。
+  string restriction = 8;
+  // 协议字段。
+  optional string reason = 9;
+}
+
+// 协议消息。
+message CommentPublishedPayload {
+  // 协议字段。
+  int64 comment_id = 3;
+}
+
+// 协议消息。
+message CommentLikedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 comment_id = 3;
+}
+
+// 协议消息。
+message CommentThankedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 comment_id = 3;
+}
+
+// 协议消息。
+message CommentStatusUpdatedPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 comment_id = 3;
+  // 协议字段。
+  string action = 5;
+  // 协议字段。
+  string restriction = 6;
+  // 协议字段。
+  optional string reason = 7;
+}

@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/notify/v1/enum"
+	v1 "common/proto/gen/notify/enum/v1"
 )
 
 type NotificationChannel string

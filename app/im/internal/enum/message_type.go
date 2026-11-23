@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	imv1enum "common/proto/gen/im/v1/enum"
+	imv1enum "common/proto/gen/im/enum/v1"
 )
 
 // MessageType 表示 IM 消息的渲染语义。

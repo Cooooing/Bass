@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	realtimehubv1enum "common/proto/gen/realtime_hub/v1/enum"
+	realtimehubv1enum "common/proto/gen/realtime_hub/enum/v1"
 )
 
 // DeliveryKind 表示 Hub 可路由的实时下行类别。

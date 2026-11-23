@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/game_idle/v1/enum"
+	v1 "common/proto/gen/game_idle/enum/v1"
 )
 
 // CharacterCloseSessionReason 表示角色在线会话关闭原因。

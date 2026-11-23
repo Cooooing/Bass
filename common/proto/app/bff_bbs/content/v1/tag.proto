@@ -1,0 +1,352 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.content.v1;
+
+import "bff_bbs/content/enum/v1/tag.proto";
+import "common/v1/common.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/content/v1;content";
+
+// 标签 HTTP 接口。
+service TagService {
+  // 创建标签。
+  rpc CreateTag(CreateTag.Req) returns (CreateTag.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/tag/create"
+      body: "*"
+    };
+  }
+
+  // 更新标签。
+  rpc UpdateTag(UpdateTag.Req) returns (UpdateTag.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/tag/update"
+      body: "*"
+    };
+  }
+
+  // 绑定文章标签。
+  rpc BindArticleTags(BindArticleTags.Req) returns (BindArticleTags.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/tag/bind-article"
+      body: "*"
+    };
+  }
+
+  // 解绑文章标签。
+  rpc UnbindArticleTags(UnbindArticleTags.Req) returns (UnbindArticleTags.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/tag/unbind-article"
+      body: "*"
+    };
+  }
+
+  // 查询文章标签列表。
+  rpc ListArticleTags(ListArticleTags.Req) returns (ListArticleTags.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/tag/list-article-tags"
+      body: "*"
+    };
+  }
+
+  // 查询标签列表。
+  rpc ListTags(ListTags.Req) returns (ListTags.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/tag/list"
+      body: "*"
+    };
+  }
+}
+
+// 创建标签。
+message CreateTag {
+  // 请求参数。
+  message Req {
+    // 标签信息
+    Tag tag = 1;
+    option (gnostic.openapi.v3.schema) = {required: "tag"};
+
+    // 协议消息。
+    message Tag {
+      // 稳定编码
+      string code = 1;
+      // 标签名称
+      string name = 2;
+      // 描述
+      optional string description = 3;
+      // 领域 ID
+      optional int64 domain_id = 4;
+      // 启停状态
+      optional .common.api.app.bff_bbs.content.enum.v1.TagStatus status = 5;
+      // 图标
+      optional string icon = 6;
+      // 排序值，越小越靠前
+      int32 sort = 7;
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
+        required: "name"
+      };
+    }
+  }
+
+  // 响应结果。
+  message Resp {
+    // 标签信息
+    Tag tag = 1;
+
+    // 协议消息。
+    message Tag {
+      // 标签 ID
+      int64 id = 1;
+      // 稳定编码
+      string code = 2;
+      // 标签名称
+      string name = 3;
+      // 描述
+      optional string description = 4;
+      // 领域 ID
+      optional int64 domain_id = 5;
+      // 启停状态
+      optional .common.api.app.bff_bbs.content.enum.v1.TagStatus status = 6;
+      // 图标
+      optional string icon = 7;
+      // 排序值，越小越靠前
+      int32 sort = 8;
+      // 文章数量
+      int32 article_count = 9;
+      // 创建用户 ID
+      optional int64 created_by = 1002;
+      // 更新用户 ID
+      optional int64 updated_by = 1003;
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+    }
+  }
+}
+
+// 更新标签。
+message UpdateTag {
+  // 请求参数。
+  message Req {
+    // 标签 ID
+    int64 tag_id = 1;
+    // 标签信息
+    Tag tag = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "tag_id"
+      required: "tag"
+    };
+
+    // 协议消息。
+    message Tag {
+      // 稳定编码
+      string code = 1;
+      // 标签名称
+      string name = 2;
+      // 描述
+      optional string description = 3;
+      // 领域 ID
+      optional int64 domain_id = 4;
+      // 启停状态
+      optional .common.api.app.bff_bbs.content.enum.v1.TagStatus status = 5;
+      // 图标
+      optional string icon = 6;
+      // 排序值，越小越靠前
+      int32 sort = 7;
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
+        required: "name"
+      };
+    }
+  }
+
+  // 响应结果。
+  message Resp {
+    // 标签信息
+    Tag tag = 1;
+
+    // 协议消息。
+    message Tag {
+      // 标签 ID
+      int64 id = 1;
+      // 稳定编码
+      string code = 2;
+      // 标签名称
+      string name = 3;
+      // 描述
+      optional string description = 4;
+      // 领域 ID
+      optional int64 domain_id = 5;
+      // 启停状态
+      optional .common.api.app.bff_bbs.content.enum.v1.TagStatus status = 6;
+      // 图标
+      optional string icon = 7;
+      // 排序值，越小越靠前
+      int32 sort = 8;
+      // 文章数量
+      int32 article_count = 9;
+      // 创建用户 ID
+      optional int64 created_by = 1002;
+      // 更新用户 ID
+      optional int64 updated_by = 1003;
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+    }
+  }
+}
+
+// 绑定文章标签。
+message BindArticleTags {
+  // 请求参数。
+  message Req {
+    // 文章 ID
+    int64 article_id = 1;
+    // 标签 ID 列表
+    repeated int64 tag_ids = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "tag_ids"
+    };
+  }
+
+  // 响应结果。
+  message Resp {}
+}
+
+// 解绑文章标签。
+message UnbindArticleTags {
+  // 请求参数。
+  message Req {
+    // 文章 ID
+    int64 article_id = 1;
+    // 标签 ID 列表
+    repeated int64 tag_ids = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "tag_ids"
+    };
+  }
+
+  // 响应结果。
+  message Resp {}
+}
+
+// 查询文章标签列表。
+message ListArticleTags {
+  // 请求参数。
+  message Req {
+    // 文章 ID
+    int64 article_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+  }
+
+  // 响应结果。
+  message Resp {
+    // 标签列表
+    repeated Tag rows = 1;
+
+    // 协议消息。
+    message Tag {
+      // 标签 ID
+      int64 id = 1;
+      // 稳定编码
+      string code = 2;
+      // 标签名称
+      string name = 3;
+      // 描述
+      optional string description = 4;
+      // 领域 ID
+      optional int64 domain_id = 5;
+      // 启停状态
+      optional .common.api.app.bff_bbs.content.enum.v1.TagStatus status = 6;
+      // 图标
+      optional string icon = 7;
+      // 排序值，越小越靠前
+      int32 sort = 8;
+      // 文章数量
+      int32 article_count = 9;
+      // 创建用户 ID
+      optional int64 created_by = 1002;
+      // 更新用户 ID
+      optional int64 updated_by = 1003;
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+    }
+  }
+}
+
+// 查询标签列表。
+message ListTags {
+  // 请求参数。
+  message Req {
+    // 分页参数
+    .common.api.app.common.v1.PageReq page = 1;
+    // 查询条件
+    TagQuery query = 2;
+
+    // 协议消息。
+    message TagQuery {
+      // 标签 ID 列表
+      repeated int64 ids = 1;
+      // 稳定编码
+      optional string code = 2;
+      // 标签名称
+      optional string name = 3;
+      // 标签名称列表
+      repeated string names = 4;
+      // 描述
+      optional string description = 5;
+      // 启停状态
+      optional .common.api.app.bff_bbs.content.enum.v1.TagStatus status = 6;
+      // 领域 ID
+      optional int64 domain_id = 7;
+    }
+  }
+
+  // 响应结果。
+  message Resp {
+    // 分页结果
+    .common.api.app.common.v1.PageResp page = 1;
+    // 标签列表
+    repeated Tag rows = 2;
+
+    // 协议消息。
+    message Tag {
+      // 标签 ID
+      int64 id = 1;
+      // 稳定编码
+      string code = 2;
+      // 标签名称
+      string name = 3;
+      // 描述
+      optional string description = 4;
+      // 领域 ID
+      optional int64 domain_id = 5;
+      // 启停状态
+      optional .common.api.app.bff_bbs.content.enum.v1.TagStatus status = 6;
+      // 图标
+      optional string icon = 7;
+      // 排序值，越小越靠前
+      int32 sort = 8;
+      // 文章数量
+      int32 article_count = 9;
+      // 创建用户 ID
+      optional int64 created_by = 1002;
+      // 更新用户 ID
+      optional int64 updated_by = 1003;
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+    }
+  }
+}

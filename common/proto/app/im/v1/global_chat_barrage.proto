@@ -2,41 +2,63 @@ syntax = "proto3";
 
 package common.api.app.im.v1;
 
-import "common/common.proto";
+import "common/v1/common.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";
 
+// 服务定义。
 service IMGlobalChatBarrageService {
-  rpc SendGlobalChatBarrage(SendGlobalChatBarrage.Req) returns (SendGlobalChatBarrage.Resp) {} // 发送全局聊天室弹幕。
-  rpc ListGlobalChatBarrages(ListGlobalChatBarrages.Req) returns (ListGlobalChatBarrages.Resp) {} // 分页查询全局聊天室弹幕。
+  // 发送全局聊天室弹幕。
+  rpc SendGlobalChatBarrage(SendGlobalChatBarrage.Req) returns (SendGlobalChatBarrage.Resp) {}
+  // 分页查询全局聊天室弹幕。
+  rpc ListGlobalChatBarrages(ListGlobalChatBarrages.Req) returns (ListGlobalChatBarrages.Resp) {}
 }
 
+// 协议消息。
 message GlobalChatBarrage {
-  int64 id = 1; // 弹幕 ID。
-  int64 user_id = 2; // 发送账号 ID。
-  string content = 3; // 纯文本弹幕内容。
-  int64 points_cost = 4; // 本次实际消耗的积分。
-  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  // 弹幕 ID。
+  int64 id = 1;
+  // 发送账号 ID。
+  int64 user_id = 2;
+  // 纯文本弹幕内容。
+  string content = 3;
+  // 本次实际消耗的积分。
+  int64 points_cost = 4;
+  // 创建时间。
+  google.protobuf.Timestamp created_at = 1000;
 }
 
+// 协议消息。
 message SendGlobalChatBarrage {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 发送账号 ID。
-    string content = 2; // 原始弹幕内容。
+    // 发送账号 ID。
+    int64 user_id = 1;
+    // 原始弹幕内容。
+    string content = 2;
   }
+  // 响应结果。
   message Resp {
-    GlobalChatBarrage barrage = 1; // 已发布的弹幕。
+    // 已发布的弹幕。
+    GlobalChatBarrage barrage = 1;
   }
 }
 
+// 协议消息。
 message ListGlobalChatBarrages {
+  // 请求参数。
   message Req {
-    optional int64 user_id = 1; // 按发送账号筛选。
-    .common.api.app.common.PageReq page = 2; // 分页参数。
+    // 按发送账号筛选。
+    optional int64 user_id = 1;
+    // 分页参数。
+    .common.api.app.common.v1.PageReq page = 2;
   }
+  // 响应结果。
   message Resp {
-    .common.api.app.common.PageResp page = 1; // 分页信息。
-    repeated GlobalChatBarrage rows = 2; // 已发布弹幕。
+    // 分页信息。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 已发布弹幕。
+    repeated GlobalChatBarrage rows = 2;
   }
 }

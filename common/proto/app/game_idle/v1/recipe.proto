@@ -4,12 +4,17 @@ package common.api.app.game_idle.v1;
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
+// 服务定义。
 service RecipeService {
+  // 服务方法。
   rpc RefreshRecipes(RefreshRecipes.Req) returns (RefreshRecipes.Resp) {}
 }
 
+// 协议消息。
 message RefreshRecipes {
+  // 请求参数。
   message Req {}
 
+  // 响应结果。
   message Resp {}
 }

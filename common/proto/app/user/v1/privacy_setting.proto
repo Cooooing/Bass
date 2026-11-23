@@ -2,61 +2,94 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "common/enums/language.proto";
-import "google/protobuf/timestamp.proto";
-import "user/v1/enum/relation.proto";
-
 option go_package = "common/proto/gen/user/v1;v1";
 
+// 服务定义。
 service PrivacySettingService {
-  rpc GetPrivacySetting(GetPrivacySetting.Req) returns (GetPrivacySetting.Resp) {} // 获取账号隐私设置，缺省时返回默认设置。
-  rpc MapPrivacySettings(MapPrivacySettings.Req) returns (MapPrivacySettings.Resp) {} // 批量获取账号隐私设置，缺省账号返回默认设置。
-  rpc UpdatePrivacySetting(UpdatePrivacySetting.Req) returns (UpdatePrivacySetting.Resp) {} // 更新账号隐私设置；缺省扩展表使用 upsert 创建。
+  // 获取账号隐私设置，缺省时返回默认设置。
+  rpc GetPrivacySetting(GetPrivacySetting.Req) returns (GetPrivacySetting.Resp) {}
+  // 批量获取账号隐私设置，缺省账号返回默认设置。
+  rpc MapPrivacySettings(MapPrivacySettings.Req) returns (MapPrivacySettings.Resp) {}
+  // 更新账号隐私设置；缺省扩展表使用 upsert 创建。
+  rpc UpdatePrivacySetting(UpdatePrivacySetting.Req) returns (UpdatePrivacySetting.Resp) {}
 }
 
+// 协议消息。
 message PrivacySetting {
+  // 协议字段。
   int64 user_id = 1;
+  // 协议字段。
   optional bool public_points = 2;
+  // 协议字段。
   optional bool public_follower_list = 3;
+  // 协议字段。
   optional bool public_following_list = 4;
+  // 协议字段。
   optional bool public_article_list = 5;
+  // 协议字段。
   optional bool public_comment_list = 6;
+  // 协议字段。
   optional bool public_online_status = 7;
+  // 协议字段。
   optional bool public_location = 8;
+  // 协议字段。
   optional bool public_moonbreeze_list = 9;
 }
 
+// 协议消息。
 message GetPrivacySetting {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     PrivacySetting privacy_setting = 1;
   }
 }
 
+// 协议消息。
 message MapPrivacySettings {
+  // 请求参数。
   message Req {
+    // 协议字段。
     repeated int64 user_ids = 1;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     map<int64, PrivacySetting> privacy_settings = 1;
   }
 }
 
+// 协议消息。
 message UpdatePrivacySetting {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
+    // 协议字段。
     optional bool public_points = 2;
+    // 协议字段。
     optional bool public_follower_list = 3;
+    // 协议字段。
     optional bool public_following_list = 4;
+    // 协议字段。
     optional bool public_article_list = 5;
+    // 协议字段。
     optional bool public_comment_list = 6;
+    // 协议字段。
     optional bool public_online_status = 7;
+    // 协议字段。
     optional bool public_location = 8;
+    // 协议字段。
     optional bool public_moonbreeze_list = 9;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     PrivacySetting privacy_setting = 1;
   }
 }

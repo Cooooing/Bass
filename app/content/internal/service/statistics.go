@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"common/pkg/apperror"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	v1 "common/proto/gen/content/v1"
 
 	"content/internal/biz/usecase"

@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	schedulerv1 "common/proto/gen/scheduler/v1/enum"
+	schedulerv1 "common/proto/gen/scheduler/enum/v1"
 )
 
 // TaskMisfirePolicy 定义错过计划时间后的处理策略。

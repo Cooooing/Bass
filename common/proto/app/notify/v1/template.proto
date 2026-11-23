@@ -4,16 +4,24 @@ package common.api.app.notify.v1;
 
 option go_package = "common/proto/gen/notify/v1;v1";
 
+// 服务定义。
 service NotifyTemplateService {
-  rpc PreviewNotificationTemplate(PreviewNotificationTemplate.Req) returns (PreviewNotificationTemplate.Resp) {} // 渲染预览通知模板。
+  // 渲染预览通知模板。
+  rpc PreviewNotificationTemplate(PreviewNotificationTemplate.Req) returns (PreviewNotificationTemplate.Resp) {}
 }
 
+// 协议消息。
 message PreviewNotificationTemplate {
+  // 请求参数。
   message Req {
+    // 协议字段。
     string template = 1;
+    // 协议字段。
     string template_data_json = 2;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     string rendered = 1;
   }
 }

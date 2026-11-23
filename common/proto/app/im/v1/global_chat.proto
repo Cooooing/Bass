@@ -2,108 +2,171 @@ syntax = "proto3";
 
 package common.api.app.im.v1;
 
-import "common/common.proto";
+import "common/v1/common.proto";
 import "google/protobuf/timestamp.proto";
-import "im/v1/enum/im_message_type.proto";
+import "im/enum/v1/im_message_type.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";
 
+// 服务定义。
 service IMGlobalChatService {
-  rpc SendGlobalChatMessage(SendGlobalChatMessage.Req) returns (SendGlobalChatMessage.Resp) {} // 发送全局聊天室消息。
-  rpc RevokeGlobalChatMessage(RevokeGlobalChatMessage.Req) returns (RevokeGlobalChatMessage.Resp) {} // 撤回全局聊天室消息。
-  rpc ListGlobalChatMessages(ListGlobalChatMessages.Req) returns (ListGlobalChatMessages.Resp) {} // 查询全局聊天室历史。
-  rpc GetGlobalChatTopic(GetGlobalChatTopic.Req) returns (GetGlobalChatTopic.Resp) {} // 查询当前全局聊天室话题。
-  rpc SetGlobalChatTopic(SetGlobalChatTopic.Req) returns (SetGlobalChatTopic.Resp) {} // 设置全局聊天室话题并扣除积分。
-  rpc MuteGlobalChatUser(MuteGlobalChatUser.Req) returns (MuteGlobalChatUser.Resp) {} // 管理员定时禁言账号。
-  rpc UnmuteGlobalChatUser(UnmuteGlobalChatUser.Req) returns (UnmuteGlobalChatUser.Resp) {} // 管理员解除账号禁言。
+  // 发送全局聊天室消息。
+  rpc SendGlobalChatMessage(SendGlobalChatMessage.Req) returns (SendGlobalChatMessage.Resp) {}
+  // 撤回全局聊天室消息。
+  rpc RevokeGlobalChatMessage(RevokeGlobalChatMessage.Req) returns (RevokeGlobalChatMessage.Resp) {}
+  // 查询全局聊天室历史。
+  rpc ListGlobalChatMessages(ListGlobalChatMessages.Req) returns (ListGlobalChatMessages.Resp) {}
+  // 查询当前全局聊天室话题。
+  rpc GetGlobalChatTopic(GetGlobalChatTopic.Req) returns (GetGlobalChatTopic.Resp) {}
+  // 设置全局聊天室话题并扣除积分。
+  rpc SetGlobalChatTopic(SetGlobalChatTopic.Req) returns (SetGlobalChatTopic.Resp) {}
+  // 管理员定时禁言账号。
+  rpc MuteGlobalChatUser(MuteGlobalChatUser.Req) returns (MuteGlobalChatUser.Resp) {}
+  // 管理员解除账号禁言。
+  rpc UnmuteGlobalChatUser(UnmuteGlobalChatUser.Req) returns (UnmuteGlobalChatUser.Resp) {}
 }
 
+// 协议消息。
 message GlobalChatMessage {
-  int64 id = 1; // 消息 ID。
-  int64 sender_id = 2; // 发送账号 ID。
-  string content = 3; // 原始 Markdown 内容。
-  .common.api.app.im.v1.enum.IMMessageType message_type = 4; // 消息类型。
-  bool revoked = 5; // 是否已撤回。
-  int64 revoked_by = 6; // 撤回操作账号 ID。
-  google.protobuf.Timestamp created_at = 1000; // 创建时间。
-  google.protobuf.Timestamp revoked_at = 1001; // 撤回时间。
+  // 消息 ID。
+  int64 id = 1;
+  // 发送账号 ID。
+  int64 sender_id = 2;
+  // 原始 Markdown 内容。
+  string content = 3;
+  // 消息类型。
+  .common.api.app.im.enum.v1.IMMessageType message_type = 4;
+  // 是否已撤回。
+  bool revoked = 5;
+  // 撤回操作账号 ID。
+  int64 revoked_by = 6;
+  // 创建时间。
+  google.protobuf.Timestamp created_at = 1000;
+  // 撤回时间。
+  google.protobuf.Timestamp revoked_at = 1001;
 }
 
 // GlobalChatTopic 表示一次全局聊天室话题设置记录。
 message GlobalChatTopic {
-  int64 id = 1; // 话题记录 ID。
-  int64 user_id = 2; // 设置话题的账号 ID。
-  string content = 3; // 话题内容。
-  int64 points_cost = 4; // 本次设置实际消耗的积分。
-  google.protobuf.Timestamp created_at = 1000; // 话题设置时间。
+  // 话题记录 ID。
+  int64 id = 1;
+  // 设置话题的账号 ID。
+  int64 user_id = 2;
+  // 话题内容。
+  string content = 3;
+  // 本次设置实际消耗的积分。
+  int64 points_cost = 4;
+  // 话题设置时间。
+  google.protobuf.Timestamp created_at = 1000;
 }
 
 // GetGlobalChatTopic 查询当前已发布话题。
 message GetGlobalChatTopic {
+  // 请求参数。
   message Req {}
+  // 响应结果。
   message Resp {
-    GlobalChatTopic topic = 1; // 当前话题；未设置时为空。
+    // 当前话题；未设置时为空。
+    GlobalChatTopic topic = 1;
   }
 }
 
 // SetGlobalChatTopic 设置一个新的全局聊天室话题。
 message SetGlobalChatTopic {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 设置账号 ID。
-    string content = 2; // 话题内容。
+    // 设置账号 ID。
+    int64 user_id = 1;
+    // 话题内容。
+    string content = 2;
   }
+  // 响应结果。
   message Resp {
-    GlobalChatTopic topic = 1; // 成功发布的话题记录。
+    // 成功发布的话题记录。
+    GlobalChatTopic topic = 1;
   }
 }
 
+// 协议消息。
 message SendGlobalChatMessage {
+  // 请求参数。
   message Req {
-    int64 sender_id = 1; // 发送账号 ID。
-    string client_message_id = 2; // 客户端幂等消息 ID。
-    string content = 3; // 原始 Markdown 内容。
+    // 发送账号 ID。
+    int64 sender_id = 1;
+    // 客户端幂等消息 ID。
+    string client_message_id = 2;
+    // 原始 Markdown 内容。
+    string content = 3;
   }
+  // 响应结果。
   message Resp {
-    GlobalChatMessage message = 1; // 已创建或幂等返回的消息。
+    // 已创建或幂等返回的消息。
+    GlobalChatMessage message = 1;
   }
 }
 
+// 协议消息。
 message RevokeGlobalChatMessage {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 操作账号 ID。
-    int64 message_id = 2; // 消息 ID。
-    bool administrator = 3; // 是否以管理员权限操作。
+    // 操作账号 ID。
+    int64 user_id = 1;
+    // 消息 ID。
+    int64 message_id = 2;
+    // 是否以管理员权限操作。
+    bool administrator = 3;
   }
+  // 响应结果。
   message Resp {
-    GlobalChatMessage message = 1; // 已撤回消息。
+    // 已撤回消息。
+    GlobalChatMessage message = 1;
   }
 }
 
+// 协议消息。
 message ListGlobalChatMessages {
+  // 请求参数。
   message Req {
-    int64 before_id = 1; // 向前分页游标消息 ID，0 表示最新。
-    .common.api.app.common.PageReq page = 2; // 分页参数。
+    // 向前分页游标消息 ID，0 表示最新。
+    int64 before_id = 1;
+    // 分页参数。
+    .common.api.app.common.v1.PageReq page = 2;
   }
+  // 响应结果。
   message Resp {
-    .common.api.app.common.PageResp page = 1; // 分页信息。
-    repeated GlobalChatMessage rows = 2; // 全局聊天室消息。
+    // 分页信息。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 全局聊天室消息。
+    repeated GlobalChatMessage rows = 2;
   }
 }
 
+// 协议消息。
 message MuteGlobalChatUser {
+  // 请求参数。
   message Req {
-    int64 operator_user_id = 1; // 操作管理员账号 ID。
-    int64 user_id = 2; // 被禁言账号 ID。
-    int64 muted_seconds = 3; // 禁言持续秒数。
-    optional string reason = 4; // 禁言原因。
+    // 操作管理员账号 ID。
+    int64 operator_user_id = 1;
+    // 被禁言账号 ID。
+    int64 user_id = 2;
+    // 禁言持续秒数。
+    int64 muted_seconds = 3;
+    // 禁言原因。
+    optional string reason = 4;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UnmuteGlobalChatUser {
+  // 请求参数。
   message Req {
-    int64 operator_user_id = 1; // 操作管理员账号 ID。
-    int64 user_id = 2; // 解除禁言账号 ID。
+    // 操作管理员账号 ID。
+    int64 operator_user_id = 1;
+    // 解除禁言账号 ID。
+    int64 user_id = 2;
   }
+  // 响应结果。
   message Resp {}
 }

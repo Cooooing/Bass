@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.content.v1;
+
+import "bff_bbs/content/v1/article.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/content/v1;content";
+
+// PostscriptService 提供 BBS 文章附言接口。
+service PostscriptService {
+  // 添加文章附言。
+  rpc AddPostscript(AddPostscript.Req) returns (AddPostscript.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/postscript/add"
+      body: "*"
+    };
+  }
+
+  // 查询文章附言列表。
+  rpc ListPostscripts(ListPostscripts.Req) returns (ListPostscripts.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/postscript/list"
+      body: "*"
+    };
+  }
+}
+
+// 协议消息。
+message AddPostscript {
+  // 请求参数。
+  message Req {
+    // 必填，文章 ID。
+    int64 article_id = 1;
+    // 必填，附言内容。
+    string content = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "content"
+    };
+  }
+  // 响应结果。
+  message Resp {
+    // 创建后的文章附言。
+    ArticlePostscript postscript = 1;
+  }
+}
+
+// 协议消息。
+message ListPostscripts {
+  // 请求参数。
+  message Req {
+    // 必填，文章 ID。
+    int64 article_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+  }
+  // 响应结果。
+  message Resp {
+    // 文章附言列表。
+    repeated ArticlePostscript rows = 1;
+  }
+}

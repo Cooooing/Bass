@@ -4,7 +4,7 @@ import (
 	"common/pkg/apperror"
 	"common/pkg/client/timewheel"
 	"common/pkg/constant"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"errors"
 	"fmt"

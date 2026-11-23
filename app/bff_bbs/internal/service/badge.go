@@ -6,9 +6,9 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	badgev1 "common/proto/gen/badge/v1"
-	bffbadgev1 "common/proto/gen/bff_bbs/v1/badge"
-	"common/proto/gen/common"
-	cerrors "common/proto/gen/common/errors"
+	bffbadgev1 "common/proto/gen/bff_bbs/badge/v1"
+	cerrors "common/proto/gen/common/errors/v1"
+	"common/proto/gen/common/v1"
 	"context"
 
 	"bff_bbs/internal/biz/usecase"

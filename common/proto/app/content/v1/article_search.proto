@@ -6,20 +6,30 @@ import "content/v1/article.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
-// ContentArticleSearchService provides public article keyword search.
+// ContentArticleSearchService 提供公开文章关键词搜索。
 service ContentArticleSearchService {
+  // 服务方法。
   rpc SearchPublicArticles(SearchPublicArticles.Req) returns (SearchPublicArticles.Resp) {}
 }
 
+// 协议消息。
 message SearchPublicArticles {
+  // 请求参数。
   message Req {
-    string query = 1; // 搜索词
-    optional string cursor = 2; // 不透明续页游标
-    uint32 size = 3; // 返回条数
-    repeated int64 excluded_author_ids = 4; // 读取侧排除的作者账号 ID
+    // 搜索词
+    string query = 1;
+    // 不透明续页游标
+    optional string cursor = 2;
+    // 返回条数
+    uint32 size = 3;
+    // 读取侧排除的作者账号 ID
+    repeated int64 excluded_author_ids = 4;
   }
+  // 响应结果。
   message Resp {
-    repeated Article rows = 1; // 公开文章
-    optional string next_cursor = 2; // 下一页游标
+    // 公开文章
+    repeated Article rows = 1;
+    // 下一页游标
+    optional string next_cursor = 2;
   }
 }

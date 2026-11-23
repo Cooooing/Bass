@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/bff_bbs/v1/user/enum"
+	v1 "common/proto/gen/bff_bbs/user/enum/v1"
 )
 
 type RelationType string

@@ -2,7 +2,7 @@ package service
 
 import (
 	"common/pkg/apperror"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	v1 "common/proto/gen/game_idle/v1"
 	"context"
 

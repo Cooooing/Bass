@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	imv1enum "common/proto/gen/im/v1/enum"
+	imv1enum "common/proto/gen/im/enum/v1"
 )
 
 // GlobalChatTopicStatus 表示全局聊天室话题设置的状态。

@@ -3,11 +3,11 @@ package usecase
 import (
 	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"common/pkg/apperror"
-	commonevent "common/proto/gen/common/enums/event"
+	commonevent "common/proto/gen/common/enums/event/v1"
 
 	"content/internal/biz/model"
 	"content/internal/biz/repo"

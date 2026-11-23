@@ -5,9 +5,9 @@ import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
-	relationmodel "common/proto/gen/bff_bbs/v1/user/model"
-	cerrors "common/proto/gen/common/errors"
+	relationmodel "common/proto/gen/bff_bbs/user/model/v1"
+	bbsuserv1 "common/proto/gen/bff_bbs/user/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"bff_bbs/internal/biz/usecase"

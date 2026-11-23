@@ -9,7 +9,7 @@ import (
 	"bff_bbs/internal/data"
 	"bff_bbs/internal/server"
 	"bff_bbs/internal/service"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"log/slog"
 
 	"github.com/go-kratos/kratos/v3"

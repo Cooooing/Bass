@@ -8,19 +8,29 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // TCCArticlePublishService 提供文章发布的 TCC 分支操作。
 service TCCArticlePublishService {
-  rpc Try(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {} // 预留文章发布。
-  rpc Confirm(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {} // 确认文章发布。
-  rpc Cancel(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {} // 取消待确认文章发布。
+  // 预留文章发布。
+  rpc Try(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {}
+  // 确认文章发布。
+  rpc Confirm(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {}
+  // 取消待确认文章发布。
+  rpc Cancel(TCCArticlePublish.Req) returns (TCCArticlePublish.Resp) {}
 }
 
 // TCCArticlePublish 表示文章发布 TCC 分支的完整业务参数。
 message TCCArticlePublish {
+  // 请求参数。
   message Req {
-    int64 article_id = 1; // 文章 ID。
-    int64 operator_user_id = 2; // 发起发布的账号 ID。
-    optional string city = 3; // 发布城市快照。
-    optional int64 reward_setup_points = 4; // 打赏区启用积分费用快照。
-    google.protobuf.Timestamp published_at = 5; // 实际发布时间。
+    // 文章 ID。
+    int64 article_id = 1;
+    // 发起发布的账号 ID。
+    int64 operator_user_id = 2;
+    // 发布城市快照。
+    optional string city = 3;
+    // 打赏区启用积分费用快照。
+    optional int64 reward_setup_points = 4;
+    // 实际发布时间。
+    google.protobuf.Timestamp published_at = 5;
   }
+  // 响应结果。
   message Resp {}
 }

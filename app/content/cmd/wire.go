@@ -4,7 +4,7 @@
 package main
 
 import (
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"content/internal/biz"
 	"content/internal/config"
 	"content/internal/data"

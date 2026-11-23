@@ -4,7 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"

@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"common/pkg/client/rpc"
+	contentenum "common/proto/gen/content/enum/v1"
 	contentv1 "common/proto/gen/content/v1"
-	contentenum "common/proto/gen/content/v1/enum"
 	imv1 "common/proto/gen/im/v1"
 
 	"user/internal/biz/model"

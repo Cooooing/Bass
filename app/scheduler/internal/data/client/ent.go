@@ -3,7 +3,7 @@ package client
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/client/driver"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"context"
 	"database/sql"
 	"fmt"

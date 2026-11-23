@@ -6,8 +6,8 @@ import (
 	"log/slog"
 
 	"common/pkg/apperror"
-	commonevent "common/proto/gen/common/enums/event"
-	cerrors "common/proto/gen/common/errors"
+	commonevent "common/proto/gen/common/enums/event/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 
 	"content/internal/biz/model"
 	"content/internal/biz/repo"

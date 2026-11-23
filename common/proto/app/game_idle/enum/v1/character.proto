@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.enum.v1;
+
+option go_package = "common/proto/gen/game_idle/enum/v1;enum";
+
+// CharacterStatus 表示挂机游戏角色状态。
+enum CharacterStatus {
+  // 未指定
+  CHARACTER_STATUS_UNSPECIFIED = 0;
+  // 正常
+  CHARACTER_STATUS_ACTIVE = 1;
+  // 禁用
+  CHARACTER_STATUS_DISABLED = 2;
+}

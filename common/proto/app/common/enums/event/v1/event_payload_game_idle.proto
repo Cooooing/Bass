@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package common.api.app.common.enums.event.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/common/enums/event/v1;event";
+
+// 协议消息。
+message GameIdleChatMessagePayload {
+  // 协议字段。
+  int64 message_id = 1;
+  // 协议字段。
+  string channel_type = 2;
+  // 协议字段。
+  string channel_id = 3;
+  // 协议字段。
+  int64 sender_character_id = 4;
+  // 协议字段。
+  int64 receiver_character_id = 5;
+  // 协议字段。
+  string content = 6;
+  // 协议字段。
+  string sender_name = 7;
+  // 协议字段。
+  google.protobuf.Timestamp created_at = 8;
+}
+
+// 枚举定义。
+enum GameIdleCloseSessionReason {
+  // 未指定
+  GAME_IDLE_CLOSE_SESSION_REASON_UNSPECIFIED = 0;
+  // 被其他连接挤占
+  GAME_IDLE_CLOSE_SESSION_REASON_OCCUPIED = 1;
+  // 心跳超时
+  GAME_IDLE_CLOSE_SESSION_REASON_TIMEOUT = 2;
+}
+
+// 协议消息。
+message GameIdleCloseSessionPayload {
+  // 会话 ID
+  string session_id = 1;
+  // 关闭原因
+  GameIdleCloseSessionReason reason = 2;
+  // 客户端提示
+  string message = 3;
+  // 是否建议自动重连
+  bool should_reconnect = 4;
+}
+
+// 协议消息。
+message GameIdleActionCompletedPayload {
+  // 协议字段。
+  int64 character_id = 1;
+  // 协议字段。
+  GameIdleActionCompletedAction action = 2;
+  // 协议字段。
+  repeated GameIdleItemChange item_changes = 3;
+  // 协议字段。
+  repeated GameIdleAbilityChange ability_changes = 4;
+}
+
+// 协议消息。
+message GameIdleActionCompletedAction {
+  // 协议字段。
+  string action_id = 1;
+  // 协议字段。
+  int64 times_finished = 2;
+  // 协议字段。
+  int64 times_remaining = 3;
+  // 协议字段。
+  google.protobuf.Timestamp started_at = 4;
+  // 协议字段。
+  google.protobuf.Timestamp completed_at = 5;
+}
+
+// 协议消息。
+message GameIdleItemChange {
+  // 协议字段。
+  string item_id = 1;
+  // 协议字段。
+  int64 quantity_delta = 2;
+  // 协议字段。
+  int64 quantity_after = 3;
+}
+
+// 协议消息。
+message GameIdleAbilityChange {
+  // 协议字段。
+  string ability_id = 1;
+  // 协议字段。
+  int64 exp_delta = 2;
+  // 协议字段。
+  int64 exp_after = 3;
+}
+
+// 协议消息。
+message GameIdleAbilityLeveledUpPayload {
+  // 协议字段。
+  int64 character_id = 1;
+  // 协议字段。
+  string ability_id = 2;
+  // 协议字段。
+  int32 level = 3;
+  // 协议字段。
+  int64 exp = 4;
+  // 协议字段。
+  int64 next_level_exp = 5;
+}
+
+// 协议消息。
+message GameIdleActionQueueUpdatedPayload {
+  // 协议字段。
+  int64 character_id = 1;
+  // 协议字段。
+  repeated GameIdleActionQueueItem items = 2;
+  // 协议字段。
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+// 协议消息。
+message GameIdleActionQueueItem {
+  // 协议字段。
+  string action_id = 1;
+  // 协议字段。
+  int64 times = 2;
+  // 协议字段。
+  google.protobuf.Timestamp created_at = 3;
+}

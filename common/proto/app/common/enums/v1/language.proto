@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common.api.app.common.enums.v1;
+
+option go_package = "common/proto/gen/common/enums/v1;enums";
+
+// 枚举定义。
+enum Language {
+  // 枚举值。
+  LANGUAGE_UNSPECIFIED = 0;
+  // 简体中文
+  LANGUAGE_ZH_CN = 1;
+  // 繁体中文
+  LANGUAGE_ZH_TW = 2;
+  // 英文
+  LANGUAGE_EN = 3;
+}

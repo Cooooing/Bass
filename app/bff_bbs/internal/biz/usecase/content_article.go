@@ -3,7 +3,7 @@ package usecase
 import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"fmt"
 	"strings"
@@ -475,7 +475,7 @@ func (u *ContentArticleUsecase) allowArticleSearch(ctx context.Context, req *Sea
 		return err
 	}
 	if !allowed {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_ReqS)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_REQ_S)
 	}
 	return nil
 }

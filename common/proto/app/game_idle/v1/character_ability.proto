@@ -4,23 +4,35 @@ package common.api.app.game_idle.v1;
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
+// 服务定义。
 service CharacterAbilityService {
+  // 服务方法。
   rpc GetCharacterAbility(GetCharacterAbility.Req) returns (GetCharacterAbility.Resp) {}
 }
 
+// 协议消息。
 message GetCharacterAbility {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
+    // 角色 ID
+    int64 character_id = 1;
   }
 
+  // 响应结果。
   message Resp {
-    repeated CharacterAbility rows = 1; // 能力列表
+    // 能力列表
+    repeated CharacterAbility rows = 1;
   }
 }
 
+// 协议消息。
 message CharacterAbility {
-  string ability_id = 1; // 能力编码
-  int32 level = 2; // 当前等级
-  int64 exp = 3; // 当前经验
-  int64 next_level_exp = 4; // 下一级所需经验
+  // 能力编码
+  string ability_id = 1;
+  // 当前等级
+  int32 level = 2;
+  // 当前经验
+  int64 exp = 3;
+  // 下一级所需经验
+  int64 next_level_exp = 4;
 }

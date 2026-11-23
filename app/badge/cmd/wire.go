@@ -4,12 +4,12 @@
 package main
 
 import (
-	"common/proto/gen/common"
 	"badge/internal/biz"
 	"badge/internal/config"
 	"badge/internal/data"
 	"badge/internal/server"
 	"badge/internal/service"
+	"common/proto/gen/common/v1"
 	"log/slog"
 
 	"github.com/go-kratos/kratos/v3"

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.user.enum.v1;
+
+option go_package = "common/proto/gen/user/enum/v1;enum";
+
+// 枚举定义。
+enum RelationType {
+  // 枚举值。
+  RELATION_TYPE_UNSPECIFIED = 0;
+  // 关注
+  RELATION_TYPE_FOLLOW = 1;
+  // 拉黑
+  RELATION_TYPE_BLOCK = 2;
+}

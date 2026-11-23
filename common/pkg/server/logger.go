@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"common/pkg/constant"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	kratoslog "github.com/go-kratos/kratos/v3/log"
 	"go.opentelemetry.io/otel/trace"

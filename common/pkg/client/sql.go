@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 )
 
 // SQLClient 管理数据库连接池。

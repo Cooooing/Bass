@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"common/pkg/apperror"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"encoding/base64"
 	"encoding/hex"
@@ -254,7 +254,7 @@ func (u *AssetUsecase) consumeUploadAllowance(ctx context.Context, uploadByID in
 			retryAfterSeconds = int64((state.RetryAfter + time.Second - 1) / time.Second)
 		}
 		return apperror.New(
-			cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_ReqS,
+			cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_REQ_S,
 			apperror.WithData(&cerrors.RetryAfterErrorData{RetryAfterSeconds: retryAfterSeconds}),
 		)
 	}

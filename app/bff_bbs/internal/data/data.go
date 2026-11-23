@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	userv1 "common/proto/gen/user/v1"
 
 	"bff_bbs/internal/config"

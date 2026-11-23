@@ -4,22 +4,33 @@ package common.api.app.game_idle.v1;
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
+// 服务定义。
 service BackpackService {
+  // 服务方法。
   rpc GetBackpack(GetBackpack.Req) returns (GetBackpack.Resp) {}
 }
 
+// 协议消息。
 message GetBackpack {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
-    repeated string item_ids = 2; // 物品编码，为空时返回全部
+    // 角色 ID
+    int64 character_id = 1;
+    // 物品编码，为空时返回全部
+    repeated string item_ids = 2;
   }
 
+  // 响应结果。
   message Resp {
-    repeated CharacterItem rows = 1; // 背包物品
+    // 背包物品
+    repeated CharacterItem rows = 1;
   }
 }
 
+// 协议消息。
 message CharacterItem {
-  string item_id = 1; // 物品编码
-  int64 quantity = 2; // 当前数量
+  // 物品编码
+  string item_id = 1;
+  // 当前数量
+  int64 quantity = 2;
 }

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.enum.v1;
+
+option go_package = "common/proto/gen/scheduler/enum/v1;enum";
+
+// 枚举定义。
+enum SchedulerTaskMisfirePolicy {
+  // 未指定。
+  SCHEDULER_TASK_MISFIRE_POLICY_UNSPECIFIED = 0;
+  // 超过时效窗口后跳过。
+  SCHEDULER_TASK_MISFIRE_POLICY_SKIP = 1;
+  // 积压时只补最新一次。
+  SCHEDULER_TASK_MISFIRE_POLICY_EXECUTE_LATEST = 2;
+  // 逐条补执行。
+  SCHEDULER_TASK_MISFIRE_POLICY_EXECUTE_ALL = 3;
+}

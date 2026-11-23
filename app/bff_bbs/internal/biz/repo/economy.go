@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonmodel "common/pkg/model"
-	commonenums "common/proto/gen/common/enums"
-	economyv1enum "common/proto/gen/economy/v1/enum"
+	commonenums "common/proto/gen/common/enums/v1"
+	economyv1enum "common/proto/gen/economy/enum/v1"
 	"context"
 	"time"
 )

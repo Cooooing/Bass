@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.user.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/user/v1;user";
+
+// 账号隐私设置接口。
+service PrivacySettingService {
+  // 获取当前账号的隐私设置。
+  rpc GetCurrentPrivacySetting(GetCurrentPrivacySetting.Req) returns (GetCurrentPrivacySetting.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/privacy-setting/get-current"
+      body: "*"
+    };
+  }
+
+  // 更新当前账号的隐私设置。
+  rpc UpdateCurrentPrivacySetting(UpdateCurrentPrivacySetting.Req) returns (UpdateCurrentPrivacySetting.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/privacy-setting/update-current"
+      body: "*"
+    };
+  }
+}
+
+// 获取当前账号的隐私设置。
+message GetCurrentPrivacySetting {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message PrivacySetting {
+      // 账号 ID
+      int64 user_id = 1;
+      // 是否公开积分
+      optional bool public_points = 2;
+      // 是否公开粉丝列表
+      optional bool public_follower_list = 3;
+      // 是否公开关注列表
+      optional bool public_following_list = 4;
+      // 是否公开帖子列表
+      optional bool public_article_list = 5;
+      // 是否公开回复列表
+      optional bool public_comment_list = 6;
+      // 是否公开在线状态
+      optional bool public_online_status = 7;
+      // 是否公开地理资料
+      optional bool public_location = 8;
+      // 是否公开清风明月列表
+      optional bool public_moonbreeze_list = 9;
+    }
+    // 当前账号隐私设置
+    PrivacySetting privacy_setting = 1;
+  }
+}
+
+// 更新当前账号的隐私设置。
+message UpdateCurrentPrivacySetting {
+  // 请求参数。
+  message Req {
+    // 是否公开积分
+    optional bool public_points = 1;
+    // 是否公开粉丝列表
+    optional bool public_follower_list = 2;
+    // 是否公开关注列表
+    optional bool public_following_list = 3;
+    // 是否公开帖子列表
+    optional bool public_article_list = 4;
+    // 是否公开回复列表
+    optional bool public_comment_list = 5;
+    // 是否公开在线状态
+    optional bool public_online_status = 6;
+    // 是否公开地理资料
+    optional bool public_location = 7;
+    // 是否公开清风明月列表
+    optional bool public_moonbreeze_list = 8;
+  }
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message PrivacySetting {
+      // 账号 ID
+      int64 user_id = 1;
+      // 是否公开积分
+      optional bool public_points = 2;
+      // 是否公开粉丝列表
+      optional bool public_follower_list = 3;
+      // 是否公开关注列表
+      optional bool public_following_list = 4;
+      // 是否公开帖子列表
+      optional bool public_article_list = 5;
+      // 是否公开回复列表
+      optional bool public_comment_list = 6;
+      // 是否公开在线状态
+      optional bool public_online_status = 7;
+      // 是否公开地理资料
+      optional bool public_location = 8;
+      // 是否公开清风明月列表
+      optional bool public_moonbreeze_list = 9;
+    }
+    // 更新后的账号隐私设置
+    PrivacySetting privacy_setting = 1;
+  }
+}

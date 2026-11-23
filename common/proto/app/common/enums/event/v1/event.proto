@@ -1,0 +1,273 @@
+syntax = "proto3";
+
+package common.api.app.common.enums.event.v1;
+
+import "common/enums/event/v1/event_payload_content.proto";
+import "common/enums/event/v1/event_payload_game_idle.proto";
+import "common/enums/event/v1/event_payload_im.proto";
+import "common/enums/event/v1/event_payload_notify.proto";
+import "common/enums/event/v1/event_payload_user.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/common/enums/event/v1;event";
+
+// 事件主题 — 内部映射为实际 MQ subject。
+enum EventSubject {
+  // 枚举值。
+  EVENT_SUBJECT_UNSPECIFIED = 0;
+
+  // 用户事件（1000-1999）
+  // 事件主题：user.follow。
+  EVENT_SUBJECT_USER_FOLLOW = 1001;
+  // 事件主题：user.unfollow。
+  EVENT_SUBJECT_USER_UNFOLLOW = 1002;
+  // 事件主题：user.register。
+  EVENT_SUBJECT_USER_REGISTER = 1003;
+  // 事件主题：user.login。
+  EVENT_SUBJECT_USER_LOGIN = 1004;
+  // 事件主题：user.logout。
+  EVENT_SUBJECT_USER_LOGOUT = 1005;
+  // 事件主题：user.email.verification_code。
+  EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE = 1006;
+  // 事件主题：user.phone.verification_code。
+  EVENT_SUBJECT_USER_PHONE_VERIFICATION_CODE = 1007;
+  // 事件主题：user.block。
+  EVENT_SUBJECT_USER_BLOCK = 1010;
+  // 事件主题：user.unblock。
+  EVENT_SUBJECT_USER_UNBLOCK = 1011;
+  // 事件主题：user.totp.enable。
+  EVENT_SUBJECT_USER_TOTP_ENABLE = 1012;
+  // 事件主题：user.totp.disable。
+  EVENT_SUBJECT_USER_TOTP_DISABLE = 1013;
+  // 事件主题：user.account.cancelled。
+  EVENT_SUBJECT_USER_ACCOUNT_CANCELLED = 1014;
+  // 事件主题：user.account.banned。
+  EVENT_SUBJECT_USER_ACCOUNT_BANNED = 1015;
+  // 事件主题：user.account.unbanned。
+  EVENT_SUBJECT_USER_ACCOUNT_UNBANNED = 1016;
+  // 事件主题：user.checkin.completed。
+  EVENT_SUBJECT_USER_CHECKIN_COMPLETED = 1017;
+
+  // 内容文章事件（2000-2099）
+  // 事件主题：content.article.published。
+  EVENT_SUBJECT_ARTICLE_PUBLISHED = 2001;
+  // 事件主题：content.article.liked。
+  EVENT_SUBJECT_ARTICLE_LIKED = 2002;
+  // 事件主题：content.article.thanked。
+  EVENT_SUBJECT_ARTICLE_THANKED = 2003;
+  // 事件主题：content.article.collected。
+  EVENT_SUBJECT_ARTICLE_COLLECTED = 2004;
+  // 事件主题：content.article.watched。
+  EVENT_SUBJECT_ARTICLE_WATCHED = 2005;
+  // 事件主题：content.article.accepted_answer。
+  EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER = 2006;
+  // 事件主题：content.article.postscript_added。
+  EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED = 2007;
+  // 事件主题：content.article.status_updated。
+  EVENT_SUBJECT_ARTICLE_STATUS_UPDATED = 2008;
+  // 事件主题：content.article.lottery_won。
+  EVENT_SUBJECT_ARTICLE_LOTTERY_WON = 2009;
+  // 事件主题：content.article.poll_ended。
+  EVENT_SUBJECT_ARTICLE_POLL_ENDED = 2010;
+  // 事件主题：content.article.lottery_drawn。
+  EVENT_SUBJECT_ARTICLE_LOTTERY_DRAWN = 2011;
+  // 事件主题：content.article.rewarded。
+  EVENT_SUBJECT_ARTICLE_REWARDED = 2019;
+
+  // 内容评论事件（2100-2199）
+  // 事件主题：content.comment.published。
+  EVENT_SUBJECT_COMMENT_PUBLISHED = 2101;
+  // 事件主题：content.comment.liked。
+  EVENT_SUBJECT_COMMENT_LIKED = 2102;
+  // 事件主题：content.comment.thanked。
+  EVENT_SUBJECT_COMMENT_THANKED = 2103;
+  // 事件主题：content.comment.status_updated。
+  EVENT_SUBJECT_COMMENT_STATUS_UPDATED = 2104;
+
+  // 即时通讯事件（3000-3999）
+  // 事件主题：im.private_chat.message_created。
+  EVENT_SUBJECT_IM_PRIVATE_CHAT_MESSAGE_CREATED = 3001;
+  // 事件主题：im.global_chat.message_created。
+  EVENT_SUBJECT_IM_GLOBAL_CHAT_MESSAGE_CREATED = 3002;
+  // 事件主题：im.global_chat.barrage_created。
+  EVENT_SUBJECT_IM_GLOBAL_CHAT_BARRAGE_CREATED = 3004;
+  // 事件主题：im.global_chat.topic_updated。
+  EVENT_SUBJECT_IM_GLOBAL_CHAT_TOPIC_UPDATED = 3005;
+
+  // 挂机游戏事件（5000-5999）
+  // 事件主题：game_idle。
+  EVENT_SUBJECT_GAME_IDLE = 5000;
+  // 事件主题：game_idle.chat_message。
+  EVENT_SUBJECT_GAME_IDLE_CHAT_MESSAGE = 5001;
+  // 事件主题：game_idle.close_session。
+  EVENT_SUBJECT_GAME_IDLE_CLOSE_SESSION = 5002;
+  // 事件主题：game_idle.action_completed。
+  EVENT_SUBJECT_GAME_IDLE_ACTION_COMPLETED = 5003;
+  // 事件主题：game_idle.ability_leveled_up。
+  EVENT_SUBJECT_GAME_IDLE_ABILITY_LEVELED_UP = 5004;
+  // 事件主题：game_idle.action_queue_updated。
+  EVENT_SUBJECT_GAME_IDLE_ACTION_QUEUE_UPDATED = 5005;
+
+  // 平台事件（4000-4999）
+
+  // 通知事件（6000-6999）
+  // 事件主题：notify.station_messages.created。
+  EVENT_SUBJECT_NOTIFY_STATION_MESSAGES_CREATED = 6001;
+}
+
+// 事件消费组对应 JetStream durable 名称。
+enum EventConsumer {
+  // 未指定消费者
+  EVENT_CONSUMER_UNSPECIFIED = 0;
+  // 通知消费者
+  EVENT_CONSUMER_NOTIFY = 1;
+  // 定时任务消费者
+  EVENT_CONSUMER_SCHEDULER_SCHEDULED_TASK = 2;
+  // 延迟任务消费者
+  EVENT_CONSUMER_SCHEDULER_DELAYED_TASK = 3;
+  // 资产上传消费者
+  EVENT_CONSUMER_PLATFORM_ASSET_UPLOAD = 4;
+}
+
+// 事件流标识 JetStream 中受应用管理的消息边界。
+enum EventStream {
+  // 未指定流
+  EVENT_STREAM_UNSPECIFIED = 0;
+  // 用户领域事件流
+  EVENT_STREAM_USER = 1;
+  // 内容领域事件流
+  EVENT_STREAM_CONTENT = 2;
+  // 即时通信领域事件流
+  EVENT_STREAM_IM = 3;
+  // 调度任务流
+  EVENT_STREAM_SCHEDULER_TASKS = 4;
+  // 平台资产上传流
+  EVENT_STREAM_PLATFORM_ASSET_UPLOADS = 5;
+}
+
+// outbox 事件投递状态。
+enum OutboxEventStatus {
+  // 未指定
+  OUTBOX_EVENT_STATUS_UNSPECIFIED = 0;
+  // 等待投递
+  OUTBOX_EVENT_STATUS_PENDING = 1;
+  // 正在投递
+  OUTBOX_EVENT_STATUS_PUBLISHING = 2;
+  // 已投递
+  OUTBOX_EVENT_STATUS_PUBLISHED = 3;
+  // 投递失败，等待重试
+  OUTBOX_EVENT_STATUS_FAILED = 4;
+  // 超过最大重试次数
+  OUTBOX_EVENT_STATUS_DEAD = 5;
+}
+
+// inbox 事件消费状态。
+enum InboxEventStatus {
+  // 未指定
+  INBOX_EVENT_STATUS_UNSPECIFIED = 0;
+  // 已接收
+  INBOX_EVENT_STATUS_RECEIVED = 1;
+  // 正在处理
+  INBOX_EVENT_STATUS_PROCESSING = 2;
+  // 已处理
+  INBOX_EVENT_STATUS_PROCESSED = 3;
+  // 处理失败，等待重试
+  INBOX_EVENT_STATUS_FAILED = 4;
+  // 超过最大重试次数
+  INBOX_EVENT_STATUS_DEAD = 5;
+}
+
+// 事件消息 — 业务服务通过 MQ 发布的标准事件
+message Event {
+  // 幂等标识
+  string event_id = 1;
+  // 事件主题
+  EventSubject subject = 4;
+  // 事件发生时间
+  google.protobuf.Timestamp timestamp = 3;
+  // 业务数据与 subject 对应。
+  oneof payload {
+    // 协议字段。
+    UserFollowPayload user_follow = 1001;
+    // 协议字段。
+    UserUnfollowPayload user_unfollow = 1002;
+    // 协议字段。
+    UserRegisterPayload user_register = 1003;
+    // 协议字段。
+    UserLoginPayload user_login = 1004;
+    // 协议字段。
+    UserLogoutPayload user_logout = 1005;
+    // 协议字段。
+    UserEmailVerificationCodePayload user_email_verification_code = 1006;
+    // 协议字段。
+    UserPhoneVerificationCodePayload user_phone_verification_code = 1007;
+    // 协议字段。
+    UserBlockPayload user_block = 1010;
+    // 协议字段。
+    UserUnblockPayload user_unblock = 1011;
+    // 协议字段。
+    UserTotpEnablePayload user_totp_enable = 1012;
+    // 协议字段。
+    UserTotpDisablePayload user_totp_disable = 1013;
+    // 协议字段。
+    UserAccountCancelledPayload user_account_cancelled = 1014;
+    // 协议字段。
+    UserAccountBannedPayload user_account_banned = 1015;
+    // 协议字段。
+    UserAccountUnbannedPayload user_account_unbanned = 1016;
+    // 协议字段。
+    UserCheckinCompletedPayload user_checkin_completed = 1017;
+    // 协议字段。
+    ArticlePublishedPayload article_published = 2001;
+    // 协议字段。
+    ArticleLikedPayload article_liked = 2002;
+    // 协议字段。
+    ArticleThankedPayload article_thanked = 2003;
+    // 协议字段。
+    ArticleCollectedPayload article_collected = 2004;
+    // 协议字段。
+    ArticleWatchedPayload article_watched = 2005;
+    // 协议字段。
+    ArticleAcceptedAnswerPayload article_accepted_answer = 2006;
+    // 协议字段。
+    ArticlePostscriptAddedPayload article_postscript_added = 2007;
+    // 协议字段。
+    ArticleStatusUpdatedPayload article_status_updated = 2008;
+    // 协议字段。
+    ArticleLotteryWonPayload article_lottery_won = 2009;
+    // 协议字段。
+    ArticlePollEndedPayload article_poll_ended = 2010;
+    // 协议字段。
+    ArticleLotteryDrawnPayload article_lottery_drawn = 2011;
+    // 协议字段。
+    ArticleRewardedPayload article_rewarded = 2019;
+    // 协议字段。
+    CommentPublishedPayload comment_published = 2101;
+    // 协议字段。
+    CommentLikedPayload comment_liked = 2102;
+    // 协议字段。
+    CommentThankedPayload comment_thanked = 2103;
+    // 协议字段。
+    CommentStatusUpdatedPayload comment_status_updated = 2104;
+    // 协议字段。
+    IMPrivateChatMessageCreatedPayload im_private_chat_message_created = 3001;
+    // 协议字段。
+    IMGlobalChatMessageCreatedPayload im_global_chat_message_created = 3002;
+    // 协议字段。
+    IMGlobalChatBarrageCreatedPayload im_global_chat_barrage_created = 3004;
+    // 协议字段。
+    IMGlobalChatTopicUpdatedPayload im_global_chat_topic_updated = 3005;
+    // 协议字段。
+    GameIdleChatMessagePayload game_idle_chat_message = 5001;
+    // 协议字段。
+    GameIdleCloseSessionPayload game_idle_close_session = 5002;
+    // 协议字段。
+    GameIdleActionCompletedPayload game_idle_action_completed = 5003;
+    // 协议字段。
+    GameIdleAbilityLeveledUpPayload game_idle_ability_leveled_up = 5004;
+    // 协议字段。
+    GameIdleActionQueueUpdatedPayload game_idle_action_queue_updated = 5005;
+    // 协议字段。
+    NotifyStationMessagesCreatedPayload notify_station_messages_created = 6001;
+  }
+}

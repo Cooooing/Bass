@@ -1,0 +1,290 @@
+syntax = "proto3";
+
+package common.api.app.common.v1;
+
+import "google/protobuf/duration.proto";
+
+option go_package = "common/proto/gen/common/v1;common";
+
+// 协议消息。
+message Server {
+  // 服务名称
+  string name = 1;
+  // 服务版本
+  string version = 2;
+  // 运行模式: dev, prod
+  string mode = 3;
+}
+
+// 协议消息。
+message Bootstrap {
+  // 服务基本信息
+  Server server = 1;
+  // 协议消息。
+  message Config {
+    // 用于从 Consul KV 加载配置
+    Consul consul = 1;
+    // 协议消息。
+    message Consul {
+      // Consul 地址，格式 host:port
+      string address = 1;
+      // Consul 访问控制令牌
+      string token = 2;
+      // Consul KV 中的配置路径
+      string path = 3;
+      // 连接超时
+      google.protobuf.Duration timeout = 4;
+    }
+  }
+  // 配置加载来源
+  Config config = 2;
+  // 协议消息。
+  message Log {
+    // 日志级别: debug, info, warn, error, fatal, panic
+    string level = 1;
+  }
+  // 日志配置
+  Log log = 3;
+}
+
+// 协议消息。
+message Trace {
+  // 是否导出链路数据
+  bool enable_otel = 1;
+  // OTLP gRPC 地址，格式 host:port
+  string endpoint = 2;
+  // 是否使用非 TLS 连接
+  bool insecure = 3;
+  // 采样率，范围 0-1
+  double sampler = 4;
+}
+
+// 协议消息。
+message Observability {
+  // 是否暴露 Prometheus 指标
+  bool enable_metrics = 1;
+}
+
+// 协议消息。
+message HTTP {
+  // 网络类型: tcp
+  string network = 1;
+  // 监听地址
+  string host = 2;
+  // 监听端口
+  int32 port = 3;
+  // 请求超时
+  google.protobuf.Duration timeout = 4;
+}
+
+// 协议消息。
+message GRPC {
+  // 网络类型: tcp
+  string network = 1;
+  // 监听地址
+  string host = 2;
+  // 监听端口
+  int32 port = 3;
+  // 请求超时
+  google.protobuf.Duration timeout = 4;
+}
+
+// 协议消息。
+message Database {
+  // 数据库驱动: postgres, mysql
+  string driver = 1;
+  // 连接字符串
+  string source = 2;
+  // 是否自动同步表结构
+  bool merge = 3;
+  // 是否开启 SQL 调试日志
+  bool debug = 4;
+  // 慢查询阈值
+  google.protobuf.Duration slow_sql_threshold = 5;
+  // SQL 日志采样率，0-1
+  double sample_rate = 6;
+}
+
+// 协议消息。
+message Redis {
+  // 地址，格式 host:port
+  string addr = 1;
+  // 密码
+  string password = 2;
+  // 连接超时
+  google.protobuf.Duration dial_timeout = 3;
+  // 数据库编号
+  int32 db = 4;
+  // 读超时
+  google.protobuf.Duration read_timeout = 5;
+  // 写超时
+  google.protobuf.Duration write_timeout = 6;
+  // 连接池大小
+  int32 pool_size = 7;
+  // 最小空闲连接数
+  int32 min_idle_conns = 8;
+  // 连接池获取超时
+  google.protobuf.Duration pool_timeout = 9;
+  // 连接最大空闲时间
+  google.protobuf.Duration conn_max_idle_time = 10;
+  // 连接最大存活时间
+  google.protobuf.Duration conn_max_life_time = 11;
+}
+
+// 协议消息。
+message Consul {
+  // 地址，格式 host:port
+  string address = 1;
+  // 数据中心
+  string datacenter = 2;
+  // 访问控制令牌
+  string token = 3;
+  // 连接超时
+  google.protobuf.Duration dial_timeout = 4;
+}
+
+// 协议消息。
+message Nats {
+  // 连接主机
+  string host = 1;
+  // 连接端口
+  int32 port = 2;
+  // 认证用户名
+  string user = 3;
+  // 认证密码
+  string password = 4;
+  // 客户端名称，用于连接标识和日志
+  string name = 5;
+  // 连接超时
+  google.protobuf.Duration timeout = 6;
+  // 最大重连次数，-1 为无限重连
+  int32 max_reconnects = 7;
+  // 重连间隔
+  google.protobuf.Duration reconnect_wait = 8;
+  // 心跳间隔，用于检测连接是否存活
+  google.protobuf.Duration ping_interval = 9;
+  // 内部 flusher 超时，发布积压时触发
+  google.protobuf.Duration flusher_timeout = 10;
+  // durable 名称对应的 JetStream 消费策略
+  map<string, NatsConsumer> consumers = 11;
+  // Core NATS 订阅积压限制
+  NatsCoreSubscription core_subscription = 12;
+}
+
+// 协议消息。
+message NatsConsumer {
+  // 未确认消息的重投等待时间
+  google.protobuf.Duration ack_wait = 1;
+  // durable 的最大在途消息数
+  int32 max_ack_pending = 2;
+  // 单次拉取消息数
+  int32 pull_max_messages = 3;
+  // 单次拉取等待时间
+  google.protobuf.Duration pull_expiry = 4;
+}
+
+// 协议消息。
+message NatsCoreSubscription {
+  // 单订阅最大待处理消息数
+  int64 max_pending_messages = 1;
+  // 单订阅最大待处理字节数
+  int64 max_pending_bytes = 2;
+}
+
+// 协议消息。
+message DTM {
+  // gRPC 接入地址
+  string grpc_endpoint = 1;
+  // 请求超时
+  google.protobuf.Duration timeout = 2;
+  // TCC 全局事务失败超时
+  google.protobuf.Duration tcc_timeout_to_fail = 3;
+  // 重试间隔
+  google.protobuf.Duration retry_interval = 4;
+}
+
+// 协议消息。
+message TimeWheel {
+  // 时间轮 tick 间隔
+  google.protobuf.Duration interval = 1;
+  // 时间轮槽位数
+  uint32 wheel_slots = 2;
+  // 到期任务执行协程池
+  WorkerPool worker_pool = 3;
+}
+
+// 协议消息。
+message WorkerPool {
+  // 常驻 worker 数量
+  uint32 core_size = 1;
+  // 最大 worker 数量
+  uint32 max_size = 2;
+  // 等待队列长度
+  uint32 queue_size = 3;
+  // 临时 worker 空闲回收时间
+  google.protobuf.Duration idle_timeout = 4;
+  // 队列满时是否立即返回错误
+  bool nonblocking = 5;
+}
+
+// 协议消息。
+message Alert {
+  // 飞书 Webhook 告警通道配置
+  LarkWebhook lark_webhook = 1;
+
+  // 协议消息。
+  message LarkWebhook {
+    // 飞书 Webhook 基础地址
+    string base_url = 1;
+    // 飞书 Webhook 令牌
+    string token = 2;
+    // 飞书 Webhook 签名密钥
+    string secret = 3;
+    // HTTP 调用超时
+    google.protobuf.Duration timeout = 4;
+  }
+}
+
+// 协议消息。
+message Event {
+  // 生产者 outbox 投递配置
+  Outbox outbox = 1;
+  // 消费者 inbox 处理配置
+  Inbox inbox = 2;
+  // 死信告警配置
+  DeadLetter dead_letter = 3;
+
+  // 协议消息。
+  message Outbox {
+    // 最大投递重试次数
+    int32 max_retry = 1;
+    // publishing 状态超时时间
+    google.protobuf.Duration publish_timeout = 2;
+    // 单轮投递 Redis 锁有效期
+    google.protobuf.Duration poll_lock_ttl = 3;
+    // 单批投递数量
+    int32 publish_limit = 4;
+    // 空闲轮询最小间隔
+    google.protobuf.Duration min_poll_interval = 5;
+    // 空闲轮询最大间隔
+    google.protobuf.Duration max_poll_interval = 6;
+  }
+
+  // 协议消息。
+  message Inbox {
+    // 最大处理尝试次数
+    int32 max_retry = 1;
+    // processing 状态超时时间
+    google.protobuf.Duration processing_timeout = 2;
+  }
+
+  // 协议消息。
+  message DeadLetter {
+    // 是否启用死信告警
+    bool enable_alert = 1;
+    // 死信扫描间隔
+    google.protobuf.Duration scan_interval = 2;
+    // 同一死信告警去重窗口
+    google.protobuf.Duration alert_dedup_window = 3;
+  }
+}

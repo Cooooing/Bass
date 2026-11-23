@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package common.api.app.realtime_hub.enum.v1;
+
+option go_package = "common/proto/gen/realtime_hub/enum/v1;enum";
+
+// 枚举定义。
+enum DeliveryKind {
+  // 未指定
+  DELIVERY_KIND_UNSPECIFIED = 0;
+  // 站内信变更
+  DELIVERY_KIND_NOTIFICATION = 1;
+  // 私聊消息变更
+  DELIVERY_KIND_PRIVATE_CHAT_MESSAGE = 2;
+  // 全局聊天室消息变更
+  DELIVERY_KIND_GLOBAL_CHAT_MESSAGE = 3;
+  // 全局聊天室弹幕变更
+  DELIVERY_KIND_GLOBAL_CHAT_BARRAGE = 4;
+  // 全局聊天室话题变更
+  DELIVERY_KIND_GLOBAL_CHAT_TOPIC = 5;
+}

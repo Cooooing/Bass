@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	platformv1 "common/proto/gen/bff_bbs/v1/platform"
+	platformv1 "common/proto/gen/bff_bbs/platform/v1"
 
 	"bff_bbs/internal/biz/repo"
 )

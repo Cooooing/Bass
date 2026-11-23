@@ -2,190 +2,326 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
-import "common/common.proto";
-import "content/v1/enum/domain.proto";
+import "common/v1/common.proto";
+import "content/enum/v1/domain.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
 // 领域服务。
 service ContentDomainService {
-  rpc BatchCreateDomains(BatchCreateDomains.Req) returns (BatchCreateDomains.Resp) {} // 批量创建领域。
-  rpc UpdateDomain(UpdateDomain.Req) returns (UpdateDomain.Resp) {} // 更新领域。
-  rpc MapDomains(MapDomains.Req) returns (MapDomains.Resp) {} // 批量查询领域映射。
-  rpc ListDomains(ListDomains.Req) returns (ListDomains.Resp) {} // 查询领域列表。
-  rpc PageDomains(PageDomains.Req) returns (PageDomains.Resp) {} // 分页查询领域。
+  // 批量创建领域。
+  rpc BatchCreateDomains(BatchCreateDomains.Req) returns (BatchCreateDomains.Resp) {}
+  // 更新领域。
+  rpc UpdateDomain(UpdateDomain.Req) returns (UpdateDomain.Resp) {}
+  // 批量查询领域映射。
+  rpc MapDomains(MapDomains.Req) returns (MapDomains.Resp) {}
+  // 查询领域列表。
+  rpc ListDomains(ListDomains.Req) returns (ListDomains.Resp) {}
+  // 分页查询领域。
+  rpc PageDomains(PageDomains.Req) returns (PageDomains.Resp) {}
 }
 
+// 协议消息。
 message BatchCreateDomains {
+  // 请求参数。
   message Req {
-    repeated Domain domains = 1; // 领域列表。
-    int64 user_id = 2; // 操作用户 ID。
+    // 领域列表。
+    repeated Domain domains = 1;
+    // 操作用户 ID。
+    int64 user_id = 2;
 
+    // 协议消息。
     message Domain {
-      string code = 1; // 稳定编码。
-      string name = 2; // 领域名称。
-      optional string description = 3; // 描述。
-      optional DomainStatus status = 4; // 启停状态。
-      optional string url = 5; // 链接。
-      optional string icon = 6; // 图标。
-      bool is_nav = 7; // 是否在导航中展示。
-      int32 sort = 8; // 排序值，越小越靠前。
+      // 稳定编码。
+      string code = 1;
+      // 领域名称。
+      string name = 2;
+      // 描述。
+      optional string description = 3;
+      // 启停状态。
+      optional .common.api.app.content.enum.v1.DomainStatus status = 4;
+      // 链接。
+      optional string url = 5;
+      // 图标。
+      optional string icon = 6;
+      // 是否在导航中展示。
+      bool is_nav = 7;
+      // 排序值，越小越靠前。
+      int32 sort = 8;
     }
   }
 
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Domain {
-      int64 id = 1; // 领域 ID。
-      string code = 2; // 稳定编码。
-      string name = 3; // 领域名称。
-      optional string description = 4; // 描述。
-      DomainStatus status = 5; // 启停状态。
-      optional string url = 6; // 链接。
-      optional string icon = 7; // 图标。
-      bool is_nav = 8; // 是否在导航中展示。
-      int32 sort = 9; // 排序值，越小越靠前。
-      optional int64 created_by = 1002; // 创建用户 ID。
-      optional int64 updated_by = 1003; // 更新用户 ID。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+      // 领域 ID。
+      int64 id = 1;
+      // 稳定编码。
+      string code = 2;
+      // 领域名称。
+      string name = 3;
+      // 描述。
+      optional string description = 4;
+      // 启停状态。
+      .common.api.app.content.enum.v1.DomainStatus status = 5;
+      // 链接。
+      optional string url = 6;
+      // 图标。
+      optional string icon = 7;
+      // 是否在导航中展示。
+      bool is_nav = 8;
+      // 排序值，越小越靠前。
+      int32 sort = 9;
+      // 创建用户 ID。
+      optional int64 created_by = 1002;
+      // 更新用户 ID。
+      optional int64 updated_by = 1003;
+      // 创建时间。
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间。
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
-    repeated Domain rows = 1; // 领域列表。
+    // 领域列表。
+    repeated Domain rows = 1;
   }
 }
 
+// 协议消息。
 message UpdateDomain {
+  // 请求参数。
   message Req {
-    Domain domain = 1; // 领域信息。
-    int64 user_id = 2; // 操作用户 ID。
+    // 领域信息。
+    Domain domain = 1;
+    // 操作用户 ID。
+    int64 user_id = 2;
 
+    // 协议消息。
     message Domain {
-      int64 id = 1; // 领域 ID。
-      string code = 2; // 稳定编码。
-      string name = 3; // 领域名称。
-      optional string description = 4; // 描述。
-      optional DomainStatus status = 5; // 启停状态。
-      optional string url = 6; // 链接。
-      optional string icon = 7; // 图标。
-      bool is_nav = 8; // 是否在导航中展示。
-      int32 sort = 9; // 排序值，越小越靠前。
+      // 领域 ID。
+      int64 id = 1;
+      // 稳定编码。
+      string code = 2;
+      // 领域名称。
+      string name = 3;
+      // 描述。
+      optional string description = 4;
+      // 启停状态。
+      optional .common.api.app.content.enum.v1.DomainStatus status = 5;
+      // 链接。
+      optional string url = 6;
+      // 图标。
+      optional string icon = 7;
+      // 是否在导航中展示。
+      bool is_nav = 8;
+      // 排序值，越小越靠前。
+      int32 sort = 9;
     }
   }
 
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Domain {
-      int64 id = 1; // 领域 ID。
-      string code = 2; // 稳定编码。
-      string name = 3; // 领域名称。
-      optional string description = 4; // 描述。
-      DomainStatus status = 5; // 启停状态。
-      optional string url = 6; // 链接。
-      optional string icon = 7; // 图标。
-      bool is_nav = 8; // 是否在导航中展示。
-      int32 sort = 9; // 排序值，越小越靠前。
-      optional int64 created_by = 1002; // 创建用户 ID。
-      optional int64 updated_by = 1003; // 更新用户 ID。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+      // 领域 ID。
+      int64 id = 1;
+      // 稳定编码。
+      string code = 2;
+      // 领域名称。
+      string name = 3;
+      // 描述。
+      optional string description = 4;
+      // 启停状态。
+      .common.api.app.content.enum.v1.DomainStatus status = 5;
+      // 链接。
+      optional string url = 6;
+      // 图标。
+      optional string icon = 7;
+      // 是否在导航中展示。
+      bool is_nav = 8;
+      // 排序值，越小越靠前。
+      int32 sort = 9;
+      // 创建用户 ID。
+      optional int64 created_by = 1002;
+      // 更新用户 ID。
+      optional int64 updated_by = 1003;
+      // 创建时间。
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间。
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
-    Domain domain = 1; // 领域信息。
+    // 领域信息。
+    Domain domain = 1;
   }
 }
 
+// 协议消息。
 message MapDomains {
+  // 请求参数。
   message Req {
-    repeated int64 domain_ids = 1; // 领域 ID 列表。
-    optional DomainStatus status = 2; // 领域状态过滤。
+    // 领域 ID 列表。
+    repeated int64 domain_ids = 1;
+    // 领域状态过滤。
+    optional .common.api.app.content.enum.v1.DomainStatus status = 2;
   }
+  // 响应结果。
   message Resp {
-    map<int64, Domain> domains = 1; // 领域 ID 到领域的映射。
+    // 领域 ID 到领域的映射。
+    map<int64, Domain> domains = 1;
 
+    // 协议消息。
     message Domain {
-      int64 id = 1; // 领域 ID。
-      DomainStatus status = 2; // 领域状态。
-      string name = 3; // 领域名称。
-      string code = 4; // 稳定编码。
-      optional string icon = 5; // 图标。
-      optional string url = 6; // 链接。
-      int32 sort = 7; // 排序值，越小越靠前。
+      // 领域 ID。
+      int64 id = 1;
+      // 领域状态。
+      .common.api.app.content.enum.v1.DomainStatus status = 2;
+      // 领域名称。
+      string name = 3;
+      // 稳定编码。
+      string code = 4;
+      // 图标。
+      optional string icon = 5;
+      // 链接。
+      optional string url = 6;
+      // 排序值，越小越靠前。
+      int32 sort = 7;
     }
   }
 }
 
+// 协议消息。
 message ListDomains {
+  // 请求参数。
   message Req {
-    Query query = 1; // 查询条件。
+    // 查询条件。
+    Query query = 1;
 
+    // 协议消息。
     message Query {
-      repeated int64 ids = 1; // 领域 ID 列表。
-      optional string code = 2; // 稳定编码。
-      optional string name = 3; // 领域名称。
-      optional string description = 4; // 描述。
-      optional DomainStatus status = 5; // 启停状态。
-      optional string url = 6; // 链接。
-      optional string icon = 7; // 图标。
-      optional bool is_nav = 8; // 是否在导航中展示。
+      // 领域 ID 列表。
+      repeated int64 ids = 1;
+      // 稳定编码。
+      optional string code = 2;
+      // 领域名称。
+      optional string name = 3;
+      // 描述。
+      optional string description = 4;
+      // 启停状态。
+      optional .common.api.app.content.enum.v1.DomainStatus status = 5;
+      // 链接。
+      optional string url = 6;
+      // 图标。
+      optional string icon = 7;
+      // 是否在导航中展示。
+      optional bool is_nav = 8;
     }
   }
 
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Domain {
-      int64 id = 1; // 领域 ID。
-      string code = 2; // 稳定编码。
-      string name = 3; // 领域名称。
-      optional string description = 4; // 描述。
-      DomainStatus status = 5; // 启停状态。
-      optional string url = 6; // 链接。
-      optional string icon = 7; // 图标。
-      bool is_nav = 8; // 是否在导航中展示。
-      int32 sort = 9; // 排序值，越小越靠前。
-      optional int64 created_by = 1002; // 创建用户 ID。
-      optional int64 updated_by = 1003; // 更新用户 ID。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+      // 领域 ID。
+      int64 id = 1;
+      // 稳定编码。
+      string code = 2;
+      // 领域名称。
+      string name = 3;
+      // 描述。
+      optional string description = 4;
+      // 启停状态。
+      .common.api.app.content.enum.v1.DomainStatus status = 5;
+      // 链接。
+      optional string url = 6;
+      // 图标。
+      optional string icon = 7;
+      // 是否在导航中展示。
+      bool is_nav = 8;
+      // 排序值，越小越靠前。
+      int32 sort = 9;
+      // 创建用户 ID。
+      optional int64 created_by = 1002;
+      // 更新用户 ID。
+      optional int64 updated_by = 1003;
+      // 创建时间。
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间。
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
-    repeated Domain rows = 1; // 领域列表。
+    // 领域列表。
+    repeated Domain rows = 1;
   }
 }
 
+// 协议消息。
 message PageDomains {
+  // 请求参数。
   message Req {
-    Query query = 1; // 查询条件。
-    .common.api.app.common.PageReq page = 2; // 分页参数。
+    // 查询条件。
+    Query query = 1;
+    // 分页参数。
+    .common.api.app.common.v1.PageReq page = 2;
 
+    // 协议消息。
     message Query {
-      repeated int64 ids = 1; // 领域 ID 列表。
-      optional string code = 2; // 稳定编码。
-      optional string name = 3; // 领域名称。
-      optional string description = 4; // 描述。
-      optional DomainStatus status = 5; // 启停状态。
-      optional string url = 6; // 链接。
-      optional string icon = 7; // 图标。
-      optional bool is_nav = 8; // 是否在导航中展示。
+      // 领域 ID 列表。
+      repeated int64 ids = 1;
+      // 稳定编码。
+      optional string code = 2;
+      // 领域名称。
+      optional string name = 3;
+      // 描述。
+      optional string description = 4;
+      // 启停状态。
+      optional .common.api.app.content.enum.v1.DomainStatus status = 5;
+      // 链接。
+      optional string url = 6;
+      // 图标。
+      optional string icon = 7;
+      // 是否在导航中展示。
+      optional bool is_nav = 8;
     }
   }
 
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Domain {
-      int64 id = 1; // 领域 ID。
-      string code = 2; // 稳定编码。
-      string name = 3; // 领域名称。
-      optional string description = 4; // 描述。
-      DomainStatus status = 5; // 启停状态。
-      optional string url = 6; // 链接。
-      optional string icon = 7; // 图标。
-      bool is_nav = 8; // 是否在导航中展示。
-      int32 sort = 9; // 排序值，越小越靠前。
-      optional int64 created_by = 1002; // 创建用户 ID。
-      optional int64 updated_by = 1003; // 更新用户 ID。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+      // 领域 ID。
+      int64 id = 1;
+      // 稳定编码。
+      string code = 2;
+      // 领域名称。
+      string name = 3;
+      // 描述。
+      optional string description = 4;
+      // 启停状态。
+      .common.api.app.content.enum.v1.DomainStatus status = 5;
+      // 链接。
+      optional string url = 6;
+      // 图标。
+      optional string icon = 7;
+      // 是否在导航中展示。
+      bool is_nav = 8;
+      // 排序值，越小越靠前。
+      int32 sort = 9;
+      // 创建用户 ID。
+      optional int64 created_by = 1002;
+      // 更新用户 ID。
+      optional int64 updated_by = 1003;
+      // 创建时间。
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间。
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
-    .common.api.app.common.PageResp page = 1; // 分页结果。
-    repeated Domain rows = 2; // 领域列表。
+    // 分页结果。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 领域列表。
+    repeated Domain rows = 2;
   }
 }

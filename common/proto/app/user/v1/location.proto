@@ -2,27 +2,35 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "common/enums/language.proto";
-import "google/protobuf/timestamp.proto";
-import "user/v1/enum/relation.proto";
-
 option go_package = "common/proto/gen/user/v1;v1";
 
+// 服务定义。
 service LocationService {
-  rpc GetLocation(GetLocation.Req) returns (GetLocation.Resp) {} // 获取账号地理资料。
+  // 获取账号地理资料。
+  rpc GetLocation(GetLocation.Req) returns (GetLocation.Resp) {}
 }
 
+// 协议消息。
 message GetLocation {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Location {
+      // 协议字段。
       int64 user_id = 1;
+      // 协议字段。
       optional string country = 2;
+      // 协议字段。
       optional string province = 3;
+      // 协议字段。
       optional string city = 4;
     }
+    // 协议字段。
     Location location = 1;
   }
 }

@@ -2,7 +2,7 @@ package config
 
 import (
 	serverconfig "common/pkg/server/config"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 )
 
 func NewConfig(bootstrapPath, path string) (*Bootstrap, *common.Bootstrap, func(), error) {

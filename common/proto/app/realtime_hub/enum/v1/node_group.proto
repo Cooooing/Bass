@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.realtime_hub.enum.v1;
+
+option go_package = "common/proto/gen/realtime_hub/enum/v1;enum";
+
+// 枚举定义。
+enum NodeGroup {
+  // 未指定
+  NODE_GROUP_UNSPECIFIED = 0;
+  // 主站内部节点集群
+  NODE_GROUP_INTERNAL = 1;
+}

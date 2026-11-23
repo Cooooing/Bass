@@ -8,54 +8,72 @@ option go_package = "common/proto/gen/scheduler/v1;v1";
 
 // NoopTaskPayload 是空任务的可选执行参数。
 message NoopTaskPayload {
-  string name = 1; // 任务显示名称
-  int32 sleep_seconds = 2; // 模拟执行等待秒数
+  // 任务显示名称
+  string name = 1;
+  // 模拟执行等待秒数
+  int32 sleep_seconds = 2;
 }
 
 // OutboxPublishBatchTaskPayload 是 Outbox 批量投递任务的可选参数。
 message OutboxPublishBatchTaskPayload {
-  int32 limit = 1; // 单批最大事件数
-  int64 publish_timeout = 2; // 单事件投递超时纳秒数
-  int32 max_retry = 3; // 单事件最大重试次数
+  // 单批最大事件数
+  int32 limit = 1;
+  // 单事件投递超时纳秒数
+  int64 publish_timeout = 2;
+  // 单事件最大重试次数
+  int32 max_retry = 3;
 }
 
 // FlushArticleViewsTaskPayload 是文章浏览量刷盘任务的可选参数。
 message FlushArticleViewsTaskPayload {
-  int32 limit = 1; // 单批最大文章数
+  // 单批最大文章数
+  int32 limit = 1;
 }
 
 // UnbanAccountsTaskPayload 是账号解封延迟任务参数。
 message UnbanAccountsTaskPayload {
-  repeated int64 user_ids = 1; // 待解封账号 ID
+  // 待解封账号 ID
+  repeated int64 user_ids = 1;
 }
 
 // SettleUserLivenessTaskPayload 是每日活跃度日结任务参数。
 message SettleUserLivenessTaskPayload {
-  int32 page_size = 1; // 单次读取并统计的账号数量。
+  // 单次读取并统计的账号数量。
+  int32 page_size = 1;
 }
 
 // PublishScheduledArticleTaskPayload 是文章定时发布任务参数。
 message PublishScheduledArticleTaskPayload {
-  int64 article_id = 1; // 文章 ID
-  int64 author_user_id = 2; // 设置计划的作者账号 ID
-  google.protobuf.Timestamp scheduled_at = 3; // 原计划发布时间
+  // 文章 ID
+  int64 article_id = 1;
+  // 设置计划的作者账号 ID
+  int64 author_user_id = 2;
+  // 原计划发布时间
+  google.protobuf.Timestamp scheduled_at = 3;
 }
 
 // DrawArticleLotteryTaskPayload 是文章抽奖开奖任务参数。
 message DrawArticleLotteryTaskPayload {
-  int64 article_id = 1; // 文章 ID
-  google.protobuf.Timestamp draw_at = 2; // 原计划开奖时间
+  // 文章 ID
+  int64 article_id = 1;
+  // 原计划开奖时间
+  google.protobuf.Timestamp draw_at = 2;
 }
 
+// 协议消息。
 message FinishArticlePollTaskPayload {
-  int64 article_id = 1; // 文章 ID
-  google.protobuf.Timestamp ends_at = 2; // 原计划截止时间
+  // 文章 ID
+  int64 article_id = 1;
+  // 原计划截止时间
+  google.protobuf.Timestamp ends_at = 2;
 }
 
 // RefreshHolidayTaskPayload 是节假日缓存刷新任务参数。
 message RefreshHolidayTaskPayload {
-  google.protobuf.Timestamp start = 1; // 刷新起始日期；为空时使用当天
-  google.protobuf.Timestamp end = 2; // 刷新结束日期；为空时等于起始日期
+  // 刷新起始日期；为空时使用当天
+  google.protobuf.Timestamp start = 1;
+  // 刷新结束日期；为空时等于起始日期
+  google.protobuf.Timestamp end = 2;
 }
 
 // RefreshIPDataTaskPayload 是 IP 地理数据刷新的空任务参数。

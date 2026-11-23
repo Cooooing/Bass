@@ -4,7 +4,7 @@ package common.api.app.common.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "common/proto/gen/common/v1;v1";
+option go_package = "common/proto/gen/common/v1;common";
 
 // System 服务。
 service CommonSystemService {
@@ -14,8 +14,11 @@ service CommonSystemService {
   }
 }
 
+// 协议消息。
 message HealthSystem {
+  // 请求参数。
   message Req {}
+  // 响应结果。
   message Resp {
     // 响应消息。
     string message = 1;

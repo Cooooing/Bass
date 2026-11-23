@@ -3,7 +3,7 @@ package repo
 import (
 	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
-	commonevent "common/proto/gen/common/enums/event"
+	commonevent "common/proto/gen/common/enums/event/v1"
 	"context"
 	"time"
 )

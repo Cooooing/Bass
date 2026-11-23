@@ -4,7 +4,7 @@ import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
 	commonserver "common/pkg/server"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"scheduler/internal/biz"
 	"scheduler/internal/config"

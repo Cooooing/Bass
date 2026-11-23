@@ -1,6 +1,6 @@
 package enum
 
-import event "common/proto/gen/common/enums/event"
+import event "common/proto/gen/common/enums/event/v1"
 
 // OutboxEventStatus 定义生产者侧本地 outbox 记录的投递状态。
 type OutboxEventStatus string

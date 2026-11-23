@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
+	bbsuserv1 "common/proto/gen/bff_bbs/user/v1"
 	"context"
 
 	"bff_bbs/internal/biz/repo"

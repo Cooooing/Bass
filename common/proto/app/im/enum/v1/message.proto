@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package common.api.app.im.enum.v1;
+
+option go_package = "common/proto/gen/im/enum/v1;enum";
+
+// 消息接收者类型
+enum ReceiverType {
+  // 枚举值。
+  RECEIVER_TYPE_UNSPECIFIED = 0;
+  // 用户
+  RECEIVER_TYPE_USER = 1;
+  // 群组
+  RECEIVER_TYPE_GROUP = 2;
+}
+
+// 消息类型
+enum MessageType {
+  // 枚举值。
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+  // 正常
+  MESSAGE_TYPE_NORMAL = 1;
+}
+
+// 消息状态
+enum MessageStatus {
+  // 枚举值。
+  MESSAGE_STATUS_UNSPECIFIED = 0;
+  // 正常
+  MESSAGE_STATUS_NORMAL = 1;
+  // 撤回
+  MESSAGE_STATUS_REVOKE = 2;
+}

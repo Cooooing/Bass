@@ -4,7 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	nats "common/pkg/client/nats"
 	"common/pkg/client/timewheel"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/config"

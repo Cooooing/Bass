@@ -5,8 +5,8 @@ import (
 
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
-	commonevent "common/proto/gen/common/enums/event"
-	cerrors "common/proto/gen/common/errors"
+	commonevent "common/proto/gen/common/enums/event/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	contentv1 "common/proto/gen/content/v1"
 
 	"content/internal/biz/repo"

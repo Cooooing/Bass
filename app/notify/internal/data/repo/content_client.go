@@ -2,7 +2,7 @@ package repo
 
 import (
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	contentv1 "common/proto/gen/content/v1"
 	"context"
 

@@ -1,6 +1,6 @@
 package model
 
-import commonpb "common/proto/gen/common"
+import commonpb "common/proto/gen/common/v1"
 
 const (
 	DefaultPage     int64 = 1

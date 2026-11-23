@@ -3,7 +3,7 @@ package data
 import (
 	commonclient "common/pkg/client"
 	nats "common/pkg/client/nats"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"realtime_hub/internal/config"
 	datarepo "realtime_hub/internal/data/repo"

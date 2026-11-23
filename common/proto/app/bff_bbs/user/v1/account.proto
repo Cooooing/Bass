@@ -1,0 +1,576 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.user.v1;
+
+import "bff_bbs/user/enum/v1/account.proto";
+import "common/v1/common.proto";
+import "economy/enum/v1/economy.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/user/v1;user";
+
+// AccountService 提供 BBS 账号接口
+service AccountService {
+  // 获取当前账号完整资料
+  rpc GetCurrentAccount(GetCurrentAccount.Req) returns (GetCurrentAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/get-current"
+      body: "*"
+    };
+  }
+  // 按账号名获取个人主页资料。
+  rpc GetProfile(GetProfile.Req) returns (GetProfile.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/get-profile"
+      body: "*"
+    };
+  }
+  // 查询账号公开的积分流水。
+  rpc ListPointRecords(ListPointRecords.Req) returns (ListPointRecords.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/list-point-records"
+      body: "*"
+    };
+  }
+  // 查询账号公开的关注列表。
+  rpc ListFollowing(ListFollowing.Req) returns (ListFollowing.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/list-following"
+      body: "*"
+    };
+  }
+  // 查询账号公开的粉丝列表。
+  rpc ListFollowers(ListFollowers.Req) returns (ListFollowers.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/list-followers"
+      body: "*"
+    };
+  }
+  // 检索可提及账号的候选项。
+  rpc SearchMentionAccounts(SearchMentionAccounts.Req) returns (SearchMentionAccounts.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/search-mention"
+      body: "*"
+    };
+  }
+  // 更新当前账号展示资料
+  rpc UpdateProfileAccount(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-profile"
+      body: "*"
+    };
+  }
+  // 申请当前账号资料图片的内容寻址直传能力。
+  rpc PrepareProfileImageUploadAccount(PrepareProfileImageUploadAccount.Req) returns (PrepareProfileImageUploadAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/prepare-profile-image-upload"
+      body: "*"
+    };
+  }
+  // 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+  rpc CompleteProfileImageUploadAccount(CompleteProfileImageUploadAccount.Req) returns (CompleteProfileImageUploadAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/complete-profile-image-upload"
+      body: "*"
+    };
+  }
+  // 更新当前账号密码
+  rpc UpdatePasswordAccount(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-password"
+      body: "*"
+    };
+  }
+  // 更新当前账号邮箱
+  rpc UpdateEmailAccount(UpdateEmailAccount.Req) returns (UpdateEmailAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-email"
+      body: "*"
+    };
+  }
+  // 更新当前账号手机号
+  rpc UpdatePhoneAccount(UpdatePhoneAccount.Req) returns (UpdatePhoneAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-phone"
+      body: "*"
+    };
+  }
+  // 查询当前账号的积分余额和累计收支。
+  rpc GetAccountEconomy(GetAccountEconomy.Req) returns (GetAccountEconomy.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/economy/get"
+      body: "*"
+    };
+  }
+  // 向指定账号转移积分。
+  rpc TransferAccountPoints(TransferAccountPoints.Req) returns (TransferAccountPoints.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/economy/transfer"
+      body: "*"
+    };
+  }
+  // 生成默认账号头像
+  rpc AvatarAccount(AvatarAccount.Req) returns (AvatarAccount.Resp) {
+    option (google.api.http) = {get: "/v1/user/account/avatar"};
+  }
+}
+
+// 协议消息。
+message AccountProfile {
+  // 账号 ID
+  int64 id = 1;
+  // 账号名
+  string name = 2;
+  // 昵称
+  optional string nickname = 3;
+  // 个人主页 URL
+  optional string url = 4;
+  // 头像 URL
+  optional string avatar_url = 5;
+  // 个人主页背景图资源 ID
+  optional int64 background_asset_id = 6;
+  // 个人简介
+  optional string introduction = 7;
+  // MBTI 类型，规范化为大写
+  optional string mbti = 8;
+  // 账号状态
+  .common.api.app.bff_bbs.user.enum.v1.AccountStatus status = 9;
+  // 关注数量
+  optional int32 follow_count = 10;
+  // 粉丝数量
+  optional int32 follower_count = 11;
+  // 社区个人主页 URL。
+  string profile_url = 12;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+}
+
+// 协议消息。
+message ProfileVisibility {
+  // 协议字段。
+  bool article_list = 1;
+  // 协议字段。
+  bool comment_list = 2;
+  // 协议字段。
+  bool follower_list = 3;
+  // 协议字段。
+  bool following_list = 4;
+  // 协议字段。
+  bool moonbreeze_list = 5;
+}
+
+// 协议消息。
+message ProfileRelation {
+  // 协议字段。
+  bool following = 1;
+  // 协议字段。
+  bool followed_by = 2;
+  // 协议字段。
+  bool blocking = 3;
+  // 协议字段。
+  bool blocked_by = 4;
+}
+
+// 协议消息。
+message ProfileLocation {
+  // 协议字段。
+  optional string country = 1;
+  // 协议字段。
+  optional string province = 2;
+  // 协议字段。
+  optional string city = 3;
+}
+
+// 协议消息。
+message Profile {
+  // 协议字段。
+  AccountProfile account = 1;
+  // 协议字段。
+  optional string background_url = 2;
+  // 协议字段。
+  ProfileLocation location = 3;
+  // 协议字段。
+  google.protobuf.Timestamp last_success_login_at = 4;
+  // 协议字段。
+  ProfileVisibility visibility = 5;
+  // 协议字段。
+  ProfileRelation viewer_relation = 6;
+  // 仅本人或允许公开在线状态的账号返回。
+  optional bool online = 7;
+  // 仅本人或允许公开积分的账号返回。
+  optional int64 points = 8;
+}
+
+// 协议消息。
+message AccountProfileListItem {
+  // 协议字段。
+  AccountProfile account = 1;
+  // 协议字段。
+  ProfileRelation viewer_relation = 2;
+}
+
+// 协议消息。
+message AccountContact {
+  // 账号 ID
+  int64 user_id = 1;
+  // 邮箱地址
+  optional string email = 2;
+  // 手机号
+  optional string phone = 3;
+}
+
+// 协议消息。
+message GetCurrentAccount {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message CurrentAccount {
+      // 账号展示资料
+      AccountProfile profile = 1;
+      // 账号联系方式
+      AccountContact contact = 2;
+      // 当前账号地理资料
+      ProfileLocation location = 3;
+    }
+    // 当前账号完整资料
+    CurrentAccount account = 1;
+  }
+}
+
+// 协议消息。
+message GetProfile {
+  // 请求参数。
+  message Req {
+    // 账号名，必填
+    string name = 1;
+    option (gnostic.openapi.v3.schema) = {required: "name"};
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    Profile profile = 1;
+  }
+}
+
+// ListPointRecords 查询账号公开的积分流水。
+message ListPointRecords {
+  // 请求参数。
+  message Req {
+    // 账号名，必填
+    string name = 1;
+    // 分页参数
+    .common.api.app.common.v1.PageReq page = 2;
+    option (gnostic.openapi.v3.schema) = {required: "name"};
+  }
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message PointRecord {
+      // 记录创建时间
+      google.protobuf.Timestamp created_at = 1;
+      // 流水类型展示文案
+      string type_label = 2;
+      // 收入或支出方向
+      .common.api.app.economy.enum.v1.EconomyRecordDirection direction = 3;
+      // 绝对变动积分
+      int64 amount = 4;
+      // 变动后的积分余额
+      int64 balance_after = 5;
+    }
+    // 积分流水列表
+    repeated PointRecord rows = 1;
+    // 分页结果
+    .common.api.app.common.v1.PageResp page = 2;
+  }
+}
+
+// 协议消息。
+message ListFollowing {
+  // 请求参数。
+  message Req {
+    // 协议字段。
+    string name = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageReq page = 2;
+    option (gnostic.openapi.v3.schema) = {required: "name"};
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 协议字段。
+    repeated AccountProfileListItem rows = 2;
+  }
+}
+
+// 协议消息。
+message ListFollowers {
+  // 请求参数。
+  message Req {
+    // 协议字段。
+    string name = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageReq page = 2;
+    option (gnostic.openapi.v3.schema) = {required: "name"};
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 协议字段。
+    repeated AccountProfileListItem rows = 2;
+  }
+}
+
+// 协议消息。
+message SearchMentionAccounts {
+  // 请求参数。
+  message Req {
+    // 用户名或昵称搜索词，可为空。
+    string query = 1;
+    // 分页参数。
+    .common.api.app.common.v1.PageReq page = 2;
+  }
+  // 响应结果。
+  message Resp {
+    // 最多五个可提及账号候选。
+    repeated AccountProfile rows = 1;
+    // 分页结果。
+    .common.api.app.common.v1.PageResp page = 2;
+  }
+}
+
+// 协议消息。
+message UpdateProfileAccount {
+  // 请求参数。
+  message Req {
+    // 昵称，选填
+    optional string nickname = 1;
+    // 个人主页 URL，选填
+    optional string url = 2;
+    // 个人简介，选填
+    optional string introduction = 3;
+    // MBTI 类型，选填；空字符串表示清除
+    optional string mbti = 4;
+  }
+  // 响应结果。
+  message Resp {
+    // 更新后的账号资料
+    AccountProfile profile = 1;
+  }
+}
+
+// 枚举定义。
+enum ProfileImagePurpose {
+  // 枚举值。
+  PROFILE_IMAGE_PURPOSE_UNSPECIFIED = 0;
+  // 枚举值。
+  PROFILE_IMAGE_PURPOSE_AVATAR = 1;
+  // 枚举值。
+  PROFILE_IMAGE_PURPOSE_BACKGROUND = 2;
+}
+
+// 协议消息。
+message PrepareProfileImageUploadAccount {
+  // 请求参数。
+  message Req {
+    // 图片用途，必填；仅用于 BFF 业务校验
+    ProfileImagePurpose purpose = 1;
+    // 文件 SHA-256，小写十六进制
+    string hash = 2;
+    // 上传 MIME 类型
+    string mime_type = 3;
+    // 文件大小，最大 2 MiB
+    int64 size = 4;
+    option (gnostic.openapi.v3.schema) = {
+      required: "purpose"
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
+  }
+  // 响应结果。
+  message Resp {
+    // 已存在时直接返回
+    optional int64 asset_id = 1;
+    // 新资源的 MinIO multipart POST 地址
+    string upload_url = 2;
+    // 协议字段。
+    map<string, string> form_fields = 3;
+  }
+}
+
+// 协议消息。
+message CompleteProfileImageUploadAccount {
+  // 请求参数。
+  message Req {
+    // 协议字段。
+    ProfileImagePurpose purpose = 1;
+    // 文件 SHA-256；回调尚未入库时返回可重试错误
+    string hash = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "purpose"
+      required: "hash"
+    };
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    AccountProfile profile = 1;
+    // 协议字段。
+    string image_url = 2;
+  }
+}
+
+// 协议消息。
+message UpdatePasswordAccount {
+  // 请求参数。
+  message Req {
+    // 旧密码，必填
+    string old_password = 1;
+    // 新密码，必填
+    string new_password = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "old_password"
+      required: "new_password"
+    };
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 协议消息。
+message UpdateEmailAccount {
+  // 请求参数。
+  message Req {
+    // 新邮箱地址，必填
+    string email = 1;
+    // 邮箱 OTP，必填
+    string code = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "email"
+      required: "code"
+    };
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 协议消息。
+message UpdatePhoneAccount {
+  // 请求参数。
+  message Req {
+    // 新手机号，必填
+    string phone = 1;
+    // 手机 OTP，必填
+    string code = 2;
+    option (gnostic.openapi.v3.schema) = {
+      required: "phone"
+      required: "code"
+    };
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 协议消息。
+message GetAccountEconomy {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {
+    // 当前积分
+    int64 balance = 1;
+    // 累计获得
+    int64 total_income = 2;
+    // 累计消耗
+    int64 total_expense = 3;
+  }
+}
+
+// TransferAccountPoints 转移当前账号的积分。
+message TransferAccountPoints {
+  // 请求参数。
+  message Req {
+    // 收款账号名，必填
+    string target_name = 1;
+    // 转账积分数量，必填
+    int64 amount = 2;
+    // 转账备注
+    optional string remark = 3;
+    // 本次转账的技术幂等键，必填
+    string idempotency_key = 4;
+    option (gnostic.openapi.v3.schema) = {
+      required: "target_name"
+      required: "amount"
+      required: "idempotency_key"
+    };
+  }
+  // 响应结果。
+  message Resp {
+    // 转账后的当前积分
+    int64 balance = 1;
+  }
+}
+
+// 协议消息。
+message ListAccountEconomyRecords {
+  // 请求参数。
+  message Req {
+    // 分页参数
+    .common.api.app.common.v1.PageReq page = 1;
+    // 流水方向
+    optional .common.api.app.economy.enum.v1.EconomyRecordDirection direction = 2;
+    // 流水类型
+    optional .common.api.app.economy.enum.v1.EconomyRecordType record_type = 3;
+  }
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message Record {
+      // 流水 ID
+      int64 id = 1;
+      // 交易号
+      string transaction_no = 2;
+      // 流水类型
+      .common.api.app.economy.enum.v1.EconomyRecordType record_type = 3;
+      // 流水方向
+      .common.api.app.economy.enum.v1.EconomyRecordDirection direction = 4;
+      // 积分数量
+      int64 amount = 5;
+      // 变动前积分
+      int64 balance_before = 6;
+      // 变动后积分
+      int64 balance_after = 7;
+      // 备注
+      optional string remark = 8;
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+    }
+    // 流水列表
+    repeated Record rows = 1;
+    // 分页信息
+    .common.api.app.common.v1.PageResp page = 2;
+  }
+}
+
+// 协议消息。
+message AvatarAccount {
+  // 请求参数。
+  message Req {
+    // 账号名，必填
+    string name = 1;
+    option (gnostic.openapi.v3.schema) = {required: "name"};
+  }
+  // Resp 通过 raw_body 返回头像原始字节及内容类型。
+  message Resp {
+    // 协议字段。
+    .common.api.app.common.v1.ImageResp raw_body = 1;
+  }
+}

@@ -7,8 +7,8 @@ import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	bffbbsv1 "common/proto/gen/bff_bbs/v1/im"
-	cerrors "common/proto/gen/common/errors"
+	bffbbsv1 "common/proto/gen/bff_bbs/im/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	imv1 "common/proto/gen/im/v1"
 
 	"bff_bbs/internal/biz/model"

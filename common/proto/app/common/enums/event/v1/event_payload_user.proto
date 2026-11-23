@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package common.api.app.common.enums.event.v1;
+
+option go_package = "common/proto/gen/common/enums/event/v1;event";
+
+// 协议消息。
+message UserEmailVerificationCodePayload {
+  // 协议字段。
+  string email = 1;
+  // 协议字段。
+  string code = 2;
+  // 协议字段。
+  int64 expires_seconds = 3;
+}
+
+// 协议消息。
+message UserPhoneVerificationCodePayload {
+  // 协议字段。
+  string phone = 1;
+  // 协议字段。
+  string code = 2;
+  // 协议字段。
+  int64 expires_seconds = 3;
+}
+
+// 协议消息。
+message UserRegisterPayload {
+  // 协议字段。
+  int64 user_id = 1;
+}
+
+// 协议消息。
+message UserLoginPayload {
+  // 协议字段。
+  int64 user_id = 1;
+  // 协议字段。
+  string name = 2;
+  // 协议字段。
+  string account = 3;
+  // 协议字段。
+  string ip = 4;
+  // 协议字段。
+  string user_agent = 5;
+  // 协议字段。
+  string realm = 9;
+  // 协议字段。
+  string login_type = 10;
+  // 协议字段。
+  string session_id = 11;
+  // 协议字段。
+  string app_name = 12;
+  // 协议字段。
+  string app_version = 13;
+  // 协议字段。
+  string client_type = 14;
+  // 协议字段。
+  string device_type = 15;
+}
+
+// 协议消息。
+message UserLogoutPayload {
+  // 协议字段。
+  int64 user_id = 1;
+  // 协议字段。
+  string name = 2;
+  // 协议字段。
+  string session_id = 3;
+  // 协议字段。
+  string realm = 4;
+}
+
+// 协议消息。
+message UserFollowPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 followed_id = 3;
+}
+
+// 协议消息。
+message UserUnfollowPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 followed_id = 3;
+}
+
+// 协议消息。
+message UserBlockPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 blocked_id = 3;
+}
+
+// 协议消息。
+message UserUnblockPayload {
+  // 协议字段。
+  int64 sender_id = 1;
+  // 协议字段。
+  int64 unblocked_id = 3;
+}
+
+// 协议消息。
+message UserTotpEnablePayload {
+  // 协议字段。
+  int64 user_id = 1;
+}
+
+// 协议消息。
+message UserTotpDisablePayload {
+  // 协议字段。
+  int64 user_id = 1;
+}
+
+// 协议消息。
+message UserAccountCancelledPayload {
+  // 协议字段。
+  int64 user_id = 1;
+}
+
+// 协议消息。
+message UserAccountBannedPayload {
+  // 协议字段。
+  int64 user_id = 1;
+  // 协议字段。
+  int64 operator_id = 2;
+  // 协议字段。
+  string operator_realm = 3;
+  // 协议字段。
+  int64 ban_record_id = 4;
+  // 协议字段。
+  string reason = 5;
+  // 协议字段。
+  int64 banned_until_unix_seconds = 6;
+}
+
+// 协议消息。
+message UserAccountUnbannedPayload {
+  // 协议字段。
+  int64 user_id = 1;
+  // 协议字段。
+  int64 ban_record_id = 2;
+}
+
+// 协议消息。
+message UserCheckinCompletedPayload {
+  // 协议字段。
+  int64 user_id = 1;
+  // 协议字段。
+  int64 checkin_record_id = 2;
+  // 协议字段。
+  string local_date = 3;
+  // 协议字段。
+  int32 current_streak = 4;
+}

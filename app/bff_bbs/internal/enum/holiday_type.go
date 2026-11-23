@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	platformv1enum "common/proto/gen/bff_bbs/v1/platform/enum"
+	platformv1enum "common/proto/gen/bff_bbs/platform/enum/v1"
 )
 
 type HolidayType string

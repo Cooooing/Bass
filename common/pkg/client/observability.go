@@ -3,8 +3,8 @@ package client
 import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
-	"common/proto/gen/common"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
+	"common/proto/gen/common/v1"
 	"context"
 	"log/slog"
 	"net/http"

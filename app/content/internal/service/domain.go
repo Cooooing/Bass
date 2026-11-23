@@ -4,10 +4,10 @@ import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	"common/proto/gen/common"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
+	"common/proto/gen/common/v1"
+	contentv1enum "common/proto/gen/content/enum/v1"
 	v1 "common/proto/gen/content/v1"
-	contentv1enum "common/proto/gen/content/v1/enum"
 	"context"
 
 	"content/internal/biz/model"

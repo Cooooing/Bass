@@ -6,7 +6,7 @@ import (
 
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 
 	"im/internal/biz/model"
 	"im/internal/biz/repo"

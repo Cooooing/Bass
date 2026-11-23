@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"github.com/dtm-labs/client/dtmcli"
 	"github.com/dtm-labs/client/dtmgrpc"

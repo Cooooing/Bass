@@ -2,12 +2,14 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
-import "content/v1/enum/access.proto";
+import "content/enum/v1/access.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
 // ContentAccess 表示可信调用方传递的访问主体
 message ContentAccess {
-  ContentAccessScope scope = 1; // 主体类型
-  optional int64 actor_user_id = 2; // 操作账号 ID
+  // 主体类型
+  .common.api.app.content.enum.v1.ContentAccessScope scope = 1;
+  // 操作账号 ID
+  optional int64 actor_user_id = 2;
 }

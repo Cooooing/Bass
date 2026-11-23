@@ -2,8 +2,8 @@ package usecase
 
 import (
 	commonmodel "common/pkg/model"
-	bbsnotifyv1 "common/proto/gen/bff_bbs/v1/notify"
-	notifyv1enum "common/proto/gen/notify/v1/enum"
+	bbsnotifyv1 "common/proto/gen/bff_bbs/notify/v1"
+	notifyv1enum "common/proto/gen/notify/enum/v1"
 	"context"
 
 	"bff_bbs/internal/biz/repo"

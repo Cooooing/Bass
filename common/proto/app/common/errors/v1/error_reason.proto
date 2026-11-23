@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package common.api.app.common.errors.v1;
+
+import "errors/errors.proto";
+
+option go_package = "common/proto/gen/common/errors/v1;errors";
+
+// 枚举定义。
+enum ErrorReason {
+  // 默认错误码（未定义的错误情况）
+  option (.errors.default_code) = 500;
+
+  // ===== 通用错误 =====
+
+  // 未知错误
+  ERROR_REASON_UNSPECIFIED = 0 [(.errors.code) = 500];
+
+  // ===== 1xx 信息性响应 =====
+  //
+  // 临时响应，客户端应继续请求，如果已完成则忽略
+  // 响应客户端的 Upgrade 请求，服务器将切换协议
+  // WebDAV：服务器已收到请求，正在处理，无响应可用
+  // 允许用户代理在服务器准备响应阶段预加载资源
+  //
+  // ===== 2xx 成功 =====
+  //
+  // 请求成功
+  // 请求成功，创建新资源
+  // 请求已接受，但尚未处理
+  // 响应头部信息非权威，可能来自第三方
+  // 请求成功，但无内容返回
+  // 告诉客户端重置请求文档
+  // 客户端请求了部分资源
+  // WebDAV：多个状态码，返回多个资源信息
+  // WebDAV：已报告，避免重复
+  // HTTP Delta encoding，响应应用一个或多个实例操作
+  //
+  // ===== 3xx 重定向 =====
+  //
+  // 请求有多个可能响应，用户可选择
+  // 资源 URL 已永久更改
+  // 资源 URI 暂时更改
+  // 客户端应使用 GET 请求另一个 URI 获取资源
+  // 缓存资源未修改，客户端可继续使用
+  // 已弃用，响应必须通过代理访问
+  // 临时重定向，方法不变
+  // 永久重定向，方法不变
+
+  // ===== 4xx 客户端错误 =====
+
+  // 请求语法错误、参数错误
+  ERROR_REASON_BAD_REQ = 400 [(.errors.code) = 400];
+  // 未认证，需身份验证
+  ERROR_REASON_UNAUTHORIZED = 401 [(.errors.code) = 401];
+  // 保留，支付相关
+  ERROR_REASON_PAYMENT_REQUIRED = 402 [(.errors.code) = 402];
+  // 已认证但无权限访问
+  ERROR_REASON_FORBIDDEN = 403 [(.errors.code) = 403];
+  // 请求资源不存在
+  ERROR_REASON_NOT_FOUND = 404 [(.errors.code) = 404];
+  // 请求方法不被允许
+  ERROR_REASON_METHOD_NOT_ALLOWED = 405 [(.errors.code) = 405];
+  // 无可接受的内容
+  ERROR_REASON_NOT_ACCEPTABLE = 406 [(.errors.code) = 406];
+  // 代理认证
+  ERROR_REASON_PROXY_AUTHENTICATION_REQUIRED = 407 [(.errors.code) = 407];
+  // 请求超时
+  ERROR_REASON_REQ_TIMEOUT = 408 [(.errors.code) = 408];
+  // 请求与服务器状态冲突
+  ERROR_REASON_CONFLICT = 409 [(.errors.code) = 409];
+  // 资源永久删除
+  ERROR_REASON_GONE = 410 [(.errors.code) = 410];
+  // 需 Content-Length 头
+  ERROR_REASON_LENGTH_REQUIRED = 411 [(.errors.code) = 411];
+  // 前置条件失败
+  ERROR_REASON_PRECONDITION_FAILED = 412 [(.errors.code) = 412];
+  // 请求实体过大
+  ERROR_REASON_PAYLOAD_TOO_LARGE = 413 [(.errors.code) = 413];
+  // URI 过长
+  ERROR_REASON_URI_TOO_LONG = 414 [(.errors.code) = 414];
+  // 不支持的媒体类型
+  ERROR_REASON_UNSUPPORTED_MEDIA_TYPE = 415 [(.errors.code) = 415];
+  // Range 请求不可满足
+  ERROR_REASON_RANGE_NOT_SATISFIABLE = 416 [(.errors.code) = 416];
+  // Expect 请求无法满足
+  ERROR_REASON_EXPECTATION_FAILED = 417 [(.errors.code) = 417];
+  // 玩笑：茶壶不能煮咖啡
+  ERROR_REASON_IM_A_TEAPOT = 418 [(.errors.code) = 418];
+  // 请求被错误路由
+  ERROR_REASON_MISDIRECTED_REQ = 421 [(.errors.code) = 421];
+  // WebDAV：语义错误无法处理
+  ERROR_REASON_UNPROCESSABLE_ENTITY = 422 [(.errors.code) = 422];
+  // WebDAV：资源锁定
+  ERROR_REASON_LOCKED = 423 [(.errors.code) = 423];
+  // WebDAV：前置请求失败
+  ERROR_REASON_FAILED_DEPENDENCY = 424 [(.errors.code) = 424];
+  // 实验性：请求过早
+  ERROR_REASON_TOO_EARLY = 425 [(.errors.code) = 425];
+  // 需升级协议
+  ERROR_REASON_UPGRADE_REQUIRED = 426 [(.errors.code) = 426];
+  // 需前置条件，防止丢失更新
+  ERROR_REASON_PRECONDITION_REQUIRED = 428 [(.errors.code) = 428];
+  // 请求过多，限流
+  ERROR_REASON_TOO_MANY_REQS = 429 [(.errors.code) = 429];
+  // 请求头字段过大
+  ERROR_REASON_REQ_HEADER_FIELDS_TOO_LARGE = 431 [(.errors.code) = 431];
+  // 法律原因不可用
+  ERROR_REASON_UNAVAILABLE_FOR_LEGAL_REASONS = 451 [(.errors.code) = 451];
+
+  // ===== 5xx 服务器错误 =====
+
+  // 服务器内部错误
+  ERROR_REASON_INTERNAL_SERVER_ERROR = 500 [(.errors.code) = 500];
+  // 功能未实现
+  ERROR_REASON_NOT_IMPLEMENTED = 501 [(.errors.code) = 501];
+  // 上游网关错误
+  ERROR_REASON_BAD_GATEWAY = 502 [(.errors.code) = 502];
+  // 服务暂不可用
+  ERROR_REASON_SERVICE_UNAVAILABLE = 503 [(.errors.code) = 503];
+  // 上游网关超时
+  ERROR_REASON_GATEWAY_TIMEOUT = 504 [(.errors.code) = 504];
+  // HTTP 版本不支持
+  ERROR_REASON_HTTP_VERSION_NOT_SUPPORTED = 505 [(.errors.code) = 505];
+  // 内部配置错误
+  ERROR_REASON_VARIANT_ALSO_NEGOTIATES = 506 [(.errors.code) = 506];
+  // WebDAV：存储不足
+  ERROR_REASON_INSUFFICIENT_STORAGE = 507 [(.errors.code) = 507];
+  // WebDAV：循环检测
+  ERROR_REASON_LOOP_DETECTED = 508 [(.errors.code) = 508];
+  // 请求需扩展才能完成
+  ERROR_REASON_NOT_EXTENDED = 510 [(.errors.code) = 510];
+  // 网络认证要求
+  ERROR_REASON_NETWORK_AUTHENTICATION_REQUIRED = 511 [(.errors.code) = 511];
+}

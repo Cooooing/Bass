@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package common.api.app.common.enums.event.v1;
+
+import "google/protobuf/timestamp.proto";
+import "im/enum/v1/im_message_type.proto";
+
+option go_package = "common/proto/gen/common/enums/event/v1;event";
+
+// 协议消息。
+message IMPrivateChatMessageCreatedPayload {
+  // 私聊消息 ID。
+  int64 message_id = 1;
+  // 发送账号 ID。
+  int64 sender_id = 2;
+  // 接收账号 ID。
+  int64 receiver_id = 3;
+  // 消息类型。
+  .common.api.app.im.enum.v1.IMMessageType message_type = 4;
+  // 原始 Markdown 内容。
+  string content = 5;
+  // 创建时间。
+  google.protobuf.Timestamp created_at = 1000;
+}
+
+// 协议消息。
+message IMGlobalChatMessageCreatedPayload {
+  // 全局聊天室消息 ID。
+  int64 message_id = 1;
+  // 发送账号 ID。
+  int64 sender_id = 2;
+  // 消息类型。
+  .common.api.app.im.enum.v1.IMMessageType message_type = 3;
+  // 原始 Markdown 内容。
+  string content = 4;
+  // 创建时间。
+  google.protobuf.Timestamp created_at = 1000;
+}
+
+// 协议消息。
+message IMGlobalChatBarrageCreatedPayload {
+  // 全局聊天室弹幕 ID。
+  int64 barrage_id = 1;
+  // 发送账号 ID。
+  int64 user_id = 2;
+  // 纯文本弹幕内容。
+  string content = 3;
+  // 创建时间。
+  google.protobuf.Timestamp created_at = 1000;
+}
+
+// 协议消息。
+message IMGlobalChatTopicUpdatedPayload {
+  // 全局聊天室话题记录 ID。
+  int64 topic_id = 1;
+  // 设置话题的账号 ID。
+  int64 user_id = 2;
+  // 话题内容。
+  string content = 3;
+  // 话题设置时间。
+  google.protobuf.Timestamp created_at = 1000;
+}

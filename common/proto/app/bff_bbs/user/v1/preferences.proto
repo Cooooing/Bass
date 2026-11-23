@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.user.v1;
+
+import "common/enums/v1/language.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/user/v1;user";
+
+// 账号偏好设置接口。
+service PreferencesService {
+  // 获取当前账号的偏好设置。
+  rpc GetCurrentPreferences(GetCurrentPreferences.Req) returns (GetCurrentPreferences.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/preference/get-current"
+      body: "*"
+    };
+  }
+
+  // 更新当前账号的偏好设置。
+  rpc UpdateCurrentPreferences(UpdateCurrentPreferences.Req) returns (UpdateCurrentPreferences.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/preference/update-current"
+      body: "*"
+    };
+  }
+}
+
+// 获取当前账号的偏好设置。
+message GetCurrentPreferences {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message Preference {
+      // 账号 ID
+      int64 user_id = 1;
+      // 时区
+      optional string timezone = 3;
+      // 桌面端主题
+      optional string theme = 4;
+      // 移动端主题
+      optional string mobile_theme = 5;
+      // 界面语言
+      .common.api.app.common.enums.v1.Language language = 8;
+    }
+    // 当前账号偏好设置
+    Preference preference = 1;
+  }
+}
+
+// 更新当前账号的偏好设置。
+message UpdateCurrentPreferences {
+  // 请求参数。
+  message Req {
+    // 时区
+    optional string timezone = 2;
+    // 桌面端主题
+    optional string theme = 3;
+    // 移动端主题
+    optional string mobile_theme = 4;
+    // 界面语言
+    optional .common.api.app.common.enums.v1.Language language = 7;
+  }
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message Preference {
+      // 账号 ID
+      int64 user_id = 1;
+      // 时区
+      optional string timezone = 3;
+      // 桌面端主题
+      optional string theme = 4;
+      // 移动端主题
+      optional string mobile_theme = 5;
+      // 界面语言
+      .common.api.app.common.enums.v1.Language language = 8;
+    }
+    // 更新后的账号偏好设置
+    Preference preference = 1;
+  }
+}

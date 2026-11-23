@@ -3,7 +3,7 @@ package config
 import (
 	commonmodule "common/pkg/module"
 	serverconfig "common/pkg/server/config"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"fmt"
 
 	"google.golang.org/protobuf/types/known/structpb"

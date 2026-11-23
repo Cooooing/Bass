@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.content.v1;
+
+import "bff_bbs/content/v1/article.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/content/v1;content";
+
+// MoonbreezeService 提供社区短动态入口。
+service MoonbreezeService {
+  // 服务方法。
+  rpc CreateMoonbreeze(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/create"
+      body: "*"
+    };
+  }
+  // 服务方法。
+  rpc PagePublicMoonbreezes(PagePublicMoonbreezes.Req) returns (PagePublicMoonbreezes.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/page-public"
+      body: "*"
+    };
+  }
+  // 服务方法。
+  rpc PageWatchingMoonbreezes(PageWatchingMoonbreezes.Req) returns (PageWatchingMoonbreezes.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/page-watching"
+      body: "*"
+    };
+  }
+  // 服务方法。
+  rpc PageMemberMoonbreezes(PageMemberMoonbreezes.Req) returns (PageMemberMoonbreezes.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/page-member"
+      body: "*"
+    };
+  }
+}
+
+// 协议消息。
+message CreateMoonbreeze {
+  // 请求参数。
+  message Req {
+    // 协议字段。
+    string content = 1;
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    Moonbreeze moonbreeze = 1;
+  }
+}
+
+// 协议消息。
+message PagePublicMoonbreezes {
+  // 请求参数。
+  message Req {
+    // 协议字段。
+    optional string cursor = 1;
+    // 协议字段。
+    uint32 size = 2;
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    repeated Moonbreeze rows = 1;
+    // 协议字段。
+    optional string next_cursor = 2;
+  }
+}
+
+// 协议消息。
+message PageWatchingMoonbreezes {
+  // 请求参数。
+  message Req {
+    // 协议字段。
+    optional string cursor = 1;
+    // 协议字段。
+    uint32 size = 2;
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    repeated Moonbreeze rows = 1;
+    // 协议字段。
+    optional string next_cursor = 2;
+  }
+}
+
+// 协议消息。
+message PageMemberMoonbreezes {
+  // 请求参数。
+  message Req {
+    // 协议字段。
+    string name = 1;
+    // 协议字段。
+    optional string cursor = 2;
+    // 协议字段。
+    uint32 size = 3;
+  }
+  // 响应结果。
+  message Resp {
+    // 协议字段。
+    repeated Moonbreeze rows = 1;
+    // 协议字段。
+    optional string next_cursor = 2;
+  }
+}
+
+// 协议消息。
+message Moonbreeze {
+  // 协议字段。
+  int64 id = 1;
+  // 协议字段。
+  string content = 2;
+  // 协议字段。
+  AccountProfile author = 3;
+  // 协议字段。
+  optional string city = 4;
+  // 协议字段。
+  google.protobuf.Timestamp created_at = 1000;
+}

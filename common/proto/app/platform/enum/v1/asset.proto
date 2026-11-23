@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package common.api.app.platform.enum.v1;
+
+option go_package = "common/proto/gen/platform/enum/v1;enum";
+
+// AssetProvider 表示持久化资源的存储提供方。
+enum AssetProvider {
+  // 枚举值。
+  ASSET_PROVIDER_UNSPECIFIED = 0;
+  // 枚举值。
+  ASSET_PROVIDER_MINIO = 1;
+  // 枚举值。
+  ASSET_PROVIDER_QINIU = 2;
+}
+
+// AssetStatus 表示全局资源治理状态；业务可见性归属业务引用，而非资源本身。
+enum AssetStatus {
+  // 枚举值。
+  ASSET_STATUS_UNSPECIFIED = 0;
+  // 枚举值。
+  ASSET_STATUS_AVAILABLE = 1;
+  // 枚举值。
+  ASSET_STATUS_BLOCKED = 2;
+}

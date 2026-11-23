@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.realtime.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/realtime/v1;realtime";
+
+// 服务定义。
+service RealtimeService {
+  // 服务方法。
+  rpc CreateRealtimeTicket(CreateRealtimeTicket.Req) returns (CreateRealtimeTicket.Resp) {
+    option (google.api.http) = {
+      post: "/v1/realtime/ticket"
+      body: "*"
+    };
+  }
+}
+
+// 协议消息。
+message CreateRealtimeTicket {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {
+    // 一次性 SSE 建连凭证。
+    string ticket = 1;
+    // 有效期秒数。
+    int64 expires_in_seconds = 2;
+    // realtime node SSE 路径。
+    string path = 3;
+  }
+}

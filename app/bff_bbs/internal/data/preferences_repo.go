@@ -2,7 +2,7 @@ package data
 
 import (
 	"common/pkg/client/rpc"
-	commonenums "common/proto/gen/common/enums"
+	commonenums "common/proto/gen/common/enums/v1"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 

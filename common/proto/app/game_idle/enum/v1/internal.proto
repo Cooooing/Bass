@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.enum.v1;
+
+option go_package = "common/proto/gen/game_idle/enum/v1;enum";
+
+// 枚举定义。
+enum Ability {
+  // 枚举值。
+  ABILITY_UNSPECIFIED = 0;
+  // 枚举值。
+  ABILITY_WOODCUTTING = 1;
+  // 枚举值。
+  ABILITY_FORAGING = 2;
+  // 枚举值。
+  ABILITY_MINING = 3;
+  // 枚举值。
+  ABILITY_FISHING = 4;
+  // 枚举值。
+  ABILITY_CRAFTING = 5;
+  // 枚举值。
+  ABILITY_SEWING = 6;
+  // 枚举值。
+  ABILITY_SMITHING = 7;
+  // 枚举值。
+  ABILITY_COOKING = 8;
+  // 枚举值。
+  ABILITY_ENHANCING = 9;
+  // 枚举值。
+  ABILITY_ALCHEMY = 10;
+}
+
+// 枚举定义。
+enum ActionKind {
+  // 枚举值。
+  ACTION_KIND_UNSPECIFIED = 0;
+  // 枚举值。
+  ACTION_KIND_WOODCUTTING = 1;
+  // 枚举值。
+  ACTION_KIND_FORAGING = 2;
+  // 枚举值。
+  ACTION_KIND_MINING = 3;
+  // 枚举值。
+  ACTION_KIND_FISHING = 4;
+  // 枚举值。
+  ACTION_KIND_CRAFTING = 5;
+  // 枚举值。
+  ACTION_KIND_SEWING = 6;
+  // 枚举值。
+  ACTION_KIND_SMITHING = 7;
+  // 枚举值。
+  ACTION_KIND_COOKING = 8;
+  // 枚举值。
+  ACTION_KIND_ENHANCING = 9;
+  // 枚举值。
+  ACTION_KIND_ALCHEMY = 10;
+}
+
+// 枚举定义。
+enum ActionStopReason {
+  // 枚举值。
+  ACTION_STOP_REASON_UNSPECIFIED = 0;
+  // 枚举值。
+  ACTION_STOP_REASON_NONE = 1;
+  // 枚举值。
+  ACTION_STOP_REASON_INSUFFICIENT_ITEMS = 2;
+}
+
+// 枚举定义。
+enum CharacterCloseSessionReason {
+  // 枚举值。
+  CHARACTER_CLOSE_SESSION_REASON_UNSPECIFIED = 0;
+  // 枚举值。
+  CHARACTER_CLOSE_SESSION_REASON_OCCUPIED = 1;
+  // 枚举值。
+  CHARACTER_CLOSE_SESSION_REASON_TIMEOUT = 2;
+}
+
+// 枚举定义。
+enum RecipeType {
+  // 枚举值。
+  RECIPE_TYPE_UNSPECIFIED = 0;
+  // 枚举值。
+  RECIPE_TYPE_NORMAL = 1;
+  // 枚举值。
+  RECIPE_TYPE_RARE = 2;
+}
+
+// 枚举定义。
+enum StateCommandType {
+  // 枚举值。
+  STATE_COMMAND_TYPE_UNSPECIFIED = 0;
+  // 枚举值。
+  STATE_COMMAND_TYPE_ACTION_QUEUE_ADD = 1;
+  // 枚举值。
+  STATE_COMMAND_TYPE_ACTION_QUEUE_MOVE = 2;
+  // 枚举值。
+  STATE_COMMAND_TYPE_ACTION_QUEUE_REMOVE = 3;
+  // 枚举值。
+  STATE_COMMAND_TYPE_ACTION_QUEUE_CLEAR = 4;
+  // 枚举值。
+  STATE_COMMAND_TYPE_ACTION_QUEUE_COMPLETE_HEAD = 5;
+  // 枚举值。
+  STATE_COMMAND_TYPE_ACTION_SETTLEMENT = 6;
+}
+
+// 枚举定义。
+enum ItemID {
+  // 枚举值。
+  ITEM_ID_UNSPECIFIED = 0;
+  // 枚举值。
+  ITEM_ID_EMPTY = 1;
+}
+
+// 枚举定义。
+enum ItemType {
+  // 枚举值。
+  ITEM_TYPE_UNSPECIFIED = 0;
+  // 枚举值。
+  ITEM_TYPE_CURRENCY = 1;
+  // 枚举值。
+  ITEM_TYPE_LOOT = 2;
+  // 枚举值。
+  ITEM_TYPE_CONSUMABLE = 3;
+  // 枚举值。
+  ITEM_TYPE_SKILL_BOOK = 4;
+  // 枚举值。
+  ITEM_TYPE_EQUIPMENT = 5;
+  // 枚举值。
+  ITEM_TYPE_RESOURCE = 6;
+}

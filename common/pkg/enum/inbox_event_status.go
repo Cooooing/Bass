@@ -1,6 +1,6 @@
 package enum
 
-import event "common/proto/gen/common/enums/event"
+import event "common/proto/gen/common/enums/event/v1"
 
 // InboxEventStatus 定义消费者侧本地 inbox 记录的处理状态。
 type InboxEventStatus string

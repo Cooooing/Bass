@@ -3,7 +3,7 @@ package command
 import (
 	"common/pkg/apperror"
 	v1 "common/proto/gen/bff_game_idle/v1"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"bff_game_idle/internal/biz/usecase"

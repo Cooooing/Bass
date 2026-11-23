@@ -2,34 +2,50 @@ syntax = "proto3";
 
 package common.api.app.economy.v1;
 
+import "economy/enum/v1/economy.proto";
 import "economy/v1/economy.proto";
-import "economy/v1/enum/economy.proto";
 
 option go_package = "common/proto/gen/economy/v1;v1";
 
 // TCCPointsTransferService 提供积分转移的 TCC 分支操作。
 service TCCPointsTransferService {
-  rpc Try(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {} // 预留转出积分
-  rpc Confirm(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {} // 确认积分转移
-  rpc Cancel(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {} // 取消积分转移并释放资源
+  // 预留转出积分
+  rpc Try(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {}
+  // 确认积分转移
+  rpc Confirm(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {}
+  // 取消积分转移并释放资源
+  rpc Cancel(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {}
 }
 
 // TCCPointsTransfer 表示积分转移的 TCC 分支请求与响应。
 message TCCPointsTransfer {
+  // 请求参数。
   message Req {
-    int64 from_user_id = 1; // 转出用户 ID
-    int64 to_user_id = 2; // 接收用户 ID
-    int64 amount = 3; // 转移积分数量
-    .common.api.app.economy.v1.enum.EconomyRecordType out_record_type = 4; // 转出流水类型
-    .common.api.app.economy.v1.enum.EconomyRecordType in_record_type = 5; // 转入流水类型
-    optional string remark = 6; // 流水备注
-    optional string idempotency_key = 7; // 转出与转入账户的幂等键
+    // 转出用户 ID
+    int64 from_user_id = 1;
+    // 接收用户 ID
+    int64 to_user_id = 2;
+    // 转移积分数量
+    int64 amount = 3;
+    // 转出流水类型
+    .common.api.app.economy.enum.v1.EconomyRecordType out_record_type = 4;
+    // 转入流水类型
+    .common.api.app.economy.enum.v1.EconomyRecordType in_record_type = 5;
+    // 流水备注
+    optional string remark = 6;
+    // 转出与转入账户的幂等键
+    optional string idempotency_key = 7;
   }
 
+  // 响应结果。
   message Resp {
-    EconomyAccount from_account = 1; // 转出账户
-    EconomyAccount to_account = 2; // 接收账户
-    EconomyRecord out_record = 3; // 确认阶段产生的转出流水
-    EconomyRecord in_record = 4; // 确认阶段产生的转入流水
+    // 转出账户
+    EconomyAccount from_account = 1;
+    // 接收账户
+    EconomyAccount to_account = 2;
+    // 确认阶段产生的转出流水
+    EconomyRecord out_record = 3;
+    // 确认阶段产生的转入流水
+    EconomyRecord in_record = 4;
   }
 }

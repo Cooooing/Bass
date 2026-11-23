@@ -1,7 +1,7 @@
 package event
 
 import (
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 	"context"
 
 	"bff_game_idle/internal/biz/usecase"

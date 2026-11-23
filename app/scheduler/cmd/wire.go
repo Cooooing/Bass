@@ -4,7 +4,7 @@
 package main
 
 import (
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"log/slog"
 	"scheduler/internal/biz"
 	"scheduler/internal/config"

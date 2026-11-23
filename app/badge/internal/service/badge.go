@@ -2,9 +2,9 @@ package service
 
 import (
 	"common/pkg/apperror"
+	badgeenum "common/proto/gen/badge/enum/v1"
 	v1 "common/proto/gen/badge/v1"
-	badgeenum "common/proto/gen/badge/v1/enum"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"time"
 

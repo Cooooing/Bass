@@ -2,8 +2,8 @@ package server
 
 import (
 	serverutil "common/pkg/server"
-	commonenums "common/proto/gen/common/enums"
-	cerrors "common/proto/gen/common/errors"
+	commonenums "common/proto/gen/common/enums/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 )
 
 func NewBBSErrorMessages() serverutil.ErrorMessages {
@@ -53,7 +53,7 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "The current state does not allow this operation",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_ReqS: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_REQ_S: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "操作过于频繁，请 %d 秒后再试",
 				commonenums.Language_LANGUAGE_ZH_TW: "操作過於頻繁，請 %d 秒後再試",
@@ -546,7 +546,7 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Invalid point record query",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQ_INVALID: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "限流请求无效",
 				commonenums.Language_LANGUAGE_ZH_TW: "限流請求無效",

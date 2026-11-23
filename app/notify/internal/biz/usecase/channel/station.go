@@ -3,7 +3,7 @@ package channel
 import (
 	nats "common/pkg/client/nats"
 	commonenum "common/pkg/enum"
-	commonevent "common/proto/gen/common/enums/event"
+	commonevent "common/proto/gen/common/enums/event/v1"
 	"context"
 	"time"
 

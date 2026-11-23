@@ -6,7 +6,7 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	utilent "common/pkg/util/ent"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"errors"
 	"fmt"
@@ -14,10 +14,10 @@ import (
 	"time"
 
 	"common/pkg/apperror"
-	commonevent "common/proto/gen/common/enums/event"
+	commonevent "common/proto/gen/common/enums/event/v1"
 	contentv1 "common/proto/gen/content/v1"
+	economyv1enum "common/proto/gen/economy/enum/v1"
 	economyv1 "common/proto/gen/economy/v1"
-	economyv1enum "common/proto/gen/economy/v1/enum"
 
 	"content/internal/biz/model"
 	"content/internal/biz/repo"

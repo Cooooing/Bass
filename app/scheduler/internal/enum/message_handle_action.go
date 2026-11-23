@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	schedulerv1 "common/proto/gen/scheduler/v1/enum"
+	schedulerv1 "common/proto/gen/scheduler/enum/v1"
 )
 
 // MessageHandleAction 定义调度消息处理结果。

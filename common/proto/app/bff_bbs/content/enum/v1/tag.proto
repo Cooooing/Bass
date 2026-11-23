@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.content.enum.v1;
+
+option go_package = "common/proto/gen/bff_bbs/content/enum/v1;enum";
+
+// 标签状态。
+enum TagStatus {
+  // 未指定
+  TAG_STATUS_UNSPECIFIED = 0;
+  // 启用
+  TAG_STATUS_ENABLED = 1;
+  // 停用
+  TAG_STATUS_DISABLED = 2;
+}

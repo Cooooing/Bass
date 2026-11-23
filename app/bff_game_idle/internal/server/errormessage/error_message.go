@@ -4,8 +4,8 @@ package errormessage
 import (
 	"common/pkg/apperror"
 	serverutil "common/pkg/server"
-	commonenums "common/proto/gen/common/enums"
-	cerrors "common/proto/gen/common/errors"
+	commonenums "common/proto/gen/common/enums/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	"encoding/json"
 	"net/http"
 )
@@ -57,7 +57,7 @@ func (r *Resolver) initializeMessages() {
 				commonenums.Language_LANGUAGE_EN:    "The current state does not allow this operation",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_ReqS: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_REQ_S: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "操作过于频繁，请 %d 秒后再试",
 				commonenums.Language_LANGUAGE_ZH_TW: "操作過於頻繁，請 %d 秒後再試",

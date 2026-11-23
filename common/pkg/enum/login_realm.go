@@ -1,6 +1,6 @@
 package enum
 
-import "common/proto/gen/common/enums"
+import "common/proto/gen/common/enums/v1"
 
 // LoginRealm 表示认证会话所属入口域
 type LoginRealm string

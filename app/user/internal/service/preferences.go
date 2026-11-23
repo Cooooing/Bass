@@ -2,8 +2,8 @@ package service
 
 import (
 	"common/pkg/apperror"
-	commonenums "common/proto/gen/common/enums"
-	cerrors "common/proto/gen/common/errors"
+	commonenums "common/proto/gen/common/enums/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	v1 "common/proto/gen/user/v1"
 	"context"
 

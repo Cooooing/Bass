@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.content.enum.v1;
+
+option go_package = "common/proto/gen/content/enum/v1;enum";
+
+// DomainStatus 表示领域状态。
+enum DomainStatus {
+  // 未指定
+  DOMAIN_STATUS_UNSPECIFIED = 0;
+  // 启用
+  DOMAIN_STATUS_ENABLED = 1;
+  // 禁用
+  DOMAIN_STATUS_DISABLED = 2;
+}

@@ -1,7 +1,7 @@
 package enum
 
 import (
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 	"slices"
 
 	"github.com/nats-io/nats.go/jetstream"

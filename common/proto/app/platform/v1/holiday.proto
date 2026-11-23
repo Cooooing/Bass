@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.platform.v1;
 
 import "google/protobuf/timestamp.proto";
-import "platform/v1/enum/holiday.proto";
+import "platform/enum/v1/holiday.proto";
 
 option go_package = "common/proto/gen/platform/v1;v1";
 
@@ -15,13 +15,16 @@ service PlatformHolidayService {
   rpc RefreshHoliday(RefreshHoliday.Req) returns (RefreshHoliday.Resp) {}
 }
 
+// 协议消息。
 message GetCurrentHoliday {
+  // 请求参数。
   message Req {}
+  // 响应结果。
   message Resp {
     // 当前日期。
     google.protobuf.Timestamp date = 1;
     // 当天类型。
-    common.api.app.platform.v1.enum.HolidayType type = 2;
+    common.api.app.platform.enum.v1.HolidayType type = 2;
     // 当天名称，例如周四、国庆节。
     string day_name = 3;
     // 下一个假期名称，未放假时非空。
@@ -33,12 +36,15 @@ message GetCurrentHoliday {
   }
 }
 
+// 协议消息。
 message RefreshHoliday {
+  // 请求参数。
   message Req {
     // 刷新起始日期；两个日期都为空时使用当天。
     google.protobuf.Timestamp start = 1;
     // 刷新结束日期；为空时等于起始日期。
     google.protobuf.Timestamp end = 2;
   }
+  // 响应结果。
   message Resp {}
 }

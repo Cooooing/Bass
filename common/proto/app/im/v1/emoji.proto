@@ -6,164 +6,248 @@ option go_package = "common/proto/gen/im/v1;v1";
 
 // IMEmojiService 管理账号自有表情分组及短期导入分享码。
 service IMEmojiService {
-  rpc ListEmojiGroups(ListEmojiGroups.Req) returns (ListEmojiGroups.Resp) {} // 查询账号自有的表情分组。
-  rpc CreateEmojiGroup(CreateEmojiGroup.Req) returns (CreateEmojiGroup.Resp) {} // 创建表情分组。
-  rpc RenameEmojiGroup(RenameEmojiGroup.Req) returns (RenameEmojiGroup.Resp) {} // 重命名表情分组。
-  rpc DeleteEmojiGroup(DeleteEmojiGroup.Req) returns (DeleteEmojiGroup.Resp) {} // 删除分组及其中表情项。
-  rpc AddEmojiItem(AddEmojiItem.Req) returns (AddEmojiItem.Resp) {} // 向分组加入一个可用图片资产。
-  rpc RenameEmojiItem(RenameEmojiItem.Req) returns (RenameEmojiItem.Resp) {} // 重命名表情项别名。
-  rpc ReorderEmojiGroups(ReorderEmojiGroups.Req) returns (ReorderEmojiGroups.Resp) {} // 重排表情分组。
-  rpc ReorderEmojiItems(ReorderEmojiItems.Req) returns (ReorderEmojiItems.Resp) {} // 重排同一分组内的表情项。
-  rpc DeleteEmojiItem(DeleteEmojiItem.Req) returns (DeleteEmojiItem.Resp) {} // 从分组移除一个表情项。
-  rpc MoveEmojiItem(MoveEmojiItem.Req) returns (MoveEmojiItem.Resp) {} // 移动当前账号的表情到另一个分组。
-  rpc CreateEmojiShare(CreateEmojiShare.Req) returns (CreateEmojiShare.Resp) {} // 创建可短期导入的分组快照。
-  rpc ImportEmojiShare(ImportEmojiShare.Req) returns (ImportEmojiShare.Resp) {} // 从分享码导入为新的表情分组。
+  // 查询账号自有的表情分组。
+  rpc ListEmojiGroups(ListEmojiGroups.Req) returns (ListEmojiGroups.Resp) {}
+  // 创建表情分组。
+  rpc CreateEmojiGroup(CreateEmojiGroup.Req) returns (CreateEmojiGroup.Resp) {}
+  // 重命名表情分组。
+  rpc RenameEmojiGroup(RenameEmojiGroup.Req) returns (RenameEmojiGroup.Resp) {}
+  // 删除分组及其中表情项。
+  rpc DeleteEmojiGroup(DeleteEmojiGroup.Req) returns (DeleteEmojiGroup.Resp) {}
+  // 向分组加入一个可用图片资产。
+  rpc AddEmojiItem(AddEmojiItem.Req) returns (AddEmojiItem.Resp) {}
+  // 重命名表情项别名。
+  rpc RenameEmojiItem(RenameEmojiItem.Req) returns (RenameEmojiItem.Resp) {}
+  // 重排表情分组。
+  rpc ReorderEmojiGroups(ReorderEmojiGroups.Req) returns (ReorderEmojiGroups.Resp) {}
+  // 重排同一分组内的表情项。
+  rpc ReorderEmojiItems(ReorderEmojiItems.Req) returns (ReorderEmojiItems.Resp) {}
+  // 从分组移除一个表情项。
+  rpc DeleteEmojiItem(DeleteEmojiItem.Req) returns (DeleteEmojiItem.Resp) {}
+  // 移动当前账号的表情到另一个分组。
+  rpc MoveEmojiItem(MoveEmojiItem.Req) returns (MoveEmojiItem.Resp) {}
+  // 创建可短期导入的分组快照。
+  rpc CreateEmojiShare(CreateEmojiShare.Req) returns (CreateEmojiShare.Resp) {}
+  // 从分享码导入为新的表情分组。
+  rpc ImportEmojiShare(ImportEmojiShare.Req) returns (ImportEmojiShare.Resp) {}
 }
 
 // EmojiGroup 是账号拥有的表情分组。
 message EmojiGroup {
-  int64 id = 1; // 分组 ID。
-  string name = 2; // 分组名称。
-  int64 sort = 3; // 展示排序。
-  repeated EmojiItem items = 4; // 该分组中的表情项。
+  // 分组 ID。
+  int64 id = 1;
+  // 分组名称。
+  string name = 2;
+  // 展示排序。
+  int64 sort = 3;
+  // 该分组中的表情项。
+  repeated EmojiItem items = 4;
 }
 
 // EmojiItem 是分组中引用的平台图片资产。
 message EmojiItem {
-  int64 id = 1; // 表情项 ID。
-  int64 asset_id = 2; // 平台图片资产 ID。
-  string name = 3; // 可选表情别名。
-  int64 sort = 4; // 分组内展示排序。
+  // 表情项 ID。
+  int64 id = 1;
+  // 平台图片资产 ID。
+  int64 asset_id = 2;
+  // 可选表情别名。
+  string name = 3;
+  // 分组内展示排序。
+  int64 sort = 4;
 }
 
 // ListEmojiGroups 查询账号的全部表情分组。
 message ListEmojiGroups {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 分组所属账号 ID。
-    string query = 2; // 按表情项别名进行的模糊查询。
+    // 分组所属账号 ID。
+    int64 user_id = 1;
+    // 按表情项别名进行的模糊查询。
+    string query = 2;
   }
+  // 响应结果。
   message Resp {
-    repeated EmojiGroup rows = 1; // 表情分组列表。
+    // 表情分组列表。
+    repeated EmojiGroup rows = 1;
   }
 }
 
 // CreateEmojiGroup 创建一个账号表情分组。
 message CreateEmojiGroup {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 分组所属账号 ID。
-    string name = 2; // 新分组名称。
+    // 分组所属账号 ID。
+    int64 user_id = 1;
+    // 新分组名称。
+    string name = 2;
   }
+  // 响应结果。
   message Resp {
-    EmojiGroup group = 1; // 已创建分组。
+    // 已创建分组。
+    EmojiGroup group = 1;
   }
 }
 
 // RenameEmojiGroup 修改账号自有表情分组的名称。
 message RenameEmojiGroup {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 分组所属账号 ID。
-    int64 group_id = 2; // 待修改分组 ID。
-    string name = 3; // 新分组名称。
+    // 分组所属账号 ID。
+    int64 user_id = 1;
+    // 待修改分组 ID。
+    int64 group_id = 2;
+    // 新分组名称。
+    string name = 3;
   }
+  // 响应结果。
   message Resp {
-    EmojiGroup group = 1; // 已重命名分组。
+    // 已重命名分组。
+    EmojiGroup group = 1;
   }
 }
 
 // DeleteEmojiGroup 删除账号自有分组及其表情项引用。
 message DeleteEmojiGroup {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 分组所属账号 ID。
-    int64 group_id = 2; // 待删除分组 ID。
+    // 分组所属账号 ID。
+    int64 user_id = 1;
+    // 待删除分组 ID。
+    int64 group_id = 2;
   }
+  // 响应结果。
   message Resp {}
 }
 
 // AddEmojiItem 向账号自有分组添加一个平台图片资产。
 message AddEmojiItem {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 分组所属账号 ID。
-    optional int64 group_id = 2; // 可选目标分组 ID；缺省时加入默认分组。
-    int64 asset_id = 3; // 已可用的平台图片资产 ID。
-    string name = 4; // 可选表情别名。
+    // 分组所属账号 ID。
+    int64 user_id = 1;
+    // 可选目标分组 ID；缺省时加入默认分组。
+    optional int64 group_id = 2;
+    // 已可用的平台图片资产 ID。
+    int64 asset_id = 3;
+    // 可选表情别名。
+    string name = 4;
   }
+  // 响应结果。
   message Resp {
-    EmojiItem item = 1; // 已添加表情项。
+    // 已添加表情项。
+    EmojiItem item = 1;
   }
 }
 
 // DeleteEmojiItem 从账号自有分组删除一个表情项。
 message DeleteEmojiItem {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 表情项所属账号 ID。
-    int64 item_id = 2; // 待删除表情项 ID。
+    // 表情项所属账号 ID。
+    int64 user_id = 1;
+    // 待删除表情项 ID。
+    int64 item_id = 2;
   }
+  // 响应结果。
   message Resp {}
 }
 
 // MoveEmojiItem 将当前账号的表情项移动到同一账号的目标分组。
 message MoveEmojiItem {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 表情项与目标分组所属账号 ID。
-    int64 item_id = 2; // 待移动表情项 ID。
-    int64 group_id = 3; // 目标分组 ID。
+    // 表情项与目标分组所属账号 ID。
+    int64 user_id = 1;
+    // 待移动表情项 ID。
+    int64 item_id = 2;
+    // 目标分组 ID。
+    int64 group_id = 3;
   }
+  // 响应结果。
   message Resp {
-    EmojiItem item = 1; // 已移动表情项。
+    // 已移动表情项。
+    EmojiItem item = 1;
   }
 }
 
 // RenameEmojiItem 修改当前账号表情项的别名。
 message RenameEmojiItem {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 表情项所属账号 ID。
-    int64 item_id = 2; // 待重命名表情项 ID。
-    string name = 3; // 新表情别名。
+    // 表情项所属账号 ID。
+    int64 user_id = 1;
+    // 待重命名表情项 ID。
+    int64 item_id = 2;
+    // 新表情别名。
+    string name = 3;
   }
+  // 响应结果。
   message Resp {
-    EmojiItem item = 1; // 已重命名表情项。
+    // 已重命名表情项。
+    EmojiItem item = 1;
   }
 }
 
 // ReorderEmojiGroups 按完整 ID 序列重排当前账号的表情分组。
 message ReorderEmojiGroups {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 分组所属账号 ID。
-    repeated int64 group_ids = 2; // 按最终展示顺序排列的完整分组 ID 序列。
+    // 分组所属账号 ID。
+    int64 user_id = 1;
+    // 按最终展示顺序排列的完整分组 ID 序列。
+    repeated int64 group_ids = 2;
   }
+  // 响应结果。
   message Resp {}
 }
 
 // ReorderEmojiItems 按完整 ID 序列重排一个分组内的表情项。
 message ReorderEmojiItems {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 表情项所属账号 ID。
-    optional int64 group_id = 2; // 可选目标分组 ID；为空时重排未分组表情。
-    repeated int64 item_ids = 3; // 按最终展示顺序排列的完整表情项 ID 序列。
+    // 表情项所属账号 ID。
+    int64 user_id = 1;
+    // 可选目标分组 ID；为空时重排未分组表情。
+    optional int64 group_id = 2;
+    // 按最终展示顺序排列的完整表情项 ID 序列。
+    repeated int64 item_ids = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
 // CreateEmojiShare 把一个表情分组快照写入短期缓存。
 message CreateEmojiShare {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 分享者账号 ID。
-    int64 group_id = 2; // 待分享分组 ID。
+    // 分享者账号 ID。
+    int64 user_id = 1;
+    // 待分享分组 ID。
+    int64 group_id = 2;
   }
+  // 响应结果。
   message Resp {
-    string code = 1; // 高熵分享码。
-    int64 expires_in_seconds = 2; // 从响应开始计算的剩余有效秒数。
+    // 高熵分享码。
+    string code = 1;
+    // 从响应开始计算的剩余有效秒数。
+    int64 expires_in_seconds = 2;
   }
 }
 
 // ImportEmojiShare 根据分享码新建分组并复制可用表情项引用。
 message ImportEmojiShare {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 导入者账号 ID。
-    string code = 2; // 待导入分享码。
+    // 导入者账号 ID。
+    int64 user_id = 1;
+    // 待导入分享码。
+    string code = 2;
   }
+  // 响应结果。
   message Resp {
-    EmojiGroup group = 1; // 新建的导入分组。
-    uint32 skipped_count = 2; // 因资源不可用而跳过的表情数量。
+    // 新建的导入分组。
+    EmojiGroup group = 1;
+    // 因资源不可用而跳过的表情数量。
+    uint32 skipped_count = 2;
   }
 }

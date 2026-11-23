@@ -2,138 +2,228 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "common/common.proto";
-import "common/enums/language.proto";
+import "common/v1/common.proto";
 import "google/protobuf/timestamp.proto";
-import "user/v1/enum/relation.proto";
+import "user/enum/v1/relation.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
+// 服务定义。
 service RelationService {
-  rpc FollowRelation(FollowRelation.Req) returns (FollowRelation.Resp) {} // 账号关注目标账号，并同步维护双方关注统计。
-  rpc UnfollowRelation(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {} // 账号取消关注目标账号，并同步维护双方关注统计。
-  rpc BlockRelation(BlockRelation.Req) returns (BlockRelation.Resp) {} // 账号拉黑目标账号，并同步维护双方拉黑统计。
-  rpc UnblockRelation(UnblockRelation.Req) returns (UnblockRelation.Resp) {} // 账号取消拉黑目标账号，并同步维护双方拉黑统计。
-  rpc ListFollowingRelations(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {} // 查询账号关注的账号列表。
-  rpc ListFollowersRelations(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {} // 查询账号的粉丝关系列表。
-  rpc ListBlockedRelations(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {} // 查询账号拉黑的账号列表。
-  rpc MapRelationStatuses(MapRelationStatuses.Req) returns (MapRelationStatuses.Resp) {} // 查询账号与多个目标账号之间的关系状态映射。
-  rpc ListBlockedCounterparts(ListBlockedCounterparts.Req) returns (ListBlockedCounterparts.Resp) {} // 查询与账号存在任一方向拉黑关系的账号。
+  // 账号关注目标账号，并同步维护双方关注统计。
+  rpc FollowRelation(FollowRelation.Req) returns (FollowRelation.Resp) {}
+  // 账号取消关注目标账号，并同步维护双方关注统计。
+  rpc UnfollowRelation(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {}
+  // 账号拉黑目标账号，并同步维护双方拉黑统计。
+  rpc BlockRelation(BlockRelation.Req) returns (BlockRelation.Resp) {}
+  // 账号取消拉黑目标账号，并同步维护双方拉黑统计。
+  rpc UnblockRelation(UnblockRelation.Req) returns (UnblockRelation.Resp) {}
+  // 查询账号关注的账号列表。
+  rpc ListFollowingRelations(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {}
+  // 查询账号的粉丝关系列表。
+  rpc ListFollowersRelations(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {}
+  // 查询账号拉黑的账号列表。
+  rpc ListBlockedRelations(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {}
+  // 查询账号与多个目标账号之间的关系状态映射。
+  rpc MapRelationStatuses(MapRelationStatuses.Req) returns (MapRelationStatuses.Resp) {}
+  // 查询与账号存在任一方向拉黑关系的账号。
+  rpc ListBlockedCounterparts(ListBlockedCounterparts.Req) returns (ListBlockedCounterparts.Resp) {}
 }
 
+// 协议消息。
 message FollowRelation {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 actor_id = 1;
+    // 协议字段。
     int64 target_id = 2;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UnfollowRelation {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 actor_id = 1;
+    // 协议字段。
     int64 target_id = 2;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message BlockRelation {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 actor_id = 1;
+    // 协议字段。
     int64 target_id = 2;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UnblockRelation {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 actor_id = 1;
+    // 协议字段。
     int64 target_id = 2;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message ListFollowingRelations {
+  // 请求参数。
   message Req {
-    .common.api.app.common.PageReq page = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageReq page = 1;
+    // 协议字段。
     int64 user_id = 2;
+    // 协议字段。
     repeated int64 excluded_user_ids = 3;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Relation {
+      // 协议字段。
       int64 id = 1;
-      RelationType type = 2;
+      // 协议字段。
+      .common.api.app.user.enum.v1.RelationType type = 2;
+      // 协议字段。
       int64 actor_id = 3;
+      // 协议字段。
       int64 target_id = 4;
+      // 协议字段。
       google.protobuf.Timestamp created_at = 1000;
+      // 协议字段。
       google.protobuf.Timestamp updated_at = 1001;
     }
-    .common.api.app.common.PageResp page = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 协议字段。
     repeated Relation rows = 2;
   }
 }
 
+// 协议消息。
 message ListFollowersRelations {
+  // 请求参数。
   message Req {
-    .common.api.app.common.PageReq page = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageReq page = 1;
+    // 协议字段。
     int64 user_id = 2;
+    // 协议字段。
     repeated int64 excluded_user_ids = 3;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Relation {
+      // 协议字段。
       int64 id = 1;
-      RelationType type = 2;
+      // 协议字段。
+      .common.api.app.user.enum.v1.RelationType type = 2;
+      // 协议字段。
       int64 actor_id = 3;
+      // 协议字段。
       int64 target_id = 4;
+      // 协议字段。
       google.protobuf.Timestamp created_at = 1000;
+      // 协议字段。
       google.protobuf.Timestamp updated_at = 1001;
     }
-    .common.api.app.common.PageResp page = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 协议字段。
     repeated Relation rows = 2;
   }
 }
 
+// 协议消息。
 message ListBlockedRelations {
+  // 请求参数。
   message Req {
-    .common.api.app.common.PageReq page = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageReq page = 1;
+    // 协议字段。
     int64 user_id = 2;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Relation {
+      // 协议字段。
       int64 id = 1;
-      RelationType type = 2;
+      // 协议字段。
+      .common.api.app.user.enum.v1.RelationType type = 2;
+      // 协议字段。
       int64 actor_id = 3;
+      // 协议字段。
       int64 target_id = 4;
+      // 协议字段。
       google.protobuf.Timestamp created_at = 1000;
+      // 协议字段。
       google.protobuf.Timestamp updated_at = 1001;
     }
-    .common.api.app.common.PageResp page = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 协议字段。
     repeated Relation rows = 2;
   }
 }
 
+// 协议消息。
 message MapRelationStatuses {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 actor_id = 1;
+    // 协议字段。
     repeated int64 target_ids = 2;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message RelationStatus {
+      // 协议字段。
       int64 target_id = 1;
+      // 协议字段。
       bool following = 2;
+      // 协议字段。
       bool followed_by = 3;
+      // 协议字段。
       bool blocking = 4;
+      // 协议字段。
       bool blocked_by = 5;
     }
+    // 协议字段。
     map<int64, RelationStatus> statuses = 1;
   }
 }
 
+// 协议消息。
 message ListBlockedCounterparts {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     repeated int64 user_ids = 1;
   }
 }

@@ -1,7 +1,7 @@
 package biz
 
 import (
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 
 	"notify/internal/biz/usecase"
 	channelusecase "notify/internal/biz/usecase/channel"

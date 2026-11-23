@@ -2,22 +2,32 @@ syntax = "proto3";
 
 package common.api.app.notify.v1;
 
-import "notify/v1/enum/channel.proto";
+import "notify/enum/v1/channel.proto";
 
 option go_package = "common/proto/gen/notify/v1;v1";
 
+// 服务定义。
 service NotifyRateLimitService {
-  rpc CheckNotificationRateLimit(CheckNotificationRateLimit.Req) returns (CheckNotificationRateLimit.Resp) {} // 查询通知通道收件目标是否已被限流。
+  // 查询通知通道收件目标是否已被限流。
+  rpc CheckNotificationRateLimit(CheckNotificationRateLimit.Req) returns (CheckNotificationRateLimit.Resp) {}
 }
 
+// 协议消息。
 message CheckNotificationRateLimit {
+  // 请求参数。
   message Req {
-    NotificationChannel channel = 1;
+    // 协议字段。
+    .common.api.app.notify.enum.v1.NotificationChannel channel = 1;
+    // 协议字段。
     string recipient = 2;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     bool limited = 1;
+    // 协议字段。
     int64 retry_after_seconds = 2;
+    // 协议字段。
     int64 remaining_count = 3;
   }
 }

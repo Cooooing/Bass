@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "common/common.proto";
+import "common/v1/common.proto";
 import "google/protobuf/timestamp.proto";
-import "user/v1/enum/account_status.proto";
+import "user/enum/v1/account_status.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
@@ -30,132 +30,219 @@ service AccountService {
   rpc AvatarAccount(AvatarAccount.Req) returns (AvatarAccount.Resp) {}
 }
 
+// 协议消息。
 message AccountBasic {
-  int64 id = 1; // 账号 ID
-  string name = 2; // 账号名
-  optional string nickname = 3; // 昵称
-  optional string url = 4; // 个人主页 URL
-  optional int64 avatar_asset_id = 5; // 头像资源 ID
-  optional int64 background_asset_id = 6; // 个人主页背景图资源 ID
-  optional string introduction = 7; // 个人简介
-  optional string mbti = 8; // MBTI 类型，规范化为大写
-  AccountStatus status = 9; // 账号状态
-  optional int32 follow_count = 10; // 关注数量
-  optional int32 follower_count = 11; // 粉丝数量
-  google.protobuf.Timestamp created_at = 1000; // 创建时间
-  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+  // 账号 ID
+  int64 id = 1;
+  // 账号名
+  string name = 2;
+  // 昵称
+  optional string nickname = 3;
+  // 个人主页 URL
+  optional string url = 4;
+  // 头像资源 ID
+  optional int64 avatar_asset_id = 5;
+  // 个人主页背景图资源 ID
+  optional int64 background_asset_id = 6;
+  // 个人简介
+  optional string introduction = 7;
+  // MBTI 类型，规范化为大写
+  optional string mbti = 8;
+  // 账号状态
+  .common.api.app.user.enum.v1.AccountStatus status = 9;
+  // 关注数量
+  optional int32 follow_count = 10;
+  // 粉丝数量
+  optional int32 follower_count = 11;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
 }
 
+// 协议消息。
 message AccountContact {
-  int64 user_id = 1; // 账号 ID
-  optional string email = 2; // 邮箱地址
-  optional string phone = 3; // 手机号
+  // 账号 ID
+  int64 user_id = 1;
+  // 邮箱地址
+  optional string email = 2;
+  // 手机号
+  optional string phone = 3;
 }
 
+// 协议消息。
 message AccountInfo {
-  AccountBasic basic = 1; // 账号基础资料
-  AccountContact contact = 2; // 账号联系方式
+  // 账号基础资料
+  AccountBasic basic = 1;
+  // 账号联系方式
+  AccountContact contact = 2;
 }
 
+// 协议消息。
 message GetAccount {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 账号 ID；name 未传时必填
-    optional string name = 2; // 账号名；传入时优先于 user_id
+    // 账号 ID；name 未传时必填
+    int64 user_id = 1;
+    // 账号名；传入时优先于 user_id
+    optional string name = 2;
   }
+  // 响应结果。
   message Resp {
-    AccountInfo account = 1; // 账号完整资料
-    optional google.protobuf.Timestamp last_success_login_at = 2; // 最近一次成功登录时间
+    // 账号完整资料
+    AccountInfo account = 1;
+    // 最近一次成功登录时间
+    optional google.protobuf.Timestamp last_success_login_at = 2;
   }
 }
 
+// 协议消息。
 message ListAccounts {
+  // 请求参数。
   message Req {
+    // 协议消息。
     message AccountQuery {
-      repeated int64 user_ids = 1; // 账号 ID 列表
-      repeated string names = 2; // 账号名列表。
-      repeated int64 excluded_user_ids = 3; // 不返回的账号 ID。
+      // 账号 ID 列表
+      repeated int64 user_ids = 1;
+      // 账号名列表。
+      repeated string names = 2;
+      // 不返回的账号 ID。
+      repeated int64 excluded_user_ids = 3;
     }
-    AccountQuery query = 1; // 查询条件
+    // 查询条件
+    AccountQuery query = 1;
   }
+  // 响应结果。
   message Resp {
-    repeated AccountInfo rows = 1; // 账号列表
+    // 账号列表
+    repeated AccountInfo rows = 1;
   }
 }
 
+// 协议消息。
 message MapAccounts {
+  // 请求参数。
   message Req {
+    // 协议消息。
     message AccountQuery {
-      repeated int64 user_ids = 1; // 账号 ID 列表
-      repeated string names = 2; // 账号名列表。
-      repeated int64 excluded_user_ids = 3; // 不返回的账号 ID。
+      // 账号 ID 列表
+      repeated int64 user_ids = 1;
+      // 账号名列表。
+      repeated string names = 2;
+      // 不返回的账号 ID。
+      repeated int64 excluded_user_ids = 3;
     }
-    AccountQuery query = 1; // 查询条件
+    // 查询条件
+    AccountQuery query = 1;
   }
+  // 响应结果。
   message Resp {
-    map<int64, AccountInfo> accounts = 1; // 账号映射
+    // 账号映射
+    map<int64, AccountInfo> accounts = 1;
   }
 }
 
+// 协议消息。
 message SearchMentionAccounts {
+  // 请求参数。
   message Req {
-    string query = 1; // 用户名或昵称搜索词，可为空。
-    .common.api.app.common.PageReq page = 2; // 分页参数。
-    repeated int64 excluded_user_ids = 3; // 不返回的账号 ID。
+    // 用户名或昵称搜索词，可为空。
+    string query = 1;
+    // 分页参数。
+    .common.api.app.common.v1.PageReq page = 2;
+    // 不返回的账号 ID。
+    repeated int64 excluded_user_ids = 3;
   }
+  // 响应结果。
   message Resp {
-    repeated AccountBasic rows = 1; // 可提及账号。
-    .common.api.app.common.PageResp page = 2; // 分页结果。
+    // 可提及账号。
+    repeated AccountBasic rows = 1;
+    // 分页结果。
+    .common.api.app.common.v1.PageResp page = 2;
   }
 }
 
+// 协议消息。
 message UpdateProfileAccount {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 账号 ID
-    optional int64 avatar_asset_id = 2; // 头像资源 ID
-    optional int64 background_asset_id = 3; // 个人主页背景图资源 ID；0 表示清除
-    optional string nickname = 4; // 昵称
-    optional string url = 5; // 个人主页 URL
-    optional string introduction = 6; // 个人简介
-    optional string mbti = 7; // MBTI 类型，空字符串表示清除
+    // 账号 ID
+    int64 user_id = 1;
+    // 头像资源 ID
+    optional int64 avatar_asset_id = 2;
+    // 个人主页背景图资源 ID；0 表示清除
+    optional int64 background_asset_id = 3;
+    // 昵称
+    optional string nickname = 4;
+    // 个人主页 URL
+    optional string url = 5;
+    // 个人简介
+    optional string introduction = 6;
+    // MBTI 类型，空字符串表示清除
+    optional string mbti = 7;
   }
+  // 响应结果。
   message Resp {
-    AccountBasic account = 1; // 更新后的账号资料
+    // 更新后的账号资料
+    AccountBasic account = 1;
   }
 }
 
+// 协议消息。
 message UpdatePasswordAccount {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 账号 ID
-    string old_password = 2; // 旧密码
-    string new_password = 3; // 新密码
+    // 账号 ID
+    int64 user_id = 1;
+    // 旧密码
+    string old_password = 2;
+    // 新密码
+    string new_password = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UpdateEmailAccount {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 账号 ID
-    string email = 2; // 新邮箱地址
-    string code = 3; // 邮箱 OTP
+    // 账号 ID
+    int64 user_id = 1;
+    // 新邮箱地址
+    string email = 2;
+    // 邮箱 OTP
+    string code = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UpdatePhoneAccount {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 账号 ID
-    string phone = 2; // 新手机号
-    string code = 3; // 手机 OTP
+    // 账号 ID
+    int64 user_id = 1;
+    // 新手机号
+    string phone = 2;
+    // 手机 OTP
+    string code = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message AvatarAccount {
+  // 请求参数。
   message Req {
-    string name = 1; // 账号名
+    // 账号名
+    string name = 1;
   }
   // Resp 通过 raw_body 返回头像原始字节及内容类型。
   message Resp {
-    .common.api.app.common.ImageResp raw_body = 1;
+    // 协议字段。
+    .common.api.app.common.v1.ImageResp raw_body = 1;
   }
 }

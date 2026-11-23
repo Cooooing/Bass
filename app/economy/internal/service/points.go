@@ -3,9 +3,9 @@ package service
 import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
-	"common/proto/gen/common"
-	commonenums "common/proto/gen/common/enums"
-	cerrors "common/proto/gen/common/errors"
+	commonenums "common/proto/gen/common/enums/v1"
+	cerrors "common/proto/gen/common/errors/v1"
+	"common/proto/gen/common/v1"
 	v1 "common/proto/gen/economy/v1"
 	"context"
 

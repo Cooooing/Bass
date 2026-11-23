@@ -2,46 +2,70 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
+import "content/enum/v1/article.proto";
 import "content/v1/access.proto";
-import "content/v1/enum/article.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
 // ContentPostscriptService 提供文章附言能力
 service ContentPostscriptService {
-  rpc AddPostscript(AddPostscript.Req) returns (AddPostscript.Resp) {} // 添加文章附言
-  rpc ListPostscripts(ListPostscripts.Req) returns (ListPostscripts.Resp) {} // 查询文章附言列表
+  // 添加文章附言
+  rpc AddPostscript(AddPostscript.Req) returns (AddPostscript.Resp) {}
+  // 查询文章附言列表
+  rpc ListPostscripts(ListPostscripts.Req) returns (ListPostscripts.Resp) {}
 }
 
+// 协议消息。
 message AddPostscript {
+  // 请求参数。
   message Req {
-    int64 article_id = 1; // 文章 ID
-    string content = 2; // 附言内容
-    ContentAccess access = 3; // 访问上下文
+    // 文章 ID
+    int64 article_id = 1;
+    // 附言内容
+    string content = 2;
+    // 访问上下文
+    ContentAccess access = 3;
   }
+  // 响应结果。
   message Resp {
-    Postscript postscript = 1; // 创建后的附言
+    // 创建后的附言
+    Postscript postscript = 1;
   }
 }
 
+// 协议消息。
 message ListPostscripts {
+  // 请求参数。
   message Req {
-    int64 article_id = 1; // 文章 ID
-    ContentAccess access = 2; // 访问上下文
+    // 文章 ID
+    int64 article_id = 1;
+    // 访问上下文
+    ContentAccess access = 2;
   }
+  // 响应结果。
   message Resp {
-    repeated Postscript rows = 1; // 附言列表
+    // 附言列表
+    repeated Postscript rows = 1;
   }
 }
 
+// 协议消息。
 message Postscript {
-  int64 id = 1; // 附言 ID
-  int64 article_id = 2; // 文章 ID
-  string content = 3; // 附言内容
-  ContentRestriction restriction = 4; // 治理限制
-  optional int64 created_by = 1002; // 创建账号 ID
-  optional int64 updated_by = 1003; // 更新账号 ID
-  google.protobuf.Timestamp created_at = 1000; // 创建时间
-  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+  // 附言 ID
+  int64 id = 1;
+  // 文章 ID
+  int64 article_id = 2;
+  // 附言内容
+  string content = 3;
+  // 治理限制
+  .common.api.app.content.enum.v1.ContentRestriction restriction = 4;
+  // 创建账号 ID
+  optional int64 created_by = 1002;
+  // 更新账号 ID
+  optional int64 updated_by = 1003;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
 }

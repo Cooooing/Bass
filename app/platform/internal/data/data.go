@@ -3,7 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	nats "common/pkg/client/nats"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"platform/internal/config"
 	"platform/internal/data/client"

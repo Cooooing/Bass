@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	realtimehubv1enum "common/proto/gen/realtime_hub/v1/enum"
+	realtimehubv1enum "common/proto/gen/realtime_hub/enum/v1"
 )
 
 // NodeGroup 表示 node 注册到 Hub 时声明的节点集群。

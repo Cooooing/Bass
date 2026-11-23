@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 )
 
 type EventSubject string

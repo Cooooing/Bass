@@ -27,37 +27,55 @@ service AuthService {
   }
 }
 
+// 协议消息。
 message RegisterAccount {
+  // 请求参数。
   message Req {
-    string email = 1; // 邮箱
-    string password = 2; // 账号密码
+    // 邮箱
+    string email = 1;
+    // 账号密码
+    string password = 2;
     option (gnostic.openapi.v3.schema) = {
       required: "email"
       required: "password"
     };
   }
 
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message LoginAccount {
+  // 请求参数。
   message Req {
-    string email = 1; // 邮箱
-    string password = 2; // 账号密码
+    // 邮箱
+    string email = 1;
+    // 账号密码
+    string password = 2;
     option (gnostic.openapi.v3.schema) = {
       required: "email"
       required: "password"
     };
   }
 
+  // 响应结果。
   message Resp {
-    string access_token = 1; // access token
-    string refresh_token = 2; // refresh token
-    google.protobuf.Timestamp access_token_expires_at = 3; // access token 过期时间
-    google.protobuf.Timestamp refresh_token_expires_at = 4; // refresh token 过期时间
-    google.protobuf.Timestamp session_expires_at = 5; // session 过期时间
-    int64 user_id = 6; // 当前账号 ID
-    string name = 7; // 账号名
-    string nickname = 8; // 昵称
+    // 访问令牌
+    string access_token = 1;
+    // 刷新令牌
+    string refresh_token = 2;
+    // 访问令牌过期时间
+    google.protobuf.Timestamp access_token_expires_at = 3;
+    // 刷新令牌过期时间
+    google.protobuf.Timestamp refresh_token_expires_at = 4;
+    // session 过期时间
+    google.protobuf.Timestamp session_expires_at = 5;
+    // 当前账号 ID
+    int64 user_id = 6;
+    // 账号名
+    string name = 7;
+    // 昵称
+    string nickname = 8;
   }
 }

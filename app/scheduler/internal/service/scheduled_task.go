@@ -3,9 +3,9 @@ package service
 import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
+	schedulerv1enum "common/proto/gen/scheduler/enum/v1"
 	schedulerv1 "common/proto/gen/scheduler/v1"
-	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
 	"context"
 	"time"
 

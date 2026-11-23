@@ -2,8 +2,8 @@ package repo
 
 import (
 	"common/pkg/client/rpc"
+	notifyv1enum "common/proto/gen/notify/enum/v1"
 	notifyv1 "common/proto/gen/notify/v1"
-	notifyv1enum "common/proto/gen/notify/v1/enum"
 	"context"
 
 	bizrepo "user/internal/biz/repo"

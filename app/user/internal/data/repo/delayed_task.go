@@ -3,8 +3,8 @@ package repo
 import (
 	"common/pkg/client/rpc"
 	commonscheduler "common/pkg/scheduler"
+	schedulerv1enum "common/proto/gen/scheduler/enum/v1"
 	schedulerv1 "common/proto/gen/scheduler/v1"
-	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
 	"context"
 	"errors"
 	"time"

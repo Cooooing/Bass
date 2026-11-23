@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	notifyproto "common/proto/gen/notify/v1/enum"
+	notifyproto "common/proto/gen/notify/enum/v1"
 )
 
 // NotificationType identifies the notification template and delivery kind.

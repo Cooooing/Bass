@@ -4,18 +4,29 @@ package common.api.app.im.v1;
 
 option go_package = "common/proto/gen/im/v1;v1";
 
+// 服务定义。
 service TCCGlobalChatBarrageService {
-  rpc Try(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {} // 创建待确认弹幕。
-  rpc Confirm(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {} // 发布待确认弹幕。
-  rpc Cancel(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {} // 取消待确认弹幕。
+  // 创建待确认弹幕。
+  rpc Try(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {}
+  // 发布待确认弹幕。
+  rpc Confirm(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {}
+  // 取消待确认弹幕。
+  rpc Cancel(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {}
 }
 
+// 协议消息。
 message TCCGlobalChatBarrage {
+  // 请求参数。
   message Req {
-    int64 barrage_id = 1; // IM 预分配的弹幕记录 ID，仅用于 TCC 分支关联。
-    int64 user_id = 2; // 发送账号 ID。
-    string content = 3; // 纯文本弹幕内容。
-    int64 points_cost = 4; // 本次消耗积分。
+    // IM 预分配的弹幕记录 ID，仅用于 TCC 分支关联。
+    int64 barrage_id = 1;
+    // 发送账号 ID。
+    int64 user_id = 2;
+    // 纯文本弹幕内容。
+    string content = 3;
+    // 本次消耗积分。
+    int64 points_cost = 4;
   }
+  // 响应结果。
   message Resp {}
 }

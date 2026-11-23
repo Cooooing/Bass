@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/content/v1/enum"
+	v1 "common/proto/gen/content/enum/v1"
 )
 
 // ContentActionStatus 表示需要异步确认的内容互动命令状态。

@@ -12,7 +12,7 @@ import (
 	"bff_game_idle/internal/server/errormessage"
 	"bff_game_idle/internal/service"
 	commonClient "common/pkg/client"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"log/slog"
 
 	"github.com/go-kratos/kratos/v3"

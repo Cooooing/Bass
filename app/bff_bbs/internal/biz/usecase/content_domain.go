@@ -3,9 +3,9 @@ package usecase
 import (
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
-	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
-	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
-	cerrors "common/proto/gen/common/errors"
+	bbscontentv1enum "common/proto/gen/bff_bbs/content/enum/v1"
+	bbscontentv1 "common/proto/gen/bff_bbs/content/v1"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"bff_bbs/internal/biz/repo"

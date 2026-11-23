@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.content.v1;
+
+import "bff_bbs/content/v1/article.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/content/v1;content";
+
+// ArticleSearchService 向社区客户端提供公开文章关键词搜索。
+service ArticleSearchService {
+  // 服务方法。
+  rpc SearchArticles(SearchArticles.Req) returns (SearchArticles.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/search"
+      body: "*"
+    };
+  }
+}
+
+// 协议消息。
+message SearchArticles {
+  // 请求参数。
+  message Req {
+    // 必填，搜索词
+    string query = 1;
+    // 可选，不透明续页游标
+    optional string cursor = 2;
+    // 可选，返回条数
+    uint32 size = 3;
+    option (gnostic.openapi.v3.schema) = {required: "query"};
+  }
+  // 响应结果。
+  message Resp {
+    // 文章列表
+    repeated ArticleListItem rows = 1;
+    // 下一页游标
+    optional string next_cursor = 2;
+  }
+}

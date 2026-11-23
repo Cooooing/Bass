@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.enum.v1;
+
+option go_package = "common/proto/gen/scheduler/enum/v1;enum";
+
+// 枚举定义。
+enum SchedulerMessageHandleAction {
+  // 枚举值。
+  SCHEDULER_MESSAGE_HANDLE_ACTION_UNSPECIFIED = 0;
+  // 枚举值。
+  SCHEDULER_MESSAGE_HANDLE_ACTION_COMPLETE = 1;
+  // 枚举值。
+  SCHEDULER_MESSAGE_HANDLE_ACTION_RETRY = 2;
+  // 枚举值。
+  SCHEDULER_MESSAGE_HANDLE_ACTION_DISCARD = 3;
+}

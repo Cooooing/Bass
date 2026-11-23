@@ -5,7 +5,7 @@ import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
 	"common/pkg/server"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"user/internal/biz"
 	"user/internal/config"

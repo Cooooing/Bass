@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.user.v1;
+
+import "bff_bbs/user/model/v1/relation.proto";
+import "common/v1/common.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/user/v1;user";
+
+// 账号关系接口。
+service RelationService {
+  // 当前账号关注目标账号。
+  rpc FollowRelation(FollowRelation.Req) returns (FollowRelation.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/follow"
+      body: "*"
+    };
+  }
+
+  // 当前账号取消关注目标账号。
+  rpc UnfollowRelation(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/unfollow"
+      body: "*"
+    };
+  }
+
+  // 当前账号拉黑目标账号。
+  rpc BlockRelation(BlockRelation.Req) returns (BlockRelation.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/block"
+      body: "*"
+    };
+  }
+
+  // 当前账号取消拉黑目标账号。
+  rpc UnblockRelation(UnblockRelation.Req) returns (UnblockRelation.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/unblock"
+      body: "*"
+    };
+  }
+
+  // 分页查询当前账号关注的账号列表。
+  rpc ListFollowingRelations(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/list-following"
+      body: "*"
+    };
+  }
+
+  // 分页查询当前账号的粉丝账号列表。
+  rpc ListFollowersRelations(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/list-followers"
+      body: "*"
+    };
+  }
+
+  // 分页查询当前账号拉黑的账号列表。
+  rpc ListBlockedRelations(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/list-blocked"
+      body: "*"
+    };
+  }
+
+  // 查询当前账号与目标账号之间的关系。
+  rpc GetStatusRelation(GetStatusRelation.Req) returns (GetStatusRelation.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/relation/get-status"
+      body: "*"
+    };
+  }
+}
+
+// 当前账号关注目标账号。
+message FollowRelation {
+  // 请求参数。
+  message Req {
+    // 目标账号 ID
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 当前账号取消关注目标账号。
+message UnfollowRelation {
+  // 请求参数。
+  message Req {
+    // 目标账号 ID
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 当前账号拉黑目标账号。
+message BlockRelation {
+  // 请求参数。
+  message Req {
+    // 目标账号 ID
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 当前账号取消拉黑目标账号。
+message UnblockRelation {
+  // 请求参数。
+  message Req {
+    // 目标账号 ID
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 分页查询当前账号关注的账号列表。
+message ListFollowingRelations {
+  // 请求参数。
+  message Req {
+    // 分页参数
+    .common.api.app.common.v1.PageReq page = 1;
+  }
+  // 响应结果。
+  message Resp {
+    // 分页结果
+    .common.api.app.common.v1.PageResp page = 1;
+    // 账号关系列表
+    repeated .common.api.app.bff_bbs.user.model.v1.Relation rows = 2;
+  }
+}
+
+// 分页查询当前账号的粉丝账号列表。
+message ListFollowersRelations {
+  // 请求参数。
+  message Req {
+    // 分页参数
+    .common.api.app.common.v1.PageReq page = 1;
+  }
+  // 响应结果。
+  message Resp {
+    // 分页结果
+    .common.api.app.common.v1.PageResp page = 1;
+    // 账号关系列表
+    repeated .common.api.app.bff_bbs.user.model.v1.Relation rows = 2;
+  }
+}
+
+// 分页查询当前账号拉黑的账号列表。
+message ListBlockedRelations {
+  // 请求参数。
+  message Req {
+    // 分页参数
+    .common.api.app.common.v1.PageReq page = 1;
+  }
+  // 响应结果。
+  message Resp {
+    // 分页结果
+    .common.api.app.common.v1.PageResp page = 1;
+    // 账号关系列表
+    repeated .common.api.app.bff_bbs.user.model.v1.Relation rows = 2;
+  }
+}
+
+// 查询当前账号与目标账号之间的关系。
+message GetStatusRelation {
+  // 请求参数。
+  message Req {
+    // 目标账号 ID
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message RelationStatus {
+      // 目标账号 ID
+      int64 target_id = 1;
+      // 当前账号是否关注目标账号
+      bool following = 2;
+      // 目标账号是否关注当前账号
+      bool followed_by = 3;
+      // 当前账号是否拉黑目标账号
+      bool blocking = 4;
+      // 目标账号是否拉黑当前账号
+      bool blocked_by = 5;
+    }
+    // 关系状态
+    RelationStatus status = 1;
+  }
+}

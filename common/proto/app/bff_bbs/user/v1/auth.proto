@@ -1,0 +1,278 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.user.v1;
+
+import "bff_bbs/user/enum/v1/account.proto";
+import "bff_bbs/user/enum/v1/login_type.proto";
+import "bff_bbs/user/enum/v1/register_type.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/user/v1;user";
+
+// 认证接口。
+service AuthService {
+  // 检查注册字段是否可用。
+  rpc CheckRegistrationAvailability(CheckRegistrationAvailability.Req) returns (CheckRegistrationAvailability.Resp) {
+    option (google.api.http) = {get: "/v1/user/auth/register-availability"};
+  }
+  // 注册账号。
+  rpc Register(Register.Req) returns (Register.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/auth/register"
+      body: "*"
+    };
+  }
+  // 登录账号。
+  rpc Login(Login.Req) returns (Login.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/auth/login"
+      body: "*"
+    };
+  }
+
+  // 刷新登录令牌。
+  rpc RefreshToken(RefreshToken.Req) returns (RefreshToken.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/auth/refresh-token"
+      body: "*"
+    };
+  }
+
+  // 退出登录。
+  rpc Logout(Logout.Req) returns (Logout.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/auth/logout"
+      body: "*"
+    };
+  }
+
+  // 注销账号。
+  rpc CancelAccount(CancelAccount.Req) returns (CancelAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/auth/cancel-account"
+      body: "*"
+    };
+  }
+}
+
+// 注册字段可用性预检。
+message CheckRegistrationAvailability {
+  // 请求参数。
+  message Req {
+    // 待检查的账号名
+    optional string name = 1;
+    // 待检查的邮箱
+    optional string email = 2;
+    // 待检查的手机号
+    optional string phone = 3;
+  }
+  // 响应结果。
+  message Resp {
+    // 账号名是否可用
+    optional bool name_available = 1;
+    // 邮箱是否可继续用于注册
+    optional bool email_can_register = 2;
+    // 手机号是否可继续用于注册
+    optional bool phone_can_register = 3;
+  }
+}
+
+// 注册账号。
+message Register {
+  // 请求参数。
+  message Req {
+    // 协议消息。
+    message EmailCredential {
+      // 邮箱地址
+      string email = 1;
+      // 邮箱 OTP
+      string code = 2;
+    }
+
+    // 协议消息。
+    message PhoneCredential {
+      // 手机号
+      string phone = 1;
+      // 手机 OTP
+      string code = 2;
+    }
+
+    // 注册方式
+    .common.api.app.bff_bbs.user.enum.v1.RegisterType type = 1;
+    // 账号名
+    string name = 2;
+    // 账号密码
+    string password = 3;
+    // 昵称
+    optional string nickname = 4;
+    option (gnostic.openapi.v3.schema) = {
+      required: "type"
+      required: "name"
+      required: "password"
+    };
+
+    // 联合字段。
+    oneof credential {
+      // 邮箱注册凭证
+      EmailCredential email_credential = 10;
+      // 手机注册凭证
+      PhoneCredential phone_credential = 11;
+    }
+  }
+  // 响应结果。
+  message Resp {}
+}
+
+// 登录账号。
+message Login {
+  // 请求参数。
+  message Req {
+    // 协议消息。
+    message PasswordCredential {
+      // 账号名、邮箱或手机号
+      string account = 1;
+      // 密码
+      string password = 2;
+      // 账号启用 TOTP 时作为 TOTP code
+      string code = 3;
+    }
+
+    // 协议消息。
+    message EmailCredential {
+      // 邮箱地址
+      string email = 1;
+      // 邮箱 OTP
+      string code = 2;
+    }
+
+    // 协议消息。
+    message PhoneCredential {
+      // 手机号
+      string phone = 1;
+      // 手机 OTP
+      string code = 2;
+    }
+
+    // 登录方式
+    .common.api.app.bff_bbs.user.enum.v1.LoginType type = 1;
+    option (gnostic.openapi.v3.schema) = {required: "type"};
+
+    // 联合字段。
+    oneof credential {
+      // 密码登录凭证
+      PasswordCredential password_credential = 10;
+      // 邮箱登录凭证
+      EmailCredential email_credential = 11;
+      // 手机登录凭证
+      PhoneCredential phone_credential = 12;
+    }
+  }
+  // 响应结果。
+  message Resp {
+    // 协议消息。
+    message Account {
+      // 基础信息
+      AccountBasic basic = 1;
+      // 联系方式
+      AccountContact contact = 2;
+    }
+
+    // 协议消息。
+    message AccountBasic {
+      // 账号 ID
+      int64 id = 1;
+      // 账号名
+      string name = 2;
+      // 昵称
+      optional string nickname = 3;
+      // 个人主页 URL
+      optional string url = 4;
+      // 头像 URL
+      optional string avatar_url = 5;
+      // 个人简介
+      optional string introduction = 6;
+      // MBTI 类型，规范化为大写
+      optional string mbti = 7;
+      // 账号状态
+      .common.api.app.bff_bbs.user.enum.v1.AccountStatus status = 8;
+      // 关注数
+      optional int32 follow_count = 10;
+      // 粉丝数
+      optional int32 follower_count = 11;
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+    }
+
+    // 协议消息。
+    message AccountContact {
+      // 账号 ID
+      int64 user_id = 1;
+      // 邮箱
+      optional string email = 2;
+      // 手机号
+      optional string phone = 3;
+    }
+
+    // 访问令牌
+    string access_token = 1;
+    // 刷新令牌
+    string refresh_token = 2;
+    // 访问令牌过期时间
+    google.protobuf.Timestamp access_token_expires_at = 3;
+    // 刷新令牌空闲过期时间
+    google.protobuf.Timestamp refresh_token_expires_at = 4;
+    // session 绝对过期时间
+    google.protobuf.Timestamp session_expires_at = 5;
+    // 当前账号完整资料
+    Account account = 6;
+  }
+}
+
+// 刷新登录令牌。
+message RefreshToken {
+  // 请求参数。
+  message Req {
+    // 刷新令牌
+    string refresh_token = 1;
+    option (gnostic.openapi.v3.schema) = {required: "refresh_token"};
+  }
+  // 响应结果。
+  message Resp {
+    // 新的访问令牌
+    string access_token = 1;
+    // 新的刷新令牌
+    string refresh_token = 2;
+    // 访问令牌过期时间
+    google.protobuf.Timestamp access_token_expires_at = 3;
+    // 刷新令牌空闲过期时间
+    google.protobuf.Timestamp refresh_token_expires_at = 4;
+    // session 绝对过期时间
+    google.protobuf.Timestamp session_expires_at = 5;
+  }
+}
+
+// 退出登录。
+message Logout {
+  // 请求参数。
+  message Req {}
+  // 响应结果。
+  message Resp {}
+}
+
+// 注销账号。
+message CancelAccount {
+  // 请求参数。
+  message Req {
+    // 当前密码
+    string password = 1;
+    // 启用 TOTP 时作为 TOTP code
+    string code = 2;
+    option (gnostic.openapi.v3.schema) = {required: "password"};
+  }
+  // 响应结果。
+  message Resp {}
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.user.enum.v1;
+
+option go_package = "common/proto/gen/user/enum/v1;enum";
+
+// VerificationType 表示验证码账号类型。
+enum VerificationType {
+  // 未指定
+  VERIFICATION_TYPE_UNSPECIFIED = 0;
+  // 邮箱验证码
+  VERIFICATION_TYPE_EMAIL = 1;
+  // 手机验证码
+  VERIFICATION_TYPE_PHONE = 2;
+}

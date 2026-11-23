@@ -6,7 +6,7 @@ import (
 	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
 	"common/pkg/util/str"
-	commonerrors "common/proto/gen/common/errors"
+	commonerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"log/slog"
 	"strings"

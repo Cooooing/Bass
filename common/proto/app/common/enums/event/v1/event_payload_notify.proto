@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.common.enums.event.v1;
+
+option go_package = "common/proto/gen/common/enums/event/v1;event";
+
+// 协议消息。
+message NotifyStationMessagesCreatedPayload {
+  // 协议字段。
+  int64 notification_id = 1;
+  // 协议字段。
+  repeated int64 receiver_ids = 2;
+}

@@ -3,7 +3,7 @@
 package main
 
 import (
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"github.com/go-kratos/kratos/v3"
 	"github.com/google/wire"
 	"log/slog"

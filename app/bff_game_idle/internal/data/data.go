@@ -4,7 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	nats "common/pkg/client/nats"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	userv1 "common/proto/gen/user/v1"
 
 	"bff_game_idle/internal/config"

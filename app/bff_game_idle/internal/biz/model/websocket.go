@@ -1,7 +1,7 @@
 package model
 
 import (
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 	"time"
 )
 

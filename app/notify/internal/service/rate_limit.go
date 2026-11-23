@@ -2,7 +2,7 @@ package service
 
 import (
 	"common/pkg/apperror"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	v1 "common/proto/gen/notify/v1"
 	"context"
 	"strings"
@@ -37,7 +37,7 @@ func (s *RateLimitService) RegisterHTTP(hs *http.Server) {
 
 func (s *RateLimitService) CheckNotificationRateLimit(ctx context.Context, req *v1.CheckNotificationRateLimit_Req) (*v1.CheckNotificationRateLimit_Resp, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQ_INVALID)
 	}
 	channel, ok := notifyenum.NotificationChannelMap.ToEnum(req.GetChannel())
 	if !ok || (channel != notifyenum.NotificationChannelEmail && channel != notifyenum.NotificationChannelTencentSMS) {

@@ -2,7 +2,7 @@ package repo
 
 import (
 	commonmodel "common/pkg/model"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 
 	"economy/internal/biz/model"

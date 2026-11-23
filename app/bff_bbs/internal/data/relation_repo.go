@@ -3,8 +3,8 @@ package data
 import (
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
+	userv1enum "common/proto/gen/user/enum/v1"
 	userv1 "common/proto/gen/user/v1"
-	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
 
 	"bff_bbs/internal/biz/model"

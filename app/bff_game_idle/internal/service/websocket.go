@@ -3,7 +3,7 @@ package service
 import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"context"
 	"encoding/json"
 	"errors"

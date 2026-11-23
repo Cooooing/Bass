@@ -3,7 +3,7 @@ package usecase
 import (
 	commonenum "common/pkg/enum"
 	"common/pkg/util/jwt"
-	commonenums "common/proto/gen/common/enums"
+	commonenums "common/proto/gen/common/enums/v1"
 	"time"
 
 	"user/internal/biz/model"

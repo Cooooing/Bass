@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.im.enum.v1;
+
+option go_package = "common/proto/gen/im/enum/v1;enum";
+
+// IMMessageType 表示即时消息的渲染语义。
+enum IMMessageType {
+  // 未指定消息类型。
+  IM_MESSAGE_TYPE_UNSPECIFIED = 0;
+  // 普通 Markdown 文本消息。
+  IM_MESSAGE_TYPE_TEXT = 1;
+  // 红包消息。
+  IM_MESSAGE_TYPE_RED_PACKET = 2;
+}

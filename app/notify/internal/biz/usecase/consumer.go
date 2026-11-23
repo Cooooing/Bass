@@ -7,7 +7,7 @@ import (
 	"time"
 
 	commonenum "common/pkg/enum"
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 
 	"notify/internal/biz/repo"
 	"notify/internal/config"

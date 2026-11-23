@@ -1,7 +1,7 @@
 package apperror
 
 import (
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"encoding/json"
 	"net/http"
 	"reflect"

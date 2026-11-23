@@ -2,7 +2,7 @@ package client
 
 import (
 	"common/pkg/constant"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"fmt"
 	"log/slog"
 	"runtime/debug"

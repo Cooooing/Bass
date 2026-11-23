@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"common/pkg/apperror"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 
 	"im/internal/biz/model"
 	"im/internal/biz/repo"

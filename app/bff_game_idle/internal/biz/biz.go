@@ -2,7 +2,7 @@ package biz
 
 import (
 	commonclient "common/pkg/client"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"bff_game_idle/internal/biz/usecase"
 	"bff_game_idle/internal/biz/usecase/command"

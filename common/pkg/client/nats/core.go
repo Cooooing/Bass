@@ -1,7 +1,7 @@
 package nats
 
 import (
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	"context"
 	"errors"
 	"fmt"

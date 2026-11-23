@@ -3,9 +3,9 @@ package data
 import (
 	"common/pkg/apperror"
 	"common/pkg/client/rpc"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
+	gameidleenum "common/proto/gen/game_idle/enum/v1"
 	gameidlev1 "common/proto/gen/game_idle/v1"
-	gameidleenum "common/proto/gen/game_idle/v1/enum"
 	"context"
 	"time"
 

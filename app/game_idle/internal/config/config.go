@@ -2,7 +2,7 @@ package config
 
 import (
 	serverconfig "common/pkg/server/config"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 )
 
 // LoadConfig 加载 game_idle 配置，并注册可热更新配置。

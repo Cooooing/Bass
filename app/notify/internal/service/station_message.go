@@ -2,7 +2,7 @@ package service
 
 import (
 	commonmodel "common/pkg/model"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 	v1 "common/proto/gen/notify/v1"
 	"context"
 	"math"

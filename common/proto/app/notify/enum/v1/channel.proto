@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package common.api.app.notify.enum.v1;
+
+option go_package = "common/proto/gen/notify/enum/v1;enum";
+
+// 枚举定义。
+enum NotificationChannel {
+  // 未指定
+  NOTIFICATION_CHANNEL_UNSPECIFIED = 0;
+  // 站内信
+  NOTIFICATION_CHANNEL_STATION = 1;
+  // 邮件
+  NOTIFICATION_CHANNEL_EMAIL = 2;
+  // 腾讯云短信
+  NOTIFICATION_CHANNEL_TENCENT_SMS = 3;
+  // 飞书 Webhook
+  NOTIFICATION_CHANNEL_LARK_WEBHOOK = 4;
+}

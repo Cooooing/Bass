@@ -8,39 +8,64 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // ContentMoonbreezeService 提供短动态的事实写入与游标读取能力。
 service ContentMoonbreezeService {
+  // 服务方法。
   rpc CreateMoonbreeze(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {}
+  // 服务方法。
   rpc PageMoonbreezes(PageMoonbreezes.Req) returns (PageMoonbreezes.Resp) {}
 }
 
+// 协议消息。
 message CreateMoonbreeze {
+  // 请求参数。
   message Req {
-    string content = 1; // 动态正文
-    int64 author_id = 2; // 作者账号 ID
-    optional string city = 3; // 发布时城市快照
+    // 动态正文
+    string content = 1;
+    // 作者账号 ID
+    int64 author_id = 2;
+    // 发布时城市快照
+    optional string city = 3;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     Moonbreeze moonbreeze = 1;
   }
 }
 
+// 协议消息。
 message PageMoonbreezes {
+  // 请求参数。
   message Req {
-    repeated int64 author_ids = 1; // 作者账号 ID；空表示全部作者
-    optional string cursor = 2; // 不透明续页游标
-    uint32 size = 3; // 页面大小
-    repeated int64 excluded_author_ids = 4; // 读取侧排除的作者账号 ID
+    // 作者账号 ID；空表示全部作者
+    repeated int64 author_ids = 1;
+    // 不透明续页游标
+    optional string cursor = 2;
+    // 页面大小
+    uint32 size = 3;
+    // 读取侧排除的作者账号 ID
+    repeated int64 excluded_author_ids = 4;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     repeated Moonbreeze rows = 1;
-    optional string next_cursor = 2; // 下一页游标
+    // 下一页游标
+    optional string next_cursor = 2;
   }
 }
 
+// 协议消息。
 message Moonbreeze {
+  // 协议字段。
   int64 id = 1;
+  // 协议字段。
   string content = 2;
+  // 协议字段。
   int64 author_id = 3;
+  // 协议字段。
   optional string city = 4;
+  // 协议字段。
   google.protobuf.Timestamp created_at = 1000;
+  // 协议字段。
   google.protobuf.Timestamp updated_at = 1001;
 }

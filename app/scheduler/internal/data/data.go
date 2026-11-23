@@ -4,7 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	nats "common/pkg/client/nats"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	"scheduler/internal/config"
 	"scheduler/internal/data/client"

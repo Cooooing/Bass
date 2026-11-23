@@ -2,8 +2,8 @@ package data
 
 import (
 	"common/pkg/client/rpc"
+	platformv1enum "common/proto/gen/platform/enum/v1"
 	platformv1 "common/proto/gen/platform/v1"
-	platformv1enum "common/proto/gen/platform/v1/enum"
 	"context"
 
 	"bff_bbs/internal/biz/model"

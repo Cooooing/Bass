@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/game_idle/v1/enum"
+	v1 "common/proto/gen/game_idle/enum/v1"
 )
 
 // StateCommandType 表示角色状态机可处理的命令类型。

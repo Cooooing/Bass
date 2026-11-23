@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common.api.app.user.enum.v1;
+
+option go_package = "common/proto/gen/user/enum/v1;enum";
+
+// CheckinStatus 表示自动签到积分事务的状态。
+enum CheckinStatus {
+  // 未指定
+  CHECKIN_STATUS_UNSPECIFIED = 0;
+  // 签到中
+  CHECKIN_STATUS_PENDING = 1;
+  // 已完成
+  CHECKIN_STATUS_COMPLETED = 2;
+  // 已取消
+  CHECKIN_STATUS_CANCELED = 3;
+}

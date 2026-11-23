@@ -2,285 +2,496 @@ syntax = "proto3";
 
 package common.api.app.content.v1;
 
-import "common/common.proto";
+import "common/v1/common.proto";
+import "content/enum/v1/article.proto";
+import "content/enum/v1/comment.proto";
 import "content/v1/access.proto";
-import "content/v1/enum/article.proto";
-import "content/v1/enum/comment.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
 // 评论服务
 service ContentCommentService {
-  rpc CreateComment(CreateComment.Req) returns (CreateComment.Resp) {} // 创建评论
-  rpc HideComment(HideComment.Req) returns (HideComment.Resp) {} // 管理隐藏评论
-  rpc UnhideComment(UnhideComment.Req) returns (UnhideComment.Resp) {} // 取消管理隐藏
-  rpc LockComment(LockComment.Req) returns (LockComment.Resp) {} // 管理锁定评论
-  rpc UnlockComment(UnlockComment.Req) returns (UnlockComment.Resp) {} // 管理解锁评论
-  rpc LikeComment(LikeComment.Req) returns (LikeComment.Resp) {} // 点赞评论
-  rpc ThankComment(ThankComment.Req) returns (ThankComment.Resp) {} // 感谢评论
+  // 创建评论
+  rpc CreateComment(CreateComment.Req) returns (CreateComment.Resp) {}
+  // 管理隐藏评论
+  rpc HideComment(HideComment.Req) returns (HideComment.Resp) {}
+  // 取消管理隐藏
+  rpc UnhideComment(UnhideComment.Req) returns (UnhideComment.Resp) {}
+  // 管理锁定评论
+  rpc LockComment(LockComment.Req) returns (LockComment.Resp) {}
+  // 管理解锁评论
+  rpc UnlockComment(UnlockComment.Req) returns (UnlockComment.Resp) {}
+  // 点赞评论
+  rpc LikeComment(LikeComment.Req) returns (LikeComment.Resp) {}
+  // 感谢评论
+  rpc ThankComment(ThankComment.Req) returns (ThankComment.Resp) {}
 
-  rpc ListComments(ListComments.Req) returns (ListComments.Resp) {} // 查询评论列表
-  rpc PageComments(PageComments.Req) returns (PageComments.Resp) {} // 分页查询评论
-  rpc MapCommentViewerActionStates(MapCommentViewerActionStates.Req) returns (MapCommentViewerActionStates.Resp) {} // 查询用户的评论行为状态
-  rpc ListCommentReplyPreviews(ListCommentReplyPreviews.Req) returns (ListCommentReplyPreviews.Resp) {} // 查询评论回复预览
-  rpc MapArticleLastComments(MapArticleLastComments.Req) returns (MapArticleLastComments.Resp) {} // 查询文章最后正常评论映射
+  // 查询评论列表
+  rpc ListComments(ListComments.Req) returns (ListComments.Resp) {}
+  // 分页查询评论
+  rpc PageComments(PageComments.Req) returns (PageComments.Resp) {}
+  // 查询用户的评论行为状态
+  rpc MapCommentViewerActionStates(MapCommentViewerActionStates.Req) returns (MapCommentViewerActionStates.Resp) {}
+  // 查询评论回复预览
+  rpc ListCommentReplyPreviews(ListCommentReplyPreviews.Req) returns (ListCommentReplyPreviews.Resp) {}
+  // 查询文章最后正常评论映射
+  rpc MapArticleLastComments(MapArticleLastComments.Req) returns (MapArticleLastComments.Resp) {}
 }
 
+// 协议消息。
 message CreateComment {
+  // 请求参数。
   message Req {
-    int64 article_id = 1; // 文章 ID
-    string content = 2; // 评论内容
-    optional int64 reply_id = 3; // 回复评论 ID
-    ContentAccess access = 4; // 访问上下文
+    // 文章 ID
+    int64 article_id = 1;
+    // 评论内容
+    string content = 2;
+    // 回复评论 ID
+    optional int64 reply_id = 3;
+    // 访问上下文
+    ContentAccess access = 4;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Comment {
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+      // 创建人
+      optional int64 created_by = 1002;
+      // 更新人
+      optional int64 updated_by = 1003;
 
-      int64 id = 1; // 评论 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 评论内容
-      int32 level = 5; // 评论层级
-      optional int64 parent_id = 6; // 父级评论 ID
-      optional int64 reply_id = 7; // 回复评论 ID
-      int32 thank_count = 9; // 感谢数量
-      int32 like_count = 10; // 点赞数量
-      int32 reply_count = 11; // 子评论数量
-      optional int64 reply_user_id = 12; // 被回复用户 ID
-      ContentRestriction restriction = 13; // 管理限制
-      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
+      // 评论 ID
+      int64 id = 1;
+      // 文章 ID
+      int64 article_id = 2;
+      // 评论内容
+      string content = 3;
+      // 评论层级
+      int32 level = 5;
+      // 父级评论 ID
+      optional int64 parent_id = 6;
+      // 回复评论 ID
+      optional int64 reply_id = 7;
+      // 感谢数量
+      int32 thank_count = 9;
+      // 点赞数量
+      int32 like_count = 10;
+      // 子评论数量
+      int32 reply_count = 11;
+      // 被回复用户 ID
+      optional int64 reply_user_id = 12;
+      // 管理限制
+      .common.api.app.content.enum.v1.ContentRestriction restriction = 13;
+      // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 14;
     }
-    Comment comment = 1; // 评论信息
+    // 评论信息
+    Comment comment = 1;
   }
 }
 
+// 协议消息。
 message HideComment {
+  // 请求参数。
   message Req {
-    int64 id = 1; // 评论 ID
-    ContentAccess access = 2; // 访问上下文
-    optional string reason = 3; // 操作原因
+    // 评论 ID
+    int64 id = 1;
+    // 访问上下文
+    ContentAccess access = 2;
+    // 操作原因
+    optional string reason = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UnhideComment {
+  // 请求参数。
   message Req {
-    int64 id = 1; // 评论 ID
-    ContentAccess access = 2; // 访问上下文
-    optional string reason = 3; // 操作原因
+    // 评论 ID
+    int64 id = 1;
+    // 访问上下文
+    ContentAccess access = 2;
+    // 操作原因
+    optional string reason = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message LockComment {
+  // 请求参数。
   message Req {
-    int64 id = 1; // 评论 ID
-    ContentAccess access = 2; // 访问上下文
-    optional string reason = 3; // 操作原因
+    // 评论 ID
+    int64 id = 1;
+    // 访问上下文
+    ContentAccess access = 2;
+    // 操作原因
+    optional string reason = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UnlockComment {
+  // 请求参数。
   message Req {
-    int64 id = 1; // 评论 ID
-    ContentAccess access = 2; // 访问上下文
-    optional string reason = 3; // 操作原因
+    // 评论 ID
+    int64 id = 1;
+    // 访问上下文
+    ContentAccess access = 2;
+    // 操作原因
+    optional string reason = 3;
   }
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message LikeComment {
+  // 请求参数。
   message Req {
-    int64 id = 1; // 评论 ID
-    bool liked = 2; // 是否点赞
-    ContentAccess access = 3; // 访问上下文
+    // 评论 ID
+    int64 id = 1;
+    // 是否点赞
+    bool liked = 2;
+    // 访问上下文
+    ContentAccess access = 3;
   }
+  // 响应结果。
   message Resp {
-    bool liked = 1; // 是否点赞
+    // 是否点赞
+    bool liked = 1;
   }
 }
 
+// 协议消息。
 message ThankComment {
+  // 请求参数。
   message Req {
-    int64 id = 1; // 评论 ID
-    bool thanked = 2; // 是否感谢
-    ContentAccess access = 3; // 访问上下文
+    // 评论 ID
+    int64 id = 1;
+    // 是否感谢
+    bool thanked = 2;
+    // 访问上下文
+    ContentAccess access = 3;
   }
+  // 响应结果。
   message Resp {
-    bool thanked = 1; // 是否感谢
+    // 是否感谢
+    bool thanked = 1;
   }
 }
 
+// 协议消息。
 message ListComments {
+  // 请求参数。
   message Req {
+    // 协议消息。
     message CommentQueryParams {
-      optional int64 comment_id = 1; // 评论 ID
-      optional int64 article_id = 2; // 文章 ID
-      optional int64 parent_id = 3; // 父级评论 ID
-      optional int64 reply_id = 4; // 回复评论 ID
-      optional CommentOrder order = 5; // 排序
-      optional int32 level = 6; // 层级
-      optional int64 user_id = 9; // 评论用户 ID
-      optional ContentRestriction restriction = 10; // 管理限制
-      repeated ContentRestriction restrictions = 11; // 管理限制列表
-      repeated int64 excluded_user_ids = 12; // 读取侧排除的作者账号 ID
-      repeated int64 excluded_comment_ids = 13; // 当前查询中排除的评论 ID
+      // 评论 ID
+      optional int64 comment_id = 1;
+      // 文章 ID
+      optional int64 article_id = 2;
+      // 父级评论 ID
+      optional int64 parent_id = 3;
+      // 回复评论 ID
+      optional int64 reply_id = 4;
+      // 排序
+      optional .common.api.app.content.enum.v1.CommentOrder order = 5;
+      // 层级
+      optional int32 level = 6;
+      // 评论用户 ID
+      optional int64 user_id = 9;
+      // 管理限制
+      optional .common.api.app.content.enum.v1.ContentRestriction restriction = 10;
+      // 管理限制列表
+      repeated .common.api.app.content.enum.v1.ContentRestriction restrictions = 11;
+      // 读取侧排除的作者账号 ID
+      repeated int64 excluded_user_ids = 12;
+      // 当前查询中排除的评论 ID
+      repeated int64 excluded_comment_ids = 13;
     }
-    CommentQueryParams query = 1; // 查询参数
-    ContentAccess access = 2; // 访问上下文
+    // 查询参数
+    CommentQueryParams query = 1;
+    // 访问上下文
+    ContentAccess access = 2;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Comment {
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+      // 创建人
+      optional int64 created_by = 1002;
+      // 更新人
+      optional int64 updated_by = 1003;
 
-      int64 id = 1; // 评论 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 评论内容
-      int32 level = 5; // 评论层级
-      optional int64 parent_id = 6; // 父级评论 ID
-      optional int64 reply_id = 7; // 回复评论 ID
-      int32 thank_count = 9; // 感谢数量
-      int32 like_count = 10; // 点赞数量
-      int32 reply_count = 11; // 子评论数量
-      optional int64 reply_user_id = 12; // 被回复用户 ID
-      ContentRestriction restriction = 13; // 管理限制
-      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
+      // 评论 ID
+      int64 id = 1;
+      // 文章 ID
+      int64 article_id = 2;
+      // 评论内容
+      string content = 3;
+      // 评论层级
+      int32 level = 5;
+      // 父级评论 ID
+      optional int64 parent_id = 6;
+      // 回复评论 ID
+      optional int64 reply_id = 7;
+      // 感谢数量
+      int32 thank_count = 9;
+      // 点赞数量
+      int32 like_count = 10;
+      // 子评论数量
+      int32 reply_count = 11;
+      // 被回复用户 ID
+      optional int64 reply_user_id = 12;
+      // 管理限制
+      .common.api.app.content.enum.v1.ContentRestriction restriction = 13;
+      // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 14;
     }
-    repeated Comment rows = 1; // 评论列表
+    // 评论列表
+    repeated Comment rows = 1;
   }
 }
 
+// 协议消息。
 message PageComments {
+  // 请求参数。
   message Req {
+    // 协议消息。
     message CommentQueryParams {
-      optional int64 comment_id = 1; // 评论 ID
-      optional int64 article_id = 2; // 文章 ID
-      optional int64 parent_id = 3; // 父级评论 ID
-      optional int64 reply_id = 4; // 回复评论 ID
-      optional CommentOrder order = 5; // 排序
-      optional int32 level = 6; // 层级
-      optional int64 user_id = 9; // 评论用户 ID
-      optional ContentRestriction restriction = 10; // 管理限制
-      repeated ContentRestriction restrictions = 11; // 管理限制列表
-      repeated int64 excluded_user_ids = 12; // 读取侧排除的作者账号 ID
-      repeated int64 excluded_comment_ids = 13; // 当前查询中排除的评论 ID
+      // 评论 ID
+      optional int64 comment_id = 1;
+      // 文章 ID
+      optional int64 article_id = 2;
+      // 父级评论 ID
+      optional int64 parent_id = 3;
+      // 回复评论 ID
+      optional int64 reply_id = 4;
+      // 排序
+      optional .common.api.app.content.enum.v1.CommentOrder order = 5;
+      // 层级
+      optional int32 level = 6;
+      // 评论用户 ID
+      optional int64 user_id = 9;
+      // 管理限制
+      optional .common.api.app.content.enum.v1.ContentRestriction restriction = 10;
+      // 管理限制列表
+      repeated .common.api.app.content.enum.v1.ContentRestriction restrictions = 11;
+      // 读取侧排除的作者账号 ID
+      repeated int64 excluded_user_ids = 12;
+      // 当前查询中排除的评论 ID
+      repeated int64 excluded_comment_ids = 13;
     }
-    CommentQueryParams query = 1; // 查询参数
-    optional .common.api.app.common.PageReq page = 2; // 分页参数
-    ContentAccess access = 3; // 访问上下文
+    // 查询参数
+    CommentQueryParams query = 1;
+    // 分页参数
+    optional .common.api.app.common.v1.PageReq page = 2;
+    // 访问上下文
+    ContentAccess access = 3;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Comment {
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+      // 创建人
+      optional int64 created_by = 1002;
+      // 更新人
+      optional int64 updated_by = 1003;
 
-      int64 id = 1; // 评论 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 评论内容
-      int32 level = 5; // 评论层级
-      optional int64 parent_id = 6; // 父级评论 ID
-      optional int64 reply_id = 7; // 回复评论 ID
-      int32 thank_count = 9; // 感谢数量
-      int32 like_count = 10; // 点赞数量
-      int32 reply_count = 11; // 子评论数量
-      optional int64 reply_user_id = 12; // 被回复用户 ID
-      ContentRestriction restriction = 13; // 管理限制
-      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
+      // 评论 ID
+      int64 id = 1;
+      // 文章 ID
+      int64 article_id = 2;
+      // 评论内容
+      string content = 3;
+      // 评论层级
+      int32 level = 5;
+      // 父级评论 ID
+      optional int64 parent_id = 6;
+      // 回复评论 ID
+      optional int64 reply_id = 7;
+      // 感谢数量
+      int32 thank_count = 9;
+      // 点赞数量
+      int32 like_count = 10;
+      // 子评论数量
+      int32 reply_count = 11;
+      // 被回复用户 ID
+      optional int64 reply_user_id = 12;
+      // 管理限制
+      .common.api.app.content.enum.v1.ContentRestriction restriction = 13;
+      // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 14;
     }
-    repeated Comment rows = 1; // 评论列表
-    .common.api.app.common.PageResp page = 2; // 分页信息
+    // 评论列表
+    repeated Comment rows = 1;
+    // 分页信息
+    .common.api.app.common.v1.PageResp page = 2;
   }
 }
 
+// 协议消息。
 message MapCommentViewerActionStates {
+  // 请求参数。
   message Req {
-    repeated int64 comment_ids = 1; // 评论 ID 列表
-    int64 user_id = 2; // 用户 ID
+    // 评论 ID 列表
+    repeated int64 comment_ids = 1;
+    // 用户 ID
+    int64 user_id = 2;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message State {
-      bool liked = 1; // 是否点赞
-      bool thanked = 2; // 是否感谢
+      // 是否点赞
+      bool liked = 1;
+      // 是否感谢
+      bool thanked = 2;
     }
-    map<int64, State> states = 1; // 评论行为状态映射
+    // 评论行为状态映射
+    map<int64, State> states = 1;
   }
 }
 
+// 协议消息。
 message ListCommentReplyPreviews {
+  // 请求参数。
   message Req {
-    int64 article_id = 1; // 文章 ID
-    repeated int64 parent_ids = 2; // 父级评论 ID
-    int32 limit_per_parent = 3; // 每条父级评论返回的回复数量
-    optional CommentOrder order = 4; // 排序
-    optional ContentRestriction restriction = 7; // 管理限制
-    repeated ContentRestriction restrictions = 8; // 管理限制列表
-    ContentAccess access = 9; // 访问上下文
-    repeated int64 excluded_user_ids = 10; // 读取侧排除的作者账号 ID
+    // 文章 ID
+    int64 article_id = 1;
+    // 父级评论 ID
+    repeated int64 parent_ids = 2;
+    // 每条父级评论返回的回复数量
+    int32 limit_per_parent = 3;
+    // 排序
+    optional .common.api.app.content.enum.v1.CommentOrder order = 4;
+    // 管理限制
+    optional .common.api.app.content.enum.v1.ContentRestriction restriction = 7;
+    // 管理限制列表
+    repeated .common.api.app.content.enum.v1.ContentRestriction restrictions = 8;
+    // 访问上下文
+    ContentAccess access = 9;
+    // 读取侧排除的作者账号 ID
+    repeated int64 excluded_user_ids = 10;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message CommentReplyPreview {
-      int64 parent_id = 1; // 父级评论 ID
-      repeated Comment rows = 2; // 回复列表
+      // 父级评论 ID
+      int64 parent_id = 1;
+      // 回复列表
+      repeated Comment rows = 2;
     }
 
+    // 协议消息。
     message Comment {
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+      // 创建人
+      optional int64 created_by = 1002;
+      // 更新人
+      optional int64 updated_by = 1003;
 
-      int64 id = 1; // 评论 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 评论内容
-      int32 level = 5; // 评论层级
-      optional int64 parent_id = 6; // 父级评论 ID
-      optional int64 reply_id = 7; // 回复评论 ID
-      int32 thank_count = 9; // 感谢数量
-      int32 like_count = 10; // 点赞数量
-      int32 reply_count = 11; // 子评论数量
-      optional int64 reply_user_id = 12; // 被回复用户 ID
-      ContentRestriction restriction = 13; // 管理限制
-      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
+      // 评论 ID
+      int64 id = 1;
+      // 文章 ID
+      int64 article_id = 2;
+      // 评论内容
+      string content = 3;
+      // 评论层级
+      int32 level = 5;
+      // 父级评论 ID
+      optional int64 parent_id = 6;
+      // 回复评论 ID
+      optional int64 reply_id = 7;
+      // 感谢数量
+      int32 thank_count = 9;
+      // 点赞数量
+      int32 like_count = 10;
+      // 子评论数量
+      int32 reply_count = 11;
+      // 被回复用户 ID
+      optional int64 reply_user_id = 12;
+      // 管理限制
+      .common.api.app.content.enum.v1.ContentRestriction restriction = 13;
+      // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 14;
     }
-    repeated CommentReplyPreview rows = 1; // 回复预览列表
+    // 回复预览列表
+    repeated CommentReplyPreview rows = 1;
   }
 }
 
+// 协议消息。
 message MapArticleLastComments {
+  // 请求参数。
   message Req {
-    repeated int64 article_ids = 1; // 文章 ID
-    repeated int64 excluded_user_ids = 2; // 读取侧排除的作者账号 ID
+    // 文章 ID
+    repeated int64 article_ids = 1;
+    // 读取侧排除的作者账号 ID
+    repeated int64 excluded_user_ids = 2;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Comment {
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
+      // 创建时间
+      google.protobuf.Timestamp created_at = 1000;
+      // 更新时间
+      google.protobuf.Timestamp updated_at = 1001;
+      // 创建人
+      optional int64 created_by = 1002;
+      // 更新人
+      optional int64 updated_by = 1003;
 
-      int64 id = 1; // 评论 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 评论内容
-      int32 level = 5; // 评论层级
-      optional int64 parent_id = 6; // 父级评论 ID
-      optional int64 reply_id = 7; // 回复评论 ID
-      int32 thank_count = 9; // 感谢数量
-      int32 like_count = 10; // 点赞数量
-      int32 reply_count = 11; // 子评论数量
-      optional int64 reply_user_id = 12; // 被回复用户 ID
-      ContentRestriction restriction = 13; // 管理限制
-      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
+      // 评论 ID
+      int64 id = 1;
+      // 文章 ID
+      int64 article_id = 2;
+      // 评论内容
+      string content = 3;
+      // 评论层级
+      int32 level = 5;
+      // 父级评论 ID
+      optional int64 parent_id = 6;
+      // 回复评论 ID
+      optional int64 reply_id = 7;
+      // 感谢数量
+      int32 thank_count = 9;
+      // 点赞数量
+      int32 like_count = 10;
+      // 子评论数量
+      int32 reply_count = 11;
+      // 被回复用户 ID
+      optional int64 reply_user_id = 12;
+      // 管理限制
+      .common.api.app.content.enum.v1.ContentRestriction restriction = 13;
+      // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 14;
     }
-    map<int64, Comment> comments = 1; // 文章最后正常评论映射
+    // 文章最后正常评论映射
+    map<int64, Comment> comments = 1;
   }
 }

@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	"common/proto/gen/common/enums"
+	"common/proto/gen/common/enums/v1"
 )
 
 type Language string

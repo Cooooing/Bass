@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"common/pkg/apperror"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"time"
 
 	"content/internal/biz/model"

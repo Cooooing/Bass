@@ -8,10 +8,10 @@ import (
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	contentv1 "common/proto/gen/content/v1"
+	economyv1enum "common/proto/gen/economy/enum/v1"
 	economyv1 "common/proto/gen/economy/v1"
-	economyv1enum "common/proto/gen/economy/v1/enum"
 
 	"github.com/dtm-labs/client/dtmgrpc"
 

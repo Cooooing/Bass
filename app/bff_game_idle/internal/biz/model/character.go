@@ -1,7 +1,7 @@
 package model
 
 import (
-	gameidleenum "common/proto/gen/game_idle/v1/enum"
+	gameidleenum "common/proto/gen/game_idle/enum/v1"
 	"time"
 )
 

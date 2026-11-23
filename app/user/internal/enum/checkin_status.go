@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/user/v1/enum"
+	v1 "common/proto/gen/user/enum/v1"
 )
 
 // CheckinStatus 表示自动签到积分事务的状态。

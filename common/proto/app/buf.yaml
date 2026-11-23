@@ -9,10 +9,23 @@ deps:
 
 lint:
   use:
-    - MINIMAL
+    - STANDARD
+    - COMMENTS
+    - STABLE_PACKAGE_NO_IMPORT_UNSTABLE
   except:
+    # 模块根位于 common.api.app 命名空间之后，Buf 不支持声明该 package 前缀。
     - PACKAGE_DIRECTORY_MATCH
-    - PACKAGE_SAME_DIRECTORY
+    # Bass 的 RPC 参数使用 X.Req/X.Resp；TCC 的三个方法复用同一对参数。
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    - RPC_REQUEST_STANDARD_NAME
+    - RPC_RESPONSE_STANDARD_NAME
+  # 业务成功码固定为 0，不适用未指定零值后缀约定。
+  ignore_only:
+    ENUM_ZERO_VALUE_SUFFIX:
+      - common/errors/v1/business_error_code.proto
+    # 该文件与 Kratos 的扩展协议保持兼容，package 名称不可加版本后缀。
+    PACKAGE_VERSION_SUFFIX:
+      - errors/errors.proto
 
 breaking:
   use:

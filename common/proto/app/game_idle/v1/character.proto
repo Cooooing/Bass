@@ -2,82 +2,129 @@ syntax = "proto3";
 
 package common.api.app.game_idle.v1;
 
-import "game_idle/v1/enum/character.proto";
+import "game_idle/enum/v1/character.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
+// 服务定义。
 service CharacterService {
+  // 服务方法。
   rpc CreateCharacter(CreateCharacter.Req) returns (CreateCharacter.Resp) {}
+  // 服务方法。
   rpc GetCharacter(GetCharacter.Req) returns (GetCharacter.Resp) {}
+  // 服务方法。
   rpc OnlineCharacter(OnlineCharacter.Req) returns (OnlineCharacter.Resp) {}
+  // 服务方法。
   rpc OfflineCharacter(OfflineCharacter.Req) returns (OfflineCharacter.Resp) {}
+  // 服务方法。
   rpc PingCharacter(PingCharacter.Req) returns (PingCharacter.Resp) {}
 }
 
+// 协议消息。
 message CreateCharacter {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 用户 ID
-    string name = 2; // 角色名称
+    // 用户 ID
+    int64 user_id = 1;
+    // 角色名称
+    string name = 2;
   }
 
+  // 响应结果。
   message Resp {
-    Character row = 1; // 角色
+    // 角色
+    Character row = 1;
   }
 }
 
+// 协议消息。
 message GetCharacter {
+  // 请求参数。
   message Req {
-    int64 user_id = 1; // 用户 ID
-    int64 character_id = 2; // 角色 ID
+    // 用户 ID
+    int64 user_id = 1;
+    // 角色 ID
+    int64 character_id = 2;
   }
 
+  // 响应结果。
   message Resp {
-    repeated Character rows = 1; // 角色列表
+    // 角色列表
+    repeated Character rows = 1;
   }
 }
 
+// 协议消息。
 message OnlineCharacter {
+  // 请求参数。
   message Req {
-    int64 character_id = 2; // 角色 ID
+    // 角色 ID
+    int64 character_id = 2;
   }
 
+  // 响应结果。
   message Resp {
-    string session_id = 1; // 角色在线会话 ID
-    int64 expires_in_seconds = 2; // 剩余有效秒数
+    // 角色在线会话 ID
+    string session_id = 1;
+    // 剩余有效秒数
+    int64 expires_in_seconds = 2;
   }
 }
 
+// 协议消息。
 message OfflineCharacter {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
-    string session_id = 2; // 角色在线会话 ID
-    bool timeout = 3; // 是否心跳超时下线
+    // 角色 ID
+    int64 character_id = 1;
+    // 角色在线会话 ID
+    string session_id = 2;
+    // 是否心跳超时下线
+    bool timeout = 3;
   }
 
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message PingCharacter {
+  // 请求参数。
   message Req {
-    int64 character_id = 1; // 角色 ID
-    string session_id = 2; // 角色在线会话 ID
+    // 角色 ID
+    int64 character_id = 1;
+    // 角色在线会话 ID
+    string session_id = 2;
   }
 
+  // 响应结果。
   message Resp {
-    int64 expires_in_seconds = 1; // 剩余有效秒数
+    // 剩余有效秒数
+    int64 expires_in_seconds = 1;
   }
 }
 
+// 协议消息。
 message Character {
-  int64 id = 1; // 角色 ID
-  int64 user_id = 2; // 用户 ID
-  string name = 3; // 角色名称
-  common.api.app.game_idle.v1.enum.CharacterStatus status = 4; // 角色状态
-  int32 slot = 5; // 角色槽位
-  int32 action_queue_capacity = 6; // 行动队列容量上限
-  int64 max_offline_seconds = 7; // 最大离线收益结算秒数
-  google.protobuf.Timestamp created_at = 1000; // 创建时间
-  google.protobuf.Timestamp updated_at = 1001; // 更新时间
-  google.protobuf.Timestamp last_offline_at = 1002; // 最近离线时间
+  // 角色 ID
+  int64 id = 1;
+  // 用户 ID
+  int64 user_id = 2;
+  // 角色名称
+  string name = 3;
+  // 角色状态
+  common.api.app.game_idle.enum.v1.CharacterStatus status = 4;
+  // 角色槽位
+  int32 slot = 5;
+  // 行动队列容量上限
+  int32 action_queue_capacity = 6;
+  // 最大离线收益结算秒数
+  int64 max_offline_seconds = 7;
+  // 创建时间
+  google.protobuf.Timestamp created_at = 1000;
+  // 更新时间
+  google.protobuf.Timestamp updated_at = 1001;
+  // 最近离线时间
+  google.protobuf.Timestamp last_offline_at = 1002;
 }

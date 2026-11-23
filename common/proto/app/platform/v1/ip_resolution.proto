@@ -14,11 +14,14 @@ service PlatformIPResolutionService {
   rpc UpdateIPDataFromOSS(UpdateIPDataFromOSS.Req) returns (UpdateIPDataFromOSS.Resp) {}
 }
 
+// 协议消息。
 message ResolveIP {
+  // 请求参数。
   message Req {
     // IP 地址。
     string ip = 1;
   }
+  // 响应结果。
   message Resp {
     // 国家。
     string country = 1;
@@ -35,12 +38,18 @@ message ResolveIP {
   }
 }
 
+// 协议消息。
 message UpdateIPDataFromSource {
+  // 请求参数。
   message Req {}
+  // 响应结果。
   message Resp {}
 }
 
+// 协议消息。
 message UpdateIPDataFromOSS {
+  // 请求参数。
   message Req {}
+  // 响应结果。
   message Resp {}
 }

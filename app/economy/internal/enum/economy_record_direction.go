@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/economy/v1/enum"
+	v1 "common/proto/gen/economy/enum/v1"
 )
 
 // EconomyRecordDirection 表示积分流水方向

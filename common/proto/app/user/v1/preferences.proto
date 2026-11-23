@@ -2,49 +2,76 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "common/enums/language.proto";
-import "google/protobuf/timestamp.proto";
-import "user/v1/enum/relation.proto";
+import "common/enums/v1/language.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
+// 服务定义。
 service PreferencesService {
-  rpc GetPreferences(GetPreferences.Req) returns (GetPreferences.Resp) {} // 获取账号偏好设置，缺省时返回默认设置。
-  rpc UpdatePreferences(UpdatePreferences.Req) returns (UpdatePreferences.Resp) {} // 更新账号偏好设置；缺省扩展表使用 upsert 创建。
+  // 获取账号偏好设置，缺省时返回默认设置。
+  rpc GetPreferences(GetPreferences.Req) returns (GetPreferences.Resp) {}
+  // 更新账号偏好设置；缺省扩展表使用 upsert 创建。
+  rpc UpdatePreferences(UpdatePreferences.Req) returns (UpdatePreferences.Resp) {}
 }
 
+// 协议消息。
 message GetPreferences {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Preferences {
+      // 协议字段。
       int64 user_id = 1;
+      // 协议字段。
       optional string timezone = 3;
+      // 协议字段。
       optional string theme = 4;
+      // 协议字段。
       optional string mobile_theme = 5;
-      common.enums.Language language = 8;
+      // 协议字段。
+      .common.api.app.common.enums.v1.Language language = 8;
     }
+    // 协议字段。
     Preferences preferences = 1;
   }
 }
 
+// 协议消息。
 message UpdatePreferences {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
+    // 协议字段。
     optional string timezone = 2;
+    // 协议字段。
     optional string theme = 3;
+    // 协议字段。
     optional string mobile_theme = 4;
-    optional common.enums.Language language = 7;
+    // 协议字段。
+    optional .common.api.app.common.enums.v1.Language language = 7;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message Preferences {
+      // 协议字段。
       int64 user_id = 1;
+      // 协议字段。
       optional string timezone = 3;
+      // 协议字段。
       optional string theme = 4;
+      // 协议字段。
       optional string mobile_theme = 5;
-      common.enums.Language language = 8;
+      // 协议字段。
+      .common.api.app.common.enums.v1.Language language = 8;
     }
+    // 协议字段。
     Preferences preferences = 1;
   }
 }

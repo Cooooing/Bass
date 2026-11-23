@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	schedulerv1 "common/proto/gen/scheduler/v1/enum"
+	schedulerv1 "common/proto/gen/scheduler/enum/v1"
 )
 
 // TaskHandlerName 定义代码内任务处理器名称。

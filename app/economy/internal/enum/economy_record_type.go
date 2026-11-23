@@ -3,9 +3,9 @@ package enum
 import (
 	"common/pkg/apperror"
 	commonenum "common/pkg/enum"
-	commonenums "common/proto/gen/common/enums"
-	cerrors "common/proto/gen/common/errors"
-	v1 "common/proto/gen/economy/v1/enum"
+	commonenums "common/proto/gen/common/enums/v1"
+	cerrors "common/proto/gen/common/errors/v1"
+	v1 "common/proto/gen/economy/enum/v1"
 )
 
 // EconomyRecordType 表示积分流水类型

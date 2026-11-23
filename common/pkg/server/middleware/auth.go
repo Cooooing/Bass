@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"log/slog"

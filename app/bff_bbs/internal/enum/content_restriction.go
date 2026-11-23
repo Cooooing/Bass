@@ -2,8 +2,8 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	bffv1 "common/proto/gen/bff_bbs/v1/content/enum"
-	contentv1 "common/proto/gen/content/v1/enum"
+	bffv1 "common/proto/gen/bff_bbs/content/enum/v1"
+	contentv1 "common/proto/gen/content/enum/v1"
 )
 
 type ContentRestriction string

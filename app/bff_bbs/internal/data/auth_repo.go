@@ -5,8 +5,8 @@ import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
+	userenum "common/proto/gen/user/enum/v1"
 	userv1 "common/proto/gen/user/v1"
-	userenum "common/proto/gen/user/v1/enum"
 	"context"
 
 	"bff_bbs/internal/biz/model"

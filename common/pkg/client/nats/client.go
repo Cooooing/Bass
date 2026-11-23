@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"sync"
 
-	"common/proto/gen/common"
+	"common/proto/gen/common/v1"
 
 	gonats "github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"

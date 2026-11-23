@@ -4,7 +4,7 @@ import (
 	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	commonevent "common/proto/gen/common/enums/event"
+	commonevent "common/proto/gen/common/enums/event/v1"
 	"context"
 	"errors"
 	"fmt"

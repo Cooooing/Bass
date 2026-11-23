@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	userenum "common/proto/gen/user/v1/enum"
+	userenum "common/proto/gen/user/enum/v1"
 )
 
 type Liveness struct {

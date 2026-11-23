@@ -2,64 +2,103 @@ syntax = "proto3";
 
 package common.api.app.notify.v1;
 
-import "common/common.proto";
+import "common/v1/common.proto";
 import "google/protobuf/timestamp.proto";
-import "notify/v1/enum/channel_status.proto";
-import "notify/v1/enum/notification_type.proto";
+import "notify/enum/v1/channel_status.proto";
+import "notify/enum/v1/notification_type.proto";
 
 option go_package = "common/proto/gen/notify/v1;v1";
 
+// 服务定义。
 service NotifyStationMessageService {
-  rpc ListStationMessages(ListStationMessages.Req) returns (ListStationMessages.Resp) {} // 查询账号站内信列表。
-  rpc MarkReadStationMessage(MarkReadStationMessage.Req) returns (MarkReadStationMessage.Resp) {} // 标记账号站内信为已读。
-  rpc CountUnreadStationMessages(CountUnreadStationMessages.Req) returns (CountUnreadStationMessages.Resp) {} // 查询账号未读站内信数量。
+  // 查询账号站内信列表。
+  rpc ListStationMessages(ListStationMessages.Req) returns (ListStationMessages.Resp) {}
+  // 标记账号站内信为已读。
+  rpc MarkReadStationMessage(MarkReadStationMessage.Req) returns (MarkReadStationMessage.Resp) {}
+  // 查询账号未读站内信数量。
+  rpc CountUnreadStationMessages(CountUnreadStationMessages.Req) returns (CountUnreadStationMessages.Resp) {}
 }
 
+// 协议消息。
 message ListStationMessages {
+  // 请求参数。
   message Req {
+    // 协议消息。
     message NotificationStationMessageQueryParams {
+      // 协议字段。
       repeated int64 ids = 1;
-      optional NotificationType notification_type = 2;
+      // 协议字段。
+      optional .common.api.app.notify.enum.v1.NotificationType notification_type = 2;
+      // 协议字段。
       optional bool unread = 3;
     }
+    // 协议字段。
     int64 user_id = 1;
-    .common.api.app.common.PageReq page = 2;
+    // 协议字段。
+    .common.api.app.common.v1.PageReq page = 2;
+    // 协议字段。
     NotificationStationMessageQueryParams query = 3;
   }
+  // 响应结果。
   message Resp {
+    // 协议消息。
     message NotificationStationMessage {
+      // 协议字段。
       google.protobuf.Timestamp created_at = 1000;
+      // 协议字段。
       google.protobuf.Timestamp updated_at = 1001;
+      // 协议字段。
       int64 id = 1;
+      // 协议字段。
       string event_id = 2;
-      NotificationType notification_type = 3;
+      // 协议字段。
+      .common.api.app.notify.enum.v1.NotificationType notification_type = 3;
+      // 协议字段。
       int64 receiver_id = 4;
+      // 协议字段。
       string title = 5;
+      // 协议字段。
       string content = 6;
-      NotificationChannelStatus status = 7;
+      // 协议字段。
+      .common.api.app.notify.enum.v1.NotificationChannelStatus status = 7;
+      // 协议字段。
       optional google.protobuf.Timestamp read_at = 8;
     }
-    .common.api.app.common.PageResp page = 1;
+    // 协议字段。
+    .common.api.app.common.v1.PageResp page = 1;
+    // 协议字段。
     repeated NotificationStationMessage rows = 2;
   }
 }
 
+// 协议消息。
 message MarkReadStationMessage {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
+    // 协议字段。
     repeated int64 ids = 2;
-    .common.api.app.common.TimeRange created_time_range = 3;
+    // 协议字段。
+    .common.api.app.common.v1.TimeRange created_time_range = 3;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     int32 count = 1;
   }
 }
 
+// 协议消息。
 message CountUnreadStationMessages {
+  // 请求参数。
   message Req {
+    // 协议字段。
     int64 user_id = 1;
   }
+  // 响应结果。
   message Resp {
+    // 协议字段。
     int64 count = 1;
   }
 }

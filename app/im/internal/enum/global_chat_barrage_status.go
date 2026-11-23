@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	imv1enum "common/proto/gen/im/v1/enum"
+	imv1enum "common/proto/gen/im/enum/v1"
 )
 
 type GlobalChatBarrageStatus string

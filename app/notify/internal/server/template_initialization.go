@@ -1,7 +1,7 @@
 package server
 
 import (
-	event "common/proto/gen/common/enums/event"
+	event "common/proto/gen/common/enums/event/v1"
 	"context"
 
 	"notify/internal/biz/usecase"

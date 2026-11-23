@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/user/v1/enum"
+	v1 "common/proto/gen/user/enum/v1"
 )
 
 // LivenessRewardStatus 表示每日活跃奖励的领取状态。

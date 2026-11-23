@@ -3,7 +3,7 @@ package server
 import (
 	commonserver "common/pkg/server"
 	servermiddleware "common/pkg/server/middleware"
-	cerrors "common/proto/gen/common/errors"
+	cerrors "common/proto/gen/common/errors/v1"
 	"encoding/json"
 	"fmt"
 	"log/slog"

@@ -3,7 +3,7 @@ package usecase
 import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
-	commonevent "common/proto/gen/common/enums/event"
+	commonevent "common/proto/gen/common/enums/event/v1"
 	"context"
 	"fmt"
 	"log/slog"

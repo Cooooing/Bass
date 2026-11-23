@@ -1,20 +1,20 @@
 syntax = "proto3";
 package kratos.api.bff_game_idle.config;
 
-import "common/config.proto";
+import "common/v1/config.proto";
 import "google/protobuf/duration.proto";
 
 option go_package = "bff_game_idle/internal/config;config";
 
 message Bootstrap {
-  common.api.app.common.Server server = 1;
-  common.api.app.common.HTTP http = 2;
-  common.api.app.common.GRPC grpc = 3;
-  common.api.app.common.Consul consul = 4;
-  common.api.app.common.Redis redis = 5;
-  common.api.app.common.Nats nats = 7;
-  common.api.app.common.Trace trace = 8;
-  common.api.app.common.Observability observability = 9;
+  common.api.app.common.v1.Server server = 1;
+  common.api.app.common.v1.HTTP http = 2;
+  common.api.app.common.v1.GRPC grpc = 3;
+  common.api.app.common.v1.Consul consul = 4;
+  common.api.app.common.v1.Redis redis = 5;
+  common.api.app.common.v1.Nats nats = 7;
+  common.api.app.common.v1.Trace trace = 8;
+  common.api.app.common.v1.Observability observability = 9;
   Business business = 10;
 }
 
@@ -24,6 +24,6 @@ message Business {
   message WebSocket {
     google.protobuf.Duration ping_interval = 1; // WS 协议层 ping 间隔
     google.protobuf.Duration write_timeout = 2; // WS 写超时
-    common.api.app.common.WorkerPool worker_pool = 3; // WS 命令和事件处理协程池
+    common.api.app.common.v1.WorkerPool worker_pool = 3; // WS 命令和事件处理协程池
   }
 }

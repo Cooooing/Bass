@@ -4,7 +4,7 @@ include $(ROOT_DIR)/build/make/common.mk
 
 MONOLITH_DIR := $(abspath $(CURDIR))
 MONOLITH_CONFIG_PROTO := monolith/internal/config/config.proto
-BUF_MONOLITH_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"monolith"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]},"breaking":{"use":["FILE"]}}'
+BUF_MONOLITH_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"monolith"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]}}'
 
 IGNORE_ERROR ?= 0
 

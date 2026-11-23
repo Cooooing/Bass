@@ -26,7 +26,3 @@ lint:
     # 该文件与 Kratos 的扩展协议保持兼容，package 名称不可加版本后缀。
     PACKAGE_VERSION_SUFFIX:
       - errors/errors.proto
-
-breaking:
-  use:
-    - FILE

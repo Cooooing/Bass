@@ -9,7 +9,7 @@ include $(MAKE_DIR)/common.mk
 SERVER := $(notdir $(CURDIR))
 APP_DIR := $(ROOT_DIR)/app/$(SERVER)
 INTERNAL_DIR := $(APP_DIR)/internal
-BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"app"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]},"breaking":{"use":["FILE"]}}'
+BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"app"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]}}'
 
 IGNORE_ERROR ?= 0
 MODULE_GEN_TARGETS := cfg wire

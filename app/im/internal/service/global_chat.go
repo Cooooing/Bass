@@ -32,7 +32,7 @@ func (s *GlobalChatService) RegisterGrpc(server *grpc.Server) {
 
 func (*GlobalChatService) RegisterHTTP(*http.Server) {}
 
-func (s *GlobalChatService) Send(ctx context.Context, req *imv1.SendGlobalChatMessage_Req) (*imv1.SendGlobalChatMessage_Resp, error) {
+func (s *GlobalChatService) SendGlobalChatMessage(ctx context.Context, req *imv1.SendGlobalChatMessage_Req) (*imv1.SendGlobalChatMessage_Resp, error) {
 	message, err := s.globalChat.Send(ctx, req.GetSenderId(), req.GetClientMessageId(), req.GetContent())
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (s *GlobalChatService) Send(ctx context.Context, req *imv1.SendGlobalChatMe
 	return &imv1.SendGlobalChatMessage_Resp{Message: s.globalChatMessageProto(message)}, nil
 }
 
-func (s *GlobalChatService) Revoke(ctx context.Context, req *imv1.RevokeGlobalChatMessage_Req) (*imv1.RevokeGlobalChatMessage_Resp, error) {
+func (s *GlobalChatService) RevokeGlobalChatMessage(ctx context.Context, req *imv1.RevokeGlobalChatMessage_Req) (*imv1.RevokeGlobalChatMessage_Resp, error) {
 	message, err := s.globalChat.Revoke(ctx, req.GetUserId(), req.GetMessageId(), req.GetAdministrator())
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (s *GlobalChatService) Revoke(ctx context.Context, req *imv1.RevokeGlobalCh
 	return &imv1.RevokeGlobalChatMessage_Resp{Message: s.globalChatMessageProto(message)}, nil
 }
 
-func (s *GlobalChatService) List(ctx context.Context, req *imv1.ListGlobalChatMessages_Req) (*imv1.ListGlobalChatMessages_Resp, error) {
+func (s *GlobalChatService) ListGlobalChatMessages(ctx context.Context, req *imv1.ListGlobalChatMessages_Req) (*imv1.ListGlobalChatMessages_Resp, error) {
 	rows, page, err := s.globalChat.List(ctx, req.GetBeforeId(), commonmodel.PageReqFromProto(req.GetPage()))
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (s *GlobalChatService) List(ctx context.Context, req *imv1.ListGlobalChatMe
 	return &imv1.ListGlobalChatMessages_Resp{Page: page.ToProto(), Rows: response}, nil
 }
 
-func (s *GlobalChatService) GetTopic(ctx context.Context, _ *imv1.GetGlobalChatTopic_Req) (*imv1.GetGlobalChatTopic_Resp, error) {
+func (s *GlobalChatService) GetGlobalChatTopic(ctx context.Context, _ *imv1.GetGlobalChatTopic_Req) (*imv1.GetGlobalChatTopic_Resp, error) {
 	topic, err := s.topic.Get(ctx)
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (s *GlobalChatService) GetTopic(ctx context.Context, _ *imv1.GetGlobalChatT
 	return &imv1.GetGlobalChatTopic_Resp{Topic: response}, nil
 }
 
-func (s *GlobalChatService) SetTopic(ctx context.Context, req *imv1.SetGlobalChatTopic_Req) (*imv1.SetGlobalChatTopic_Resp, error) {
+func (s *GlobalChatService) SetGlobalChatTopic(ctx context.Context, req *imv1.SetGlobalChatTopic_Req) (*imv1.SetGlobalChatTopic_Resp, error) {
 	topic, err := s.topic.Set(ctx, req.GetUserId(), req.GetContent())
 	if err != nil {
 		return nil, err
@@ -90,14 +90,14 @@ func (s *GlobalChatService) SetTopic(ctx context.Context, req *imv1.SetGlobalCha
 	return &imv1.SetGlobalChatTopic_Resp{Topic: response}, nil
 }
 
-func (s *GlobalChatService) Mute(ctx context.Context, req *imv1.MuteGlobalChatUser_Req) (*imv1.MuteGlobalChatUser_Resp, error) {
+func (s *GlobalChatService) MuteGlobalChatUser(ctx context.Context, req *imv1.MuteGlobalChatUser_Req) (*imv1.MuteGlobalChatUser_Resp, error) {
 	if err := s.globalChat.Mute(ctx, req.GetOperatorUserId(), req.GetUserId(), time.Duration(req.GetMutedSeconds())*time.Second, req.Reason); err != nil {
 		return nil, err
 	}
 	return &imv1.MuteGlobalChatUser_Resp{}, nil
 }
 
-func (s *GlobalChatService) Unmute(ctx context.Context, req *imv1.UnmuteGlobalChatUser_Req) (*imv1.UnmuteGlobalChatUser_Resp, error) {
+func (s *GlobalChatService) UnmuteGlobalChatUser(ctx context.Context, req *imv1.UnmuteGlobalChatUser_Req) (*imv1.UnmuteGlobalChatUser_Resp, error) {
 	if err := s.globalChat.Unmute(ctx, req.GetUserId()); err != nil {
 		return nil, err
 	}

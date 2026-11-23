@@ -86,7 +86,11 @@ message PrepareBadgeImageUpload {
     string hash = 1; // 文件 SHA-256，小写十六进制。
     string mime_type = 2; // 上传图片 MIME 类型。
     int64 size = 3; // 文件大小，最大 5 MiB。
-    option (gnostic.openapi.v3.schema) = {required: "hash" required: "mime_type" required: "size"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
   }
   message Resp {
     optional int64 asset_id = 1; // 已存在资源的 ID。
@@ -113,7 +117,11 @@ message PrepareBadgeFontUpload {
     string hash = 1; // 文件 SHA-256，小写十六进制。
     string mime_type = 2; // 上传字体 MIME 类型。
     int64 size = 3; // 文件大小，最大 5 MiB。
-    option (gnostic.openapi.v3.schema) = {required: "hash" required: "mime_type" required: "size"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
   }
   // Resp 返回已存在字体或一次直传凭证。
   message Resp {

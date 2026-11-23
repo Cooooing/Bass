@@ -3,19 +3,19 @@ syntax = "proto3";
 package common.api.app.im.v1;
 
 import "common/common.proto";
-import "im/v1/enum/im_message_type.proto";
 import "google/protobuf/timestamp.proto";
+import "im/v1/enum/im_message_type.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";
 
 service IMGlobalChatService {
-  rpc Send(SendGlobalChatMessage.Req) returns (SendGlobalChatMessage.Resp) {} // 发送全局聊天室消息。
-  rpc Revoke(RevokeGlobalChatMessage.Req) returns (RevokeGlobalChatMessage.Resp) {} // 撤回全局聊天室消息。
-  rpc List(ListGlobalChatMessages.Req) returns (ListGlobalChatMessages.Resp) {} // 查询全局聊天室历史。
-  rpc GetTopic(GetGlobalChatTopic.Req) returns (GetGlobalChatTopic.Resp) {} // 查询当前全局聊天室话题。
-  rpc SetTopic(SetGlobalChatTopic.Req) returns (SetGlobalChatTopic.Resp) {} // 设置全局聊天室话题并扣除积分。
-  rpc Mute(MuteGlobalChatUser.Req) returns (MuteGlobalChatUser.Resp) {} // 管理员定时禁言账号。
-  rpc Unmute(UnmuteGlobalChatUser.Req) returns (UnmuteGlobalChatUser.Resp) {} // 管理员解除账号禁言。
+  rpc SendGlobalChatMessage(SendGlobalChatMessage.Req) returns (SendGlobalChatMessage.Resp) {} // 发送全局聊天室消息。
+  rpc RevokeGlobalChatMessage(RevokeGlobalChatMessage.Req) returns (RevokeGlobalChatMessage.Resp) {} // 撤回全局聊天室消息。
+  rpc ListGlobalChatMessages(ListGlobalChatMessages.Req) returns (ListGlobalChatMessages.Resp) {} // 查询全局聊天室历史。
+  rpc GetGlobalChatTopic(GetGlobalChatTopic.Req) returns (GetGlobalChatTopic.Resp) {} // 查询当前全局聊天室话题。
+  rpc SetGlobalChatTopic(SetGlobalChatTopic.Req) returns (SetGlobalChatTopic.Resp) {} // 设置全局聊天室话题并扣除积分。
+  rpc MuteGlobalChatUser(MuteGlobalChatUser.Req) returns (MuteGlobalChatUser.Resp) {} // 管理员定时禁言账号。
+  rpc UnmuteGlobalChatUser(UnmuteGlobalChatUser.Req) returns (UnmuteGlobalChatUser.Resp) {} // 管理员解除账号禁言。
 }
 
 message GlobalChatMessage {

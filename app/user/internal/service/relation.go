@@ -34,7 +34,7 @@ func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 func (s *RelationService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Req) (*v1.FollowRelation_Resp, error) {
+func (s *RelationService) FollowRelation(ctx context.Context, req *v1.FollowRelation_Req) (*v1.FollowRelation_Resp, error) {
 	err := s.relationUsecase.Follow(ctx, &usecase.FollowRelationReq{
 		ActorID:  req.GetActorId(),
 		TargetID: req.GetTargetId(),
@@ -42,7 +42,7 @@ func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Req
 	return &v1.FollowRelation_Resp{}, err
 }
 
-func (s *RelationService) Unfollow(ctx context.Context, req *v1.UnfollowRelation_Req) (*v1.UnfollowRelation_Resp, error) {
+func (s *RelationService) UnfollowRelation(ctx context.Context, req *v1.UnfollowRelation_Req) (*v1.UnfollowRelation_Resp, error) {
 	err := s.relationUsecase.Unfollow(ctx, &usecase.UnfollowRelationReq{
 		ActorID:  req.GetActorId(),
 		TargetID: req.GetTargetId(),
@@ -50,7 +50,7 @@ func (s *RelationService) Unfollow(ctx context.Context, req *v1.UnfollowRelation
 	return &v1.UnfollowRelation_Resp{}, err
 }
 
-func (s *RelationService) Block(ctx context.Context, req *v1.BlockRelation_Req) (*v1.BlockRelation_Resp, error) {
+func (s *RelationService) BlockRelation(ctx context.Context, req *v1.BlockRelation_Req) (*v1.BlockRelation_Resp, error) {
 	err := s.relationUsecase.Block(ctx, &usecase.BlockRelationReq{
 		ActorID:  req.GetActorId(),
 		TargetID: req.GetTargetId(),
@@ -58,7 +58,7 @@ func (s *RelationService) Block(ctx context.Context, req *v1.BlockRelation_Req) 
 	return &v1.BlockRelation_Resp{}, err
 }
 
-func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_Req) (*v1.UnblockRelation_Resp, error) {
+func (s *RelationService) UnblockRelation(ctx context.Context, req *v1.UnblockRelation_Req) (*v1.UnblockRelation_Resp, error) {
 	err := s.relationUsecase.Unblock(ctx, &usecase.UnblockRelationReq{
 		ActorID:  req.GetActorId(),
 		TargetID: req.GetTargetId(),
@@ -66,7 +66,7 @@ func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_R
 	return &v1.UnblockRelation_Resp{}, err
 }
 
-func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowingRelations_Req) (*v1.ListFollowingRelations_Resp, error) {
+func (s *RelationService) ListFollowingRelations(ctx context.Context, req *v1.ListFollowingRelations_Req) (*v1.ListFollowingRelations_Resp, error) {
 	req = util.OrDefault(req, &v1.ListFollowingRelations_Req{})
 	res, err := s.relationUsecase.ListFollowing(ctx, &usecase.ListFollowingRelationsReq{
 		Page:            commonmodel.PageReqFromProto(req.GetPage()),
@@ -98,7 +98,7 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowi
 	}, nil
 }
 
-func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowersRelations_Req) (*v1.ListFollowersRelations_Resp, error) {
+func (s *RelationService) ListFollowersRelations(ctx context.Context, req *v1.ListFollowersRelations_Req) (*v1.ListFollowersRelations_Resp, error) {
 	req = util.OrDefault(req, &v1.ListFollowersRelations_Req{})
 	targetID := req.GetUserId()
 	res, err := s.relationUsecase.ListFollowers(ctx, &usecase.ListFollowersRelationsReq{
@@ -131,7 +131,7 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowe
 	}, nil
 }
 
-func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRelations_Req) (*v1.ListBlockedRelations_Resp, error) {
+func (s *RelationService) ListBlockedRelations(ctx context.Context, req *v1.ListBlockedRelations_Req) (*v1.ListBlockedRelations_Resp, error) {
 	req = util.OrDefault(req, &v1.ListBlockedRelations_Req{})
 	res, err := s.relationUsecase.ListBlocked(ctx, &usecase.ListBlockedRelationsReq{
 		Page:    commonmodel.PageReqFromProto(req.GetPage()),
@@ -162,7 +162,7 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRe
 	}, nil
 }
 
-func (s *RelationService) MapStatus(ctx context.Context, req *v1.MapRelationStatuses_Req) (*v1.MapRelationStatuses_Resp, error) {
+func (s *RelationService) MapRelationStatuses(ctx context.Context, req *v1.MapRelationStatuses_Req) (*v1.MapRelationStatuses_Resp, error) {
 	req = util.OrDefault(req, &v1.MapRelationStatuses_Req{})
 	res, err := s.relationUsecase.MapStatus(ctx, &usecase.MapRelationStatusReq{
 		ActorID:   req.GetActorId(),

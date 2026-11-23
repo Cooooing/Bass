@@ -25,8 +25,8 @@ import (
 
 func NewHTTPAuthMiddlewares(authClient *rpc.UserClient) []middleware.Middleware {
 	publicOperations := map[string]struct{}{
-		v1.OperationAuthServiceRegister: {},
-		v1.OperationAuthServiceLogin:    {},
+		v1.OperationAuthServiceRegisterAccount: {},
+		v1.OperationAuthServiceLoginAccount:    {},
 	}
 	authRequiredMatch := func(_ context.Context, operation string) bool {
 		_, ok := publicOperations[operation]

@@ -2,19 +2,19 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "google/protobuf/timestamp.proto";
 import "common/enums/login_realm.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
 service RbacService {
-  rpc UpsertRole(UpsertRbacRole.Req) returns (UpsertRbacRole.Resp) {} // 新增或更新角色。
-  rpc UpsertPermission(UpsertRbacPermission.Req) returns (UpsertRbacPermission.Resp) {} // 新增或更新权限。
-  rpc BindRolePermission(BindRbacRolePermission.Req) returns (BindRbacRolePermission.Resp) {} // 绑定角色权限。
-  rpc UnbindRolePermission(UnbindRbacRolePermission.Req) returns (UnbindRbacRolePermission.Resp) {} // 解绑角色权限。
-  rpc GrantRole(GrantRbacRole.Req) returns (GrantRbacRole.Resp) {} // 给账号授予角色。
-  rpc RevokeRole(RevokeRbacRole.Req) returns (RevokeRbacRole.Resp) {} // 撤销账号角色。
-  rpc CheckPermission(CheckRbacPermission.Req) returns (CheckRbacPermission.Resp) {} // 校验账号权限。
+  rpc UpsertRbacRole(UpsertRbacRole.Req) returns (UpsertRbacRole.Resp) {} // 新增或更新角色。
+  rpc UpsertRbacPermission(UpsertRbacPermission.Req) returns (UpsertRbacPermission.Resp) {} // 新增或更新权限。
+  rpc BindRbacRolePermission(BindRbacRolePermission.Req) returns (BindRbacRolePermission.Resp) {} // 绑定角色权限。
+  rpc UnbindRbacRolePermission(UnbindRbacRolePermission.Req) returns (UnbindRbacRolePermission.Resp) {} // 解绑角色权限。
+  rpc GrantRbacRole(GrantRbacRole.Req) returns (GrantRbacRole.Resp) {} // 给账号授予角色。
+  rpc RevokeRbacRole(RevokeRbacRole.Req) returns (RevokeRbacRole.Resp) {} // 撤销账号角色。
+  rpc CheckRbacPermission(CheckRbacPermission.Req) returns (CheckRbacPermission.Resp) {} // 校验账号权限。
 }
 
 message UpsertRbacRole {

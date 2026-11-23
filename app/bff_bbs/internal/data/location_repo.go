@@ -23,7 +23,7 @@ func NewLocationClient(
 }
 
 func (r *LocationClient) GetCurrentLocation(ctx context.Context, userID int64) (*repo.Location, error) {
-	reply, err := r.userClient.Location.Get(ctx, &userv1.GetLocation_Req{
+	reply, err := r.userClient.Location.GetLocation(ctx, &userv1.GetLocation_Req{
 		UserId: userID,
 	})
 	if err != nil {

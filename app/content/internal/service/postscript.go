@@ -36,7 +36,7 @@ func (s *PostscriptService) RegisterGrpc(gs *grpc.Server) {
 func (s *PostscriptService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *PostscriptService) Add(ctx context.Context, req *v1.AddPostscript_Req) (*v1.AddPostscript_Resp, error) {
+func (s *PostscriptService) AddPostscript(ctx context.Context, req *v1.AddPostscript_Req) (*v1.AddPostscript_Resp, error) {
 	if req.GetArticleId() <= 0 || req.GetContent() == "" || req.GetAccess() == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -62,7 +62,7 @@ func (s *PostscriptService) Add(ctx context.Context, req *v1.AddPostscript_Req) 
 	return &v1.AddPostscript_Resp{Postscript: out}, nil
 }
 
-func (s *PostscriptService) List(ctx context.Context, req *v1.ListPostscripts_Req) (*v1.ListPostscripts_Resp, error) {
+func (s *PostscriptService) ListPostscripts(ctx context.Context, req *v1.ListPostscripts_Req) (*v1.ListPostscripts_Resp, error) {
 	if req.GetArticleId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

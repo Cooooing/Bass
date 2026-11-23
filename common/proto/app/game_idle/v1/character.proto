@@ -8,15 +8,15 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service CharacterService {
-  rpc Create(CreateCharacter.Request) returns (CreateCharacter.Resp) {}
-  rpc Get(GetCharacter.Request) returns (GetCharacter.Resp) {}
-  rpc Online(OnlineCharacter.Request) returns (OnlineCharacter.Resp) {}
-  rpc Offline(OfflineCharacter.Request) returns (OfflineCharacter.Resp) {}
-  rpc Ping(PingCharacter.Request) returns (PingCharacter.Resp) {}
+  rpc CreateCharacter(CreateCharacter.Req) returns (CreateCharacter.Resp) {}
+  rpc GetCharacter(GetCharacter.Req) returns (GetCharacter.Resp) {}
+  rpc OnlineCharacter(OnlineCharacter.Req) returns (OnlineCharacter.Resp) {}
+  rpc OfflineCharacter(OfflineCharacter.Req) returns (OfflineCharacter.Resp) {}
+  rpc PingCharacter(PingCharacter.Req) returns (PingCharacter.Resp) {}
 }
 
 message CreateCharacter {
-  message Request {
+  message Req {
     int64 user_id = 1; // 用户 ID
     string name = 2; // 角色名称
   }
@@ -27,7 +27,7 @@ message CreateCharacter {
 }
 
 message GetCharacter {
-  message Request {
+  message Req {
     int64 user_id = 1; // 用户 ID
     int64 character_id = 2; // 角色 ID
   }
@@ -38,7 +38,7 @@ message GetCharacter {
 }
 
 message OnlineCharacter {
-  message Request {
+  message Req {
     int64 character_id = 2; // 角色 ID
   }
 
@@ -49,7 +49,7 @@ message OnlineCharacter {
 }
 
 message OfflineCharacter {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
     string session_id = 2; // 角色在线会话 ID
     bool timeout = 3; // 是否心跳超时下线
@@ -59,7 +59,7 @@ message OfflineCharacter {
 }
 
 message PingCharacter {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
     string session_id = 2; // 角色在线会话 ID
   }

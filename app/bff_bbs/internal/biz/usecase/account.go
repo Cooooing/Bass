@@ -148,7 +148,7 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 		profile.Points = new(economyAccount.Balance)
 	}
 	if viewerID == account.ID || privacy.PublicOnlineStatus == nil || *privacy.PublicOnlineStatus {
-		onlineStatuses, queryErr := u.realtimeHub.Hub.QueryOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: []int64{account.ID}})
+		onlineStatuses, queryErr := u.realtimeHub.Hub.QueryRealtimeOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: []int64{account.ID}})
 		if queryErr != nil {
 			u.log.WarnContext(ctx, "query profile online status failed", "user_id", account.ID, "error", queryErr)
 		} else {

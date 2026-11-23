@@ -29,7 +29,7 @@ func (s *StatisticsService) RegisterGrpc(server *grpc.Server) {
 }
 func (*StatisticsService) RegisterHTTP(*http.Server) {}
 
-func (s *StatisticsService) BatchCountUserBehaviors(ctx context.Context, req *v1.BatchCountContentUserBehaviors_Req) (*v1.BatchCountContentUserBehaviors_Resp, error) {
+func (s *StatisticsService) BatchCountContentUserBehaviors(ctx context.Context, req *v1.BatchCountContentUserBehaviors_Req) (*v1.BatchCountContentUserBehaviors_Resp, error) {
 	statuses := make([]enum.ContentActionStatus, 0, len(req.GetActionStatuses()))
 	for _, status := range req.GetActionStatuses() {
 		value, ok := enum.ContentActionStatusMap.ToEnum(status)
@@ -42,9 +42,9 @@ func (s *StatisticsService) BatchCountUserBehaviors(ctx context.Context, req *v1
 	if err != nil {
 		return nil, err
 	}
-	response := make([]*v1.BatchCountContentUserBehaviors_UserBehaviorCount, 0, len(rows))
+	response := make([]*v1.BatchCountContentUserBehaviors_Resp_UserBehaviorCount, 0, len(rows))
 	for _, row := range rows {
-		response = append(response, &v1.BatchCountContentUserBehaviors_UserBehaviorCount{UserId: row.UserID, ArticleCount: row.ArticleCount, CommentCount: row.CommentCount, ArticleLikeCount: row.ArticleLikeCount, CommentLikeCount: row.CommentLikeCount, ArticleThankCount: row.ArticleThankCount, CommentThankCount: row.CommentThankCount, ArticleRewardCount: row.ArticleRewardCount, ViewCount: row.ViewCount})
+		response = append(response, &v1.BatchCountContentUserBehaviors_Resp_UserBehaviorCount{UserId: row.UserID, ArticleCount: row.ArticleCount, CommentCount: row.CommentCount, ArticleLikeCount: row.ArticleLikeCount, CommentLikeCount: row.CommentLikeCount, ArticleThankCount: row.ArticleThankCount, CommentThankCount: row.CommentThankCount, ArticleRewardCount: row.ArticleRewardCount, ViewCount: row.ViewCount})
 	}
 	return &v1.BatchCountContentUserBehaviors_Resp{Rows: response}, nil
 }

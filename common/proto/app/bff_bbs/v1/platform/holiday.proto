@@ -11,7 +11,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/platform;platform";
 // 节假日服务。
 service HolidayService {
   // 获取当前节假日状态。
-  rpc GetCurrent(GetCurrentHoliday.Req) returns (GetCurrentHoliday.Resp) {
+  rpc GetCurrentHoliday(GetCurrentHoliday.Req) returns (GetCurrentHoliday.Resp) {
     option (google.api.http) = {
       post: "/v1/platform/holiday/get-current"
       body: "*"

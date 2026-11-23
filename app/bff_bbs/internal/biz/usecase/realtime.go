@@ -17,7 +17,7 @@ func NewRealtimeUsecase(hub *rpc.RealtimeHubClient) *RealtimeUsecase {
 }
 
 func (u *RealtimeUsecase) CreateTicket(ctx context.Context, userID int64) (string, int64, error) {
-	resp, err := u.hub.IssueTicket(ctx, &realtimehubv1.IssueRealtimeTicket_Req{UserId: userID, Realm: constant.RealtimeRealmBBS})
+	resp, err := u.hub.IssueRealtimeTicket(ctx, &realtimehubv1.IssueRealtimeTicket_Req{UserId: userID, Realm: constant.RealtimeRealmBBS})
 	if err != nil {
 		return "", 0, err
 	}

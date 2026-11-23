@@ -30,7 +30,7 @@ func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 func (s *LocationService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *LocationService) Get(ctx context.Context, req *v1.GetLocation_Req) (*v1.GetLocation_Resp, error) {
+func (s *LocationService) GetLocation(ctx context.Context, req *v1.GetLocation_Req) (*v1.GetLocation_Resp, error) {
 	res, err := s.locationUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err

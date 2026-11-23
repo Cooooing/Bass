@@ -70,10 +70,10 @@ func (u *GlobalChatBarrageUsecase) Send(ctx context.Context, userID int64, conte
 	if err != nil {
 		return nil, err
 	}
-	barrageRequest := &imv1.TCCSendGlobalChatBarrage_Req{BarrageId: barrageID, UserId: userID, Content: content, PointsCost: points}
+	barrageRequest := &imv1.TCCGlobalChatBarrage_Req{BarrageId: barrageID, UserId: userID, Content: content, PointsCost: points}
 	pointsRequest := &economyv1.TCCPoints_Req{UserId: userID, Amount: points, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
-		if err = u.branches.Call(ctx, tcc, constant.IMServiceName.String(), barrageRequest, imv1.TCCGlobalChatBarrageService_Try_FullMethodName, imv1.TCCGlobalChatBarrageService_Confirm_FullMethodName, imv1.TCCGlobalChatBarrageService_Cancel_FullMethodName, &imv1.TCCSendGlobalChatBarrage_Resp{}); err != nil {
+		if err = u.branches.Call(ctx, tcc, constant.IMServiceName.String(), barrageRequest, imv1.TCCGlobalChatBarrageService_Try_FullMethodName, imv1.TCCGlobalChatBarrageService_Confirm_FullMethodName, imv1.TCCGlobalChatBarrageService_Cancel_FullMethodName, &imv1.TCCGlobalChatBarrage_Resp{}); err != nil {
 			return err
 		}
 		return u.branches.Call(ctx, tcc, constant.EconomyServiceName.String(), pointsRequest, economyv1.TCCPointsService_Try_FullMethodName, economyv1.TCCPointsService_Confirm_FullMethodName, economyv1.TCCPointsService_Cancel_FullMethodName, &economyv1.TCCPoints_Resp{})

@@ -5,13 +5,13 @@ package common.api.app.game_idle.v1;
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service ActionService {
-  rpc List(ListActions.Request) returns (ListActions.Resp) {}
-  rpc GetDetail(GetActionDetail.Request) returns (GetActionDetail.Resp) {}
-  rpc Refresh(RefreshActions.Request) returns (RefreshActions.Resp) {}
+  rpc ListActions(ListActions.Req) returns (ListActions.Resp) {}
+  rpc GetActionDetail(GetActionDetail.Req) returns (GetActionDetail.Resp) {}
+  rpc RefreshActions(RefreshActions.Req) returns (RefreshActions.Resp) {}
 }
 
 message ListActions {
-  message Request {}
+  message Req {}
 
   message Resp {
     repeated Action rows = 1; // 行动列表
@@ -19,7 +19,7 @@ message ListActions {
 }
 
 message GetActionDetail {
-  message Request {
+  message Req {
     string action_id = 1; // 行动编码
   }
 
@@ -29,7 +29,7 @@ message GetActionDetail {
 }
 
 message RefreshActions {
-  message Request {}
+  message Req {}
 
   message Resp {}
 }

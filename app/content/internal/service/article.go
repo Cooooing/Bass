@@ -40,7 +40,7 @@ func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 func (s *ArticleService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *ArticleService) CreateDraft(ctx context.Context, req *v1.CreateDraftArticle_Req) (*v1.CreateDraftArticle_Resp, error) {
+func (s *ArticleService) CreateDraftArticle(ctx context.Context, req *v1.CreateDraftArticle_Req) (*v1.CreateDraftArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -86,7 +86,7 @@ func (s *ArticleService) CreateDraft(ctx context.Context, req *v1.CreateDraftArt
 	return &v1.CreateDraftArticle_Resp{ArticleId: row.ID}, nil
 }
 
-func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArticle_Req) (*v1.UpdateDraftArticle_Resp, error) {
+func (s *ArticleService) UpdateDraftArticle(ctx context.Context, req *v1.UpdateDraftArticle_Req) (*v1.UpdateDraftArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -134,7 +134,7 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 	return &v1.UpdateDraftArticle_Resp{ArticleId: row.ID}, nil
 }
 
-func (s *ArticleService) VotePoll(ctx context.Context, req *v1.VoteArticlePoll_Req) (*v1.VoteArticlePoll_Resp, error) {
+func (s *ArticleService) VoteArticlePoll(ctx context.Context, req *v1.VoteArticlePoll_Req) (*v1.VoteArticlePoll_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -159,7 +159,7 @@ func (s *ArticleService) VotePoll(ctx context.Context, req *v1.VoteArticlePoll_R
 	return &v1.VoteArticlePoll_Resp{}, err
 }
 
-func (s *ArticleService) FinishPoll(ctx context.Context, req *v1.FinishArticlePoll_Req) (*v1.FinishArticlePoll_Resp, error) {
+func (s *ArticleService) FinishArticlePoll(ctx context.Context, req *v1.FinishArticlePoll_Req) (*v1.FinishArticlePoll_Resp, error) {
 	if req.GetArticleId() <= 0 || req.GetEndsAt() == nil || !req.GetEndsAt().IsValid() {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -187,7 +187,7 @@ func (*ArticleService) articleLotteryDraft(req *v1.ArticleLotteryDraft) *model.A
 	return &model.ArticleLotteryDraft{Prizes: prizes, DrawAt: req.GetDrawAt().AsTime()}
 }
 
-func (s *ArticleService) EnterLottery(ctx context.Context, req *v1.EnterArticleLottery_Req) (*v1.EnterArticleLottery_Resp, error) {
+func (s *ArticleService) EnterArticleLottery(ctx context.Context, req *v1.EnterArticleLottery_Req) (*v1.EnterArticleLottery_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -212,7 +212,7 @@ func (s *ArticleService) EnterLottery(ctx context.Context, req *v1.EnterArticleL
 	return &v1.EnterArticleLottery_Resp{}, err
 }
 
-func (s *ArticleService) DrawLottery(ctx context.Context, req *v1.DrawArticleLottery_Req) (*v1.DrawArticleLottery_Resp, error) {
+func (s *ArticleService) DrawArticleLottery(ctx context.Context, req *v1.DrawArticleLottery_Req) (*v1.DrawArticleLottery_Resp, error) {
 	if req.GetArticleId() <= 0 || req.GetDrawAt() == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -220,7 +220,7 @@ func (s *ArticleService) DrawLottery(ctx context.Context, req *v1.DrawArticleLot
 	return &v1.DrawArticleLottery_Resp{}, err
 }
 
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {
+func (s *ArticleService) PublishArticle(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeInternalTask}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -249,7 +249,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 	return &v1.PublishArticle_Resp{}, nil
 }
 
-func (s *ArticleService) CancelPublish(ctx context.Context, req *v1.CancelPublishArticle_Req) (*v1.CancelPublishArticle_Resp, error) {
+func (s *ArticleService) CancelPublishArticle(ctx context.Context, req *v1.CancelPublishArticle_Req) (*v1.CancelPublishArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -273,7 +273,7 @@ func (s *ArticleService) CancelPublish(ctx context.Context, req *v1.CancelPublis
 	return &v1.CancelPublishArticle_Resp{}, nil
 }
 
-func (s *ArticleService) DiscardDraft(ctx context.Context, req *v1.DiscardDraftArticle_Req) (*v1.DiscardDraftArticle_Resp, error) {
+func (s *ArticleService) DiscardDraftArticle(ctx context.Context, req *v1.DiscardDraftArticle_Req) (*v1.DiscardDraftArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -294,7 +294,7 @@ func (s *ArticleService) DiscardDraft(ctx context.Context, req *v1.DiscardDraftA
 	return &v1.DiscardDraftArticle_Resp{}, s.articleUsecase.DiscardDraft(ctx, &usecase.ArticleDiscardDraftReq{Access: access, ArticleID: req.GetArticleId()})
 }
 
-func (s *ArticleService) MakePrivate(ctx context.Context, req *v1.MakePrivateArticle_Req) (*v1.MakePrivateArticle_Resp, error) {
+func (s *ArticleService) MakePrivateArticle(ctx context.Context, req *v1.MakePrivateArticle_Req) (*v1.MakePrivateArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -315,7 +315,7 @@ func (s *ArticleService) MakePrivate(ctx context.Context, req *v1.MakePrivateArt
 	return &v1.MakePrivateArticle_Resp{}, s.articleUsecase.MakePrivate(ctx, &usecase.ArticleMakePrivateReq{Access: access, ArticleID: req.GetArticleId()})
 }
 
-func (s *ArticleService) MakePublic(ctx context.Context, req *v1.MakePublicArticle_Req) (*v1.MakePublicArticle_Resp, error) {
+func (s *ArticleService) MakePublicArticle(ctx context.Context, req *v1.MakePublicArticle_Req) (*v1.MakePublicArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -336,7 +336,7 @@ func (s *ArticleService) MakePublic(ctx context.Context, req *v1.MakePublicArtic
 	return &v1.MakePublicArticle_Resp{}, s.articleUsecase.MakePublic(ctx, &usecase.ArticleMakePublicReq{Access: access, ArticleID: req.GetArticleId()})
 }
 
-func (s *ArticleService) Archive(ctx context.Context, req *v1.ArchiveArticle_Req) (*v1.ArchiveArticle_Resp, error) {
+func (s *ArticleService) ArchiveArticle(ctx context.Context, req *v1.ArchiveArticle_Req) (*v1.ArchiveArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -357,7 +357,7 @@ func (s *ArticleService) Archive(ctx context.Context, req *v1.ArchiveArticle_Req
 	return &v1.ArchiveArticle_Resp{}, s.articleUsecase.Archive(ctx, &usecase.ArticleArchiveReq{Access: access, ArticleID: req.GetArticleId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) SetPinnedComment(ctx context.Context, req *v1.SetPinnedArticleComment_Req) (*v1.SetPinnedArticleComment_Resp, error) {
+func (s *ArticleService) SetPinnedArticleComment(ctx context.Context, req *v1.SetPinnedArticleComment_Req) (*v1.SetPinnedArticleComment_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -375,7 +375,7 @@ func (s *ArticleService) SetPinnedComment(ctx context.Context, req *v1.SetPinned
 	return &v1.SetPinnedArticleComment_Resp{}, err
 }
 
-func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptArticleAnswer_Req) (*v1.AcceptArticleAnswer_Resp, error) {
+func (s *ArticleService) AcceptArticleAnswer(ctx context.Context, req *v1.AcceptArticleAnswer_Req) (*v1.AcceptArticleAnswer_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -393,7 +393,7 @@ func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptArticle
 	return &v1.AcceptArticleAnswer_Resp{}, err
 }
 
-func (s *ArticleService) Unarchive(ctx context.Context, req *v1.UnarchiveArticle_Req) (*v1.UnarchiveArticle_Resp, error) {
+func (s *ArticleService) UnarchiveArticle(ctx context.Context, req *v1.UnarchiveArticle_Req) (*v1.UnarchiveArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -414,7 +414,7 @@ func (s *ArticleService) Unarchive(ctx context.Context, req *v1.UnarchiveArticle
 	return &v1.UnarchiveArticle_Resp{}, s.articleUsecase.Unarchive(ctx, &usecase.ArticleUnarchiveReq{Access: access, ArticleID: req.GetArticleId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Hide(ctx context.Context, req *v1.HideArticle_Req) (*v1.HideArticle_Resp, error) {
+func (s *ArticleService) HideArticle(ctx context.Context, req *v1.HideArticle_Req) (*v1.HideArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -435,7 +435,7 @@ func (s *ArticleService) Hide(ctx context.Context, req *v1.HideArticle_Req) (*v1
 	return &v1.HideArticle_Resp{}, s.articleUsecase.Hide(ctx, &usecase.ArticleHideReq{Access: access, ArticleID: req.GetArticleId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Unhide(ctx context.Context, req *v1.UnhideArticle_Req) (*v1.UnhideArticle_Resp, error) {
+func (s *ArticleService) UnhideArticle(ctx context.Context, req *v1.UnhideArticle_Req) (*v1.UnhideArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -456,7 +456,7 @@ func (s *ArticleService) Unhide(ctx context.Context, req *v1.UnhideArticle_Req) 
 	return &v1.UnhideArticle_Resp{}, s.articleUsecase.Unhide(ctx, &usecase.ArticleUnhideReq{Access: access, ArticleID: req.GetArticleId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Lock(ctx context.Context, req *v1.LockArticle_Req) (*v1.LockArticle_Resp, error) {
+func (s *ArticleService) LockArticle(ctx context.Context, req *v1.LockArticle_Req) (*v1.LockArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -477,7 +477,7 @@ func (s *ArticleService) Lock(ctx context.Context, req *v1.LockArticle_Req) (*v1
 	return &v1.LockArticle_Resp{}, s.articleUsecase.Lock(ctx, &usecase.ArticleLockReq{Access: access, ArticleID: req.GetArticleId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Unlock(ctx context.Context, req *v1.UnlockArticle_Req) (*v1.UnlockArticle_Resp, error) {
+func (s *ArticleService) UnlockArticle(ctx context.Context, req *v1.UnlockArticle_Req) (*v1.UnlockArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -498,7 +498,7 @@ func (s *ArticleService) Unlock(ctx context.Context, req *v1.UnlockArticle_Req) 
 	return &v1.UnlockArticle_Resp{}, s.articleUsecase.Unlock(ctx, &usecase.ArticleUnlockReq{Access: access, ArticleID: req.GetArticleId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Req) (*v1.LikeArticle_Resp, error) {
+func (s *ArticleService) LikeArticle(ctx context.Context, req *v1.LikeArticle_Req) (*v1.LikeArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -520,7 +520,7 @@ func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Req) (*v1
 	return &v1.LikeArticle_Resp{Liked: liked}, err
 }
 
-func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Req) (*v1.ThankArticle_Resp, error) {
+func (s *ArticleService) ThankArticle(ctx context.Context, req *v1.ThankArticle_Req) (*v1.ThankArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -542,7 +542,7 @@ func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Req) (*
 	return &v1.ThankArticle_Resp{Thanked: thanked}, err
 }
 
-func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Req) (*v1.CollectArticle_Resp, error) {
+func (s *ArticleService) CollectArticle(ctx context.Context, req *v1.CollectArticle_Req) (*v1.CollectArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -564,7 +564,7 @@ func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Req
 	return &v1.CollectArticle_Resp{Collected: collected}, err
 }
 
-func (s *ArticleService) CountCollected(ctx context.Context, req *v1.CountCollectedArticles_Req) (*v1.CountCollectedArticles_Resp, error) {
+func (s *ArticleService) CountCollectedArticles(ctx context.Context, req *v1.CountCollectedArticles_Req) (*v1.CountCollectedArticles_Resp, error) {
 	count, err := s.articleUsecase.CountCollected(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -572,7 +572,7 @@ func (s *ArticleService) CountCollected(ctx context.Context, req *v1.CountCollec
 	return &v1.CountCollectedArticles_Resp{Count: count}, nil
 }
 
-func (s *ArticleService) PageCollected(ctx context.Context, req *v1.PageCollectedArticles_Req) (*v1.PageCollectedArticles_Resp, error) {
+func (s *ArticleService) PageCollectedArticles(ctx context.Context, req *v1.PageCollectedArticles_Req) (*v1.PageCollectedArticles_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeUser}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -603,7 +603,7 @@ func (s *ArticleService) PageCollected(ctx context.Context, req *v1.PageCollecte
 	return &v1.PageCollectedArticles_Resp{Rows: rows, Page: page}, nil
 }
 
-func (s *ArticleService) PageWatched(ctx context.Context, req *v1.PageWatchedArticles_Req) (*v1.PageWatchedArticles_Resp, error) {
+func (s *ArticleService) PageWatchedArticles(ctx context.Context, req *v1.PageWatchedArticles_Req) (*v1.PageWatchedArticles_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeUser}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -634,7 +634,7 @@ func (s *ArticleService) PageWatched(ctx context.Context, req *v1.PageWatchedArt
 	return &v1.PageWatchedArticles_Resp{Rows: rows, Page: page}, nil
 }
 
-func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Req) (*v1.WatchArticle_Resp, error) {
+func (s *ArticleService) WatchArticle(ctx context.Context, req *v1.WatchArticle_Req) (*v1.WatchArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -656,7 +656,7 @@ func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Req) (*
 	return &v1.WatchArticle_Resp{Watched: watched}, err
 }
 
-func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) (*v1.RewardArticle_Resp, error) {
+func (s *ArticleService) RewardArticle(ctx context.Context, req *v1.RewardArticle_Req) (*v1.RewardArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -678,7 +678,7 @@ func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) 
 	return &v1.RewardArticle_Resp{Rewarded: rewarded}, err
 }
 
-func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Req) (*v1.ViewArticle_Resp, error) {
+func (s *ArticleService) ViewArticle(ctx context.Context, req *v1.ViewArticle_Req) (*v1.ViewArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -699,7 +699,7 @@ func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Req) (*v1
 	return &v1.ViewArticle_Resp{}, s.articleUsecase.View(ctx, &usecase.ArticleViewReq{Access: access, ArticleID: req.GetArticleId(), IP: req.Ip, UserAgent: req.UserAgent, BrowserFingerprint: req.BrowserFingerprint})
 }
 
-func (s *ArticleService) PageViewHistory(
+func (s *ArticleService) PageArticleViewHistory(
 	ctx context.Context,
 	req *v1.PageArticleViewHistory_Req,
 ) (*v1.PageArticleViewHistory_Resp, error) {
@@ -823,7 +823,7 @@ func (*ArticleService) articleLottery(row *model.ArticleLottery) *v1.ArticleLott
 	return lottery
 }
 
-func (s *ArticleService) FlushViews(ctx context.Context, req *v1.FlushArticleViews_Req) (*v1.FlushArticleViews_Resp, error) {
+func (s *ArticleService) FlushArticleViews(ctx context.Context, req *v1.FlushArticleViews_Req) (*v1.FlushArticleViews_Resp, error) {
 	flushed, err := s.articleUsecase.FlushViews(ctx, &usecase.ArticleFlushViewsReq{Limit: req.GetLimit()})
 	if err != nil {
 		return nil, err
@@ -831,7 +831,7 @@ func (s *ArticleService) FlushViews(ctx context.Context, req *v1.FlushArticleVie
 	return &v1.FlushArticleViews_Resp{Flushed: flushed}, nil
 }
 
-func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.GetArticle_Resp, error) {
+func (s *ArticleService) GetArticle(ctx context.Context, req *v1.GetArticle_Req) (*v1.GetArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -909,7 +909,7 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 	return &v1.GetArticle_Resp{Article: article}, nil
 }
 
-func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v1.ListArticles_Resp, error) {
+func (s *ArticleService) ListArticles(ctx context.Context, req *v1.ListArticles_Req) (*v1.ListArticles_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -978,7 +978,7 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v
 	return &v1.ListArticles_Resp{Rows: rows}, nil
 }
 
-func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v1.PageArticles_Resp, error) {
+func (s *ArticleService) PageArticles(ctx context.Context, req *v1.PageArticles_Req) (*v1.PageArticles_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -1047,7 +1047,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 	return &v1.PageArticles_Resp{Rows: rows, Page: pageResp.Page.ToProto()}, nil
 }
 
-func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Req) (*v1.MapArticleViewerActionStates_Resp, error) {
+func (s *ArticleService) MapArticleViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Req) (*v1.MapArticleViewerActionStates_Resp, error) {
 	states, err := s.articleUsecase.MapViewerActionStates(ctx, &usecase.ArticleMapViewerActionStatesReq{ArticleIDs: req.GetArticleIds(), UserID: req.GetUserId()})
 	if err != nil {
 		return nil, err
@@ -1059,7 +1059,7 @@ func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapA
 	return &v1.MapArticleViewerActionStates_Resp{States: reply}, nil
 }
 
-func (s *ArticleService) ListWatchers(ctx context.Context, req *v1.ListArticleWatchers_Req) (*v1.ListArticleWatchers_Resp, error) {
+func (s *ArticleService) ListArticleWatchers(ctx context.Context, req *v1.ListArticleWatchers_Req) (*v1.ListArticleWatchers_Resp, error) {
 	userIDs, err := s.articleUsecase.ListWatchers(ctx, req.GetArticleId())
 	if err != nil {
 		return nil, err
@@ -1067,7 +1067,7 @@ func (s *ArticleService) ListWatchers(ctx context.Context, req *v1.ListArticleWa
 	return &v1.ListArticleWatchers_Resp{UserIds: userIDs}, nil
 }
 
-func (s *ArticleService) ListPollParticipants(ctx context.Context, req *v1.ListArticlePollParticipants_Req) (*v1.ListArticlePollParticipants_Resp, error) {
+func (s *ArticleService) ListArticlePollParticipants(ctx context.Context, req *v1.ListArticlePollParticipants_Req) (*v1.ListArticlePollParticipants_Resp, error) {
 	userIDs, err := s.articleUsecase.ListPollParticipants(ctx, req.GetArticleId())
 	if err != nil {
 		return nil, err
@@ -1075,7 +1075,7 @@ func (s *ArticleService) ListPollParticipants(ctx context.Context, req *v1.ListA
 	return &v1.ListArticlePollParticipants_Resp{UserIds: userIDs}, nil
 }
 
-func (s *ArticleService) ListLotteryParticipants(ctx context.Context, req *v1.ListArticleLotteryParticipants_Req) (*v1.ListArticleLotteryParticipants_Resp, error) {
+func (s *ArticleService) ListArticleLotteryParticipants(ctx context.Context, req *v1.ListArticleLotteryParticipants_Req) (*v1.ListArticleLotteryParticipants_Resp, error) {
 	userIDs, err := s.articleUsecase.ListLotteryParticipants(ctx, req.GetArticleId())
 	if err != nil {
 		return nil, err

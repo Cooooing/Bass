@@ -40,7 +40,7 @@ func (s *SchedulerDelayedTaskService) RegisterGrpc(gs *grpc.Server) {
 func (s *SchedulerDelayedTaskService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *SchedulerDelayedTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerDelayedTask_Req) (*schedulerv1.UpsertSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) UpsertSchedulerDelayedTask(ctx context.Context, req *schedulerv1.UpsertSchedulerDelayedTask_Req) (*schedulerv1.UpsertSchedulerDelayedTask_Resp, error) {
 	if req == nil || strings.TrimSpace(req.GetTitle()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -93,7 +93,7 @@ func (s *SchedulerDelayedTaskService) Upsert(ctx context.Context, req *scheduler
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerDelayedTask_Req) (*schedulerv1.GetSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) GetSchedulerDelayedTask(ctx context.Context, req *schedulerv1.GetSchedulerDelayedTask_Req) (*schedulerv1.GetSchedulerDelayedTask_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -131,7 +131,7 @@ func (s *SchedulerDelayedTaskService) Get(ctx context.Context, req *schedulerv1.
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerDelayedTasks_Req) (*schedulerv1.PageSchedulerDelayedTasks_Resp, error) {
+func (s *SchedulerDelayedTaskService) PageSchedulerDelayedTasks(ctx context.Context, req *schedulerv1.PageSchedulerDelayedTasks_Req) (*schedulerv1.PageSchedulerDelayedTasks_Resp, error) {
 	query := &usecase.DelayedTaskPageReq{}
 	if req != nil {
 		query.Page = commonmodel.PageReqFromProto(req.GetPage())
@@ -179,7 +179,7 @@ func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) ListAvailableTasks(
+func (s *SchedulerDelayedTaskService) ListSchedulerAvailableDelayedTasks(
 	ctx context.Context,
 	req *schedulerv1.ListSchedulerAvailableDelayedTasks_Req,
 ) (*schedulerv1.ListSchedulerAvailableDelayedTasks_Resp, error) {
@@ -204,7 +204,7 @@ func (s *SchedulerDelayedTaskService) ListAvailableTasks(
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) Schedule(ctx context.Context, req *schedulerv1.ScheduleSchedulerDelayedTask_Req) (*schedulerv1.ScheduleSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) ScheduleSchedulerDelayedTask(ctx context.Context, req *schedulerv1.ScheduleSchedulerDelayedTask_Req) (*schedulerv1.ScheduleSchedulerDelayedTask_Resp, error) {
 	if req == nil || req.GetScheduledAt() == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -253,7 +253,7 @@ func (s *SchedulerDelayedTaskService) Schedule(ctx context.Context, req *schedul
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerDelayedTask_Req) (*schedulerv1.TriggerSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) TriggerSchedulerDelayedTask(ctx context.Context, req *schedulerv1.TriggerSchedulerDelayedTask_Req) (*schedulerv1.TriggerSchedulerDelayedTask_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -287,7 +287,7 @@ func (s *SchedulerDelayedTaskService) Trigger(ctx context.Context, req *schedule
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) CancelExecution(
+func (s *SchedulerDelayedTaskService) CancelSchedulerDelayedTaskExecution(
 	ctx context.Context,
 	req *schedulerv1.CancelSchedulerDelayedTaskExecution_Req,
 ) (*schedulerv1.CancelSchedulerDelayedTaskExecution_Resp, error) {
@@ -323,7 +323,7 @@ func (s *SchedulerDelayedTaskService) CancelExecution(
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) PageExecutionRecords(
+func (s *SchedulerDelayedTaskService) PageSchedulerDelayedTaskExecutionRecords(
 	ctx context.Context,
 	req *schedulerv1.PageSchedulerDelayedTaskExecutionRecords_Req,
 ) (*schedulerv1.PageSchedulerDelayedTaskExecutionRecords_Resp, error) {

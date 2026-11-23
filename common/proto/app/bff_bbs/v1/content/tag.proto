@@ -13,7 +13,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/content;content";
 // 标签 HTTP 接口。
 service TagService {
   // 创建标签。
-  rpc Create(CreateTag.Req) returns (CreateTag.Resp) {
+  rpc CreateTag(CreateTag.Req) returns (CreateTag.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/create"
       body: "*"
@@ -21,7 +21,7 @@ service TagService {
   }
 
   // 更新标签。
-  rpc Update(UpdateTag.Req) returns (UpdateTag.Resp) {
+  rpc UpdateTag(UpdateTag.Req) returns (UpdateTag.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/update"
       body: "*"
@@ -29,7 +29,7 @@ service TagService {
   }
 
   // 绑定文章标签。
-  rpc BindArticle(BindArticleTags.Req) returns (BindArticleTags.Resp) {
+  rpc BindArticleTags(BindArticleTags.Req) returns (BindArticleTags.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/bind-article"
       body: "*"
@@ -37,7 +37,7 @@ service TagService {
   }
 
   // 解绑文章标签。
-  rpc UnbindArticle(UnbindArticleTags.Req) returns (UnbindArticleTags.Resp) {
+  rpc UnbindArticleTags(UnbindArticleTags.Req) returns (UnbindArticleTags.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/unbind-article"
       body: "*"
@@ -53,7 +53,7 @@ service TagService {
   }
 
   // 查询标签列表。
-  rpc List(ListTags.Req) returns (ListTags.Resp) {
+  rpc ListTags(ListTags.Req) returns (ListTags.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/list"
       body: "*"
@@ -65,9 +65,7 @@ service TagService {
 message CreateTag {
   message Req {
     Tag tag = 1; // 标签信息
-    option (gnostic.openapi.v3.schema) = {
-      required: "tag"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "tag"};
 
     message Tag {
       string code = 1; // 稳定编码
@@ -183,9 +181,7 @@ message UnbindArticleTags {
 message ListArticleTags {
   message Req {
     int64 article_id = 1; // 文章 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
 
   message Resp {

@@ -19,6 +19,6 @@ func NewEmojiAssetClient(client *rpc.PlatformClient) bizrepo.EmojiAssetClient {
 }
 
 func (c *EmojiAssetClient) ValidateAvailable(ctx context.Context, assetID int64) error {
-	_, err := c.asset.ValidateAvailable(ctx, &platformv1.ValidateAvailableAsset_Req{AssetId: assetID})
+	_, err := c.asset.ValidateAvailableAsset(ctx, &platformv1.ValidateAvailableAsset_Req{AssetId: assetID})
 	return err
 }

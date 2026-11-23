@@ -57,7 +57,7 @@ func (u *IMUsecase) MapChatProfiles(ctx context.Context, userIDs []int64) (map[i
 }
 
 func (u *IMUsecase) ListGlobalChatOnlineMembers(ctx context.Context) ([]*model.AccountProfile, error) {
-	response, err := u.hub.ListOnlineUsers(ctx, &realtimehubv1.ListRealtimeOnlineUsers_Req{Realm: constant.RealtimeRealmBBS})
+	response, err := u.hub.ListRealtimeOnlineUsers(ctx, &realtimehubv1.ListRealtimeOnlineUsers_Req{Realm: constant.RealtimeRealmBBS})
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (u *IMUsecase) ListGlobalChatOnlineMembers(ctx context.Context) ([]*model.A
 }
 
 func (u *IMUsecase) QueryChatOnline(ctx context.Context, userIDs []int64) (map[int64]bool, error) {
-	response, err := u.hub.QueryOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: userIDs})
+	response, err := u.hub.QueryRealtimeOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: userIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -83,15 +83,15 @@ func (u *IMUsecase) QueryChatOnline(ctx context.Context, userIDs []int64) (map[i
 }
 
 func (u *IMUsecase) ListPrivateChatSessions(ctx context.Context, req *imv1.ListPrivateChatSessions_Req) (*imv1.ListPrivateChatSessions_Resp, error) {
-	return u.privateChat.ListSessions(ctx, req)
+	return u.privateChat.ListPrivateChatSessions(ctx, req)
 }
 
 func (u *IMUsecase) ListPrivateChatMessages(ctx context.Context, req *imv1.ListPrivateChatMessages_Req) (*imv1.ListPrivateChatMessages_Resp, error) {
-	return u.privateChat.ListMessages(ctx, req)
+	return u.privateChat.ListPrivateChatMessages(ctx, req)
 }
 
 func (u *IMUsecase) CountPrivateChatUnread(ctx context.Context, userID int64) (uint32, error) {
-	response, err := u.privateChat.CountUnread(ctx, &imv1.CountUnreadPrivateChatMessages_Req{UserId: userID})
+	response, err := u.privateChat.CountUnreadPrivateChatMessages(ctx, &imv1.CountUnreadPrivateChatMessages_Req{UserId: userID})
 	if err != nil {
 		return 0, err
 	}
@@ -99,52 +99,52 @@ func (u *IMUsecase) CountPrivateChatUnread(ctx context.Context, userID int64) (u
 }
 
 func (u *IMUsecase) SendPrivateChatMessage(ctx context.Context, req *imv1.SendPrivateChatMessage_Req) (*imv1.SendPrivateChatMessage_Resp, error) {
-	return u.privateChat.Send(ctx, req)
+	return u.privateChat.SendPrivateChatMessage(ctx, req)
 }
 
 func (u *IMUsecase) RevokePrivateChatMessage(ctx context.Context, req *imv1.RevokePrivateChatMessage_Req) (*imv1.RevokePrivateChatMessage_Resp, error) {
-	return u.privateChat.Revoke(ctx, req)
+	return u.privateChat.RevokePrivateChatMessage(ctx, req)
 }
 
 func (u *IMUsecase) MarkPrivateChatSessionRead(ctx context.Context, req *imv1.MarkPrivateChatSessionRead_Req) error {
-	_, err := u.privateChat.MarkRead(ctx, req)
+	_, err := u.privateChat.MarkPrivateChatSessionRead(ctx, req)
 	return err
 }
 
 func (u *IMUsecase) SetPrivateChatSessionMuted(ctx context.Context, req *imv1.SetPrivateChatSessionMuted_Req) error {
-	_, err := u.privateChat.SetMuted(ctx, req)
+	_, err := u.privateChat.SetPrivateChatSessionMuted(ctx, req)
 	return err
 }
 
 func (u *IMUsecase) SetPrivateChatSessionPinned(ctx context.Context, req *imv1.SetPrivateChatSessionPinned_Req) error {
-	_, err := u.privateChat.SetPinned(ctx, req)
+	_, err := u.privateChat.SetPrivateChatSessionPinned(ctx, req)
 	return err
 }
 
 func (u *IMUsecase) ListGlobalChatMessages(ctx context.Context, req *imv1.ListGlobalChatMessages_Req) (*imv1.ListGlobalChatMessages_Resp, error) {
-	return u.globalChat.List(ctx, req)
+	return u.globalChat.ListGlobalChatMessages(ctx, req)
 }
 
 func (u *IMUsecase) GetGlobalChatTopic(ctx context.Context) (*imv1.GetGlobalChatTopic_Resp, error) {
-	return u.globalChat.GetTopic(ctx, &imv1.GetGlobalChatTopic_Req{})
+	return u.globalChat.GetGlobalChatTopic(ctx, &imv1.GetGlobalChatTopic_Req{})
 }
 
 func (u *IMUsecase) SetGlobalChatTopic(ctx context.Context, req *imv1.SetGlobalChatTopic_Req) (*imv1.SetGlobalChatTopic_Resp, error) {
-	return u.globalChat.SetTopic(ctx, req)
+	return u.globalChat.SetGlobalChatTopic(ctx, req)
 }
 
 func (u *IMUsecase) SendGlobalChatMessage(ctx context.Context, req *imv1.SendGlobalChatMessage_Req) (*imv1.SendGlobalChatMessage_Resp, error) {
-	return u.globalChat.Send(ctx, req)
+	return u.globalChat.SendGlobalChatMessage(ctx, req)
 }
 
 func (u *IMUsecase) SendGlobalChatBarrage(ctx context.Context, req *imv1.SendGlobalChatBarrage_Req) (*imv1.SendGlobalChatBarrage_Resp, error) {
-	return u.globalChatBarrage.Send(ctx, req)
+	return u.globalChatBarrage.SendGlobalChatBarrage(ctx, req)
 }
 
 func (u *IMUsecase) ListGlobalChatBarrages(ctx context.Context, req *imv1.ListGlobalChatBarrages_Req) (*imv1.ListGlobalChatBarrages_Resp, error) {
-	return u.globalChatBarrage.List(ctx, req)
+	return u.globalChatBarrage.ListGlobalChatBarrages(ctx, req)
 }
 
 func (u *IMUsecase) RevokeGlobalChatMessage(ctx context.Context, req *imv1.RevokeGlobalChatMessage_Req) (*imv1.RevokeGlobalChatMessage_Resp, error) {
-	return u.globalChat.Revoke(ctx, req)
+	return u.globalChat.RevokeGlobalChatMessage(ctx, req)
 }

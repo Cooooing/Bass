@@ -35,7 +35,7 @@ func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
 func (s *RateLimitService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Req) (*v1.CheckNotificationRateLimit_Resp, error) {
+func (s *RateLimitService) CheckNotificationRateLimit(ctx context.Context, req *v1.CheckNotificationRateLimit_Req) (*v1.CheckNotificationRateLimit_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID)
 	}

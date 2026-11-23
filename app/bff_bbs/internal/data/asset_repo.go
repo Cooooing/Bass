@@ -22,7 +22,7 @@ func (r *AssetClient) Get(ctx context.Context, assetID int64) (*repo.Asset, erro
 	if assetID <= 0 || r.platformClient == nil {
 		return nil, nil
 	}
-	reply, err := r.platformClient.Asset.ResolvePublic(ctx, &platformv1.ResolvePublicAssets_Req{AssetIds: []int64{assetID}})
+	reply, err := r.platformClient.Asset.ResolvePublicAssets(ctx, &platformv1.ResolvePublicAssets_Req{AssetIds: []int64{assetID}})
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (r *AssetClient) Map(ctx context.Context, req *repo.AssetGetReq) (map[int64
 	if req == nil || len(req.IDs) == 0 || r.platformClient == nil {
 		return map[int64]*repo.Asset{}, nil
 	}
-	reply, err := r.platformClient.Asset.ResolvePublic(ctx, &platformv1.ResolvePublicAssets_Req{AssetIds: req.IDs})
+	reply, err := r.platformClient.Asset.ResolvePublicAssets(ctx, &platformv1.ResolvePublicAssets_Req{AssetIds: req.IDs})
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (r *AssetClient) Map(ctx context.Context, req *repo.AssetGetReq) (map[int64
 }
 
 func (r *AssetClient) PrepareDirectUpload(ctx context.Context, req *repo.PrepareDirectAssetUploadReq) (*repo.PrepareDirectAssetUploadResp, error) {
-	reply, err := r.platformClient.Asset.PrepareDirectUpload(ctx, &platformv1.PrepareDirectAssetUpload_Req{
+	reply, err := r.platformClient.Asset.PrepareDirectAssetUpload(ctx, &platformv1.PrepareDirectAssetUpload_Req{
 		Hash:           req.Hash,
 		MimeType:       req.MimeType,
 		Size:           req.Size,
@@ -65,7 +65,7 @@ func (r *AssetClient) PrepareDirectUpload(ctx context.Context, req *repo.Prepare
 }
 
 func (r *AssetClient) GetAvailableByHash(ctx context.Context, hash string) (*repo.Asset, error) {
-	reply, err := r.platformClient.Asset.GetAvailableByHash(ctx, &platformv1.GetAvailableAssetByHash_Req{Hash: hash})
+	reply, err := r.platformClient.Asset.GetAvailableAssetByHash(ctx, &platformv1.GetAvailableAssetByHash_Req{Hash: hash})
 	if err != nil {
 		return nil, err
 	}
@@ -81,6 +81,6 @@ func (r *AssetClient) GetAvailableByHash(ctx context.Context, hash string) (*rep
 }
 
 func (r *AssetClient) ValidateAvailable(ctx context.Context, assetID int64) error {
-	_, err := r.platformClient.Asset.ValidateAvailable(ctx, &platformv1.ValidateAvailableAsset_Req{AssetId: assetID})
+	_, err := r.platformClient.Asset.ValidateAvailableAsset(ctx, &platformv1.ValidateAvailableAsset_Req{AssetId: assetID})
 	return err
 }

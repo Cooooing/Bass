@@ -28,7 +28,7 @@ func (s *EmojiService) RegisterGrpc(server *grpc.Server) {
 
 func (*EmojiService) RegisterHTTP(*transporthttp.Server) {}
 
-func (s *EmojiService) List(ctx context.Context, req *imv1.ListEmojiGroups_Req) (*imv1.ListEmojiGroups_Resp, error) {
+func (s *EmojiService) ListEmojiGroups(ctx context.Context, req *imv1.ListEmojiGroups_Req) (*imv1.ListEmojiGroups_Resp, error) {
 	groups, err := s.emojis.List(ctx, req.GetUserId(), req.GetQuery())
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (s *EmojiService) List(ctx context.Context, req *imv1.ListEmojiGroups_Req) 
 	return &imv1.ListEmojiGroups_Resp{Rows: rows}, nil
 }
 
-func (s *EmojiService) CreateGroup(ctx context.Context, req *imv1.CreateEmojiGroup_Req) (*imv1.CreateEmojiGroup_Resp, error) {
+func (s *EmojiService) CreateEmojiGroup(ctx context.Context, req *imv1.CreateEmojiGroup_Req) (*imv1.CreateEmojiGroup_Resp, error) {
 	group, err := s.emojis.CreateGroup(ctx, req.GetUserId(), req.GetName())
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (s *EmojiService) CreateGroup(ctx context.Context, req *imv1.CreateEmojiGro
 	return &imv1.CreateEmojiGroup_Resp{Group: s.group(group)}, nil
 }
 
-func (s *EmojiService) RenameGroup(ctx context.Context, req *imv1.RenameEmojiGroup_Req) (*imv1.RenameEmojiGroup_Resp, error) {
+func (s *EmojiService) RenameEmojiGroup(ctx context.Context, req *imv1.RenameEmojiGroup_Req) (*imv1.RenameEmojiGroup_Resp, error) {
 	group, err := s.emojis.RenameGroup(ctx, req.GetUserId(), req.GetGroupId(), req.GetName())
 	if err != nil {
 		return nil, err
@@ -56,14 +56,14 @@ func (s *EmojiService) RenameGroup(ctx context.Context, req *imv1.RenameEmojiGro
 	return &imv1.RenameEmojiGroup_Resp{Group: s.group(group)}, nil
 }
 
-func (s *EmojiService) DeleteGroup(ctx context.Context, req *imv1.DeleteEmojiGroup_Req) (*imv1.DeleteEmojiGroup_Resp, error) {
+func (s *EmojiService) DeleteEmojiGroup(ctx context.Context, req *imv1.DeleteEmojiGroup_Req) (*imv1.DeleteEmojiGroup_Resp, error) {
 	if err := s.emojis.DeleteGroup(ctx, req.GetUserId(), req.GetGroupId()); err != nil {
 		return nil, err
 	}
 	return &imv1.DeleteEmojiGroup_Resp{}, nil
 }
 
-func (s *EmojiService) AddItem(ctx context.Context, req *imv1.AddEmojiItem_Req) (*imv1.AddEmojiItem_Resp, error) {
+func (s *EmojiService) AddEmojiItem(ctx context.Context, req *imv1.AddEmojiItem_Req) (*imv1.AddEmojiItem_Resp, error) {
 	item, err := s.emojis.AddItem(ctx, req.GetUserId(), req.GroupId, req.GetAssetId(), req.GetName())
 	if err != nil {
 		return nil, err
@@ -71,14 +71,14 @@ func (s *EmojiService) AddItem(ctx context.Context, req *imv1.AddEmojiItem_Req) 
 	return &imv1.AddEmojiItem_Resp{Item: s.item(item)}, nil
 }
 
-func (s *EmojiService) DeleteItem(ctx context.Context, req *imv1.DeleteEmojiItem_Req) (*imv1.DeleteEmojiItem_Resp, error) {
+func (s *EmojiService) DeleteEmojiItem(ctx context.Context, req *imv1.DeleteEmojiItem_Req) (*imv1.DeleteEmojiItem_Resp, error) {
 	if err := s.emojis.DeleteItem(ctx, req.GetUserId(), req.GetItemId()); err != nil {
 		return nil, err
 	}
 	return &imv1.DeleteEmojiItem_Resp{}, nil
 }
 
-func (s *EmojiService) MoveItem(ctx context.Context, req *imv1.MoveEmojiItem_Req) (*imv1.MoveEmojiItem_Resp, error) {
+func (s *EmojiService) MoveEmojiItem(ctx context.Context, req *imv1.MoveEmojiItem_Req) (*imv1.MoveEmojiItem_Resp, error) {
 	item, err := s.emojis.MoveItem(ctx, req.GetUserId(), req.GetItemId(), req.GetGroupId())
 	if err != nil {
 		return nil, err
@@ -86,7 +86,7 @@ func (s *EmojiService) MoveItem(ctx context.Context, req *imv1.MoveEmojiItem_Req
 	return &imv1.MoveEmojiItem_Resp{Item: s.item(item)}, nil
 }
 
-func (s *EmojiService) RenameItem(ctx context.Context, req *imv1.RenameEmojiItem_Req) (*imv1.RenameEmojiItem_Resp, error) {
+func (s *EmojiService) RenameEmojiItem(ctx context.Context, req *imv1.RenameEmojiItem_Req) (*imv1.RenameEmojiItem_Resp, error) {
 	item, err := s.emojis.RenameItem(ctx, req.GetUserId(), req.GetItemId(), req.GetName())
 	if err != nil {
 		return nil, err
@@ -94,21 +94,21 @@ func (s *EmojiService) RenameItem(ctx context.Context, req *imv1.RenameEmojiItem
 	return &imv1.RenameEmojiItem_Resp{Item: s.item(item)}, nil
 }
 
-func (s *EmojiService) ReorderGroups(ctx context.Context, req *imv1.ReorderEmojiGroups_Req) (*imv1.ReorderEmojiGroups_Resp, error) {
+func (s *EmojiService) ReorderEmojiGroups(ctx context.Context, req *imv1.ReorderEmojiGroups_Req) (*imv1.ReorderEmojiGroups_Resp, error) {
 	if err := s.emojis.ReorderGroups(ctx, req.GetUserId(), req.GetGroupIds()); err != nil {
 		return nil, err
 	}
 	return &imv1.ReorderEmojiGroups_Resp{}, nil
 }
 
-func (s *EmojiService) ReorderItems(ctx context.Context, req *imv1.ReorderEmojiItems_Req) (*imv1.ReorderEmojiItems_Resp, error) {
+func (s *EmojiService) ReorderEmojiItems(ctx context.Context, req *imv1.ReorderEmojiItems_Req) (*imv1.ReorderEmojiItems_Resp, error) {
 	if err := s.emojis.ReorderItems(ctx, req.GetUserId(), req.GroupId, req.GetItemIds()); err != nil {
 		return nil, err
 	}
 	return &imv1.ReorderEmojiItems_Resp{}, nil
 }
 
-func (s *EmojiService) CreateShare(ctx context.Context, req *imv1.CreateEmojiShare_Req) (*imv1.CreateEmojiShare_Resp, error) {
+func (s *EmojiService) CreateEmojiShare(ctx context.Context, req *imv1.CreateEmojiShare_Req) (*imv1.CreateEmojiShare_Resp, error) {
 	code, ttl, err := s.emojis.CreateShare(ctx, req.GetUserId(), req.GetGroupId())
 	if err != nil {
 		return nil, err
@@ -116,7 +116,7 @@ func (s *EmojiService) CreateShare(ctx context.Context, req *imv1.CreateEmojiSha
 	return &imv1.CreateEmojiShare_Resp{Code: code, ExpiresInSeconds: int64(ttl.Seconds())}, nil
 }
 
-func (s *EmojiService) ImportShare(ctx context.Context, req *imv1.ImportEmojiShare_Req) (*imv1.ImportEmojiShare_Resp, error) {
+func (s *EmojiService) ImportEmojiShare(ctx context.Context, req *imv1.ImportEmojiShare_Req) (*imv1.ImportEmojiShare_Resp, error) {
 	group, skipped, err := s.emojis.ImportShare(ctx, req.GetUserId(), req.GetCode())
 	if err != nil {
 		return nil, err

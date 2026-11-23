@@ -28,7 +28,7 @@ func (r *UserAccountRepo) MapAccounts(ctx context.Context, userIDs []int64) (map
 	if len(userIDs) == 0 {
 		return map[int64]*model.UserAccount{}, nil
 	}
-	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+	reply, err := r.userClient.Account.MapAccounts(ctx, &userv1.MapAccounts_Req{
 		Query: &userv1.MapAccounts_Req_AccountQuery{
 			UserIds: userIDs,
 		},
@@ -61,7 +61,7 @@ func (r *UserAccountRepo) MapAccountsByNames(ctx context.Context, names []string
 	if len(names) == 0 {
 		return map[int64]*model.UserAccount{}, nil
 	}
-	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+	reply, err := r.userClient.Account.MapAccounts(ctx, &userv1.MapAccounts_Req{
 		Query: &userv1.MapAccounts_Req_AccountQuery{Names: names},
 	})
 	if err != nil {
@@ -86,7 +86,7 @@ func (r *UserAccountRepo) ListFollowerIDs(ctx context.Context, userID int64) ([]
 	size := int64(500)
 	userIDs := make([]int64, 0)
 	for {
-		reply, err := r.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
+		reply, err := r.userClient.Relation.ListFollowersRelations(ctx, &userv1.ListFollowersRelations_Req{
 			UserId: userID,
 			Page: (&commonmodel.PageReq{
 				Page: page,
@@ -113,7 +113,7 @@ func (r *UserAccountRepo) MapRelationStatuses(ctx context.Context, userID int64,
 	if userID <= 0 || len(targetIDs) == 0 {
 		return map[int64]*model.RelationStatus{}, nil
 	}
-	reply, err := r.userClient.Relation.MapStatus(ctx, &userv1.MapRelationStatuses_Req{ActorId: userID, TargetIds: targetIDs})
+	reply, err := r.userClient.Relation.MapRelationStatuses(ctx, &userv1.MapRelationStatuses_Req{ActorId: userID, TargetIds: targetIDs})
 	if err != nil {
 		return nil, err
 	}

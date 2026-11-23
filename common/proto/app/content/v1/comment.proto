@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.content.v1;
 
@@ -12,18 +12,18 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // 评论服务
 service ContentCommentService {
-  rpc Create(CreateComment.Req) returns (CreateComment.Resp) {} // 创建评论
-  rpc Hide(HideComment.Req) returns (HideComment.Resp) {} // 管理隐藏评论
-  rpc Unhide(UnhideComment.Req) returns (UnhideComment.Resp) {} // 取消管理隐藏
-  rpc Lock(LockComment.Req) returns (LockComment.Resp) {} // 管理锁定评论
-  rpc Unlock(UnlockComment.Req) returns (UnlockComment.Resp) {} // 管理解锁评论
-  rpc Like(LikeComment.Req) returns (LikeComment.Resp) {} // 点赞评论
-  rpc Thank(ThankComment.Req) returns (ThankComment.Resp) {} // 感谢评论
+  rpc CreateComment(CreateComment.Req) returns (CreateComment.Resp) {} // 创建评论
+  rpc HideComment(HideComment.Req) returns (HideComment.Resp) {} // 管理隐藏评论
+  rpc UnhideComment(UnhideComment.Req) returns (UnhideComment.Resp) {} // 取消管理隐藏
+  rpc LockComment(LockComment.Req) returns (LockComment.Resp) {} // 管理锁定评论
+  rpc UnlockComment(UnlockComment.Req) returns (UnlockComment.Resp) {} // 管理解锁评论
+  rpc LikeComment(LikeComment.Req) returns (LikeComment.Resp) {} // 点赞评论
+  rpc ThankComment(ThankComment.Req) returns (ThankComment.Resp) {} // 感谢评论
 
-  rpc List(ListComments.Req) returns (ListComments.Resp) {} // 查询评论列表
-  rpc Page(PageComments.Req) returns (PageComments.Resp) {} // 分页查询评论
-  rpc MapViewerActionStates(MapCommentViewerActionStates.Req) returns (MapCommentViewerActionStates.Resp) {} // 查询用户的评论行为状态
-  rpc ListReplyPreviews(ListCommentReplyPreviews.Req) returns (ListCommentReplyPreviews.Resp) {} // 查询评论回复预览
+  rpc ListComments(ListComments.Req) returns (ListComments.Resp) {} // 查询评论列表
+  rpc PageComments(PageComments.Req) returns (PageComments.Resp) {} // 分页查询评论
+  rpc MapCommentViewerActionStates(MapCommentViewerActionStates.Req) returns (MapCommentViewerActionStates.Resp) {} // 查询用户的评论行为状态
+  rpc ListCommentReplyPreviews(ListCommentReplyPreviews.Req) returns (ListCommentReplyPreviews.Resp) {} // 查询评论回复预览
   rpc MapArticleLastComments(MapArticleLastComments.Req) returns (MapArticleLastComments.Resp) {} // 查询文章最后正常评论映射
 }
 

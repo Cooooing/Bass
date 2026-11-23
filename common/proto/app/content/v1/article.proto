@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.content.v1;
 
@@ -11,43 +11,43 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // ContentArticleService 提供文章草稿、发布、查询与互动能力
 service ContentArticleService {
-  rpc CreateDraft(CreateDraftArticle.Req) returns (CreateDraftArticle.Resp) {} // 创建文章草稿
-  rpc UpdateDraft(UpdateDraftArticle.Req) returns (UpdateDraftArticle.Resp) {} // 编辑文章草稿
-  rpc Publish(PublishArticle.Req) returns (PublishArticle.Resp) {} // 发布文章
-  rpc CancelPublish(CancelPublishArticle.Req) returns (CancelPublishArticle.Resp) {} // 取消定时发布
-  rpc DiscardDraft(DiscardDraftArticle.Req) returns (DiscardDraftArticle.Resp) {} // 丢弃草稿
-  rpc MakePrivate(MakePrivateArticle.Req) returns (MakePrivateArticle.Resp) {} // 设为私有
-  rpc MakePublic(MakePublicArticle.Req) returns (MakePublicArticle.Resp) {} // 设为公开
-  rpc Archive(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {} // 归档文章
-  rpc SetPinnedComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {} // 设置文章置顶评论
-  rpc AcceptAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {} // 采纳问答回答
-  rpc VotePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {} // 投票
-  rpc FinishPoll(FinishArticlePoll.Req) returns (FinishArticlePoll.Resp) {} // 完成投票
-  rpc EnterLottery(EnterArticleLottery.Req) returns (EnterArticleLottery.Resp) {} // 报名或撤销抽奖报名
-  rpc DrawLottery(DrawArticleLottery.Req) returns (DrawArticleLottery.Resp) {} // 执行抽奖开奖
-  rpc Unarchive(UnarchiveArticle.Req) returns (UnarchiveArticle.Resp) {} // 取消归档
-  rpc Hide(HideArticle.Req) returns (HideArticle.Resp) {} // 隐藏文章
-  rpc Unhide(UnhideArticle.Req) returns (UnhideArticle.Resp) {} // 取消隐藏
-  rpc Lock(LockArticle.Req) returns (LockArticle.Resp) {} // 锁定文章
-  rpc Unlock(UnlockArticle.Req) returns (UnlockArticle.Resp) {} // 取消锁定
-  rpc Like(LikeArticle.Req) returns (LikeArticle.Resp) {} // 点赞文章
-  rpc Thank(ThankArticle.Req) returns (ThankArticle.Resp) {} // 感谢文章
-  rpc Collect(CollectArticle.Req) returns (CollectArticle.Resp) {} // 收藏文章
-  rpc Watch(WatchArticle.Req) returns (WatchArticle.Resp) {} // 关注文章
-  rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {} // 打赏文章
-  rpc View(ViewArticle.Req) returns (ViewArticle.Resp) {} // 浏览文章
-  rpc PageViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {} // 分页查询当前用户浏览历史
-  rpc PageCollected(PageCollectedArticles.Req) returns (PageCollectedArticles.Resp) {} // 分页查询当前用户收藏的公开文章
-  rpc PageWatched(PageWatchedArticles.Req) returns (PageWatchedArticles.Resp) {} // 分页查询当前用户关注的公开文章
-  rpc CountCollected(CountCollectedArticles.Req) returns (CountCollectedArticles.Resp) {} // 统计账号当前收藏的文章数量。
-  rpc FlushViews(FlushArticleViews.Req) returns (FlushArticleViews.Resp) {} // 刷新浏览量
-  rpc MapViewerActionStates(MapArticleViewerActionStates.Req) returns (MapArticleViewerActionStates.Resp) {} // 查询互动状态
-  rpc ListWatchers(ListArticleWatchers.Req) returns (ListArticleWatchers.Resp) {} // 查询文章关注账号
-  rpc ListPollParticipants(ListArticlePollParticipants.Req) returns (ListArticlePollParticipants.Resp) {} // 查询投票参与账号
-  rpc ListLotteryParticipants(ListArticleLotteryParticipants.Req) returns (ListArticleLotteryParticipants.Resp) {} // 查询抽奖参与账号
-  rpc Get(GetArticle.Req) returns (GetArticle.Resp) {} // 查询文章详情
-  rpc List(ListArticles.Req) returns (ListArticles.Resp) {} // 查询文章列表
-  rpc Page(PageArticles.Req) returns (PageArticles.Resp) {} // 分页查询文章
+  rpc CreateDraftArticle(CreateDraftArticle.Req) returns (CreateDraftArticle.Resp) {} // 创建文章草稿
+  rpc UpdateDraftArticle(UpdateDraftArticle.Req) returns (UpdateDraftArticle.Resp) {} // 编辑文章草稿
+  rpc PublishArticle(PublishArticle.Req) returns (PublishArticle.Resp) {} // 发布文章
+  rpc CancelPublishArticle(CancelPublishArticle.Req) returns (CancelPublishArticle.Resp) {} // 取消定时发布
+  rpc DiscardDraftArticle(DiscardDraftArticle.Req) returns (DiscardDraftArticle.Resp) {} // 丢弃草稿
+  rpc MakePrivateArticle(MakePrivateArticle.Req) returns (MakePrivateArticle.Resp) {} // 设为私有
+  rpc MakePublicArticle(MakePublicArticle.Req) returns (MakePublicArticle.Resp) {} // 设为公开
+  rpc ArchiveArticle(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {} // 归档文章
+  rpc SetPinnedArticleComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {} // 设置文章置顶评论
+  rpc AcceptArticleAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {} // 采纳问答回答
+  rpc VoteArticlePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {} // 投票
+  rpc FinishArticlePoll(FinishArticlePoll.Req) returns (FinishArticlePoll.Resp) {} // 完成投票
+  rpc EnterArticleLottery(EnterArticleLottery.Req) returns (EnterArticleLottery.Resp) {} // 报名或撤销抽奖报名
+  rpc DrawArticleLottery(DrawArticleLottery.Req) returns (DrawArticleLottery.Resp) {} // 执行抽奖开奖
+  rpc UnarchiveArticle(UnarchiveArticle.Req) returns (UnarchiveArticle.Resp) {} // 取消归档
+  rpc HideArticle(HideArticle.Req) returns (HideArticle.Resp) {} // 隐藏文章
+  rpc UnhideArticle(UnhideArticle.Req) returns (UnhideArticle.Resp) {} // 取消隐藏
+  rpc LockArticle(LockArticle.Req) returns (LockArticle.Resp) {} // 锁定文章
+  rpc UnlockArticle(UnlockArticle.Req) returns (UnlockArticle.Resp) {} // 取消锁定
+  rpc LikeArticle(LikeArticle.Req) returns (LikeArticle.Resp) {} // 点赞文章
+  rpc ThankArticle(ThankArticle.Req) returns (ThankArticle.Resp) {} // 感谢文章
+  rpc CollectArticle(CollectArticle.Req) returns (CollectArticle.Resp) {} // 收藏文章
+  rpc WatchArticle(WatchArticle.Req) returns (WatchArticle.Resp) {} // 关注文章
+  rpc RewardArticle(RewardArticle.Req) returns (RewardArticle.Resp) {} // 打赏文章
+  rpc ViewArticle(ViewArticle.Req) returns (ViewArticle.Resp) {} // 浏览文章
+  rpc PageArticleViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {} // 分页查询当前用户浏览历史
+  rpc PageCollectedArticles(PageCollectedArticles.Req) returns (PageCollectedArticles.Resp) {} // 分页查询当前用户收藏的公开文章
+  rpc PageWatchedArticles(PageWatchedArticles.Req) returns (PageWatchedArticles.Resp) {} // 分页查询当前用户关注的公开文章
+  rpc CountCollectedArticles(CountCollectedArticles.Req) returns (CountCollectedArticles.Resp) {} // 统计账号当前收藏的文章数量。
+  rpc FlushArticleViews(FlushArticleViews.Req) returns (FlushArticleViews.Resp) {} // 刷新浏览量
+  rpc MapArticleViewerActionStates(MapArticleViewerActionStates.Req) returns (MapArticleViewerActionStates.Resp) {} // 查询互动状态
+  rpc ListArticleWatchers(ListArticleWatchers.Req) returns (ListArticleWatchers.Resp) {} // 查询文章关注账号
+  rpc ListArticlePollParticipants(ListArticlePollParticipants.Req) returns (ListArticlePollParticipants.Resp) {} // 查询投票参与账号
+  rpc ListArticleLotteryParticipants(ListArticleLotteryParticipants.Req) returns (ListArticleLotteryParticipants.Resp) {} // 查询抽奖参与账号
+  rpc GetArticle(GetArticle.Req) returns (GetArticle.Resp) {} // 查询文章详情
+  rpc ListArticles(ListArticles.Req) returns (ListArticles.Resp) {} // 查询文章列表
+  rpc PageArticles(PageArticles.Req) returns (PageArticles.Resp) {} // 分页查询文章
 }
 
 message CreateDraftArticle {
@@ -113,7 +113,6 @@ message CancelPublishArticle {
   message Resp {}
 }
 
-
 message DiscardDraftArticle {
   message Req {
     int64 article_id = 1; // 文章 ID
@@ -158,7 +157,11 @@ message SetPinnedArticleComment {
 }
 
 message AcceptArticleAnswer {
-  message Req { int64 article_id = 1; int64 comment_id = 2; ContentAccess access = 3; }
+  message Req {
+    int64 article_id = 1;
+    int64 comment_id = 2;
+    ContentAccess access = 3;
+  }
   message Resp {}
 }
 

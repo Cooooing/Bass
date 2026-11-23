@@ -37,7 +37,7 @@ func (s *RbacService) RegisterGrpc(gs *grpc.Server) {
 func (s *RbacService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *RbacService) UpsertRole(ctx context.Context, req *v1.UpsertRbacRole_Req) (*v1.UpsertRbacRole_Resp, error) {
+func (s *RbacService) UpsertRbacRole(ctx context.Context, req *v1.UpsertRbacRole_Req) (*v1.UpsertRbacRole_Resp, error) {
 	if req == nil || strings.TrimSpace(req.GetCode()) == "" || strings.TrimSpace(req.GetName()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -84,7 +84,7 @@ func (s *RbacService) UpsertRole(ctx context.Context, req *v1.UpsertRbacRole_Req
 	}, nil
 }
 
-func (s *RbacService) UpsertPermission(ctx context.Context, req *v1.UpsertRbacPermission_Req) (*v1.UpsertRbacPermission_Resp, error) {
+func (s *RbacService) UpsertRbacPermission(ctx context.Context, req *v1.UpsertRbacPermission_Req) (*v1.UpsertRbacPermission_Resp, error) {
 	if req == nil || strings.TrimSpace(req.GetCode()) == "" || strings.TrimSpace(req.GetName()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -129,21 +129,21 @@ func (s *RbacService) UpsertPermission(ctx context.Context, req *v1.UpsertRbacPe
 	}, nil
 }
 
-func (s *RbacService) BindRolePermission(ctx context.Context, req *v1.BindRbacRolePermission_Req) (*v1.BindRbacRolePermission_Resp, error) {
+func (s *RbacService) BindRbacRolePermission(ctx context.Context, req *v1.BindRbacRolePermission_Req) (*v1.BindRbacRolePermission_Resp, error) {
 	if req == nil || req.GetRoleId() == 0 || req.GetPermissionId() == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	return &v1.BindRbacRolePermission_Resp{}, s.rbacUsecase.BindRolePermission(ctx, req.GetRoleId(), req.GetPermissionId())
 }
 
-func (s *RbacService) UnbindRolePermission(ctx context.Context, req *v1.UnbindRbacRolePermission_Req) (*v1.UnbindRbacRolePermission_Resp, error) {
+func (s *RbacService) UnbindRbacRolePermission(ctx context.Context, req *v1.UnbindRbacRolePermission_Req) (*v1.UnbindRbacRolePermission_Resp, error) {
 	if req == nil || req.GetRoleId() == 0 || req.GetPermissionId() == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	return &v1.UnbindRbacRolePermission_Resp{}, s.rbacUsecase.UnbindRolePermission(ctx, req.GetRoleId(), req.GetPermissionId())
 }
 
-func (s *RbacService) GrantRole(ctx context.Context, req *v1.GrantRbacRole_Req) (*v1.GrantRbacRole_Resp, error) {
+func (s *RbacService) GrantRbacRole(ctx context.Context, req *v1.GrantRbacRole_Req) (*v1.GrantRbacRole_Resp, error) {
 	if req == nil || req.GetUserId() == 0 || req.GetRoleId() == 0 || req.GetGrantedBy() == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -154,14 +154,14 @@ func (s *RbacService) GrantRole(ctx context.Context, req *v1.GrantRbacRole_Req) 
 	return &v1.GrantRbacRole_Resp{}, s.rbacUsecase.GrantRole(ctx, req.GetUserId(), req.GetRoleId(), req.GetGrantedBy(), expiresAt)
 }
 
-func (s *RbacService) RevokeRole(ctx context.Context, req *v1.RevokeRbacRole_Req) (*v1.RevokeRbacRole_Resp, error) {
+func (s *RbacService) RevokeRbacRole(ctx context.Context, req *v1.RevokeRbacRole_Req) (*v1.RevokeRbacRole_Resp, error) {
 	if req == nil || req.GetUserId() == 0 || req.GetRoleId() == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	return &v1.RevokeRbacRole_Resp{}, s.rbacUsecase.RevokeRole(ctx, req.GetUserId(), req.GetRoleId())
 }
 
-func (s *RbacService) CheckPermission(ctx context.Context, req *v1.CheckRbacPermission_Req) (*v1.CheckRbacPermission_Resp, error) {
+func (s *RbacService) CheckRbacPermission(ctx context.Context, req *v1.CheckRbacPermission_Req) (*v1.CheckRbacPermission_Resp, error) {
 	if req == nil || req.GetUserId() == 0 || strings.TrimSpace(req.GetPermissionCode()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

@@ -39,7 +39,7 @@ func NewCommentService(
 	}
 }
 
-func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Req) (rsp *v1.CreateComment_Resp, err error) {
+func (s *CommentService) CreateComment(ctx context.Context, req *v1.CreateComment_Req) (rsp *v1.CreateComment_Resp, err error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -94,7 +94,7 @@ func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Req) 
 	}, err
 }
 
-func (s *CommentService) Hide(ctx context.Context, req *v1.HideComment_Req) (*v1.HideComment_Resp, error) {
+func (s *CommentService) HideComment(ctx context.Context, req *v1.HideComment_Req) (*v1.HideComment_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -120,7 +120,7 @@ func (s *CommentService) Hide(ctx context.Context, req *v1.HideComment_Req) (*v1
 	return &v1.HideComment_Resp{}, err
 }
 
-func (s *CommentService) Unhide(ctx context.Context, req *v1.UnhideComment_Req) (*v1.UnhideComment_Resp, error) {
+func (s *CommentService) UnhideComment(ctx context.Context, req *v1.UnhideComment_Req) (*v1.UnhideComment_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -146,7 +146,7 @@ func (s *CommentService) Unhide(ctx context.Context, req *v1.UnhideComment_Req) 
 	return &v1.UnhideComment_Resp{}, err
 }
 
-func (s *CommentService) Lock(ctx context.Context, req *v1.LockComment_Req) (*v1.LockComment_Resp, error) {
+func (s *CommentService) LockComment(ctx context.Context, req *v1.LockComment_Req) (*v1.LockComment_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -172,7 +172,7 @@ func (s *CommentService) Lock(ctx context.Context, req *v1.LockComment_Req) (*v1
 	return &v1.LockComment_Resp{}, err
 }
 
-func (s *CommentService) Unlock(ctx context.Context, req *v1.UnlockComment_Req) (*v1.UnlockComment_Resp, error) {
+func (s *CommentService) UnlockComment(ctx context.Context, req *v1.UnlockComment_Req) (*v1.UnlockComment_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -198,7 +198,7 @@ func (s *CommentService) Unlock(ctx context.Context, req *v1.UnlockComment_Req) 
 	return &v1.UnlockComment_Resp{}, err
 }
 
-func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v1.ListComments_Resp, error) {
+func (s *CommentService) ListComments(ctx context.Context, req *v1.ListComments_Req) (*v1.ListComments_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -294,7 +294,7 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v
 	}, err
 }
 
-func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v1.PageComments_Resp, error) {
+func (s *CommentService) PageComments(ctx context.Context, req *v1.PageComments_Req) (*v1.PageComments_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -392,7 +392,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 	}, err
 }
 
-func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListCommentReplyPreviews_Req) (*v1.ListCommentReplyPreviews_Resp, error) {
+func (s *CommentService) ListCommentReplyPreviews(ctx context.Context, req *v1.ListCommentReplyPreviews_Req) (*v1.ListCommentReplyPreviews_Resp, error) {
 	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -484,7 +484,7 @@ func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListComm
 	}, nil
 }
 
-func (s *CommentService) MapViewerActionStates(ctx context.Context, req *v1.MapCommentViewerActionStates_Req) (*v1.MapCommentViewerActionStates_Resp, error) {
+func (s *CommentService) MapCommentViewerActionStates(ctx context.Context, req *v1.MapCommentViewerActionStates_Req) (*v1.MapCommentViewerActionStates_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -541,7 +541,7 @@ func (s *CommentService) MapArticleLastComments(ctx context.Context, req *v1.Map
 	return reply, nil
 }
 
-func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Req) (rsp *v1.LikeComment_Resp, err error) {
+func (s *CommentService) LikeComment(ctx context.Context, req *v1.LikeComment_Req) (rsp *v1.LikeComment_Resp, err error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {
@@ -569,7 +569,7 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Req) (rsp
 	}, err
 }
 
-func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Req) (rsp *v1.ThankComment_Resp, err error) {
+func (s *CommentService) ThankComment(ctx context.Context, req *v1.ThankComment_Req) (rsp *v1.ThankComment_Resp, err error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
 		if req.GetAccess().GetScope() != 0 {

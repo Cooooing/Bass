@@ -8,12 +8,12 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service ChatService {
-  rpc Send(SendChatMessage.Request) returns (SendChatMessage.Resp) {}
-  rpc List(ListChatMessages.Request) returns (ListChatMessages.Resp) {}
+  rpc SendChatMessage(SendChatMessage.Req) returns (SendChatMessage.Resp) {}
+  rpc ListChatMessages(ListChatMessages.Req) returns (ListChatMessages.Resp) {}
 }
 
 message SendChatMessage {
-  message Request {
+  message Req {
     int64 character_id = 1; // 发送角色 ID
     common.api.app.game_idle.v1.enum.ChatChannelType channel_type = 2; // 频道类型
     string channel_id = 3; // 频道标识
@@ -27,7 +27,7 @@ message SendChatMessage {
 }
 
 message ListChatMessages {
-  message Request {
+  message Req {
     common.api.app.game_idle.v1.enum.ChatChannelType channel_type = 1; // 频道类型
     string channel_id = 2; // 频道标识
     int64 before_id = 3; // 查询该 ID 之前的消息，为 0 时从最新开始

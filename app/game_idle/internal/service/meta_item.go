@@ -29,7 +29,7 @@ func (s *MetaItemService) RegisterGrpc(server *grpc.Server) {
 func (s *MetaItemService) RegisterHTTP(*http.Server) {
 }
 
-func (s *MetaItemService) List(ctx context.Context, req *v1.ListItems_Request) (*v1.ListItems_Resp, error) {
+func (s *MetaItemService) ListItems(ctx context.Context, req *v1.ListItems_Req) (*v1.ListItems_Resp, error) {
 	rows, err := s.itemUsecase.List(ctx)
 	if err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (s *MetaItemService) List(ctx context.Context, req *v1.ListItems_Request) (
 	return &v1.ListItems_Resp{Rows: out}, nil
 }
 
-func (s *MetaItemService) Refresh(ctx context.Context, req *v1.RefreshItems_Request) (*v1.RefreshItems_Resp, error) {
+func (s *MetaItemService) RefreshItems(ctx context.Context, req *v1.RefreshItems_Req) (*v1.RefreshItems_Resp, error) {
 	if err := s.itemUsecase.Refresh(ctx); err != nil {
 		return nil, err
 	}

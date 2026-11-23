@@ -31,7 +31,7 @@ func (s *CharacterActionQueueService) RegisterGrpc(server *grpc.Server) {
 func (s *CharacterActionQueueService) RegisterHTTP(*http.Server) {
 }
 
-func (s *CharacterActionQueueService) List(ctx context.Context, req *v1.ListActionQueue_Request) (*v1.ListActionQueue_Resp, error) {
+func (s *CharacterActionQueueService) ListActionQueue(ctx context.Context, req *v1.ListActionQueue_Req) (*v1.ListActionQueue_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -53,7 +53,7 @@ func (s *CharacterActionQueueService) List(ctx context.Context, req *v1.ListActi
 	return &v1.ListActionQueue_Resp{Queue: queue}, nil
 }
 
-func (s *CharacterActionQueueService) Add(ctx context.Context, req *v1.AddAction_Request) (*v1.AddAction_Resp, error) {
+func (s *CharacterActionQueueService) AddAction(ctx context.Context, req *v1.AddAction_Req) (*v1.AddAction_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetActionId() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -68,7 +68,7 @@ func (s *CharacterActionQueueService) Add(ctx context.Context, req *v1.AddAction
 	return &v1.AddAction_Resp{}, nil
 }
 
-func (s *CharacterActionQueueService) Move(ctx context.Context, req *v1.MoveAction_Request) (*v1.MoveAction_Resp, error) {
+func (s *CharacterActionQueueService) MoveAction(ctx context.Context, req *v1.MoveAction_Req) (*v1.MoveAction_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -82,7 +82,7 @@ func (s *CharacterActionQueueService) Move(ctx context.Context, req *v1.MoveActi
 	return &v1.MoveAction_Resp{}, nil
 }
 
-func (s *CharacterActionQueueService) Remove(ctx context.Context, req *v1.RemoveAction_Request) (*v1.RemoveAction_Resp, error) {
+func (s *CharacterActionQueueService) RemoveAction(ctx context.Context, req *v1.RemoveAction_Req) (*v1.RemoveAction_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -95,7 +95,7 @@ func (s *CharacterActionQueueService) Remove(ctx context.Context, req *v1.Remove
 	return &v1.RemoveAction_Resp{}, nil
 }
 
-func (s *CharacterActionQueueService) Clear(ctx context.Context, req *v1.ClearActionQueue_Request) (*v1.ClearActionQueue_Resp, error) {
+func (s *CharacterActionQueueService) ClearActionQueue(ctx context.Context, req *v1.ClearActionQueue_Req) (*v1.ClearActionQueue_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

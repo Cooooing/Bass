@@ -22,7 +22,7 @@ func NewHolidayRepo(platformClient *rpc.PlatformClient) bizrepo.HolidayClient {
 }
 
 func (r *HolidayRepo) GetCurrent(ctx context.Context) (*model.HolidayInfo, error) {
-	resp, err := r.platformClient.Holiday.GetCurrent(ctx, &platformv1.GetCurrentHoliday_Req{})
+	resp, err := r.platformClient.Holiday.GetCurrentHoliday(ctx, &platformv1.GetCurrentHoliday_Req{})
 	if err != nil {
 		return nil, err
 	}

@@ -8,8 +8,8 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/im/v1;v1";
 
 service IMGlobalChatBarrageService {
-  rpc Send(SendGlobalChatBarrage.Req) returns (SendGlobalChatBarrage.Resp) {} // 发送全局聊天室弹幕。
-  rpc List(ListGlobalChatBarrages.Req) returns (ListGlobalChatBarrages.Resp) {} // 分页查询全局聊天室弹幕。
+  rpc SendGlobalChatBarrage(SendGlobalChatBarrage.Req) returns (SendGlobalChatBarrage.Resp) {} // 发送全局聊天室弹幕。
+  rpc ListGlobalChatBarrages(ListGlobalChatBarrages.Req) returns (ListGlobalChatBarrages.Resp) {} // 分页查询全局聊天室弹幕。
 }
 
 message GlobalChatBarrage {

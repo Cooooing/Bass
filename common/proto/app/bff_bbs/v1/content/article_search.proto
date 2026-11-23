@@ -10,7 +10,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/content;content";
 
 // ArticleSearchService provides public article keyword search for BBS clients.
 service ArticleSearchService {
-  rpc Search(SearchArticles.Req) returns (SearchArticles.Resp) {
+  rpc SearchArticles(SearchArticles.Req) returns (SearchArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/search"
       body: "*"
@@ -23,9 +23,7 @@ message SearchArticles {
     string query = 1; // 必填，搜索词
     optional string cursor = 2; // 可选，不透明续页游标
     uint32 size = 3; // 可选，返回条数
-    option (gnostic.openapi.v3.schema) = {
-      required: "query"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "query"};
   }
   message Resp {
     repeated ArticleListItem rows = 1; // 文章列表

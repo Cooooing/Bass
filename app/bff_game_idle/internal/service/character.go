@@ -36,7 +36,7 @@ func (s *CharacterService) RegisterHTTP(hs *http.Server) {
 	v1.RegisterCharacterServiceHTTPServer(hs, s)
 }
 
-func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_Req) (*v1.CreateCharacter_Resp, error) {
+func (s *CharacterService) CreateCharacter(ctx context.Context, req *v1.CreateCharacter_Req) (*v1.CreateCharacter_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -68,7 +68,7 @@ func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_R
 	return &v1.CreateCharacter_Resp{Row: character}, nil
 }
 
-func (s *CharacterService) List(ctx context.Context, req *v1.ListCharacter_Req) (*v1.ListCharacter_Resp, error) {
+func (s *CharacterService) ListCharacter(ctx context.Context, req *v1.ListCharacter_Req) (*v1.ListCharacter_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)

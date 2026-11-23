@@ -32,7 +32,7 @@ func (s *AuthService) RegisterHTTP(hs *http.Server) {
 	v1.RegisterAuthServiceHTTPServer(hs, s)
 }
 
-func (s *AuthService) Register(ctx context.Context, req *v1.RegisterAccount_Req) (*v1.RegisterAccount_Resp, error) {
+func (s *AuthService) RegisterAccount(ctx context.Context, req *v1.RegisterAccount_Req) (*v1.RegisterAccount_Resp, error) {
 	email := strings.ToLower(strings.TrimSpace(req.GetEmail()))
 	return &v1.RegisterAccount_Resp{}, s.authUsecase.Register(ctx, &usecase.RegisterReq{
 		Password: req.GetPassword(),
@@ -40,7 +40,7 @@ func (s *AuthService) Register(ctx context.Context, req *v1.RegisterAccount_Req)
 	})
 }
 
-func (s *AuthService) Login(ctx context.Context, req *v1.LoginAccount_Req) (*v1.LoginAccount_Resp, error) {
+func (s *AuthService) LoginAccount(ctx context.Context, req *v1.LoginAccount_Req) (*v1.LoginAccount_Resp, error) {
 	email := strings.ToLower(strings.TrimSpace(req.GetEmail()))
 	token, err := s.authUsecase.Login(ctx, &usecase.LoginReq{
 		Email:    email,

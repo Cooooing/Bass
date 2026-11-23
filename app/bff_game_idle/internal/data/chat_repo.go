@@ -33,7 +33,7 @@ func (r *ChatRepo) Send(ctx context.Context, req *repo.SendChatMessageReq) (*mod
 	default:
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	reply, err := r.gameIdleClient.Chat.Send(ctx, &gameidlev1.SendChatMessage_Request{
+	reply, err := r.gameIdleClient.Chat.SendChatMessage(ctx, &gameidlev1.SendChatMessage_Req{
 		CharacterId:         req.CharacterID,
 		ChannelType:         channelType,
 		ChannelId:           req.ChannelID,
@@ -68,7 +68,7 @@ func (r *ChatRepo) List(ctx context.Context, req *repo.ListChatMessagesReq) ([]*
 	default:
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	reply, err := r.gameIdleClient.Chat.List(ctx, &gameidlev1.ListChatMessages_Request{
+	reply, err := r.gameIdleClient.Chat.ListChatMessages(ctx, &gameidlev1.ListChatMessages_Req{
 		ChannelType: channelType,
 		ChannelId:   req.ChannelID,
 		BeforeId:    req.BeforeID,

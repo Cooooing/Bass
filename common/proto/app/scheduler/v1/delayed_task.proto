@@ -12,14 +12,14 @@ import "scheduler/v1/enum/task_trigger_type.proto";
 option go_package = "common/proto/gen/scheduler/v1;v1";
 
 service SchedulerDelayedTaskService {
-  rpc Upsert(UpsertSchedulerDelayedTask.Req) returns (UpsertSchedulerDelayedTask.Resp) {} // 创建或更新延迟任务配置。
-  rpc Get(GetSchedulerDelayedTask.Req) returns (GetSchedulerDelayedTask.Resp) {} // 获取延迟任务配置。
-  rpc Page(PageSchedulerDelayedTasks.Req) returns (PageSchedulerDelayedTasks.Resp) {} // 分页查询延迟任务配置。
-  rpc ListAvailableTasks(ListSchedulerAvailableDelayedTasks.Req) returns (ListSchedulerAvailableDelayedTasks.Resp) {} // 查询代码中可用任务。
-  rpc Schedule(ScheduleSchedulerDelayedTask.Req) returns (ScheduleSchedulerDelayedTask.Resp) {} // 注册一次延迟执行。
-  rpc Trigger(TriggerSchedulerDelayedTask.Req) returns (TriggerSchedulerDelayedTask.Resp) {} // 手动立即触发一次延迟任务。
-  rpc CancelExecution(CancelSchedulerDelayedTaskExecution.Req) returns (CancelSchedulerDelayedTaskExecution.Resp) {} // 取消延迟任务执行记录。
-  rpc PageExecutionRecords(PageSchedulerDelayedTaskExecutionRecords.Req) returns (PageSchedulerDelayedTaskExecutionRecords.Resp) {} // 分页查询延迟任务执行记录。
+  rpc UpsertSchedulerDelayedTask(UpsertSchedulerDelayedTask.Req) returns (UpsertSchedulerDelayedTask.Resp) {} // 创建或更新延迟任务配置。
+  rpc GetSchedulerDelayedTask(GetSchedulerDelayedTask.Req) returns (GetSchedulerDelayedTask.Resp) {} // 获取延迟任务配置。
+  rpc PageSchedulerDelayedTasks(PageSchedulerDelayedTasks.Req) returns (PageSchedulerDelayedTasks.Resp) {} // 分页查询延迟任务配置。
+  rpc ListSchedulerAvailableDelayedTasks(ListSchedulerAvailableDelayedTasks.Req) returns (ListSchedulerAvailableDelayedTasks.Resp) {} // 查询代码中可用任务。
+  rpc ScheduleSchedulerDelayedTask(ScheduleSchedulerDelayedTask.Req) returns (ScheduleSchedulerDelayedTask.Resp) {} // 注册一次延迟执行。
+  rpc TriggerSchedulerDelayedTask(TriggerSchedulerDelayedTask.Req) returns (TriggerSchedulerDelayedTask.Resp) {} // 手动立即触发一次延迟任务。
+  rpc CancelSchedulerDelayedTaskExecution(CancelSchedulerDelayedTaskExecution.Req) returns (CancelSchedulerDelayedTaskExecution.Resp) {} // 取消延迟任务执行记录。
+  rpc PageSchedulerDelayedTaskExecutionRecords(PageSchedulerDelayedTaskExecutionRecords.Req) returns (PageSchedulerDelayedTaskExecutionRecords.Resp) {} // 分页查询延迟任务执行记录。
 }
 
 message UpsertSchedulerDelayedTask {

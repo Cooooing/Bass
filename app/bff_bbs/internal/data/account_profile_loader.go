@@ -25,7 +25,7 @@ func (r *accountProfileLoader) loadAccountProfiles(ctx context.Context, userIDs 
 	if len(ids) == 0 {
 		return map[int64]*model.AccountProfile{}, nil
 	}
-	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+	reply, err := r.userClient.Account.MapAccounts(ctx, &userv1.MapAccounts_Req{
 		Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: ids},
 	})
 	if err != nil {

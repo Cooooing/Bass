@@ -36,7 +36,7 @@ func (s *ContentArticleSearchService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterArticleSearchServiceHTTPServer(hs, s)
 }
 
-func (s *ContentArticleSearchService) Search(
+func (s *ContentArticleSearchService) SearchArticles(
 	ctx context.Context,
 	req *bbscontentv1.SearchArticles_Req,
 ) (*bbscontentv1.SearchArticles_Resp, error) {

@@ -9,84 +9,84 @@ option go_package = "common/proto/gen/bff_bbs/v1/im;im";
 // EmojiService 提供当前登录账号的 IM 表情分组 HTTP 接口。
 service EmojiService {
   // 查询当前账号的表情分组。
-  rpc List(ListEmojiGroups.Req) returns (ListEmojiGroups.Resp) {
+  rpc ListEmojiGroups(ListEmojiGroups.Req) returns (ListEmojiGroups.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/groups/list"
       body: "*"
     };
   }
   // 创建一个表情分组。
-  rpc CreateGroup(CreateEmojiGroup.Req) returns (CreateEmojiGroup.Resp) {
+  rpc CreateEmojiGroup(CreateEmojiGroup.Req) returns (CreateEmojiGroup.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/groups"
       body: "*"
     };
   }
   // 重命名一个表情分组。
-  rpc RenameGroup(RenameEmojiGroup.Req) returns (RenameEmojiGroup.Resp) {
+  rpc RenameEmojiGroup(RenameEmojiGroup.Req) returns (RenameEmojiGroup.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/groups/rename"
       body: "*"
     };
   }
   // 删除一个表情分组。
-  rpc DeleteGroup(DeleteEmojiGroup.Req) returns (DeleteEmojiGroup.Resp) {
+  rpc DeleteEmojiGroup(DeleteEmojiGroup.Req) returns (DeleteEmojiGroup.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/groups/delete"
       body: "*"
     };
   }
   // 向分组加入已上传图片。
-  rpc AddItem(AddEmojiItem.Req) returns (AddEmojiItem.Resp) {
+  rpc AddEmojiItem(AddEmojiItem.Req) returns (AddEmojiItem.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/items"
       body: "*"
     };
   }
   // 重命名一个表情别名。
-  rpc RenameItem(RenameEmojiItem.Req) returns (RenameEmojiItem.Resp) {
+  rpc RenameEmojiItem(RenameEmojiItem.Req) returns (RenameEmojiItem.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/items/rename"
       body: "*"
     };
   }
   // 重排表情分组。
-  rpc ReorderGroups(ReorderEmojiGroups.Req) returns (ReorderEmojiGroups.Resp) {
+  rpc ReorderEmojiGroups(ReorderEmojiGroups.Req) returns (ReorderEmojiGroups.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/groups/reorder"
       body: "*"
     };
   }
   // 重排同一分组内的表情。
-  rpc ReorderItems(ReorderEmojiItems.Req) returns (ReorderEmojiItems.Resp) {
+  rpc ReorderEmojiItems(ReorderEmojiItems.Req) returns (ReorderEmojiItems.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/items/reorder"
       body: "*"
     };
   }
   // 从分组移除表情。
-  rpc DeleteItem(DeleteEmojiItem.Req) returns (DeleteEmojiItem.Resp) {
+  rpc DeleteEmojiItem(DeleteEmojiItem.Req) returns (DeleteEmojiItem.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/items/delete"
       body: "*"
     };
   }
   // 将表情移动到另一个当前账号分组。
-  rpc MoveItem(MoveEmojiItem.Req) returns (MoveEmojiItem.Resp) {
+  rpc MoveEmojiItem(MoveEmojiItem.Req) returns (MoveEmojiItem.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/items/move"
       body: "*"
     };
   }
   // 生成七天有效的分组分享码。
-  rpc CreateShare(CreateEmojiShare.Req) returns (CreateEmojiShare.Resp) {
+  rpc CreateEmojiShare(CreateEmojiShare.Req) returns (CreateEmojiShare.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/shares"
       body: "*"
     };
   }
   // 把分享码导入为一个新分组。
-  rpc ImportShare(ImportEmojiShare.Req) returns (ImportEmojiShare.Resp) {
+  rpc ImportEmojiShare(ImportEmojiShare.Req) returns (ImportEmojiShare.Resp) {
     option (google.api.http) = {
       post: "/v1/im/emoji/shares/import"
       body: "*"

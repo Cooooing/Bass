@@ -27,7 +27,7 @@ func (s *LivenessService) RegisterGrpc(gs *grpc.Server) {
 func (s *LivenessService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *LivenessService) GetLiveness(ctx context.Context, req *v1.GetUserLiveness_Req) (*v1.GetUserLiveness_Resp, error) {
+func (s *LivenessService) GetUserLiveness(ctx context.Context, req *v1.GetUserLiveness_Req) (*v1.GetUserLiveness_Resp, error) {
 	score, detail, record, err := s.livenessUsecase.Get(ctx, req.GetUserId(), req.GetDate().AsTime())
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (s *LivenessService) GetLiveness(ctx context.Context, req *v1.GetUserLivene
 	return response, nil
 }
 
-func (s *LivenessService) ClaimLivenessReward(ctx context.Context, req *v1.ClaimUserLivenessReward_Req) (*v1.ClaimUserLivenessReward_Resp, error) {
+func (s *LivenessService) ClaimUserLivenessReward(ctx context.Context, req *v1.ClaimUserLivenessReward_Req) (*v1.ClaimUserLivenessReward_Resp, error) {
 	row, err := s.livenessUsecase.Claim(ctx, req.GetUserId(), req.GetDate().AsTime())
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (s *LivenessService) ClaimLivenessReward(ctx context.Context, req *v1.Claim
 	return &v1.ClaimUserLivenessReward_Resp{RewardPoints: int64(row.Score), RewardStatus: enum.LivenessRewardStatusMap.MustToProto(row.RewardStatus)}, nil
 }
 
-func (s *LivenessService) SettleLiveness(ctx context.Context, req *v1.SettleUserLiveness_Req) (*v1.SettleUserLiveness_Resp, error) {
+func (s *LivenessService) SettleUserLiveness(ctx context.Context, req *v1.SettleUserLiveness_Req) (*v1.SettleUserLiveness_Resp, error) {
 	settled, checked, err := s.livenessUsecase.Settle(ctx, req.GetDate().AsTime(), req.GetPageSize())
 	if err != nil {
 		return nil, err

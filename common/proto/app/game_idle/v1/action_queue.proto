@@ -7,15 +7,15 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service ActionQueueService {
-  rpc List(ListActionQueue.Request) returns (ListActionQueue.Resp) {}
-  rpc Add(AddAction.Request) returns (AddAction.Resp) {}
-  rpc Move(MoveAction.Request) returns (MoveAction.Resp) {}
-  rpc Remove(RemoveAction.Request) returns (RemoveAction.Resp) {}
-  rpc Clear(ClearActionQueue.Request) returns (ClearActionQueue.Resp) {}
+  rpc ListActionQueue(ListActionQueue.Req) returns (ListActionQueue.Resp) {}
+  rpc AddAction(AddAction.Req) returns (AddAction.Resp) {}
+  rpc MoveAction(MoveAction.Req) returns (MoveAction.Resp) {}
+  rpc RemoveAction(RemoveAction.Req) returns (RemoveAction.Resp) {}
+  rpc ClearActionQueue(ClearActionQueue.Req) returns (ClearActionQueue.Resp) {}
 }
 
 message ListActionQueue {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
   }
 
@@ -25,7 +25,7 @@ message ListActionQueue {
 }
 
 message AddAction {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
     string action_id = 2; // 行动编码
     int64 times = 3; // 执行次数，-1 表示无限
@@ -36,7 +36,7 @@ message AddAction {
 }
 
 message MoveAction {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
     int32 current_position = 2; // 当前位置，从 0 开始
     int32 target_position = 3; // 目标位置，从 0 开始
@@ -46,7 +46,7 @@ message MoveAction {
 }
 
 message RemoveAction {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
     int32 position = 2; // 移除位置，从 0 开始
   }
@@ -55,7 +55,7 @@ message RemoveAction {
 }
 
 message ClearActionQueue {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
   }
 

@@ -10,9 +10,9 @@ import "notify/v1/enum/notification_type.proto";
 option go_package = "common/proto/gen/notify/v1;v1";
 
 service NotifyStationMessageService {
-  rpc List(ListStationMessages.Req) returns (ListStationMessages.Resp) {} // 查询账号站内信列表。
-  rpc MarkRead(MarkReadStationMessage.Req) returns (MarkReadStationMessage.Resp) {} // 标记账号站内信为已读。
-  rpc CountUnread(CountUnreadStationMessages.Req) returns (CountUnreadStationMessages.Resp) {} // 查询账号未读站内信数量。
+  rpc ListStationMessages(ListStationMessages.Req) returns (ListStationMessages.Resp) {} // 查询账号站内信列表。
+  rpc MarkReadStationMessage(MarkReadStationMessage.Req) returns (MarkReadStationMessage.Resp) {} // 标记账号站内信为已读。
+  rpc CountUnreadStationMessages(CountUnreadStationMessages.Req) returns (CountUnreadStationMessages.Resp) {} // 查询账号未读站内信数量。
 }
 
 message ListStationMessages {

@@ -29,7 +29,7 @@ func (s *ArticleSearchService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *ArticleSearchService) RegisterHTTP(hs *http.Server) {}
 
-func (s *ArticleSearchService) SearchPublic(
+func (s *ArticleSearchService) SearchPublicArticles(
 	ctx context.Context,
 	req *v1.SearchPublicArticles_Req,
 ) (*v1.SearchPublicArticles_Resp, error) {

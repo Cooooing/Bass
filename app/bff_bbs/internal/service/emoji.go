@@ -34,7 +34,7 @@ func (s *EmojiService) RegisterHTTP(server *http.Server) {
 	bffbbsv1.RegisterEmojiServiceHTTPServer(server, s)
 }
 
-func (s *EmojiService) List(ctx context.Context, req *bffbbsv1.ListEmojiGroups_Req) (*bffbbsv1.ListEmojiGroups_Resp, error) {
+func (s *EmojiService) ListEmojiGroups(ctx context.Context, req *bffbbsv1.ListEmojiGroups_Req) (*bffbbsv1.ListEmojiGroups_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (s *EmojiService) List(ctx context.Context, req *bffbbsv1.ListEmojiGroups_R
 	return &bffbbsv1.ListEmojiGroups_Resp{Rows: s.groups(rows)}, nil
 }
 
-func (s *EmojiService) CreateGroup(ctx context.Context, req *bffbbsv1.CreateEmojiGroup_Req) (*bffbbsv1.CreateEmojiGroup_Resp, error) {
+func (s *EmojiService) CreateEmojiGroup(ctx context.Context, req *bffbbsv1.CreateEmojiGroup_Req) (*bffbbsv1.CreateEmojiGroup_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (s *EmojiService) CreateGroup(ctx context.Context, req *bffbbsv1.CreateEmoj
 	return &bffbbsv1.CreateEmojiGroup_Resp{Group: s.groups(rows)[0]}, nil
 }
 
-func (s *EmojiService) RenameGroup(ctx context.Context, req *bffbbsv1.RenameEmojiGroup_Req) (*bffbbsv1.RenameEmojiGroup_Resp, error) {
+func (s *EmojiService) RenameEmojiGroup(ctx context.Context, req *bffbbsv1.RenameEmojiGroup_Req) (*bffbbsv1.RenameEmojiGroup_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -82,7 +82,7 @@ func (s *EmojiService) RenameGroup(ctx context.Context, req *bffbbsv1.RenameEmoj
 	return &bffbbsv1.RenameEmojiGroup_Resp{Group: s.groups(rows)[0]}, nil
 }
 
-func (s *EmojiService) DeleteGroup(ctx context.Context, req *bffbbsv1.DeleteEmojiGroup_Req) (*bffbbsv1.DeleteEmojiGroup_Resp, error) {
+func (s *EmojiService) DeleteEmojiGroup(ctx context.Context, req *bffbbsv1.DeleteEmojiGroup_Req) (*bffbbsv1.DeleteEmojiGroup_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -93,7 +93,7 @@ func (s *EmojiService) DeleteGroup(ctx context.Context, req *bffbbsv1.DeleteEmoj
 	return &bffbbsv1.DeleteEmojiGroup_Resp{}, nil
 }
 
-func (s *EmojiService) AddItem(ctx context.Context, req *bffbbsv1.AddEmojiItem_Req) (*bffbbsv1.AddEmojiItem_Resp, error) {
+func (s *EmojiService) AddEmojiItem(ctx context.Context, req *bffbbsv1.AddEmojiItem_Req) (*bffbbsv1.AddEmojiItem_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func (s *EmojiService) AddItem(ctx context.Context, req *bffbbsv1.AddEmojiItem_R
 	return &bffbbsv1.AddEmojiItem_Resp{Item: s.item(rows[0].Items[0])}, nil
 }
 
-func (s *EmojiService) DeleteItem(ctx context.Context, req *bffbbsv1.DeleteEmojiItem_Req) (*bffbbsv1.DeleteEmojiItem_Resp, error) {
+func (s *EmojiService) DeleteEmojiItem(ctx context.Context, req *bffbbsv1.DeleteEmojiItem_Req) (*bffbbsv1.DeleteEmojiItem_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -123,7 +123,7 @@ func (s *EmojiService) DeleteItem(ctx context.Context, req *bffbbsv1.DeleteEmoji
 	return &bffbbsv1.DeleteEmojiItem_Resp{}, nil
 }
 
-func (s *EmojiService) MoveItem(ctx context.Context, req *bffbbsv1.MoveEmojiItem_Req) (*bffbbsv1.MoveEmojiItem_Resp, error) {
+func (s *EmojiService) MoveEmojiItem(ctx context.Context, req *bffbbsv1.MoveEmojiItem_Req) (*bffbbsv1.MoveEmojiItem_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -142,7 +142,7 @@ func (s *EmojiService) MoveItem(ctx context.Context, req *bffbbsv1.MoveEmojiItem
 	return &bffbbsv1.MoveEmojiItem_Resp{Item: s.item(rows[0].Items[0])}, nil
 }
 
-func (s *EmojiService) RenameItem(ctx context.Context, req *bffbbsv1.RenameEmojiItem_Req) (*bffbbsv1.RenameEmojiItem_Resp, error) {
+func (s *EmojiService) RenameEmojiItem(ctx context.Context, req *bffbbsv1.RenameEmojiItem_Req) (*bffbbsv1.RenameEmojiItem_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -161,7 +161,7 @@ func (s *EmojiService) RenameItem(ctx context.Context, req *bffbbsv1.RenameEmoji
 	return &bffbbsv1.RenameEmojiItem_Resp{Item: s.item(rows[0].Items[0])}, nil
 }
 
-func (s *EmojiService) ReorderGroups(ctx context.Context, req *bffbbsv1.ReorderEmojiGroups_Req) (*bffbbsv1.ReorderEmojiGroups_Resp, error) {
+func (s *EmojiService) ReorderEmojiGroups(ctx context.Context, req *bffbbsv1.ReorderEmojiGroups_Req) (*bffbbsv1.ReorderEmojiGroups_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -172,7 +172,7 @@ func (s *EmojiService) ReorderGroups(ctx context.Context, req *bffbbsv1.ReorderE
 	return &bffbbsv1.ReorderEmojiGroups_Resp{}, nil
 }
 
-func (s *EmojiService) ReorderItems(ctx context.Context, req *bffbbsv1.ReorderEmojiItems_Req) (*bffbbsv1.ReorderEmojiItems_Resp, error) {
+func (s *EmojiService) ReorderEmojiItems(ctx context.Context, req *bffbbsv1.ReorderEmojiItems_Req) (*bffbbsv1.ReorderEmojiItems_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -183,7 +183,7 @@ func (s *EmojiService) ReorderItems(ctx context.Context, req *bffbbsv1.ReorderEm
 	return &bffbbsv1.ReorderEmojiItems_Resp{}, nil
 }
 
-func (s *EmojiService) CreateShare(ctx context.Context, req *bffbbsv1.CreateEmojiShare_Req) (*bffbbsv1.CreateEmojiShare_Resp, error) {
+func (s *EmojiService) CreateEmojiShare(ctx context.Context, req *bffbbsv1.CreateEmojiShare_Req) (*bffbbsv1.CreateEmojiShare_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -195,7 +195,7 @@ func (s *EmojiService) CreateShare(ctx context.Context, req *bffbbsv1.CreateEmoj
 	return &bffbbsv1.CreateEmojiShare_Resp{Code: code, ExpiresInSeconds: expiresInSeconds}, nil
 }
 
-func (s *EmojiService) ImportShare(ctx context.Context, req *bffbbsv1.ImportEmojiShare_Req) (*bffbbsv1.ImportEmojiShare_Resp, error) {
+func (s *EmojiService) ImportEmojiShare(ctx context.Context, req *bffbbsv1.ImportEmojiShare_Req) (*bffbbsv1.ImportEmojiShare_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err

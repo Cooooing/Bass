@@ -14,7 +14,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 // AccountService 提供 BBS 账号接口
 service AccountService {
   // 获取当前账号完整资料
-  rpc GetCurrent(GetCurrentAccount.Req) returns (GetCurrentAccount.Resp) {
+  rpc GetCurrentAccount(GetCurrentAccount.Req) returns (GetCurrentAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-current"
       body: "*"
@@ -49,73 +49,71 @@ service AccountService {
     };
   }
   // 检索可提及账号的候选项。
-  rpc SearchMention(SearchMentionAccounts.Req) returns (SearchMentionAccounts.Resp) {
+  rpc SearchMentionAccounts(SearchMentionAccounts.Req) returns (SearchMentionAccounts.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/search-mention"
       body: "*"
     };
   }
   // 更新当前账号展示资料
-  rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
+  rpc UpdateProfileAccount(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/update-profile"
       body: "*"
     };
   }
   // 申请当前账号资料图片的内容寻址直传能力。
-  rpc PrepareProfileImageUpload(PrepareProfileImageUploadAccount.Req) returns (PrepareProfileImageUploadAccount.Resp) {
+  rpc PrepareProfileImageUploadAccount(PrepareProfileImageUploadAccount.Req) returns (PrepareProfileImageUploadAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/prepare-profile-image-upload"
       body: "*"
     };
   }
   // 将已由 MinIO 回调确认的资源绑定到当前账号资料。
-  rpc CompleteProfileImageUpload(CompleteProfileImageUploadAccount.Req) returns (CompleteProfileImageUploadAccount.Resp) {
+  rpc CompleteProfileImageUploadAccount(CompleteProfileImageUploadAccount.Req) returns (CompleteProfileImageUploadAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/complete-profile-image-upload"
       body: "*"
     };
   }
   // 更新当前账号密码
-  rpc UpdatePassword(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {
+  rpc UpdatePasswordAccount(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/update-password"
       body: "*"
     };
   }
   // 更新当前账号邮箱
-  rpc UpdateEmail(UpdateEmailAccount.Req) returns (UpdateEmailAccount.Resp) {
+  rpc UpdateEmailAccount(UpdateEmailAccount.Req) returns (UpdateEmailAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/update-email"
       body: "*"
     };
   }
   // 更新当前账号手机号
-  rpc UpdatePhone(UpdatePhoneAccount.Req) returns (UpdatePhoneAccount.Resp) {
+  rpc UpdatePhoneAccount(UpdatePhoneAccount.Req) returns (UpdatePhoneAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/update-phone"
       body: "*"
     };
   }
   // 查询当前账号的积分余额和累计收支。
-  rpc GetEconomyAccount(GetAccountEconomy.Req) returns (GetAccountEconomy.Resp) {
+  rpc GetAccountEconomy(GetAccountEconomy.Req) returns (GetAccountEconomy.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/economy/get"
       body: "*"
     };
   }
   // 向指定账号转移积分。
-  rpc TransferPoints(TransferAccountPoints.Req) returns (TransferAccountPoints.Resp) {
+  rpc TransferAccountPoints(TransferAccountPoints.Req) returns (TransferAccountPoints.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/economy/transfer"
       body: "*"
     };
   }
   // 生成默认账号头像
-  rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {
-    option (google.api.http) = {
-      get: "/v1/user/account/avatar"
-    };
+  rpc AvatarAccount(AvatarAccount.Req) returns (AvatarAccount.Resp) {
+    option (google.api.http) = {get: "/v1/user/account/avatar"};
   }
 }
 
@@ -194,7 +192,7 @@ message GetCurrentAccount {
 message GetProfile {
   message Req {
     string name = 1; // 账号名，必填
-    option (gnostic.openapi.v3.schema) = { required: "name" };
+    option (gnostic.openapi.v3.schema) = {required: "name"};
   }
   message Resp {
     Profile profile = 1;
@@ -206,7 +204,7 @@ message ListPointRecords {
   message Req {
     string name = 1; // 账号名，必填
     .common.api.app.common.PageReq page = 2; // 分页参数
-    option (gnostic.openapi.v3.schema) = { required: "name" };
+    option (gnostic.openapi.v3.schema) = {required: "name"};
   }
   message Resp {
     message PointRecord {
@@ -225,7 +223,7 @@ message ListFollowing {
   message Req {
     string name = 1;
     .common.api.app.common.PageReq page = 2;
-    option (gnostic.openapi.v3.schema) = { required: "name" };
+    option (gnostic.openapi.v3.schema) = {required: "name"};
   }
   message Resp {
     .common.api.app.common.PageResp page = 1;
@@ -237,7 +235,7 @@ message ListFollowers {
   message Req {
     string name = 1;
     .common.api.app.common.PageReq page = 2;
-    option (gnostic.openapi.v3.schema) = { required: "name" };
+    option (gnostic.openapi.v3.schema) = {required: "name"};
   }
   message Resp {
     .common.api.app.common.PageResp page = 1;
@@ -280,7 +278,12 @@ message PrepareProfileImageUploadAccount {
     string hash = 2; // 文件 SHA-256，小写十六进制
     string mime_type = 3; // 上传 MIME 类型
     int64 size = 4; // 文件大小，最大 2 MiB
-    option (gnostic.openapi.v3.schema) = { required: "purpose" required: "hash" required: "mime_type" required: "size" };
+    option (gnostic.openapi.v3.schema) = {
+      required: "purpose"
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
   }
   message Resp {
     optional int64 asset_id = 1; // 已存在时直接返回
@@ -293,7 +296,10 @@ message CompleteProfileImageUploadAccount {
   message Req {
     ProfileImagePurpose purpose = 1;
     string hash = 2; // 文件 SHA-256；回调尚未入库时返回可重试错误
-    option (gnostic.openapi.v3.schema) = { required: "purpose" required: "hash" };
+    option (gnostic.openapi.v3.schema) = {
+      required: "purpose"
+      required: "hash"
+    };
   }
   message Resp {
     AccountProfile profile = 1;
@@ -390,8 +396,10 @@ message ListAccountEconomyRecords {
 message AvatarAccount {
   message Req {
     string name = 1; // 账号名，必填
-    option (gnostic.openapi.v3.schema) = {
-      required: "name"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "name"};
+  }
+  // Resp 通过 raw_body 返回头像原始字节及内容类型。
+  message Resp {
+    .common.api.app.common.ImageResp raw_body = 1;
   }
 }

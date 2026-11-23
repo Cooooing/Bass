@@ -13,7 +13,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/content;content";
 // 领域 HTTP 接口。
 service DomainService {
   // 创建领域。
-  rpc Create(CreateDomain.Req) returns (CreateDomain.Resp) {
+  rpc CreateDomain(CreateDomain.Req) returns (CreateDomain.Resp) {
     option (google.api.http) = {
       post: "/v1/content/domain/create"
       body: "*"
@@ -21,7 +21,7 @@ service DomainService {
   }
 
   // 更新领域。
-  rpc Update(UpdateDomain.Req) returns (UpdateDomain.Resp) {
+  rpc UpdateDomain(UpdateDomain.Req) returns (UpdateDomain.Resp) {
     option (google.api.http) = {
       post: "/v1/content/domain/update"
       body: "*"
@@ -29,7 +29,7 @@ service DomainService {
   }
 
   // 查询领域列表。
-  rpc List(ListDomains.Req) returns (ListDomains.Resp) {
+  rpc ListDomains(ListDomains.Req) returns (ListDomains.Resp) {
     option (google.api.http) = {
       post: "/v1/content/domain/list"
       body: "*"
@@ -41,9 +41,7 @@ service DomainService {
 message CreateDomain {
   message Req {
     Domain domain = 1; // 领域信息
-    option (gnostic.openapi.v3.schema) = {
-      required: "domain"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "domain"};
 
     message Domain {
       string code = 1; // 稳定编码

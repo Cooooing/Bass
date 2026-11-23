@@ -8,8 +8,8 @@ option go_package = "common/proto/gen/user/v1;v1";
 
 // OutboxService 提供 user 本地 outbox 事件投递能力。
 service OutboxService {
-  rpc Publish(PublishOutboxEvent.Req) returns (PublishOutboxEvent.Resp) {} // 投递单条 outbox 事件。
-  rpc PublishBatch(PublishOutboxEvents.Req) returns (PublishOutboxEvents.Resp) {} // 批量投递可抢占的 outbox 事件。
+  rpc PublishOutboxEvent(PublishOutboxEvent.Req) returns (PublishOutboxEvent.Resp) {} // 投递单条 outbox 事件。
+  rpc PublishOutboxEvents(PublishOutboxEvents.Req) returns (PublishOutboxEvents.Resp) {} // 批量投递可抢占的 outbox 事件。
 }
 
 message PublishOutboxEvent {

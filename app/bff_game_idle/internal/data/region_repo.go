@@ -22,7 +22,7 @@ func NewRegionRepo(gameIdleClient *rpc.GameIdleClient) repo.RegionRepo {
 }
 
 func (r *RegionRepo) List(ctx context.Context) ([]*model.RegionConfig, error) {
-	reply, err := r.gameIdleClient.Region.List(ctx, &gameidlev1.ListRegions_Request{})
+	reply, err := r.gameIdleClient.Region.ListRegions(ctx, &gameidlev1.ListRegions_Req{})
 	if err != nil {
 		return nil, err
 	}

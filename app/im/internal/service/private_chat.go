@@ -27,21 +27,21 @@ func (s *PrivateChatService) RegisterGrpc(server *grpc.Server) {
 	imv1.RegisterIMPrivateChatServiceServer(server, s)
 }
 func (*PrivateChatService) RegisterHTTP(*http.Server) {}
-func (s *PrivateChatService) Send(ctx context.Context, req *imv1.SendPrivateChatMessage_Req) (*imv1.SendPrivateChatMessage_Resp, error) {
+func (s *PrivateChatService) SendPrivateChatMessage(ctx context.Context, req *imv1.SendPrivateChatMessage_Req) (*imv1.SendPrivateChatMessage_Resp, error) {
 	row, err := s.privateChat.Send(ctx, req.GetSenderId(), req.GetReceiverId(), req.GetClientMessageId(), req.GetContent())
 	if err != nil {
 		return nil, err
 	}
 	return &imv1.SendPrivateChatMessage_Resp{Message: s.privateChatMessageProto(row)}, nil
 }
-func (s *PrivateChatService) Revoke(ctx context.Context, req *imv1.RevokePrivateChatMessage_Req) (*imv1.RevokePrivateChatMessage_Resp, error) {
+func (s *PrivateChatService) RevokePrivateChatMessage(ctx context.Context, req *imv1.RevokePrivateChatMessage_Req) (*imv1.RevokePrivateChatMessage_Resp, error) {
 	row, err := s.privateChat.Revoke(ctx, req.GetUserId(), req.GetMessageId())
 	if err != nil {
 		return nil, err
 	}
 	return &imv1.RevokePrivateChatMessage_Resp{Message: s.privateChatMessageProto(row)}, nil
 }
-func (s *PrivateChatService) ListSessions(ctx context.Context, req *imv1.ListPrivateChatSessions_Req) (*imv1.ListPrivateChatSessions_Resp, error) {
+func (s *PrivateChatService) ListPrivateChatSessions(ctx context.Context, req *imv1.ListPrivateChatSessions_Req) (*imv1.ListPrivateChatSessions_Resp, error) {
 	rows, page, err := s.privateChat.ListSessions(ctx, req.GetUserId(), commonmodel.PageReqFromProto(req.GetPage()))
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (s *PrivateChatService) ListSessions(ctx context.Context, req *imv1.ListPri
 	}
 	return &imv1.ListPrivateChatSessions_Resp{Page: page.ToProto(), Rows: out}, nil
 }
-func (s *PrivateChatService) ListMessages(ctx context.Context, req *imv1.ListPrivateChatMessages_Req) (*imv1.ListPrivateChatMessages_Resp, error) {
+func (s *PrivateChatService) ListPrivateChatMessages(ctx context.Context, req *imv1.ListPrivateChatMessages_Req) (*imv1.ListPrivateChatMessages_Resp, error) {
 	rows, page, err := s.privateChat.ListMessages(ctx, req.GetUserId(), req.GetPeerUserId(), req.GetBeforeId(), commonmodel.PageReqFromProto(req.GetPage()))
 	if err != nil {
 		return nil, err
@@ -64,20 +64,20 @@ func (s *PrivateChatService) ListMessages(ctx context.Context, req *imv1.ListPri
 	return &imv1.ListPrivateChatMessages_Resp{Page: page.ToProto(), Rows: out}, nil
 }
 
-func (s *PrivateChatService) CountUnread(ctx context.Context, req *imv1.CountUnreadPrivateChatMessages_Req) (*imv1.CountUnreadPrivateChatMessages_Resp, error) {
+func (s *PrivateChatService) CountUnreadPrivateChatMessages(ctx context.Context, req *imv1.CountUnreadPrivateChatMessages_Req) (*imv1.CountUnreadPrivateChatMessages_Resp, error) {
 	count, err := s.privateChat.CountUnread(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
 	return &imv1.CountUnreadPrivateChatMessages_Resp{Count: count}, nil
 }
-func (s *PrivateChatService) MarkRead(ctx context.Context, req *imv1.MarkPrivateChatSessionRead_Req) (*imv1.MarkPrivateChatSessionRead_Resp, error) {
+func (s *PrivateChatService) MarkPrivateChatSessionRead(ctx context.Context, req *imv1.MarkPrivateChatSessionRead_Req) (*imv1.MarkPrivateChatSessionRead_Resp, error) {
 	return &imv1.MarkPrivateChatSessionRead_Resp{}, s.privateChat.MarkRead(ctx, req.GetUserId(), req.GetPeerUserId(), req.GetMessageId())
 }
-func (s *PrivateChatService) SetMuted(ctx context.Context, req *imv1.SetPrivateChatSessionMuted_Req) (*imv1.SetPrivateChatSessionMuted_Resp, error) {
+func (s *PrivateChatService) SetPrivateChatSessionMuted(ctx context.Context, req *imv1.SetPrivateChatSessionMuted_Req) (*imv1.SetPrivateChatSessionMuted_Resp, error) {
 	return &imv1.SetPrivateChatSessionMuted_Resp{}, s.privateChat.SetMuted(ctx, req.GetUserId(), req.GetPeerUserId(), req.GetMuted())
 }
-func (s *PrivateChatService) SetPinned(ctx context.Context, req *imv1.SetPrivateChatSessionPinned_Req) (*imv1.SetPrivateChatSessionPinned_Resp, error) {
+func (s *PrivateChatService) SetPrivateChatSessionPinned(ctx context.Context, req *imv1.SetPrivateChatSessionPinned_Req) (*imv1.SetPrivateChatSessionPinned_Resp, error) {
 	return &imv1.SetPrivateChatSessionPinned_Resp{}, s.privateChat.SetPinned(ctx, req.GetUserId(), req.GetPeerUserId(), req.GetPinned())
 }
 

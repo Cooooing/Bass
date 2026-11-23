@@ -35,7 +35,7 @@ func (s *PrivacySettingService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterPrivacySettingServiceHTTPServer(hs, s)
 }
 
-func (s *PrivacySettingService) GetCurrent(
+func (s *PrivacySettingService) GetCurrentPrivacySetting(
 	ctx context.Context,
 	req *bbsuserv1.GetCurrentPrivacySetting_Req,
 ) (*bbsuserv1.GetCurrentPrivacySetting_Resp, error) {
@@ -52,7 +52,7 @@ func (s *PrivacySettingService) GetCurrent(
 	}, nil
 }
 
-func (s *PrivacySettingService) UpdateCurrent(
+func (s *PrivacySettingService) UpdateCurrentPrivacySetting(
 	ctx context.Context,
 	req *bbsuserv1.UpdateCurrentPrivacySetting_Req,
 ) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp, error) {

@@ -27,7 +27,7 @@ func (r *CharacterAbilityRepo) Map(
 	ctx context.Context,
 	characterID int64,
 ) (map[string]*model.CharacterAbility, error) {
-	reply, err := r.gameIdleClient.CharacterAbility.Get(ctx, &gameidlev1.GetCharacterAbility_Request{
+	reply, err := r.gameIdleClient.CharacterAbility.GetCharacterAbility(ctx, &gameidlev1.GetCharacterAbility_Req{
 		CharacterId: characterID,
 	})
 	if err != nil {

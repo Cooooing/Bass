@@ -46,7 +46,7 @@ func (t *ContentFinishArticlePolls) Execute(ctx context.Context, execution Execu
 	if data.GetArticleId() <= 0 || data.GetEndsAt() == nil || !data.GetEndsAt().IsValid() {
 		return nil, fmt.Errorf("invalid content article poll finish payload")
 	}
-	response, err := t.contentClient.Article.FinishPoll(ctx, &contentv1.FinishArticlePoll_Req{ArticleId: data.GetArticleId(), EndsAt: timestamppb.New(data.GetEndsAt().AsTime())})
+	response, err := t.contentClient.Article.FinishArticlePoll(ctx, &contentv1.FinishArticlePoll_Req{ArticleId: data.GetArticleId(), EndsAt: timestamppb.New(data.GetEndsAt().AsTime())})
 	if err != nil || response == nil {
 		if err == nil {
 			err = fmt.Errorf("article poll finish returned an empty response")

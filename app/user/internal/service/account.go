@@ -49,7 +49,7 @@ func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 func (s *AccountService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.GetAccount_Resp, error) {
+func (s *AccountService) GetAccount(ctx context.Context, req *v1.GetAccount_Req) (*v1.GetAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.GetAccount_Req{})
 	var res *model.Account
 	var err error
@@ -111,7 +111,7 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.G
 	return resp, nil
 }
 
-func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v1.ListAccounts_Resp, error) {
+func (s *AccountService) ListAccounts(ctx context.Context, req *v1.ListAccounts_Req) (*v1.ListAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.ListAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.ListAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 && len(query.Names) == 0 {
@@ -164,7 +164,7 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 	}, nil
 }
 
-func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.MapAccounts_Resp, error) {
+func (s *AccountService) MapAccounts(ctx context.Context, req *v1.MapAccounts_Req) (*v1.MapAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.MapAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.MapAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 && len(query.Names) == 0 {
@@ -217,7 +217,7 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 	}, nil
 }
 
-func (s *AccountService) SearchMention(ctx context.Context, req *v1.SearchMentionAccounts_Req) (*v1.SearchMentionAccounts_Resp, error) {
+func (s *AccountService) SearchMentionAccounts(ctx context.Context, req *v1.SearchMentionAccounts_Req) (*v1.SearchMentionAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.SearchMentionAccounts_Req{})
 	result, err := s.accountUsecase.SearchMention(ctx, req.GetQuery(), commonmodel.PageReqFromProto(req.GetPage()), req.GetExcludedUserIds())
 	if err != nil {
@@ -253,7 +253,7 @@ func (s *AccountService) SearchMention(ctx context.Context, req *v1.SearchMentio
 	return &v1.SearchMentionAccounts_Resp{Rows: rows, Page: result.Page.ToProto()}, nil
 }
 
-func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Req) (*v1.UpdateProfileAccount_Resp, error) {
+func (s *AccountService) UpdateProfileAccount(ctx context.Context, req *v1.UpdateProfileAccount_Req) (*v1.UpdateProfileAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.UpdateProfileAccount_Req{})
 	if req.Nickname != nil {
 		value := strings.TrimSpace(req.GetNickname())
@@ -333,7 +333,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 	}, nil
 }
 
-func (s *AccountService) UpdatePassword(ctx context.Context, req *v1.UpdatePasswordAccount_Req) (*v1.UpdatePasswordAccount_Resp, error) {
+func (s *AccountService) UpdatePasswordAccount(ctx context.Context, req *v1.UpdatePasswordAccount_Req) (*v1.UpdatePasswordAccount_Resp, error) {
 	if req == nil || req.GetUserId() == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -367,7 +367,7 @@ func (s *AccountService) UpdatePassword(ctx context.Context, req *v1.UpdatePassw
 	return &v1.UpdatePasswordAccount_Resp{}, nil
 }
 
-func (s *AccountService) UpdateEmail(ctx context.Context, req *v1.UpdateEmailAccount_Req) (*v1.UpdateEmailAccount_Resp, error) {
+func (s *AccountService) UpdateEmailAccount(ctx context.Context, req *v1.UpdateEmailAccount_Req) (*v1.UpdateEmailAccount_Resp, error) {
 	if req == nil || req.GetUserId() == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -386,7 +386,7 @@ func (s *AccountService) UpdateEmail(ctx context.Context, req *v1.UpdateEmailAcc
 	return &v1.UpdateEmailAccount_Resp{}, nil
 }
 
-func (s *AccountService) UpdatePhone(ctx context.Context, req *v1.UpdatePhoneAccount_Req) (*v1.UpdatePhoneAccount_Resp, error) {
+func (s *AccountService) UpdatePhoneAccount(ctx context.Context, req *v1.UpdatePhoneAccount_Req) (*v1.UpdatePhoneAccount_Resp, error) {
 	if req == nil || req.GetUserId() == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -403,13 +403,10 @@ func (s *AccountService) UpdatePhone(ctx context.Context, req *v1.UpdatePhoneAcc
 	}
 	return &v1.UpdatePhoneAccount_Resp{}, nil
 }
-func (s *AccountService) Avatar(ctx context.Context, req *v1.AvatarAccount_Req) (*common.ImageResp, error) {
+func (s *AccountService) AvatarAccount(ctx context.Context, req *v1.AvatarAccount_Req) (*v1.AvatarAccount_Resp, error) {
 	res, err := s.accountUsecase.Avatar(ctx, req.GetName())
 	if err != nil {
 		return nil, err
 	}
-	return &common.ImageResp{
-		Data:        res,
-		ContentType: "image/png",
-	}, nil
+	return &v1.AvatarAccount_Resp{RawBody: &common.ImageResp{Data: res, ContentType: "image/png"}}, nil
 }

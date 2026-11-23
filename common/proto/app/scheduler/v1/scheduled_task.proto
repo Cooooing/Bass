@@ -12,13 +12,13 @@ import "scheduler/v1/enum/task_trigger_type.proto";
 option go_package = "common/proto/gen/scheduler/v1;v1";
 
 service SchedulerScheduledTaskService {
-  rpc Upsert(UpsertSchedulerScheduledTask.Req) returns (UpsertSchedulerScheduledTask.Resp) {} // 创建或更新定时任务配置。
-  rpc Get(GetSchedulerScheduledTask.Req) returns (GetSchedulerScheduledTask.Resp) {} // 获取定时任务配置。
-  rpc Page(PageSchedulerScheduledTasks.Req) returns (PageSchedulerScheduledTasks.Resp) {} // 分页查询定时任务配置。
-  rpc ListAvailableTasks(ListSchedulerAvailableScheduledTasks.Req) returns (ListSchedulerAvailableScheduledTasks.Resp) {} // 查询代码中可用任务。
-  rpc PageExecutionRecords(PageSchedulerScheduledTaskExecutionRecords.Req) returns (PageSchedulerScheduledTaskExecutionRecords.Resp) {} // 分页查询定时任务执行记录。
-  rpc Trigger(TriggerSchedulerScheduledTask.Req) returns (TriggerSchedulerScheduledTask.Resp) {} // 手动触发一次定时任务。
-  rpc CancelExecution(CancelSchedulerScheduledTaskExecution.Req) returns (CancelSchedulerScheduledTaskExecution.Resp) {} // 取消执行中的定时任务记录。
+  rpc UpsertSchedulerScheduledTask(UpsertSchedulerScheduledTask.Req) returns (UpsertSchedulerScheduledTask.Resp) {} // 创建或更新定时任务配置。
+  rpc GetSchedulerScheduledTask(GetSchedulerScheduledTask.Req) returns (GetSchedulerScheduledTask.Resp) {} // 获取定时任务配置。
+  rpc PageSchedulerScheduledTasks(PageSchedulerScheduledTasks.Req) returns (PageSchedulerScheduledTasks.Resp) {} // 分页查询定时任务配置。
+  rpc ListSchedulerAvailableScheduledTasks(ListSchedulerAvailableScheduledTasks.Req) returns (ListSchedulerAvailableScheduledTasks.Resp) {} // 查询代码中可用任务。
+  rpc PageSchedulerScheduledTaskExecutionRecords(PageSchedulerScheduledTaskExecutionRecords.Req) returns (PageSchedulerScheduledTaskExecutionRecords.Resp) {} // 分页查询定时任务执行记录。
+  rpc TriggerSchedulerScheduledTask(TriggerSchedulerScheduledTask.Req) returns (TriggerSchedulerScheduledTask.Resp) {} // 手动触发一次定时任务。
+  rpc CancelSchedulerScheduledTaskExecution(CancelSchedulerScheduledTaskExecution.Req) returns (CancelSchedulerScheduledTaskExecution.Resp) {} // 取消执行中的定时任务记录。
 }
 
 message UpsertSchedulerScheduledTask {

@@ -40,7 +40,7 @@ func (t *UserSettleLiveness) Execute(ctx context.Context, execution Execution) (
 		return nil, fmt.Errorf("scheduled liveness settlement requires scheduled_at")
 	}
 	date := execution.ScheduledAt.In(time.Local).AddDate(0, 0, -1)
-	response, err := t.client.Liveness.SettleLiveness(ctx, &userv1.SettleUserLiveness_Req{Date: timestamppb.New(date), PageSize: data.GetPageSize()})
+	response, err := t.client.Liveness.SettleUserLiveness(ctx, &userv1.SettleUserLiveness_Req{Date: timestamppb.New(date), PageSize: data.GetPageSize()})
 	if err != nil {
 		return nil, err
 	}

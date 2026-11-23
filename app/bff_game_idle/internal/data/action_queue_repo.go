@@ -24,7 +24,7 @@ func NewActionQueueRepo(
 }
 
 func (r *ActionQueueRepo) List(ctx context.Context, characterID int64) (*model.ActionQueue, error) {
-	reply, err := r.gameIdleClient.ActionQueue.List(ctx, &gameidlev1.ListActionQueue_Request{
+	reply, err := r.gameIdleClient.ActionQueue.ListActionQueue(ctx, &gameidlev1.ListActionQueue_Req{
 		CharacterId: characterID,
 	})
 	if err != nil {
@@ -46,7 +46,7 @@ func (r *ActionQueueRepo) List(ctx context.Context, characterID int64) (*model.A
 }
 
 func (r *ActionQueueRepo) Add(ctx context.Context, req *repo.AddActionReq) error {
-	_, err := r.gameIdleClient.ActionQueue.Add(ctx, &gameidlev1.AddAction_Request{
+	_, err := r.gameIdleClient.ActionQueue.AddAction(ctx, &gameidlev1.AddAction_Req{
 		CharacterId: req.CharacterID,
 		ActionId:    req.ActionID,
 		Times:       req.Times,
@@ -56,7 +56,7 @@ func (r *ActionQueueRepo) Add(ctx context.Context, req *repo.AddActionReq) error
 }
 
 func (r *ActionQueueRepo) Move(ctx context.Context, req *repo.MoveActionReq) error {
-	_, err := r.gameIdleClient.ActionQueue.Move(ctx, &gameidlev1.MoveAction_Request{
+	_, err := r.gameIdleClient.ActionQueue.MoveAction(ctx, &gameidlev1.MoveAction_Req{
 		CharacterId:     req.CharacterID,
 		CurrentPosition: req.CurrentPosition,
 		TargetPosition:  req.TargetPosition,
@@ -65,7 +65,7 @@ func (r *ActionQueueRepo) Move(ctx context.Context, req *repo.MoveActionReq) err
 }
 
 func (r *ActionQueueRepo) Remove(ctx context.Context, req *repo.RemoveActionReq) error {
-	_, err := r.gameIdleClient.ActionQueue.Remove(ctx, &gameidlev1.RemoveAction_Request{
+	_, err := r.gameIdleClient.ActionQueue.RemoveAction(ctx, &gameidlev1.RemoveAction_Req{
 		CharacterId: req.CharacterID,
 		Position:    req.Position,
 	})
@@ -73,7 +73,7 @@ func (r *ActionQueueRepo) Remove(ctx context.Context, req *repo.RemoveActionReq)
 }
 
 func (r *ActionQueueRepo) Clear(ctx context.Context, characterID int64) error {
-	_, err := r.gameIdleClient.ActionQueue.Clear(ctx, &gameidlev1.ClearActionQueue_Request{
+	_, err := r.gameIdleClient.ActionQueue.ClearActionQueue(ctx, &gameidlev1.ClearActionQueue_Req{
 		CharacterId: characterID,
 	})
 	return err

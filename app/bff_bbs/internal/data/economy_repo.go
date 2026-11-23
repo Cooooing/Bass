@@ -21,7 +21,7 @@ func NewEconomyClient(economyClient *rpc.EconomyClient) repo.EconomyClient {
 }
 
 func (r *EconomyClient) GetAccount(ctx context.Context, userID int64) (*repo.EconomyAccount, error) {
-	reply, err := r.economyClient.Economy.GetAccount(ctx, &economyv1.GetEconomyAccount_Req{UserId: userID})
+	reply, err := r.economyClient.Economy.GetEconomyAccount(ctx, &economyv1.GetEconomyAccount_Req{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (r *EconomyClient) ListRecords(ctx context.Context, req *repo.ListEconomyRe
 		page = &commonmodel.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
 	rpcReq := &economyv1.ListEconomyRecords_Req{UserId: req.UserID, Page: page.ToProto(), Direction: req.Direction, RecordType: req.RecordType, Language: req.Language}
-	reply, err := r.economyClient.Economy.ListRecords(ctx, rpcReq)
+	reply, err := r.economyClient.Economy.ListEconomyRecords(ctx, rpcReq)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (r *EconomyClient) ListRecords(ctx context.Context, req *repo.ListEconomyRe
 }
 
 func (r *EconomyClient) TransferPoints(ctx context.Context, req *repo.TransferEconomyPointsReq) (*repo.TransferEconomyPointsResp, error) {
-	reply, err := r.economyClient.Economy.TransferPoints(ctx, &economyv1.TransferEconomyPoints_Req{
+	reply, err := r.economyClient.Economy.TransferEconomyPoints(ctx, &economyv1.TransferEconomyPoints_Req{
 		FromUserId:     req.FromUserID,
 		ToUserId:       req.ToUserID,
 		Amount:         req.Amount,

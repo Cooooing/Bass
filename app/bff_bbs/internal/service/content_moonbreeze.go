@@ -36,7 +36,7 @@ func (s *ContentMoonbreezeService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterMoonbreezeServiceHTTPServer(hs, s)
 }
 
-func (s *ContentMoonbreezeService) Create(
+func (s *ContentMoonbreezeService) CreateMoonbreeze(
 	ctx context.Context,
 	req *bbscontentv1.CreateMoonbreeze_Req,
 ) (*bbscontentv1.CreateMoonbreeze_Resp, error) {
@@ -55,10 +55,10 @@ func (s *ContentMoonbreezeService) Create(
 	return &bbscontentv1.CreateMoonbreeze_Resp{Moonbreeze: s.moonbreezeView(row)}, nil
 }
 
-func (s *ContentMoonbreezeService) PagePublic(
+func (s *ContentMoonbreezeService) PagePublicMoonbreezes(
 	ctx context.Context,
 	req *bbscontentv1.PagePublicMoonbreezes_Req,
-) (*bbscontentv1.PageMoonbreezes_Resp, error) {
+) (*bbscontentv1.PagePublicMoonbreezes_Resp, error) {
 	page, err := s.moonbreezeUsecase.Page(ctx, &usecase.PageMoonbreezesReq{
 		ViewerID: s.currentUserID(ctx),
 		Cursor:   req.Cursor,
@@ -67,39 +67,42 @@ func (s *ContentMoonbreezeService) PagePublic(
 	if err != nil {
 		return nil, err
 	}
-	return s.pageReply(page), nil
+	rows, nextCursor := s.pageRows(page)
+	return &bbscontentv1.PagePublicMoonbreezes_Resp{Rows: rows, NextCursor: nextCursor}, nil
 }
 
-func (s *ContentMoonbreezeService) PageWatching(
+func (s *ContentMoonbreezeService) PageWatchingMoonbreezes(
 	ctx context.Context,
 	req *bbscontentv1.PageWatchingMoonbreezes_Req,
-) (*bbscontentv1.PageMoonbreezes_Resp, error) {
+) (*bbscontentv1.PageWatchingMoonbreezes_Resp, error) {
 	viewerID := s.currentUserID(ctx)
 	page, err := s.moonbreezeUsecase.PageWatching(ctx, viewerID, req.Cursor, req.GetSize())
 	if err != nil {
 		return nil, err
 	}
-	return s.pageReply(page), nil
+	rows, nextCursor := s.pageRows(page)
+	return &bbscontentv1.PageWatchingMoonbreezes_Resp{Rows: rows, NextCursor: nextCursor}, nil
 }
 
-func (s *ContentMoonbreezeService) PageMember(
+func (s *ContentMoonbreezeService) PageMemberMoonbreezes(
 	ctx context.Context,
 	req *bbscontentv1.PageMemberMoonbreezes_Req,
-) (*bbscontentv1.PageMoonbreezes_Resp, error) {
+) (*bbscontentv1.PageMemberMoonbreezes_Resp, error) {
 	viewerID := s.currentUserID(ctx)
 	page, err := s.moonbreezeUsecase.PageMember(ctx, viewerID, req.GetName(), req.Cursor, req.GetSize())
 	if err != nil {
 		return nil, err
 	}
-	return s.pageReply(page), nil
+	rows, nextCursor := s.pageRows(page)
+	return &bbscontentv1.PageMemberMoonbreezes_Resp{Rows: rows, NextCursor: nextCursor}, nil
 }
 
-func (s *ContentMoonbreezeService) pageReply(page *model.PageMoonbreezesResp) *bbscontentv1.PageMoonbreezes_Resp {
+func (s *ContentMoonbreezeService) pageRows(page *model.PageMoonbreezesResp) ([]*bbscontentv1.Moonbreeze, *string) {
 	rows := make([]*bbscontentv1.Moonbreeze, 0, len(page.Rows))
 	for _, row := range page.Rows {
 		rows = append(rows, s.moonbreezeView(row))
 	}
-	return &bbscontentv1.PageMoonbreezes_Resp{Rows: rows, NextCursor: page.NextCursor}
+	return rows, page.NextCursor
 }
 
 func (*ContentMoonbreezeService) moonbreezeView(row *model.Moonbreeze) *bbscontentv1.Moonbreeze {

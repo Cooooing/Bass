@@ -26,23 +26,23 @@ func (s *TCCGlobalChatBarrageService) RegisterGrpc(server *grpc.Server) {
 
 func (*TCCGlobalChatBarrageService) RegisterHTTP(*http.Server) {}
 
-func (s *TCCGlobalChatBarrageService) Try(ctx context.Context, req *imv1.TCCSendGlobalChatBarrage_Req) (*imv1.TCCSendGlobalChatBarrage_Resp, error) {
+func (s *TCCGlobalChatBarrageService) Try(ctx context.Context, req *imv1.TCCGlobalChatBarrage_Req) (*imv1.TCCGlobalChatBarrage_Resp, error) {
 	if err := s.barrages.Try(ctx, req.GetBarrageId(), req.GetUserId(), req.GetContent(), req.GetPointsCost()); err != nil {
 		return nil, err
 	}
-	return &imv1.TCCSendGlobalChatBarrage_Resp{}, nil
+	return &imv1.TCCGlobalChatBarrage_Resp{}, nil
 }
 
-func (s *TCCGlobalChatBarrageService) Confirm(ctx context.Context, req *imv1.TCCSendGlobalChatBarrage_Req) (*imv1.TCCSendGlobalChatBarrage_Resp, error) {
+func (s *TCCGlobalChatBarrageService) Confirm(ctx context.Context, req *imv1.TCCGlobalChatBarrage_Req) (*imv1.TCCGlobalChatBarrage_Resp, error) {
 	if err := s.barrages.Confirm(ctx, req.GetBarrageId()); err != nil {
 		return nil, err
 	}
-	return &imv1.TCCSendGlobalChatBarrage_Resp{}, nil
+	return &imv1.TCCGlobalChatBarrage_Resp{}, nil
 }
 
-func (s *TCCGlobalChatBarrageService) Cancel(ctx context.Context, req *imv1.TCCSendGlobalChatBarrage_Req) (*imv1.TCCSendGlobalChatBarrage_Resp, error) {
+func (s *TCCGlobalChatBarrageService) Cancel(ctx context.Context, req *imv1.TCCGlobalChatBarrage_Req) (*imv1.TCCGlobalChatBarrage_Resp, error) {
 	if err := s.barrages.Cancel(ctx, req.GetBarrageId()); err != nil {
 		return nil, err
 	}
-	return &imv1.TCCSendGlobalChatBarrage_Resp{}, nil
+	return &imv1.TCCGlobalChatBarrage_Resp{}, nil
 }

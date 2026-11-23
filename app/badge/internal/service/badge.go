@@ -31,7 +31,7 @@ func (s *BadgeService) RegisterGrpc(server *grpc.Server) { v1.RegisterBadgeServi
 func (*BadgeService) RegisterHTTP(*transporthttp.Server) {}
 
 // RenderMaker renders a typed Maker request after BFF has authenticated its designer.
-func (s *BadgeService) RenderMaker(ctx context.Context, req *v1.RenderMakerBadge_Req) (*v1.RenderMakerBadge_Resp, error) {
+func (s *BadgeService) RenderMakerBadge(ctx context.Context, req *v1.RenderMakerBadge_Req) (*v1.RenderMakerBadge_Resp, error) {
 	svg, err := s.renderUsecase.RenderSpec(ctx, req.GetRenderSpec())
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (s *BadgeService) RenderMaker(ctx context.Context, req *v1.RenderMakerBadge
 }
 
 // RenderPublished loads a published badge and renders its stored parameters.
-func (s *BadgeService) RenderPublished(ctx context.Context, req *v1.RenderPublishedBadge_Req) (*v1.RenderPublishedBadge_Resp, error) {
+func (s *BadgeService) RenderPublishedBadge(ctx context.Context, req *v1.RenderPublishedBadge_Req) (*v1.RenderPublishedBadge_Resp, error) {
 	item, err := s.badgeUsecase.PublishedByCode(ctx, req.GetBadgeCode())
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (s *BadgeService) RenderPublished(ctx context.Context, req *v1.RenderPublis
 	return &v1.RenderPublishedBadge_Resp{Svg: svg}, nil
 }
 
-func (s *BadgeService) UpsertDraft(ctx context.Context, req *v1.UpsertBadgeDraft_Req) (*v1.UpsertBadgeDraft_Resp, error) {
+func (s *BadgeService) UpsertBadgeDraft(ctx context.Context, req *v1.UpsertBadgeDraft_Req) (*v1.UpsertBadgeDraft_Resp, error) {
 	if req == nil || req.GetRenderSpec() == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -81,7 +81,7 @@ func (s *BadgeService) UpsertDraft(ctx context.Context, req *v1.UpsertBadgeDraft
 	return &v1.UpsertBadgeDraft_Resp{Badge: s.badge(item)}, nil
 }
 
-func (s *BadgeService) DeleteDraft(ctx context.Context, req *v1.DeleteBadgeDraft_Req) (*v1.DeleteBadgeDraft_Resp, error) {
+func (s *BadgeService) DeleteBadgeDraft(ctx context.Context, req *v1.DeleteBadgeDraft_Req) (*v1.DeleteBadgeDraft_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -92,7 +92,7 @@ func (s *BadgeService) DeleteDraft(ctx context.Context, req *v1.DeleteBadgeDraft
 }
 
 // Publish promotes a validated draft after the calling BFF has checked administrator permission.
-func (s *BadgeService) Publish(ctx context.Context, req *v1.PublishBadgeDraft_Req) (*v1.PublishBadgeDraft_Resp, error) {
+func (s *BadgeService) PublishBadgeDraft(ctx context.Context, req *v1.PublishBadgeDraft_Req) (*v1.PublishBadgeDraft_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -104,7 +104,7 @@ func (s *BadgeService) Publish(ctx context.Context, req *v1.PublishBadgeDraft_Re
 }
 
 // ListDesignerDrafts exposes only the requested designer's remaining editable drafts.
-func (s *BadgeService) ListDesignerDrafts(ctx context.Context, req *v1.ListDesignerBadgeDrafts_Req) (*v1.ListDesignerBadgeDrafts_Resp, error) {
+func (s *BadgeService) ListDesignerBadgeDrafts(ctx context.Context, req *v1.ListDesignerBadgeDrafts_Req) (*v1.ListDesignerBadgeDrafts_Resp, error) {
 	items, err := s.badgeUsecase.ListDrafts(ctx, req.GetDesignerUserId())
 	if err != nil {
 		return nil, err
@@ -117,7 +117,7 @@ func (s *BadgeService) ListDesignerDrafts(ctx context.Context, req *v1.ListDesig
 }
 
 // Grant records every requested award as one atomic batch.
-func (s *BadgeService) Grant(ctx context.Context, req *v1.GrantBadge_Req) (*v1.GrantBadge_Resp, error) {
+func (s *BadgeService) GrantBadge(ctx context.Context, req *v1.GrantBadge_Req) (*v1.GrantBadge_Resp, error) {
 	if req == nil || len(req.GetItems()) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -153,7 +153,7 @@ func (s *BadgeService) Grant(ctx context.Context, req *v1.GrantBadge_Req) (*v1.G
 }
 
 // Revoke removes every requested user badge relation as one atomic batch.
-func (s *BadgeService) Revoke(ctx context.Context, req *v1.RevokeBadge_Req) (*v1.RevokeBadge_Resp, error) {
+func (s *BadgeService) RevokeBadge(ctx context.Context, req *v1.RevokeBadge_Req) (*v1.RevokeBadge_Resp, error) {
 	if req == nil || len(req.GetItems()) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -174,7 +174,7 @@ func (s *BadgeService) Revoke(ctx context.Context, req *v1.RevokeBadge_Req) (*v1
 }
 
 // UpdatePresentation persists a user's public visibility and ordering choice.
-func (s *BadgeService) UpdatePresentation(ctx context.Context, req *v1.UpdateUserBadgePresentation_Req) (*v1.UpdateUserBadgePresentation_Resp, error) {
+func (s *BadgeService) UpdateUserBadgePresentation(ctx context.Context, req *v1.UpdateUserBadgePresentation_Req) (*v1.UpdateUserBadgePresentation_Resp, error) {
 	item, err := s.badgeUsecase.UpdatePresentation(
 		ctx,
 		req.GetUserId(),

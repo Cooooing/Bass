@@ -10,14 +10,14 @@ import "user/v1/enum/relation.proto";
 option go_package = "common/proto/gen/user/v1;v1";
 
 service RelationService {
-  rpc Follow(FollowRelation.Req) returns (FollowRelation.Resp) {} // 账号关注目标账号，并同步维护双方关注统计。
-  rpc Unfollow(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {} // 账号取消关注目标账号，并同步维护双方关注统计。
-  rpc Block(BlockRelation.Req) returns (BlockRelation.Resp) {} // 账号拉黑目标账号，并同步维护双方拉黑统计。
-  rpc Unblock(UnblockRelation.Req) returns (UnblockRelation.Resp) {} // 账号取消拉黑目标账号，并同步维护双方拉黑统计。
-  rpc ListFollowing(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {} // 查询账号关注的账号列表。
-  rpc ListFollowers(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {} // 查询账号的粉丝关系列表。
-  rpc ListBlocked(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {} // 查询账号拉黑的账号列表。
-  rpc MapStatus(MapRelationStatuses.Req) returns (MapRelationStatuses.Resp) {} // 查询账号与多个目标账号之间的关系状态映射。
+  rpc FollowRelation(FollowRelation.Req) returns (FollowRelation.Resp) {} // 账号关注目标账号，并同步维护双方关注统计。
+  rpc UnfollowRelation(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {} // 账号取消关注目标账号，并同步维护双方关注统计。
+  rpc BlockRelation(BlockRelation.Req) returns (BlockRelation.Resp) {} // 账号拉黑目标账号，并同步维护双方拉黑统计。
+  rpc UnblockRelation(UnblockRelation.Req) returns (UnblockRelation.Resp) {} // 账号取消拉黑目标账号，并同步维护双方拉黑统计。
+  rpc ListFollowingRelations(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {} // 查询账号关注的账号列表。
+  rpc ListFollowersRelations(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {} // 查询账号的粉丝关系列表。
+  rpc ListBlockedRelations(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {} // 查询账号拉黑的账号列表。
+  rpc MapRelationStatuses(MapRelationStatuses.Req) returns (MapRelationStatuses.Resp) {} // 查询账号与多个目标账号之间的关系状态映射。
   rpc ListBlockedCounterparts(ListBlockedCounterparts.Req) returns (ListBlockedCounterparts.Resp) {} // 查询与账号存在任一方向拉黑关系的账号。
 }
 

@@ -28,7 +28,7 @@ func NewRelationClient(
 }
 
 func (r *RelationClient) Follow(ctx context.Context, req *repo.FollowRelationReq) error {
-	_, err := r.userClient.Relation.Follow(ctx, &userv1.FollowRelation_Req{
+	_, err := r.userClient.Relation.FollowRelation(ctx, &userv1.FollowRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
 	})
@@ -39,7 +39,7 @@ func (r *RelationClient) Follow(ctx context.Context, req *repo.FollowRelationReq
 }
 
 func (r *RelationClient) Unfollow(ctx context.Context, req *repo.UnfollowRelationReq) error {
-	_, err := r.userClient.Relation.Unfollow(ctx, &userv1.UnfollowRelation_Req{
+	_, err := r.userClient.Relation.UnfollowRelation(ctx, &userv1.UnfollowRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
 	})
@@ -50,7 +50,7 @@ func (r *RelationClient) Unfollow(ctx context.Context, req *repo.UnfollowRelatio
 }
 
 func (r *RelationClient) Block(ctx context.Context, req *repo.BlockRelationReq) error {
-	_, err := r.userClient.Relation.Block(ctx, &userv1.BlockRelation_Req{
+	_, err := r.userClient.Relation.BlockRelation(ctx, &userv1.BlockRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
 	})
@@ -61,7 +61,7 @@ func (r *RelationClient) Block(ctx context.Context, req *repo.BlockRelationReq) 
 }
 
 func (r *RelationClient) Unblock(ctx context.Context, req *repo.UnblockRelationReq) error {
-	_, err := r.userClient.Relation.Unblock(ctx, &userv1.UnblockRelation_Req{
+	_, err := r.userClient.Relation.UnblockRelation(ctx, &userv1.UnblockRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
 	})
@@ -72,7 +72,7 @@ func (r *RelationClient) Unblock(ctx context.Context, req *repo.UnblockRelationR
 }
 
 func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollowingRelationsReq) (*repo.ListFollowingRelationsResp, error) {
-	reply, err := r.userClient.Relation.ListFollowing(ctx, &userv1.ListFollowingRelations_Req{Page: req.Page.ToProto(), UserId: req.ActorID, ExcludedUserIds: req.ExcludedUserIDs})
+	reply, err := r.userClient.Relation.ListFollowingRelations(ctx, &userv1.ListFollowingRelations_Req{Page: req.Page.ToProto(), UserId: req.ActorID, ExcludedUserIds: req.ExcludedUserIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollow
 }
 
 func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollowersRelationsReq) (*repo.ListFollowersRelationsResp, error) {
-	reply, err := r.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{Page: req.Page.ToProto(), UserId: req.ActorID, ExcludedUserIds: req.ExcludedUserIDs})
+	reply, err := r.userClient.Relation.ListFollowersRelations(ctx, &userv1.ListFollowersRelations_Req{Page: req.Page.ToProto(), UserId: req.ActorID, ExcludedUserIds: req.ExcludedUserIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedR
 			Size: req.Page.Size,
 		}
 	}
-	reply, err := r.userClient.Relation.ListBlocked(ctx, &userv1.ListBlockedRelations_Req{
+	reply, err := r.userClient.Relation.ListBlockedRelations(ctx, &userv1.ListBlockedRelations_Req{
 		Page:   pageReq.ToProto(),
 		UserId: req.ActorID,
 	})
@@ -158,7 +158,7 @@ func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedR
 }
 
 func (r *RelationClient) GetStatus(ctx context.Context, req *repo.GetStatusRelationReq) (*repo.RelationStatus, error) {
-	reply, err := r.userClient.Relation.MapStatus(ctx, &userv1.MapRelationStatuses_Req{
+	reply, err := r.userClient.Relation.MapRelationStatuses(ctx, &userv1.MapRelationStatuses_Req{
 		ActorId:   req.ActorID,
 		TargetIds: []int64{req.TargetID},
 	})
@@ -182,7 +182,7 @@ func (r *RelationClient) MapStatus(ctx context.Context, actorID int64, targetIDs
 	if actorID == 0 || len(targetIDs) == 0 {
 		return map[int64]*repo.RelationStatus{}, nil
 	}
-	reply, err := r.userClient.Relation.MapStatus(ctx, &userv1.MapRelationStatuses_Req{ActorId: actorID, TargetIds: targetIDs})
+	reply, err := r.userClient.Relation.MapRelationStatuses(ctx, &userv1.MapRelationStatuses_Req{ActorId: actorID, TargetIds: targetIDs})
 	if err != nil {
 		return nil, err
 	}

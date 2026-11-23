@@ -29,7 +29,7 @@ func (s *GlobalChatBarrageService) RegisterGrpc(server *grpc.Server) {
 
 func (*GlobalChatBarrageService) RegisterHTTP(*http.Server) {}
 
-func (s *GlobalChatBarrageService) Send(ctx context.Context, req *imv1.SendGlobalChatBarrage_Req) (*imv1.SendGlobalChatBarrage_Resp, error) {
+func (s *GlobalChatBarrageService) SendGlobalChatBarrage(ctx context.Context, req *imv1.SendGlobalChatBarrage_Req) (*imv1.SendGlobalChatBarrage_Resp, error) {
 	barrage, err := s.barrages.Send(ctx, req.GetUserId(), req.GetContent())
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (s *GlobalChatBarrageService) Send(ctx context.Context, req *imv1.SendGloba
 	return &imv1.SendGlobalChatBarrage_Resp{Barrage: s.barrageProto(barrage)}, nil
 }
 
-func (s *GlobalChatBarrageService) List(ctx context.Context, req *imv1.ListGlobalChatBarrages_Req) (*imv1.ListGlobalChatBarrages_Resp, error) {
+func (s *GlobalChatBarrageService) ListGlobalChatBarrages(ctx context.Context, req *imv1.ListGlobalChatBarrages_Req) (*imv1.ListGlobalChatBarrages_Resp, error) {
 	rows, page, err := s.barrages.List(ctx, req.UserId, commonmodel.PageReqFromProto(req.GetPage()))
 	if err != nil {
 		return nil, err

@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"encoding/json/jsontext"
 	jsonv2 "encoding/json/v2"
+	"fmt"
 	"net/http"
 	"runtime/debug"
 
@@ -20,11 +21,22 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// rawHTTPResponse 标识需要绕过 JSON 信封直接写出的协议响应。
+//
+// Proto 响应仍保持 X.Resp 结构，由生成的 GetRawBody 方法满足该接口。
+type rawHTTPResponse interface {
+	GetRawBody() *common.ImageResp
+}
+
 func HttpRespEncoder(w http.ResponseWriter, r *http.Request, data any) error {
-	if ImageResp, ok := data.(*common.ImageResp); ok {
-		w.Header().Set("Content-Type", ImageResp.ContentType)
+	if response, ok := data.(rawHTTPResponse); ok {
+		body := response.GetRawBody()
+		if body == nil {
+			return fmt.Errorf("raw HTTP response body is nil")
+		}
+		w.Header().Set("Content-Type", body.ContentType)
 		w.WriteHeader(http.StatusOK)
-		_, err := w.Write(ImageResp.Data)
+		_, err := w.Write(body.Data)
 		if err != nil {
 			return err
 		}

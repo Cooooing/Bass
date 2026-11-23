@@ -39,7 +39,7 @@ func NewDomainService(
 	}
 }
 
-func (s *DomainService) BatchCreate(ctx context.Context, req *v1.BatchCreateDomains_Req) (*v1.BatchCreateDomains_Resp, error) {
+func (s *DomainService) BatchCreateDomains(ctx context.Context, req *v1.BatchCreateDomains_Req) (*v1.BatchCreateDomains_Resp, error) {
 	if req.UserId <= 0 || len(req.Domains) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -92,7 +92,7 @@ func (s *DomainService) BatchCreate(ctx context.Context, req *v1.BatchCreateDoma
 	return &v1.BatchCreateDomains_Resp{Rows: rows}, nil
 }
 
-func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Req) (*v1.UpdateDomain_Resp, error) {
+func (s *DomainService) UpdateDomain(ctx context.Context, req *v1.UpdateDomain_Req) (*v1.UpdateDomain_Resp, error) {
 	if req.Domain == nil || req.UserId <= 0 || req.Domain.Id <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -137,7 +137,7 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Req) (*
 	return &v1.UpdateDomain_Resp{Domain: reply}, nil
 }
 
-func (s *DomainService) Map(ctx context.Context, req *v1.MapDomains_Req) (*v1.MapDomains_Resp, error) {
+func (s *DomainService) MapDomains(ctx context.Context, req *v1.MapDomains_Req) (*v1.MapDomains_Resp, error) {
 	req = util.OrDefault(req, &v1.MapDomains_Req{})
 	var status *enum.DomainStatus
 	if req.Status != nil {
@@ -166,7 +166,7 @@ func (s *DomainService) Map(ctx context.Context, req *v1.MapDomains_Req) (*v1.Ma
 	return &v1.MapDomains_Resp{Domains: domains}, nil
 }
 
-func (s *DomainService) List(ctx context.Context, req *v1.ListDomains_Req) (*v1.ListDomains_Resp, error) {
+func (s *DomainService) ListDomains(ctx context.Context, req *v1.ListDomains_Req) (*v1.ListDomains_Resp, error) {
 	query := req.GetQuery()
 	if query == nil {
 		query = &v1.ListDomains_Req_Query{}
@@ -222,7 +222,7 @@ func (s *DomainService) List(ctx context.Context, req *v1.ListDomains_Req) (*v1.
 	return &v1.ListDomains_Resp{Rows: rows}, nil
 }
 
-func (s *DomainService) Page(ctx context.Context, req *v1.PageDomains_Req) (*v1.PageDomains_Resp, error) {
+func (s *DomainService) PageDomains(ctx context.Context, req *v1.PageDomains_Req) (*v1.PageDomains_Resp, error) {
 	query := req.GetQuery()
 	if query == nil {
 		query = &v1.PageDomains_Req_Query{}

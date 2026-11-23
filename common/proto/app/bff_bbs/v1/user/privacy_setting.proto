@@ -10,7 +10,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 // 账号隐私设置接口。
 service PrivacySettingService {
   // 获取当前账号的隐私设置。
-  rpc GetCurrent(GetCurrentPrivacySetting.Req) returns (GetCurrentPrivacySetting.Resp) {
+  rpc GetCurrentPrivacySetting(GetCurrentPrivacySetting.Req) returns (GetCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/get-current"
       body: "*"
@@ -18,7 +18,7 @@ service PrivacySettingService {
   }
 
   // 更新当前账号的隐私设置。
-  rpc UpdateCurrent(UpdateCurrentPrivacySetting.Req) returns (UpdateCurrentPrivacySetting.Resp) {
+  rpc UpdateCurrentPrivacySetting(UpdateCurrentPrivacySetting.Req) returns (UpdateCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/update-current"
       body: "*"

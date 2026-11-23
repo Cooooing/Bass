@@ -3,6 +3,7 @@ syntax = "proto3";
 package common.api.app.bff_game_idle.v1;
 
 import "google/api/annotations.proto";
+
 option go_package = "common/proto/gen/bff_game_idle/v1;v1";
 
 enum WebSocketMessageType {
@@ -33,7 +34,7 @@ enum WebSocketMessageType {
 // WebSocketService 提供摸鱼放置 WS 辅助入口。
 service WebSocketService {
   // 创建角色 WS 连接凭证。
-  rpc CreateTicket(CreateWebSocketTicket.Req) returns (CreateWebSocketTicket.Resp) {
+  rpc CreateWebSocketTicket(CreateWebSocketTicket.Req) returns (CreateWebSocketTicket.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/ws/create-ticket"
       body: "*"

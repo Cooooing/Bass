@@ -28,7 +28,7 @@ func NewContentPostscriptClient(
 }
 
 func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.AddPostscriptReq) (*model.ArticlePostscript, error) {
-	reply, err := r.contentClient.Postscript.Add(ctx, &contentv1.AddPostscript_Req{
+	reply, err := r.contentClient.Postscript.AddPostscript(ctx, &contentv1.AddPostscript_Req{
 		ArticleId: req.ArticleID,
 		Content:   req.Content,
 		Access: &contentv1.ContentAccess{
@@ -59,7 +59,7 @@ func (r *ContentPostscriptClient) ListPostscripts(ctx context.Context, req *repo
 		access.Scope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
 		access.ActorUserId = new(req.UserID)
 	}
-	reply, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{ArticleId: req.ArticleID, Access: access})
+	reply, err := r.contentClient.Postscript.ListPostscripts(ctx, &contentv1.ListPostscripts_Req{ArticleId: req.ArticleID, Access: access})
 	if err != nil {
 		return nil, err
 	}

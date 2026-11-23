@@ -31,7 +31,7 @@ func (s *MetaActionService) RegisterGrpc(server *grpc.Server) {
 func (s *MetaActionService) RegisterHTTP(*http.Server) {
 }
 
-func (s *MetaActionService) List(ctx context.Context, req *v1.ListActions_Request) (*v1.ListActions_Resp, error) {
+func (s *MetaActionService) ListActions(ctx context.Context, req *v1.ListActions_Req) (*v1.ListActions_Resp, error) {
 	rows, err := s.actionUsecase.List(ctx)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (s *MetaActionService) List(ctx context.Context, req *v1.ListActions_Reques
 	return &v1.ListActions_Resp{Rows: out}, nil
 }
 
-func (s *MetaActionService) GetDetail(ctx context.Context, req *v1.GetActionDetail_Request) (*v1.GetActionDetail_Resp, error) {
+func (s *MetaActionService) GetActionDetail(ctx context.Context, req *v1.GetActionDetail_Req) (*v1.GetActionDetail_Resp, error) {
 	if req.GetActionId() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -122,7 +122,7 @@ func (s *MetaActionService) GetDetail(ctx context.Context, req *v1.GetActionDeta
 	return &v1.GetActionDetail_Resp{Row: out}, nil
 }
 
-func (s *MetaActionService) Refresh(ctx context.Context, req *v1.RefreshActions_Request) (*v1.RefreshActions_Resp, error) {
+func (s *MetaActionService) RefreshActions(ctx context.Context, req *v1.RefreshActions_Req) (*v1.RefreshActions_Resp, error) {
 	if err := s.actionUsecase.Refresh(ctx); err != nil {
 		return nil, err
 	}

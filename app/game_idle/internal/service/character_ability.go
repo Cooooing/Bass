@@ -32,9 +32,9 @@ func (s *CharacterAbilityService) RegisterGrpc(server *grpc.Server) {
 func (s *CharacterAbilityService) RegisterHTTP(*http.Server) {
 }
 
-func (s *CharacterAbilityService) Get(
+func (s *CharacterAbilityService) GetCharacterAbility(
 	ctx context.Context,
-	req *v1.GetCharacterAbility_Request,
+	req *v1.GetCharacterAbility_Req,
 ) (*v1.GetCharacterAbility_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

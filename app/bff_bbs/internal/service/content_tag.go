@@ -38,7 +38,7 @@ func (s *ContentTagService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterTagServiceHTTPServer(hs, s)
 }
 
-func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.CreateTag_Req) (*bbscontentv1.CreateTag_Resp, error) {
+func (s *ContentTagService) CreateTag(ctx context.Context, req *bbscontentv1.CreateTag_Req) (*bbscontentv1.CreateTag_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -91,7 +91,7 @@ func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.Create
 	}, nil
 }
 
-func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.UpdateTag_Req) (*bbscontentv1.UpdateTag_Resp, error) {
+func (s *ContentTagService) UpdateTag(ctx context.Context, req *bbscontentv1.UpdateTag_Req) (*bbscontentv1.UpdateTag_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -145,7 +145,7 @@ func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.Update
 	}, nil
 }
 
-func (s *ContentTagService) BindArticle(ctx context.Context, req *bbscontentv1.BindArticleTags_Req) (*bbscontentv1.BindArticleTags_Resp, error) {
+func (s *ContentTagService) BindArticleTags(ctx context.Context, req *bbscontentv1.BindArticleTags_Req) (*bbscontentv1.BindArticleTags_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -158,7 +158,7 @@ func (s *ContentTagService) BindArticle(ctx context.Context, req *bbscontentv1.B
 	return &bbscontentv1.BindArticleTags_Resp{}, err
 }
 
-func (s *ContentTagService) UnbindArticle(ctx context.Context, req *bbscontentv1.UnbindArticleTags_Req) (*bbscontentv1.UnbindArticleTags_Resp, error) {
+func (s *ContentTagService) UnbindArticleTags(ctx context.Context, req *bbscontentv1.UnbindArticleTags_Req) (*bbscontentv1.UnbindArticleTags_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -212,7 +212,7 @@ func (s *ContentTagService) ListArticleTags(ctx context.Context, req *bbscontent
 	}, nil
 }
 
-func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags_Req) (*bbscontentv1.ListTags_Resp, error) {
+func (s *ContentTagService) ListTags(ctx context.Context, req *bbscontentv1.ListTags_Req) (*bbscontentv1.ListTags_Resp, error) {
 	resp, err := s.contentTagUsecase.ListTags(ctx, &usecase.ListTagsReq{
 		Page:  commonmodel.PageReqFromProto(req.GetPage()),
 		Query: req.GetQuery(),

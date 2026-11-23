@@ -35,7 +35,7 @@ func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
 func (s *PreferencesService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Req) (*v1.GetPreferences_Resp, error) {
+func (s *PreferencesService) GetPreferences(ctx context.Context, req *v1.GetPreferences_Req) (*v1.GetPreferences_Resp, error) {
 	res, err := s.preferencesUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -56,7 +56,7 @@ func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Req
 	}, nil
 }
 
-func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferences_Req) (*v1.UpdatePreferences_Resp, error) {
+func (s *PreferencesService) UpdatePreferences(ctx context.Context, req *v1.UpdatePreferences_Req) (*v1.UpdatePreferences_Resp, error) {
 	var language *enum.Language
 	if req.Language != nil {
 		if *req.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {

@@ -28,7 +28,7 @@ func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int6
 	if len(userIDs) == 0 {
 		return map[int64]*model.UserAccountBasic{}, nil
 	}
-	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+	reply, err := c.userClient.Account.MapAccounts(ctx, &userv1.MapAccounts_Req{
 		Query: &userv1.MapAccounts_Req_AccountQuery{
 			UserIds: userIDs,
 		},

@@ -34,7 +34,7 @@ func (s *HolidayService) RegisterGrpc(gs *grpc.Server) {
 func (s *HolidayService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *HolidayService) GetCurrent(ctx context.Context, req *v1.GetCurrentHoliday_Req) (*v1.GetCurrentHoliday_Resp, error) {
+func (s *HolidayService) GetCurrentHoliday(ctx context.Context, req *v1.GetCurrentHoliday_Req) (*v1.GetCurrentHoliday_Resp, error) {
 	info, err := s.holidayUsecase.Get(ctx)
 	if err != nil {
 		return nil, err

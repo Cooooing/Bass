@@ -38,7 +38,7 @@ func (s *CharacterService) RegisterGrpc(server *grpc.Server) {
 func (s *CharacterService) RegisterHTTP(*http.Server) {
 }
 
-func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_Request) (*v1.CreateCharacter_Resp, error) {
+func (s *CharacterService) CreateCharacter(ctx context.Context, req *v1.CreateCharacter_Req) (*v1.CreateCharacter_Resp, error) {
 	if req.GetUserId() <= 0 || req.GetName() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -70,7 +70,7 @@ func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_R
 	return &v1.CreateCharacter_Resp{Row: character}, nil
 }
 
-func (s *CharacterService) Get(ctx context.Context, req *v1.GetCharacter_Request) (*v1.GetCharacter_Resp, error) {
+func (s *CharacterService) GetCharacter(ctx context.Context, req *v1.GetCharacter_Req) (*v1.GetCharacter_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -106,7 +106,7 @@ func (s *CharacterService) Get(ctx context.Context, req *v1.GetCharacter_Request
 	return &v1.GetCharacter_Resp{Rows: characters}, nil
 }
 
-func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineCharacter_Request) (*v1.OnlineCharacter_Resp, error) {
+func (s *CharacterService) OnlineCharacter(ctx context.Context, req *v1.OnlineCharacter_Req) (*v1.OnlineCharacter_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -125,7 +125,7 @@ func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineCharacter_R
 	}, nil
 }
 
-func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineCharacter_Request) (*v1.OfflineCharacter_Resp, error) {
+func (s *CharacterService) OfflineCharacter(ctx context.Context, req *v1.OfflineCharacter_Req) (*v1.OfflineCharacter_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetSessionId() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -142,7 +142,7 @@ func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineCharacter
 	return &v1.OfflineCharacter_Resp{}, nil
 }
 
-func (s *CharacterService) Ping(ctx context.Context, req *v1.PingCharacter_Request) (*v1.PingCharacter_Resp, error) {
+func (s *CharacterService) PingCharacter(ctx context.Context, req *v1.PingCharacter_Req) (*v1.PingCharacter_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetSessionId() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

@@ -15,9 +15,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 service AuthService {
   // 检查注册字段是否可用。
   rpc CheckRegistrationAvailability(CheckRegistrationAvailability.Req) returns (CheckRegistrationAvailability.Resp) {
-    option (google.api.http) = {
-      get: "/v1/user/auth/register-availability"
-    };
+    option (google.api.http) = {get: "/v1/user/auth/register-availability"};
   }
   // 注册账号。
   rpc Register(Register.Req) returns (Register.Resp) {
@@ -103,6 +101,7 @@ message Register {
   }
   message Resp {}
 }
+
 // 登录账号。
 message Login {
   message Req {
@@ -123,9 +122,7 @@ message Login {
     }
 
     LoginType type = 1; // 登录方式
-    option (gnostic.openapi.v3.schema) = {
-      required: "type"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "type"};
 
     oneof credential {
       PasswordCredential password_credential = 10; // 密码登录凭证
@@ -173,9 +170,7 @@ message Login {
 message RefreshToken {
   message Req {
     string refresh_token = 1; // refresh token
-    option (gnostic.openapi.v3.schema) = {
-      required: "refresh_token"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "refresh_token"};
   }
   message Resp {
     string access_token = 1; // 新 access token
@@ -197,9 +192,7 @@ message CancelAccount {
   message Req {
     string password = 1; // 当前密码
     string code = 2; // 启用 TOTP 时作为 TOTP code
-    option (gnostic.openapi.v3.schema) = {
-      required: "password"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "password"};
   }
   message Resp {}
 }

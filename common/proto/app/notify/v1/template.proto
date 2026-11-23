@@ -5,7 +5,7 @@ package common.api.app.notify.v1;
 option go_package = "common/proto/gen/notify/v1;v1";
 
 service NotifyTemplateService {
-  rpc Preview(PreviewNotificationTemplate.Req) returns (PreviewNotificationTemplate.Resp) {} // 渲染预览通知模板。
+  rpc PreviewNotificationTemplate(PreviewNotificationTemplate.Req) returns (PreviewNotificationTemplate.Resp) {} // 渲染预览通知模板。
 }
 
 message PreviewNotificationTemplate {

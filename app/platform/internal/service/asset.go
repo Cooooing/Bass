@@ -31,7 +31,7 @@ func (s *AssetService) RegisterGrpc(server *grpc.Server) {
 
 func (s *AssetService) RegisterHTTP(*transporthttp.Server) {}
 
-func (s *AssetService) PrepareDirectUpload(ctx context.Context, req *v1.PrepareDirectAssetUpload_Req) (*v1.PrepareDirectAssetUpload_Resp, error) {
+func (s *AssetService) PrepareDirectAssetUpload(ctx context.Context, req *v1.PrepareDirectAssetUpload_Req) (*v1.PrepareDirectAssetUpload_Resp, error) {
 	result, err := s.assetUsecase.PrepareDirectUpload(ctx, &usecase.PrepareDirectAssetUploadReq{
 		Hash:       req.GetHash(),
 		MimeType:   req.GetMimeType(),
@@ -51,7 +51,7 @@ func (s *AssetService) PrepareDirectUpload(ctx context.Context, req *v1.PrepareD
 	return response, nil
 }
 
-func (s *AssetService) GetAvailableByHash(ctx context.Context, req *v1.GetAvailableAssetByHash_Req) (*v1.GetAvailableAssetByHash_Resp, error) {
+func (s *AssetService) GetAvailableAssetByHash(ctx context.Context, req *v1.GetAvailableAssetByHash_Req) (*v1.GetAvailableAssetByHash_Resp, error) {
 	asset, err := s.assetUsecase.GetAvailableByHash(ctx, req.GetHash())
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (s *AssetService) GetAvailableByHash(ctx context.Context, req *v1.GetAvaila
 	return &v1.GetAvailableAssetByHash_Resp{Asset: s.asset(asset)}, nil
 }
 
-func (s *AssetService) ResolvePublic(ctx context.Context, req *v1.ResolvePublicAssets_Req) (*v1.ResolvePublicAssets_Resp, error) {
+func (s *AssetService) ResolvePublicAssets(ctx context.Context, req *v1.ResolvePublicAssets_Req) (*v1.ResolvePublicAssets_Resp, error) {
 	urls, err := s.assetUsecase.ResolvePublic(ctx, req.GetAssetIds())
 	if err != nil {
 		return nil, err
@@ -67,14 +67,14 @@ func (s *AssetService) ResolvePublic(ctx context.Context, req *v1.ResolvePublicA
 	return &v1.ResolvePublicAssets_Resp{Urls: urls}, nil
 }
 
-func (s *AssetService) ValidateAvailable(ctx context.Context, req *v1.ValidateAvailableAsset_Req) (*v1.ValidateAvailableAsset_Resp, error) {
+func (s *AssetService) ValidateAvailableAsset(ctx context.Context, req *v1.ValidateAvailableAsset_Req) (*v1.ValidateAvailableAsset_Resp, error) {
 	if err := s.assetUsecase.ValidateAvailable(ctx, req.GetAssetId()); err != nil {
 		return nil, err
 	}
 	return &v1.ValidateAvailableAsset_Resp{}, nil
 }
 
-func (s *AssetService) Block(ctx context.Context, req *v1.BlockAsset_Req) (*v1.BlockAsset_Resp, error) {
+func (s *AssetService) BlockAsset(ctx context.Context, req *v1.BlockAsset_Req) (*v1.BlockAsset_Resp, error) {
 	if err := s.assetUsecase.Block(ctx, req.GetAssetId(), req.GetReason(), req.GetOperatorUserId()); err != nil {
 		return nil, err
 	}

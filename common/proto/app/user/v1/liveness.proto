@@ -9,11 +9,10 @@ option go_package = "common/proto/gen/user/v1;v1";
 
 // LivenessService 提供用户每日活跃度查询、日结与奖励领取能力。
 service LivenessService {
-  rpc GetLiveness(GetUserLiveness.Req) returns (GetUserLiveness.Resp) {} // 查询指定业务日的活跃度。
-  rpc ClaimLivenessReward(ClaimUserLivenessReward.Req) returns (ClaimUserLivenessReward.Resp) {} // 领取指定业务日已结算的活跃奖励。
-  rpc SettleLiveness(SettleUserLiveness.Req) returns (SettleUserLiveness.Resp) {} // 结算指定业务日并自动签到。
+  rpc GetUserLiveness(GetUserLiveness.Req) returns (GetUserLiveness.Resp) {} // 查询指定业务日的活跃度。
+  rpc ClaimUserLivenessReward(ClaimUserLivenessReward.Req) returns (ClaimUserLivenessReward.Resp) {} // 领取指定业务日已结算的活跃奖励。
+  rpc SettleUserLiveness(SettleUserLiveness.Req) returns (SettleUserLiveness.Resp) {} // 结算指定业务日并自动签到。
 }
-
 
 // UserLivenessDetail 表示按来源聚合的活跃行为次数。
 message UserLivenessDetail {

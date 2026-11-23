@@ -71,7 +71,7 @@ func (t *ContentFlushArticleViews) Execute(ctx context.Context, execution Execut
 	if data.GetLimit() > 0 {
 		limit = data.GetLimit()
 	}
-	response, err := t.contentClient.Article.FlushViews(ctx, &contentv1.FlushArticleViews_Req{Limit: limit})
+	response, err := t.contentClient.Article.FlushArticleViews(ctx, &contentv1.FlushArticleViews_Req{Limit: limit})
 	if err != nil {
 		return nil, err
 	}

@@ -34,7 +34,7 @@ func (s *RealtimeService) RegisterGrpc(server *kratosgrpc.Server) {
 
 func (*RealtimeService) RegisterHTTP(*http.Server) {}
 
-func (s *RealtimeService) QueryOnline(ctx context.Context, req *realtimehubv1.QueryRealtimeOnline_Req) (*realtimehubv1.QueryRealtimeOnline_Resp, error) {
+func (s *RealtimeService) QueryRealtimeOnline(ctx context.Context, req *realtimehubv1.QueryRealtimeOnline_Req) (*realtimehubv1.QueryRealtimeOnline_Resp, error) {
 	onlineStatuses, err := s.realtime.QueryOnline(ctx, req.GetRealm(), req.GetUserIds())
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (s *RealtimeService) QueryOnline(ctx context.Context, req *realtimehubv1.Qu
 	return &realtimehubv1.QueryRealtimeOnline_Resp{OnlineStatuses: onlineStatuses}, nil
 }
 
-func (s *RealtimeService) ListOnlineUsers(ctx context.Context, req *realtimehubv1.ListRealtimeOnlineUsers_Req) (*realtimehubv1.ListRealtimeOnlineUsers_Resp, error) {
+func (s *RealtimeService) ListRealtimeOnlineUsers(ctx context.Context, req *realtimehubv1.ListRealtimeOnlineUsers_Req) (*realtimehubv1.ListRealtimeOnlineUsers_Resp, error) {
 	userIDs, err := s.realtime.ListOnlineUsers(ctx, req.GetRealm())
 	if err != nil {
 		return nil, err
@@ -167,7 +167,7 @@ func (*RealtimeService) deliveryProto(delivery *model.Delivery) (*realtimehubv1.
 	return response, nil
 }
 
-func (s *RealtimeService) IssueTicket(ctx context.Context, req *realtimehubv1.IssueRealtimeTicket_Req) (*realtimehubv1.IssueRealtimeTicket_Resp, error) {
+func (s *RealtimeService) IssueRealtimeTicket(ctx context.Context, req *realtimehubv1.IssueRealtimeTicket_Req) (*realtimehubv1.IssueRealtimeTicket_Resp, error) {
 	ticket, err := s.realtime.IssueTicket(ctx, req.GetRealm(), req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -175,7 +175,7 @@ func (s *RealtimeService) IssueTicket(ctx context.Context, req *realtimehubv1.Is
 	return &realtimehubv1.IssueRealtimeTicket_Resp{Ticket: ticket, ExpiresInSeconds: 60}, nil
 }
 
-func (s *RealtimeService) ConsumeTicket(ctx context.Context, req *realtimehubv1.ConsumeRealtimeTicket_Req) (*realtimehubv1.ConsumeRealtimeTicket_Resp, error) {
+func (s *RealtimeService) ConsumeRealtimeTicket(ctx context.Context, req *realtimehubv1.ConsumeRealtimeTicket_Req) (*realtimehubv1.ConsumeRealtimeTicket_Resp, error) {
 	userID, err := s.realtime.ConsumeTicket(ctx, req.GetRealm(), req.GetTicket())
 	if err != nil {
 		return nil, err

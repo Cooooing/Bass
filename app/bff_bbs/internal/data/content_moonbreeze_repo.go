@@ -21,7 +21,7 @@ func NewContentMoonbreezeClient(contentClient *rpc.ContentClient) repo.ContentMo
 }
 
 func (r *ContentMoonbreezeClient) CreateMoonbreeze(ctx context.Context, req *repo.CreateMoonbreezeReq) (*model.Moonbreeze, error) {
-	reply, err := r.contentClient.Moonbreeze.Create(ctx, &contentv1.CreateMoonbreeze_Req{
+	reply, err := r.contentClient.Moonbreeze.CreateMoonbreeze(ctx, &contentv1.CreateMoonbreeze_Req{
 		Content:  req.Content,
 		AuthorId: req.AuthorID,
 		City:     req.City,
@@ -33,7 +33,7 @@ func (r *ContentMoonbreezeClient) CreateMoonbreeze(ctx context.Context, req *rep
 }
 
 func (r *ContentMoonbreezeClient) PageMoonbreezes(ctx context.Context, req *repo.PageMoonbreezesReq) (*model.PageMoonbreezesResp, error) {
-	reply, err := r.contentClient.Moonbreeze.Page(ctx, &contentv1.PageMoonbreezes_Req{
+	reply, err := r.contentClient.Moonbreeze.PageMoonbreezes(ctx, &contentv1.PageMoonbreezes_Req{
 		AuthorIds:         req.AuthorIDs,
 		ExcludedAuthorIds: req.ExcludedAuthorIDs,
 		Cursor:            req.Cursor,

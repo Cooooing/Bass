@@ -78,10 +78,10 @@ func (u *GlobalChatTopicUsecase) Set(ctx context.Context, userID int64, content 
 	if err != nil {
 		return nil, err
 	}
-	topicRequest := &imv1.TCCSetGlobalChatTopic_Req{TopicId: topicID, UserId: userID, Content: content, PointsCost: points}
+	topicRequest := &imv1.TCCGlobalChatTopic_Req{TopicId: topicID, UserId: userID, Content: content, PointsCost: points}
 	pointsRequest := &economyv1.TCCPoints_Req{UserId: userID, Amount: points, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE}
 	_, err = u.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
-		if err = u.branches.Call(ctx, tcc, constant.IMServiceName.String(), topicRequest, imv1.TCCGlobalChatTopicService_Try_FullMethodName, imv1.TCCGlobalChatTopicService_Confirm_FullMethodName, imv1.TCCGlobalChatTopicService_Cancel_FullMethodName, &imv1.TCCSetGlobalChatTopic_Resp{}); err != nil {
+		if err = u.branches.Call(ctx, tcc, constant.IMServiceName.String(), topicRequest, imv1.TCCGlobalChatTopicService_Try_FullMethodName, imv1.TCCGlobalChatTopicService_Confirm_FullMethodName, imv1.TCCGlobalChatTopicService_Cancel_FullMethodName, &imv1.TCCGlobalChatTopic_Resp{}); err != nil {
 			return err
 		}
 		return u.branches.Call(ctx, tcc, constant.EconomyServiceName.String(), pointsRequest, economyv1.TCCPointsService_Try_FullMethodName, economyv1.TCCPointsService_Confirm_FullMethodName, economyv1.TCCPointsService_Cancel_FullMethodName, &economyv1.TCCPoints_Resp{})

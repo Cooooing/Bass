@@ -39,7 +39,7 @@ func (s *ContentCommentService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterCommentServiceHTTPServer(hs, s)
 }
 
-func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.CreateComment_Req) (*bbscontentv1.CreateComment_Resp, error) {
+func (s *ContentCommentService) CreateComment(ctx context.Context, req *bbscontentv1.CreateComment_Req) (*bbscontentv1.CreateComment_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -116,7 +116,7 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 	}, nil
 }
 
-func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.ListComments_Req) (*bbscontentv1.ListComments_Resp, error) {
+func (s *ContentCommentService) ListComments(ctx context.Context, req *bbscontentv1.ListComments_Req) (*bbscontentv1.ListComments_Resp, error) {
 	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if ok && user != nil {
@@ -209,7 +209,7 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 	}, nil
 }
 
-func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Req) (*bbscontentv1.ListCommentThreads_Resp, error) {
+func (s *ContentCommentService) ListCommentThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Req) (*bbscontentv1.ListCommentThreads_Resp, error) {
 	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if ok && user != nil {
@@ -392,7 +392,7 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 	return result, nil
 }
 
-func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Req) (*bbscontentv1.ListCommentReplies_Resp, error) {
+func (s *ContentCommentService) ListCommentReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Req) (*bbscontentv1.ListCommentReplies_Resp, error) {
 	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if ok && user != nil {
@@ -411,7 +411,7 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 	return s.contentCommentUsecase.ListCommentRepliesProto(resp), nil
 }
 
-func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Req) (*bbscontentv1.ListCommentTimeline_Resp, error) {
+func (s *ContentCommentService) ListCommentTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Req) (*bbscontentv1.ListCommentTimeline_Resp, error) {
 	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if ok && user != nil {
@@ -429,7 +429,7 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 	return s.contentCommentUsecase.ListCommentTimelineProto(resp), nil
 }
 
-func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.LikeComment_Req) (*bbscontentv1.LikeComment_Resp, error) {
+func (s *ContentCommentService) LikeComment(ctx context.Context, req *bbscontentv1.LikeComment_Req) (*bbscontentv1.LikeComment_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -447,7 +447,7 @@ func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.Like
 	}, nil
 }
 
-func (s *ContentCommentService) Thank(ctx context.Context, req *bbscontentv1.ThankComment_Req) (*bbscontentv1.ThankComment_Resp, error) {
+func (s *ContentCommentService) ThankComment(ctx context.Context, req *bbscontentv1.ThankComment_Req) (*bbscontentv1.ThankComment_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)

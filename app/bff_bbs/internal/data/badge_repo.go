@@ -21,7 +21,7 @@ func NewBadgeClient(badgeClient *rpc.BadgeClient) bizrepo.BadgeClient {
 }
 
 func (r *BadgeClient) RenderMaker(ctx context.Context, designerUserID int64, spec *badgev1.RenderSpec) (*model.BadgePreview, error) {
-	resp, err := r.badgeClient.Badge.RenderMaker(ctx, &badgev1.RenderMakerBadge_Req{DesignerUserId: designerUserID, RenderSpec: spec})
+	resp, err := r.badgeClient.Badge.RenderMakerBadge(ctx, &badgev1.RenderMakerBadge_Req{DesignerUserId: designerUserID, RenderSpec: spec})
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func (r *BadgeClient) RenderMaker(ctx context.Context, designerUserID int64, spe
 }
 
 func (r *BadgeClient) RenderPublished(ctx context.Context, badgeCode string) (*model.BadgePreview, error) {
-	resp, err := r.badgeClient.Badge.RenderPublished(ctx, &badgev1.RenderPublishedBadge_Req{BadgeCode: badgeCode})
+	resp, err := r.badgeClient.Badge.RenderPublishedBadge(ctx, &badgev1.RenderPublishedBadge_Req{BadgeCode: badgeCode})
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (r *BadgeClient) RenderPublished(ctx context.Context, badgeCode string) (*m
 }
 
 func (r *BadgeClient) UpsertDraft(ctx context.Context, req *badgev1.UpsertBadgeDraft_Req) (*badgev1.Badge, error) {
-	resp, err := r.badgeClient.Badge.UpsertDraft(ctx, req)
+	resp, err := r.badgeClient.Badge.UpsertBadgeDraft(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (r *BadgeClient) UpsertDraft(ctx context.Context, req *badgev1.UpsertBadgeD
 }
 
 func (r *BadgeClient) ListDrafts(ctx context.Context, designerUserID int64) ([]*badgev1.Badge, error) {
-	resp, err := r.badgeClient.Badge.ListDesignerDrafts(ctx, &badgev1.ListDesignerBadgeDrafts_Req{DesignerUserId: designerUserID})
+	resp, err := r.badgeClient.Badge.ListDesignerBadgeDrafts(ctx, &badgev1.ListDesignerBadgeDrafts_Req{DesignerUserId: designerUserID})
 	if err != nil {
 		return nil, err
 	}
@@ -56,6 +56,6 @@ func (r *BadgeClient) ListDrafts(ctx context.Context, designerUserID int64) ([]*
 }
 
 func (r *BadgeClient) DeleteDraft(ctx context.Context, badgeID, designerUserID int64) error {
-	_, err := r.badgeClient.Badge.DeleteDraft(ctx, &badgev1.DeleteBadgeDraft_Req{BadgeId: badgeID, DesignerUserId: designerUserID})
+	_, err := r.badgeClient.Badge.DeleteBadgeDraft(ctx, &badgev1.DeleteBadgeDraft_Req{BadgeId: badgeID, DesignerUserId: designerUserID})
 	return err
 }

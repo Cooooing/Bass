@@ -39,7 +39,7 @@ func NewTagService(
 	}
 }
 
-func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Req) (*v1.BatchCreateTags_Resp, error) {
+func (s *TagService) BatchCreateTags(ctx context.Context, req *v1.BatchCreateTags_Req) (*v1.BatchCreateTags_Resp, error) {
 	if req.UserId <= 0 || len(req.Tags) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -91,7 +91,7 @@ func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Re
 	return &v1.BatchCreateTags_Resp{Rows: rows}, nil
 }
 
-func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Req) (*v1.UpdateTag_Resp, error) {
+func (s *TagService) UpdateTag(ctx context.Context, req *v1.UpdateTag_Req) (*v1.UpdateTag_Resp, error) {
 	if req.Tag == nil || req.TagId <= 0 || req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -135,7 +135,7 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Req) (*v1.Upd
 	return &v1.UpdateTag_Resp{Tag: reply}, nil
 }
 
-func (s *TagService) BindArticle(ctx context.Context, req *v1.BindArticleTags_Req) (*v1.BindArticleTags_Resp, error) {
+func (s *TagService) BindArticleTags(ctx context.Context, req *v1.BindArticleTags_Req) (*v1.BindArticleTags_Resp, error) {
 	if req.ArticleId <= 0 || req.UserId <= 0 || len(req.TagIds) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -150,7 +150,7 @@ func (s *TagService) BindArticle(ctx context.Context, req *v1.BindArticleTags_Re
 	return &v1.BindArticleTags_Resp{}, nil
 }
 
-func (s *TagService) UnbindArticle(ctx context.Context, req *v1.UnbindArticleTags_Req) (*v1.UnbindArticleTags_Resp, error) {
+func (s *TagService) UnbindArticleTags(ctx context.Context, req *v1.UnbindArticleTags_Req) (*v1.UnbindArticleTags_Resp, error) {
 	if req.ArticleId <= 0 || req.UserId <= 0 || len(req.TagIds) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -199,7 +199,7 @@ func (s *TagService) ListArticleTags(ctx context.Context, req *v1.ListArticleTag
 	return &v1.ListArticleTags_Resp{Rows: reply}, nil
 }
 
-func (s *TagService) Map(ctx context.Context, req *v1.MapTags_Req) (*v1.MapTags_Resp, error) {
+func (s *TagService) MapTags(ctx context.Context, req *v1.MapTags_Req) (*v1.MapTags_Resp, error) {
 	req = util.OrDefault(req, &v1.MapTags_Req{})
 	var status *enum.TagStatus
 	if req.Status != nil {
@@ -261,7 +261,7 @@ func (s *TagService) MapArticleTags(ctx context.Context, req *v1.MapArticleTags_
 	return &v1.MapArticleTags_Resp{ArticleTags: articleTags}, nil
 }
 
-func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTags_Resp, error) {
+func (s *TagService) ListTags(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTags_Resp, error) {
 	query := req.GetQuery()
 	if query == nil {
 		query = &v1.ListTags_Req_Query{}
@@ -316,7 +316,7 @@ func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTa
 	return &v1.ListTags_Resp{Rows: reply}, nil
 }
 
-func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTags_Resp, error) {
+func (s *TagService) PageTags(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTags_Resp, error) {
 	query := req.GetQuery()
 	if query == nil {
 		query = &v1.PageTags_Req_Query{}

@@ -31,7 +31,7 @@ func (s *BadgePreviewService) RegisterHTTP(server *http.Server) {
 	bffbadgev1.RegisterBadgeServiceHTTPServer(server, s)
 }
 
-func (s *BadgePreviewService) RenderMaker(ctx context.Context, req *bffbadgev1.RenderMakerBadge_Req) (*common.ImageResp, error) {
+func (s *BadgePreviewService) RenderMakerBadge(ctx context.Context, req *bffbadgev1.RenderMakerBadge_Req) (*bffbadgev1.RenderMakerBadge_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil || user.ID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -46,10 +46,10 @@ func (s *BadgePreviewService) RenderMaker(ctx context.Context, req *bffbadgev1.R
 	if err != nil {
 		return nil, err
 	}
-	return &common.ImageResp{Data: preview.Data, ContentType: preview.ContentType}, nil
+	return &bffbadgev1.RenderMakerBadge_Resp{RawBody: &common.ImageResp{Data: preview.Data, ContentType: preview.ContentType}}, nil
 }
 
-func (s *BadgePreviewService) RenderPublished(ctx context.Context, req *bffbadgev1.RenderPublishedBadge_Req) (*common.ImageResp, error) {
+func (s *BadgePreviewService) RenderPublishedBadge(ctx context.Context, req *bffbadgev1.RenderPublishedBadge_Req) (*bffbadgev1.RenderPublishedBadge_Resp, error) {
 	if req == nil || req.GetCode() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -57,10 +57,10 @@ func (s *BadgePreviewService) RenderPublished(ctx context.Context, req *bffbadge
 	if err != nil {
 		return nil, err
 	}
-	return &common.ImageResp{Data: preview.Data, ContentType: preview.ContentType}, nil
+	return &bffbadgev1.RenderPublishedBadge_Resp{RawBody: &common.ImageResp{Data: preview.Data, ContentType: preview.ContentType}}, nil
 }
 
-func (s *BadgePreviewService) UpsertDraft(ctx context.Context, req *bffbadgev1.UpsertBadgeDraft_Req) (*bffbadgev1.UpsertBadgeDraft_Resp, error) {
+func (s *BadgePreviewService) UpsertBadgeDraft(ctx context.Context, req *bffbadgev1.UpsertBadgeDraft_Req) (*bffbadgev1.UpsertBadgeDraft_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -92,7 +92,7 @@ func (s *BadgePreviewService) UpsertDraft(ctx context.Context, req *bffbadgev1.U
 	return &bffbadgev1.UpsertBadgeDraft_Resp{Draft: s.draft(draft)}, nil
 }
 
-func (s *BadgePreviewService) ListDrafts(ctx context.Context, req *bffbadgev1.ListBadgeDrafts_Req) (*bffbadgev1.ListBadgeDrafts_Resp, error) {
+func (s *BadgePreviewService) ListBadgeDrafts(ctx context.Context, req *bffbadgev1.ListBadgeDrafts_Req) (*bffbadgev1.ListBadgeDrafts_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
@@ -108,7 +108,7 @@ func (s *BadgePreviewService) ListDrafts(ctx context.Context, req *bffbadgev1.Li
 	return &bffbadgev1.ListBadgeDrafts_Resp{Rows: result}, nil
 }
 
-func (s *BadgePreviewService) DeleteDraft(ctx context.Context, req *bffbadgev1.DeleteBadgeDraft_Req) (*bffbadgev1.DeleteBadgeDraft_Resp, error) {
+func (s *BadgePreviewService) DeleteBadgeDraft(ctx context.Context, req *bffbadgev1.DeleteBadgeDraft_Req) (*bffbadgev1.DeleteBadgeDraft_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err

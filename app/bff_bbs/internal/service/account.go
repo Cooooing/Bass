@@ -46,7 +46,7 @@ func (s *AccountService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterAccountServiceHTTPServer(hs, s)
 }
 
-func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Req) (*bbsuserv1.GetCurrentAccount_Resp, error) {
+func (s *AccountService) GetCurrentAccount(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Req) (*bbsuserv1.GetCurrentAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -105,7 +105,7 @@ func (s *AccountService) ListFollowers(ctx context.Context, req *bbsuserv1.ListF
 	return s.accountUsecase.ListFollowers(ctx, req.GetName(), s.accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
 }
 
-func (s *AccountService) SearchMention(ctx context.Context, req *bbsuserv1.SearchMentionAccounts_Req) (*bbsuserv1.SearchMentionAccounts_Resp, error) {
+func (s *AccountService) SearchMentionAccounts(ctx context.Context, req *bbsuserv1.SearchMentionAccounts_Req) (*bbsuserv1.SearchMentionAccounts_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -117,7 +117,7 @@ func (s *AccountService) SearchMention(ctx context.Context, req *bbsuserv1.Searc
 	return &bbsuserv1.SearchMentionAccounts_Resp{Rows: rows, Page: page.ToProto()}, nil
 }
 
-func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
+func (s *AccountService) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -163,7 +163,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	}, nil
 }
 
-func (s *AccountService) PrepareProfileImageUpload(ctx context.Context, req *bbsuserv1.PrepareProfileImageUploadAccount_Req) (*bbsuserv1.PrepareProfileImageUploadAccount_Resp, error) {
+func (s *AccountService) PrepareProfileImageUploadAccount(ctx context.Context, req *bbsuserv1.PrepareProfileImageUploadAccount_Req) (*bbsuserv1.PrepareProfileImageUploadAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -184,7 +184,7 @@ func (s *AccountService) PrepareProfileImageUpload(ctx context.Context, req *bbs
 	return &bbsuserv1.PrepareProfileImageUploadAccount_Resp{AssetId: resp.AssetID, UploadUrl: resp.UploadURL, FormFields: resp.FormFields}, nil
 }
 
-func (s *AccountService) CompleteProfileImageUpload(ctx context.Context, req *bbsuserv1.CompleteProfileImageUploadAccount_Req) (*bbsuserv1.CompleteProfileImageUploadAccount_Resp, error) {
+func (s *AccountService) CompleteProfileImageUploadAccount(ctx context.Context, req *bbsuserv1.CompleteProfileImageUploadAccount_Req) (*bbsuserv1.CompleteProfileImageUploadAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -199,7 +199,7 @@ func (s *AccountService) CompleteProfileImageUpload(ctx context.Context, req *bb
 	return &bbsuserv1.CompleteProfileImageUploadAccount_Resp{Profile: resp.Profile, ImageUrl: resp.ImageURL}, nil
 }
 
-func (s *AccountService) UpdatePassword(ctx context.Context, req *bbsuserv1.UpdatePasswordAccount_Req) (*bbsuserv1.UpdatePasswordAccount_Resp, error) {
+func (s *AccountService) UpdatePasswordAccount(ctx context.Context, req *bbsuserv1.UpdatePasswordAccount_Req) (*bbsuserv1.UpdatePasswordAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -237,7 +237,7 @@ func (s *AccountService) UpdatePassword(ctx context.Context, req *bbsuserv1.Upda
 	return &bbsuserv1.UpdatePasswordAccount_Resp{}, nil
 }
 
-func (s *AccountService) UpdateEmail(ctx context.Context, req *bbsuserv1.UpdateEmailAccount_Req) (*bbsuserv1.UpdateEmailAccount_Resp, error) {
+func (s *AccountService) UpdateEmailAccount(ctx context.Context, req *bbsuserv1.UpdateEmailAccount_Req) (*bbsuserv1.UpdateEmailAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -263,7 +263,7 @@ func (s *AccountService) UpdateEmail(ctx context.Context, req *bbsuserv1.UpdateE
 	return &bbsuserv1.UpdateEmailAccount_Resp{}, nil
 }
 
-func (s *AccountService) UpdatePhone(ctx context.Context, req *bbsuserv1.UpdatePhoneAccount_Req) (*bbsuserv1.UpdatePhoneAccount_Resp, error) {
+func (s *AccountService) UpdatePhoneAccount(ctx context.Context, req *bbsuserv1.UpdatePhoneAccount_Req) (*bbsuserv1.UpdatePhoneAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -287,18 +287,15 @@ func (s *AccountService) UpdatePhone(ctx context.Context, req *bbsuserv1.UpdateP
 	}
 	return &bbsuserv1.UpdatePhoneAccount_Resp{}, nil
 }
-func (s *AccountService) Avatar(ctx context.Context, req *bbsuserv1.AvatarAccount_Req) (*common.ImageResp, error) {
+func (s *AccountService) AvatarAccount(ctx context.Context, req *bbsuserv1.AvatarAccount_Req) (*bbsuserv1.AvatarAccount_Resp, error) {
 	resp, err := s.accountUsecase.AvatarAccount(ctx, req.GetName())
 	if err != nil {
 		return nil, err
 	}
-	return &common.ImageResp{
-		Data:        resp.Data,
-		ContentType: resp.ContentType,
-	}, nil
+	return &bbsuserv1.AvatarAccount_Resp{RawBody: &common.ImageResp{Data: resp.Data, ContentType: resp.ContentType}}, nil
 }
 
-func (s *AccountService) GetEconomyAccount(ctx context.Context, req *bbsuserv1.GetAccountEconomy_Req) (*bbsuserv1.GetAccountEconomy_Resp, error) {
+func (s *AccountService) GetAccountEconomy(ctx context.Context, req *bbsuserv1.GetAccountEconomy_Req) (*bbsuserv1.GetAccountEconomy_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -310,7 +307,7 @@ func (s *AccountService) GetEconomyAccount(ctx context.Context, req *bbsuserv1.G
 	return &bbsuserv1.GetAccountEconomy_Resp{Balance: account.Balance, TotalIncome: account.TotalIncome, TotalExpense: account.TotalExpense}, nil
 }
 
-func (s *AccountService) TransferPoints(ctx context.Context, req *bbsuserv1.TransferAccountPoints_Req) (*bbsuserv1.TransferAccountPoints_Resp, error) {
+func (s *AccountService) TransferAccountPoints(ctx context.Context, req *bbsuserv1.TransferAccountPoints_Req) (*bbsuserv1.TransferAccountPoints_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -338,7 +335,7 @@ func (s *AccountService) TransferPoints(ctx context.Context, req *bbsuserv1.Tran
 	return &bbsuserv1.TransferAccountPoints_Resp{Balance: resp.Balance}, nil
 }
 
-func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.ListAccountEconomyRecords_Req) (*bbsuserv1.ListAccountEconomyRecords_Resp, error) {
+func (s *AccountService) ListAccountEconomyRecords(ctx context.Context, req *bbsuserv1.ListAccountEconomyRecords_Req) (*bbsuserv1.ListAccountEconomyRecords_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)

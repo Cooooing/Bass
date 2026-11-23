@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.economy.v1;
 
@@ -11,12 +11,12 @@ option go_package = "common/proto/gen/economy/v1;v1";
 
 // EconomyService 提供积分账户与流水能力
 service EconomyService {
-  rpc GetAccount(GetEconomyAccount.Req) returns (GetEconomyAccount.Resp) {} // 查询积分账户
-  rpc MapAccounts(MapEconomyAccounts.Req) returns (MapEconomyAccounts.Resp) {} // 批量查询积分账户
-  rpc AddPoints(AddEconomyPoints.Req) returns (AddEconomyPoints.Resp) {} // 增加积分
-  rpc DeductPoints(DeductEconomyPoints.Req) returns (DeductEconomyPoints.Resp) {} // 扣减积分
-  rpc TransferPoints(TransferEconomyPoints.Req) returns (TransferEconomyPoints.Resp) {} // 转移积分
-  rpc ListRecords(ListEconomyRecords.Req) returns (ListEconomyRecords.Resp) {} // 查询积分流水
+  rpc GetEconomyAccount(GetEconomyAccount.Req) returns (GetEconomyAccount.Resp) {} // 查询积分账户
+  rpc MapEconomyAccounts(MapEconomyAccounts.Req) returns (MapEconomyAccounts.Resp) {} // 批量查询积分账户
+  rpc AddEconomyPoints(AddEconomyPoints.Req) returns (AddEconomyPoints.Resp) {} // 增加积分
+  rpc DeductEconomyPoints(DeductEconomyPoints.Req) returns (DeductEconomyPoints.Resp) {} // 扣减积分
+  rpc TransferEconomyPoints(TransferEconomyPoints.Req) returns (TransferEconomyPoints.Resp) {} // 转移积分
+  rpc ListEconomyRecords(ListEconomyRecords.Req) returns (ListEconomyRecords.Resp) {} // 查询积分流水
 }
 
 // EconomyAccount 表示用户积分账户

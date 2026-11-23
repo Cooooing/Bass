@@ -24,7 +24,7 @@ func (s *CommonSystemService) RegisterHTTP(hs *http.Server) {
 	commonv1.RegisterCommonSystemServiceHTTPServer(hs, s)
 }
 
-func (s *CommonSystemService) Health(ctx context.Context, req *commonv1.HealthSystem_Req) (*commonv1.HealthSystem_Resp, error) {
+func (s *CommonSystemService) HealthSystem(ctx context.Context, req *commonv1.HealthSystem_Req) (*commonv1.HealthSystem_Resp, error) {
 	return &commonv1.HealthSystem_Resp{
 		Message: "ok",
 	}, nil

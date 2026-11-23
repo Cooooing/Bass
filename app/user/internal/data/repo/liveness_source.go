@@ -42,7 +42,7 @@ func (s *LivenessSource) BatchGet(ctx context.Context, userIDs []int64, start, e
 
 	group.Go(func() error {
 		var err error
-		contentRows, err = s.content.Statistics.BatchCountUserBehaviors(groupCtx, &contentv1.BatchCountContentUserBehaviors_Req{UserIds: userIDs, Start: requestStart, End: requestEnd, ActionStatuses: []contentenum.ContentActionStatus{contentenum.ContentActionStatus_CONTENT_ACTION_STATUS_PUBLISHED}})
+		contentRows, err = s.content.Statistics.BatchCountContentUserBehaviors(groupCtx, &contentv1.BatchCountContentUserBehaviors_Req{UserIds: userIDs, Start: requestStart, End: requestEnd, ActionStatuses: []contentenum.ContentActionStatus{contentenum.ContentActionStatus_CONTENT_ACTION_STATUS_PUBLISHED}})
 		return err
 	})
 	group.Go(func() error {

@@ -40,7 +40,7 @@ func (r *ContentCommentClient) CreateComment(ctx context.Context, req *repo.Crea
 	if req.ReplyID != 0 {
 		replyID = new(req.ReplyID)
 	}
-	reply, err := r.contentClient.Comment.Create(ctx, &contentv1.CreateComment_Req{
+	reply, err := r.contentClient.Comment.CreateComment(ctx, &contentv1.CreateComment_Req{
 		ArticleId: req.ArticleID,
 		Content:   req.Content,
 		ReplyId:   replyID,
@@ -121,7 +121,7 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
 		contentAccess = &contentv1.ContentAccess{Scope: accessScope, ActorUserId: new(req.UserID)}
 	}
-	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+	reply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
 		Page:   pageReq.ToProto(),
 		Query:  contentQuery,
 		Access: contentAccess,
@@ -175,7 +175,7 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	}
 	var acceptedRoot *contentv1.PageComments_Resp_Comment
 	if req.AcceptedAnswerID != nil {
-		acceptedReply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+		acceptedReply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
 			Page:   (&commonmodel.PageReq{Page: 1, Size: 1}).ToProto(),
 			Query:  &contentv1.PageComments_Req_CommentQueryParams{CommentId: req.AcceptedAnswerID, ArticleId: new(req.ArticleID), Level: new(int32(1)), ExcludedUserIds: req.ExcludedUserIDs},
 			Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
@@ -189,7 +189,7 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	}
 	var pinnedRoot *contentv1.PageComments_Resp_Comment
 	if req.PinnedCommentID != nil {
-		pinnedReply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+		pinnedReply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
 			Page:   (&commonmodel.PageReq{Page: 1, Size: 1}).ToProto(),
 			Query:  &contentv1.PageComments_Req_CommentQueryParams{CommentId: req.PinnedCommentID, ArticleId: new(req.ArticleID), Level: new(int32(1)), ExcludedUserIds: req.ExcludedUserIDs},
 			Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
@@ -208,7 +208,7 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	if pinnedRoot != nil {
 		excludedCommentIDs = append(excludedCommentIDs, pinnedRoot.GetId())
 	}
-	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+	reply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
 		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId:          new(req.ArticleID),
@@ -237,7 +237,7 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		if previewLimit > 5 {
 			previewLimit = 5
 		}
-		previews, err := r.contentClient.Comment.ListReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Req{
+		previews, err := r.contentClient.Comment.ListCommentReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Req{
 			ArticleId:       req.ArticleID,
 			ParentIds:       rootIDs,
 			LimitPerParent:  previewLimit,
@@ -361,7 +361,7 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1enum.CommentOrder(*req.Order)
 	}
-	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+	reply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
 		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId:       new(req.ArticleID),
@@ -416,7 +416,7 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1enum.CommentOrder(*req.Order)
 	}
-	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+	reply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
 		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId:       new(req.ArticleID),
@@ -459,7 +459,7 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 }
 
 func (r *ContentCommentClient) LikeComment(ctx context.Context, req *repo.LikeCommentReq) (bool, error) {
-	reply, err := r.contentClient.Comment.Like(ctx, &contentv1.LikeComment_Req{
+	reply, err := r.contentClient.Comment.LikeComment(ctx, &contentv1.LikeComment_Req{
 		Id:    req.ID,
 		Liked: req.Active,
 		Access: &contentv1.ContentAccess{
@@ -474,7 +474,7 @@ func (r *ContentCommentClient) LikeComment(ctx context.Context, req *repo.LikeCo
 }
 
 func (r *ContentCommentClient) ThankComment(ctx context.Context, req *repo.ThankCommentReq) (bool, error) {
-	reply, err := r.contentClient.Comment.Thank(ctx, &contentv1.ThankComment_Req{
+	reply, err := r.contentClient.Comment.ThankComment(ctx, &contentv1.ThankComment_Req{
 		Id:      req.ID,
 		Thanked: true,
 		Access: &contentv1.ContentAccess{
@@ -493,7 +493,7 @@ func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context
 	if userID <= 0 || len(commentIDs) == 0 {
 		return map[int64]*model.CommentViewerActionState{}, nil
 	}
-	reply, err := r.contentClient.Comment.MapViewerActionStates(ctx, &contentv1.MapCommentViewerActionStates_Req{
+	reply, err := r.contentClient.Comment.MapCommentViewerActionStates(ctx, &contentv1.MapCommentViewerActionStates_Req{
 		CommentIds: commentIDs,
 		UserId:     userID,
 	})
@@ -522,7 +522,7 @@ func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments
 	}))
 	articles := make(map[int64]*contentv1.Article, len(articleIDs))
 	for _, articleID := range articleIDs {
-		reply, err := r.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
+		reply, err := r.contentClient.Article.GetArticle(ctx, &contentv1.GetArticle_Req{
 			ArticleId: articleID,
 		})
 		if err != nil {

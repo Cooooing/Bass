@@ -9,11 +9,11 @@ option go_package = "common/proto/gen/platform/v1;v1";
 // PlatformAssetService manages completed, content-addressed resources. It does
 // not own business references or business visibility rules.
 service PlatformAssetService {
-  rpc PrepareDirectUpload(PrepareDirectAssetUpload.Req) returns (PrepareDirectAssetUpload.Resp) {}
-  rpc GetAvailableByHash(GetAvailableAssetByHash.Req) returns (GetAvailableAssetByHash.Resp) {}
-  rpc ResolvePublic(ResolvePublicAssets.Req) returns (ResolvePublicAssets.Resp) {}
-  rpc ValidateAvailable(ValidateAvailableAsset.Req) returns (ValidateAvailableAsset.Resp) {}
-  rpc Block(BlockAsset.Req) returns (BlockAsset.Resp) {}
+  rpc PrepareDirectAssetUpload(PrepareDirectAssetUpload.Req) returns (PrepareDirectAssetUpload.Resp) {}
+  rpc GetAvailableAssetByHash(GetAvailableAssetByHash.Req) returns (GetAvailableAssetByHash.Resp) {}
+  rpc ResolvePublicAssets(ResolvePublicAssets.Req) returns (ResolvePublicAssets.Resp) {}
+  rpc ValidateAvailableAsset(ValidateAvailableAsset.Req) returns (ValidateAvailableAsset.Resp) {}
+  rpc BlockAsset(BlockAsset.Req) returns (BlockAsset.Resp) {}
 }
 
 message Asset {

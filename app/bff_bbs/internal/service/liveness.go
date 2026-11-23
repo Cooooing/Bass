@@ -50,7 +50,7 @@ func (s *LivenessService) GetLiveness(ctx context.Context, _ *bbsuserv1.GetLiven
 	return &bbsuserv1.GetLiveness_Resp{Score: row.Score, MaxScore: row.MaxScore, CheckinScore: row.CheckinScore}, nil
 }
 
-func (s *LivenessService) ClaimYesterdayReward(ctx context.Context, _ *bbsuserv1.ClaimYesterdayLivenessReward_Req) (*bbsuserv1.ClaimYesterdayLivenessReward_Resp, error) {
+func (s *LivenessService) ClaimYesterdayLivenessReward(ctx context.Context, _ *bbsuserv1.ClaimYesterdayLivenessReward_Req) (*bbsuserv1.ClaimYesterdayLivenessReward_Resp, error) {
 	user, err := s.livenessUser(ctx)
 	if err != nil {
 		return nil, err

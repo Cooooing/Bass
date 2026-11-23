@@ -37,7 +37,7 @@ func (s *WebSocketTicketService) RegisterHTTP(hs *http.Server) {
 	v1.RegisterWebSocketServiceHTTPServer(hs, s)
 }
 
-func (s *WebSocketTicketService) CreateTicket(ctx context.Context, req *v1.CreateWebSocketTicket_Req) (*v1.CreateWebSocketTicket_Resp, error) {
+func (s *WebSocketTicketService) CreateWebSocketTicket(ctx context.Context, req *v1.CreateWebSocketTicket_Req) (*v1.CreateWebSocketTicket_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)

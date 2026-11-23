@@ -9,13 +9,12 @@ option go_package = "common/proto/gen/bff_bbs/v1/platform;platform";
 // 平台地理数据接口。
 service LocationService {
   // 按当前请求来源 IP 获取地理数据。
-  rpc GetCurrent(GetCurrentLocation.Req) returns (GetCurrentLocation.Resp) {
+  rpc GetCurrentLocation(GetCurrentLocation.Req) returns (GetCurrentLocation.Resp) {
     option (google.api.http) = {
       post: "/v1/platform/location/get-current"
       body: "*"
     };
   }
-
 }
 
 // 按当前请求来源 IP 获取地理数据。

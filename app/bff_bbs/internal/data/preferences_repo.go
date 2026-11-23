@@ -24,7 +24,7 @@ func NewPreferencesClient(
 }
 
 func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, userID int64) (*repo.Preference, error) {
-	reply, err := r.userClient.Preferences.Get(ctx, &userv1.GetPreferences_Req{
+	reply, err := r.userClient.Preferences.GetPreferences(ctx, &userv1.GetPreferences_Req{
 		UserId: userID,
 	})
 	if err != nil {
@@ -54,7 +54,7 @@ func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *r
 	if req.Language != nil {
 		updateReq.Language = new(commonenums.Language(*req.Language))
 	}
-	reply, err := r.userClient.Preferences.Update(ctx, updateReq)
+	reply, err := r.userClient.Preferences.UpdatePreferences(ctx, updateReq)
 	if err != nil {
 		return nil, err
 	}

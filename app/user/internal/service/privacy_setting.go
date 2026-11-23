@@ -32,7 +32,7 @@ func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
 func (s *PrivacySettingService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetting_Req) (*v1.GetPrivacySetting_Resp, error) {
+func (s *PrivacySettingService) GetPrivacySetting(ctx context.Context, req *v1.GetPrivacySetting_Req) (*v1.GetPrivacySetting_Resp, error) {
 	res, err := s.privacySettingUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetti
 	return &v1.GetPrivacySetting_Resp{PrivacySetting: s.privacySettingReply(res)}, nil
 }
 
-func (s *PrivacySettingService) Map(ctx context.Context, req *v1.MapPrivacySettings_Req) (*v1.MapPrivacySettings_Resp, error) {
+func (s *PrivacySettingService) MapPrivacySettings(ctx context.Context, req *v1.MapPrivacySettings_Req) (*v1.MapPrivacySettings_Resp, error) {
 	settings, err := s.privacySettingUsecase.MapByUserIDs(ctx, req.GetUserIds())
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (s *PrivacySettingService) Map(ctx context.Context, req *v1.MapPrivacySetti
 	return &v1.MapPrivacySettings_Resp{PrivacySettings: reply}, nil
 }
 
-func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivacySetting_Req) (*v1.UpdatePrivacySetting_Resp, error) {
+func (s *PrivacySettingService) UpdatePrivacySetting(ctx context.Context, req *v1.UpdatePrivacySetting_Req) (*v1.UpdatePrivacySetting_Resp, error) {
 	res, err := s.privacySettingUsecase.UpsertByUserID(ctx, &model.PrivacySetting{
 		UserID:               req.GetUserId(),
 		PublicPoints:         req.PublicPoints,

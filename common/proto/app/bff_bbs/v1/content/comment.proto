@@ -17,7 +17,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/content;content";
 // 评论接口。
 service CommentService {
   // 创建评论。
-  rpc Create(CreateComment.Req) returns (CreateComment.Resp) {
+  rpc CreateComment(CreateComment.Req) returns (CreateComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/create"
       body: "*"
@@ -25,7 +25,7 @@ service CommentService {
   }
 
   // 分页查询评论列表。
-  rpc List(ListComments.Req) returns (ListComments.Resp) {
+  rpc ListComments(ListComments.Req) returns (ListComments.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list"
       body: "*"
@@ -33,7 +33,7 @@ service CommentService {
   }
 
   // 分页查询评论楼层。
-  rpc ListThreads(ListCommentThreads.Req) returns (ListCommentThreads.Resp) {
+  rpc ListCommentThreads(ListCommentThreads.Req) returns (ListCommentThreads.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-threads"
       body: "*"
@@ -41,7 +41,7 @@ service CommentService {
   }
 
   // 分页查询评论回复。
-  rpc ListReplies(ListCommentReplies.Req) returns (ListCommentReplies.Resp) {
+  rpc ListCommentReplies(ListCommentReplies.Req) returns (ListCommentReplies.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-replies"
       body: "*"
@@ -49,7 +49,7 @@ service CommentService {
   }
 
   // 分页查询评论时间线。
-  rpc ListTimeline(ListCommentTimeline.Req) returns (ListCommentTimeline.Resp) {
+  rpc ListCommentTimeline(ListCommentTimeline.Req) returns (ListCommentTimeline.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-timeline"
       body: "*"
@@ -57,7 +57,7 @@ service CommentService {
   }
 
   // 点赞或取消点赞评论。
-  rpc Like(LikeComment.Req) returns (LikeComment.Resp) {
+  rpc LikeComment(LikeComment.Req) returns (LikeComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/like"
       body: "*"
@@ -65,7 +65,7 @@ service CommentService {
   }
 
   // 感谢或取消感谢评论。
-  rpc Thank(ThankComment.Req) returns (ThankComment.Resp) {
+  rpc ThankComment(ThankComment.Req) returns (ThankComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/thank"
       body: "*"
@@ -80,9 +80,7 @@ message ListCommentThreads {
     int64 article_id = 2; // 文章 ID
     optional CommentOrder order = 3; // 顶层评论排序方式
     optional int32 reply_preview_limit = 4; // 每个楼层返回的回复预览数量
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
     message PinnedComment {
@@ -240,9 +238,7 @@ message ListCommentTimeline {
     .common.api.app.common.PageReq page = 1; // 分页参数
     int64 article_id = 2; // 文章 ID
     optional CommentOrder order = 3; // 排序方式
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
     message CommentListItem {
@@ -479,9 +475,7 @@ message LikeComment {
 message ThankComment {
   message Req {
     int64 id = 1; // 评论 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "id"};
   }
   message Resp {
     bool thanked = 1; // 是否已感谢

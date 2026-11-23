@@ -2,22 +2,22 @@ syntax = "proto3";
 
 package common.api.app.badge.v1;
 
-import "google/protobuf/timestamp.proto";
 import "badge/v1/enum/badge.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/badge/v1;v1";
 
 // BadgeService 仅向集群内部提供徽章定义、授予和 SVG 渲染能力。
 service BadgeService {
-  rpc RenderMaker(RenderMakerBadge.Req) returns (RenderMakerBadge.Resp) {} // 供已登录用户预览完整渲染参数。
-  rpc RenderPublished(RenderPublishedBadge.Req) returns (RenderPublishedBadge.Resp) {} // 按已发布徽章编码生成主站 SVG。
-  rpc UpsertDraft(UpsertBadgeDraft.Req) returns (UpsertBadgeDraft.Resp) {} // 创建或修改设计者自己的草稿。
-  rpc DeleteDraft(DeleteBadgeDraft.Req) returns (DeleteBadgeDraft.Resp) {} // 删除草稿徽章。
-  rpc Publish(PublishBadgeDraft.Req) returns (PublishBadgeDraft.Resp) {} // 将草稿发布为可被主站渲染的徽章。
-  rpc ListDesignerDrafts(ListDesignerBadgeDrafts.Req) returns (ListDesignerBadgeDrafts.Resp) {} // 查询设计者草稿。
-  rpc Grant(GrantBadge.Req) returns (GrantBadge.Resp) {} // 批量向用户授予已发布徽章。
-  rpc Revoke(RevokeBadge.Req) returns (RevokeBadge.Resp) {} // 批量撤销用户徽章。
-  rpc UpdatePresentation(UpdateUserBadgePresentation.Req) returns (UpdateUserBadgePresentation.Resp) {} // 修改用户自己的展示设置。
+  rpc RenderMakerBadge(RenderMakerBadge.Req) returns (RenderMakerBadge.Resp) {} // 供已登录用户预览完整渲染参数。
+  rpc RenderPublishedBadge(RenderPublishedBadge.Req) returns (RenderPublishedBadge.Resp) {} // 按已发布徽章编码生成主站 SVG。
+  rpc UpsertBadgeDraft(UpsertBadgeDraft.Req) returns (UpsertBadgeDraft.Resp) {} // 创建或修改设计者自己的草稿。
+  rpc DeleteBadgeDraft(DeleteBadgeDraft.Req) returns (DeleteBadgeDraft.Resp) {} // 删除草稿徽章。
+  rpc PublishBadgeDraft(PublishBadgeDraft.Req) returns (PublishBadgeDraft.Resp) {} // 将草稿发布为可被主站渲染的徽章。
+  rpc ListDesignerBadgeDrafts(ListDesignerBadgeDrafts.Req) returns (ListDesignerBadgeDrafts.Resp) {} // 查询设计者草稿。
+  rpc GrantBadge(GrantBadge.Req) returns (GrantBadge.Resp) {} // 批量向用户授予已发布徽章。
+  rpc RevokeBadge(RevokeBadge.Req) returns (RevokeBadge.Resp) {} // 批量撤销用户徽章。
+  rpc UpdateUserBadgePresentation(UpdateUserBadgePresentation.Req) returns (UpdateUserBadgePresentation.Resp) {} // 修改用户自己的展示设置。
   rpc ListUserBadges(ListUserBadges.Req) returns (ListUserBadges.Resp) {} // 查询用户获得的徽章。
 }
 
@@ -80,6 +80,7 @@ message RenderMakerBadge {
     string svg = 1; // SVG 文本。
   }
 }
+
 // RenderPublishedBadge 表示主站按已发布徽章编码渲染。
 message RenderPublishedBadge {
   // Req 指定已发布徽章编码。
@@ -91,6 +92,7 @@ message RenderPublishedBadge {
     string svg = 1; // SVG 文本。
   }
 }
+
 // UpsertBadgeDraft 表示设计者创建或保存草稿徽章。
 message UpsertBadgeDraft {
   // Req 未传 badge_id 时创建草稿；传入时仅能修改自己的草稿。
@@ -106,6 +108,7 @@ message UpsertBadgeDraft {
     Badge badge = 1; // 已保存草稿。
   }
 }
+
 // DeleteBadgeDraft 表示删除一个未发布的草稿徽章。
 message DeleteBadgeDraft {
   // Req 指定待删除的草稿主键。
@@ -116,6 +119,7 @@ message DeleteBadgeDraft {
   // Resp 表示删除完成。
   message Resp {}
 }
+
 // PublishBadgeDraft 表示管理业务发布草稿。
 message PublishBadgeDraft {
   // Req 指定待发布草稿及稳定编码。
@@ -128,6 +132,7 @@ message PublishBadgeDraft {
     Badge badge = 1; // 已发布徽章。
   }
 }
+
 // ListDesignerBadgeDrafts 表示设计者草稿查询。
 message ListDesignerBadgeDrafts {
   // Req 指定设计者。
@@ -139,6 +144,7 @@ message ListDesignerBadgeDrafts {
     repeated Badge rows = 1; // 草稿列表。
   }
 }
+
 // GrantBadge 表示管理业务批量授予已发布徽章。
 message GrantBadge {
   // Req 的每项独立承载用户、徽章和有效期，避免多个数组形成不明确的组合关系。
@@ -157,6 +163,7 @@ message GrantBadge {
     repeated UserBadge rows = 1; // 已授予或刷新的用户徽章。
   }
 }
+
 // RevokeBadge 表示管理业务批量撤销用户徽章。
 message RevokeBadge {
   // Req 的每项精确指定一条待撤销的用户徽章关系。
@@ -173,6 +180,7 @@ message RevokeBadge {
     int64 count = 1; // 实际删除的用户徽章关系数。
   }
 }
+
 // UpdateUserBadgePresentation 表示用户修改自身展示设置。
 message UpdateUserBadgePresentation {
   // Req 指定展示设置。
@@ -187,6 +195,7 @@ message UpdateUserBadgePresentation {
     UserBadge user_badge = 1; // 已保存用户徽章。
   }
 }
+
 // ListUserBadges 表示用户徽章查询。
 message ListUserBadges {
   // Req 指定用户和展示过滤条件。

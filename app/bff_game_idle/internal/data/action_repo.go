@@ -22,7 +22,7 @@ func NewActionRepo(gameIdleClient *rpc.GameIdleClient) repo.ActionRepo {
 }
 
 func (r *ActionRepo) List(ctx context.Context) ([]*model.ActionConfig, error) {
-	reply, err := r.gameIdleClient.Action.List(ctx, &gameidlev1.ListActions_Request{})
+	reply, err := r.gameIdleClient.Action.ListActions(ctx, &gameidlev1.ListActions_Req{})
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (r *ActionRepo) List(ctx context.Context) ([]*model.ActionConfig, error) {
 }
 
 func (r *ActionRepo) GetDetail(ctx context.Context, actionID string) (*model.ActionDetailConfig, error) {
-	reply, err := r.gameIdleClient.Action.GetDetail(ctx, &gameidlev1.GetActionDetail_Request{
+	reply, err := r.gameIdleClient.Action.GetActionDetail(ctx, &gameidlev1.GetActionDetail_Req{
 		ActionId: actionID,
 	})
 	if err != nil {

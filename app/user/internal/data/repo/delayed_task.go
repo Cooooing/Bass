@@ -32,7 +32,7 @@ func (c *DelayedTaskClient) RegisterUnbanAccounts(ctx context.Context, userID in
 	if err != nil {
 		return err
 	}
-	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{
+	_, err = c.schedulerClient.DelayedTask.ScheduleSchedulerDelayedTask(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{
 		HandlerName: schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_USER_UNBAN_ACCOUNTS,
 		Payload:     payload,
 		ScheduledAt: timestamppb.New(*executeAt),

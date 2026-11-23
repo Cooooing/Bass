@@ -2,15 +2,15 @@ syntax = "proto3";
 
 package common.api.app.platform.v1;
 
-import "platform/v1/enum/holiday.proto";
 import "google/protobuf/timestamp.proto";
+import "platform/v1/enum/holiday.proto";
 
 option go_package = "common/proto/gen/platform/v1;v1";
 
 // 节假日服务。
 service PlatformHolidayService {
   // 获取当前节假日状态。
-  rpc GetCurrent(GetCurrentHoliday.Req) returns (GetCurrentHoliday.Resp) {}
+  rpc GetCurrentHoliday(GetCurrentHoliday.Req) returns (GetCurrentHoliday.Resp) {}
   // 从外部数据源按范围刷新节假日状态。
   rpc RefreshHoliday(RefreshHoliday.Req) returns (RefreshHoliday.Resp) {}
 }

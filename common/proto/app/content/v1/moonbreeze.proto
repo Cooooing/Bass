@@ -8,8 +8,8 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // ContentMoonbreezeService 提供短动态的事实写入与游标读取能力。
 service ContentMoonbreezeService {
-  rpc Create(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {}
-  rpc Page(PageMoonbreezes.Req) returns (PageMoonbreezes.Resp) {}
+  rpc CreateMoonbreeze(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {}
+  rpc PageMoonbreezes(PageMoonbreezes.Req) returns (PageMoonbreezes.Resp) {}
 }
 
 message CreateMoonbreeze {

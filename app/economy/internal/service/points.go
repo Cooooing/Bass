@@ -34,7 +34,7 @@ func (s *PointsService) RegisterGrpc(gs *grpc.Server) {
 func (s *PointsService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *PointsService) GetAccount(ctx context.Context, req *v1.GetEconomyAccount_Req) (*v1.GetEconomyAccount_Resp, error) {
+func (s *PointsService) GetEconomyAccount(ctx context.Context, req *v1.GetEconomyAccount_Req) (*v1.GetEconomyAccount_Resp, error) {
 	account, err := s.pointsUsecase.GetAccount(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (s *PointsService) GetAccount(ctx context.Context, req *v1.GetEconomyAccoun
 	return &v1.GetEconomyAccount_Resp{Account: resp}, nil
 }
 
-func (s *PointsService) MapAccounts(ctx context.Context, req *v1.MapEconomyAccounts_Req) (*v1.MapEconomyAccounts_Resp, error) {
+func (s *PointsService) MapEconomyAccounts(ctx context.Context, req *v1.MapEconomyAccounts_Req) (*v1.MapEconomyAccounts_Resp, error) {
 	accounts, err := s.pointsUsecase.MapAccounts(ctx, req.GetUserIds())
 	if err != nil {
 		return nil, err
@@ -89,7 +89,7 @@ func (s *PointsService) MapAccounts(ctx context.Context, req *v1.MapEconomyAccou
 	return reply, nil
 }
 
-func (s *PointsService) AddPoints(ctx context.Context, req *v1.AddEconomyPoints_Req) (*v1.AddEconomyPoints_Resp, error) {
+func (s *PointsService) AddEconomyPoints(ctx context.Context, req *v1.AddEconomyPoints_Req) (*v1.AddEconomyPoints_Resp, error) {
 	recordType, ok := enum.EconomyRecordTypeMap.ToEnum(req.GetRecordType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
@@ -108,7 +108,7 @@ func (s *PointsService) AddPoints(ctx context.Context, req *v1.AddEconomyPoints_
 	return &v1.AddEconomyPoints_Resp{Account: mapper.account(resp.Account), Record: mapper.record(resp.Record)}, nil
 }
 
-func (s *PointsService) DeductPoints(ctx context.Context, req *v1.DeductEconomyPoints_Req) (*v1.DeductEconomyPoints_Resp, error) {
+func (s *PointsService) DeductEconomyPoints(ctx context.Context, req *v1.DeductEconomyPoints_Req) (*v1.DeductEconomyPoints_Resp, error) {
 	recordType, ok := enum.EconomyRecordTypeMap.ToEnum(req.GetRecordType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
@@ -127,7 +127,7 @@ func (s *PointsService) DeductPoints(ctx context.Context, req *v1.DeductEconomyP
 	return &v1.DeductEconomyPoints_Resp{Account: mapper.account(resp.Account), Record: mapper.record(resp.Record)}, nil
 }
 
-func (s *PointsService) TransferPoints(ctx context.Context, req *v1.TransferEconomyPoints_Req) (*v1.TransferEconomyPoints_Resp, error) {
+func (s *PointsService) TransferEconomyPoints(ctx context.Context, req *v1.TransferEconomyPoints_Req) (*v1.TransferEconomyPoints_Resp, error) {
 	outRecordType, ok := enum.EconomyRecordTypeMap.ToEnum(req.GetOutRecordType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
@@ -219,7 +219,7 @@ func (s *PointsService) TransferPoints(ctx context.Context, req *v1.TransferEcon
 	return &v1.TransferEconomyPoints_Resp{FromAccount: fromAccount, ToAccount: toAccount, OutRecord: outRecord, InRecord: inRecord}, nil
 }
 
-func (s *PointsService) ListRecords(ctx context.Context, req *v1.ListEconomyRecords_Req) (*v1.ListEconomyRecords_Resp, error) {
+func (s *PointsService) ListEconomyRecords(ctx context.Context, req *v1.ListEconomyRecords_Req) (*v1.ListEconomyRecords_Resp, error) {
 	var direction *enum.EconomyRecordDirection
 	if req.Direction != nil {
 		value, ok := enum.EconomyRecordDirectionMap.ToEnum(req.GetDirection())

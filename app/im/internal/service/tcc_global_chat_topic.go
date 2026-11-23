@@ -27,23 +27,23 @@ func (s *TCCGlobalChatTopicService) RegisterGrpc(server *grpc.Server) {
 
 func (*TCCGlobalChatTopicService) RegisterHTTP(*http.Server) {}
 
-func (s *TCCGlobalChatTopicService) Try(ctx context.Context, req *imv1.TCCSetGlobalChatTopic_Req) (*imv1.TCCSetGlobalChatTopic_Resp, error) {
+func (s *TCCGlobalChatTopicService) Try(ctx context.Context, req *imv1.TCCGlobalChatTopic_Req) (*imv1.TCCGlobalChatTopic_Resp, error) {
 	if err := s.tccTopic.Try(ctx, req.GetTopicId(), req.GetUserId(), req.GetContent(), req.GetPointsCost()); err != nil {
 		return nil, err
 	}
-	return &imv1.TCCSetGlobalChatTopic_Resp{}, nil
+	return &imv1.TCCGlobalChatTopic_Resp{}, nil
 }
 
-func (s *TCCGlobalChatTopicService) Confirm(ctx context.Context, req *imv1.TCCSetGlobalChatTopic_Req) (*imv1.TCCSetGlobalChatTopic_Resp, error) {
+func (s *TCCGlobalChatTopicService) Confirm(ctx context.Context, req *imv1.TCCGlobalChatTopic_Req) (*imv1.TCCGlobalChatTopic_Resp, error) {
 	if err := s.tccTopic.Confirm(ctx, req.GetTopicId()); err != nil {
 		return nil, err
 	}
-	return &imv1.TCCSetGlobalChatTopic_Resp{}, nil
+	return &imv1.TCCGlobalChatTopic_Resp{}, nil
 }
 
-func (s *TCCGlobalChatTopicService) Cancel(ctx context.Context, req *imv1.TCCSetGlobalChatTopic_Req) (*imv1.TCCSetGlobalChatTopic_Resp, error) {
+func (s *TCCGlobalChatTopicService) Cancel(ctx context.Context, req *imv1.TCCGlobalChatTopic_Req) (*imv1.TCCGlobalChatTopic_Resp, error) {
 	if err := s.tccTopic.Cancel(ctx, req.GetTopicId()); err != nil {
 		return nil, err
 	}
-	return &imv1.TCCSetGlobalChatTopic_Resp{}, nil
+	return &imv1.TCCGlobalChatTopic_Resp{}, nil
 }

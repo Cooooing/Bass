@@ -30,7 +30,7 @@ func (s *TemplateService) RegisterGrpc(gs *grpc.Server) {
 func (s *TemplateService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *TemplateService) Preview(ctx context.Context, req *v1.PreviewNotificationTemplate_Req) (*v1.PreviewNotificationTemplate_Resp, error) {
+func (s *TemplateService) PreviewNotificationTemplate(ctx context.Context, req *v1.PreviewNotificationTemplate_Req) (*v1.PreviewNotificationTemplate_Resp, error) {
 	resp, err := s.templateUsecase.Preview(ctx, &usecase.TemplatePreviewReq{
 		Template:         req.GetTemplate(),
 		TemplateDataJSON: req.GetTemplateDataJson(),

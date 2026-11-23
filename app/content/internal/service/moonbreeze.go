@@ -29,7 +29,7 @@ func (s *MoonbreezeService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *MoonbreezeService) RegisterHTTP(hs *http.Server) {}
 
-func (s *MoonbreezeService) Create(ctx context.Context, req *v1.CreateMoonbreeze_Req) (*v1.CreateMoonbreeze_Resp, error) {
+func (s *MoonbreezeService) CreateMoonbreeze(ctx context.Context, req *v1.CreateMoonbreeze_Req) (*v1.CreateMoonbreeze_Resp, error) {
 	if req.GetAuthorId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
@@ -44,7 +44,7 @@ func (s *MoonbreezeService) Create(ctx context.Context, req *v1.CreateMoonbreeze
 	return &v1.CreateMoonbreeze_Resp{Moonbreeze: s.moonbreezeReply(row)}, nil
 }
 
-func (s *MoonbreezeService) Page(ctx context.Context, req *v1.PageMoonbreezes_Req) (*v1.PageMoonbreezes_Resp, error) {
+func (s *MoonbreezeService) PageMoonbreezes(ctx context.Context, req *v1.PageMoonbreezes_Req) (*v1.PageMoonbreezes_Resp, error) {
 	if req.GetSize() > 50 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}

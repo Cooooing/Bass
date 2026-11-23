@@ -46,7 +46,7 @@ func (t *ContentDrawArticleLotteries) Execute(ctx context.Context, execution Exe
 	if data.GetArticleId() <= 0 || data.GetDrawAt() == nil || !data.GetDrawAt().IsValid() {
 		return nil, fmt.Errorf("invalid content article lottery draw payload")
 	}
-	response, err := t.contentClient.Article.DrawLottery(ctx, &contentv1.DrawArticleLottery_Req{ArticleId: data.GetArticleId(), DrawAt: timestamppb.New(data.GetDrawAt().AsTime())})
+	response, err := t.contentClient.Article.DrawArticleLottery(ctx, &contentv1.DrawArticleLottery_Req{ArticleId: data.GetArticleId(), DrawAt: timestamppb.New(data.GetDrawAt().AsTime())})
 	if err != nil || response == nil {
 		if err == nil {
 			err = fmt.Errorf("article lottery draw returned an empty response")

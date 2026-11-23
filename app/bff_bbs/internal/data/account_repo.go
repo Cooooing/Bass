@@ -28,7 +28,7 @@ func NewAccountClient(
 	}
 }
 func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*model.Account, error) {
-	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Req{
+	reply, err := r.userClient.Account.GetAccount(ctx, &userv1.GetAccount_Req{
 		UserId: userID,
 	})
 	if err != nil {
@@ -67,7 +67,7 @@ func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*m
 }
 
 func (r *AccountClient) GetProfile(ctx context.Context, name string) (*model.AccountProfile, *time.Time, error) {
-	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Req{Name: &name})
+	reply, err := r.userClient.Account.GetAccount(ctx, &userv1.GetAccount_Req{Name: &name})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -78,7 +78,7 @@ func (r *AccountClient) MapProfileAccounts(ctx context.Context, userIDs []int64)
 	if len(userIDs) == 0 {
 		return map[int64]*model.AccountProfile{}, nil
 	}
-	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: userIDs}})
+	reply, err := r.userClient.Account.MapAccounts(ctx, &userv1.MapAccounts_Req{Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: userIDs}})
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func (r *AccountClient) MapProfileAccounts(ctx context.Context, userIDs []int64)
 }
 
 func (r *AccountClient) SearchMentionAccounts(ctx context.Context, query string, page *commonmodel.PageReq, excludedUserIDs []int64) ([]*model.AccountProfile, *commonmodel.PageResp, error) {
-	reply, err := r.userClient.Account.SearchMention(ctx, &userv1.SearchMentionAccounts_Req{Query: query, Page: page.ToProto(), ExcludedUserIds: excludedUserIDs})
+	reply, err := r.userClient.Account.SearchMentionAccounts(ctx, &userv1.SearchMentionAccounts_Req{Query: query, Page: page.ToProto(), ExcludedUserIds: excludedUserIDs})
 	if err != nil {
 		return nil, nil, err
 	}
@@ -128,7 +128,7 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 		Introduction:      req.Introduction,
 	}
 	updateReq.Mbti = req.MBTI
-	reply, err := r.userClient.Account.UpdateProfile(ctx, updateReq)
+	reply, err := r.userClient.Account.UpdateProfileAccount(ctx, updateReq)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +155,7 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 }
 
 func (r *AccountClient) UpdatePasswordAccount(ctx context.Context, req *repo.UpdatePasswordAccountReq) error {
-	_, err := r.userClient.Account.UpdatePassword(ctx, &userv1.UpdatePasswordAccount_Req{
+	_, err := r.userClient.Account.UpdatePasswordAccount(ctx, &userv1.UpdatePasswordAccount_Req{
 		UserId:      req.UserID,
 		OldPassword: req.OldPassword,
 		NewPassword: req.NewPassword,
@@ -164,7 +164,7 @@ func (r *AccountClient) UpdatePasswordAccount(ctx context.Context, req *repo.Upd
 }
 
 func (r *AccountClient) UpdateEmailAccount(ctx context.Context, req *repo.UpdateEmailAccountReq) error {
-	_, err := r.userClient.Account.UpdateEmail(ctx, &userv1.UpdateEmailAccount_Req{
+	_, err := r.userClient.Account.UpdateEmailAccount(ctx, &userv1.UpdateEmailAccount_Req{
 		UserId: req.UserID,
 		Email:  req.Email,
 		Code:   req.Code,
@@ -173,7 +173,7 @@ func (r *AccountClient) UpdateEmailAccount(ctx context.Context, req *repo.Update
 }
 
 func (r *AccountClient) UpdatePhoneAccount(ctx context.Context, req *repo.UpdatePhoneAccountReq) error {
-	_, err := r.userClient.Account.UpdatePhone(ctx, &userv1.UpdatePhoneAccount_Req{
+	_, err := r.userClient.Account.UpdatePhoneAccount(ctx, &userv1.UpdatePhoneAccount_Req{
 		UserId: req.UserID,
 		Phone:  req.Phone,
 		Code:   req.Code,
@@ -181,14 +181,14 @@ func (r *AccountClient) UpdatePhoneAccount(ctx context.Context, req *repo.Update
 	return err
 }
 func (r *AccountClient) AvatarAccount(ctx context.Context, name string) (*repo.AvatarAccountResp, error) {
-	reply, err := r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Req{
+	reply, err := r.userClient.Account.AvatarAccount(ctx, &userv1.AvatarAccount_Req{
 		Name: name,
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &repo.AvatarAccountResp{
-		Data:        reply.GetData(),
-		ContentType: reply.GetContentType(),
+		Data:        reply.GetRawBody().GetData(),
+		ContentType: reply.GetRawBody().GetContentType(),
 	}, nil
 }

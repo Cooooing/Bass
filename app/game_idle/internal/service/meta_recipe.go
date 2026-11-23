@@ -28,7 +28,7 @@ func (s *MetaRecipeService) RegisterGrpc(server *grpc.Server) {
 func (s *MetaRecipeService) RegisterHTTP(*http.Server) {
 }
 
-func (s *MetaRecipeService) Refresh(ctx context.Context, req *v1.RefreshRecipes_Request) (*v1.RefreshRecipes_Resp, error) {
+func (s *MetaRecipeService) RefreshRecipes(ctx context.Context, req *v1.RefreshRecipes_Req) (*v1.RefreshRecipes_Resp, error) {
 	if err := s.recipeUsecase.Refresh(ctx); err != nil {
 		return nil, err
 	}

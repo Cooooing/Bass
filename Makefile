@@ -81,12 +81,18 @@ sdk-clean:
 lint:
 	@$(foreach module,$(MODULES),echo "---- [$(module)] ----" && $(MAKE) -C $(APP_DIR)/$(module) lint IGNORE_ERROR=$(IGNORE_ERROR) && ) echo "[lint] all app modules passed"
 
+.PHONY: proto-lint
+proto-lint:
+	@cd $(ROOT_DIR)/.golangci-plugin && go run ./cmd/proto-contract-lint --root $(PROTO_DIR)
+	@$(BUF) format -w $(PROTO_DIR)
+
 # --- Help ---
 .PHONY: help
 help:
 	@echo "Available targets (all direct Make targets):"
 	@echo ""
 	@echo "Root:"
+	@echo "  proto-lint            - validate Bass Proto contracts then format them in place"
 	@echo "  help                  - show this command list"
 	@echo "  init                  - install pinned development tools"
 	@echo "  api / api-clean       - generate / clean shared API code"

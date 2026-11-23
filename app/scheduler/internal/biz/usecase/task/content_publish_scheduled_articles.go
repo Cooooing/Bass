@@ -67,7 +67,7 @@ func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, execution
 	if data.GetArticleId() <= 0 || data.GetScheduledAt() == nil || !data.GetScheduledAt().IsValid() {
 		return nil, fmt.Errorf("invalid content publish scheduled article payload")
 	}
-	response, err := t.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
+	response, err := t.contentClient.Article.PublishArticle(ctx, &contentv1.PublishArticle_Req{
 		ArticleId:   data.GetArticleId(),
 		ScheduledAt: timestamppb.New(data.GetScheduledAt().AsTime()),
 	})

@@ -2,20 +2,20 @@ syntax = "proto3";
 
 package common.api.app.bff_bbs.v1.user;
 
+import "bff_bbs/v1/user/enum/relation_type.proto";
+import "bff_bbs/v1/user/model/relation.proto";
 import "common/common.proto";
 import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "bff_bbs/v1/user/enum/relation_type.proto";
-import "bff_bbs/v1/user/model/relation.proto";
 
 option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 
 // 账号关系接口。
 service RelationService {
   // 当前账号关注目标账号。
-  rpc Follow(FollowRelation.Req) returns (FollowRelation.Resp) {
+  rpc FollowRelation(FollowRelation.Req) returns (FollowRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/follow"
       body: "*"
@@ -23,7 +23,7 @@ service RelationService {
   }
 
   // 当前账号取消关注目标账号。
-  rpc Unfollow(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {
+  rpc UnfollowRelation(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/unfollow"
       body: "*"
@@ -31,7 +31,7 @@ service RelationService {
   }
 
   // 当前账号拉黑目标账号。
-  rpc Block(BlockRelation.Req) returns (BlockRelation.Resp) {
+  rpc BlockRelation(BlockRelation.Req) returns (BlockRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/block"
       body: "*"
@@ -39,7 +39,7 @@ service RelationService {
   }
 
   // 当前账号取消拉黑目标账号。
-  rpc Unblock(UnblockRelation.Req) returns (UnblockRelation.Resp) {
+  rpc UnblockRelation(UnblockRelation.Req) returns (UnblockRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/unblock"
       body: "*"
@@ -47,7 +47,7 @@ service RelationService {
   }
 
   // 分页查询当前账号关注的账号列表。
-  rpc ListFollowing(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {
+  rpc ListFollowingRelations(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-following"
       body: "*"
@@ -55,7 +55,7 @@ service RelationService {
   }
 
   // 分页查询当前账号的粉丝账号列表。
-  rpc ListFollowers(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {
+  rpc ListFollowersRelations(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-followers"
       body: "*"
@@ -63,7 +63,7 @@ service RelationService {
   }
 
   // 分页查询当前账号拉黑的账号列表。
-  rpc ListBlocked(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {
+  rpc ListBlockedRelations(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-blocked"
       body: "*"
@@ -71,7 +71,7 @@ service RelationService {
   }
 
   // 查询当前账号与目标账号之间的关系。
-  rpc GetStatus(GetStatusRelation.Req) returns (GetStatusRelation.Resp) {
+  rpc GetStatusRelation(GetStatusRelation.Req) returns (GetStatusRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/get-status"
       body: "*"
@@ -83,9 +83,7 @@ service RelationService {
 message FollowRelation {
   message Req {
     int64 target_id = 1; // 目标账号 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "target_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Resp {}
 }
@@ -94,9 +92,7 @@ message FollowRelation {
 message UnfollowRelation {
   message Req {
     int64 target_id = 1; // 目标账号 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "target_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Resp {}
 }
@@ -105,9 +101,7 @@ message UnfollowRelation {
 message BlockRelation {
   message Req {
     int64 target_id = 1; // 目标账号 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "target_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Resp {}
 }
@@ -116,9 +110,7 @@ message BlockRelation {
 message UnblockRelation {
   message Req {
     int64 target_id = 1; // 目标账号 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "target_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Resp {}
 }
@@ -160,9 +152,7 @@ message ListBlockedRelations {
 message GetStatusRelation {
   message Req {
     int64 target_id = 1; // 目标账号 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "target_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Resp {
     message RelationStatus {

@@ -10,17 +10,29 @@ option go_package = "common/proto/gen/bff_bbs/v1/content;content";
 
 // MoonbreezeService 提供社区短动态入口。
 service MoonbreezeService {
-  rpc Create(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {
-    option (google.api.http) = { post: "/v1/content/moonbreeze/create" body: "*" };
+  rpc CreateMoonbreeze(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/create"
+      body: "*"
+    };
   }
-  rpc PagePublic(PagePublicMoonbreezes.Req) returns (PageMoonbreezes.Resp) {
-    option (google.api.http) = { post: "/v1/content/moonbreeze/page-public" body: "*" };
+  rpc PagePublicMoonbreezes(PagePublicMoonbreezes.Req) returns (PagePublicMoonbreezes.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/page-public"
+      body: "*"
+    };
   }
-  rpc PageWatching(PageWatchingMoonbreezes.Req) returns (PageMoonbreezes.Resp) {
-    option (google.api.http) = { post: "/v1/content/moonbreeze/page-watching" body: "*" };
+  rpc PageWatchingMoonbreezes(PageWatchingMoonbreezes.Req) returns (PageWatchingMoonbreezes.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/page-watching"
+      body: "*"
+    };
   }
-  rpc PageMember(PageMemberMoonbreezes.Req) returns (PageMoonbreezes.Resp) {
-    option (google.api.http) = { post: "/v1/content/moonbreeze/page-member" body: "*" };
+  rpc PageMemberMoonbreezes(PageMemberMoonbreezes.Req) returns (PageMemberMoonbreezes.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/moonbreeze/page-member"
+      body: "*"
+    };
   }
 }
 
@@ -38,12 +50,20 @@ message PagePublicMoonbreezes {
     optional string cursor = 1;
     uint32 size = 2;
   }
+  message Resp {
+    repeated Moonbreeze rows = 1;
+    optional string next_cursor = 2;
+  }
 }
 
 message PageWatchingMoonbreezes {
   message Req {
     optional string cursor = 1;
     uint32 size = 2;
+  }
+  message Resp {
+    repeated Moonbreeze rows = 1;
+    optional string next_cursor = 2;
   }
 }
 
@@ -53,9 +73,6 @@ message PageMemberMoonbreezes {
     optional string cursor = 2;
     uint32 size = 3;
   }
-}
-
-message PageMoonbreezes {
   message Resp {
     repeated Moonbreeze rows = 1;
     optional string next_cursor = 2;

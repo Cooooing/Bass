@@ -5,12 +5,12 @@ package common.api.app.game_idle.v1;
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service RegionService {
-  rpc List(ListRegions.Request) returns (ListRegions.Resp) {}
-  rpc Refresh(RefreshRegions.Request) returns (RefreshRegions.Resp) {}
+  rpc ListRegions(ListRegions.Req) returns (ListRegions.Resp) {}
+  rpc RefreshRegions(RefreshRegions.Req) returns (RefreshRegions.Resp) {}
 }
 
 message ListRegions {
-  message Request {}
+  message Req {}
 
   message Resp {
     repeated Region rows = 1; // 区域列表
@@ -18,7 +18,7 @@ message ListRegions {
 }
 
 message RefreshRegions {
-  message Request {}
+  message Req {}
 
   message Resp {}
 }

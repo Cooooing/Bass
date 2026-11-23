@@ -37,7 +37,7 @@ func (s *ContentPostscriptService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterPostscriptServiceHTTPServer(hs, s)
 }
 
-func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.AddPostscript_Req) (*bbscontentv1.AddPostscript_Resp, error) {
+func (s *ContentPostscriptService) AddPostscript(ctx context.Context, req *bbscontentv1.AddPostscript_Req) (*bbscontentv1.AddPostscript_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -70,7 +70,7 @@ func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.Ad
 	}, nil
 }
 
-func (s *ContentPostscriptService) List(ctx context.Context, req *bbscontentv1.ListPostscripts_Req) (*bbscontentv1.ListPostscripts_Resp, error) {
+func (s *ContentPostscriptService) ListPostscripts(ctx context.Context, req *bbscontentv1.ListPostscripts_Req) (*bbscontentv1.ListPostscripts_Resp, error) {
 	userID := int64(0)
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
 		userID = user.ID

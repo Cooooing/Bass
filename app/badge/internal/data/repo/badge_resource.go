@@ -30,7 +30,7 @@ func (r *BadgeResourceRepo) Read(ctx context.Context, assetID int64) ([]byte, er
 	if assetID <= 0 || r.platformClient == nil {
 		return nil, fmt.Errorf("badge resource asset is required")
 	}
-	resolved, err := r.platformClient.Asset.ResolvePublic(ctx, &platformv1.ResolvePublicAssets_Req{AssetIds: []int64{assetID}})
+	resolved, err := r.platformClient.Asset.ResolvePublicAssets(ctx, &platformv1.ResolvePublicAssets_Req{AssetIds: []int64{assetID}})
 	if err != nil {
 		return nil, err
 	}

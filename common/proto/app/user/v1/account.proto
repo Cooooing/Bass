@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.user.v1;
 
@@ -11,23 +11,23 @@ option go_package = "common/proto/gen/user/v1;v1";
 // AccountService 提供账号资料与安全能力
 service AccountService {
   // 查询单个账号
-  rpc Get(GetAccount.Req) returns (GetAccount.Resp) {}
+  rpc GetAccount(GetAccount.Req) returns (GetAccount.Resp) {}
   // 查询账号列表
-  rpc List(ListAccounts.Req) returns (ListAccounts.Resp) {}
+  rpc ListAccounts(ListAccounts.Req) returns (ListAccounts.Resp) {}
   // 查询账号映射
-  rpc Map(MapAccounts.Req) returns (MapAccounts.Resp) {}
+  rpc MapAccounts(MapAccounts.Req) returns (MapAccounts.Resp) {}
   // 检索可在内容中提及的账号
-  rpc SearchMention(SearchMentionAccounts.Req) returns (SearchMentionAccounts.Resp) {}
+  rpc SearchMentionAccounts(SearchMentionAccounts.Req) returns (SearchMentionAccounts.Resp) {}
   // 更新账号展示资料
-  rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {}
+  rpc UpdateProfileAccount(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {}
   // 更新账号密码
-  rpc UpdatePassword(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {}
+  rpc UpdatePasswordAccount(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {}
   // 更新账号邮箱
-  rpc UpdateEmail(UpdateEmailAccount.Req) returns (UpdateEmailAccount.Resp) {}
+  rpc UpdateEmailAccount(UpdateEmailAccount.Req) returns (UpdateEmailAccount.Resp) {}
   // 更新账号手机号
-  rpc UpdatePhone(UpdatePhoneAccount.Req) returns (UpdatePhoneAccount.Resp) {}
+  rpc UpdatePhoneAccount(UpdatePhoneAccount.Req) returns (UpdatePhoneAccount.Resp) {}
   // 生成默认头像
-  rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {}
+  rpc AvatarAccount(AvatarAccount.Req) returns (AvatarAccount.Resp) {}
 }
 
 message AccountBasic {
@@ -153,5 +153,9 @@ message UpdatePhoneAccount {
 message AvatarAccount {
   message Req {
     string name = 1; // 账号名
+  }
+  // Resp 通过 raw_body 返回头像原始字节及内容类型。
+  message Resp {
+    .common.api.app.common.ImageResp raw_body = 1;
   }
 }

@@ -33,7 +33,7 @@ func (s *OutboxService) RegisterGrpc(gs *grpc.Server) {
 func (s *OutboxService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *OutboxService) Publish(ctx context.Context, req *v1.PublishOutboxEvent_Req) (*v1.PublishOutboxEvent_Resp, error) {
+func (s *OutboxService) PublishOutboxEvent(ctx context.Context, req *v1.PublishOutboxEvent_Req) (*v1.PublishOutboxEvent_Resp, error) {
 	if req == nil || req.GetId() == 0 || req.GetMaxRetry() < 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -58,7 +58,7 @@ func (s *OutboxService) Publish(ctx context.Context, req *v1.PublishOutboxEvent_
 	}, nil
 }
 
-func (s *OutboxService) PublishBatch(ctx context.Context, req *v1.PublishOutboxEvents_Req) (*v1.PublishOutboxEvents_Resp, error) {
+func (s *OutboxService) PublishOutboxEvents(ctx context.Context, req *v1.PublishOutboxEvents_Req) (*v1.PublishOutboxEvents_Resp, error) {
 	limit := int32(0)
 	publishTimeout := time.Duration(0)
 	maxRetry := int32(0)

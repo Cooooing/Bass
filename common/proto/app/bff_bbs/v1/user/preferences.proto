@@ -10,7 +10,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 // 账号偏好设置接口。
 service PreferencesService {
   // 获取当前账号的偏好设置。
-  rpc GetCurrent(GetCurrentPreferences.Req) returns (GetCurrentPreferences.Resp) {
+  rpc GetCurrentPreferences(GetCurrentPreferences.Req) returns (GetCurrentPreferences.Resp) {
     option (google.api.http) = {
       post: "/v1/user/preference/get-current"
       body: "*"
@@ -18,7 +18,7 @@ service PreferencesService {
   }
 
   // 更新当前账号的偏好设置。
-  rpc UpdateCurrent(UpdateCurrentPreferences.Req) returns (UpdateCurrentPreferences.Resp) {
+  rpc UpdateCurrentPreferences(UpdateCurrentPreferences.Req) returns (UpdateCurrentPreferences.Resp) {
     option (google.api.http) = {
       post: "/v1/user/preference/update-current"
       body: "*"

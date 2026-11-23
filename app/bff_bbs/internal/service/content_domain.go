@@ -38,7 +38,7 @@ func (s *ContentDomainService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterDomainServiceHTTPServer(hs, s)
 }
 
-func (s *ContentDomainService) Create(ctx context.Context, req *bbscontentv1.CreateDomain_Req) (*bbscontentv1.CreateDomain_Resp, error) {
+func (s *ContentDomainService) CreateDomain(ctx context.Context, req *bbscontentv1.CreateDomain_Req) (*bbscontentv1.CreateDomain_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -90,7 +90,7 @@ func (s *ContentDomainService) Create(ctx context.Context, req *bbscontentv1.Cre
 	}, nil
 }
 
-func (s *ContentDomainService) Update(ctx context.Context, req *bbscontentv1.UpdateDomain_Req) (*bbscontentv1.UpdateDomain_Resp, error) {
+func (s *ContentDomainService) UpdateDomain(ctx context.Context, req *bbscontentv1.UpdateDomain_Req) (*bbscontentv1.UpdateDomain_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -143,7 +143,7 @@ func (s *ContentDomainService) Update(ctx context.Context, req *bbscontentv1.Upd
 	}, nil
 }
 
-func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListDomains_Req) (*bbscontentv1.ListDomains_Resp, error) {
+func (s *ContentDomainService) ListDomains(ctx context.Context, req *bbscontentv1.ListDomains_Req) (*bbscontentv1.ListDomains_Resp, error) {
 	resp, err := s.contentDomainUsecase.ListDomains(ctx, &usecase.ListDomainsReq{
 		Page:  commonmodel.PageReqFromProto(req.GetPage()),
 		Query: req.GetQuery(),

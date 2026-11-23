@@ -28,7 +28,7 @@ func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model
 	if articleID == 0 {
 		return nil, nil
 	}
-	reply, err := c.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
+	reply, err := c.contentClient.Article.GetArticle(ctx, &contentv1.GetArticle_Req{
 		ArticleId: articleID,
 	})
 	if err != nil {
@@ -51,7 +51,7 @@ func (c *ContentClient) GetPostscript(ctx context.Context, articleID, postscript
 	if articleID <= 0 || postscriptID <= 0 {
 		return nil, nil
 	}
-	reply, err := c.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{ArticleId: articleID})
+	reply, err := c.contentClient.Postscript.ListPostscripts(ctx, &contentv1.ListPostscripts_Req{ArticleId: articleID})
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model
 	if commentID == 0 {
 		return nil, nil
 	}
-	reply, err := c.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+	reply, err := c.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
 		Page: &common.PageReq{
 			Page: 1,
 			Size: 1,
@@ -104,7 +104,7 @@ func (c *ContentClient) ListArticleWatchers(ctx context.Context, articleID int64
 	if articleID <= 0 {
 		return nil, nil
 	}
-	reply, err := c.contentClient.Article.ListWatchers(ctx, &contentv1.ListArticleWatchers_Req{ArticleId: articleID})
+	reply, err := c.contentClient.Article.ListArticleWatchers(ctx, &contentv1.ListArticleWatchers_Req{ArticleId: articleID})
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func (c *ContentClient) ListPollParticipants(ctx context.Context, articleID int6
 	if articleID <= 0 {
 		return nil, nil
 	}
-	reply, err := c.contentClient.Article.ListPollParticipants(ctx, &contentv1.ListArticlePollParticipants_Req{ArticleId: articleID})
+	reply, err := c.contentClient.Article.ListArticlePollParticipants(ctx, &contentv1.ListArticlePollParticipants_Req{ArticleId: articleID})
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (c *ContentClient) ListLotteryParticipants(ctx context.Context, articleID i
 	if articleID <= 0 {
 		return nil, nil
 	}
-	reply, err := c.contentClient.Article.ListLotteryParticipants(ctx, &contentv1.ListArticleLotteryParticipants_Req{ArticleId: articleID})
+	reply, err := c.contentClient.Article.ListArticleLotteryParticipants(ctx, &contentv1.ListArticleLotteryParticipants_Req{ArticleId: articleID})
 	if err != nil {
 		return nil, err
 	}

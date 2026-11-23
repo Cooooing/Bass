@@ -22,7 +22,7 @@ func NewItemRepo(gameIdleClient *rpc.GameIdleClient) repo.ItemRepo {
 }
 
 func (r *ItemRepo) List(ctx context.Context) ([]*model.ItemConfig, error) {
-	reply, err := r.gameIdleClient.Item.List(ctx, &gameidlev1.ListItems_Request{})
+	reply, err := r.gameIdleClient.Item.ListItems(ctx, &gameidlev1.ListItems_Req{})
 	if err != nil {
 		return nil, err
 	}

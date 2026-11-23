@@ -10,24 +10,33 @@ option go_package = "common/proto/gen/bff_bbs/v1/badge;badge";
 // BadgeService 向社区客户端提供徽章预览与设计草稿管理。
 service BadgeService {
   // RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-  rpc RenderMaker(RenderMakerBadge.Req) returns (.common.api.app.common.ImageResp) {
-    option (google.api.http) = { get: "/v1/badge/maker/render" };
+  rpc RenderMakerBadge(RenderMakerBadge.Req) returns (RenderMakerBadge.Resp) {
+    option (google.api.http) = {get: "/v1/badge/maker/render"};
   }
   // RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-  rpc RenderPublished(RenderPublishedBadge.Req) returns (.common.api.app.common.ImageResp) {
-    option (google.api.http) = { get: "/v1/badge/render" };
+  rpc RenderPublishedBadge(RenderPublishedBadge.Req) returns (RenderPublishedBadge.Resp) {
+    option (google.api.http) = {get: "/v1/badge/render"};
   }
   // UpsertDraft 保存当前登录用户的徽章草稿。
-  rpc UpsertDraft(UpsertBadgeDraft.Req) returns (UpsertBadgeDraft.Resp) {
-    option (google.api.http) = { post: "/v1/badge/draft/upsert" body: "*" };
+  rpc UpsertBadgeDraft(UpsertBadgeDraft.Req) returns (UpsertBadgeDraft.Resp) {
+    option (google.api.http) = {
+      post: "/v1/badge/draft/upsert"
+      body: "*"
+    };
   }
   // ListDrafts 返回当前登录用户的徽章草稿。
-  rpc ListDrafts(ListBadgeDrafts.Req) returns (ListBadgeDrafts.Resp) {
-    option (google.api.http) = { post: "/v1/badge/draft/list" body: "*" };
+  rpc ListBadgeDrafts(ListBadgeDrafts.Req) returns (ListBadgeDrafts.Resp) {
+    option (google.api.http) = {
+      post: "/v1/badge/draft/list"
+      body: "*"
+    };
   }
   // DeleteDraft 删除一个未发布草稿。
-  rpc DeleteDraft(DeleteBadgeDraft.Req) returns (DeleteBadgeDraft.Resp) {
-    option (google.api.http) = { post: "/v1/badge/draft/delete" body: "*" };
+  rpc DeleteBadgeDraft(DeleteBadgeDraft.Req) returns (DeleteBadgeDraft.Resp) {
+    option (google.api.http) = {
+      post: "/v1/badge/draft/delete"
+      body: "*"
+    };
   }
 }
 
@@ -56,6 +65,10 @@ message RenderMakerBadge {
   message Req {
     RenderSpec render_spec = 1; // 待预览的完整渲染参数。
   }
+  // Resp 通过 raw_body 返回 SVG 原始字节及内容类型。
+  message Resp {
+    .common.api.app.common.ImageResp raw_body = 1;
+  }
 }
 
 // RenderPublishedBadge 表示主站按 code 查询已发布徽章 SVG 的请求。
@@ -63,6 +76,10 @@ message RenderPublishedBadge {
   // Req 的 code 由 HTTP 查询参数 code 绑定。
   message Req {
     string code = 1; // 已发布徽章稳定编码。
+  }
+  // Resp 通过 raw_body 返回 SVG 原始字节及内容类型。
+  message Resp {
+    .common.api.app.common.ImageResp raw_body = 1;
   }
 }
 

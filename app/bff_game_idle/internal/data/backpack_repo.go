@@ -24,7 +24,7 @@ func NewBackpackRepo(
 }
 
 func (r *BackpackRepo) Map(ctx context.Context, req *repo.BackpackMapReq) (map[string]*model.CharacterItem, error) {
-	reply, err := r.gameIdleClient.Backpack.Get(ctx, &gameidlev1.GetBackpack_Request{
+	reply, err := r.gameIdleClient.Backpack.GetBackpack(ctx, &gameidlev1.GetBackpack_Req{
 		CharacterId: req.CharacterID,
 		ItemIds:     req.ItemIDs,
 	})

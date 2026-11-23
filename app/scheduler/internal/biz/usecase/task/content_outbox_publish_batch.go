@@ -53,7 +53,7 @@ func (t *ContentOutboxPublishBatch) Execute(ctx context.Context, execution Execu
 	if data.GetMaxRetry() > 0 {
 		maxRetry = data.GetMaxRetry()
 	}
-	response, err := t.contentClient.Outbox.PublishBatch(ctx, &contentv1.PublishOutboxEvents_Req{Limit: limit, PublishTimeout: durationpb.New(timeout), MaxRetry: maxRetry})
+	response, err := t.contentClient.Outbox.PublishOutboxEvents(ctx, &contentv1.PublishOutboxEvents_Req{Limit: limit, PublishTimeout: durationpb.New(timeout), MaxRetry: maxRetry})
 	if err != nil {
 		return nil, err
 	}

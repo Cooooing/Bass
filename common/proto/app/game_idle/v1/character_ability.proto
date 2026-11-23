@@ -5,11 +5,11 @@ package common.api.app.game_idle.v1;
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service CharacterAbilityService {
-  rpc Get(GetCharacterAbility.Request) returns (GetCharacterAbility.Resp) {}
+  rpc GetCharacterAbility(GetCharacterAbility.Req) returns (GetCharacterAbility.Resp) {}
 }
 
 message GetCharacterAbility {
-  message Request {
+  message Req {
     int64 character_id = 1; // 角色 ID
   }
 

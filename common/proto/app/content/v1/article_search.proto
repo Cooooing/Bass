@@ -8,7 +8,7 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // ContentArticleSearchService provides public article keyword search.
 service ContentArticleSearchService {
-  rpc SearchPublic(SearchPublicArticles.Req) returns (SearchPublicArticles.Resp) {}
+  rpc SearchPublicArticles(SearchPublicArticles.Req) returns (SearchPublicArticles.Resp) {}
 }
 
 message SearchPublicArticles {

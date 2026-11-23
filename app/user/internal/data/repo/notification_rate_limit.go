@@ -24,7 +24,7 @@ func NewNotificationRateLimitClient(
 }
 
 func (c *NotificationRateLimitClient) CheckEmail(ctx context.Context, email string) (*bizrepo.NotificationRateLimitState, error) {
-	reply, err := c.notifyClient.RateLimit.Check(ctx, &notifyv1.CheckNotificationRateLimit_Req{
+	reply, err := c.notifyClient.RateLimit.CheckNotificationRateLimit(ctx, &notifyv1.CheckNotificationRateLimit_Req{
 		Channel:   notifyv1enum.NotificationChannel_NOTIFICATION_CHANNEL_EMAIL,
 		Recipient: email,
 	})
@@ -38,7 +38,7 @@ func (c *NotificationRateLimitClient) CheckEmail(ctx context.Context, email stri
 }
 
 func (c *NotificationRateLimitClient) CheckPhone(ctx context.Context, phone string) (*bizrepo.NotificationRateLimitState, error) {
-	reply, err := c.notifyClient.RateLimit.Check(ctx, &notifyv1.CheckNotificationRateLimit_Req{
+	reply, err := c.notifyClient.RateLimit.CheckNotificationRateLimit(ctx, &notifyv1.CheckNotificationRateLimit_Req{
 		Channel:   notifyv1enum.NotificationChannel_NOTIFICATION_CHANNEL_TENCENT_SMS,
 		Recipient: phone,
 	})

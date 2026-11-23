@@ -27,7 +27,7 @@ func (*RealtimeService) RegisterGrpc(*grpc.Server) {}
 func (s *RealtimeService) RegisterHTTP(server *http.Server) {
 	bffbbsv1.RegisterRealtimeServiceHTTPServer(server, s)
 }
-func (s *RealtimeService) CreateTicket(ctx context.Context, _ *bffbbsv1.CreateRealtimeTicket_Req) (*bffbbsv1.CreateRealtimeTicket_Resp, error) {
+func (s *RealtimeService) CreateRealtimeTicket(ctx context.Context, _ *bffbbsv1.CreateRealtimeTicket_Req) (*bffbbsv1.CreateRealtimeTicket_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil || user.ID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)

@@ -28,7 +28,7 @@ func (s *MetaRegionService) RegisterGrpc(server *grpc.Server) {
 func (s *MetaRegionService) RegisterHTTP(*http.Server) {
 }
 
-func (s *MetaRegionService) List(ctx context.Context, req *v1.ListRegions_Request) (*v1.ListRegions_Resp, error) {
+func (s *MetaRegionService) ListRegions(ctx context.Context, req *v1.ListRegions_Req) (*v1.ListRegions_Resp, error) {
 	rows, err := s.regionUsecase.List(ctx)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (s *MetaRegionService) List(ctx context.Context, req *v1.ListRegions_Reques
 	return &v1.ListRegions_Resp{Rows: out}, nil
 }
 
-func (s *MetaRegionService) Refresh(ctx context.Context, req *v1.RefreshRegions_Request) (*v1.RefreshRegions_Resp, error) {
+func (s *MetaRegionService) RefreshRegions(ctx context.Context, req *v1.RefreshRegions_Req) (*v1.RefreshRegions_Resp, error) {
 	if err := s.regionUsecase.Refresh(ctx); err != nil {
 		return nil, err
 	}

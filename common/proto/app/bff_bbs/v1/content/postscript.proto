@@ -11,7 +11,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/content;content";
 // PostscriptService 提供 BBS 文章附言接口。
 service PostscriptService {
   // 添加文章附言。
-  rpc Add(AddPostscript.Req) returns (AddPostscript.Resp) {
+  rpc AddPostscript(AddPostscript.Req) returns (AddPostscript.Resp) {
     option (google.api.http) = {
       post: "/v1/content/postscript/add"
       body: "*"
@@ -19,7 +19,7 @@ service PostscriptService {
   }
 
   // 查询文章附言列表。
-  rpc List(ListPostscripts.Req) returns (ListPostscripts.Resp) {
+  rpc ListPostscripts(ListPostscripts.Req) returns (ListPostscripts.Resp) {
     option (google.api.http) = {
       post: "/v1/content/postscript/list"
       body: "*"
@@ -44,9 +44,7 @@ message AddPostscript {
 message ListPostscripts {
   message Req {
     int64 article_id = 1; // 必填，文章 ID。
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
     repeated ArticlePostscript rows = 1; // 文章附言列表。

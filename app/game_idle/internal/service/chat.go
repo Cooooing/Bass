@@ -32,7 +32,7 @@ func (s *ChatService) RegisterGrpc(server *grpc.Server) {
 func (s *ChatService) RegisterHTTP(*http.Server) {
 }
 
-func (s *ChatService) Send(ctx context.Context, req *v1.SendChatMessage_Request) (*v1.SendChatMessage_Resp, error) {
+func (s *ChatService) SendChatMessage(ctx context.Context, req *v1.SendChatMessage_Req) (*v1.SendChatMessage_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetContent() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -73,7 +73,7 @@ func (s *ChatService) Send(ctx context.Context, req *v1.SendChatMessage_Request)
 	return &v1.SendChatMessage_Resp{Row: message}, nil
 }
 
-func (s *ChatService) List(ctx context.Context, req *v1.ListChatMessages_Request) (*v1.ListChatMessages_Resp, error) {
+func (s *ChatService) ListChatMessages(ctx context.Context, req *v1.ListChatMessages_Req) (*v1.ListChatMessages_Resp, error) {
 	channelType, ok := enum.ChatChannelTypeMap.ToEnum(req.GetChannelType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

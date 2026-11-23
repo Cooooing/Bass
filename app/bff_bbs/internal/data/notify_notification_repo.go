@@ -33,7 +33,7 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 			Size: req.Page.Size,
 		}).ToProto()
 	}
-	reply, err := r.notifyClient.StationMessage.List(ctx, listReq)
+	reply, err := r.notifyClient.StationMessage.ListStationMessages(ctx, listReq)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 }
 
 func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *repo.MarkReadNotificationReq) (int32, error) {
-	reply, err := r.notifyClient.StationMessage.MarkRead(ctx, &notifyv1.MarkReadStationMessage_Req{
+	reply, err := r.notifyClient.StationMessage.MarkReadStationMessage(ctx, &notifyv1.MarkReadStationMessage_Req{
 		UserId: req.UserID,
 		Ids:    req.IDs,
 	})
@@ -76,7 +76,7 @@ func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *repo
 }
 
 func (r *NotificationClient) CountUnreadNotifications(ctx context.Context, userID int64) (int64, error) {
-	reply, err := r.notifyClient.StationMessage.CountUnread(ctx, &notifyv1.CountUnreadStationMessages_Req{
+	reply, err := r.notifyClient.StationMessage.CountUnreadStationMessages(ctx, &notifyv1.CountUnreadStationMessages_Req{
 		UserId: userID,
 	})
 	if err != nil {

@@ -36,7 +36,7 @@ func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context,
 	if err != nil {
 		return err
 	}
-	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{
+	_, err = c.schedulerClient.DelayedTask.ScheduleSchedulerDelayedTask(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{
 		HandlerName:    schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_PUBLISH_SCHEDULED_ARTICLES,
 		Payload:        payload,
 		ScheduledAt:    timestamppb.New(publishAt),
@@ -47,7 +47,7 @@ func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context,
 }
 
 func (c *DelayedTaskClient) CancelPublishScheduledArticle(ctx context.Context, articleID int64) error {
-	_, err := c.schedulerClient.DelayedTask.CancelExecution(ctx, &schedulerv1.CancelSchedulerDelayedTaskExecution_Req{
+	_, err := c.schedulerClient.DelayedTask.CancelSchedulerDelayedTaskExecution(ctx, &schedulerv1.CancelSchedulerDelayedTaskExecution_Req{
 		BusinessKey: c.publishScheduledArticleBusinessKey(articleID),
 	})
 	return err
@@ -58,7 +58,7 @@ func (c *DelayedTaskClient) RegisterLotteryDraw(ctx context.Context, articleID i
 	if err != nil {
 		return err
 	}
-	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{HandlerName: schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_DRAW_ARTICLE_LOTTERIES, Payload: payload, ScheduledAt: timestamppb.New(drawAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.lottery.draw:" + strconv.FormatInt(articleID, 10)})
+	_, err = c.schedulerClient.DelayedTask.ScheduleSchedulerDelayedTask(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{HandlerName: schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_DRAW_ARTICLE_LOTTERIES, Payload: payload, ScheduledAt: timestamppb.New(drawAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.lottery.draw:" + strconv.FormatInt(articleID, 10)})
 	return err
 }
 
@@ -67,7 +67,7 @@ func (c *DelayedTaskClient) RegisterPollFinish(ctx context.Context, articleID in
 	if err != nil {
 		return err
 	}
-	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{HandlerName: schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_FINISH_ARTICLE_POLLS, Payload: payload, ScheduledAt: timestamppb.New(endsAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.poll.finish:" + strconv.FormatInt(articleID, 10)})
+	_, err = c.schedulerClient.DelayedTask.ScheduleSchedulerDelayedTask(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{HandlerName: schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_FINISH_ARTICLE_POLLS, Payload: payload, ScheduledAt: timestamppb.New(endsAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.poll.finish:" + strconv.FormatInt(articleID, 10)})
 	return err
 }
 

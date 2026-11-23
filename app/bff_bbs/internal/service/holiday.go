@@ -33,7 +33,7 @@ func (s *HolidayService) RegisterHTTP(hs *http.Server) {
 	platformv1.RegisterHolidayServiceHTTPServer(hs, s)
 }
 
-func (s *HolidayService) GetCurrent(ctx context.Context, req *platformv1.GetCurrentHoliday_Req) (*platformv1.GetCurrentHoliday_Resp, error) {
+func (s *HolidayService) GetCurrentHoliday(ctx context.Context, req *platformv1.GetCurrentHoliday_Req) (*platformv1.GetCurrentHoliday_Resp, error) {
 	info, err := s.holidayUsecase.GetCurrent(ctx)
 	if err != nil {
 		return nil, err

@@ -5,12 +5,12 @@ package common.api.app.im.v1;
 option go_package = "common/proto/gen/im/v1;v1";
 
 service TCCGlobalChatBarrageService {
-  rpc Try(TCCSendGlobalChatBarrage.Req) returns (TCCSendGlobalChatBarrage.Resp) {} // 创建待确认弹幕。
-  rpc Confirm(TCCSendGlobalChatBarrage.Req) returns (TCCSendGlobalChatBarrage.Resp) {} // 发布待确认弹幕。
-  rpc Cancel(TCCSendGlobalChatBarrage.Req) returns (TCCSendGlobalChatBarrage.Resp) {} // 取消待确认弹幕。
+  rpc Try(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {} // 创建待确认弹幕。
+  rpc Confirm(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {} // 发布待确认弹幕。
+  rpc Cancel(TCCGlobalChatBarrage.Req) returns (TCCGlobalChatBarrage.Resp) {} // 取消待确认弹幕。
 }
 
-message TCCSendGlobalChatBarrage {
+message TCCGlobalChatBarrage {
   message Req {
     int64 barrage_id = 1; // IM 预分配的弹幕记录 ID，仅用于 TCC 分支关联。
     int64 user_id = 2; // 发送账号 ID。

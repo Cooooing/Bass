@@ -39,7 +39,7 @@ func (s *ContentArticleService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterArticleServiceHTTPServer(hs, s)
 }
 
-func (s *ContentArticleService) CreateDraft(ctx context.Context, req *bbscontentv1.CreateDraftArticle_Req) (*bbscontentv1.CreateDraftArticle_Resp, error) {
+func (s *ContentArticleService) CreateDraftArticle(ctx context.Context, req *bbscontentv1.CreateDraftArticle_Req) (*bbscontentv1.CreateDraftArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -55,7 +55,7 @@ func (s *ContentArticleService) CreateDraft(ctx context.Context, req *bbscontent
 	return &bbscontentv1.CreateDraftArticle_Resp{ArticleId: articleID}, nil
 }
 
-func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Req) (*bbscontentv1.UpdateDraftArticle_Resp, error) {
+func (s *ContentArticleService) UpdateDraftArticle(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Req) (*bbscontentv1.UpdateDraftArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -71,7 +71,7 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 	return &bbscontentv1.UpdateDraftArticle_Resp{ArticleId: articleID}, nil
 }
 
-func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.PublishArticle_Req) (*bbscontentv1.PublishArticle_Resp, error) {
+func (s *ContentArticleService) PublishArticle(ctx context.Context, req *bbscontentv1.PublishArticle_Req) (*bbscontentv1.PublishArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -88,7 +88,7 @@ func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.P
 	return &bbscontentv1.PublishArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) CancelPublish(ctx context.Context, req *bbscontentv1.CancelPublishArticle_Req) (*bbscontentv1.CancelPublishArticle_Resp, error) {
+func (s *ContentArticleService) CancelPublishArticle(ctx context.Context, req *bbscontentv1.CancelPublishArticle_Req) (*bbscontentv1.CancelPublishArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -97,7 +97,7 @@ func (s *ContentArticleService) CancelPublish(ctx context.Context, req *bbsconte
 	return &bbscontentv1.CancelPublishArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbscontentv1.DiscardDraftArticle_Req) (*bbscontentv1.DiscardDraftArticle_Resp, error) {
+func (s *ContentArticleService) DiscardDraftArticle(ctx context.Context, req *bbscontentv1.DiscardDraftArticle_Req) (*bbscontentv1.DiscardDraftArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -106,7 +106,7 @@ func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbsconten
 	return &bbscontentv1.DiscardDraftArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) Archive(ctx context.Context, req *bbscontentv1.ArchiveArticle_Req) (*bbscontentv1.ArchiveArticle_Resp, error) {
+func (s *ContentArticleService) ArchiveArticle(ctx context.Context, req *bbscontentv1.ArchiveArticle_Req) (*bbscontentv1.ArchiveArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -115,7 +115,7 @@ func (s *ContentArticleService) Archive(ctx context.Context, req *bbscontentv1.A
 	return &bbscontentv1.ArchiveArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) SetPinnedComment(ctx context.Context, req *bbscontentv1.SetPinnedArticleComment_Req) (*bbscontentv1.SetPinnedArticleComment_Resp, error) {
+func (s *ContentArticleService) SetPinnedArticleComment(ctx context.Context, req *bbscontentv1.SetPinnedArticleComment_Req) (*bbscontentv1.SetPinnedArticleComment_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -124,7 +124,7 @@ func (s *ContentArticleService) SetPinnedComment(ctx context.Context, req *bbsco
 	return &bbscontentv1.SetPinnedArticleComment_Resp{}, err
 }
 
-func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbscontentv1.AcceptArticleAnswer_Req) (*bbscontentv1.AcceptArticleAnswer_Resp, error) {
+func (s *ContentArticleService) AcceptArticleAnswer(ctx context.Context, req *bbscontentv1.AcceptArticleAnswer_Req) (*bbscontentv1.AcceptArticleAnswer_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -133,7 +133,7 @@ func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbsconten
 	return &bbscontentv1.AcceptArticleAnswer_Resp{}, err
 }
 
-func (s *ContentArticleService) VotePoll(ctx context.Context, req *bbscontentv1.VoteArticlePoll_Req) (*bbscontentv1.VoteArticlePoll_Resp, error) {
+func (s *ContentArticleService) VoteArticlePoll(ctx context.Context, req *bbscontentv1.VoteArticlePoll_Req) (*bbscontentv1.VoteArticlePoll_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -142,7 +142,7 @@ func (s *ContentArticleService) VotePoll(ctx context.Context, req *bbscontentv1.
 	return &bbscontentv1.VoteArticlePoll_Resp{}, err
 }
 
-func (s *ContentArticleService) EnterLottery(ctx context.Context, req *bbscontentv1.EnterArticleLottery_Req) (*bbscontentv1.EnterArticleLottery_Resp, error) {
+func (s *ContentArticleService) EnterArticleLottery(ctx context.Context, req *bbscontentv1.EnterArticleLottery_Req) (*bbscontentv1.EnterArticleLottery_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -151,7 +151,7 @@ func (s *ContentArticleService) EnterLottery(ctx context.Context, req *bbsconten
 	return &bbscontentv1.EnterArticleLottery_Resp{}, err
 }
 
-func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
+func (s *ContentArticleService) ListArticles(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
 	var userID int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
 		userID = user.ID
@@ -188,7 +188,7 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 	return &bbscontentv1.ListArticles_Resp{Page: page, Rows: rows}, nil
 }
 
-func (s *ContentArticleService) ListNearby(ctx context.Context, req *bbscontentv1.ListNearbyArticles_Req) (*bbscontentv1.ListNearbyArticles_Resp, error) {
+func (s *ContentArticleService) ListNearbyArticles(ctx context.Context, req *bbscontentv1.ListNearbyArticles_Req) (*bbscontentv1.ListNearbyArticles_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -208,7 +208,7 @@ func (s *ContentArticleService) ListNearby(ctx context.Context, req *bbscontentv
 	return &bbscontentv1.ListNearbyArticles_Resp{Page: page, Rows: rows}, nil
 }
 
-func (s *ContentArticleService) ListFollowing(ctx context.Context, req *bbscontentv1.ListFollowingArticles_Req) (*bbscontentv1.ListFollowingArticles_Resp, error) {
+func (s *ContentArticleService) ListFollowingArticles(ctx context.Context, req *bbscontentv1.ListFollowingArticles_Req) (*bbscontentv1.ListFollowingArticles_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -228,7 +228,7 @@ func (s *ContentArticleService) ListFollowing(ctx context.Context, req *bbsconte
 	return &bbscontentv1.ListFollowingArticles_Resp{Page: page, Rows: rows}, nil
 }
 
-func (s *ContentArticleService) PageCollected(ctx context.Context, req *bbscontentv1.PageCollectedArticles_Req) (*bbscontentv1.PageCollectedArticles_Resp, error) {
+func (s *ContentArticleService) PageCollectedArticles(ctx context.Context, req *bbscontentv1.PageCollectedArticles_Req) (*bbscontentv1.PageCollectedArticles_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -248,7 +248,7 @@ func (s *ContentArticleService) PageCollected(ctx context.Context, req *bbsconte
 	return &bbscontentv1.PageCollectedArticles_Resp{Rows: rows, Page: page}, nil
 }
 
-func (s *ContentArticleService) PageWatched(ctx context.Context, req *bbscontentv1.PageWatchedArticles_Req) (*bbscontentv1.PageWatchedArticles_Resp, error) {
+func (s *ContentArticleService) PageWatchedArticles(ctx context.Context, req *bbscontentv1.PageWatchedArticles_Req) (*bbscontentv1.PageWatchedArticles_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -268,7 +268,7 @@ func (s *ContentArticleService) PageWatched(ctx context.Context, req *bbscontent
 	return &bbscontentv1.PageWatchedArticles_Resp{Rows: rows, Page: page}, nil
 }
 
-func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
+func (s *ContentArticleService) GetArticle(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
 	var userID int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
 		userID = user.ID
@@ -289,7 +289,7 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 	return &bbscontentv1.GetArticle_Resp{Article: s.articleDetail(row)}, nil
 }
 
-func (s *ContentArticleService) PageViewHistory(
+func (s *ContentArticleService) PageArticleViewHistory(
 	ctx context.Context,
 	req *bbscontentv1.PageArticleViewHistory_Req,
 ) (*bbscontentv1.PageArticleViewHistory_Resp, error) {
@@ -319,7 +319,7 @@ func (s *ContentArticleService) PageViewHistory(
 	return &bbscontentv1.PageArticleViewHistory_Resp{Rows: rows, Page: page}, nil
 }
 
-func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.LikeArticle_Req) (*bbscontentv1.LikeArticle_Resp, error) {
+func (s *ContentArticleService) LikeArticle(ctx context.Context, req *bbscontentv1.LikeArticle_Req) (*bbscontentv1.LikeArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -327,7 +327,7 @@ func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.Like
 	v, err := s.contentArticleUsecase.LikeArticle(ctx, &usecase.LikeArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Active: req.GetActive()})
 	return &bbscontentv1.LikeArticle_Resp{Liked: v}, err
 }
-func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.ThankArticle_Req) (*bbscontentv1.ThankArticle_Resp, error) {
+func (s *ContentArticleService) ThankArticle(ctx context.Context, req *bbscontentv1.ThankArticle_Req) (*bbscontentv1.ThankArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -335,7 +335,7 @@ func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.Tha
 	v, err := s.contentArticleUsecase.ThankArticle(ctx, &usecase.ThankArticleReq{UserID: user.ID, ArticleID: req.GetArticleId()})
 	return &bbscontentv1.ThankArticle_Resp{Thanked: v}, err
 }
-func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.CollectArticle_Req) (*bbscontentv1.CollectArticle_Resp, error) {
+func (s *ContentArticleService) CollectArticle(ctx context.Context, req *bbscontentv1.CollectArticle_Req) (*bbscontentv1.CollectArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -344,7 +344,7 @@ func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.C
 	return &bbscontentv1.CollectArticle_Resp{Collected: v}, err
 }
 
-func (s *ContentArticleService) CountCollected(ctx context.Context, _ *bbscontentv1.CountCollectedArticles_Req) (*bbscontentv1.CountCollectedArticles_Resp, error) {
+func (s *ContentArticleService) CountCollectedArticles(ctx context.Context, _ *bbscontentv1.CountCollectedArticles_Req) (*bbscontentv1.CountCollectedArticles_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -356,7 +356,7 @@ func (s *ContentArticleService) CountCollected(ctx context.Context, _ *bbsconten
 	return &bbscontentv1.CountCollectedArticles_Resp{Count: count}, nil
 }
 
-func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.WatchArticle_Req) (*bbscontentv1.WatchArticle_Resp, error) {
+func (s *ContentArticleService) WatchArticle(ctx context.Context, req *bbscontentv1.WatchArticle_Req) (*bbscontentv1.WatchArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -364,7 +364,7 @@ func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.Wat
 	v, err := s.contentArticleUsecase.WatchArticle(ctx, &usecase.WatchArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Active: req.GetActive()})
 	return &bbscontentv1.WatchArticle_Resp{Watched: v}, err
 }
-func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.RewardArticle_Req) (*bbscontentv1.RewardArticle_Resp, error) {
+func (s *ContentArticleService) RewardArticle(ctx context.Context, req *bbscontentv1.RewardArticle_Req) (*bbscontentv1.RewardArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)

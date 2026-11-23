@@ -31,7 +31,7 @@ func (s *CharacterBackpackService) RegisterGrpc(server *grpc.Server) {
 func (s *CharacterBackpackService) RegisterHTTP(*http.Server) {
 }
 
-func (s *CharacterBackpackService) Get(ctx context.Context, req *v1.GetBackpack_Request) (*v1.GetBackpack_Resp, error) {
+func (s *CharacterBackpackService) GetBackpack(ctx context.Context, req *v1.GetBackpack_Req) (*v1.GetBackpack_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

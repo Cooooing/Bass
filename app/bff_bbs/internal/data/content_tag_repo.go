@@ -30,7 +30,7 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq
 	if tag.Status != nil {
 		status = new(contentv1enum.TagStatus(*tag.Status))
 	}
-	reply, err := r.contentClient.Tag.BatchCreate(ctx, &contentv1.BatchCreateTags_Req{
+	reply, err := r.contentClient.Tag.BatchCreateTags(ctx, &contentv1.BatchCreateTags_Req{
 		UserId: req.UserID,
 		Tags: []*contentv1.BatchCreateTags_Req_Tag{
 			{
@@ -75,7 +75,7 @@ func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq
 	if tag.Status != nil {
 		status = new(contentv1enum.TagStatus(*tag.Status))
 	}
-	reply, err := r.contentClient.Tag.Update(ctx, &contentv1.UpdateTag_Req{
+	reply, err := r.contentClient.Tag.UpdateTag(ctx, &contentv1.UpdateTag_Req{
 		TagId:  req.TagID,
 		UserId: req.UserID,
 		Tag: &contentv1.UpdateTag_Req_Tag{
@@ -132,7 +132,7 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 			Size: req.Page.Size,
 		}
 	}
-	reply, err := r.contentClient.Tag.Page(ctx, &contentv1.PageTags_Req{
+	reply, err := r.contentClient.Tag.PageTags(ctx, &contentv1.PageTags_Req{
 		Page:  pageReq.ToProto(),
 		Query: contentQuery,
 	})
@@ -168,7 +168,7 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 }
 
 func (r *ContentTagClient) BindArticleTags(ctx context.Context, req *repo.BindArticleTagsReq) error {
-	_, err := r.contentClient.Tag.BindArticle(ctx, &contentv1.BindArticleTags_Req{
+	_, err := r.contentClient.Tag.BindArticleTags(ctx, &contentv1.BindArticleTags_Req{
 		ArticleId: req.ArticleID,
 		TagIds:    req.TagIDs,
 		UserId:    req.UserID,
@@ -177,7 +177,7 @@ func (r *ContentTagClient) BindArticleTags(ctx context.Context, req *repo.BindAr
 }
 
 func (r *ContentTagClient) UnbindArticleTags(ctx context.Context, req *repo.UnbindArticleTagsReq) error {
-	_, err := r.contentClient.Tag.UnbindArticle(ctx, &contentv1.UnbindArticleTags_Req{
+	_, err := r.contentClient.Tag.UnbindArticleTags(ctx, &contentv1.UnbindArticleTags_Req{
 		ArticleId: req.ArticleID,
 		TagIds:    req.TagIDs,
 		UserId:    req.UserID,

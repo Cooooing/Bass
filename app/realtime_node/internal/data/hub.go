@@ -21,7 +21,7 @@ func (c *HubClient) Connect(ctx context.Context) (realtimehubv1.RealtimeHubServi
 }
 
 func (c *HubClient) ConsumeTicket(ctx context.Context, realm, ticket string) (int64, error) {
-	response, err := c.client.ConsumeTicket(ctx, &realtimehubv1.ConsumeRealtimeTicket_Req{Realm: realm, Ticket: ticket})
+	response, err := c.client.ConsumeRealtimeTicket(ctx, &realtimehubv1.ConsumeRealtimeTicket_Req{Realm: realm, Ticket: ticket})
 	if err != nil {
 		return 0, err
 	}

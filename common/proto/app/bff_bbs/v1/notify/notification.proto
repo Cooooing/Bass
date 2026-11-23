@@ -13,7 +13,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/notify;notify";
 // 通知接口。
 service NotificationService {
   // 分页查询通知列表。
-  rpc List(ListNotifications.Req) returns (ListNotifications.Resp) {
+  rpc ListNotifications(ListNotifications.Req) returns (ListNotifications.Resp) {
     option (google.api.http) = {
       post: "/v1/notify/notification/list"
       body: "*"
@@ -21,7 +21,7 @@ service NotificationService {
   }
 
   // 标记通知为已读。
-  rpc MarkRead(MarkReadNotification.Req) returns (MarkReadNotification.Resp) {
+  rpc MarkReadNotification(MarkReadNotification.Req) returns (MarkReadNotification.Resp) {
     option (google.api.http) = {
       post: "/v1/notify/notification/mark-read"
       body: "*"
@@ -29,7 +29,7 @@ service NotificationService {
   }
 
   // 统计未读通知数量。
-  rpc CountUnread(CountUnreadNotifications.Req) returns (CountUnreadNotifications.Resp) {
+  rpc CountUnreadNotifications(CountUnreadNotifications.Req) returns (CountUnreadNotifications.Resp) {
     option (google.api.http) = {
       post: "/v1/notify/notification/count-unread"
       body: "*"
@@ -63,9 +63,7 @@ message ListNotifications {
 message MarkReadNotification {
   message Req {
     repeated int64 ids = 1; // 通知 ID 列表
-    option (gnostic.openapi.v3.schema) = {
-      required: "ids"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "ids"};
   }
   message Resp {
     int32 count = 1; // 成功标记的通知数量

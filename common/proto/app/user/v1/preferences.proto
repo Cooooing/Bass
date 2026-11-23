@@ -9,8 +9,8 @@ import "user/v1/enum/relation.proto";
 option go_package = "common/proto/gen/user/v1;v1";
 
 service PreferencesService {
-  rpc Get(GetPreferences.Req) returns (GetPreferences.Resp) {} // 获取账号偏好设置，缺省时返回默认设置。
-  rpc Update(UpdatePreferences.Req) returns (UpdatePreferences.Resp) {} // 更新账号偏好设置；缺省扩展表使用 upsert 创建。
+  rpc GetPreferences(GetPreferences.Req) returns (GetPreferences.Resp) {} // 获取账号偏好设置，缺省时返回默认设置。
+  rpc UpdatePreferences(UpdatePreferences.Req) returns (UpdatePreferences.Resp) {} // 更新账号偏好设置；缺省扩展表使用 upsert 创建。
 }
 
 message GetPreferences {

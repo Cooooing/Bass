@@ -30,7 +30,7 @@ func (r *ContentDomainClient) CreateDomain(ctx context.Context, req *repo.Create
 	if domain.Status != nil {
 		status = new(contentv1enum.DomainStatus(*domain.Status))
 	}
-	reply, err := r.contentClient.Domain.BatchCreate(ctx, &contentv1.BatchCreateDomains_Req{
+	reply, err := r.contentClient.Domain.BatchCreateDomains(ctx, &contentv1.BatchCreateDomains_Req{
 		UserId: req.UserID,
 		Domains: []*contentv1.BatchCreateDomains_Req_Domain{
 			{
@@ -77,7 +77,7 @@ func (r *ContentDomainClient) UpdateDomain(ctx context.Context, req *repo.Update
 	if domain.Status != nil {
 		status = new(contentv1enum.DomainStatus(*domain.Status))
 	}
-	reply, err := r.contentClient.Domain.Update(ctx, &contentv1.UpdateDomain_Req{
+	reply, err := r.contentClient.Domain.UpdateDomain(ctx, &contentv1.UpdateDomain_Req{
 		UserId: req.UserID,
 		Domain: &contentv1.UpdateDomain_Req_Domain{
 			Id:          req.DomainID,
@@ -137,7 +137,7 @@ func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDom
 			Size: req.Page.Size,
 		}
 	}
-	reply, err := r.contentClient.Domain.Page(ctx, &contentv1.PageDomains_Req{
+	reply, err := r.contentClient.Domain.PageDomains(ctx, &contentv1.PageDomains_Req{
 		Page:  pageReq.ToProto(),
 		Query: contentQuery,
 	})

@@ -14,7 +14,7 @@ option go_package = "common/proto/gen/bff_bbs/v1/content;content";
 // ArticleService 提供 BBS 文章接口
 service ArticleService {
   // 创建文章草稿
-  rpc CreateDraft(CreateDraftArticle.Req) returns (CreateDraftArticle.Resp) {
+  rpc CreateDraftArticle(CreateDraftArticle.Req) returns (CreateDraftArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/draft/create"
       body: "*"
@@ -22,7 +22,7 @@ service ArticleService {
   }
 
   // 编辑文章草稿
-  rpc UpdateDraft(UpdateDraftArticle.Req) returns (UpdateDraftArticle.Resp) {
+  rpc UpdateDraftArticle(UpdateDraftArticle.Req) returns (UpdateDraftArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/draft/update"
       body: "*"
@@ -30,7 +30,7 @@ service ArticleService {
   }
 
   // 发布文章
-  rpc Publish(PublishArticle.Req) returns (PublishArticle.Resp) {
+  rpc PublishArticle(PublishArticle.Req) returns (PublishArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/publish"
       body: "*"
@@ -38,7 +38,7 @@ service ArticleService {
   }
 
   // 取消定时发布
-  rpc CancelPublish(CancelPublishArticle.Req) returns (CancelPublishArticle.Resp) {
+  rpc CancelPublishArticle(CancelPublishArticle.Req) returns (CancelPublishArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/publish/cancel"
       body: "*"
@@ -46,7 +46,7 @@ service ArticleService {
   }
 
   // 丢弃文章草稿
-  rpc DiscardDraft(DiscardDraftArticle.Req) returns (DiscardDraftArticle.Resp) {
+  rpc DiscardDraftArticle(DiscardDraftArticle.Req) returns (DiscardDraftArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/draft/discard"
       body: "*"
@@ -54,7 +54,7 @@ service ArticleService {
   }
 
   // 归档文章
-  rpc Archive(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {
+  rpc ArchiveArticle(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/archive"
       body: "*"
@@ -62,7 +62,7 @@ service ArticleService {
   }
 
   // 设置或取消当前账号文章的置顶评论。
-  rpc SetPinnedComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {
+  rpc SetPinnedArticleComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/comment/pin"
       body: "*"
@@ -70,7 +70,7 @@ service ArticleService {
   }
 
   // 采纳文章回答
-  rpc AcceptAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {
+  rpc AcceptArticleAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/answer/accept"
       body: "*"
@@ -78,7 +78,7 @@ service ArticleService {
   }
 
   // 提交一次不可修改的文章投票。
-  rpc VotePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {
+  rpc VoteArticlePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/poll/vote"
       body: "*"
@@ -86,7 +86,7 @@ service ArticleService {
   }
 
   // 报名或撤销抽奖报名。
-  rpc EnterLottery(EnterArticleLottery.Req) returns (EnterArticleLottery.Resp) {
+  rpc EnterArticleLottery(EnterArticleLottery.Req) returns (EnterArticleLottery.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/lottery/entry"
       body: "*"
@@ -94,7 +94,7 @@ service ArticleService {
   }
 
   // 查询文章列表
-  rpc List(ListArticles.Req) returns (ListArticles.Resp) {
+  rpc ListArticles(ListArticles.Req) returns (ListArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/list"
       body: "*"
@@ -102,7 +102,7 @@ service ArticleService {
   }
 
   // 查询当前账号所在城市发布的文章。
-  rpc ListNearby(ListNearbyArticles.Req) returns (ListNearbyArticles.Resp) {
+  rpc ListNearbyArticles(ListNearbyArticles.Req) returns (ListNearbyArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/nearby/list"
       body: "*"
@@ -110,7 +110,7 @@ service ArticleService {
   }
 
   // 查询当前账号关注作者发布的文章。
-  rpc ListFollowing(ListFollowingArticles.Req) returns (ListFollowingArticles.Resp) {
+  rpc ListFollowingArticles(ListFollowingArticles.Req) returns (ListFollowingArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/following/list"
       body: "*"
@@ -118,7 +118,7 @@ service ArticleService {
   }
 
   // 查询当前账号收藏的文章。
-  rpc PageCollected(PageCollectedArticles.Req) returns (PageCollectedArticles.Resp) {
+  rpc PageCollectedArticles(PageCollectedArticles.Req) returns (PageCollectedArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/collected/page"
       body: "*"
@@ -126,7 +126,7 @@ service ArticleService {
   }
 
   // 查询当前账号关注的文章。
-  rpc PageWatched(PageWatchedArticles.Req) returns (PageWatchedArticles.Resp) {
+  rpc PageWatchedArticles(PageWatchedArticles.Req) returns (PageWatchedArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/watched/page"
       body: "*"
@@ -134,7 +134,7 @@ service ArticleService {
   }
 
   // 查询文章详情
-  rpc Get(GetArticle.Req) returns (GetArticle.Resp) {
+  rpc GetArticle(GetArticle.Req) returns (GetArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/get"
       body: "*"
@@ -142,14 +142,14 @@ service ArticleService {
   }
 
   // 查询当前账号的浏览历史。
-  rpc PageViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {
+  rpc PageArticleViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/view-history/page"
       body: "*"
     };
   }
   // 统计当前账号收藏的文章数量。
-  rpc CountCollected(CountCollectedArticles.Req) returns (CountCollectedArticles.Resp) {
+  rpc CountCollectedArticles(CountCollectedArticles.Req) returns (CountCollectedArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/collect/count"
       body: "*"
@@ -157,7 +157,7 @@ service ArticleService {
   }
 
   // 点赞文章
-  rpc Like(LikeArticle.Req) returns (LikeArticle.Resp) {
+  rpc LikeArticle(LikeArticle.Req) returns (LikeArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/like"
       body: "*"
@@ -165,7 +165,7 @@ service ArticleService {
   }
 
   // 感谢文章，确认后不可撤销。
-  rpc Thank(ThankArticle.Req) returns (ThankArticle.Resp) {
+  rpc ThankArticle(ThankArticle.Req) returns (ThankArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/thank"
       body: "*"
@@ -173,7 +173,7 @@ service ArticleService {
   }
 
   // 收藏文章
-  rpc Collect(CollectArticle.Req) returns (CollectArticle.Resp) {
+  rpc CollectArticle(CollectArticle.Req) returns (CollectArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/collect"
       body: "*"
@@ -181,7 +181,7 @@ service ArticleService {
   }
 
   // 关注文章
-  rpc Watch(WatchArticle.Req) returns (WatchArticle.Resp) {
+  rpc WatchArticle(WatchArticle.Req) returns (WatchArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/watch"
       body: "*"
@@ -189,7 +189,7 @@ service ArticleService {
   }
 
   // 打赏文章
-  rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {
+  rpc RewardArticle(RewardArticle.Req) returns (RewardArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/reward"
       body: "*"
@@ -200,9 +200,7 @@ service ArticleService {
 message CreateDraftArticle {
   message Req {
     Article article = 1; // 必填，草稿内容
-    option (gnostic.openapi.v3.schema) = {
-      required: "article"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article"};
 
     message Article {
       string title = 1; // 必填，标题
@@ -261,9 +259,7 @@ message PublishArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
     optional google.protobuf.Timestamp scheduled_at = 2; // 可选，定时发布时间
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {}
 }
@@ -271,9 +267,7 @@ message PublishArticle {
 message CancelPublishArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {}
 }
@@ -281,9 +275,7 @@ message CancelPublishArticle {
 message DiscardDraftArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {}
 }
@@ -292,9 +284,7 @@ message ArchiveArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
     optional string reason = 2; // 可选，归档原因
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {}
 }
@@ -313,7 +303,10 @@ message AcceptArticleAnswer {
   message Req {
     int64 article_id = 1; // 问答文章 ID
     int64 comment_id = 2; // 采纳的一级回答 ID
-    option (gnostic.openapi.v3.schema) = {required: "article_id" required: "comment_id"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "comment_id"
+    };
   }
   message Resp {}
 }
@@ -348,9 +341,7 @@ message GetArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
     optional ArticlePublishStatus publish_status = 2; // 可选，预期发布状态；未传按已发布查询
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
     ArticleDetail article = 1; // 文章详情
@@ -439,9 +430,7 @@ message LikeArticle {
 message ThankArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
     bool thanked = 1; // 是否已感谢
@@ -479,9 +468,7 @@ message WatchArticle {
 message RewardArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
     bool rewarded = 1; // 是否已完成打赏
@@ -666,7 +653,7 @@ message EnterArticleLottery {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
     bool entered = 2; // true 报名，false 撤销报名
-    option (gnostic.openapi.v3.schema) = { required: "article_id" };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {}
 }

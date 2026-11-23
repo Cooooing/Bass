@@ -36,7 +36,7 @@ func (s *StationMessageService) RegisterGrpc(gs *grpc.Server) {
 func (s *StationMessageService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMessages_Req) (*v1.ListStationMessages_Resp, error) {
+func (s *StationMessageService) ListStationMessages(ctx context.Context, req *v1.ListStationMessages_Req) (*v1.ListStationMessages_Resp, error) {
 	if req == nil {
 		req = &v1.ListStationMessages_Req{}
 	}
@@ -98,7 +98,7 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 	}, nil
 }
 
-func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadStationMessage_Req) (*v1.MarkReadStationMessage_Resp, error) {
+func (s *StationMessageService) MarkReadStationMessage(ctx context.Context, req *v1.MarkReadStationMessage_Req) (*v1.MarkReadStationMessage_Resp, error) {
 	if req == nil {
 		req = &v1.MarkReadStationMessage_Req{}
 	}
@@ -128,7 +128,7 @@ func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadSt
 	return &v1.MarkReadStationMessage_Resp{Count: int32(min(markReadResp, math.MaxInt32))}, nil // #nosec G115 -- capped at MaxInt32.
 }
 
-func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUnreadStationMessages_Req) (*v1.CountUnreadStationMessages_Resp, error) {
+func (s *StationMessageService) CountUnreadStationMessages(ctx context.Context, req *v1.CountUnreadStationMessages_Req) (*v1.CountUnreadStationMessages_Resp, error) {
 	if req == nil {
 		req = &v1.CountUnreadStationMessages_Req{}
 	}

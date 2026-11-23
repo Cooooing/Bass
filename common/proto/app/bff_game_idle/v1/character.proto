@@ -11,7 +11,7 @@ option go_package = "common/proto/gen/bff_game_idle/v1;v1";
 // CharacterService 提供摸鱼放置角色入口。
 service CharacterService {
   // 创建角色。
-  rpc Create(CreateCharacter.Req) returns (CreateCharacter.Resp) {
+  rpc CreateCharacter(CreateCharacter.Req) returns (CreateCharacter.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/character/create"
       body: "*"
@@ -19,7 +19,7 @@ service CharacterService {
   }
 
   // 查询当前账号角色列表。
-  rpc List(ListCharacter.Req) returns (ListCharacter.Resp) {
+  rpc ListCharacter(ListCharacter.Req) returns (ListCharacter.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/character/list"
       body: "*"

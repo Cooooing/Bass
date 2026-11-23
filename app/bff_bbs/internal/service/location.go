@@ -31,7 +31,7 @@ func (s *LocationService) RegisterHTTP(hs *http.Server) {
 	platformv1.RegisterLocationServiceHTTPServer(hs, s)
 }
 
-func (s *LocationService) GetCurrent(ctx context.Context, req *platformv1.GetCurrentLocation_Req) (*platformv1.GetCurrentLocation_Resp, error) {
+func (s *LocationService) GetCurrentLocation(ctx context.Context, req *platformv1.GetCurrentLocation_Req) (*platformv1.GetCurrentLocation_Resp, error) {
 	location, err := s.locationUsecase.GetCurrent(ctx, server.ClientIP(ctx))
 	if err != nil {
 		return nil, err

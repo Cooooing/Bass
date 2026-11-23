@@ -9,10 +9,13 @@ option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 // LivenessService 提供当前业务日活跃度查询和前一日活跃奖励领取入口。
 service LivenessService {
   rpc GetLiveness(GetLiveness.Req) returns (GetLiveness.Resp) {
-    option (google.api.http) = { get: "/v1/user/liveness" };
+    option (google.api.http) = {get: "/v1/user/liveness"};
   } // 查询当前业务日的实时活跃度。
-  rpc ClaimYesterdayReward(ClaimYesterdayLivenessReward.Req) returns (ClaimYesterdayLivenessReward.Resp) {
-    option (google.api.http) = { post: "/v1/user/liveness/yesterday-reward/claim" body: "*" };
+  rpc ClaimYesterdayLivenessReward(ClaimYesterdayLivenessReward.Req) returns (ClaimYesterdayLivenessReward.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/liveness/yesterday-reward/claim"
+      body: "*"
+    };
   } // 领取前一业务日已结算的活跃奖励。
 }
 

@@ -38,7 +38,7 @@ func (s *SchedulerScheduledTaskService) RegisterGrpc(gs *grpc.Server) {
 func (s *SchedulerScheduledTaskService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerScheduledTask_Req) (*schedulerv1.UpsertSchedulerScheduledTask_Resp, error) {
+func (s *SchedulerScheduledTaskService) UpsertSchedulerScheduledTask(ctx context.Context, req *schedulerv1.UpsertSchedulerScheduledTask_Req) (*schedulerv1.UpsertSchedulerScheduledTask_Resp, error) {
 	if req == nil || req.GetTitle() == "" || req.GetCronSpec() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -97,7 +97,7 @@ func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedul
 	return resp, nil
 }
 
-func (s *SchedulerScheduledTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerScheduledTask_Req) (*schedulerv1.GetSchedulerScheduledTask_Resp, error) {
+func (s *SchedulerScheduledTaskService) GetSchedulerScheduledTask(ctx context.Context, req *schedulerv1.GetSchedulerScheduledTask_Req) (*schedulerv1.GetSchedulerScheduledTask_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -138,7 +138,7 @@ func (s *SchedulerScheduledTaskService) Get(ctx context.Context, req *schedulerv
 	return resp, nil
 }
 
-func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerScheduledTasks_Req) (*schedulerv1.PageSchedulerScheduledTasks_Resp, error) {
+func (s *SchedulerScheduledTaskService) PageSchedulerScheduledTasks(ctx context.Context, req *schedulerv1.PageSchedulerScheduledTasks_Req) (*schedulerv1.PageSchedulerScheduledTasks_Resp, error) {
 	query := &usecase.ScheduledTaskPageReq{}
 	if req.GetQuery() != nil {
 		query.IDs = req.GetQuery().GetIds()
@@ -187,7 +187,7 @@ func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *scheduler
 	}, nil
 }
 
-func (s *SchedulerScheduledTaskService) ListAvailableTasks(
+func (s *SchedulerScheduledTaskService) ListSchedulerAvailableScheduledTasks(
 	ctx context.Context,
 	req *schedulerv1.ListSchedulerAvailableScheduledTasks_Req,
 ) (*schedulerv1.ListSchedulerAvailableScheduledTasks_Resp, error) {
@@ -212,7 +212,7 @@ func (s *SchedulerScheduledTaskService) ListAvailableTasks(
 	}, nil
 }
 
-func (s *SchedulerScheduledTaskService) PageExecutionRecords(
+func (s *SchedulerScheduledTaskService) PageSchedulerScheduledTaskExecutionRecords(
 	ctx context.Context,
 	req *schedulerv1.PageSchedulerScheduledTaskExecutionRecords_Req,
 ) (*schedulerv1.PageSchedulerScheduledTaskExecutionRecords_Resp, error) {
@@ -281,7 +281,7 @@ func (s *SchedulerScheduledTaskService) PageExecutionRecords(
 	}, nil
 }
 
-func (s *SchedulerScheduledTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerScheduledTask_Req) (*schedulerv1.TriggerSchedulerScheduledTask_Resp, error) {
+func (s *SchedulerScheduledTaskService) TriggerSchedulerScheduledTask(ctx context.Context, req *schedulerv1.TriggerSchedulerScheduledTask_Req) (*schedulerv1.TriggerSchedulerScheduledTask_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -332,7 +332,7 @@ func (s *SchedulerScheduledTaskService) Trigger(ctx context.Context, req *schedu
 	}, nil
 }
 
-func (s *SchedulerScheduledTaskService) CancelExecution(
+func (s *SchedulerScheduledTaskService) CancelSchedulerScheduledTaskExecution(
 	ctx context.Context,
 	req *schedulerv1.CancelSchedulerScheduledTaskExecution_Req,
 ) (*schedulerv1.CancelSchedulerScheduledTaskExecution_Resp, error) {

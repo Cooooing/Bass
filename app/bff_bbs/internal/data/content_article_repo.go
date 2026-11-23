@@ -52,7 +52,7 @@ func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo
 		save.Poll = r.articlePollDraft(article.Poll)
 		save.Lottery = r.articleLotteryDraft(article.Lottery)
 	}
-	reply, err := r.contentClient.Article.CreateDraft(ctx, &contentv1.CreateDraftArticle_Req{
+	reply, err := r.contentClient.Article.CreateDraftArticle(ctx, &contentv1.CreateDraftArticle_Req{
 		Article: save,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
@@ -79,7 +79,7 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 		save.Poll = r.articlePollDraft(article.Poll)
 		save.Lottery = r.articleLotteryDraft(article.Lottery)
 	}
-	reply, err := r.contentClient.Article.UpdateDraft(ctx, &contentv1.UpdateDraftArticle_Req{
+	reply, err := r.contentClient.Article.UpdateDraftArticle(ctx, &contentv1.UpdateDraftArticle_Req{
 		ArticleId: req.ArticleID,
 		Article:   save,
 		Access: &contentv1.ContentAccess{
@@ -105,7 +105,7 @@ func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.Pub
 		publishReq.ScheduledAt = timestamppb.New(*req.ScheduledAt)
 	}
 	publishReq.City = req.City
-	_, err := r.contentClient.Article.Publish(ctx, publishReq)
+	_, err := r.contentClient.Article.PublishArticle(ctx, publishReq)
 	if err != nil {
 		return err
 	}
@@ -113,7 +113,7 @@ func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.Pub
 }
 
 func (r *ContentArticleClient) CancelPublishArticle(ctx context.Context, req *repo.CancelPublishArticleReq) error {
-	_, err := r.contentClient.Article.CancelPublish(ctx, &contentv1.CancelPublishArticle_Req{
+	_, err := r.contentClient.Article.CancelPublishArticle(ctx, &contentv1.CancelPublishArticle_Req{
 		ArticleId: req.ArticleID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
@@ -127,7 +127,7 @@ func (r *ContentArticleClient) CancelPublishArticle(ctx context.Context, req *re
 }
 
 func (r *ContentArticleClient) ArchiveArticle(ctx context.Context, req *repo.ArchiveArticleReq) error {
-	_, err := r.contentClient.Article.Archive(ctx, &contentv1.ArchiveArticle_Req{
+	_, err := r.contentClient.Article.ArchiveArticle(ctx, &contentv1.ArchiveArticle_Req{
 		ArticleId: req.ArticleID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
@@ -142,22 +142,22 @@ func (r *ContentArticleClient) ArchiveArticle(ctx context.Context, req *repo.Arc
 }
 
 func (r *ContentArticleClient) SetPinnedArticleComment(ctx context.Context, req *repo.SetPinnedArticleCommentReq) error {
-	_, err := r.contentClient.Article.SetPinnedComment(ctx, &contentv1.SetPinnedArticleComment_Req{ArticleId: req.ArticleID, CommentId: req.CommentID, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
+	_, err := r.contentClient.Article.SetPinnedArticleComment(ctx, &contentv1.SetPinnedArticleComment_Req{ArticleId: req.ArticleID, CommentId: req.CommentID, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
 	return err
 }
 
 func (r *ContentArticleClient) AcceptArticleAnswer(ctx context.Context, req *repo.AcceptArticleAnswerReq) error {
-	_, err := r.contentClient.Article.AcceptAnswer(ctx, &contentv1.AcceptArticleAnswer_Req{ArticleId: req.ArticleID, CommentId: req.CommentID, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
+	_, err := r.contentClient.Article.AcceptArticleAnswer(ctx, &contentv1.AcceptArticleAnswer_Req{ArticleId: req.ArticleID, CommentId: req.CommentID, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
 	return err
 }
 
 func (r *ContentArticleClient) VoteArticlePoll(ctx context.Context, req *repo.VoteArticlePollReq) error {
-	_, err := r.contentClient.Article.VotePoll(ctx, &contentv1.VoteArticlePoll_Req{ArticleId: req.ArticleID, OptionIds: req.OptionIDs, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
+	_, err := r.contentClient.Article.VoteArticlePoll(ctx, &contentv1.VoteArticlePoll_Req{ArticleId: req.ArticleID, OptionIds: req.OptionIDs, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
 	return err
 }
 
 func (r *ContentArticleClient) EnterArticleLottery(ctx context.Context, req *repo.EnterArticleLotteryReq) error {
-	_, err := r.contentClient.Article.EnterLottery(ctx, &contentv1.EnterArticleLottery_Req{ArticleId: req.ArticleID, Entered: req.Entered, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
+	_, err := r.contentClient.Article.EnterArticleLottery(ctx, &contentv1.EnterArticleLottery_Req{ArticleId: req.ArticleID, Entered: req.Entered, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
 	return err
 }
 
@@ -181,7 +181,7 @@ func (*ContentArticleClient) articleLotteryDraft(row *model.ArticleLotteryDraft)
 	return &contentv1.ArticleLotteryDraft{Prizes: prizes, DrawAt: timestamppb.New(row.DrawAt)}
 }
 func (r *ContentArticleClient) DiscardDraftArticle(ctx context.Context, req *repo.DiscardDraftArticleReq) error {
-	_, err := r.contentClient.Article.DiscardDraft(ctx, &contentv1.DiscardDraftArticle_Req{
+	_, err := r.contentClient.Article.DiscardDraftArticle(ctx, &contentv1.DiscardDraftArticle_Req{
 		ArticleId: req.ArticleID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
@@ -248,7 +248,7 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 			Size: req.Page.Size,
 		}
 	}
-	reply, err := r.contentClient.Article.Page(ctx, &contentv1.PageArticles_Req{
+	reply, err := r.contentClient.Article.PageArticles(ctx, &contentv1.PageArticles_Req{
 		Page:   pageReq.ToProto(),
 		Query:  contentQuery,
 		Access: contentAccess,
@@ -272,7 +272,7 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 
 func (r *ContentArticleClient) PageCollectedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*repo.ListArticlesResp, error) {
 	pageReq := commonmodel.NormalizePage(page).ToProto()
-	reply, err := r.contentClient.Article.PageCollected(ctx, &contentv1.PageCollectedArticles_Req{
+	reply, err := r.contentClient.Article.PageCollectedArticles(ctx, &contentv1.PageCollectedArticles_Req{
 		Page: pageReq,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
@@ -292,7 +292,7 @@ func (r *ContentArticleClient) PageCollectedArticles(ctx context.Context, userID
 
 func (r *ContentArticleClient) PageWatchedArticles(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*repo.ListArticlesResp, error) {
 	pageReq := commonmodel.NormalizePage(page).ToProto()
-	reply, err := r.contentClient.Article.PageWatched(ctx, &contentv1.PageWatchedArticles_Req{
+	reply, err := r.contentClient.Article.PageWatchedArticles(ctx, &contentv1.PageWatchedArticles_Req{
 		Page: pageReq,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
@@ -346,7 +346,7 @@ func (r *ContentArticleClient) articleListItems(
 }
 
 func (r *ContentArticleClient) SearchArticles(ctx context.Context, req *repo.SearchArticlesReq) (*repo.SearchArticlesResp, error) {
-	reply, err := r.contentClient.ArticleSearch.SearchPublic(ctx, &contentv1.SearchPublicArticles_Req{
+	reply, err := r.contentClient.ArticleSearch.SearchPublicArticles(ctx, &contentv1.SearchPublicArticles_Req{
 		Query:             req.Query,
 		Cursor:            req.Cursor,
 		Size:              req.Size,
@@ -376,7 +376,7 @@ func (r *ContentArticleClient) PageViewHistory(
 		pageReq.Page = page.Page
 		pageReq.Size = page.Size
 	}
-	reply, err := r.contentClient.Article.PageViewHistory(ctx, &contentv1.PageArticleViewHistory_Req{
+	reply, err := r.contentClient.Article.PageArticleViewHistory(ctx, &contentv1.PageArticleViewHistory_Req{
 		Page: pageReq.ToProto(),
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
@@ -446,7 +446,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	if req.UserID > 0 {
 		contentAccess.ActorUserId = new(req.UserID)
 	}
-	reply, err := r.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
+	reply, err := r.contentClient.Article.GetArticle(ctx, &contentv1.GetArticle_Req{
 		ArticleId: req.ArticleID,
 		Access:    contentAccess,
 	})
@@ -487,7 +487,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 		}
 	}
 	if item.GetHasPostscript() {
-		postscriptResp, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{
+		postscriptResp, err := r.contentClient.Postscript.ListPostscripts(ctx, &contentv1.ListPostscripts_Req{
 			ArticleId: item.GetId(),
 			Access:    contentAccess,
 		})
@@ -527,7 +527,7 @@ func (r *ContentArticleClient) ViewArticle(ctx context.Context, req *repo.ViewAr
 	}
 	viewReq.Ip = req.IP
 	viewReq.UserAgent = req.UserAgent
-	_, err := r.contentClient.Article.View(ctx, viewReq)
+	_, err := r.contentClient.Article.ViewArticle(ctx, viewReq)
 	if err != nil {
 		return err
 	}
@@ -535,7 +535,7 @@ func (r *ContentArticleClient) ViewArticle(ctx context.Context, req *repo.ViewAr
 }
 
 func (r *ContentArticleClient) LikeArticle(ctx context.Context, req *repo.LikeArticleReq) (bool, error) {
-	reply, err := r.contentClient.Article.Like(ctx, &contentv1.LikeArticle_Req{
+	reply, err := r.contentClient.Article.LikeArticle(ctx, &contentv1.LikeArticle_Req{
 		ArticleId: req.ArticleID,
 		Liked:     req.Active,
 		Access: &contentv1.ContentAccess{
@@ -550,7 +550,7 @@ func (r *ContentArticleClient) LikeArticle(ctx context.Context, req *repo.LikeAr
 }
 
 func (r *ContentArticleClient) ThankArticle(ctx context.Context, req *repo.ThankArticleReq) (bool, error) {
-	reply, err := r.contentClient.Article.Thank(ctx, &contentv1.ThankArticle_Req{
+	reply, err := r.contentClient.Article.ThankArticle(ctx, &contentv1.ThankArticle_Req{
 		ArticleId: req.ArticleID,
 		Thanked:   true,
 		Access: &contentv1.ContentAccess{
@@ -565,7 +565,7 @@ func (r *ContentArticleClient) ThankArticle(ctx context.Context, req *repo.Thank
 }
 
 func (r *ContentArticleClient) CollectArticle(ctx context.Context, req *repo.CollectArticleReq) (bool, error) {
-	reply, err := r.contentClient.Article.Collect(ctx, &contentv1.CollectArticle_Req{
+	reply, err := r.contentClient.Article.CollectArticle(ctx, &contentv1.CollectArticle_Req{
 		ArticleId: req.ArticleID,
 		Collected: req.Active,
 		Access: &contentv1.ContentAccess{
@@ -580,7 +580,7 @@ func (r *ContentArticleClient) CollectArticle(ctx context.Context, req *repo.Col
 }
 
 func (r *ContentArticleClient) CountCollectedArticles(ctx context.Context, userID int64) (int32, error) {
-	response, err := r.contentClient.Article.CountCollected(ctx, &contentv1.CountCollectedArticles_Req{UserId: userID})
+	response, err := r.contentClient.Article.CountCollectedArticles(ctx, &contentv1.CountCollectedArticles_Req{UserId: userID})
 	if err != nil {
 		return 0, err
 	}
@@ -588,7 +588,7 @@ func (r *ContentArticleClient) CountCollectedArticles(ctx context.Context, userI
 }
 
 func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.WatchArticleReq) (bool, error) {
-	reply, err := r.contentClient.Article.Watch(ctx, &contentv1.WatchArticle_Req{
+	reply, err := r.contentClient.Article.WatchArticle(ctx, &contentv1.WatchArticle_Req{
 		ArticleId: req.ArticleID,
 		Watched:   req.Active,
 		Access: &contentv1.ContentAccess{
@@ -603,7 +603,7 @@ func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.Watch
 }
 
 func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) (bool, error) {
-	reply, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
+	reply, err := r.contentClient.Article.RewardArticle(ctx, &contentv1.RewardArticle_Req{
 		ArticleId: req.ArticleID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
@@ -629,7 +629,7 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 	}
 	states := map[int64]*model.ArticleViewerActionState{}
 	if userID > 0 {
-		stateResp, err := r.contentClient.Article.MapViewerActionStates(ctx, &contentv1.MapArticleViewerActionStates_Req{
+		stateResp, err := r.contentClient.Article.MapArticleViewerActionStates(ctx, &contentv1.MapArticleViewerActionStates_Req{
 			ArticleIds: articleIDs,
 			UserId:     userID,
 		})
@@ -656,7 +656,7 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 		articleTags[articleID] = values
 	}
 	domainStatus := contentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED
-	domainResp, err := r.contentClient.Domain.Map(ctx, &contentv1.MapDomains_Req{DomainIds: lo.Uniq(domainIDs), Status: &domainStatus})
+	domainResp, err := r.contentClient.Domain.MapDomains(ctx, &contentv1.MapDomains_Req{DomainIds: lo.Uniq(domainIDs), Status: &domainStatus})
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}

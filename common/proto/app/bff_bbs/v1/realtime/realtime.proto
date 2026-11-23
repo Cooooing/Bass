@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 option go_package = "common/proto/gen/bff_bbs/v1/realtime;realtime";
 
 service RealtimeService {
-  rpc CreateTicket(CreateRealtimeTicket.Req) returns (CreateRealtimeTicket.Resp) {
+  rpc CreateRealtimeTicket(CreateRealtimeTicket.Req) returns (CreateRealtimeTicket.Resp) {
     option (google.api.http) = {
       post: "/v1/realtime/ticket"
       body: "*"

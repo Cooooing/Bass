@@ -6,18 +6,18 @@ option go_package = "common/proto/gen/im/v1;v1";
 
 // IMEmojiService 管理账号自有表情分组及短期导入分享码。
 service IMEmojiService {
-  rpc List(ListEmojiGroups.Req) returns (ListEmojiGroups.Resp) {} // 查询账号自有的表情分组。
-  rpc CreateGroup(CreateEmojiGroup.Req) returns (CreateEmojiGroup.Resp) {} // 创建表情分组。
-  rpc RenameGroup(RenameEmojiGroup.Req) returns (RenameEmojiGroup.Resp) {} // 重命名表情分组。
-  rpc DeleteGroup(DeleteEmojiGroup.Req) returns (DeleteEmojiGroup.Resp) {} // 删除分组及其中表情项。
-  rpc AddItem(AddEmojiItem.Req) returns (AddEmojiItem.Resp) {} // 向分组加入一个可用图片资产。
-  rpc RenameItem(RenameEmojiItem.Req) returns (RenameEmojiItem.Resp) {} // 重命名表情项别名。
-  rpc ReorderGroups(ReorderEmojiGroups.Req) returns (ReorderEmojiGroups.Resp) {} // 重排表情分组。
-  rpc ReorderItems(ReorderEmojiItems.Req) returns (ReorderEmojiItems.Resp) {} // 重排同一分组内的表情项。
-  rpc DeleteItem(DeleteEmojiItem.Req) returns (DeleteEmojiItem.Resp) {} // 从分组移除一个表情项。
-  rpc MoveItem(MoveEmojiItem.Req) returns (MoveEmojiItem.Resp) {} // 移动当前账号的表情到另一个分组。
-  rpc CreateShare(CreateEmojiShare.Req) returns (CreateEmojiShare.Resp) {} // 创建可短期导入的分组快照。
-  rpc ImportShare(ImportEmojiShare.Req) returns (ImportEmojiShare.Resp) {} // 从分享码导入为新的表情分组。
+  rpc ListEmojiGroups(ListEmojiGroups.Req) returns (ListEmojiGroups.Resp) {} // 查询账号自有的表情分组。
+  rpc CreateEmojiGroup(CreateEmojiGroup.Req) returns (CreateEmojiGroup.Resp) {} // 创建表情分组。
+  rpc RenameEmojiGroup(RenameEmojiGroup.Req) returns (RenameEmojiGroup.Resp) {} // 重命名表情分组。
+  rpc DeleteEmojiGroup(DeleteEmojiGroup.Req) returns (DeleteEmojiGroup.Resp) {} // 删除分组及其中表情项。
+  rpc AddEmojiItem(AddEmojiItem.Req) returns (AddEmojiItem.Resp) {} // 向分组加入一个可用图片资产。
+  rpc RenameEmojiItem(RenameEmojiItem.Req) returns (RenameEmojiItem.Resp) {} // 重命名表情项别名。
+  rpc ReorderEmojiGroups(ReorderEmojiGroups.Req) returns (ReorderEmojiGroups.Resp) {} // 重排表情分组。
+  rpc ReorderEmojiItems(ReorderEmojiItems.Req) returns (ReorderEmojiItems.Resp) {} // 重排同一分组内的表情项。
+  rpc DeleteEmojiItem(DeleteEmojiItem.Req) returns (DeleteEmojiItem.Resp) {} // 从分组移除一个表情项。
+  rpc MoveEmojiItem(MoveEmojiItem.Req) returns (MoveEmojiItem.Resp) {} // 移动当前账号的表情到另一个分组。
+  rpc CreateEmojiShare(CreateEmojiShare.Req) returns (CreateEmojiShare.Resp) {} // 创建可短期导入的分组快照。
+  rpc ImportEmojiShare(ImportEmojiShare.Req) returns (ImportEmojiShare.Resp) {} // 从分享码导入为新的表情分组。
 }
 
 // EmojiGroup 是账号拥有的表情分组。

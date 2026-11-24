@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
+// Domain 定义内容服务允许使用的域名。
 type Domain struct {
 	ent.Schema
 }

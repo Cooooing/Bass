@@ -13,9 +13,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Asset is a completed, content-addressed storage object. It deliberately has
-// no business purpose, owner or access level: those facts belong to references
-// owned by user, content, IM and other domains.
+// Asset 是已完成的内容寻址存储对象，不保存业务归属、所有者或访问级别；这些事实由用户、内容和 IM 等领域引用维护。
 type Asset struct {
 	ent.Schema
 }

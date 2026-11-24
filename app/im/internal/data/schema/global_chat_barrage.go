@@ -13,6 +13,7 @@ import (
 	"im/internal/enum"
 )
 
+// GlobalChatBarrage 记录全局聊天室的弹幕消息。
 type GlobalChatBarrage struct{ ent.Schema }
 
 func (GlobalChatBarrage) Annotations() []schema.Annotation {

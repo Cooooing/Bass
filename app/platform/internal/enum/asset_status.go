@@ -8,8 +8,8 @@ import (
 type AssetStatus string
 
 const (
-	AssetStatusAvailable AssetStatus = "available" // available
-	AssetStatusBlocked   AssetStatus = "blocked"   // blocked
+	AssetStatusAvailable AssetStatus = "available" // 资源可正常访问
+	AssetStatusBlocked   AssetStatus = "blocked"   // 资源已禁止访问
 )
 
 var AssetStatusMap = commonenum.NewMapping[AssetStatus, v1.AssetStatus](map[AssetStatus]commonenum.Entry[AssetStatus, v1.AssetStatus]{

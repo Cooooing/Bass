@@ -31,13 +31,6 @@ type CommentDetail struct {
 	UpdatedAt         *time.Time
 }
 
-type CommentThread struct {
-	Root           *model.CommentListItem
-	PreviewReplies []*model.CommentListItem
-	ReplyCount     int32
-	HasMoreReplies bool
-}
-
 type CommentQuery struct {
 	CommentID       *int64
 	ArticleID       *int64
@@ -82,9 +75,9 @@ type ListCommentThreadsReq struct {
 
 type ListCommentThreadsResp struct {
 	Page           *commonmodel.PageResp
-	Rows           []*CommentThread
-	AcceptedAnswer *CommentThread
-	PinnedComment  *CommentThread
+	Rows           []*model.CommentThread
+	AcceptedAnswer *model.CommentThread
+	PinnedComment  *model.CommentThread
 }
 
 type ListCommentRepliesReq struct {

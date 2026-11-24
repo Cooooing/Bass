@@ -217,9 +217,9 @@ type ListCommentThreadsReq struct {
 
 type ListCommentThreadsResp struct {
 	Page           *commonmodel.PageResp
-	Rows           []*repo.CommentThread
-	AcceptedAnswer *repo.CommentThread
-	PinnedComment  *repo.CommentThread
+	Rows           []*model.CommentThread
+	AcceptedAnswer *model.CommentThread
+	PinnedComment  *model.CommentThread
 }
 
 func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error) {
@@ -320,7 +320,7 @@ func (u *ContentCommentUsecase) commentThreadProfiles(resp *repo.ListCommentThre
 	return profiles
 }
 
-func (u *ContentCommentUsecase) appendCommentThreadProfiles(profiles []*model.AccountProfile, thread *repo.CommentThread) []*model.AccountProfile {
+func (u *ContentCommentUsecase) appendCommentThreadProfiles(profiles []*model.AccountProfile, thread *model.CommentThread) []*model.AccountProfile {
 	if thread == nil {
 		return profiles
 	}

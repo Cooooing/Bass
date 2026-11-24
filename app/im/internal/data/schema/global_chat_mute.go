@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
+// GlobalChatMute 记录全局聊天室禁言状态。
 type GlobalChatMute struct{ ent.Schema }
 
 func (GlobalChatMute) Annotations() []schema.Annotation {

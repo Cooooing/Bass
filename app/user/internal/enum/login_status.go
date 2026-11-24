@@ -8,8 +8,8 @@ import (
 type LoginStatus string
 
 const (
-	LoginStatusSuccess LoginStatus = "success" // success
-	LoginStatusFailed  LoginStatus = "failed"  // failed
+	LoginStatusSuccess LoginStatus = "success" // 登录认证成功
+	LoginStatusFailed  LoginStatus = "failed"  // 登录认证失败
 )
 
 var LoginStatusMap = commonenum.NewMapping[LoginStatus, v1.LoginStatus](map[LoginStatus]commonenum.Entry[LoginStatus, v1.LoginStatus]{

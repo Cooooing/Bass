@@ -37,7 +37,6 @@ func NewIPResolutionUsecase(
 	httpClient *http.Client,
 	storageClient repo.StorageClient,
 ) (*IPResolutionUsecase, func(), error) {
-	ctx := context.Background()
 	u := &IPResolutionUsecase{
 		conf:          conf,
 		log:           logger,
@@ -54,8 +53,13 @@ func NewIPResolutionUsecase(
 			old.Close()
 		}
 	}
-	if !conf.GetBusiness().GetIpData().GetEnable() {
-		return u, cleanup, nil
+	return u, cleanup, nil
+}
+
+// Start 在应用生命周期启动时加载 IP 数据集，避免在依赖装配阶段创建根 context。
+func (u *IPResolutionUsecase) Start(ctx context.Context) error {
+	if !u.conf.GetBusiness().GetIpData().GetEnable() {
+		return nil
 	}
 	ipData := u.conf.GetBusiness().GetIpData()
 	ipv4Content, ipv4Err := u.downloadIPDataFromStorage(ctx, ipData.GetIpv4XdbPath())
@@ -63,15 +67,15 @@ func NewIPResolutionUsecase(
 	if ipv4Err == nil && ipv6Err == nil {
 		err := u.uploadIPDataToLocal(ctx, ipv4Content, ipv6Content)
 		if err != nil {
-			return u, cleanup, fmt.Errorf("upload ip data to local: %w", err)
+			return fmt.Errorf("upload ip data to local: %w", err)
 		}
-		return u, cleanup, nil
+		return nil
 	}
 	u.log.Warn("download ip data from object storage failed, use local cache", "ipv4_error", ipv4Err, "ipv6_error", ipv6Err)
 	if err := u.loadIPDataFromLocal(ctx); err != nil {
 		u.log.Warn("load local ip data cache failed, IP resolution is unavailable", "error", err)
 	}
-	return u, cleanup, nil
+	return nil
 }
 
 func (u *IPResolutionUsecase) downloadIPDataFromSource(ctx context.Context, url string) (content []byte, err error) {
@@ -250,7 +254,9 @@ func (u *IPResolutionUsecase) writeIPDataFile(ctx context.Context, path string, 
 		return false, fmt.Errorf("write ip data temp file %s: %w", tmpPath, err)
 	}
 	if err := os.Rename(tmpPath, path); err != nil {
-		_ = os.Remove(tmpPath)
+		if cleanupErr := util.RemoveFile(tmpPath); cleanupErr != nil && !os.IsNotExist(cleanupErr) {
+			u.log.Warn("clean IP data temp file failed", "error", cleanupErr, "path", tmpPath)
+		}
 		return false, fmt.Errorf("replace ip data file %s: %w", path, err)
 	}
 	return true, nil

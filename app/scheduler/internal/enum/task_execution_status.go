@@ -9,14 +9,14 @@ import (
 type TaskExecutionStatus string
 
 const (
-	TaskExecutionStatusPending      TaskExecutionStatus = "pending"       // pending
-	TaskExecutionStatusRunning      TaskExecutionStatus = "running"       // running
-	TaskExecutionStatusSuccess      TaskExecutionStatus = "success"       // success
-	TaskExecutionStatusFailed       TaskExecutionStatus = "failed"        // failed
-	TaskExecutionStatusTimeout      TaskExecutionStatus = "timeout"       // timeout
-	TaskExecutionStatusCanceled     TaskExecutionStatus = "canceled"      // canceled
-	TaskExecutionStatusSkipped      TaskExecutionStatus = "skipped"       // skipped
-	TaskExecutionStatusRetryPending TaskExecutionStatus = "retry_pending" // retry_pending
+	TaskExecutionStatusPending      TaskExecutionStatus = "pending"       // 等待开始执行
+	TaskExecutionStatusRunning      TaskExecutionStatus = "running"       // 正在执行任务
+	TaskExecutionStatusSuccess      TaskExecutionStatus = "success"       // 任务执行成功
+	TaskExecutionStatusFailed       TaskExecutionStatus = "failed"        // 任务执行失败
+	TaskExecutionStatusTimeout      TaskExecutionStatus = "timeout"       // 任务执行超时
+	TaskExecutionStatusCanceled     TaskExecutionStatus = "canceled"      // 任务被取消
+	TaskExecutionStatusSkipped      TaskExecutionStatus = "skipped"       // 任务被跳过
+	TaskExecutionStatusRetryPending TaskExecutionStatus = "retry_pending" // 等待下一次重试
 )
 
 // TaskExecutionStatusMap 将内部任务执行状态映射到 proto 枚举。

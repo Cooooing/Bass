@@ -8,8 +8,8 @@ import (
 type TokenType string
 
 const (
-	TokenTypeAccess  TokenType = "access"  // access
-	TokenTypeRefresh TokenType = "refresh" // refresh
+	TokenTypeAccess  TokenType = "access"  // 访问接口令牌
+	TokenTypeRefresh TokenType = "refresh" // 刷新访问令牌
 )
 
 var TokenTypeMap = commonenum.NewMapping[TokenType, v1.TokenType](map[TokenType]commonenum.Entry[TokenType, v1.TokenType]{

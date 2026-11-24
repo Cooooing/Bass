@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
+// PrivateChatSession 记录用户间的私聊会话。
 type PrivateChatSession struct{ ent.Schema }
 
 func (PrivateChatSession) Annotations() []schema.Annotation {

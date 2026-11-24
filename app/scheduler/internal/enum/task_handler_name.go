@@ -9,17 +9,17 @@ import (
 type TaskHandlerName string
 
 const (
-	TaskHandlerNameNoop                            TaskHandlerName = "noop"                               // noop
-	TaskHandlerNameUserOutboxPublishBatch          TaskHandlerName = "user.outbox_publish_batch"          // user.outbox_publish_batch
-	TaskHandlerNameUserUnbanAccounts               TaskHandlerName = "user.unban_accounts"                // user.unban_accounts
-	TaskHandlerNameUserSettleLiveness              TaskHandlerName = "user.settle_liveness"               // user.settle_liveness
-	TaskHandlerNameContentOutboxPublishBatch       TaskHandlerName = "content.outbox_publish_batch"       // content.outbox_publish_batch
-	TaskHandlerNameContentPublishScheduledArticles TaskHandlerName = "content.publish_scheduled_articles" // content.publish_scheduled_articles
-	TaskHandlerNameContentFlushArticleViews        TaskHandlerName = "content.flush_article_views"        // content.flush_article_views
-	TaskHandlerNameContentDrawArticleLotteries     TaskHandlerName = "content.draw_article_lotteries"     // content.draw_article_lotteries
-	TaskHandlerNameContentFinishArticlePolls       TaskHandlerName = "content.finish_article_polls"       // content.finish_article_polls
-	TaskHandlerNamePlatformRefreshHoliday          TaskHandlerName = "platform.refresh_holiday"           // platform.refresh_holiday
-	TaskHandlerNamePlatformRefreshIPData           TaskHandlerName = "platform.refresh_ip_data"           // platform.refresh_ip_data
+	TaskHandlerNameNoop                            TaskHandlerName = "noop"                               // 空处理器，仅用于占位
+	TaskHandlerNameUserOutboxPublishBatch          TaskHandlerName = "user.outbox_publish_batch"          // 批量发布用户发件箱事件
+	TaskHandlerNameUserUnbanAccounts               TaskHandlerName = "user.unban_accounts"                // 解除到期账号封禁
+	TaskHandlerNameUserSettleLiveness              TaskHandlerName = "user.settle_liveness"               // 结算用户活跃度奖励
+	TaskHandlerNameContentOutboxPublishBatch       TaskHandlerName = "content.outbox_publish_batch"       // 批量发布内容发件箱事件
+	TaskHandlerNameContentPublishScheduledArticles TaskHandlerName = "content.publish_scheduled_articles" // 发布定时文章
+	TaskHandlerNameContentFlushArticleViews        TaskHandlerName = "content.flush_article_views"        // 刷新文章浏览量
+	TaskHandlerNameContentDrawArticleLotteries     TaskHandlerName = "content.draw_article_lotteries"     // 开奖文章抽奖活动
+	TaskHandlerNameContentFinishArticlePolls       TaskHandlerName = "content.finish_article_polls"       // 结束文章投票活动
+	TaskHandlerNamePlatformRefreshHoliday          TaskHandlerName = "platform.refresh_holiday"           // 刷新节假日数据
+	TaskHandlerNamePlatformRefreshIPData           TaskHandlerName = "platform.refresh_ip_data"           // 刷新 IP 地址数据
 )
 
 // TaskHandlerNameMap 将内部任务处理器名称映射到 proto 枚举。

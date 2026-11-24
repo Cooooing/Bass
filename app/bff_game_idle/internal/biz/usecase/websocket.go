@@ -204,12 +204,6 @@ func (u *WebSocketUsecase) Start(ctx context.Context) error {
 	u.cancel = cancel
 	u.running = true
 	u.lock.Unlock()
-	go func() {
-		<-runCtx.Done()
-		if err := subscription.Unsubscribe(); err != nil {
-			u.logger.Error("game idle bff websocket unsubscribe failed", constant.LogFieldErr, err)
-		}
-	}()
 	return nil
 }
 

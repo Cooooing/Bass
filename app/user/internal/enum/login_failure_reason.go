@@ -8,12 +8,12 @@ import (
 type LoginFailureReason string
 
 const (
-	LoginFailureReasonInvalidCredentials   LoginFailureReason = "invalid_credentials"     // #nosec G101 -- login failure enum, not a credential.
-	LoginFailureReasonTotpInvalid          LoginFailureReason = "totp_invalid"            // totp_invalid
-	LoginFailureReasonCodeInvalidOrExpired LoginFailureReason = "code_invalid_or_expired" // code_invalid_or_expired
-	LoginFailureReasonAccountNotNormal     LoginFailureReason = "account_not_normal"      // account_not_normal
-	LoginFailureReasonNotImplemented       LoginFailureReason = "not_implemented"         // not_implemented
-	LoginFailureReasonInternal             LoginFailureReason = "internal"                // internal
+	LoginFailureReasonInvalidCredentials   LoginFailureReason = "invalid_credentials"     // #nosec G101 -- 登录失败枚举值，不包含敏感凭据。
+	LoginFailureReasonTotpInvalid          LoginFailureReason = "totp_invalid"            // 双因素验证码无效
+	LoginFailureReasonCodeInvalidOrExpired LoginFailureReason = "code_invalid_or_expired" // 验证码无效或已过期
+	LoginFailureReasonAccountNotNormal     LoginFailureReason = "account_not_normal"      // 账号状态不允许登录
+	LoginFailureReasonNotImplemented       LoginFailureReason = "not_implemented"         // 登录方式尚未实现
+	LoginFailureReasonInternal             LoginFailureReason = "internal"                // 系统内部登录错误
 )
 
 var LoginFailureReasonMap = commonenum.NewMapping[LoginFailureReason, v1.LoginFailureReason](map[LoginFailureReason]commonenum.Entry[LoginFailureReason, v1.LoginFailureReason]{

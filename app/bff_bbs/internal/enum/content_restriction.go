@@ -9,9 +9,9 @@ import (
 type ContentRestriction string
 
 const (
-	ContentRestrictionNone   ContentRestriction = "none"   // none
-	ContentRestrictionHidden ContentRestriction = "hidden" // hidden
-	ContentRestrictionLocked ContentRestriction = "locked" // locked
+	ContentRestrictionNone   ContentRestriction = "none"   // 不限制内容访问
+	ContentRestrictionHidden ContentRestriction = "hidden" // 对读者隐藏内容
+	ContentRestrictionLocked ContentRestriction = "locked" // 锁定内容禁止访问
 )
 
 var ContentRestrictionMap = commonenum.NewMapping[ContentRestriction, bffv1.ContentRestriction](map[ContentRestriction]commonenum.Entry[ContentRestriction, bffv1.ContentRestriction]{

@@ -8,7 +8,7 @@ import (
 type SMSType string
 
 const (
-	SMSTypeTencent SMSType = "tencent" // tencent
+	SMSTypeTencent SMSType = "tencent" // 腾讯云短信服务
 )
 
 var SMSTypeMap = commonenum.NewMapping[SMSType, v1.SMSType](map[SMSType]commonenum.Entry[SMSType, v1.SMSType]{

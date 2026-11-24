@@ -11,9 +11,9 @@ APP_DIR := $(ROOT_DIR)/app/$(SERVER)
 INTERNAL_DIR := $(APP_DIR)/internal
 BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"app"}],"deps":["buf.build/googleapis/googleapis"]}'
 LINT_BINARY := $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE)
-# 使用 Git 跟踪文件生成依赖列表，避免 Windows 的 find.exe 与 Unix find 参数不兼容。
+# 使用 Git 已跟踪和未跟踪文件生成依赖列表，避免 Windows 的 find.exe 与 Unix find 参数不兼容。
 # glob 路径限定在插件目录，防止 app 源码变更触发定制 linter 重建。
-LINT_PLUGIN_SOURCES := $(addprefix $(ROOT_DIR)/,$(shell git -C $(ROOT_DIR) ls-files -- .golangci-plugin/go.mod .golangci-plugin/go.sum ':(glob).golangci-plugin/**/*.go'))
+LINT_PLUGIN_SOURCES := $(addprefix $(ROOT_DIR)/,$(shell git -C $(ROOT_DIR) ls-files --cached --others --exclude-standard -- .golangci-plugin/go.mod .golangci-plugin/go.sum ':(glob).golangci-plugin/**/*.go'))
 
 IGNORE_ERROR ?= 0
 MODULE_GEN_TARGETS := cfg wire
@@ -85,7 +85,7 @@ $(LINT_BINARY): $(ROOT_DIR)/.custom-gcl.yml $(ROOT_DIR)/.golangci.yml $(LINT_PLU
 .PHONY: lint
 lint: lint-toolchain
 	@echo "[lint] $(SERVER)..."
-	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners --disable=bassarch --fix --issues-exit-code=0 ./... || echo "[lint] fix pass did not complete; continuing strict verification"
-	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners --disable=bassarch ./...
+	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners --fix --issues-exit-code=0 ./... || echo "[lint] fix pass did not complete; continuing strict verification"
+	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners ./...
 
 endif

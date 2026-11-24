@@ -31,7 +31,7 @@ func (NotificationLarkWebhookTemplate) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("rule_id").Comment("通知规则 ID"),
 		field.String("webhook_id").Comment("Lark webhook 配置标识"),
-		field.String("token").Sensitive().Comment("Lark webhook token"),
+		field.String("token").Sensitive().Comment("飞书机器人访问令牌"),
 		field.String("secret").Optional().Nillable().Sensitive().Comment("Lark webhook 签名密钥"),
 		field.String("msg_type").Default("text").Comment("Lark 消息类型"),
 		field.String("content_template").Comment("Lark content 对象模板"),

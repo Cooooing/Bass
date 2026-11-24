@@ -38,3 +38,11 @@ type CommentListItem struct {
 	CreatedAt         *time.Time
 	UpdatedAt         *time.Time
 }
+
+// CommentThread 表示一级评论及其有限数量的回复预览。
+type CommentThread struct {
+	Root           *CommentListItem
+	PreviewReplies []*CommentListItem
+	ReplyCount     int32
+	HasMoreReplies bool
+}

@@ -23,6 +23,7 @@ var ProviderSet = wire.NewSet(
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
 	platformserver.NewAssetEventConsumerServer,
+	platformserver.NewIPResolutionBootstrapServer,
 	provideServers,
 	newModule,
 )
@@ -41,8 +42,11 @@ func newModule(config *Config, services []server.Service, servers []transport.Se
 
 func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
 
-func provideServers(assetEventConsumerServer *platformserver.AssetEventConsumerServer) []transport.Server {
-	return []transport.Server{assetEventConsumerServer}
+func provideServers(
+	assetEventConsumerServer *platformserver.AssetEventConsumerServer,
+	ipResolutionBootstrapServer *platformserver.IPResolutionBootstrapServer,
+) []transport.Server {
+	return []transport.Server{assetEventConsumerServer, ipResolutionBootstrapServer}
 }
 
 // Build 构造平台模块并返回单体可收集的模块能力。

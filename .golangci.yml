@@ -1,4 +1,4 @@
-# 全仓共享 Go 质量门禁；必须使用内置 bassarch 的 bass-golangci-lint。
+# 全仓共享 Go 质量门禁；必须使用内置 Bass 自定义插件的 bass-golangci-lint。
 version: "2"
 
 run:
@@ -77,8 +77,6 @@ linters:
     - depguard
     # 禁止库代码直接打印和 Fatal。
     - forbidigo
-    # 项目级分层、enum 和 internal 结构约束。
-    - bassarch
     # 路径、弱随机数、命令注入等安全问题。
     - gosec
     # 无意义类型转换。
@@ -143,6 +141,12 @@ linters:
     - inamedparam
     # Proto 消息统一 GetXxx 访问，保证 nil 安全。
     - protogetter
+    # 服务依赖、配置、并发与基础设施边界。
+    - bassdep
+    # 内部枚举与 Proto 映射契约。
+    - bassenum
+    # Ent schema 文件结构与业务说明。
+    - bassschema
 
   settings:
     errchkjson:
@@ -174,6 +178,10 @@ linters:
     inamedparam:
       # 单参数接口常用于表达第三方形状，不强制添加无实际用途的名称。
       skip-single-param: true
+    nolintlint:
+      # 禁止裸 nolint，豁免必须指明具体规则并给出中文原因。
+      require-explanation: true
+      require-specific: true
     revive:
       # 只启用本项目需要的命名、错误、context 和断言规则。
       rules:
@@ -227,16 +235,37 @@ linters:
             - { pkg: "github.com/gofrs/uuid", desc: "统一使用 github.com/google/uuid" }
             - { pkg: "github.com/dgrijalva/jwt-go", desc: "统一使用 github.com/golang-jwt/jwt/v5" }
             - { pkg: "github.com/golang/protobuf", desc: "统一使用 google.golang.org/protobuf" }
+        system-boundary:
+          # 高风险系统能力只能由启动或受控基础设施代码使用。
+          list-mode: lax
+          files: ["**/*.go"]
+          deny:
+            - { pkg: "os/exec", desc: "禁止直接启动外部进程" }
+            - { pkg: "unsafe", desc: "禁止使用 unsafe" }
+            - { pkg: "plugin", desc: "禁止运行时加载 Go 插件" }
+            - { pkg: "syscall", desc: "禁止直接调用系统调用" }
     custom:
-      bassarch:
-        # 通过 golangci 插件模块加载项目级规则。
+      bassdep:
+        # 依赖、配置、并发与基础设施边界规则。
         type: module
-        # 在 golangci 输出中展示的规则说明。
-        description: 包级函数与分层依赖约束
+        description: 服务依赖、配置、并发与基础设施边界约束
+      bassenum:
+        # 内部 enum 与 Proto 映射规则。
+        type: module
+        description: 内部枚举和 Proto 映射约束
+      bassschema:
+        # Ent schema 文件和说明规则。
+        type: module
+        description: Ent schema 文件结构和业务说明约束
     forbidigo:
       forbid:
         - { pattern: '^(fmt\.Println|fmt\.Printf)$', msg: "库代码禁止直接打印" }
         - { pattern: '^log\.Fatal(f|ln)?$', msg: "库代码禁止 Fatal 终止进程" }
+        - { pattern: '^os\.(Exit|Remove|RemoveAll)$', msg: "禁止直接终止进程或删除文件" }
+        - { pattern: '^exec\.(Command|CommandContext)$', msg: "禁止直接启动外部进程" }
+        - { pattern: '^plugin\.Open$', msg: "禁止运行时加载 Go 插件" }
+        - { pattern: '^syscall\.', msg: "禁止直接调用系统调用" }
+        - { pattern: '^unsafe\.', msg: "禁止使用 unsafe" }
     gosec:
       # G104 与 errcheck 重复，由 errcheck 统一报告。
       excludes: [G104]
@@ -255,6 +284,9 @@ linters:
         linters: [funlen]
       # 进程入口允许 fmt 输出启动和诊断信息。
       - path: '(^|/)cmd/.*\.go$'
+        linters: [forbidigo]
+      # 单文件删除能力集中在 common，调用方必须先完成路径校验并处理返回错误。
+      - path: '(^|/)common/pkg/util/file\.go$'
         linters: [forbidigo]
 
 issues:

@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// UserBadge stores a user's owned badge and display preferences.
+// UserBadge 记录用户持有的徽章及展示偏好。
 type UserBadge struct {
 	ent.Schema
 }

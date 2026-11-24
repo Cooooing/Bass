@@ -8,13 +8,13 @@ import (
 type NotificationChannelStatus string
 
 const (
-	NotificationChannelStatusProcessing    NotificationChannelStatus = "processing"     // processing
-	NotificationChannelStatusSucceeded     NotificationChannelStatus = "succeeded"      // succeeded
-	NotificationChannelStatusSkipped       NotificationChannelStatus = "skipped"        // skipped
-	NotificationChannelStatusFailed        NotificationChannelStatus = "failed"         // failed
-	NotificationChannelStatusUnknown       NotificationChannelStatus = "unknown"        // unknown
-	NotificationChannelStatusInternalError NotificationChannelStatus = "internal_error" // internal_error
-	NotificationChannelStatusRateLimited   NotificationChannelStatus = "rate_limited"   // rate_limited
+	NotificationChannelStatusProcessing    NotificationChannelStatus = "processing"     // 正在投递
+	NotificationChannelStatusSucceeded     NotificationChannelStatus = "succeeded"      // 投递成功
+	NotificationChannelStatusSkipped       NotificationChannelStatus = "skipped"        // 无需投递
+	NotificationChannelStatusFailed        NotificationChannelStatus = "failed"         // 投递失败
+	NotificationChannelStatusUnknown       NotificationChannelStatus = "unknown"        // 状态未知
+	NotificationChannelStatusInternalError NotificationChannelStatus = "internal_error" // 通道内部错误
+	NotificationChannelStatusRateLimited   NotificationChannelStatus = "rate_limited"   // 触发通道限流
 )
 
 var NotificationChannelStatusMap = enum.NewMapping[NotificationChannelStatus, v1.NotificationChannelStatus](map[NotificationChannelStatus]enum.Entry[NotificationChannelStatus, v1.NotificationChannelStatus]{

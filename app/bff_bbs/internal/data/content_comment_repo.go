@@ -229,12 +229,12 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*repo.CommentThread, 0, len(reply.GetRows()))
+	rows := make([]*model.CommentThread, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
 		previewRows := lo.Map(previewMap[item.GetId()], func(preview *contentv1.PageComments_Resp_Comment, _ int) *model.CommentListItem {
 			return r.commentListItem(preview, articles[preview.GetArticleId()], profiles, states[preview.GetId()])
 		})
-		rows = append(rows, &repo.CommentThread{
+		rows = append(rows, &model.CommentThread{
 			Root:           r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()]),
 			PreviewReplies: previewRows,
 			ReplyCount:     item.GetReplyCount(),
@@ -250,10 +250,10 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		Rows: rows,
 	}
 	if pinnedRoot != nil {
-		result.PinnedComment = &repo.CommentThread{Root: r.commentListItem(pinnedRoot, articles[pinnedRoot.GetArticleId()], profiles, states[pinnedRoot.GetId()]), ReplyCount: pinnedRoot.GetReplyCount(), HasMoreReplies: pinnedRoot.GetReplyCount() > 0}
+		result.PinnedComment = &model.CommentThread{Root: r.commentListItem(pinnedRoot, articles[pinnedRoot.GetArticleId()], profiles, states[pinnedRoot.GetId()]), ReplyCount: pinnedRoot.GetReplyCount(), HasMoreReplies: pinnedRoot.GetReplyCount() > 0}
 	}
 	if acceptedRoot != nil {
-		result.AcceptedAnswer = &repo.CommentThread{Root: r.commentListItem(acceptedRoot, articles[acceptedRoot.GetArticleId()], profiles, states[acceptedRoot.GetId()]), ReplyCount: acceptedRoot.GetReplyCount(), HasMoreReplies: acceptedRoot.GetReplyCount() > 0}
+		result.AcceptedAnswer = &model.CommentThread{Root: r.commentListItem(acceptedRoot, articles[acceptedRoot.GetArticleId()], profiles, states[acceptedRoot.GetId()]), ReplyCount: acceptedRoot.GetReplyCount(), HasMoreReplies: acceptedRoot.GetReplyCount() > 0}
 	}
 	return result, nil
 }

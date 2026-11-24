@@ -8,8 +8,8 @@ import (
 type VerificationType string
 
 const (
-	VerificationTypeEmail VerificationType = "email" // email
-	VerificationTypePhone VerificationType = "phone" // phone
+	VerificationTypeEmail VerificationType = "email" // 邮箱验证
+	VerificationTypePhone VerificationType = "phone" // 手机验证
 )
 
 var VerificationTypeMap = commonenum.NewMapping[VerificationType, v1.VerificationType](map[VerificationType]commonenum.Entry[VerificationType, v1.VerificationType]{

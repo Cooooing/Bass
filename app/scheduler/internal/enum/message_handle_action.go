@@ -9,9 +9,9 @@ import (
 type MessageHandleAction string
 
 const (
-	MessageHandleActionComplete MessageHandleAction = "complete" // complete
-	MessageHandleActionRetry    MessageHandleAction = "retry"    // retry
-	MessageHandleActionDiscard  MessageHandleAction = "discard"  // discard
+	MessageHandleActionComplete MessageHandleAction = "complete" // 成功完成处理
+	MessageHandleActionRetry    MessageHandleAction = "retry"    // 稍后重试处理
+	MessageHandleActionDiscard  MessageHandleAction = "discard"  // 丢弃当前消息
 )
 
 var MessageHandleActionMap = commonenum.NewMapping[MessageHandleAction, schedulerv1.SchedulerMessageHandleAction](map[MessageHandleAction]commonenum.Entry[MessageHandleAction, schedulerv1.SchedulerMessageHandleAction]{

@@ -8,10 +8,10 @@ import (
 type HolidayType string
 
 const (
-	HolidayTypeWorkday       HolidayType = "workday"        // workday
-	HolidayTypeWeekend       HolidayType = "weekend"        // weekend
-	HolidayTypeFestival      HolidayType = "festival"       // festival
-	HolidayTypeMakeupWorkday HolidayType = "makeup_workday" // makeup_workday
+	HolidayTypeWorkday       HolidayType = "workday"        // 法定工作日
+	HolidayTypeWeekend       HolidayType = "weekend"        // 常规周末休息日
+	HolidayTypeFestival      HolidayType = "festival"       // 法定节假日
+	HolidayTypeMakeupWorkday HolidayType = "makeup_workday" // 调休补班日
 )
 
 var HolidayTypeMap = commonenum.NewMapping[HolidayType, v1.HolidayType](map[HolidayType]commonenum.Entry[HolidayType, v1.HolidayType]{

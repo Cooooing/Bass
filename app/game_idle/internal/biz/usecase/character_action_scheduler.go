@@ -37,6 +37,7 @@ type CharacterActionSchedulerUsecase struct {
 	// scheduledTasks 记录当前已放入时间轮的队首任务，避免重复调度同一个队列项。
 	scheduledTasks map[int64]string
 	stop           context.CancelFunc
+	runningWG      sync.WaitGroup
 	running        bool
 }
 
@@ -84,8 +85,8 @@ func (u *CharacterActionSchedulerUsecase) Start(ctx context.Context) error {
 	u.mutex.Unlock()
 
 	// 调度器只消费通道，具体状态变更仍进入 CharacterStateUsecase 串行执行。
-	go u.consumePendingTasks(runCtx)
-	go u.consumeOfflineTasks(runCtx)
+	u.runningWG.Go(func() { u.consumePendingTasks(runCtx) })
+	u.runningWG.Go(func() { u.consumeOfflineTasks(runCtx) })
 
 	characterIDs, err := u.actionQueueRepo.ListCharacterIDs(runCtx)
 	if err != nil {

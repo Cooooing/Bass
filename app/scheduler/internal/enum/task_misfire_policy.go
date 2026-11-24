@@ -9,9 +9,9 @@ import (
 type TaskMisfirePolicy string
 
 const (
-	TaskMisfirePolicySkip          TaskMisfirePolicy = "skip"           // skip
-	TaskMisfirePolicyExecuteLatest TaskMisfirePolicy = "execute_latest" // execute_latest
-	TaskMisfirePolicyExecuteAll    TaskMisfirePolicy = "execute_all"    // execute_all
+	TaskMisfirePolicySkip          TaskMisfirePolicy = "skip"           // 跳过错过的执行
+	TaskMisfirePolicyExecuteLatest TaskMisfirePolicy = "execute_latest" // 仅补执行最近一次
+	TaskMisfirePolicyExecuteAll    TaskMisfirePolicy = "execute_all"    // 补执行所有错过任务
 )
 
 // TaskMisfirePolicyMap 将内部错过调度策略映射到 proto 枚举。

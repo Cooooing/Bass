@@ -12,7 +12,6 @@ import (
 	"context"
 
 	"bff_bbs/internal/biz/model"
-	"bff_bbs/internal/biz/repo"
 	"bff_bbs/internal/biz/usecase"
 	"bff_bbs/internal/enum"
 
@@ -245,7 +244,7 @@ func (s *ContentCommentService) ListCommentThreads(ctx context.Context, req *bbs
 }
 
 // commentThreadToProto 统一组装评论线程，确保列表、置顶与采纳回答的响应字段保持一致。
-func (s *ContentCommentService) commentThreadToProto(row *repo.CommentThread) *bbscontentv1.ListCommentThreads_Resp_CommentThread {
+func (s *ContentCommentService) commentThreadToProto(row *model.CommentThread) *bbscontentv1.ListCommentThreads_Resp_CommentThread {
 	if row == nil {
 		return nil
 	}
@@ -313,7 +312,7 @@ func (s *ContentCommentService) accountProfileToProto(profile *model.AccountProf
 	}
 }
 
-func (s *ContentCommentService) pinnedCommentToProto(row *repo.CommentThread) *bbscontentv1.ListCommentThreads_Resp_PinnedComment {
+func (s *ContentCommentService) pinnedCommentToProto(row *model.CommentThread) *bbscontentv1.ListCommentThreads_Resp_PinnedComment {
 	if row == nil || row.Root == nil {
 		return nil
 	}

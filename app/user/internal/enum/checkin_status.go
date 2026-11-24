@@ -9,9 +9,9 @@ import (
 type CheckinStatus string
 
 const (
-	CheckinStatusPending   CheckinStatus = "pending"   // pending
-	CheckinStatusCompleted CheckinStatus = "completed" // completed
-	CheckinStatusCanceled  CheckinStatus = "canceled"  // canceled
+	CheckinStatusPending   CheckinStatus = "pending"   // 等待签到奖励结算
+	CheckinStatusCompleted CheckinStatus = "completed" // 签到奖励已结算
+	CheckinStatusCanceled  CheckinStatus = "canceled"  // 签到奖励已取消
 )
 
 var CheckinStatusMap = commonenum.NewMapping[CheckinStatus, v1.CheckinStatus](map[CheckinStatus]commonenum.Entry[CheckinStatus, v1.CheckinStatus]{

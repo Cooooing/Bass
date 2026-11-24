@@ -11,6 +11,7 @@ import (
 	"net"
 	stdhttp "net/http"
 	"strconv"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -112,11 +113,13 @@ func (s *WebSocketService) Handle(w stdhttp.ResponseWriter, r *stdhttp.Request) 
 		return nil
 	})
 
-	go func() {
+	var pumps sync.WaitGroup
+	pumps.Go(func() {
 		s.writePump(connCtx, conn, connection, cancel, &timeout)
-	}()
+	})
 
 	s.readPump(connCtx, conn, connection, cancel, &timeout)
+	pumps.Wait()
 }
 
 func (s *WebSocketService) readPump(

@@ -353,10 +353,9 @@ func (u *ScheduledTaskUsecase) Trigger(ctx context.Context, req *TaskTriggerReq)
 	if err != nil || record == nil {
 		return record, err
 	}
-	u.runningWG.Add(1)
-	go func() {
+	u.runningWG.Go(func() {
 		_, _ = u.executeScheduledRecord(context.WithoutCancel(ctx), task, record)
-	}()
+	})
 	return record, nil
 }
 
@@ -460,7 +459,6 @@ func (u *ScheduledTaskUsecase) executeScheduledRecord(
 	task *model.ScheduledTask,
 	record *model.ScheduledTaskExecutionRecord,
 ) (*model.ScheduledTaskExecutionRecord, error) {
-	defer u.runningWG.Done()
 	timeout := record.Timeout
 	if timeout <= 0 {
 		timeout = 300 * time.Second
@@ -558,6 +556,7 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 		return result, err
 	}
 	u.runningWG.Add(1)
+	defer u.runningWG.Done()
 	updated, err := u.executeScheduledRecord(ctx, task, record)
 	if err != nil {
 		return nil, err
@@ -698,10 +697,11 @@ func (u *ScheduledTaskUsecase) StopConsuming(ctx context.Context) error {
 		cancel()
 	}
 	done := make(chan struct{})
-	go func() {
+	var waitWG sync.WaitGroup
+	waitWG.Go(func() {
 		u.runningWG.Wait()
 		close(done)
-	}()
+	})
 	stopRunningCtx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
 	defer cancel()
 	select {

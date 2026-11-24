@@ -8,11 +8,11 @@ import (
 type DeviceType string
 
 const (
-	DeviceTypeUnknown DeviceType = "unknown" // unknown
-	DeviceTypeDesktop DeviceType = "desktop" // desktop
-	DeviceTypeMobile  DeviceType = "mobile"  // mobile
-	DeviceTypeTablet  DeviceType = "tablet"  // tablet
-	DeviceTypeBot     DeviceType = "bot"     // bot
+	DeviceTypeUnknown DeviceType = "unknown" // 未识别设备
+	DeviceTypeDesktop DeviceType = "desktop" // 桌面设备
+	DeviceTypeMobile  DeviceType = "mobile"  // 移动设备
+	DeviceTypeTablet  DeviceType = "tablet"  // 平板设备
+	DeviceTypeBot     DeviceType = "bot"     // 自动化客户端
 )
 
 var DeviceTypeMap = commonenum.NewMapping[DeviceType, v1.DeviceType](map[DeviceType]commonenum.Entry[DeviceType, v1.DeviceType]{

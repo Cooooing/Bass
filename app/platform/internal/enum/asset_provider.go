@@ -8,8 +8,8 @@ import (
 type AssetProvider string
 
 const (
-	AssetProviderMinio AssetProvider = "minio" // minio
-	AssetProviderQiniu AssetProvider = "qiniu" // qiniu
+	AssetProviderMinio AssetProvider = "minio" // MinIO 对象存储
+	AssetProviderQiniu AssetProvider = "qiniu" // 七牛云对象存储
 )
 
 var AssetProviderMap = commonenum.NewMapping[AssetProvider, v1.AssetProvider](map[AssetProvider]commonenum.Entry[AssetProvider, v1.AssetProvider]{

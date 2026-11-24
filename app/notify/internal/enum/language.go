@@ -8,9 +8,9 @@ import (
 type Language string
 
 const (
-	LanguageZhCN Language = "zh_CN" // zh_CN
-	LanguageZhTW Language = "zh_TW" // zh_TW
-	LanguageEn   Language = "en"    // en
+	LanguageZhCN Language = "zh_CN" // 简体中文
+	LanguageZhTW Language = "zh_TW" // 繁体中文
+	LanguageEn   Language = "en"    // 英文
 )
 
 var LanguageMap = enum.NewMapping[Language, enums.Language](map[Language]enum.Entry[Language, enums.Language]{

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"sync"
 
 	imv1enum "common/proto/gen/im/enum/v1"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
@@ -69,7 +70,8 @@ func (s *RealtimeService) Connect(stream grpc.BidiStreamingServer[realtimehubv1.
 	}
 	defer s.realtime.CloseSession(context.WithoutCancel(stream.Context()), register.GetNodeId(), register.GetRealms())
 	errs := make(chan error, 1)
-	go s.receiveNodeMessages(stream, register.GetNodeId(), group, register.GetRealms(), errs)
+	var receiveWG sync.WaitGroup
+	receiveWG.Go(func() { s.receiveNodeMessages(stream, register.GetNodeId(), group, register.GetRealms(), errs) })
 	for {
 		select {
 		case <-stream.Context().Done():

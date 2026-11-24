@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
+// GlobalChatMessage 记录全局聊天室消息。
 type GlobalChatMessage struct{ ent.Schema }
 
 func (GlobalChatMessage) Annotations() []schema.Annotation {

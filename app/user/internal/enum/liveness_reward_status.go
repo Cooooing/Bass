@@ -9,10 +9,10 @@ import (
 type LivenessRewardStatus string
 
 const (
-	LivenessRewardStatusUnclaimed LivenessRewardStatus = "unclaimed" // unclaimed
-	LivenessRewardStatusPending   LivenessRewardStatus = "pending"   // pending
-	LivenessRewardStatusCompleted LivenessRewardStatus = "completed" // completed
-	LivenessRewardStatusCanceled  LivenessRewardStatus = "canceled"  // canceled
+	LivenessRewardStatusUnclaimed LivenessRewardStatus = "unclaimed" // 尚未领取奖励
+	LivenessRewardStatusPending   LivenessRewardStatus = "pending"   // 等待发放奖励
+	LivenessRewardStatusCompleted LivenessRewardStatus = "completed" // 奖励已发放
+	LivenessRewardStatusCanceled  LivenessRewardStatus = "canceled"  // 奖励已取消
 )
 
 var LivenessRewardStatusMap = commonenum.NewMapping[LivenessRewardStatus, v1.LivenessRewardStatus](map[LivenessRewardStatus]commonenum.Entry[LivenessRewardStatus, v1.LivenessRewardStatus]{

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
+// Tag 定义文章可关联的内容标签。
 type Tag struct {
 	ent.Schema
 }

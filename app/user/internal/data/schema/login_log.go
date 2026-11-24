@@ -45,7 +45,7 @@ func (LoginLog) Fields() []ent.Field {
 		field.String("province").Comment("省份").Optional().Nillable(),
 		field.String("city").Comment("城市").Optional().Nillable(),
 		field.String("isp").Comment("网络服务商").Optional().Nillable(),
-		field.Text("user_agent").Comment("User-Agent").Optional().Nillable(),
+		field.Text("user_agent").Comment("客户端 User-Agent 标识").Optional().Nillable(),
 		field.Enum("client_type").Values(userenum.ClientTypeMap.EnumValues()...).Comment("客户端类型").Optional().Nillable(),
 		field.Enum("device_type").Values(userenum.DeviceTypeMap.EnumValues()...).Comment("设备类型").Optional().Nillable(),
 		field.String("os_name").Comment("操作系统名称").MaxLen(64).Default(""),

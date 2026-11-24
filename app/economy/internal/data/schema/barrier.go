@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent"
 )
 
-// Barrier 定义 DTM 子事务屏障表。
+// Barrier 记录经济域的分布式事务屏障。
 type Barrier struct {
 	ent.Schema
 }

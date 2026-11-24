@@ -12,7 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Badge stores a reusable badge owned by the badge service.
+// Badge 定义徽章服务管理的可复用徽章。
 type Badge struct {
 	ent.Schema
 }

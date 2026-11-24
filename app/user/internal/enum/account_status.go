@@ -8,9 +8,9 @@ import (
 type AccountStatus string
 
 const (
-	AccountStatusNormal    AccountStatus = "normal"    // normal
-	AccountStatusBanned    AccountStatus = "banned"    // banned
-	AccountStatusCancelled AccountStatus = "cancelled" // cancelled
+	AccountStatusNormal    AccountStatus = "normal"    // 账号状态正常
+	AccountStatusBanned    AccountStatus = "banned"    // 账号已被封禁
+	AccountStatusCancelled AccountStatus = "cancelled" // 账号已注销
 )
 
 var AccountStatusMap = commonenum.NewMapping[AccountStatus, v1.AccountStatus](map[AccountStatus]commonenum.Entry[AccountStatus, v1.AccountStatus]{

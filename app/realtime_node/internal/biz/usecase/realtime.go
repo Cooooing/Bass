@@ -19,16 +19,17 @@ import (
 )
 
 type RealtimeUsecase struct {
-	log      *slog.Logger
-	hub      repo.Hub
-	realm    string
-	mu       sync.RWMutex
-	users    map[int64]map[string]*connection
-	byID     map[string]*connection
-	outbound chan *realtimehubv1.NodeToHub
-	runCtx   context.Context
-	cancel   context.CancelFunc
-	stream   *streamState
+	log       *slog.Logger
+	hub       repo.Hub
+	realm     string
+	mu        sync.RWMutex
+	users     map[int64]map[string]*connection
+	byID      map[string]*connection
+	outbound  chan *realtimehubv1.NodeToHub
+	runCtx    context.Context
+	cancel    context.CancelFunc
+	stream    *streamState
+	runningWG sync.WaitGroup
 }
 
 type connection struct {
@@ -60,7 +61,7 @@ func (u *RealtimeUsecase) Start(ctx context.Context) error {
 	u.runCtx = ctx
 	u.cancel = cancel
 	u.mu.Unlock()
-	go u.maintainStream(ctx)
+	u.runningWG.Go(func() { u.maintainStream(ctx) })
 	return nil
 }
 
@@ -71,6 +72,7 @@ func (u *RealtimeUsecase) Stop(context.Context) error {
 	if cancel != nil {
 		cancel()
 	}
+	u.runningWG.Wait()
 	return nil
 }
 
@@ -152,7 +154,9 @@ func (u *RealtimeUsecase) maintainStream(ctx context.Context) {
 }
 
 func (u *RealtimeUsecase) runStream(ctx context.Context) error {
-	stream, err := u.hub.Connect(ctx)
+	runCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	stream, err := u.hub.Connect(runCtx)
 	if err != nil {
 		return err
 	}
@@ -178,7 +182,9 @@ func (u *RealtimeUsecase) runStream(ctx context.Context) error {
 		u.mu.Unlock()
 	}()
 	errs := make(chan error, 1)
-	go u.receiveMessages(ctx, stream, errs)
+	var receiveWG sync.WaitGroup
+	receiveWG.Go(func() { u.receiveMessages(runCtx, stream, errs) })
+	defer receiveWG.Wait()
 	u.mu.RLock()
 	messages := make([]*realtimehubv1.NodeToHub, 0, len(u.byID))
 	for connectionID, connection := range u.byID {

@@ -13,16 +13,19 @@ var ServerProviderSet = wire.NewSet(
 	NewGRPCServer,
 	NewHTTPServer,
 	NewAssetEventConsumerServer,
+	NewIPResolutionBootstrapServer,
 )
 
 func ProvideServers(
 	grpcServer *grpc.Server,
 	httpServer *http.Server,
 	assetEventConsumerServer *AssetEventConsumerServer,
+	ipResolutionBootstrapServer *IPResolutionBootstrapServer,
 ) []transport.Server {
 	return []transport.Server{
 		grpcServer,
 		httpServer,
 		assetEventConsumerServer,
+		ipResolutionBootstrapServer,
 	}
 }

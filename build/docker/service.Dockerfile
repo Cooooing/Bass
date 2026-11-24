@@ -12,6 +12,7 @@ ENV CGO_ENABLED=0 \
 
 WORKDIR /build
 
+COPY buf.yaml buf.lock /build/
 COPY common/go.mod common/go.sum /build/common/
 COPY common/pkg/ /build/common/pkg/
 COPY common/proto/ /build/common/proto/

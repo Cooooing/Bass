@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateWebSocketTicketReq
  */
 export interface CreateWebSocketTicketReq {
     /**
-     * 
+     * 角色 ID
      * @type {string}
      * @memberof CreateWebSocketTicketReq
      */

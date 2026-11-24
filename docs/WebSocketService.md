@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**createTicket**](WebSocketService.md#createticket) | **POST** /v1/game-idle/ws/create-ticket |  |
+| [**createWebSocketTicket**](WebSocketService.md#createwebsocketticket) | **POST** /v1/game-idle/ws/create-ticket |  |
 
 
 
-## createTicket
+## createWebSocketTicket
 
-> CreateWebSocketTicketResp createTicket(createWebSocketTicketReq)
+> CreateWebSocketTicketResp createWebSocketTicket(createWebSocketTicketReq)
 
 
 
@@ -23,7 +23,7 @@ import {
   Configuration,
   WebSocketService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateTicketRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateWebSocketTicketRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -32,10 +32,10 @@ async function example() {
   const body = {
     // CreateWebSocketTicketReq
     createWebSocketTicketReq: ...,
-  } satisfies CreateTicketRequest;
+  } satisfies CreateWebSocketTicketRequest;
 
   try {
-    const data = await api.createTicket(body);
+    const data = await api.createWebSocketTicket(body);
     console.log(data);
   } catch (error) {
     console.error(error);

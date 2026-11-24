@@ -22,13 +22,13 @@ import {
 } from './Character';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListCharacterResp
  */
 export interface ListCharacterResp {
     /**
-     * 
+     * 角色列表
      * @type {Array<Character>}
      * @memberof ListCharacterResp
      */

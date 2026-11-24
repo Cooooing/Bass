@@ -14,31 +14,31 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CreateWebSocketTicketResp
  */
 export interface CreateWebSocketTicketResp {
     /**
-     * 
+     * 角色 ID
      * @type {string}
      * @memberof CreateWebSocketTicketResp
      */
     characterId?: string;
     /**
-     * 
+     * WS 连接凭证
      * @type {string}
      * @memberof CreateWebSocketTicketResp
      */
     ticket?: string;
     /**
-     * 
+     * 剩余有效秒数
      * @type {string}
      * @memberof CreateWebSocketTicketResp
      */
     expiresInSeconds?: string;
     /**
-     * 
+     * WS 连接路径
      * @type {string}
      * @memberof CreateWebSocketTicketResp
      */

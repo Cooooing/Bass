@@ -29,11 +29,11 @@ import {
     ListCharacterRespToJSON,
 } from '../models/ListCharacterResp';
 
-export interface CreateRequest {
+export interface CreateCharacterRequest {
     createCharacterReq: CreateCharacterReq;
 }
 
-export interface ListRequest {
+export interface ListCharacterRequest {
     body: object;
 }
 
@@ -45,12 +45,12 @@ export interface ListRequest {
  */
 export interface CharacterServiceInterface {
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createCharacter without sending the request
      * @param {CreateCharacterReq} createCharacterReq 
      * @throws {RequiredError}
      * @memberof CharacterServiceInterface
      */
-    createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts>;
+    createCharacterRequestOpts(requestParameters: CreateCharacterRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 创建角色。
@@ -59,20 +59,20 @@ export interface CharacterServiceInterface {
      * @throws {RequiredError}
      * @memberof CharacterServiceInterface
      */
-    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCharacterResp>>;
+    createCharacterRaw(requestParameters: CreateCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCharacterResp>>;
 
     /**
      * 创建角色。
      */
-    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCharacterResp>;
+    createCharacter(requestParameters: CreateCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCharacterResp>;
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listCharacter without sending the request
      * @param {object} body 
      * @throws {RequiredError}
      * @memberof CharacterServiceInterface
      */
-    listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
+    listCharacterRequestOpts(requestParameters: ListCharacterRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 查询当前账号角色列表。
@@ -81,12 +81,12 @@ export interface CharacterServiceInterface {
      * @throws {RequiredError}
      * @memberof CharacterServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCharacterResp>>;
+    listCharacterRaw(requestParameters: ListCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCharacterResp>>;
 
     /**
      * 查询当前账号角色列表。
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCharacterResp>;
+    listCharacter(requestParameters: ListCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCharacterResp>;
 
 }
 
@@ -96,13 +96,13 @@ export interface CharacterServiceInterface {
 export class CharacterService extends runtime.BaseAPI implements CharacterServiceInterface {
 
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createCharacter without sending the request
      */
-    async createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts> {
+    async createCharacterRequestOpts(requestParameters: CreateCharacterRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['createCharacterReq'] == null) {
             throw new runtime.RequiredError(
                 'createCharacterReq',
-                'Required parameter "createCharacterReq" was null or undefined when calling create().'
+                'Required parameter "createCharacterReq" was null or undefined when calling createCharacter().'
             );
         }
 
@@ -127,8 +127,8 @@ export class CharacterService extends runtime.BaseAPI implements CharacterServic
     /**
      * 创建角色。
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCharacterResp>> {
-        const requestOptions = await this.createRequestOpts(requestParameters);
+    async createCharacterRaw(requestParameters: CreateCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCharacterResp>> {
+        const requestOptions = await this.createCharacterRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateCharacterRespFromJSON(jsonValue));
@@ -137,19 +137,19 @@ export class CharacterService extends runtime.BaseAPI implements CharacterServic
     /**
      * 创建角色。
      */
-    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCharacterResp> {
-        const response = await this.createRaw(requestParameters, initOverrides);
+    async createCharacter(requestParameters: CreateCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCharacterResp> {
+        const response = await this.createCharacterRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listCharacter without sending the request
      */
-    async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
+    async listCharacterRequestOpts(requestParameters: ListCharacterRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
-                'Required parameter "body" was null or undefined when calling list().'
+                'Required parameter "body" was null or undefined when calling listCharacter().'
             );
         }
 
@@ -174,8 +174,8 @@ export class CharacterService extends runtime.BaseAPI implements CharacterServic
     /**
      * 查询当前账号角色列表。
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCharacterResp>> {
-        const requestOptions = await this.listRequestOpts(requestParameters);
+    async listCharacterRaw(requestParameters: ListCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCharacterResp>> {
+        const requestOptions = await this.listCharacterRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListCharacterRespFromJSON(jsonValue));
@@ -184,8 +184,8 @@ export class CharacterService extends runtime.BaseAPI implements CharacterServic
     /**
      * 查询当前账号角色列表。
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCharacterResp> {
-        const response = await this.listRaw(requestParameters, initOverrides);
+    async listCharacter(requestParameters: ListCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCharacterResp> {
+        const response = await this.listCharacterRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

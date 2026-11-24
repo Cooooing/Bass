@@ -29,11 +29,11 @@ import {
     RegisterAccountReqToJSON,
 } from '../models/RegisterAccountReq';
 
-export interface LoginRequest {
+export interface LoginAccountRequest {
     loginAccountReq: LoginAccountReq;
 }
 
-export interface RegisterRequest {
+export interface RegisterAccountRequest {
     registerAccountReq: RegisterAccountReq;
 }
 
@@ -45,12 +45,12 @@ export interface RegisterRequest {
  */
 export interface AuthServiceInterface {
     /**
-     * Creates request options for login without sending the request
+     * Creates request options for loginAccount without sending the request
      * @param {LoginAccountReq} loginAccountReq 
      * @throws {RequiredError}
      * @memberof AuthServiceInterface
      */
-    loginRequestOpts(requestParameters: LoginRequest): Promise<runtime.RequestOpts>;
+    loginAccountRequestOpts(requestParameters: LoginAccountRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 登录账号。
@@ -59,20 +59,20 @@ export interface AuthServiceInterface {
      * @throws {RequiredError}
      * @memberof AuthServiceInterface
      */
-    loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginAccountResp>>;
+    loginAccountRaw(requestParameters: LoginAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginAccountResp>>;
 
     /**
      * 登录账号。
      */
-    login(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginAccountResp>;
+    loginAccount(requestParameters: LoginAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginAccountResp>;
 
     /**
-     * Creates request options for register without sending the request
+     * Creates request options for registerAccount without sending the request
      * @param {RegisterAccountReq} registerAccountReq 
      * @throws {RequiredError}
      * @memberof AuthServiceInterface
      */
-    registerRequestOpts(requestParameters: RegisterRequest): Promise<runtime.RequestOpts>;
+    registerAccountRequestOpts(requestParameters: RegisterAccountRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 注册账号。
@@ -81,12 +81,12 @@ export interface AuthServiceInterface {
      * @throws {RequiredError}
      * @memberof AuthServiceInterface
      */
-    registerRaw(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    registerAccountRaw(requestParameters: RegisterAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 注册账号。
      */
-    register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    registerAccount(requestParameters: RegisterAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
 }
 
@@ -96,13 +96,13 @@ export interface AuthServiceInterface {
 export class AuthService extends runtime.BaseAPI implements AuthServiceInterface {
 
     /**
-     * Creates request options for login without sending the request
+     * Creates request options for loginAccount without sending the request
      */
-    async loginRequestOpts(requestParameters: LoginRequest): Promise<runtime.RequestOpts> {
+    async loginAccountRequestOpts(requestParameters: LoginAccountRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['loginAccountReq'] == null) {
             throw new runtime.RequiredError(
                 'loginAccountReq',
-                'Required parameter "loginAccountReq" was null or undefined when calling login().'
+                'Required parameter "loginAccountReq" was null or undefined when calling loginAccount().'
             );
         }
 
@@ -127,8 +127,8 @@ export class AuthService extends runtime.BaseAPI implements AuthServiceInterface
     /**
      * 登录账号。
      */
-    async loginRaw(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginAccountResp>> {
-        const requestOptions = await this.loginRequestOpts(requestParameters);
+    async loginAccountRaw(requestParameters: LoginAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LoginAccountResp>> {
+        const requestOptions = await this.loginAccountRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LoginAccountRespFromJSON(jsonValue));
@@ -137,19 +137,19 @@ export class AuthService extends runtime.BaseAPI implements AuthServiceInterface
     /**
      * 登录账号。
      */
-    async login(requestParameters: LoginRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginAccountResp> {
-        const response = await this.loginRaw(requestParameters, initOverrides);
+    async loginAccount(requestParameters: LoginAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LoginAccountResp> {
+        const response = await this.loginAccountRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for register without sending the request
+     * Creates request options for registerAccount without sending the request
      */
-    async registerRequestOpts(requestParameters: RegisterRequest): Promise<runtime.RequestOpts> {
+    async registerAccountRequestOpts(requestParameters: RegisterAccountRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['registerAccountReq'] == null) {
             throw new runtime.RequiredError(
                 'registerAccountReq',
-                'Required parameter "registerAccountReq" was null or undefined when calling register().'
+                'Required parameter "registerAccountReq" was null or undefined when calling registerAccount().'
             );
         }
 
@@ -174,8 +174,8 @@ export class AuthService extends runtime.BaseAPI implements AuthServiceInterface
     /**
      * 注册账号。
      */
-    async registerRaw(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.registerRequestOpts(requestParameters);
+    async registerAccountRaw(requestParameters: RegisterAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.registerAccountRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -184,8 +184,8 @@ export class AuthService extends runtime.BaseAPI implements AuthServiceInterface
     /**
      * 注册账号。
      */
-    async register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.registerRaw(requestParameters, initOverrides);
+    async registerAccount(requestParameters: RegisterAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.registerAccountRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

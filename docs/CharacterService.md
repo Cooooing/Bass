@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**create**](CharacterService.md#create) | **POST** /v1/game-idle/character/create |  |
-| [**list**](CharacterService.md#list) | **POST** /v1/game-idle/character/list |  |
+| [**createCharacter**](CharacterService.md#createcharacter) | **POST** /v1/game-idle/character/create |  |
+| [**listCharacter**](CharacterService.md#listcharacter) | **POST** /v1/game-idle/character/list |  |
 
 
 
-## create
+## createCharacter
 
-> CreateCharacterResp create(createCharacterReq)
+> CreateCharacterResp createCharacter(createCharacterReq)
 
 
 
@@ -24,7 +24,7 @@ import {
   Configuration,
   CharacterService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateCharacterRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -33,10 +33,10 @@ async function example() {
   const body = {
     // CreateCharacterReq
     createCharacterReq: ...,
-  } satisfies CreateRequest;
+  } satisfies CreateCharacterRequest;
 
   try {
-    const data = await api.create(body);
+    const data = await api.createCharacter(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## list
+## listCharacter
 
-> ListCharacterResp list(body)
+> ListCharacterResp listCharacter(body)
 
 
 
@@ -91,7 +91,7 @@ import {
   Configuration,
   CharacterService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
+import type { ListCharacterRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -100,10 +100,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies ListRequest;
+  } satisfies ListCharacterRequest;
 
   try {
-    const data = await api.list(body);
+    const data = await api.listCharacter(body);
     console.log(data);
   } catch (error) {
     console.error(error);

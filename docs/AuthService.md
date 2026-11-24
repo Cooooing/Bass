@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**login**](AuthService.md#login) | **POST** /v1/game-idle/auth/login |  |
-| [**register**](AuthService.md#register) | **POST** /v1/game-idle/auth/register |  |
+| [**loginAccount**](AuthService.md#loginaccount) | **POST** /v1/game-idle/auth/login |  |
+| [**registerAccount**](AuthService.md#registeraccount) | **POST** /v1/game-idle/auth/register |  |
 
 
 
-## login
+## loginAccount
 
-> LoginAccountResp login(loginAccountReq)
+> LoginAccountResp loginAccount(loginAccountReq)
 
 
 
@@ -24,7 +24,7 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { LoginRequest } from '@bass/bbs-sdk-fetch';
+import type { LoginAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -33,10 +33,10 @@ async function example() {
   const body = {
     // LoginAccountReq
     loginAccountReq: ...,
-  } satisfies LoginRequest;
+  } satisfies LoginAccountRequest;
 
   try {
-    const data = await api.login(body);
+    const data = await api.loginAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## register
+## registerAccount
 
-> object register(registerAccountReq)
+> object registerAccount(registerAccountReq)
 
 
 
@@ -91,7 +91,7 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { RegisterRequest } from '@bass/bbs-sdk-fetch';
+import type { RegisterAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -100,10 +100,10 @@ async function example() {
   const body = {
     // RegisterAccountReq
     registerAccountReq: ...,
-  } satisfies RegisterRequest;
+  } satisfies RegisterAccountRequest;
 
   try {
-    const data = await api.register(body);
+    const data = await api.registerAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);

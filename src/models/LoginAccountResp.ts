@@ -14,55 +14,55 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface LoginAccountResp
  */
 export interface LoginAccountResp {
     /**
-     * 
+     * 访问令牌
      * @type {string}
      * @memberof LoginAccountResp
      */
     accessToken?: string;
     /**
-     * 
+     * 刷新令牌
      * @type {string}
      * @memberof LoginAccountResp
      */
     refreshToken?: string;
     /**
-     * 
+     * 访问令牌过期时间
      * @type {Date}
      * @memberof LoginAccountResp
      */
     accessTokenExpiresAt?: Date;
     /**
-     * 
+     * 刷新令牌过期时间
      * @type {Date}
      * @memberof LoginAccountResp
      */
     refreshTokenExpiresAt?: Date;
     /**
-     * 
+     * session 过期时间
      * @type {Date}
      * @memberof LoginAccountResp
      */
     sessionExpiresAt?: Date;
     /**
-     * 
+     * 当前账号 ID
      * @type {string}
      * @memberof LoginAccountResp
      */
     userId?: string;
     /**
-     * 
+     * 账号名
      * @type {string}
      * @memberof LoginAccountResp
      */
     name?: string;
     /**
-     * 
+     * 昵称
      * @type {string}
      * @memberof LoginAccountResp
      */

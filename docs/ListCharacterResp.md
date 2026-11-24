@@ -1,6 +1,7 @@
 
 # ListCharacterResp
 
+响应结果。
 
 ## Properties
 

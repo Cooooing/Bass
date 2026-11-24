@@ -24,7 +24,7 @@ import {
     CreateWebSocketTicketRespToJSON,
 } from '../models/CreateWebSocketTicketResp';
 
-export interface CreateTicketRequest {
+export interface CreateWebSocketTicketRequest {
     createWebSocketTicketReq: CreateWebSocketTicketReq;
 }
 
@@ -36,12 +36,12 @@ export interface CreateTicketRequest {
  */
 export interface WebSocketServiceInterface {
     /**
-     * Creates request options for createTicket without sending the request
+     * Creates request options for createWebSocketTicket without sending the request
      * @param {CreateWebSocketTicketReq} createWebSocketTicketReq 
      * @throws {RequiredError}
      * @memberof WebSocketServiceInterface
      */
-    createTicketRequestOpts(requestParameters: CreateTicketRequest): Promise<runtime.RequestOpts>;
+    createWebSocketTicketRequestOpts(requestParameters: CreateWebSocketTicketRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 创建角色 WS 连接凭证。
@@ -50,12 +50,12 @@ export interface WebSocketServiceInterface {
      * @throws {RequiredError}
      * @memberof WebSocketServiceInterface
      */
-    createTicketRaw(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateWebSocketTicketResp>>;
+    createWebSocketTicketRaw(requestParameters: CreateWebSocketTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateWebSocketTicketResp>>;
 
     /**
      * 创建角色 WS 连接凭证。
      */
-    createTicket(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateWebSocketTicketResp>;
+    createWebSocketTicket(requestParameters: CreateWebSocketTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateWebSocketTicketResp>;
 
 }
 
@@ -65,13 +65,13 @@ export interface WebSocketServiceInterface {
 export class WebSocketService extends runtime.BaseAPI implements WebSocketServiceInterface {
 
     /**
-     * Creates request options for createTicket without sending the request
+     * Creates request options for createWebSocketTicket without sending the request
      */
-    async createTicketRequestOpts(requestParameters: CreateTicketRequest): Promise<runtime.RequestOpts> {
+    async createWebSocketTicketRequestOpts(requestParameters: CreateWebSocketTicketRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['createWebSocketTicketReq'] == null) {
             throw new runtime.RequiredError(
                 'createWebSocketTicketReq',
-                'Required parameter "createWebSocketTicketReq" was null or undefined when calling createTicket().'
+                'Required parameter "createWebSocketTicketReq" was null or undefined when calling createWebSocketTicket().'
             );
         }
 
@@ -96,8 +96,8 @@ export class WebSocketService extends runtime.BaseAPI implements WebSocketServic
     /**
      * 创建角色 WS 连接凭证。
      */
-    async createTicketRaw(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateWebSocketTicketResp>> {
-        const requestOptions = await this.createTicketRequestOpts(requestParameters);
+    async createWebSocketTicketRaw(requestParameters: CreateWebSocketTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateWebSocketTicketResp>> {
+        const requestOptions = await this.createWebSocketTicketRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateWebSocketTicketRespFromJSON(jsonValue));
@@ -106,8 +106,8 @@ export class WebSocketService extends runtime.BaseAPI implements WebSocketServic
     /**
      * 创建角色 WS 连接凭证。
      */
-    async createTicket(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateWebSocketTicketResp> {
-        const response = await this.createTicketRaw(requestParameters, initOverrides);
+    async createWebSocketTicket(requestParameters: CreateWebSocketTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateWebSocketTicketResp> {
+        const response = await this.createWebSocketTicketRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

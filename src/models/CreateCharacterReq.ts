@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateCharacterReq
  */
 export interface CreateCharacterReq {
     /**
-     * 
+     * 角色名称
      * @type {string}
      * @memberof CreateCharacterReq
      */

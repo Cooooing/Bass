@@ -14,61 +14,61 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface Character
  */
 export interface Character {
     /**
-     * 
+     * 角色 ID
      * @type {string}
      * @memberof Character
      */
     id?: string;
     /**
-     * 
+     * 角色名称
      * @type {string}
      * @memberof Character
      */
     name?: string;
     /**
-     * 
+     * 角色状态
      * @type {CharacterStatusEnum}
      * @memberof Character
      */
     status?: CharacterStatusEnum;
     /**
-     * 
+     * 角色槽位
      * @type {number}
      * @memberof Character
      */
     slot?: number;
     /**
-     * 
+     * 行动队列容量上限
      * @type {number}
      * @memberof Character
      */
     actionQueueCapacity?: number;
     /**
-     * 
+     * 最大离线收益结算秒数
      * @type {string}
      * @memberof Character
      */
     maxOfflineSeconds?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof Character
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof Character
      */
     updatedAt?: Date;
     /**
-     * 
+     * 最近离线时间
      * @type {Date}
      * @memberof Character
      */

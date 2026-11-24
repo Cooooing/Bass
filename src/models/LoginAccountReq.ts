@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface LoginAccountReq
  */
 export interface LoginAccountReq {
     /**
-     * 
+     * 邮箱
      * @type {string}
      * @memberof LoginAccountReq
      */
     email: string;
     /**
-     * 
+     * 账号密码
      * @type {string}
      * @memberof LoginAccountReq
      */

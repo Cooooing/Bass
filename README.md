@@ -18,7 +18,7 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { LoginRequest } from '@bass/bbs-sdk-fetch';
+import type { LoginAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -27,10 +27,10 @@ async function example() {
   const body = {
     // LoginAccountReq
     loginAccountReq: ...,
-  } satisfies LoginRequest;
+  } satisfies LoginAccountRequest;
 
   try {
-    const data = await api.login(body);
+    const data = await api.loginAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -50,11 +50,11 @@ All URIs are relative to *http://localhost*
 
 | Class | Method | HTTP request | Description
 | ----- | ------ | ------------ | -------------
-*AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/game-idle/auth/login | 
-*AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/game-idle/auth/register | 
-*CharacterService* | [**create**](docs/CharacterService.md#create) | **POST** /v1/game-idle/character/create | 
-*CharacterService* | [**list**](docs/CharacterService.md#list) | **POST** /v1/game-idle/character/list | 
-*WebSocketService* | [**createTicket**](docs/WebSocketService.md#createticket) | **POST** /v1/game-idle/ws/create-ticket | 
+*AuthService* | [**loginAccount**](docs/AuthService.md#loginaccount) | **POST** /v1/game-idle/auth/login | 
+*AuthService* | [**registerAccount**](docs/AuthService.md#registeraccount) | **POST** /v1/game-idle/auth/register | 
+*CharacterService* | [**createCharacter**](docs/CharacterService.md#createcharacter) | **POST** /v1/game-idle/character/create | 
+*CharacterService* | [**listCharacter**](docs/CharacterService.md#listcharacter) | **POST** /v1/game-idle/character/list | 
+*WebSocketService* | [**createWebSocketTicket**](docs/WebSocketService.md#createwebsocketticket) | **POST** /v1/game-idle/ws/create-ticket | 
 
 
 ### Models

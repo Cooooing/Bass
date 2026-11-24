@@ -1,14 +1,15 @@
 # CreateWebSocketTicketResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**character_id** | **string** |  | [optional] [default to undefined]
-**ticket** | **string** |  | [optional] [default to undefined]
-**expires_in_seconds** | **string** |  | [optional] [default to undefined]
-**path** | **string** |  | [optional] [default to undefined]
+**character_id** | **string** | 角色 ID | [optional] [default to undefined]
+**ticket** | **string** | WS 连接凭证 | [optional] [default to undefined]
+**expires_in_seconds** | **string** | 剩余有效秒数 | [optional] [default to undefined]
+**path** | **string** | WS 连接路径 | [optional] [default to undefined]
 
 ## Example
 

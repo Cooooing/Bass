@@ -1,12 +1,13 @@
 # RegisterAccountReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **string** |  | [default to undefined]
-**password** | **string** |  | [default to undefined]
+**email** | **string** | 邮箱 | [default to undefined]
+**password** | **string** | 账号密码 | [default to undefined]
 
 ## Example
 

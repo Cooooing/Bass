@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**create**](#create) | **POST** /v1/game-idle/character/create | |
-|[**list**](#list) | **POST** /v1/game-idle/character/list | |
+|[**createCharacter**](#createcharacter) | **POST** /v1/game-idle/character/create | |
+|[**listCharacter**](#listcharacter) | **POST** /v1/game-idle/character/list | |
 
-# **create**
-> CreateCharacterResp create(createCharacterReq)
+# **createCharacter**
+> CreateCharacterResp createCharacter(createCharacterReq)
 
 创建角色。
 
@@ -26,7 +26,7 @@ const apiInstance = new CharacterService(configuration);
 
 let createCharacterReq: CreateCharacterReq; //
 
-const { status, data } = await apiInstance.create(
+const { status, data } = await apiInstance.createCharacter(
     createCharacterReq
 );
 ```
@@ -59,8 +59,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> ListCharacterResp list(body)
+# **listCharacter**
+> ListCharacterResp listCharacter(body)
 
 查询当前账号角色列表。
 
@@ -77,7 +77,7 @@ const apiInstance = new CharacterService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.list(
+const { status, data } = await apiInstance.listCharacter(
     body
 );
 ```

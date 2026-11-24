@@ -4,10 +4,10 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**createTicket**](#createticket) | **POST** /v1/game-idle/ws/create-ticket | |
+|[**createWebSocketTicket**](#createwebsocketticket) | **POST** /v1/game-idle/ws/create-ticket | |
 
-# **createTicket**
-> CreateWebSocketTicketResp createTicket(createWebSocketTicketReq)
+# **createWebSocketTicket**
+> CreateWebSocketTicketResp createWebSocketTicket(createWebSocketTicketReq)
 
 创建角色 WS 连接凭证。
 
@@ -25,7 +25,7 @@ const apiInstance = new WebSocketService(configuration);
 
 let createWebSocketTicketReq: CreateWebSocketTicketReq; //
 
-const { status, data } = await apiInstance.createTicket(
+const { status, data } = await apiInstance.createWebSocketTicket(
     createWebSocketTicketReq
 );
 ```

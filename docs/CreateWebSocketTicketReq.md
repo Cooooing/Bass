@@ -1,11 +1,12 @@
 # CreateWebSocketTicketReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**character_id** | **string** |  | [optional] [default to undefined]
+**character_id** | **string** | 角色 ID | [optional] [default to undefined]
 
 ## Example
 

@@ -1,11 +1,12 @@
 # CreateCharacterReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [optional] [default to undefined]
+**name** | **string** | 角色名称 | [optional] [default to undefined]
 
 ## Example
 

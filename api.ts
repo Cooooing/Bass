@@ -23,15 +23,45 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
+/**
+ * 协议消息。
+ */
 export interface Character {
+    /**
+     * 角色 ID
+     */
     'id'?: string;
+    /**
+     * 角色名称
+     */
     'name'?: string;
+    /**
+     * 角色状态
+     */
     'status'?: CharacterStatusEnum;
+    /**
+     * 角色槽位
+     */
     'slot'?: number;
+    /**
+     * 行动队列容量上限
+     */
     'action_queue_capacity'?: number;
+    /**
+     * 最大离线收益结算秒数
+     */
     'max_offline_seconds'?: string;
+    /**
+     * 创建时间
+     */
     'created_at'?: string;
+    /**
+     * 更新时间
+     */
     'updated_at'?: string;
+    /**
+     * 最近离线时间
+     */
     'last_offline_at'?: string;
 }
 
@@ -43,40 +73,124 @@ export const CharacterStatusEnum = {
 
 export type CharacterStatusEnum = typeof CharacterStatusEnum[keyof typeof CharacterStatusEnum];
 
+/**
+ * 请求参数。
+ */
 export interface CreateCharacterReq {
+    /**
+     * 角色名称
+     */
     'name'?: string;
 }
+/**
+ * 响应结果。
+ */
 export interface CreateCharacterResp {
+    /**
+     * 角色
+     */
     'row'?: Character;
 }
+/**
+ * 请求参数。
+ */
 export interface CreateWebSocketTicketReq {
+    /**
+     * 角色 ID
+     */
     'character_id'?: string;
 }
+/**
+ * 响应结果。
+ */
 export interface CreateWebSocketTicketResp {
+    /**
+     * 角色 ID
+     */
     'character_id'?: string;
+    /**
+     * WS 连接凭证
+     */
     'ticket'?: string;
+    /**
+     * 剩余有效秒数
+     */
     'expires_in_seconds'?: string;
+    /**
+     * WS 连接路径
+     */
     'path'?: string;
 }
+/**
+ * 响应结果。
+ */
 export interface ListCharacterResp {
+    /**
+     * 角色列表
+     */
     'rows'?: Array<Character>;
 }
+/**
+ * 请求参数。
+ */
 export interface LoginAccountReq {
+    /**
+     * 邮箱
+     */
     'email': string;
+    /**
+     * 账号密码
+     */
     'password': string;
 }
+/**
+ * 响应结果。
+ */
 export interface LoginAccountResp {
+    /**
+     * 访问令牌
+     */
     'access_token'?: string;
+    /**
+     * 刷新令牌
+     */
     'refresh_token'?: string;
+    /**
+     * 访问令牌过期时间
+     */
     'access_token_expires_at'?: string;
+    /**
+     * 刷新令牌过期时间
+     */
     'refresh_token_expires_at'?: string;
+    /**
+     * session 过期时间
+     */
     'session_expires_at'?: string;
+    /**
+     * 当前账号 ID
+     */
     'user_id'?: string;
+    /**
+     * 账号名
+     */
     'name'?: string;
+    /**
+     * 昵称
+     */
     'nickname'?: string;
 }
+/**
+ * 请求参数。
+ */
 export interface RegisterAccountReq {
+    /**
+     * 邮箱
+     */
     'email': string;
+    /**
+     * 账号密码
+     */
     'password': string;
 }
 
@@ -91,9 +205,9 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        login: async (loginAccountReq: LoginAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        loginAccount: async (loginAccountReq: LoginAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'loginAccountReq' is not null or undefined
-            assertParamExists('login', 'loginAccountReq', loginAccountReq)
+            assertParamExists('loginAccount', 'loginAccountReq', loginAccountReq)
             const localVarPath = `/v1/game-idle/auth/login`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -125,9 +239,9 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        register: async (registerAccountReq: RegisterAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        registerAccount: async (registerAccountReq: RegisterAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'registerAccountReq' is not null or undefined
-            assertParamExists('register', 'registerAccountReq', registerAccountReq)
+            assertParamExists('registerAccount', 'registerAccountReq', registerAccountReq)
             const localVarPath = `/v1/game-idle/auth/register`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -168,10 +282,10 @@ export const AuthServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async login(loginAccountReq: LoginAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginAccountResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.login(loginAccountReq, options);
+        async loginAccount(loginAccountReq: LoginAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginAccountResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginAccount(loginAccountReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthService.login']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthService.loginAccount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -180,10 +294,10 @@ export const AuthServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async register(registerAccountReq: RegisterAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.register(registerAccountReq, options);
+        async registerAccount(registerAccountReq: RegisterAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.registerAccount(registerAccountReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthService.register']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthService.registerAccount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -197,21 +311,21 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
     return {
         /**
          * 登录账号。
-         * @param {AuthServiceLoginRequest} requestParameters Request parameters.
+         * @param {AuthServiceLoginAccountRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        login(requestParameters: AuthServiceLoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginAccountResp> {
-            return localVarFp.login(requestParameters.loginAccountReq, options).then((request) => request(axios, basePath));
+        loginAccount(requestParameters: AuthServiceLoginAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginAccountResp> {
+            return localVarFp.loginAccount(requestParameters.loginAccountReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 注册账号。
-         * @param {AuthServiceRegisterRequest} requestParameters Request parameters.
+         * @param {AuthServiceRegisterAccountRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.register(requestParameters.registerAccountReq, options).then((request) => request(axios, basePath));
+        registerAccount(requestParameters: AuthServiceRegisterAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.registerAccount(requestParameters.registerAccountReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -222,33 +336,33 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
 export interface AuthServiceInterface {
     /**
      * 登录账号。
-     * @param {AuthServiceLoginRequest} requestParameters Request parameters.
+     * @param {AuthServiceLoginAccountRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    login(requestParameters: AuthServiceLoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginAccountResp>;
+    loginAccount(requestParameters: AuthServiceLoginAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginAccountResp>;
 
     /**
      * 注册账号。
-     * @param {AuthServiceRegisterRequest} requestParameters Request parameters.
+     * @param {AuthServiceRegisterAccountRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    registerAccount(requestParameters: AuthServiceRegisterAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
 }
 
 /**
- * Request parameters for login operation in AuthService.
+ * Request parameters for loginAccount operation in AuthService.
  */
-export interface AuthServiceLoginRequest {
+export interface AuthServiceLoginAccountRequest {
     readonly loginAccountReq: LoginAccountReq
 }
 
 /**
- * Request parameters for register operation in AuthService.
+ * Request parameters for registerAccount operation in AuthService.
  */
-export interface AuthServiceRegisterRequest {
+export interface AuthServiceRegisterAccountRequest {
     readonly registerAccountReq: RegisterAccountReq
 }
 
@@ -258,22 +372,22 @@ export interface AuthServiceRegisterRequest {
 export class AuthService extends BaseAPI implements AuthServiceInterface {
     /**
      * 登录账号。
-     * @param {AuthServiceLoginRequest} requestParameters Request parameters.
+     * @param {AuthServiceLoginAccountRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public login(requestParameters: AuthServiceLoginRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).login(requestParameters.loginAccountReq, options).then((request) => request(this.axios, this.basePath));
+    public loginAccount(requestParameters: AuthServiceLoginAccountRequest, options?: RawAxiosRequestConfig) {
+        return AuthServiceFp(this.configuration).loginAccount(requestParameters.loginAccountReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 注册账号。
-     * @param {AuthServiceRegisterRequest} requestParameters Request parameters.
+     * @param {AuthServiceRegisterAccountRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).register(requestParameters.registerAccountReq, options).then((request) => request(this.axios, this.basePath));
+    public registerAccount(requestParameters: AuthServiceRegisterAccountRequest, options?: RawAxiosRequestConfig) {
+        return AuthServiceFp(this.configuration).registerAccount(requestParameters.registerAccountReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -290,9 +404,9 @@ export const CharacterServiceAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create: async (createCharacterReq: CreateCharacterReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createCharacter: async (createCharacterReq: CreateCharacterReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createCharacterReq' is not null or undefined
-            assertParamExists('create', 'createCharacterReq', createCharacterReq)
+            assertParamExists('createCharacter', 'createCharacterReq', createCharacterReq)
             const localVarPath = `/v1/game-idle/character/create`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -324,9 +438,9 @@ export const CharacterServiceAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listCharacter: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
-            assertParamExists('list', 'body', body)
+            assertParamExists('listCharacter', 'body', body)
             const localVarPath = `/v1/game-idle/character/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -367,10 +481,10 @@ export const CharacterServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create(createCharacterReq: CreateCharacterReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCharacterResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createCharacterReq, options);
+        async createCharacter(createCharacterReq: CreateCharacterReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCharacterResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createCharacter(createCharacterReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CharacterService.create']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CharacterService.createCharacter']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -379,10 +493,10 @@ export const CharacterServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCharacterResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(body, options);
+        async listCharacter(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCharacterResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listCharacter(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['CharacterService.list']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['CharacterService.listCharacter']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -396,21 +510,21 @@ export const CharacterServiceFactory = function (configuration?: Configuration, 
     return {
         /**
          * 创建角色。
-         * @param {CharacterServiceCreateRequest} requestParameters Request parameters.
+         * @param {CharacterServiceCreateCharacterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create(requestParameters: CharacterServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCharacterResp> {
-            return localVarFp.create(requestParameters.createCharacterReq, options).then((request) => request(axios, basePath));
+        createCharacter(requestParameters: CharacterServiceCreateCharacterRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCharacterResp> {
+            return localVarFp.createCharacter(requestParameters.createCharacterReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 查询当前账号角色列表。
-         * @param {CharacterServiceListRequest} requestParameters Request parameters.
+         * @param {CharacterServiceListCharacterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(requestParameters: CharacterServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCharacterResp> {
-            return localVarFp.list(requestParameters.body, options).then((request) => request(axios, basePath));
+        listCharacter(requestParameters: CharacterServiceListCharacterRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCharacterResp> {
+            return localVarFp.listCharacter(requestParameters.body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -421,33 +535,33 @@ export const CharacterServiceFactory = function (configuration?: Configuration, 
 export interface CharacterServiceInterface {
     /**
      * 创建角色。
-     * @param {CharacterServiceCreateRequest} requestParameters Request parameters.
+     * @param {CharacterServiceCreateCharacterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    create(requestParameters: CharacterServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCharacterResp>;
+    createCharacter(requestParameters: CharacterServiceCreateCharacterRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCharacterResp>;
 
     /**
      * 查询当前账号角色列表。
-     * @param {CharacterServiceListRequest} requestParameters Request parameters.
+     * @param {CharacterServiceListCharacterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    list(requestParameters: CharacterServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCharacterResp>;
+    listCharacter(requestParameters: CharacterServiceListCharacterRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCharacterResp>;
 
 }
 
 /**
- * Request parameters for create operation in CharacterService.
+ * Request parameters for createCharacter operation in CharacterService.
  */
-export interface CharacterServiceCreateRequest {
+export interface CharacterServiceCreateCharacterRequest {
     readonly createCharacterReq: CreateCharacterReq
 }
 
 /**
- * Request parameters for list operation in CharacterService.
+ * Request parameters for listCharacter operation in CharacterService.
  */
-export interface CharacterServiceListRequest {
+export interface CharacterServiceListCharacterRequest {
     readonly body: object
 }
 
@@ -457,22 +571,22 @@ export interface CharacterServiceListRequest {
 export class CharacterService extends BaseAPI implements CharacterServiceInterface {
     /**
      * 创建角色。
-     * @param {CharacterServiceCreateRequest} requestParameters Request parameters.
+     * @param {CharacterServiceCreateCharacterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public create(requestParameters: CharacterServiceCreateRequest, options?: RawAxiosRequestConfig) {
-        return CharacterServiceFp(this.configuration).create(requestParameters.createCharacterReq, options).then((request) => request(this.axios, this.basePath));
+    public createCharacter(requestParameters: CharacterServiceCreateCharacterRequest, options?: RawAxiosRequestConfig) {
+        return CharacterServiceFp(this.configuration).createCharacter(requestParameters.createCharacterReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 查询当前账号角色列表。
-     * @param {CharacterServiceListRequest} requestParameters Request parameters.
+     * @param {CharacterServiceListCharacterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public list(requestParameters: CharacterServiceListRequest, options?: RawAxiosRequestConfig) {
-        return CharacterServiceFp(this.configuration).list(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    public listCharacter(requestParameters: CharacterServiceListCharacterRequest, options?: RawAxiosRequestConfig) {
+        return CharacterServiceFp(this.configuration).listCharacter(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -489,9 +603,9 @@ export const WebSocketServiceAxiosParamCreator = function (configuration?: Confi
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTicket: async (createWebSocketTicketReq: CreateWebSocketTicketReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createWebSocketTicket: async (createWebSocketTicketReq: CreateWebSocketTicketReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createWebSocketTicketReq' is not null or undefined
-            assertParamExists('createTicket', 'createWebSocketTicketReq', createWebSocketTicketReq)
+            assertParamExists('createWebSocketTicket', 'createWebSocketTicketReq', createWebSocketTicketReq)
             const localVarPath = `/v1/game-idle/ws/create-ticket`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -532,10 +646,10 @@ export const WebSocketServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTicket(createWebSocketTicketReq: CreateWebSocketTicketReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebSocketTicketResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createTicket(createWebSocketTicketReq, options);
+        async createWebSocketTicket(createWebSocketTicketReq: CreateWebSocketTicketReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateWebSocketTicketResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createWebSocketTicket(createWebSocketTicketReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['WebSocketService.createTicket']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['WebSocketService.createWebSocketTicket']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -549,12 +663,12 @@ export const WebSocketServiceFactory = function (configuration?: Configuration, 
     return {
         /**
          * 创建角色 WS 连接凭证。
-         * @param {WebSocketServiceCreateTicketRequest} requestParameters Request parameters.
+         * @param {WebSocketServiceCreateWebSocketTicketRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTicket(requestParameters: WebSocketServiceCreateTicketRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateWebSocketTicketResp> {
-            return localVarFp.createTicket(requestParameters.createWebSocketTicketReq, options).then((request) => request(axios, basePath));
+        createWebSocketTicket(requestParameters: WebSocketServiceCreateWebSocketTicketRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateWebSocketTicketResp> {
+            return localVarFp.createWebSocketTicket(requestParameters.createWebSocketTicketReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -565,18 +679,18 @@ export const WebSocketServiceFactory = function (configuration?: Configuration, 
 export interface WebSocketServiceInterface {
     /**
      * 创建角色 WS 连接凭证。
-     * @param {WebSocketServiceCreateTicketRequest} requestParameters Request parameters.
+     * @param {WebSocketServiceCreateWebSocketTicketRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createTicket(requestParameters: WebSocketServiceCreateTicketRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateWebSocketTicketResp>;
+    createWebSocketTicket(requestParameters: WebSocketServiceCreateWebSocketTicketRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateWebSocketTicketResp>;
 
 }
 
 /**
- * Request parameters for createTicket operation in WebSocketService.
+ * Request parameters for createWebSocketTicket operation in WebSocketService.
  */
-export interface WebSocketServiceCreateTicketRequest {
+export interface WebSocketServiceCreateWebSocketTicketRequest {
     readonly createWebSocketTicketReq: CreateWebSocketTicketReq
 }
 
@@ -586,12 +700,12 @@ export interface WebSocketServiceCreateTicketRequest {
 export class WebSocketService extends BaseAPI implements WebSocketServiceInterface {
     /**
      * 创建角色 WS 连接凭证。
-     * @param {WebSocketServiceCreateTicketRequest} requestParameters Request parameters.
+     * @param {WebSocketServiceCreateWebSocketTicketRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public createTicket(requestParameters: WebSocketServiceCreateTicketRequest, options?: RawAxiosRequestConfig) {
-        return WebSocketServiceFp(this.configuration).createTicket(requestParameters.createWebSocketTicketReq, options).then((request) => request(this.axios, this.basePath));
+    public createWebSocketTicket(requestParameters: WebSocketServiceCreateWebSocketTicketRequest, options?: RawAxiosRequestConfig) {
+        return WebSocketServiceFp(this.configuration).createWebSocketTicket(requestParameters.createWebSocketTicketReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

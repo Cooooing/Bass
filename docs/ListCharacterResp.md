@@ -1,11 +1,12 @@
 # ListCharacterResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rows** | [**Array&lt;Character&gt;**](Character.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;Character&gt;**](Character.md) | 角色列表 | [optional] [default to undefined]
 
 ## Example
 

@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**login**](#login) | **POST** /v1/game-idle/auth/login | |
-|[**register**](#register) | **POST** /v1/game-idle/auth/register | |
+|[**loginAccount**](#loginaccount) | **POST** /v1/game-idle/auth/login | |
+|[**registerAccount**](#registeraccount) | **POST** /v1/game-idle/auth/register | |
 
-# **login**
-> LoginAccountResp login(loginAccountReq)
+# **loginAccount**
+> LoginAccountResp loginAccount(loginAccountReq)
 
 登录账号。
 
@@ -26,7 +26,7 @@ const apiInstance = new AuthService(configuration);
 
 let loginAccountReq: LoginAccountReq; //
 
-const { status, data } = await apiInstance.login(
+const { status, data } = await apiInstance.loginAccount(
     loginAccountReq
 );
 ```
@@ -59,8 +59,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **register**
-> object register(registerAccountReq)
+# **registerAccount**
+> object registerAccount(registerAccountReq)
 
 注册账号。
 
@@ -78,7 +78,7 @@ const apiInstance = new AuthService(configuration);
 
 let registerAccountReq: RegisterAccountReq; //
 
-const { status, data } = await apiInstance.register(
+const { status, data } = await apiInstance.registerAccount(
     registerAccountReq
 );
 ```

@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Login**](AuthService.md#Login) | **Post** /v1/game-idle/auth/login | 
-[**Register**](AuthService.md#Register) | **Post** /v1/game-idle/auth/register | 
+[**LoginAccount**](AuthService.md#LoginAccount) | **Post** /v1/game-idle/auth/login | 
+[**RegisterAccount**](AuthService.md#RegisterAccount) | **Post** /v1/game-idle/auth/register | 
 
 
 
-## Login
+## LoginAccount
 
-> LoginAccountResp Login(ctx).LoginAccountReq(loginAccountReq).Execute()
+> LoginAccountResp LoginAccount(ctx).LoginAccountReq(loginAccountReq).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthService.Login(context.Background()).LoginAccountReq(loginAccountReq).Execute()
+	resp, r, err := apiClient.AuthService.LoginAccount(context.Background()).LoginAccountReq(loginAccountReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.Login``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.LoginAccount``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Login`: LoginAccountResp
-	fmt.Fprintf(os.Stdout, "Response from `AuthService.Login`: %v\n", resp)
+	// response from `LoginAccount`: LoginAccountResp
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.LoginAccount`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiLoginRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiLoginAccountRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## Register
+## RegisterAccount
 
-> map[string]interface{} Register(ctx).RegisterAccountReq(registerAccountReq).Execute()
+> map[string]interface{} RegisterAccount(ctx).RegisterAccountReq(registerAccountReq).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthService.Register(context.Background()).RegisterAccountReq(registerAccountReq).Execute()
+	resp, r, err := apiClient.AuthService.RegisterAccount(context.Background()).RegisterAccountReq(registerAccountReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.Register``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.RegisterAccount``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Register`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthService.Register`: %v\n", resp)
+	// response from `RegisterAccount`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.RegisterAccount`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRegisterRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiRegisterAccountRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

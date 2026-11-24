@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AccessToken** | Pointer to **string** |  | [optional] 
-**RefreshToken** | Pointer to **string** |  | [optional] 
-**AccessTokenExpiresAt** | Pointer to **time.Time** |  | [optional] 
-**RefreshTokenExpiresAt** | Pointer to **time.Time** |  | [optional] 
-**SessionExpiresAt** | Pointer to **time.Time** |  | [optional] 
-**UserId** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Nickname** | Pointer to **string** |  | [optional] 
+**AccessToken** | Pointer to **string** | 访问令牌 | [optional] 
+**RefreshToken** | Pointer to **string** | 刷新令牌 | [optional] 
+**AccessTokenExpiresAt** | Pointer to **time.Time** | 访问令牌过期时间 | [optional] 
+**RefreshTokenExpiresAt** | Pointer to **time.Time** | 刷新令牌过期时间 | [optional] 
+**SessionExpiresAt** | Pointer to **time.Time** | session 过期时间 | [optional] 
+**UserId** | Pointer to **string** | 当前账号 ID | [optional] 
+**Name** | Pointer to **string** | 账号名 | [optional] 
+**Nickname** | Pointer to **string** | 昵称 | [optional] 
 
 ## Methods
 

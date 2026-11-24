@@ -22,11 +22,11 @@ func Test_bbs_AuthServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test AuthServiceService Login", func(t *testing.T) {
+	t.Run("Test AuthServiceService LoginAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthService.Login(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.LoginAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_AuthServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AuthServiceService Register", func(t *testing.T) {
+	t.Run("Test AuthServiceService RegisterAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthService.Register(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.RegisterAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

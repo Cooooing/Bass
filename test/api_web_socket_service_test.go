@@ -22,11 +22,11 @@ func Test_bbs_WebSocketServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test WebSocketServiceService CreateTicket", func(t *testing.T) {
+	t.Run("Test WebSocketServiceService CreateWebSocketTicket", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.WebSocketService.CreateTicket(context.Background()).Execute()
+		resp, httpRes, err := apiClient.WebSocketService.CreateWebSocketTicket(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Row** | Pointer to [**Character**](Character.md) |  | [optional] 
+**Row** | Pointer to [**Character**](Character.md) | 角色 | [optional] 
 
 ## Methods
 

@@ -15,7 +15,7 @@ paths:
   /v1/game-idle/auth/login:
     post:
       description: 登录账号。
-      operationId: AuthService_Login
+      operationId: AuthService_LoginAccount
       requestBody:
         content:
           application/json:
@@ -34,7 +34,7 @@ paths:
   /v1/game-idle/auth/register:
     post:
       description: 注册账号。
-      operationId: AuthService_Register
+      operationId: AuthService_RegisterAccount
       requestBody:
         content:
           application/json:
@@ -53,7 +53,7 @@ paths:
   /v1/game-idle/character/create:
     post:
       description: 创建角色。
-      operationId: CharacterService_Create
+      operationId: CharacterService_CreateCharacter
       requestBody:
         content:
           application/json:
@@ -72,7 +72,7 @@ paths:
   /v1/game-idle/character/list:
     post:
       description: 查询当前账号角色列表。
-      operationId: CharacterService_List
+      operationId: CharacterService_ListCharacter
       requestBody:
         content:
           application/json:
@@ -91,7 +91,7 @@ paths:
   /v1/game-idle/ws/create-ticket:
     post:
       description: 创建角色 WS 连接凭证。
-      operationId: WebSocketService_CreateTicket
+      operationId: WebSocketService_CreateWebSocketTicket
       requestBody:
         content:
           application/json:
@@ -110,6 +110,7 @@ paths:
 components:
   schemas:
     Character:
+      description: 协议消息。
       example:
         updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
@@ -122,10 +123,13 @@ components:
         status: CHARACTER_STATUS_UNSPECIFIED
       properties:
         id:
+          description: 角色 ID
           type: string
         name:
+          description: 角色名称
           type: string
         status:
+          description: 角色状态
           enum:
           - CHARACTER_STATUS_UNSPECIFIED
           - CHARACTER_STATUS_ACTIVE
@@ -133,50 +137,55 @@ components:
           format: enum
           type: string
         slot:
+          description: 角色槽位
           format: int32
           type: integer
         action_queue_capacity:
+          description: 行动队列容量上限
           format: int32
           type: integer
         max_offline_seconds:
+          description: 最大离线收益结算秒数
           type: string
         created_at:
+          description: 创建时间
           format: date-time
           type: string
         updated_at:
+          description: 更新时间
           format: date-time
           type: string
         last_offline_at:
+          description: 最近离线时间
           format: date-time
           type: string
       type: object
     CreateCharacter_Req:
+      description: 请求参数。
       properties:
         name:
+          description: 角色名称
           type: string
       type: object
     CreateCharacter_Resp:
+      description: 响应结果。
       example:
-        row:
-          updated_at: 2000-01-23T04:56:07.000+00:00
-          name: name
-          created_at: 2000-01-23T04:56:07.000+00:00
-          last_offline_at: 2000-01-23T04:56:07.000+00:00
-          id: id
-          slot: 0
-          action_queue_capacity: 6
-          max_offline_seconds: max_offline_seconds
-          status: CHARACTER_STATUS_UNSPECIFIED
+        row: ""
       properties:
         row:
-          $ref: "#/components/schemas/Character"
+          allOf:
+          - $ref: "#/components/schemas/Character"
+          description: 角色
       type: object
     CreateWebSocketTicket_Req:
+      description: 请求参数。
       properties:
         character_id:
+          description: 角色 ID
           type: string
       type: object
     CreateWebSocketTicket_Resp:
+      description: 响应结果。
       example:
         path: path
         expires_in_seconds: expires_in_seconds
@@ -184,18 +193,24 @@ components:
         character_id: character_id
       properties:
         character_id:
+          description: 角色 ID
           type: string
         ticket:
+          description: WS 连接凭证
           type: string
         expires_in_seconds:
+          description: 剩余有效秒数
           type: string
         path:
+          description: WS 连接路径
           type: string
       type: object
     ListCharacter_Req:
+      description: 请求参数。
       properties: {}
       type: object
     ListCharacter_Resp:
+      description: 响应结果。
       example:
         rows:
         - updated_at: 2000-01-23T04:56:07.000+00:00
@@ -218,21 +233,26 @@ components:
           status: CHARACTER_STATUS_UNSPECIFIED
       properties:
         rows:
+          description: 角色列表
           items:
             $ref: "#/components/schemas/Character"
           type: array
       type: object
     LoginAccount_Req:
+      description: 请求参数。
       properties:
         email:
+          description: 邮箱
           type: string
         password:
+          description: 账号密码
           type: string
       required:
       - email
       - password
       type: object
     LoginAccount_Resp:
+      description: 响应结果。
       example:
         access_token: access_token
         access_token_expires_at: 2000-01-23T04:56:07.000+00:00
@@ -244,35 +264,47 @@ components:
         session_expires_at: 2000-01-23T04:56:07.000+00:00
       properties:
         access_token:
+          description: 访问令牌
           type: string
         refresh_token:
+          description: 刷新令牌
           type: string
         access_token_expires_at:
+          description: 访问令牌过期时间
           format: date-time
           type: string
         refresh_token_expires_at:
+          description: 刷新令牌过期时间
           format: date-time
           type: string
         session_expires_at:
+          description: session 过期时间
           format: date-time
           type: string
         user_id:
+          description: 当前账号 ID
           type: string
         name:
+          description: 账号名
           type: string
         nickname:
+          description: 昵称
           type: string
       type: object
     RegisterAccount_Req:
+      description: 请求参数。
       properties:
         email:
+          description: 邮箱
           type: string
         password:
+          description: 账号密码
           type: string
       required:
       - email
       - password
       type: object
     RegisterAccount_Resp:
+      description: 响应结果。
       properties: {}
       type: object

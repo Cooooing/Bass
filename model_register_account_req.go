@@ -19,9 +19,11 @@ import (
 // checks if the RegisterAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RegisterAccountReq{}
 
-// RegisterAccountReq struct for RegisterAccountReq
+// RegisterAccountReq 请求参数。
 type RegisterAccountReq struct {
+	// 邮箱
 	Email string `json:"email"`
+	// 账号密码
 	Password string `json:"password"`
 }
 

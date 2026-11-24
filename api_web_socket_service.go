@@ -22,48 +22,48 @@ import (
 type WebSocketService interface {
 
 	/*
-	CreateTicket Method for CreateTicket
+	CreateWebSocketTicket Method for CreateWebSocketTicket
 
 	创建角色 WS 连接凭证。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateTicketRequest
+	@return ApiCreateWebSocketTicketRequest
 	*/
-	CreateTicket(ctx context.Context) ApiCreateTicketRequest
+	CreateWebSocketTicket(ctx context.Context) ApiCreateWebSocketTicketRequest
 
-	// CreateTicketExecute executes the request
+	// CreateWebSocketTicketExecute executes the request
 	//  @return CreateWebSocketTicketResp
-	CreateTicketExecute(r ApiCreateTicketRequest) (*CreateWebSocketTicketResp, *http.Response, error)
+	CreateWebSocketTicketExecute(r ApiCreateWebSocketTicketRequest) (*CreateWebSocketTicketResp, *http.Response, error)
 }
 
 // WebSocketServiceService WebSocketService service
 type WebSocketServiceService service
 
-type ApiCreateTicketRequest struct {
+type ApiCreateWebSocketTicketRequest struct {
 	ctx context.Context
 	ApiService WebSocketService
 	createWebSocketTicketReq *CreateWebSocketTicketReq
 }
 
-func (r ApiCreateTicketRequest) CreateWebSocketTicketReq(createWebSocketTicketReq CreateWebSocketTicketReq) ApiCreateTicketRequest {
+func (r ApiCreateWebSocketTicketRequest) CreateWebSocketTicketReq(createWebSocketTicketReq CreateWebSocketTicketReq) ApiCreateWebSocketTicketRequest {
 	r.createWebSocketTicketReq = &createWebSocketTicketReq
 	return r
 }
 
-func (r ApiCreateTicketRequest) Execute() (*CreateWebSocketTicketResp, *http.Response, error) {
-	return r.ApiService.CreateTicketExecute(r)
+func (r ApiCreateWebSocketTicketRequest) Execute() (*CreateWebSocketTicketResp, *http.Response, error) {
+	return r.ApiService.CreateWebSocketTicketExecute(r)
 }
 
 /*
-CreateTicket Method for CreateTicket
+CreateWebSocketTicket Method for CreateWebSocketTicket
 
 创建角色 WS 连接凭证。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateTicketRequest
+ @return ApiCreateWebSocketTicketRequest
 */
-func (a *WebSocketServiceService) CreateTicket(ctx context.Context) ApiCreateTicketRequest {
-	return ApiCreateTicketRequest{
+func (a *WebSocketServiceService) CreateWebSocketTicket(ctx context.Context) ApiCreateWebSocketTicketRequest {
+	return ApiCreateWebSocketTicketRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -71,7 +71,7 @@ func (a *WebSocketServiceService) CreateTicket(ctx context.Context) ApiCreateTic
 
 // Execute executes the request
 //  @return CreateWebSocketTicketResp
-func (a *WebSocketServiceService) CreateTicketExecute(r ApiCreateTicketRequest) (*CreateWebSocketTicketResp, *http.Response, error) {
+func (a *WebSocketServiceService) CreateWebSocketTicketExecute(r ApiCreateWebSocketTicketRequest) (*CreateWebSocketTicketResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -79,7 +79,7 @@ func (a *WebSocketServiceService) CreateTicketExecute(r ApiCreateTicketRequest) 
 		localVarReturnValue  *CreateWebSocketTicketResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebSocketServiceService.CreateTicket")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "WebSocketServiceService.CreateWebSocketTicket")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

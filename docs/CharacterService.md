@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Create**](CharacterService.md#Create) | **Post** /v1/game-idle/character/create | 
-[**List**](CharacterService.md#List) | **Post** /v1/game-idle/character/list | 
+[**CreateCharacter**](CharacterService.md#CreateCharacter) | **Post** /v1/game-idle/character/create | 
+[**ListCharacter**](CharacterService.md#ListCharacter) | **Post** /v1/game-idle/character/list | 
 
 
 
-## Create
+## CreateCharacter
 
-> CreateCharacterResp Create(ctx).CreateCharacterReq(createCharacterReq).Execute()
+> CreateCharacterResp CreateCharacter(ctx).CreateCharacterReq(createCharacterReq).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CharacterService.Create(context.Background()).CreateCharacterReq(createCharacterReq).Execute()
+	resp, r, err := apiClient.CharacterService.CreateCharacter(context.Background()).CreateCharacterReq(createCharacterReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CharacterService.Create``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CharacterService.CreateCharacter``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Create`: CreateCharacterResp
-	fmt.Fprintf(os.Stdout, "Response from `CharacterService.Create`: %v\n", resp)
+	// response from `CreateCharacter`: CreateCharacterResp
+	fmt.Fprintf(os.Stdout, "Response from `CharacterService.CreateCharacter`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateCharacterRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## List
+## ListCharacter
 
-> ListCharacterResp List(ctx).Body(body).Execute()
+> ListCharacterResp ListCharacter(ctx).Body(body).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CharacterService.List(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.CharacterService.ListCharacter(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `CharacterService.List``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `CharacterService.ListCharacter``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListCharacterResp
-	fmt.Fprintf(os.Stdout, "Response from `CharacterService.List`: %v\n", resp)
+	// response from `ListCharacter`: ListCharacterResp
+	fmt.Fprintf(os.Stdout, "Response from `CharacterService.ListCharacter`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListCharacterRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

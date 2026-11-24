@@ -18,16 +18,25 @@ import (
 // checks if the Character type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Character{}
 
-// Character struct for Character
+// Character 协议消息。
 type Character struct {
+	// 角色 ID
 	Id *string `json:"id,omitempty"`
+	// 角色名称
 	Name *string `json:"name,omitempty"`
+	// 角色状态
 	Status *string `json:"status,omitempty"`
+	// 角色槽位
 	Slot *int32 `json:"slot,omitempty"`
+	// 行动队列容量上限
 	ActionQueueCapacity *int32 `json:"action_queue_capacity,omitempty"`
+	// 最大离线收益结算秒数
 	MaxOfflineSeconds *string `json:"max_offline_seconds,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	// 最近离线时间
 	LastOfflineAt *time.Time `json:"last_offline_at,omitempty"`
 }
 

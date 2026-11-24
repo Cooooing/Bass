@@ -22,62 +22,62 @@ import (
 type AuthService interface {
 
 	/*
-	Login Method for Login
+	LoginAccount Method for LoginAccount
 
 	登录账号。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiLoginRequest
+	@return ApiLoginAccountRequest
 	*/
-	Login(ctx context.Context) ApiLoginRequest
+	LoginAccount(ctx context.Context) ApiLoginAccountRequest
 
-	// LoginExecute executes the request
+	// LoginAccountExecute executes the request
 	//  @return LoginAccountResp
-	LoginExecute(r ApiLoginRequest) (*LoginAccountResp, *http.Response, error)
+	LoginAccountExecute(r ApiLoginAccountRequest) (*LoginAccountResp, *http.Response, error)
 
 	/*
-	Register Method for Register
+	RegisterAccount Method for RegisterAccount
 
 	注册账号。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRegisterRequest
+	@return ApiRegisterAccountRequest
 	*/
-	Register(ctx context.Context) ApiRegisterRequest
+	RegisterAccount(ctx context.Context) ApiRegisterAccountRequest
 
-	// RegisterExecute executes the request
+	// RegisterAccountExecute executes the request
 	//  @return map[string]interface{}
-	RegisterExecute(r ApiRegisterRequest) (map[string]interface{}, *http.Response, error)
+	RegisterAccountExecute(r ApiRegisterAccountRequest) (map[string]interface{}, *http.Response, error)
 }
 
 // AuthServiceService AuthService service
 type AuthServiceService service
 
-type ApiLoginRequest struct {
+type ApiLoginAccountRequest struct {
 	ctx context.Context
 	ApiService AuthService
 	loginAccountReq *LoginAccountReq
 }
 
-func (r ApiLoginRequest) LoginAccountReq(loginAccountReq LoginAccountReq) ApiLoginRequest {
+func (r ApiLoginAccountRequest) LoginAccountReq(loginAccountReq LoginAccountReq) ApiLoginAccountRequest {
 	r.loginAccountReq = &loginAccountReq
 	return r
 }
 
-func (r ApiLoginRequest) Execute() (*LoginAccountResp, *http.Response, error) {
-	return r.ApiService.LoginExecute(r)
+func (r ApiLoginAccountRequest) Execute() (*LoginAccountResp, *http.Response, error) {
+	return r.ApiService.LoginAccountExecute(r)
 }
 
 /*
-Login Method for Login
+LoginAccount Method for LoginAccount
 
 登录账号。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiLoginRequest
+ @return ApiLoginAccountRequest
 */
-func (a *AuthServiceService) Login(ctx context.Context) ApiLoginRequest {
-	return ApiLoginRequest{
+func (a *AuthServiceService) LoginAccount(ctx context.Context) ApiLoginAccountRequest {
+	return ApiLoginAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -85,7 +85,7 @@ func (a *AuthServiceService) Login(ctx context.Context) ApiLoginRequest {
 
 // Execute executes the request
 //  @return LoginAccountResp
-func (a *AuthServiceService) LoginExecute(r ApiLoginRequest) (*LoginAccountResp, *http.Response, error) {
+func (a *AuthServiceService) LoginAccountExecute(r ApiLoginAccountRequest) (*LoginAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -93,7 +93,7 @@ func (a *AuthServiceService) LoginExecute(r ApiLoginRequest) (*LoginAccountResp,
 		localVarReturnValue  *LoginAccountResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.Login")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.LoginAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -163,31 +163,31 @@ func (a *AuthServiceService) LoginExecute(r ApiLoginRequest) (*LoginAccountResp,
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRegisterRequest struct {
+type ApiRegisterAccountRequest struct {
 	ctx context.Context
 	ApiService AuthService
 	registerAccountReq *RegisterAccountReq
 }
 
-func (r ApiRegisterRequest) RegisterAccountReq(registerAccountReq RegisterAccountReq) ApiRegisterRequest {
+func (r ApiRegisterAccountRequest) RegisterAccountReq(registerAccountReq RegisterAccountReq) ApiRegisterAccountRequest {
 	r.registerAccountReq = &registerAccountReq
 	return r
 }
 
-func (r ApiRegisterRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.RegisterExecute(r)
+func (r ApiRegisterAccountRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.RegisterAccountExecute(r)
 }
 
 /*
-Register Method for Register
+RegisterAccount Method for RegisterAccount
 
 注册账号。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRegisterRequest
+ @return ApiRegisterAccountRequest
 */
-func (a *AuthServiceService) Register(ctx context.Context) ApiRegisterRequest {
-	return ApiRegisterRequest{
+func (a *AuthServiceService) RegisterAccount(ctx context.Context) ApiRegisterAccountRequest {
+	return ApiRegisterAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -195,7 +195,7 @@ func (a *AuthServiceService) Register(ctx context.Context) ApiRegisterRequest {
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *AuthServiceService) RegisterExecute(r ApiRegisterRequest) (map[string]interface{}, *http.Response, error) {
+func (a *AuthServiceService) RegisterAccountExecute(r ApiRegisterAccountRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -203,7 +203,7 @@ func (a *AuthServiceService) RegisterExecute(r ApiRegisterRequest) (map[string]i
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.Register")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.RegisterAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

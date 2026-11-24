@@ -17,11 +17,15 @@ import (
 // checks if the CreateWebSocketTicketResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateWebSocketTicketResp{}
 
-// CreateWebSocketTicketResp struct for CreateWebSocketTicketResp
+// CreateWebSocketTicketResp 响应结果。
 type CreateWebSocketTicketResp struct {
+	// 角色 ID
 	CharacterId *string `json:"character_id,omitempty"`
+	// WS 连接凭证
 	Ticket *string `json:"ticket,omitempty"`
+	// 剩余有效秒数
 	ExpiresInSeconds *string `json:"expires_in_seconds,omitempty"`
+	// WS 连接路径
 	Path *string `json:"path,omitempty"`
 }
 

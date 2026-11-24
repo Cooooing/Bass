@@ -22,11 +22,11 @@ func Test_bbs_CharacterServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test CharacterServiceService Create", func(t *testing.T) {
+	t.Run("Test CharacterServiceService CreateCharacter", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CharacterService.Create(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CharacterService.CreateCharacter(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_CharacterServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CharacterServiceService List", func(t *testing.T) {
+	t.Run("Test CharacterServiceService ListCharacter", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CharacterService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CharacterService.ListCharacter(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

@@ -22,62 +22,62 @@ import (
 type CharacterService interface {
 
 	/*
-	Create Method for Create
+	CreateCharacter Method for CreateCharacter
 
 	创建角色。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateRequest
+	@return ApiCreateCharacterRequest
 	*/
-	Create(ctx context.Context) ApiCreateRequest
+	CreateCharacter(ctx context.Context) ApiCreateCharacterRequest
 
-	// CreateExecute executes the request
+	// CreateCharacterExecute executes the request
 	//  @return CreateCharacterResp
-	CreateExecute(r ApiCreateRequest) (*CreateCharacterResp, *http.Response, error)
+	CreateCharacterExecute(r ApiCreateCharacterRequest) (*CreateCharacterResp, *http.Response, error)
 
 	/*
-	List Method for List
+	ListCharacter Method for ListCharacter
 
 	查询当前账号角色列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListRequest
+	@return ApiListCharacterRequest
 	*/
-	List(ctx context.Context) ApiListRequest
+	ListCharacter(ctx context.Context) ApiListCharacterRequest
 
-	// ListExecute executes the request
+	// ListCharacterExecute executes the request
 	//  @return ListCharacterResp
-	ListExecute(r ApiListRequest) (*ListCharacterResp, *http.Response, error)
+	ListCharacterExecute(r ApiListCharacterRequest) (*ListCharacterResp, *http.Response, error)
 }
 
 // CharacterServiceService CharacterService service
 type CharacterServiceService service
 
-type ApiCreateRequest struct {
+type ApiCreateCharacterRequest struct {
 	ctx context.Context
 	ApiService CharacterService
 	createCharacterReq *CreateCharacterReq
 }
 
-func (r ApiCreateRequest) CreateCharacterReq(createCharacterReq CreateCharacterReq) ApiCreateRequest {
+func (r ApiCreateCharacterRequest) CreateCharacterReq(createCharacterReq CreateCharacterReq) ApiCreateCharacterRequest {
 	r.createCharacterReq = &createCharacterReq
 	return r
 }
 
-func (r ApiCreateRequest) Execute() (*CreateCharacterResp, *http.Response, error) {
-	return r.ApiService.CreateExecute(r)
+func (r ApiCreateCharacterRequest) Execute() (*CreateCharacterResp, *http.Response, error) {
+	return r.ApiService.CreateCharacterExecute(r)
 }
 
 /*
-Create Method for Create
+CreateCharacter Method for CreateCharacter
 
 创建角色。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateRequest
+ @return ApiCreateCharacterRequest
 */
-func (a *CharacterServiceService) Create(ctx context.Context) ApiCreateRequest {
-	return ApiCreateRequest{
+func (a *CharacterServiceService) CreateCharacter(ctx context.Context) ApiCreateCharacterRequest {
+	return ApiCreateCharacterRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -85,7 +85,7 @@ func (a *CharacterServiceService) Create(ctx context.Context) ApiCreateRequest {
 
 // Execute executes the request
 //  @return CreateCharacterResp
-func (a *CharacterServiceService) CreateExecute(r ApiCreateRequest) (*CreateCharacterResp, *http.Response, error) {
+func (a *CharacterServiceService) CreateCharacterExecute(r ApiCreateCharacterRequest) (*CreateCharacterResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -93,7 +93,7 @@ func (a *CharacterServiceService) CreateExecute(r ApiCreateRequest) (*CreateChar
 		localVarReturnValue  *CreateCharacterResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CharacterServiceService.Create")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CharacterServiceService.CreateCharacter")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -163,31 +163,31 @@ func (a *CharacterServiceService) CreateExecute(r ApiCreateRequest) (*CreateChar
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListRequest struct {
+type ApiListCharacterRequest struct {
 	ctx context.Context
 	ApiService CharacterService
 	body *map[string]interface{}
 }
 
-func (r ApiListRequest) Body(body map[string]interface{}) ApiListRequest {
+func (r ApiListCharacterRequest) Body(body map[string]interface{}) ApiListCharacterRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListCharacterResp, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
+func (r ApiListCharacterRequest) Execute() (*ListCharacterResp, *http.Response, error) {
+	return r.ApiService.ListCharacterExecute(r)
 }
 
 /*
-List Method for List
+ListCharacter Method for ListCharacter
 
 查询当前账号角色列表。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
+ @return ApiListCharacterRequest
 */
-func (a *CharacterServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
+func (a *CharacterServiceService) ListCharacter(ctx context.Context) ApiListCharacterRequest {
+	return ApiListCharacterRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -195,7 +195,7 @@ func (a *CharacterServiceService) List(ctx context.Context) ApiListRequest {
 
 // Execute executes the request
 //  @return ListCharacterResp
-func (a *CharacterServiceService) ListExecute(r ApiListRequest) (*ListCharacterResp, *http.Response, error) {
+func (a *CharacterServiceService) ListCharacterExecute(r ApiListCharacterRequest) (*ListCharacterResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -203,7 +203,7 @@ func (a *CharacterServiceService) ListExecute(r ApiListRequest) (*ListCharacterR
 		localVarReturnValue  *ListCharacterResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CharacterServiceService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CharacterServiceService.ListCharacter")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

@@ -17,8 +17,9 @@ import (
 // checks if the CreateWebSocketTicketReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateWebSocketTicketReq{}
 
-// CreateWebSocketTicketReq struct for CreateWebSocketTicketReq
+// CreateWebSocketTicketReq 请求参数。
 type CreateWebSocketTicketReq struct {
+	// 角色 ID
 	CharacterId *string `json:"character_id,omitempty"`
 }
 

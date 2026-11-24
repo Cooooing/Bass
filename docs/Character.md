@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**Slot** | Pointer to **int32** |  | [optional] 
-**ActionQueueCapacity** | Pointer to **int32** |  | [optional] 
-**MaxOfflineSeconds** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
-**LastOfflineAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 角色 ID | [optional] 
+**Name** | Pointer to **string** | 角色名称 | [optional] 
+**Status** | Pointer to **string** | 角色状态 | [optional] 
+**Slot** | Pointer to **int32** | 角色槽位 | [optional] 
+**ActionQueueCapacity** | Pointer to **int32** | 行动队列容量上限 | [optional] 
+**MaxOfflineSeconds** | Pointer to **string** | 最大离线收益结算秒数 | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间 | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | 更新时间 | [optional] 
+**LastOfflineAt** | Pointer to **time.Time** | 最近离线时间 | [optional] 
 
 ## Methods
 

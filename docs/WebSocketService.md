@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateTicket**](WebSocketService.md#CreateTicket) | **Post** /v1/game-idle/ws/create-ticket | 
+[**CreateWebSocketTicket**](WebSocketService.md#CreateWebSocketTicket) | **Post** /v1/game-idle/ws/create-ticket | 
 
 
 
-## CreateTicket
+## CreateWebSocketTicket
 
-> CreateWebSocketTicketResp CreateTicket(ctx).CreateWebSocketTicketReq(createWebSocketTicketReq).Execute()
+> CreateWebSocketTicketResp CreateWebSocketTicket(ctx).CreateWebSocketTicketReq(createWebSocketTicketReq).Execute()
 
 
 
@@ -33,13 +33,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.WebSocketService.CreateTicket(context.Background()).CreateWebSocketTicketReq(createWebSocketTicketReq).Execute()
+	resp, r, err := apiClient.WebSocketService.CreateWebSocketTicket(context.Background()).CreateWebSocketTicketReq(createWebSocketTicketReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `WebSocketService.CreateTicket``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `WebSocketService.CreateWebSocketTicket``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateTicket`: CreateWebSocketTicketResp
-	fmt.Fprintf(os.Stdout, "Response from `WebSocketService.CreateTicket`: %v\n", resp)
+	// response from `CreateWebSocketTicket`: CreateWebSocketTicketResp
+	fmt.Fprintf(os.Stdout, "Response from `WebSocketService.CreateWebSocketTicket`: %v\n", resp)
 }
 ```
 
@@ -49,7 +49,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateTicketRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateWebSocketTicketRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

@@ -19,9 +19,11 @@ import (
 // checks if the LoginAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &LoginAccountReq{}
 
-// LoginAccountReq struct for LoginAccountReq
+// LoginAccountReq 请求参数。
 type LoginAccountReq struct {
+	// 邮箱
 	Email string `json:"email"`
+	// 账号密码
 	Password string `json:"password"`
 }
 

@@ -17,8 +17,9 @@ import (
 // checks if the ListCharacterResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCharacterResp{}
 
-// ListCharacterResp struct for ListCharacterResp
+// ListCharacterResp 响应结果。
 type ListCharacterResp struct {
+	// 角色列表
 	Rows []Character `json:"rows,omitempty"`
 }
 

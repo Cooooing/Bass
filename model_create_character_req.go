@@ -17,8 +17,9 @@ import (
 // checks if the CreateCharacterReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateCharacterReq{}
 
-// CreateCharacterReq struct for CreateCharacterReq
+// CreateCharacterReq 请求参数。
 type CreateCharacterReq struct {
+	// 角色名称
 	Name *string `json:"name,omitempty"`
 }
 

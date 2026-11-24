@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | **string** |  | 
-**Password** | **string** |  | 
+**Email** | **string** | 邮箱 | 
+**Password** | **string** | 账号密码 | 
 
 ## Methods
 

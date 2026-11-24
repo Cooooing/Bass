@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CharacterId** | Pointer to **string** |  | [optional] 
-**Ticket** | Pointer to **string** |  | [optional] 
-**ExpiresInSeconds** | Pointer to **string** |  | [optional] 
-**Path** | Pointer to **string** |  | [optional] 
+**CharacterId** | Pointer to **string** | 角色 ID | [optional] 
+**Ticket** | Pointer to **string** | WS 连接凭证 | [optional] 
+**ExpiresInSeconds** | Pointer to **string** | 剩余有效秒数 | [optional] 
+**Path** | Pointer to **string** | WS 连接路径 | [optional] 
 
 ## Methods
 

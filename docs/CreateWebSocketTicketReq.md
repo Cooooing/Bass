@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CharacterId** | Pointer to **string** |  | [optional] 
+**CharacterId** | Pointer to **string** | 角色 ID | [optional] 
 
 ## Methods
 

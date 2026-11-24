@@ -64,13 +64,10 @@ func (u *TencentSMSUsecase) Process(ctx context.Context, req *TencentSMSProcessR
 	if req == nil || req.NotificationContext == nil || req.Rule == nil {
 		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
-	notificationContext := req.NotificationContext
-	rule := req.Rule
-	accountsByUserID := req.AccountsByUserID
 	if !u.smsEnabled {
 		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
-	if rule.TencentSMSTemplate == nil {
+	if req.Rule.TencentSMSTemplate == nil {
 		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	if u.tencentSMSClient == nil {
@@ -78,16 +75,8 @@ func (u *TencentSMSUsecase) Process(ctx context.Context, req *TencentSMSProcessR
 	}
 	status := notifyenum.NotificationChannelStatusSkipped
 	seen := map[string]struct{}{}
-	for _, recipient := range notificationContext.Recipients {
-		if recipient == nil {
-			continue
-		}
-		phone := strings.TrimSpace(recipient.Phone)
-		if phone == "" && recipient.UserID != 0 {
-			if account := accountsByUserID[recipient.UserID]; account != nil {
-				phone = strings.TrimSpace(account.Phone)
-			}
-		}
+	for _, recipient := range req.NotificationContext.Recipients {
+		phone := u.resolveRecipientPhone(recipient, req.AccountsByUserID)
 		if phone == "" {
 			continue
 		}
@@ -95,102 +84,9 @@ func (u *TencentSMSUsecase) Process(ctx context.Context, req *TencentSMSProcessR
 			continue
 		}
 		seen[phone] = struct{}{}
-		rendered, err := rule.TencentSMSTemplate.Render(ctx, notificationContext.TemplateData)
+		itemStatus, err := u.processRecipient(ctx, req, recipient, phone)
 		if err != nil {
-			continue
-		}
-		delivery := &model.NotificationTencentSMSDelivery{
-			EventID:            notificationContext.EventID,
-			NotificationType:   notificationContext.NotificationType,
-			Phone:              phone,
-			SMSSDKAppID:        rendered.SMSSDKAppID,
-			SignName:           rendered.SignName,
-			ProviderTemplateID: rendered.ProviderTemplateID,
-			TemplateParams:     rendered.TemplateParams,
-			Status:             notifyenum.NotificationChannelStatusProcessing,
-		}
-		if recipient.UserID != 0 {
-			delivery.ReceiverID = new(recipient.UserID)
-		}
-		saveResp, err := u.tencentSMSDeliveryRepo.SaveOrGet(ctx, delivery)
-		if err == nil {
-			delivery = saveResp
-		}
-		if err != nil {
-			return notifyenum.NotificationChannelStatusInternalError, err
-		}
-		itemStatus := delivery.Status
-		if itemStatus != notifyenum.NotificationChannelStatusSucceeded && itemStatus != notifyenum.NotificationChannelStatusUnknown && itemStatus != notifyenum.NotificationChannelStatusRateLimited {
-			claimResp, err := u.tencentSMSDeliveryRepo.Claim(ctx, &repo.NotificationTencentSMSDeliveryClaimReq{
-				ID:                delivery.ID,
-				Now:               time.Now(),
-				ProcessingTimeout: u.externalProcessingTimeout,
-			})
-			if err != nil {
-				return notifyenum.NotificationChannelStatusInternalError, err
-			}
-			if claimResp {
-				if u.rateLimitEnabled {
-					allowResp, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitSpec{
-						Channel:   notifyenum.NotificationChannelTencentSMS,
-						Recipient: delivery.Phone,
-						Window:    u.rateLimitWindow,
-						MaxCount:  u.rateLimitMaxCount,
-					})
-					if err != nil {
-						return notifyenum.NotificationChannelStatusInternalError, err
-					}
-					if !allowResp {
-						if err := u.tencentSMSDeliveryRepo.UpdateStatus(ctx, &repo.NotificationTencentSMSDeliveryUpdateStatusReq{
-							ID:     delivery.ID,
-							Status: notifyenum.NotificationChannelStatusRateLimited,
-						}); err != nil {
-							return notifyenum.NotificationChannelStatusInternalError, err
-						}
-						itemStatus = notifyenum.NotificationChannelStatusRateLimited
-					}
-				}
-				if itemStatus != notifyenum.NotificationChannelStatusRateLimited {
-					result, err := u.tencentSMSClient.SendTencentSMS(ctx, &repo.TencentSMSRequest{
-						IdempotencyKey:     strconv.FormatInt(delivery.ID, 10),
-						Phone:              delivery.Phone,
-						SMSSDKAppID:        delivery.SMSSDKAppID,
-						SignName:           delivery.SignName,
-						ProviderTemplateID: delivery.ProviderTemplateID,
-						TemplateParams:     delivery.TemplateParams,
-					})
-					if err != nil {
-						return notifyenum.NotificationChannelStatusInternalError, err
-					}
-					if result == nil {
-						itemStatus = notifyenum.NotificationChannelStatusUnknown
-						err = u.tencentSMSDeliveryRepo.UpdateStatus(ctx, &repo.NotificationTencentSMSDeliveryUpdateStatusReq{
-							ID:     delivery.ID,
-							Status: itemStatus,
-						})
-					} else {
-						itemStatus = result.Status
-						if itemStatus != notifyenum.NotificationChannelStatusSucceeded && itemStatus != notifyenum.NotificationChannelStatusFailed {
-							itemStatus = notifyenum.NotificationChannelStatusUnknown
-						}
-						var sentAt *time.Time
-						if itemStatus == notifyenum.NotificationChannelStatusSucceeded {
-							sentAt = new(time.Now())
-						}
-						err = u.tencentSMSDeliveryRepo.UpdateStatus(ctx, &repo.NotificationTencentSMSDeliveryUpdateStatusReq{
-							ID:                delivery.ID,
-							Status:            itemStatus,
-							ProviderRequestID: result.ProviderRequestID,
-							ProviderCode:      result.ProviderCode,
-							ProviderMessage:   result.ProviderMessage,
-							SentAt:            sentAt,
-						})
-					}
-					if err != nil {
-						return itemStatus, err
-					}
-				}
-			}
+			return itemStatus, err
 		}
 		status = status.Merge(itemStatus)
 		if status.Blocking() {
@@ -198,4 +94,96 @@ func (u *TencentSMSUsecase) Process(ctx context.Context, req *TencentSMSProcessR
 		}
 	}
 	return status, nil
+}
+
+func (*TencentSMSUsecase) resolveRecipientPhone(recipient *model.NotificationRecipient, accountsByUserID map[int64]*model.UserAccount) string {
+	if recipient == nil {
+		return ""
+	}
+	phone := strings.TrimSpace(recipient.Phone)
+	if phone == "" && recipient.UserID != 0 {
+		if account := accountsByUserID[recipient.UserID]; account != nil {
+			phone = strings.TrimSpace(account.Phone)
+		}
+	}
+	return phone
+}
+
+func (u *TencentSMSUsecase) processRecipient(ctx context.Context, req *TencentSMSProcessReq, recipient *model.NotificationRecipient, phone string) (notifyenum.NotificationChannelStatus, error) {
+	rendered, renderedOK := u.renderDelivery(ctx, req)
+	if !renderedOK {
+		return notifyenum.NotificationChannelStatusSkipped, nil
+	}
+	delivery := &model.NotificationTencentSMSDelivery{
+		EventID:            req.NotificationContext.EventID,
+		NotificationType:   req.NotificationContext.NotificationType,
+		Phone:              phone,
+		SMSSDKAppID:        rendered.SMSSDKAppID,
+		SignName:           rendered.SignName,
+		ProviderTemplateID: rendered.ProviderTemplateID,
+		TemplateParams:     rendered.TemplateParams,
+		Status:             notifyenum.NotificationChannelStatusProcessing,
+	}
+	if recipient.UserID != 0 {
+		delivery.ReceiverID = new(recipient.UserID)
+	}
+	var err error
+	delivery, err = u.tencentSMSDeliveryRepo.SaveOrGet(ctx, delivery)
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	return u.claimAndSend(ctx, delivery)
+}
+
+func (*TencentSMSUsecase) renderDelivery(ctx context.Context, req *TencentSMSProcessReq) (*model.NotificationTencentSMSRendered, bool) {
+	rendered, err := req.Rule.TencentSMSTemplate.Render(ctx, req.NotificationContext.TemplateData)
+	return rendered, err == nil
+}
+
+func (u *TencentSMSUsecase) claimAndSend(ctx context.Context, delivery *model.NotificationTencentSMSDelivery) (notifyenum.NotificationChannelStatus, error) {
+	status := delivery.Status
+	if status == notifyenum.NotificationChannelStatusSucceeded || status == notifyenum.NotificationChannelStatusUnknown || status == notifyenum.NotificationChannelStatusRateLimited {
+		return status, nil
+	}
+	claimed, err := u.tencentSMSDeliveryRepo.Claim(ctx, &repo.NotificationTencentSMSDeliveryClaimReq{ID: delivery.ID, Now: time.Now(), ProcessingTimeout: u.externalProcessingTimeout})
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if !claimed {
+		return status, nil
+	}
+	if u.rateLimitEnabled {
+		allowed, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitSpec{Channel: notifyenum.NotificationChannelTencentSMS, Recipient: delivery.Phone, Window: u.rateLimitWindow, MaxCount: u.rateLimitMaxCount})
+		if err != nil {
+			return notifyenum.NotificationChannelStatusInternalError, err
+		}
+		if !allowed {
+			if err := u.tencentSMSDeliveryRepo.UpdateStatus(ctx, &repo.NotificationTencentSMSDeliveryUpdateStatusReq{ID: delivery.ID, Status: notifyenum.NotificationChannelStatusRateLimited}); err != nil {
+				return notifyenum.NotificationChannelStatusInternalError, err
+			}
+			return notifyenum.NotificationChannelStatusRateLimited, nil
+		}
+	}
+	return u.sendTencentSMSDelivery(ctx, delivery)
+}
+
+func (u *TencentSMSUsecase) sendTencentSMSDelivery(ctx context.Context, delivery *model.NotificationTencentSMSDelivery) (notifyenum.NotificationChannelStatus, error) {
+	result, err := u.tencentSMSClient.SendTencentSMS(ctx, &repo.TencentSMSRequest{IdempotencyKey: strconv.FormatInt(delivery.ID, 10), Phone: delivery.Phone, SMSSDKAppID: delivery.SMSSDKAppID, SignName: delivery.SignName, ProviderTemplateID: delivery.ProviderTemplateID, TemplateParams: delivery.TemplateParams})
+	if err != nil {
+		return notifyenum.NotificationChannelStatusInternalError, err
+	}
+	if result == nil {
+		status := notifyenum.NotificationChannelStatusUnknown
+		return status, u.tencentSMSDeliveryRepo.UpdateStatus(ctx, &repo.NotificationTencentSMSDeliveryUpdateStatusReq{ID: delivery.ID, Status: status})
+	}
+	status := result.Status
+	if status != notifyenum.NotificationChannelStatusSucceeded && status != notifyenum.NotificationChannelStatusFailed {
+		status = notifyenum.NotificationChannelStatusUnknown
+	}
+	var sentAt *time.Time
+	if status == notifyenum.NotificationChannelStatusSucceeded {
+		sentAt = new(time.Now())
+	}
+	err = u.tencentSMSDeliveryRepo.UpdateStatus(ctx, &repo.NotificationTencentSMSDeliveryUpdateStatusReq{ID: delivery.ID, Status: status, ProviderRequestID: result.ProviderRequestID, ProviderCode: result.ProviderCode, ProviderMessage: result.ProviderMessage, SentAt: sentAt})
+	return status, err
 }

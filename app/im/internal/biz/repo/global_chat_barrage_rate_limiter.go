@@ -6,6 +6,6 @@ import (
 )
 
 type GlobalChatBarrageRateLimiter interface {
-	Limited(context.Context, int64) (bool, error)
-	Mark(context.Context, int64, time.Duration) error
+	Limited(ctx context.Context, userID int64) (bool, error)
+	Mark(ctx context.Context, userID int64, ttl time.Duration) error
 }

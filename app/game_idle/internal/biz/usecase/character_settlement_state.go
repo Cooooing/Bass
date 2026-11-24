@@ -121,111 +121,11 @@ func (h *CharacterSettlementHandler) Apply(ctx context.Context, command Characte
 		return changeSet, nil
 	}
 
-	// 同一物品可能同时出现在消耗和产出中，先聚合成净变化量。
-	itemDeltas := make(map[string]int64, len(req.Items))
-	for _, item := range req.Items {
-		itemDeltas[item.ItemID] += item.Quantity
+	if err = h.applyItemChanges(state, req, changeSet); err != nil {
+		return nil, err
 	}
-	// 先在草稿上校验所有扣减，任意物品不足时整次结算失败。
-	for itemID, quantity := range itemDeltas {
-		current := int64(0)
-		if item := state.BackpackItems[itemID]; item != nil {
-			current = item.Quantity
-		}
-		if current+quantity < 0 {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT)
-		}
-	}
-	for itemID, quantity := range itemDeltas {
-		if quantity == 0 {
-			continue
-		}
-		item := state.BackpackItems[itemID]
-		if item == nil {
-			item = &model.CharacterItem{
-				CharacterID: req.CharacterID,
-				ItemID:      itemID,
-			}
-			state.BackpackItems[itemID] = item
-		}
-		item.Quantity += quantity
-		if quantity > 0 {
-			item.TotalObtained += quantity
-		}
-		if quantity < 0 {
-			item.TotalConsumed -= quantity
-		}
-		changeSet.ItemChanges = append(changeSet.ItemChanges, &model.ActionCompletedItemChange{
-			ItemID:        itemID,
-			QuantityDelta: quantity,
-			QuantityAfter: item.Quantity,
-		})
-	}
-	state.BackpackOperationCount += int64(len(itemDeltas))
-
-	if req.AbilityID != "" && req.ExpReward > 0 {
-		ability := state.Abilities[req.AbilityID]
-		if ability == nil {
-			ability = &model.CharacterAbility{
-				CharacterID:  req.CharacterID,
-				AbilityID:    req.AbilityID,
-				Level:        1,
-				NextLevelExp: 100,
-			}
-			state.Abilities[req.AbilityID] = ability
-		}
-		levelBefore := ability.Level
-		ability.Exp += req.ExpReward
-		// 当前先使用固定等级曲线，后续可替换为公式或配置表。
-		for ability.Exp >= ability.NextLevelExp {
-			ability.Level++
-			ability.NextLevelExp = int64(ability.Level) * int64(ability.Level) * 100
-		}
-		changeSet.AbilityChanges = append(changeSet.AbilityChanges, &model.ActionCompletedAbilityChange{
-			AbilityID: req.AbilityID.String(),
-			ExpDelta:  req.ExpReward,
-			ExpAfter:  ability.Exp,
-		})
-		if ability.Level > levelBefore {
-			changeSet.AbilityLeveledUp = append(changeSet.AbilityLeveledUp, &model.AbilityLeveledUpEvent{
-				CharacterID:  req.CharacterID,
-				AbilityID:    req.AbilityID.String(),
-				Level:        ability.Level,
-				Exp:          ability.Exp,
-				NextLevelExp: ability.NextLevelExp,
-			})
-		}
-		state.AbilityOperationCount++
-	}
-
-	current := state.Queue.Items[0]
-	finishCurrent := req.RemoveHead
-	queueChanged := false
-	if !finishCurrent && current.Times != -1 {
-		current.Times--
-		finishCurrent = current.Times <= 0
-		queueChanged = true
-	}
-	changeSet.ActionTimesRemaining = current.Times
-	if finishCurrent {
-		state.Queue.Items = state.Queue.Items[1:]
-		changeSet.ActionTimesRemaining = 0
-		queueChanged = true
-	}
-	if queueChanged {
-		// 队列变化事件只描述最终快照，调度器根据新队首决定是否继续进入时间轮。
-		newHeadID := ""
-		if len(state.Queue.Items) > 0 {
-			newHeadID = state.Queue.Items[0].ID
-		}
-		changeSet.QueueChanged = &CharacterActionQueueChangedStateEvent{
-			CharacterID: req.CharacterID,
-			Queue:       state.Queue,
-			OldHeadID:   oldHeadID,
-			NewHeadID:   newHeadID,
-			ChangedAt:   time.Now(),
-		}
-	}
+	h.applyAbilityReward(state, req, changeSet)
+	h.advanceQueue(state, req, oldHeadID, changeSet)
 
 	if err = tx.Commit(ctx); err != nil {
 		return nil, err
@@ -244,4 +144,129 @@ func (h *CharacterSettlementHandler) Apply(ctx context.Context, command Characte
 		}
 	}
 	return changeSet, nil
+}
+
+// applyItemChanges 在事务草稿内校验并应用本次结算的全部物品净变化。
+func (h *CharacterSettlementHandler) applyItemChanges(
+	state *repo.CharacterStateDraft,
+	req *CharacterSettlementCommand,
+	changeSet *CharacterStateChangeSet,
+) error {
+	itemDeltas := make(map[string]int64, len(req.Items))
+	for _, item := range req.Items {
+		itemDeltas[item.ItemID] += item.Quantity
+	}
+	for itemID, quantity := range itemDeltas {
+		current := int64(0)
+		if item := state.BackpackItems[itemID]; item != nil {
+			current = item.Quantity
+		}
+		if current+quantity < 0 {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT)
+		}
+	}
+	for itemID, quantity := range itemDeltas {
+		if quantity == 0 {
+			continue
+		}
+		item := state.BackpackItems[itemID]
+		if item == nil {
+			item = &model.CharacterItem{CharacterID: req.CharacterID, ItemID: itemID}
+			state.BackpackItems[itemID] = item
+		}
+		item.Quantity += quantity
+		if quantity > 0 {
+			item.TotalObtained += quantity
+		}
+		if quantity < 0 {
+			item.TotalConsumed -= quantity
+		}
+		changeSet.ItemChanges = append(changeSet.ItemChanges, &model.ActionCompletedItemChange{
+			ItemID:        itemID,
+			QuantityDelta: quantity,
+			QuantityAfter: item.Quantity,
+		})
+	}
+	state.BackpackOperationCount += int64(len(itemDeltas))
+	return nil
+}
+
+// applyAbilityReward 在事务草稿内累加能力经验，并记录升级事件。
+func (h *CharacterSettlementHandler) applyAbilityReward(
+	state *repo.CharacterStateDraft,
+	req *CharacterSettlementCommand,
+	changeSet *CharacterStateChangeSet,
+) {
+	if req.AbilityID == "" || req.ExpReward <= 0 {
+		return
+	}
+	ability := state.Abilities[req.AbilityID]
+	if ability == nil {
+		ability = &model.CharacterAbility{
+			CharacterID:  req.CharacterID,
+			AbilityID:    req.AbilityID,
+			Level:        1,
+			NextLevelExp: 100,
+		}
+		state.Abilities[req.AbilityID] = ability
+	}
+	levelBefore := ability.Level
+	ability.Exp += req.ExpReward
+	// 当前先使用固定等级曲线，后续可替换为公式或配置表。
+	for ability.Exp >= ability.NextLevelExp {
+		ability.Level++
+		ability.NextLevelExp = int64(ability.Level) * int64(ability.Level) * 100
+	}
+	changeSet.AbilityChanges = append(changeSet.AbilityChanges, &model.ActionCompletedAbilityChange{
+		AbilityID: req.AbilityID.String(),
+		ExpDelta:  req.ExpReward,
+		ExpAfter:  ability.Exp,
+	})
+	if ability.Level > levelBefore {
+		changeSet.AbilityLeveledUp = append(changeSet.AbilityLeveledUp, &model.AbilityLeveledUpEvent{
+			CharacterID:  req.CharacterID,
+			AbilityID:    req.AbilityID.String(),
+			Level:        ability.Level,
+			Exp:          ability.Exp,
+			NextLevelExp: ability.NextLevelExp,
+		})
+	}
+	state.AbilityOperationCount++
+}
+
+// advanceQueue 扣减队首次数或移除完成项，并在队列变化时生成快照事件。
+func (h *CharacterSettlementHandler) advanceQueue(
+	state *repo.CharacterStateDraft,
+	req *CharacterSettlementCommand,
+	oldHeadID string,
+	changeSet *CharacterStateChangeSet,
+) {
+	current := state.Queue.Items[0]
+	finishCurrent := req.RemoveHead
+	queueChanged := false
+	if !finishCurrent && current.Times != -1 {
+		current.Times--
+		finishCurrent = current.Times <= 0
+		queueChanged = true
+	}
+	changeSet.ActionTimesRemaining = current.Times
+	if finishCurrent {
+		state.Queue.Items = state.Queue.Items[1:]
+		changeSet.ActionTimesRemaining = 0
+		queueChanged = true
+	}
+	if !queueChanged {
+		return
+	}
+	newHeadID := ""
+	if len(state.Queue.Items) > 0 {
+		newHeadID = state.Queue.Items[0].ID
+	}
+	changeSet.QueueChanged = &CharacterActionQueueChangedStateEvent{
+		CharacterID: req.CharacterID,
+		Queue:       state.Queue,
+		OldHeadID:   oldHeadID,
+		NewHeadID:   newHeadID,
+		ChangedAt:   time.Now(),
+	}
 }

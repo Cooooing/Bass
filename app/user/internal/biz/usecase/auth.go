@@ -144,120 +144,85 @@ func (s *AuthUsecase) CheckRegistrationAvailability(ctx context.Context, req *Ch
 func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 	switch req.Type {
 	case enum.RegisterTypeEmail:
-		email := strings.ToLower(strings.TrimSpace(req.Email))
-		if exists, err := s.accountRepo.ExistsByAccount(ctx, email); err != nil {
-			return err
-		} else if exists {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
-		}
-		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
-			return err
-		} else if exists {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
-		}
-		if !req.SkipOtp {
-			if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
-				Email: email,
-				Code:  req.Code,
-			}); err != nil {
-				return err
-			}
-		}
-		passwordHash, err := str.HashPassword(req.Password)
-		if err != nil {
-			return err
-		}
-		var outboxEvent *model.OutboxEvent
-		err = s.tx(ctx, func(ctx context.Context) error {
-			created, err := s.accountRepo.Create(ctx, &model.Account{
-				Name:     req.Name,
-				Nickname: req.Nickname,
-				Password: passwordHash,
-				Email:    new(email),
-			})
-			if err != nil {
-				return err
-			}
-			outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				Event: &commonevent.Event{
-					Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_REGISTER,
-					Payload: &commonevent.Event_UserRegister{
-						UserRegister: &commonevent.UserRegisterPayload{
-							UserId: created.ID,
-						},
-					},
-				},
-			})
-			return err
-		})
-		if err != nil {
-			return err
-		}
-		if outboxEvent != nil {
-			if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
-				ID: outboxEvent.ID,
-			}); err != nil {
-				s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
-			}
-		}
-		return nil
+		return s.registerEmail(ctx, req)
 	case enum.RegisterTypePhone:
-		phone := strings.TrimSpace(req.Phone)
-		if exists, err := s.accountRepo.ExistsByAccount(ctx, phone); err != nil {
-			return err
-		} else if exists {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
-		}
-		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
-			return err
-		} else if exists {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
-		}
-		if !req.SkipOtp {
-			if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
-				Phone: phone,
-				Code:  req.Code,
-			}); err != nil {
-				return err
-			}
-		}
-		passwordHash, err := str.HashPassword(req.Password)
-		if err != nil {
-			return err
-		}
-		var outboxEvent *model.OutboxEvent
-		err = s.tx(ctx, func(ctx context.Context) error {
-			created, err := s.accountRepo.Create(ctx, &model.Account{
-				Name:     req.Name,
-				Nickname: req.Nickname,
-				Password: passwordHash,
-				Phone:    new(phone),
-			})
-			if err != nil {
-				return err
-			}
-			outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-				Event: &commonevent.Event{
-					Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_REGISTER,
-					Payload: &commonevent.Event_UserRegister{
-						UserRegister: &commonevent.UserRegisterPayload{UserId: created.ID},
-					},
-				},
-			})
-			return err
-		})
-		if err != nil {
-			return err
-		}
-		if outboxEvent != nil {
-			if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); err != nil {
-				s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
-			}
-		}
-		return nil
+		return s.registerPhone(ctx, req)
 	default:
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
+}
+
+// registerEmail 校验邮箱验证码后创建邮箱账号。
+func (s *AuthUsecase) registerEmail(ctx context.Context, req *RegisterReq) error {
+	email := strings.ToLower(strings.TrimSpace(req.Email))
+	if err := s.validateRegistrationIdentifiers(ctx, email, req.Name); err != nil {
+		return err
+	}
+	if !req.SkipOtp {
+		if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{Email: email, Code: req.Code}); err != nil {
+			return err
+		}
+	}
+	passwordHash, err := str.HashPassword(req.Password)
+	if err != nil {
+		return err
+	}
+	return s.saveRegisteredAccount(ctx, &model.Account{Name: req.Name, Nickname: req.Nickname, Password: passwordHash, Email: new(email)})
+}
+
+// registerPhone 校验手机验证码后创建手机账号。
+func (s *AuthUsecase) registerPhone(ctx context.Context, req *RegisterReq) error {
+	phone := strings.TrimSpace(req.Phone)
+	if err := s.validateRegistrationIdentifiers(ctx, phone, req.Name); err != nil {
+		return err
+	}
+	if !req.SkipOtp {
+		if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{Phone: phone, Code: req.Code}); err != nil {
+			return err
+		}
+	}
+	passwordHash, err := str.HashPassword(req.Password)
+	if err != nil {
+		return err
+	}
+	return s.saveRegisteredAccount(ctx, &model.Account{Name: req.Name, Nickname: req.Nickname, Password: passwordHash, Phone: new(phone)})
+}
+
+// validateRegistrationIdentifiers 校验联系方式和账号名均未被占用。
+func (s *AuthUsecase) validateRegistrationIdentifiers(ctx context.Context, identifier, name string) error {
+	if exists, err := s.accountRepo.ExistsByAccount(ctx, identifier); err != nil {
+		return err
+	} else if exists {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
+	}
+	if exists, err := s.accountRepo.ExistsByAccount(ctx, name); err != nil {
+		return err
+	} else if exists {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
+	}
+	return nil
+}
+
+// saveRegisteredAccount 在同一事务内写入账号和注册事件，并尽力发布事件。
+func (s *AuthUsecase) saveRegisteredAccount(ctx context.Context, account *model.Account) error {
+	var outboxEvent *model.OutboxEvent
+	err := s.tx(ctx, func(txCtx context.Context) error {
+		created, err := s.accountRepo.Create(txCtx, account)
+		if err != nil {
+			return err
+		}
+		outboxEvent, err = s.outboxRepo.Save(txCtx, &repo.OutboxEventSave{Event: &commonevent.Event{Subject: commonevent.EventSubject_EVENT_SUBJECT_USER_REGISTER, Payload: &commonevent.Event_UserRegister{UserRegister: &commonevent.UserRegisterPayload{UserId: created.ID}}}})
+		return err
+	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, err = s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); err != nil {
+			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
+	return nil
 }
 
 type LoginReq struct {
@@ -593,17 +558,29 @@ func (*AuthUsecase) requireLoginableAccount(account *model.Account, audit *model
 }
 
 func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, realm commonenum.LoginRealm) (*model.TokenPair, error) {
-	claims, err := s.tokenUsecase.Parse(refreshToken)
-	if err != nil || claims.Type != enum.TokenTypeRefresh || claims.Realm != realm || claims.SessionID == "" || claims.JTI == "" {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
-	}
-	session, err := s.authCacheRepo.GetSession(ctx, realm, claims.SessionID)
+	claims, session, account, now, err := s.loadRefreshContext(ctx, refreshToken, realm)
 	if err != nil {
 		return nil, err
 	}
+	newJTI, _, err := s.rotateRefreshSession(ctx, claims, session, realm, now)
+	if err != nil {
+		return nil, err
+	}
+	return s.issueRefreshedTokens(ctx, claims, session, account, realm, newJTI)
+}
+
+func (s *AuthUsecase) loadRefreshContext(ctx context.Context, refreshToken string, realm commonenum.LoginRealm) (*model.Token, *model.RefreshSession, *model.Account, time.Time, error) {
+	claims, err := s.tokenUsecase.Parse(refreshToken)
+	if err != nil || claims.Type != enum.TokenTypeRefresh || claims.Realm != realm || claims.SessionID == "" || claims.JTI == "" {
+		return nil, nil, nil, time.Time{}, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+	}
+	session, err := s.authCacheRepo.GetSession(ctx, realm, claims.SessionID)
+	if err != nil {
+		return nil, nil, nil, time.Time{}, err
+	}
 	now := time.Now()
 	if session == nil || session.UserID != claims.UserID || session.Realm != realm || session.SessionExpiresAt == nil || !session.SessionExpiresAt.After(now) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+		return nil, nil, nil, time.Time{}, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 		UserID: new(claims.UserID),
@@ -611,16 +588,20 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 	if err != nil {
 		code, ok := apperror.BusinessCode(err)
 		if ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+			return nil, nil, nil, time.Time{}, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 		}
-		return nil, err
+		return nil, nil, nil, time.Time{}, err
 	}
 	if account == nil || account.Status == nil || *account.Status != enum.AccountStatusNormal {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+		return nil, nil, nil, time.Time{}, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
+	return &claims, session, account, now, nil
+}
+
+func (s *AuthUsecase) rotateRefreshSession(ctx context.Context, claims *model.Token, session *model.RefreshSession, realm commonenum.LoginRealm, now time.Time) (string, time.Duration, error) {
 	if session.CurrentJTI != claims.JTI {
 		_ = s.authCacheRepo.DeleteSession(ctx, realm, claims.UserID, claims.SessionID)
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+		return "", 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	newJTI := uuid.NewString()
 	sessionRedisTTL := session.SessionExpiresAt.Sub(now)
@@ -632,17 +613,21 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 	}
 	rotated, err := s.authCacheRepo.RotateSessionJTI(ctx, realm, claims.SessionID, claims.JTI, newJTI, new(now), sessionRedisTTL)
 	if err != nil {
-		return nil, err
+		return "", 0, err
 	}
 	if !rotated {
 		_ = s.authCacheRepo.DeleteSession(ctx, realm, claims.UserID, claims.SessionID)
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+		return "", 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	session.CurrentJTI = newJTI
 	session.LastSeenAt = new(now)
 	if err := s.authCacheRepo.TouchSession(ctx, session, sessionRedisTTL); err != nil {
-		return nil, err
+		return "", 0, err
 	}
+	return newJTI, sessionRedisTTL, nil
+}
+
+func (s *AuthUsecase) issueRefreshedTokens(ctx context.Context, claims *model.Token, session *model.RefreshSession, account *model.Account, realm commonenum.LoginRealm, newJTI string) (*model.TokenPair, error) {
 	nickname := ""
 	if account.Nickname != nil {
 		nickname = *account.Nickname

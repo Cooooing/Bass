@@ -59,7 +59,28 @@ func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
 	if req == nil || req.EventID == "" || len(req.Channels) == 0 {
 		return nil
 	}
-	notificationContext := &model.NotificationContext{
+	notificationContext := u.newNotificationContext(req)
+	if err := u.filterBlockedRecipients(ctx, notificationContext); err != nil {
+		return err
+	}
+	rules, err := u.templateUsecase.ListEnabledRulesWithTemplates(ctx, &ListEnabledRulesWithTemplatesReq{NotificationType: req.NotificationType, Language: req.Language, Channels: req.Channels})
+	if err != nil || len(rules) == 0 {
+		return err
+	}
+	accountsByUserID, err := u.loadRecipientAccounts(ctx, notificationContext, rules)
+	if err != nil {
+		return err
+	}
+	for _, rule := range rules {
+		if err := u.processChannel(ctx, notificationContext, rule, accountsByUserID); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (*NotifyUsecase) newNotificationContext(req *NotifySendReq) *model.NotificationContext {
+	return &model.NotificationContext{
 		EventID:          req.EventID,
 		NotificationType: req.NotificationType,
 		ActorUserID:      req.ActorUserID,
@@ -68,6 +89,9 @@ func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
 		TemplateData:     req.TemplateData,
 		Recipients:       req.Recipients,
 	}
+}
+
+func (u *NotifyUsecase) filterBlockedRecipients(ctx context.Context, notificationContext *model.NotificationContext) error {
 	if notificationContext.ActorUserID != nil && u.userAccountRepo != nil {
 		targets := make([]int64, 0, len(notificationContext.Recipients))
 		for _, recipient := range notificationContext.Recipients {
@@ -90,14 +114,10 @@ func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
 		}
 		notificationContext.Recipients = filtered
 	}
-	rules, err := u.templateUsecase.ListEnabledRulesWithTemplates(ctx, &ListEnabledRulesWithTemplatesReq{
-		NotificationType: req.NotificationType,
-		Language:         req.Language,
-		Channels:         req.Channels,
-	})
-	if err != nil || len(rules) == 0 {
-		return err
-	}
+	return nil
+}
+
+func (u *NotifyUsecase) loadRecipientAccounts(ctx context.Context, notificationContext *model.NotificationContext, rules []*model.NotificationRule) (map[int64]*model.UserAccount, error) {
 	needsContact := false
 	for _, rule := range rules {
 		if rule == nil || !rule.Enabled {
@@ -113,49 +133,49 @@ func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
 		userIDs := lo.Uniq(lo.FilterMap(notificationContext.Recipients, func(recipient *model.NotificationRecipient, _ int) (int64, bool) {
 			return recipient.UserID, recipient != nil && recipient.UserID != 0 && (recipient.Email == "" || recipient.Phone == "")
 		}))
-		accountsByUserID, err = u.userAccountRepo.MapAccounts(ctx, userIDs)
+		return u.userAccountRepo.MapAccounts(ctx, userIDs)
+	}
+	return accountsByUserID, nil
+}
+
+func (u *NotifyUsecase) processChannel(ctx context.Context, notificationContext *model.NotificationContext, rule *model.NotificationRule, accountsByUserID map[int64]*model.UserAccount) error {
+	if rule == nil || !rule.Enabled {
+		return nil
+	}
+	status := notifyenum.NotificationChannelStatusSkipped
+	var err error
+	switch rule.Channel {
+	case notifyenum.NotificationChannelStation:
+		status, err = u.stationUsecase.Process(ctx, &channelusecase.StationProcessReq{
+			NotificationContext: notificationContext,
+			Rule:                rule,
+			AccountsByUserID:    accountsByUserID,
+		})
+	case notifyenum.NotificationChannelEmail:
+		status, err = u.emailUsecase.Process(ctx, &channelusecase.EmailProcessReq{
+			NotificationContext: notificationContext,
+			Rule:                rule,
+			AccountsByUserID:    accountsByUserID,
+		})
+	case notifyenum.NotificationChannelTencentSMS:
+		status, err = u.tencentSMSUsecase.Process(ctx, &channelusecase.TencentSMSProcessReq{
+			NotificationContext: notificationContext,
+			Rule:                rule,
+			AccountsByUserID:    accountsByUserID,
+		})
+	case notifyenum.NotificationChannelLarkWebhook:
+		status, err = u.larkWebhookUsecase.Process(ctx, &channelusecase.LarkWebhookProcessReq{
+			NotificationContext: notificationContext,
+			Rule:                rule,
+			AccountsByUserID:    accountsByUserID,
+		})
 	}
 	if err != nil {
 		return err
 	}
-	for _, rule := range rules {
-		if rule == nil || !rule.Enabled {
-			continue
-		}
-		status := notifyenum.NotificationChannelStatusSkipped
-		switch rule.Channel {
-		case notifyenum.NotificationChannelStation:
-			status, err = u.stationUsecase.Process(ctx, &channelusecase.StationProcessReq{
-				NotificationContext: notificationContext,
-				Rule:                rule,
-				AccountsByUserID:    accountsByUserID,
-			})
-		case notifyenum.NotificationChannelEmail:
-			status, err = u.emailUsecase.Process(ctx, &channelusecase.EmailProcessReq{
-				NotificationContext: notificationContext,
-				Rule:                rule,
-				AccountsByUserID:    accountsByUserID,
-			})
-		case notifyenum.NotificationChannelTencentSMS:
-			status, err = u.tencentSMSUsecase.Process(ctx, &channelusecase.TencentSMSProcessReq{
-				NotificationContext: notificationContext,
-				Rule:                rule,
-				AccountsByUserID:    accountsByUserID,
-			})
-		case notifyenum.NotificationChannelLarkWebhook:
-			status, err = u.larkWebhookUsecase.Process(ctx, &channelusecase.LarkWebhookProcessReq{
-				NotificationContext: notificationContext,
-				Rule:                rule,
-				AccountsByUserID:    accountsByUserID,
-			})
-		}
-		if err != nil {
-			return err
-		}
-		switch status {
-		case notifyenum.NotificationChannelStatusProcessing, notifyenum.NotificationChannelStatusFailed, notifyenum.NotificationChannelStatusInternalError:
-			return fmt.Errorf("notification channel not completed: event_id=%s channel=%s status=%s", notificationContext.EventID, rule.Channel, status)
-		}
+	switch status {
+	case notifyenum.NotificationChannelStatusProcessing, notifyenum.NotificationChannelStatusFailed, notifyenum.NotificationChannelStatusInternalError:
+		return fmt.Errorf("notification channel not completed: event_id=%s channel=%s status=%s", notificationContext.EventID, rule.Channel, status)
 	}
 	return nil
 }

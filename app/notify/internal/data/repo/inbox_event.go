@@ -258,6 +258,21 @@ func (r *InboxEventRepo) MarkFailed(ctx context.Context, req *bizrepo.InboxEvent
 	return nil
 }
 
+func (r *InboxEventRepo) MarkDead(ctx context.Context, req *bizrepo.InboxEventMarkDeadReq) error {
+	if req == nil {
+		return fmt.Errorf("inbox event mark dead request is nil")
+	}
+	lastError := req.LastError
+	if len(lastError) > 255 {
+		lastError = lastError[:255]
+	}
+	return r.getClient(ctx).InboxEvent.Update().
+		Where(inboxevent.EventIDEQ(req.EventID)).
+		SetStatus(inboxevent.Status(commonenum.InboxEventStatusDead)).
+		SetLastError(lastError).
+		Exec(ctx)
+}
+
 func (r *InboxEventRepo) getQuery(query *gen.InboxEventQuery, req *bizrepo.InboxEventQuery) *gen.InboxEventQuery {
 	if req == nil {
 		return query

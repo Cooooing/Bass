@@ -7,7 +7,7 @@ import (
 )
 
 type GlobalChatMuteRepo interface {
-	Get(context.Context, int64) (*model.GlobalChatMute, error)
-	Save(context.Context, *model.GlobalChatMute) error
-	Delete(context.Context, int64) error
+	Get(ctx context.Context, userID int64) (*model.GlobalChatMute, error)
+	Save(ctx context.Context, mute *model.GlobalChatMute) error
+	Delete(ctx context.Context, userID int64) error
 }

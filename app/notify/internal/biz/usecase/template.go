@@ -109,6 +109,23 @@ func (u *TemplateUsecase) ListEnabledRulesWithTemplates(ctx context.Context, req
 	if err != nil || len(rules) == 0 {
 		return rules, err
 	}
+	rulesByID, ruleIDsByChannel := u.indexNotificationRules(rules)
+	if err := u.loadStationTemplates(ctx, ruleIDsByChannel[notifyenum.NotificationChannelStation], rulesByID); err != nil {
+		return nil, err
+	}
+	if err := u.loadEmailTemplates(ctx, ruleIDsByChannel[notifyenum.NotificationChannelEmail], rulesByID); err != nil {
+		return nil, err
+	}
+	if err := u.loadTencentSMSTemplates(ctx, ruleIDsByChannel[notifyenum.NotificationChannelTencentSMS], rulesByID); err != nil {
+		return nil, err
+	}
+	if err := u.loadLarkWebhookTemplates(ctx, ruleIDsByChannel[notifyenum.NotificationChannelLarkWebhook], rulesByID); err != nil {
+		return nil, err
+	}
+	return rules, nil
+}
+
+func (*TemplateUsecase) indexNotificationRules(rules []*model.NotificationRule) (map[int64]*model.NotificationRule, map[notifyenum.NotificationChannel][]int64) {
 	rulesByID := make(map[int64]*model.NotificationRule, len(rules))
 	ruleIDsByChannel := make(map[notifyenum.NotificationChannel][]int64)
 	for _, rule := range rules {
@@ -118,193 +135,220 @@ func (u *TemplateUsecase) ListEnabledRulesWithTemplates(ctx context.Context, req
 		rulesByID[rule.ID] = rule
 		ruleIDsByChannel[rule.Channel] = append(ruleIDsByChannel[rule.Channel], rule.ID)
 	}
-	if ruleIDs := ruleIDsByChannel[notifyenum.NotificationChannelStation]; len(ruleIDs) > 0 {
-		templates, err := u.notificationStationTemplateRepo.List(ctx, &repo.NotificationStationTemplateQuery{
-			RuleIDs: ruleIDs,
-		})
-		if err != nil {
-			return nil, err
-		}
-		for _, item := range templates {
-			if item != nil && rulesByID[item.RuleID] != nil {
-				rulesByID[item.RuleID].StationTemplate = item
-			}
-		}
-	}
-	if ruleIDs := ruleIDsByChannel[notifyenum.NotificationChannelEmail]; len(ruleIDs) > 0 {
-		templates, err := u.notificationEmailTemplateRepo.List(ctx, &repo.NotificationEmailTemplateQuery{
-			RuleIDs: ruleIDs,
-		})
-		if err != nil {
-			return nil, err
-		}
-		for _, item := range templates {
-			if item != nil && rulesByID[item.RuleID] != nil {
-				rulesByID[item.RuleID].EmailTemplate = item
-			}
-		}
-	}
-	if ruleIDs := ruleIDsByChannel[notifyenum.NotificationChannelTencentSMS]; len(ruleIDs) > 0 {
-		templates, err := u.notificationTencentSMSTemplateRepo.List(ctx, &repo.NotificationTencentSMSTemplateQuery{
-			RuleIDs: ruleIDs,
-		})
-		if err != nil {
-			return nil, err
-		}
-		for _, item := range templates {
-			if item != nil && rulesByID[item.RuleID] != nil {
-				rulesByID[item.RuleID].TencentSMSTemplate = item
-			}
-		}
-	}
-	if ruleIDs := ruleIDsByChannel[notifyenum.NotificationChannelLarkWebhook]; len(ruleIDs) > 0 {
-		templates, err := u.notificationLarkWebhookTemplateRepo.List(ctx, &repo.NotificationLarkWebhookTemplateQuery{
-			RuleIDs: ruleIDs,
-		})
-		if err != nil {
-			return nil, err
-		}
-		for _, item := range templates {
-			if item != nil && rulesByID[item.RuleID] != nil {
-				rulesByID[item.RuleID].LarkWebhookTemplate = item
-			}
-		}
-	}
-	return rules, nil
+	return rulesByID, ruleIDsByChannel
 }
 
-func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandlers map[event.EventSubject][]EventHandler) error {
+func (u *TemplateUsecase) loadStationTemplates(ctx context.Context, ruleIDs []int64, rulesByID map[int64]*model.NotificationRule) error {
+	if len(ruleIDs) == 0 {
+		return nil
+	}
+	templates, err := u.notificationStationTemplateRepo.List(ctx, &repo.NotificationStationTemplateQuery{RuleIDs: ruleIDs})
+	if err != nil {
+		return err
+	}
+	for _, item := range templates {
+		if item != nil && rulesByID[item.RuleID] != nil {
+			rulesByID[item.RuleID].StationTemplate = item
+		}
+	}
+	return nil
+}
+
+func (u *TemplateUsecase) loadEmailTemplates(ctx context.Context, ruleIDs []int64, rulesByID map[int64]*model.NotificationRule) error {
+	if len(ruleIDs) == 0 {
+		return nil
+	}
+	templates, err := u.notificationEmailTemplateRepo.List(ctx, &repo.NotificationEmailTemplateQuery{RuleIDs: ruleIDs})
+	if err != nil {
+		return err
+	}
+	for _, item := range templates {
+		if item != nil && rulesByID[item.RuleID] != nil {
+			rulesByID[item.RuleID].EmailTemplate = item
+		}
+	}
+	return nil
+}
+
+func (u *TemplateUsecase) loadTencentSMSTemplates(ctx context.Context, ruleIDs []int64, rulesByID map[int64]*model.NotificationRule) error {
+	if len(ruleIDs) == 0 {
+		return nil
+	}
+	templates, err := u.notificationTencentSMSTemplateRepo.List(ctx, &repo.NotificationTencentSMSTemplateQuery{RuleIDs: ruleIDs})
+	if err != nil {
+		return err
+	}
+	for _, item := range templates {
+		if item != nil && rulesByID[item.RuleID] != nil {
+			rulesByID[item.RuleID].TencentSMSTemplate = item
+		}
+	}
+	return nil
+}
+
+func (u *TemplateUsecase) loadLarkWebhookTemplates(ctx context.Context, ruleIDs []int64, rulesByID map[int64]*model.NotificationRule) error {
+	if len(ruleIDs) == 0 {
+		return nil
+	}
+	templates, err := u.notificationLarkWebhookTemplateRepo.List(ctx, &repo.NotificationLarkWebhookTemplateQuery{RuleIDs: ruleIDs})
+	if err != nil {
+		return err
+	}
+	for _, item := range templates {
+		if item != nil && rulesByID[item.RuleID] != nil {
+			rulesByID[item.RuleID].LarkWebhookTemplate = item
+		}
+	}
+	return nil
+}
+
+func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandlers map[event.EventSubject][]EventHandlerBinding) error {
 	if u == nil || u.notificationRuleRepo == nil {
 		return nil
 	}
-	defaultTemplates := make(map[string]*model.NotificationTemplateDefinition)
-	defaultTemplateKeys := make([]string, 0)
-	defaultRules := make([]*model.NotificationRule, 0)
-	notificationTypes := make([]notifyenum.NotificationType, 0)
-	channels := make([]notifyenum.NotificationChannel, 0)
-	languages := make([]notifyenum.Language, 0)
-	for _, handlers := range eventHandlers {
-		for _, handler := range handlers {
-			if handler == nil {
+	definitions := u.collectDefaultTemplateDefinitions(eventHandlers)
+	if len(definitions.templates) == 0 {
+		return nil
+	}
+	sort.Strings(definitions.keys)
+	if err := u.saveDefaultTemplateDefinitions(ctx, definitions); err != nil {
+		return err
+	}
+	if u.log != nil {
+		u.log.Info("notification templates initialized", slog.Int("count", len(definitions.templates)))
+	}
+	return nil
+}
+
+type defaultTemplateDefinitions struct {
+	templates         map[string]*model.NotificationTemplateDefinition
+	keys              []string
+	rules             []*model.NotificationRule
+	notificationTypes []notifyenum.NotificationType
+	channels          []notifyenum.NotificationChannel
+	languages         []notifyenum.Language
+}
+
+func (*TemplateUsecase) collectDefaultTemplateDefinitions(eventHandlers map[event.EventSubject][]EventHandlerBinding) *defaultTemplateDefinitions {
+	definitions := &defaultTemplateDefinitions{templates: make(map[string]*model.NotificationTemplateDefinition)}
+	for _, bindings := range eventHandlers {
+		for _, binding := range bindings {
+			if binding.Handler == nil {
 				continue
 			}
-			for _, tpl := range handler.Templates() {
-				if tpl == nil {
-					continue
-				}
-				key := fmt.Sprintf("%s:%s:%s", tpl.NotificationType, tpl.Channel, tpl.Language)
-				if _, ok := defaultTemplates[key]; ok {
-					continue
-				}
-				defaultTemplates[key] = tpl
-				defaultTemplateKeys = append(defaultTemplateKeys, key)
-				defaultRules = append(defaultRules, &model.NotificationRule{
-					NotificationType: tpl.NotificationType,
-					Channel:          tpl.Channel,
-					Language:         tpl.Language,
-					Enabled:          tpl.Enabled,
-				})
-				notificationTypes = append(notificationTypes, tpl.NotificationType)
-				channels = append(channels, tpl.Channel)
-				languages = append(languages, tpl.Language)
+			for _, template := range binding.Handler.Templates() {
+				definitions.add(template)
 			}
 		}
 	}
-	if len(defaultTemplates) == 0 {
-		return nil
+	return definitions
+}
+
+func (d *defaultTemplateDefinitions) add(template *model.NotificationTemplateDefinition) {
+	if template == nil {
+		return
 	}
-	sort.Strings(defaultTemplateKeys)
-	if err := u.tx(ctx, func(txCtx context.Context) error {
-		if err := u.notificationRuleRepo.BulkUpsert(txCtx, defaultRules); err != nil {
+	key := fmt.Sprintf("%s:%s:%s", template.NotificationType, template.Channel, template.Language)
+	if _, exists := d.templates[key]; exists {
+		return
+	}
+	d.templates[key] = template
+	d.keys = append(d.keys, key)
+	d.rules = append(d.rules, &model.NotificationRule{
+		NotificationType: template.NotificationType,
+		Channel:          template.Channel,
+		Language:         template.Language,
+		Enabled:          template.Enabled,
+	})
+	d.notificationTypes = append(d.notificationTypes, template.NotificationType)
+	d.channels = append(d.channels, template.Channel)
+	d.languages = append(d.languages, template.Language)
+}
+
+func (u *TemplateUsecase) saveDefaultTemplateDefinitions(ctx context.Context, definitions *defaultTemplateDefinitions) error {
+	return u.tx(ctx, func(txCtx context.Context) error {
+		if err := u.notificationRuleRepo.BulkUpsert(txCtx, definitions.rules); err != nil {
 			return err
 		}
 		rules, err := u.notificationRuleRepo.List(txCtx, &repo.NotificationRuleQuery{
-			NotificationTypes: notificationTypes,
-			Channels:          channels,
-			Languages:         languages,
+			NotificationTypes: definitions.notificationTypes,
+			Channels:          definitions.channels,
+			Languages:         definitions.languages,
 		})
 		if err != nil {
 			return err
 		}
-		rulesByKey := make(map[string]*model.NotificationRule, len(rules))
-		for _, rule := range rules {
+		batches, err := definitions.buildTemplateBatches(rules)
+		if err != nil {
+			return err
+		}
+		return u.bulkUpsertTemplateBatches(txCtx, batches)
+	})
+}
+
+type notificationTemplateBatches struct {
+	station     []*model.NotificationStationTemplate
+	email       []*model.NotificationEmailTemplate
+	tencentSMS  []*model.NotificationTencentSMSTemplate
+	larkWebhook []*model.NotificationLarkWebhookTemplate
+}
+
+func (d *defaultTemplateDefinitions) buildTemplateBatches(rules []*model.NotificationRule) (*notificationTemplateBatches, error) {
+	rulesByKey := make(map[string]*model.NotificationRule, len(rules))
+	for _, rule := range rules {
+		if rule != nil {
 			rulesByKey[fmt.Sprintf("%s:%s:%s", rule.NotificationType, rule.Channel, rule.Language)] = rule
 		}
-		stationTemplates := make([]*model.NotificationStationTemplate, 0)
-		emailTemplates := make([]*model.NotificationEmailTemplate, 0)
-		tencentSMSTemplates := make([]*model.NotificationTencentSMSTemplate, 0)
-		larkWebhookTemplates := make([]*model.NotificationLarkWebhookTemplate, 0)
-		for _, key := range defaultTemplateKeys {
-			tpl := defaultTemplates[key]
-			rule := rulesByKey[key]
-			if rule == nil || rule.ID == 0 {
-				return fmt.Errorf("notification rule not saved: notification_type=%s channel=%s language=%s", tpl.NotificationType, tpl.Channel, tpl.Language)
-			}
-			switch tpl.Channel {
-			case notifyenum.NotificationChannelStation:
-				if tpl.StationTemplate == nil {
-					return fmt.Errorf("station template is required: rule_id=%d", rule.ID)
-				}
-				stationTemplates = append(stationTemplates, &model.NotificationStationTemplate{
-					RuleID:          rule.ID,
-					TitleTemplate:   tpl.StationTemplate.TitleTemplate,
-					ContentTemplate: tpl.StationTemplate.ContentTemplate,
-				})
-			case notifyenum.NotificationChannelEmail:
-				if tpl.EmailTemplate == nil {
-					return fmt.Errorf("email template is required: rule_id=%d", rule.ID)
-				}
-				emailTemplates = append(emailTemplates, &model.NotificationEmailTemplate{
-					RuleID:          rule.ID,
-					SubjectTemplate: tpl.EmailTemplate.SubjectTemplate,
-					BodyTemplate:    tpl.EmailTemplate.BodyTemplate,
-					ContentType:     tpl.EmailTemplate.ContentType,
-				})
-			case notifyenum.NotificationChannelTencentSMS:
-				if tpl.TencentSMSTemplate == nil {
-					return fmt.Errorf("tencent sms template is required: rule_id=%d", rule.ID)
-				}
-				tencentSMSTemplates = append(tencentSMSTemplates, &model.NotificationTencentSMSTemplate{
-					RuleID:             rule.ID,
-					SMSSDKAppID:        tpl.TencentSMSTemplate.SMSSDKAppID,
-					SignName:           tpl.TencentSMSTemplate.SignName,
-					ProviderTemplateID: tpl.TencentSMSTemplate.ProviderTemplateID,
-					ParamTemplates:     tpl.TencentSMSTemplate.ParamTemplates,
-				})
-			case notifyenum.NotificationChannelLarkWebhook:
-				if tpl.LarkWebhookTemplate == nil {
-					return fmt.Errorf("lark webhook template is required: rule_id=%d", rule.ID)
-				}
-				larkWebhookTemplates = append(larkWebhookTemplates, &model.NotificationLarkWebhookTemplate{
-					RuleID:          rule.ID,
-					WebhookID:       tpl.LarkWebhookTemplate.WebhookID,
-					Token:           tpl.LarkWebhookTemplate.Token,
-					Secret:          tpl.LarkWebhookTemplate.Secret,
-					MsgType:         tpl.LarkWebhookTemplate.MsgType,
-					ContentTemplate: tpl.LarkWebhookTemplate.ContentTemplate,
-				})
-			default:
-				return fmt.Errorf("unsupported notification channel: %s", tpl.Channel)
-			}
-		}
-		if err := u.notificationStationTemplateRepo.BulkUpsert(txCtx, stationTemplates); err != nil {
-			return err
-		}
-		if err := u.notificationEmailTemplateRepo.BulkUpsert(txCtx, emailTemplates); err != nil {
-			return err
-		}
-		if err := u.notificationTencentSMSTemplateRepo.BulkUpsert(txCtx, tencentSMSTemplates); err != nil {
-			return err
-		}
-		if err := u.notificationLarkWebhookTemplateRepo.BulkUpsert(txCtx, larkWebhookTemplates); err != nil {
-			return err
-		}
-		return nil
-	}); err != nil {
-		return err
 	}
-	if u.log != nil {
-		u.log.Info("notification templates initialized", slog.Int("count", len(defaultTemplates)))
+	batches := &notificationTemplateBatches{}
+	for _, key := range d.keys {
+		if err := batches.add(d.templates[key], rulesByKey[key]); err != nil {
+			return nil, err
+		}
+	}
+	return batches, nil
+}
+
+func (b *notificationTemplateBatches) add(template *model.NotificationTemplateDefinition, rule *model.NotificationRule) error {
+	if rule == nil || rule.ID == 0 {
+		return fmt.Errorf("notification rule not saved: notification_type=%s channel=%s language=%s", template.NotificationType, template.Channel, template.Language)
+	}
+	switch template.Channel {
+	case notifyenum.NotificationChannelStation:
+		if template.StationTemplate == nil {
+			return fmt.Errorf("station template is required: rule_id=%d", rule.ID)
+		}
+		b.station = append(b.station, &model.NotificationStationTemplate{RuleID: rule.ID, TitleTemplate: template.StationTemplate.TitleTemplate, ContentTemplate: template.StationTemplate.ContentTemplate})
+	case notifyenum.NotificationChannelEmail:
+		if template.EmailTemplate == nil {
+			return fmt.Errorf("email template is required: rule_id=%d", rule.ID)
+		}
+		b.email = append(b.email, &model.NotificationEmailTemplate{RuleID: rule.ID, SubjectTemplate: template.EmailTemplate.SubjectTemplate, BodyTemplate: template.EmailTemplate.BodyTemplate, ContentType: template.EmailTemplate.ContentType})
+	case notifyenum.NotificationChannelTencentSMS:
+		if template.TencentSMSTemplate == nil {
+			return fmt.Errorf("tencent sms template is required: rule_id=%d", rule.ID)
+		}
+		b.tencentSMS = append(b.tencentSMS, &model.NotificationTencentSMSTemplate{RuleID: rule.ID, SMSSDKAppID: template.TencentSMSTemplate.SMSSDKAppID, SignName: template.TencentSMSTemplate.SignName, ProviderTemplateID: template.TencentSMSTemplate.ProviderTemplateID, ParamTemplates: template.TencentSMSTemplate.ParamTemplates})
+	case notifyenum.NotificationChannelLarkWebhook:
+		if template.LarkWebhookTemplate == nil {
+			return fmt.Errorf("lark webhook template is required: rule_id=%d", rule.ID)
+		}
+		b.larkWebhook = append(b.larkWebhook, &model.NotificationLarkWebhookTemplate{RuleID: rule.ID, WebhookID: template.LarkWebhookTemplate.WebhookID, Token: template.LarkWebhookTemplate.Token, Secret: template.LarkWebhookTemplate.Secret, MsgType: template.LarkWebhookTemplate.MsgType, ContentTemplate: template.LarkWebhookTemplate.ContentTemplate})
+	default:
+		return fmt.Errorf("unsupported notification channel: %s", template.Channel)
 	}
 	return nil
+}
+
+func (u *TemplateUsecase) bulkUpsertTemplateBatches(ctx context.Context, batches *notificationTemplateBatches) error {
+	if err := u.notificationStationTemplateRepo.BulkUpsert(ctx, batches.station); err != nil {
+		return err
+	}
+	if err := u.notificationEmailTemplateRepo.BulkUpsert(ctx, batches.email); err != nil {
+		return err
+	}
+	if err := u.notificationTencentSMSTemplateRepo.BulkUpsert(ctx, batches.tencentSMS); err != nil {
+		return err
+	}
+	return u.notificationLarkWebhookTemplateRepo.BulkUpsert(ctx, batches.larkWebhook)
 }

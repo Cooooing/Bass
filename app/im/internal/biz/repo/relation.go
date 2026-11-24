@@ -3,5 +3,5 @@ package repo
 import "context"
 
 type RelationClient interface {
-	BlockedCounterparts(context.Context, int64) ([]int64, error)
+	BlockedCounterparts(ctx context.Context, userID int64) ([]int64, error)
 }

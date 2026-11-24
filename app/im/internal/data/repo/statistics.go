@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"math"
 	"time"
 
 	"im/internal/biz/model"
@@ -32,7 +33,8 @@ func (r *StatisticsRepo) BatchCountGlobalChatMessages(ctx context.Context, userI
 	}
 	result := make([]*model.GlobalChatMessageCount, 0, len(rows))
 	for _, item := range rows {
-		result = append(result, &model.GlobalChatMessageCount{UserID: item.UserID, Count: int32(item.Count)})
+		// #nosec G115 -- min 已将计数限制在 int32 的最大可表示范围内。
+		result = append(result, &model.GlobalChatMessageCount{UserID: item.UserID, Count: int32(min(item.Count, math.MaxInt32))})
 	}
 	return result, nil
 }

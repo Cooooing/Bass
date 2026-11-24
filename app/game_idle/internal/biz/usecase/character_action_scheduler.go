@@ -287,35 +287,7 @@ func (u *CharacterActionSchedulerUsecase) startCurrent(ctx context.Context, char
 		if taskScheduled {
 			return nil
 		}
-		actionConfig, err := u.actionRepo.Get(ctx, current.ActionID)
-		if err != nil {
-			return err
-		}
-		if actionConfig == nil {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
-		}
-		if !actionConfig.Enabled {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
-		}
-		if err = u.abilityUsecase.CheckLevel(
-			ctx,
-			characterID,
-			enum.Ability(actionConfig.AbilityID),
-			actionConfig.RequiredAbilityLevel,
-		); err != nil {
-			return err
-		}
-		actionTask := u.actionTasks[actionConfig.ActionKind]
-		if actionTask == nil {
-			return fmt.Errorf("game idle action task is required: %s", actionConfig.ActionKind)
-		}
-		task, err := actionTask.BuildTask(ctx, &BuildCharacterActionTaskReq{
-			CharacterID:  queue.CharacterID,
-			QueueItem:    current,
-			Action:       actionConfig,
-			Now:          time.Now(),
-			PendingTasks: u.pendingTasks,
-		})
+		task, err := u.buildCurrentActionTask(ctx, queue.CharacterID, current)
 		if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
 			// 当前行动已无法启动时直接移除队首，并尝试启动后续行动。
 			changeSet, err := u.stateUsecase.apply(ctx, &CharacterActionQueueCompleteHeadCommand{
@@ -344,6 +316,40 @@ func (u *CharacterActionSchedulerUsecase) startCurrent(ctx context.Context, char
 		u.mutex.Unlock()
 		return nil
 	}
+}
+
+// buildCurrentActionTask 校验队首行动配置与角色条件，并构建可交给时间轮的任务。
+func (u *CharacterActionSchedulerUsecase) buildCurrentActionTask(
+	ctx context.Context,
+	characterID int64,
+	queueItem *model.CharacterActionQueueItem,
+) (*timewheel.Task, error) {
+	actionConfig, err := u.actionRepo.Get(ctx, queueItem.ActionID)
+	if err != nil {
+		return nil, err
+	}
+	if actionConfig == nil || !actionConfig.Enabled {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
+	}
+	if err = u.abilityUsecase.CheckLevel(
+		ctx,
+		characterID,
+		enum.Ability(actionConfig.AbilityID),
+		actionConfig.RequiredAbilityLevel,
+	); err != nil {
+		return nil, err
+	}
+	actionTask := u.actionTasks[actionConfig.ActionKind]
+	if actionTask == nil {
+		return nil, fmt.Errorf("game idle action task is required: %s", actionConfig.ActionKind)
+	}
+	return actionTask.BuildTask(ctx, &BuildCharacterActionTaskReq{
+		CharacterID:  characterID,
+		QueueItem:    queueItem,
+		Action:       actionConfig,
+		Now:          time.Now(),
+		PendingTasks: u.pendingTasks,
+	})
 }
 
 // wrapActionTask 在结算前确认任务仍是队首，避免玩家调整队列后旧任务继续产出。

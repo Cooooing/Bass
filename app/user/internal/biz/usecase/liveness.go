@@ -164,53 +164,66 @@ func (u *LivenessUsecase) Settle(ctx context.Context, date time.Time, pageSize i
 	previousCheckinDate := start.AddDate(0, 0, -1)
 	var settled, checked int32
 	for {
-		// todo 用户后续可以使用其他方式减少查询数量
-		rows, err := u.accounts.Page(ctx, &repo.AccountPageReq{Page: commonmodel.PageReq{Page: page, Size: int64(pageSize)}, Query: repo.AccountGetReq{Status: &normal}})
+		rows, pageSettled, pageChecked, err := u.settlePage(ctx, page, pageSize, normal, start, end, previousCheckinDate, rule.GetCheckin().GetMinimumScore())
 		if err != nil {
 			return 0, 0, err
 		}
-
-		userIDs := make([]int64, 0, len(rows.Rows))
-		for _, account := range rows.Rows {
-			userIDs = append(userIDs, account.ID)
-		}
-		if len(userIDs) == 0 {
+		settled += pageSettled
+		checked += pageChecked
+		if len(rows) == 0 {
 			break
 		}
-		details, err := u.source.BatchGet(ctx, userIDs, start, end)
-		if err != nil {
-			return 0, 0, err
-		}
-		for _, account := range rows.Rows {
-			record, err := u.records.Get(ctx, account.ID, start)
-			if err != nil {
-				return 0, 0, err
-			}
-			if record != nil {
-				continue
-			}
-			score, err := u.score(details[account.ID])
-			if err != nil {
-				return 0, 0, err
-			}
-			if score == 0 {
-				continue
-			}
-			if _, err = u.records.Save(ctx, &model.LivenessRecord{UserID: account.ID, Date: &start, Score: score, RewardStatus: enum.LivenessRewardStatusUnclaimed}); err != nil {
-				return 0, 0, err
-			}
-			settled++
-			if score >= rule.GetCheckin().GetMinimumScore() {
-				if err = u.checkin.Auto(ctx, account.ID, start, previousCheckinDate); err != nil {
-					return 0, 0, err
-				}
-				checked++
-			}
-		}
-		if len(rows.Rows) < int(pageSize) {
+		if len(rows) < int(pageSize) {
 			break
 		}
 		page++
 	}
 	return settled, checked, nil
+}
+
+// settlePage 读取一页正常账号并写入该业务日尚未结算的活跃记录。
+func (u *LivenessUsecase) settlePage(ctx context.Context, page int64, pageSize int32, status enum.AccountStatus, start, end, previousCheckinDate time.Time, minimumScore int32) ([]*model.Account, int32, int32, error) {
+	rows, err := u.accounts.Page(ctx, &repo.AccountPageReq{Page: commonmodel.PageReq{Page: page, Size: int64(pageSize)}, Query: repo.AccountGetReq{Status: &status}})
+	if err != nil {
+		return nil, 0, 0, err
+	}
+	userIDs := make([]int64, 0, len(rows.Rows))
+	for _, account := range rows.Rows {
+		userIDs = append(userIDs, account.ID)
+	}
+	if len(userIDs) == 0 {
+		return rows.Rows, 0, 0, nil
+	}
+	details, err := u.source.BatchGet(ctx, userIDs, start, end)
+	if err != nil {
+		return nil, 0, 0, err
+	}
+	var settled, checked int32
+	for _, account := range rows.Rows {
+		record, err := u.records.Get(ctx, account.ID, start)
+		if err != nil {
+			return nil, 0, 0, err
+		}
+		if record != nil {
+			continue
+		}
+		score, err := u.score(details[account.ID])
+		if err != nil {
+			return nil, 0, 0, err
+		}
+		if score == 0 {
+			continue
+		}
+		if _, err = u.records.Save(ctx, &model.LivenessRecord{UserID: account.ID, Date: &start, Score: score, RewardStatus: enum.LivenessRewardStatusUnclaimed}); err != nil {
+			return nil, 0, 0, err
+		}
+		settled++
+		if score >= minimumScore {
+			if err = u.checkin.Auto(ctx, account.ID, start, previousCheckinDate); err != nil {
+				return nil, 0, 0, err
+			}
+			checked++
+		}
+	}
+	return rows.Rows, settled, checked, nil
 }

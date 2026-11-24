@@ -7,9 +7,9 @@ import (
 )
 
 type GlobalChatMessageRepo interface {
-	Get(context.Context, int64) (*model.GlobalChatMessage, error)
-	GetByClientMessageID(context.Context, int64, string) (*model.GlobalChatMessage, error)
-	Save(context.Context, *model.GlobalChatMessage) (*model.GlobalChatMessage, error)
-	List(context.Context, int64, int, int) ([]*model.GlobalChatMessage, int64, error)
-	Revoke(context.Context, int64, int64) (*model.GlobalChatMessage, error)
+	Get(ctx context.Context, messageID int64) (*model.GlobalChatMessage, error)
+	GetByClientMessageID(ctx context.Context, senderID int64, clientMessageID string) (*model.GlobalChatMessage, error)
+	Save(ctx context.Context, message *model.GlobalChatMessage) (*model.GlobalChatMessage, error)
+	List(ctx context.Context, afterID int64, limit, offset int) ([]*model.GlobalChatMessage, int64, error)
+	Revoke(ctx context.Context, messageID, userID int64) (*model.GlobalChatMessage, error)
 }

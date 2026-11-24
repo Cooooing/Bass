@@ -198,36 +198,8 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 		}
 		profiles = append(profiles, row.User, row.ReplyUser)
 	}
-	assetIDs := make([]int64, 0, len(profiles))
-	seen := map[int64]struct{}{}
-	for _, profile := range profiles {
-		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
-			continue
-		}
-		if _, ok := seen[*profile.AvatarAssetID]; ok {
-			continue
-		}
-		seen[*profile.AvatarAssetID] = struct{}{}
-		assetIDs = append(assetIDs, *profile.AvatarAssetID)
-	}
-	assets := map[int64]*repo.Asset{}
-	if len(assetIDs) > 0 && u.assetClient != nil {
-		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
-		if err != nil {
-			return nil, err
-		}
-	}
-	for _, profile := range profiles {
-		if profile == nil {
-			continue
-		}
-		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
-		if profile.AvatarAssetID != nil {
-			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
-				avatarURL = asset.URL
-			}
-		}
-		profile.AvatarURL = &avatarURL
+	if err = u.hydrateCommentProfiles(ctx, profiles); err != nil {
+		return nil, err
 	}
 	return &ListCommentsResp{
 		Page: resp.Page,
@@ -290,41 +262,19 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*4)
-	if resp.AcceptedAnswer != nil {
-		if resp.AcceptedAnswer.Root != nil {
-			profiles = append(profiles, resp.AcceptedAnswer.Root.User, resp.AcceptedAnswer.Root.ReplyUser)
-		}
-		for _, reply := range resp.AcceptedAnswer.PreviewReplies {
-			if reply != nil {
-				profiles = append(profiles, reply.User, reply.ReplyUser)
-			}
-		}
+	if err = u.hydrateCommentProfiles(ctx, u.commentThreadProfiles(resp)); err != nil {
+		return nil, err
 	}
-	if resp.PinnedComment != nil {
-		if resp.PinnedComment.Root != nil {
-			profiles = append(profiles, resp.PinnedComment.Root.User, resp.PinnedComment.Root.ReplyUser)
-		}
-		for _, reply := range resp.PinnedComment.PreviewReplies {
-			if reply != nil {
-				profiles = append(profiles, reply.User, reply.ReplyUser)
-			}
-		}
-	}
-	for _, row := range resp.Rows {
-		if row == nil {
-			continue
-		}
-		if row.Root != nil {
-			profiles = append(profiles, row.Root.User, row.Root.ReplyUser)
-		}
-		for _, reply := range row.PreviewReplies {
-			if reply == nil {
-				continue
-			}
-			profiles = append(profiles, reply.User, reply.ReplyUser)
-		}
-	}
+	return &ListCommentThreadsResp{
+		Page:           resp.Page,
+		Rows:           resp.Rows,
+		AcceptedAnswer: resp.AcceptedAnswer,
+		PinnedComment:  resp.PinnedComment,
+	}, nil
+}
+
+// hydrateCommentProfiles 为评论作者与被回复作者补充头像地址。
+func (u *ContentCommentUsecase) hydrateCommentProfiles(ctx context.Context, profiles []*model.AccountProfile) error {
 	assetIDs := make([]int64, 0, len(profiles))
 	seen := map[int64]struct{}{}
 	for _, profile := range profiles {
@@ -339,9 +289,10 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 	}
 	assets := map[int64]*repo.Asset{}
 	if len(assetIDs) > 0 && u.assetClient != nil {
+		var err error
 		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
 		if err != nil {
-			return nil, err
+			return err
 		}
 	}
 	for _, profile := range profiles {
@@ -356,12 +307,35 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 		}
 		profile.AvatarURL = &avatarURL
 	}
-	return &ListCommentThreadsResp{
-		Page:           resp.Page,
-		Rows:           resp.Rows,
-		AcceptedAnswer: resp.AcceptedAnswer,
-		PinnedComment:  resp.PinnedComment,
-	}, nil
+	return nil
+}
+
+func (u *ContentCommentUsecase) commentThreadProfiles(resp *repo.ListCommentThreadsResp) []*model.AccountProfile {
+	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*4)
+	profiles = u.appendCommentThreadProfiles(profiles, resp.AcceptedAnswer)
+	profiles = u.appendCommentThreadProfiles(profiles, resp.PinnedComment)
+	for _, row := range resp.Rows {
+		profiles = u.appendCommentThreadProfiles(profiles, row)
+	}
+	return profiles
+}
+
+func (u *ContentCommentUsecase) appendCommentThreadProfiles(profiles []*model.AccountProfile, thread *repo.CommentThread) []*model.AccountProfile {
+	if thread == nil {
+		return profiles
+	}
+	profiles = u.appendCommentProfiles(profiles, thread.Root)
+	for _, reply := range thread.PreviewReplies {
+		profiles = u.appendCommentProfiles(profiles, reply)
+	}
+	return profiles
+}
+
+func (u *ContentCommentUsecase) appendCommentProfiles(profiles []*model.AccountProfile, row *model.CommentListItem) []*model.AccountProfile {
+	if row == nil {
+		return profiles
+	}
+	return append(profiles, row.User, row.ReplyUser)
 }
 
 type ListCommentRepliesReq struct {

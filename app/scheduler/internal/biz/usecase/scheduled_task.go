@@ -537,98 +537,25 @@ func (u *ScheduledTaskUsecase) executeScheduledRecord(
 
 func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, message *repo.ScheduledTaskScheduleMessage) (*repo.MessageHandleResult, error) {
 	if message == nil {
-		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+		return u.completeMessage(), nil
 	}
 	task, err := u.Get(ctx, &ScheduledTaskGetReq{ID: message.ScheduledTaskID})
 	if err != nil {
 		return nil, err
 	}
 	if task == nil || !task.Enabled || task.Version != message.ScheduledTaskVersion {
-		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+		return u.completeMessage(), nil
 	}
-	// 过期消息按任务策略处理：跳过、只补最新一次或逐条补齐。
-	if task.StaleAfter != nil && time.Since(message.ScheduledAt) > *task.StaleAfter+u.clockSkewGrace {
-		// skip 表示该次触发已不具备业务价值：确认消息即可，避免恢复消费积压时逐条写入 skipped 记录。
-		if task.MisfirePolicy == schedulerenum.TaskMisfirePolicySkip {
-			return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
-		}
-		if task.MisfirePolicy == schedulerenum.TaskMisfirePolicyExecuteLatest && !message.LatestForSubject {
-			finishedAt := time.Now()
-			duration := time.Duration(0)
-			_, _ = u.scheduledTaskExecutionRecordRepo.Create(ctx, &repo.ScheduledTaskExecutionRecordCreateReq{
-				Status: schedulerenum.TaskExecutionStatusSkipped,
-				Record: &model.ScheduledTaskExecutionRecord{
-					ScheduledTaskID:      task.ID,
-					ScheduledTaskVersion: task.Version,
-					TriggerType:          schedulerenum.TaskTriggerTypeSchedule,
-					ScheduleKey:          message.ScheduleKey,
-					ScheduledAt:          message.ScheduledAt,
-					FinishedAt:           &finishedAt,
-					Duration:             &duration,
-					Status:               schedulerenum.TaskExecutionStatusSkipped,
-					Attempt:              0,
-					MaxAttempts:          task.MaxAttempts,
-					Timeout:              task.Timeout,
-					StaleAfter:           task.StaleAfter,
-					MisfirePolicy:        task.MisfirePolicy,
-					WorkerID:             u.workerID,
-					Payload:              task.Payload,
-					LastError:            "scheduler task message is stale",
-				},
-			})
-			return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
-		}
+	if handled, err := u.handleStaleScheduledMessage(ctx, task, message); err != nil || handled {
+		return u.completeMessage(), err
 	}
 	record, err := u.createScheduledExecution(ctx, task, message.ScheduledAt, schedulerenum.TaskTriggerTypeSchedule, message.ScheduleKey)
 	if err != nil {
 		return nil, err
 	}
-	if record == nil || record.Status == schedulerenum.TaskExecutionStatusSkipped {
-		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
-	}
-	if record.Status == schedulerenum.TaskExecutionStatusSuccess ||
-		record.Status == schedulerenum.TaskExecutionStatusFailed ||
-		record.Status == schedulerenum.TaskExecutionStatusTimeout ||
-		record.Status == schedulerenum.TaskExecutionStatusCanceled {
-		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
-	}
-	// 运行中状态表示执行权租约未结束，其他节点不能直接确认消息。
-	if record.Status == schedulerenum.TaskExecutionStatusRunning && record.WorkerID != u.workerID {
-		if record.StartedAt != nil && record.StartedAt.Add(record.Timeout).After(time.Now()) {
-			return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: time.Until(record.StartedAt.Add(record.Timeout))}, nil
-		}
-		if record.Attempt >= record.MaxAttempts {
-			finishedAt := time.Now()
-			duration := time.Duration(0)
-			if record.StartedAt != nil {
-				duration = finishedAt.Sub(*record.StartedAt)
-			}
-			_, err = u.scheduledTaskExecutionRecordRepo.MarkFinished(ctx, &repo.ScheduledTaskExecutionRecordMarkFinishedReq{
-				ID:         record.ID,
-				WorkerID:   record.WorkerID,
-				Attempt:    record.Attempt,
-				Status:     schedulerenum.TaskExecutionStatusTimeout,
-				FinishedAt: finishedAt,
-				Duration:   duration,
-				LastError:  "scheduler task running lease expired",
-			})
-			if err != nil {
-				return nil, err
-			}
-			return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
-		}
-		claim, err := u.scheduledTaskExecutionRecordRepo.Claim(ctx, &repo.ScheduledTaskExecutionRecordClaimReq{ID: record.ID, WorkerID: u.workerID, StartedAt: time.Now()})
-		if err != nil || claim == nil || !claim.Claimed || claim.Row == nil {
-			return nil, err
-		}
-		record = claim.Row
-	}
-	if record.Status == schedulerenum.TaskExecutionStatusRetryPending || record.Status == schedulerenum.TaskExecutionStatusPending {
-		claim, err := u.scheduledTaskExecutionRecordRepo.Claim(ctx, &repo.ScheduledTaskExecutionRecordClaimReq{ID: record.ID, WorkerID: u.workerID, StartedAt: time.Now()})
-		if err != nil || claim == nil || !claim.Claimed || claim.Row == nil {
-			return nil, err
-		}
-		record = claim.Row
+	record, result, err := u.claimScheduledRecord(ctx, record)
+	if err != nil || result != nil {
+		return result, err
 	}
 	u.runningWG.Add(1)
 	updated, err := u.executeScheduledRecord(ctx, task, record)
@@ -636,24 +563,92 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 		return nil, err
 	}
 	if updated == nil {
-		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+		return u.completeMessage(), nil
 	}
-	// 业务重试由执行记录状态决定，NATS 只负责按退避时间重新投递。
-	if updated.Status == schedulerenum.TaskExecutionStatusRetryPending {
-		base := 5 * time.Second
-		capValue := 5 * time.Minute
-		factor := 1 << max(0, int(updated.Attempt)-1)
-		delay := min(time.Duration(factor)*base, capValue)
-		jitter, randomErr := cryptorand.Int(cryptorand.Reader, big.NewInt(int64(delay/2)+1))
-		if randomErr != nil {
-			return nil, randomErr
+	return u.executionMessageResult(updated)
+}
+
+func (*ScheduledTaskUsecase) completeMessage() *repo.MessageHandleResult {
+	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}
+}
+
+// handleStaleScheduledMessage 根据错过调度策略决定是否确认当前过期消息。
+func (u *ScheduledTaskUsecase) handleStaleScheduledMessage(ctx context.Context, task *model.ScheduledTask, message *repo.ScheduledTaskScheduleMessage) (bool, error) {
+	if task.StaleAfter == nil || time.Since(message.ScheduledAt) <= *task.StaleAfter+u.clockSkewGrace {
+		return false, nil
+	}
+	if task.MisfirePolicy == schedulerenum.TaskMisfirePolicySkip {
+		return true, nil
+	}
+	if task.MisfirePolicy != schedulerenum.TaskMisfirePolicyExecuteLatest || message.LatestForSubject {
+		return false, nil
+	}
+	finishedAt := time.Now()
+	duration := time.Duration(0)
+	_, _ = u.scheduledTaskExecutionRecordRepo.Create(ctx, &repo.ScheduledTaskExecutionRecordCreateReq{
+		Status: schedulerenum.TaskExecutionStatusSkipped,
+		Record: &model.ScheduledTaskExecutionRecord{ScheduledTaskID: task.ID, ScheduledTaskVersion: task.Version, TriggerType: schedulerenum.TaskTriggerTypeSchedule, ScheduleKey: message.ScheduleKey, ScheduledAt: message.ScheduledAt, FinishedAt: &finishedAt, Duration: &duration, Status: schedulerenum.TaskExecutionStatusSkipped, MaxAttempts: task.MaxAttempts, Timeout: task.Timeout, StaleAfter: task.StaleAfter, MisfirePolicy: task.MisfirePolicy, WorkerID: u.workerID, Payload: task.Payload, LastError: "scheduler task message is stale"},
+	})
+	return true, nil
+}
+
+// claimScheduledRecord 根据执行记录状态确认消息、等待租约或取得本节点执行权。
+func (u *ScheduledTaskUsecase) claimScheduledRecord(ctx context.Context, record *model.ScheduledTaskExecutionRecord) (*model.ScheduledTaskExecutionRecord, *repo.MessageHandleResult, error) {
+	if record == nil || record.Status == schedulerenum.TaskExecutionStatusSkipped || record.Status == schedulerenum.TaskExecutionStatusSuccess || record.Status == schedulerenum.TaskExecutionStatusFailed || record.Status == schedulerenum.TaskExecutionStatusTimeout || record.Status == schedulerenum.TaskExecutionStatusCanceled {
+		return nil, u.completeMessage(), nil
+	}
+	if record.Status == schedulerenum.TaskExecutionStatusRunning {
+		if record.WorkerID == u.workerID {
+			return record, nil, nil
 		}
-		return &repo.MessageHandleResult{
-			Action:     schedulerenum.MessageHandleActionRetry,
-			RetryAfter: delay + time.Duration(jitter.Int64()),
-		}, nil
+		if record.StartedAt != nil && record.StartedAt.Add(record.Timeout).After(time.Now()) {
+			return nil, &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: time.Until(record.StartedAt.Add(record.Timeout))}, nil
+		}
+		if record.Attempt >= record.MaxAttempts {
+			if err := u.markExpiredRecord(ctx, record); err != nil {
+				return nil, nil, err
+			}
+			return nil, u.completeMessage(), nil
+		}
+		claim, err := u.scheduledTaskExecutionRecordRepo.Claim(ctx, &repo.ScheduledTaskExecutionRecordClaimReq{ID: record.ID, WorkerID: u.workerID, StartedAt: time.Now()})
+		if err != nil || claim == nil || !claim.Claimed || claim.Row == nil {
+			return nil, nil, err
+		}
+		return claim.Row, nil, nil
 	}
-	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+	if record.Status == schedulerenum.TaskExecutionStatusRetryPending || record.Status == schedulerenum.TaskExecutionStatusPending {
+		claim, err := u.scheduledTaskExecutionRecordRepo.Claim(ctx, &repo.ScheduledTaskExecutionRecordClaimReq{ID: record.ID, WorkerID: u.workerID, StartedAt: time.Now()})
+		if err != nil || claim == nil || !claim.Claimed || claim.Row == nil {
+			return nil, nil, err
+		}
+		return claim.Row, nil, nil
+	}
+	return record, nil, nil
+}
+
+func (u *ScheduledTaskUsecase) markExpiredRecord(ctx context.Context, record *model.ScheduledTaskExecutionRecord) error {
+	finishedAt := time.Now()
+	duration := time.Duration(0)
+	if record.StartedAt != nil {
+		duration = finishedAt.Sub(*record.StartedAt)
+	}
+	_, err := u.scheduledTaskExecutionRecordRepo.MarkFinished(ctx, &repo.ScheduledTaskExecutionRecordMarkFinishedReq{ID: record.ID, WorkerID: record.WorkerID, Attempt: record.Attempt, Status: schedulerenum.TaskExecutionStatusTimeout, FinishedAt: finishedAt, Duration: duration, LastError: "scheduler task running lease expired"})
+	return err
+}
+
+// executionMessageResult 将业务执行结果转换为 NATS 消费确认或重试动作。
+func (u *ScheduledTaskUsecase) executionMessageResult(record *model.ScheduledTaskExecutionRecord) (*repo.MessageHandleResult, error) {
+	if record.Status != schedulerenum.TaskExecutionStatusRetryPending {
+		return u.completeMessage(), nil
+	}
+	base, capValue := 5*time.Second, 5*time.Minute
+	factor := 1 << max(0, int(record.Attempt)-1)
+	delay := min(time.Duration(factor)*base, capValue)
+	jitter, err := cryptorand.Int(cryptorand.Reader, big.NewInt(int64(delay/2)+1))
+	if err != nil {
+		return nil, err
+	}
+	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: delay + time.Duration(jitter.Int64())}, nil
 }
 
 func (u *ScheduledTaskUsecase) EnsureSchedule(ctx context.Context) error {

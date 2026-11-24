@@ -39,10 +39,11 @@ func NewConsumer(
 }
 
 func (c *Consumer) Start(ctx context.Context) error {
-	c.ctx, c.cancel = context.WithCancel(ctx)
+	runCtx, cancel := context.WithCancel(ctx)
+	c.ctx, c.cancel = runCtx, cancel
 	for _, group := range c.eventGroups() {
 		stream := commonenum.EventStreamConfigFor(group.stream)
-		if err := c.natsClient.EnsureStream(c.ctx, nats.StreamSpec{
+		if err := c.natsClient.EnsureStream(runCtx, nats.StreamSpec{
 			Name:              stream.Name.String(),
 			Subjects:          stream.Subjects,
 			Retention:         stream.Retention,
@@ -58,7 +59,7 @@ func (c *Consumer) Start(ctx context.Context) error {
 			FilterSubjects: group.consumerSubjects,
 			DeliverPolicy:  jetstream.DeliverAllPolicy,
 		}
-		subscription, consumeErr := c.natsClient.Consume(c.ctx, spec, c.handle)
+		subscription, consumeErr := c.natsClient.Consume(runCtx, spec, c.handle)
 		if consumeErr != nil {
 			c.log.Error("consume failed", "stream", group.stream, "durable", spec.Durable, "error", consumeErr)
 			return errors.Join(consumeErr, c.stopSubscriptions())

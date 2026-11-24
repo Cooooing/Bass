@@ -78,8 +78,13 @@ sdk-clean:
 		$(MAKE) -C $(APP_DIR)/$$module sdk-clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-.PHONY: lint lint-plugin
-lint: lint-plugin
+.PHONY: lint go-lint lint-plugin proto-lint
+# 完整质量门禁必须先收敛 Proto 契约与格式，再执行 Go 代码检查。
+lint:
+	@$(MAKE) proto-lint IGNORE_ERROR=$(IGNORE_ERROR)
+	@$(MAKE) go-lint IGNORE_ERROR=$(IGNORE_ERROR)
+
+go-lint: lint-plugin
 	@$(foreach module,$(MODULES),echo "---- [$(module)] ----" && $(MAKE) -C $(APP_DIR)/$(module) lint IGNORE_ERROR=$(IGNORE_ERROR) && ) echo "[lint] all app modules passed"
 
 # 定制插件也由自身产出的 linter 校验，避免质量门禁脱离被检查范围。
@@ -87,7 +92,6 @@ lint-plugin:
 	@$(MAKE) -C $(APP_DIR)/$(firstword $(MODULES)) lint-toolchain IGNORE_ERROR=$(IGNORE_ERROR)
 	@cd $(ROOT_DIR)/.golangci-plugin && $(LINT_BINARY) run --allow-parallel-runners --config $(ROOT_DIR)/.golangci.yml ./...
 
-.PHONY: proto-lint
 proto-lint:
 	@cd $(ROOT_DIR)/.golangci-plugin && go run ./cmd/proto-contract-lint --root $(PROTO_DIR)
 	@cd $(ROOT_DIR) && $(BUF) lint
@@ -102,6 +106,8 @@ help:
 	@echo ""
 	@echo "Root:"
 	@echo "  proto-lint            - validate Bass Proto contracts then format them in place"
+	@echo "  go-lint               - auto-fix and check the custom Go linter and all app services"
+	@echo "  lint                  - run proto-lint, then go-lint"
 	@echo "  help                  - show this command list"
 	@echo "  init                  - install pinned development tools"
 	@echo "  api / api-clean       - generate / clean shared API code"
@@ -109,7 +115,6 @@ help:
 	@echo "  build / build-clean   - build / clean all app binaries"
 	@echo "  doc / doc-clean       - generate / clean OpenAPI documents for all BFFs"
 	@echo "  sdk / sdk-clean       - generate / clean SDKs for all BFFs"
-	@echo "  lint                  - auto-fix then report unresolved issues (all app services)"
 	@echo ""
 	@echo "App module (make -C app/<module> <target>):"
 	@echo "  init                  - install pinned development tools (same global setup)"

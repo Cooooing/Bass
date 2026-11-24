@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"time"
@@ -45,10 +46,6 @@ func (u *ConsumerUsecase) Handle(ctx context.Context, req *ConsumerHandleReq) er
 	if req == nil || req.Event == nil || req.Event.GetEventId() == "" {
 		return nil
 	}
-	notificationType, ok := u.notificationType(req.Event.GetSubject())
-	if !ok {
-		return fmt.Errorf("unsupported event subject: %s", req.Event.GetSubject())
-	}
 	maxRetry := int32(3)
 	if u.conf != nil && u.conf.GetEvent() != nil && u.conf.GetEvent().GetInbox() != nil && u.conf.GetEvent().GetInbox().GetMaxRetry() > 0 {
 		maxRetry = u.conf.GetEvent().GetInbox().GetMaxRetry()
@@ -84,11 +81,16 @@ func (u *ConsumerUsecase) Handle(ctx context.Context, req *ConsumerHandleReq) er
 			return fmt.Errorf("event is processing: event_id=%s", req.Event.GetEventId())
 		}
 	}
-	if err := u.eventUsecase.Dispatch(ctx, &EventHandleReq{
-		Event:            req.Event,
-		NotificationType: notificationType,
-		Language:         notifyenum.LanguageZhCN,
-	}); err != nil {
+	if err := u.eventUsecase.Dispatch(ctx, &EventHandleReq{Event: req.Event, Language: notifyenum.LanguageZhCN}); err != nil {
+		if errors.Is(err, errEventHandlerNotFound) {
+			if markErr := u.inboxEventRepo.MarkDead(ctx, &repo.InboxEventMarkDeadReq{EventID: req.Event.GetEventId(), LastError: err.Error()}); markErr != nil {
+				return markErr
+			}
+			if u.log != nil {
+				u.log.Warn("event handler not found", "event_id", req.Event.GetEventId(), "subject", req.Subject)
+			}
+			return nil
+		}
 		if markErr := u.inboxEventRepo.MarkFailed(ctx, &repo.InboxEventMarkFailedReq{
 			EventID:   req.Event.GetEventId(),
 			LastError: err.Error(),
@@ -102,41 +104,4 @@ func (u *ConsumerUsecase) Handle(ctx context.Context, req *ConsumerHandleReq) er
 		EventID: req.Event.GetEventId(),
 		Now:     now,
 	})
-}
-
-func (u *ConsumerUsecase) notificationType(subject event.EventSubject) (notifyenum.NotificationType, bool) {
-	switch subject {
-	case event.EventSubject_EVENT_SUBJECT_USER_FOLLOW:
-		return notifyenum.NotificationTypeUserFollow, true
-	case event.EventSubject_EVENT_SUBJECT_USER_REGISTER:
-		return notifyenum.NotificationTypeUserRegister, true
-	case event.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE:
-		return notifyenum.NotificationTypeUserEmailVerificationCode, true
-	case event.EventSubject_EVENT_SUBJECT_USER_PHONE_VERIFICATION_CODE:
-		return notifyenum.NotificationTypeUserPhoneVerificationCode, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED:
-		return notifyenum.NotificationTypeContentArticlePublish, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED:
-		return notifyenum.NotificationTypeContentArticleLike, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED:
-		return notifyenum.NotificationTypeContentArticleThank, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_REWARDED:
-		return notifyenum.NotificationTypeContentArticleReward, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED:
-		return notifyenum.NotificationTypeContentArticleCollect, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED:
-		return notifyenum.NotificationTypeContentArticleWatch, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER:
-		return notifyenum.NotificationTypeContentArticleAcceptAnswer, true
-	case event.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_WON:
-		return notifyenum.NotificationTypeContentArticleLotteryWon, true
-	case event.EventSubject_EVENT_SUBJECT_COMMENT_PUBLISHED:
-		return notifyenum.NotificationTypeContentCommentPublish, true
-	case event.EventSubject_EVENT_SUBJECT_COMMENT_LIKED:
-		return notifyenum.NotificationTypeContentCommentLike, true
-	case event.EventSubject_EVENT_SUBJECT_COMMENT_THANKED:
-		return notifyenum.NotificationTypeContentCommentThank, true
-	default:
-		return "", false
-	}
 }

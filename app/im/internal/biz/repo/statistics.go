@@ -9,5 +9,5 @@ import (
 
 // StatisticsRepo 批量读取即时消息领域的原始消息数量。
 type StatisticsRepo interface {
-	BatchCountGlobalChatMessages(context.Context, []int64, time.Time, time.Time) ([]*model.GlobalChatMessageCount, error)
+	BatchCountGlobalChatMessages(ctx context.Context, userIDs []int64, start, end time.Time) ([]*model.GlobalChatMessageCount, error)
 }

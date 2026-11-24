@@ -7,10 +7,10 @@ import (
 )
 
 type PrivateChatMessageRepo interface {
-	Get(context.Context, int64) (*model.PrivateChatMessage, error)
-	Map(context.Context, []int64) (map[int64]*model.PrivateChatMessage, error)
-	GetByClientMessageID(context.Context, int64, string) (*model.PrivateChatMessage, error)
-	Save(context.Context, *model.PrivateChatMessage) (*model.PrivateChatMessage, error)
-	List(context.Context, int64, int64, int64, int, int) ([]*model.PrivateChatMessage, int64, error)
-	Revoke(context.Context, int64, int64) (*model.PrivateChatMessage, error)
+	Get(ctx context.Context, messageID int64) (*model.PrivateChatMessage, error)
+	Map(ctx context.Context, messageIDs []int64) (map[int64]*model.PrivateChatMessage, error)
+	GetByClientMessageID(ctx context.Context, senderID int64, clientMessageID string) (*model.PrivateChatMessage, error)
+	Save(ctx context.Context, message *model.PrivateChatMessage) (*model.PrivateChatMessage, error)
+	List(ctx context.Context, userID, counterpartID, afterID int64, limit, offset int) ([]*model.PrivateChatMessage, int64, error)
+	Revoke(ctx context.Context, messageID, userID int64) (*model.PrivateChatMessage, error)
 }

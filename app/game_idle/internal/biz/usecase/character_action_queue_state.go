@@ -114,30 +114,9 @@ func (h *CharacterActionQueueCommandHandler) Apply(ctx context.Context, command 
 
 	switch req := command.(type) {
 	case *CharacterActionQueueAddCommand:
-		if len(queue.Items) >= int(req.Capacity) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_QUEUE_FULL)
+		if err := h.addQueueItem(queue, req); err != nil {
+			return nil, err
 		}
-		position := len(queue.Items)
-		if req.Position != nil {
-			position = int(*req.Position)
-		}
-		if position < 0 || position > len(queue.Items) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
-		}
-		now := req.Now
-		if now.IsZero() {
-			now = time.Now()
-		}
-		queueItem := &model.CharacterActionQueueItem{
-			ID:        fmt.Sprintf("character:%d:action:%s:at:%d", req.CharacterID, req.ActionID, now.UnixNano()),
-			ActionID:  req.ActionID,
-			Times:     req.Times,
-			CreatedAt: now,
-		}
-		queue.Items = append(queue.Items, nil)
-		// 插入动作保持队列有序，当前位置及之后的行动整体后移。
-		copy(queue.Items[position+1:], queue.Items[position:])
-		queue.Items[position] = queueItem
 	case *CharacterActionQueueMoveCommand:
 		currentPosition := int(req.CurrentPosition)
 		targetPosition := int(req.TargetPosition)
@@ -215,4 +194,33 @@ func (h *CharacterActionQueueCommandHandler) Apply(ctx context.Context, command 
 		changeSet.ActionTimesRemaining = timesRemaining
 	}
 	return changeSet, nil
+}
+
+// addQueueItem 按请求位置向行动队列插入一个新的待执行行动。
+func (h *CharacterActionQueueCommandHandler) addQueueItem(queue *model.CharacterActionQueue, req *CharacterActionQueueAddCommand) error {
+	if len(queue.Items) >= int(req.Capacity) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_QUEUE_FULL)
+	}
+	position := len(queue.Items)
+	if req.Position != nil {
+		position = int(*req.Position)
+	}
+	if position < 0 || position > len(queue.Items) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
+	}
+	now := req.Now
+	if now.IsZero() {
+		now = time.Now()
+	}
+	queueItem := &model.CharacterActionQueueItem{
+		ID:        fmt.Sprintf("character:%d:action:%s:at:%d", req.CharacterID, req.ActionID, now.UnixNano()),
+		ActionID:  req.ActionID,
+		Times:     req.Times,
+		CreatedAt: now,
+	}
+	queue.Items = append(queue.Items, nil)
+	// 插入动作保持队列有序，当前位置及之后的行动整体后移。
+	copy(queue.Items[position+1:], queue.Items[position:])
+	queue.Items[position] = queueItem
+	return nil
 }

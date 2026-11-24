@@ -165,8 +165,8 @@ linters:
       # 嵌套 if 复杂度超过 16 时必须降低嵌套。
       min-complexity: 16
     dupl:
-      # 连续 256 个 token 重复时报告复制实现。
-      threshold: 256
+      # 连续 512 个 token 重复时报告复制实现，避免结构化 schema 声明产生误报。
+      threshold: 512
     goconst:
       # 长度至少 3 且出现至少 3 次的字符串是常量候选。
       min-len: 3

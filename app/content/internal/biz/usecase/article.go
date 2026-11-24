@@ -586,142 +586,182 @@ type ArticlePublishReq struct {
 	PublishedCity *string
 }
 
+// articlePublishPlan 保存即时发布进入 TCC 前已验证的领域数据。
+type articlePublishPlan struct {
+	article           *model.Article
+	rewardSetupPoints *int64
+	lotteryDrawAt     *time.Time
+	pollEndsAt        *time.Time
+}
+
 func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
-	articleID := req.ArticleID
 	access, err := req.Access.Normalize(enum.ContentAccessScopeInternalTask)
 	if err != nil {
 		return err
 	}
 	now := time.Now()
 	if req.ScheduledAt != nil && req.ScheduledAt.After(now) {
-		if access.Scope != enum.ContentAccessScopeAuthor {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
-		}
-		operatorUserID := access.ActorUserID
-		scheduledAt := req.ScheduledAt.UTC().Truncate(time.Second)
-		var originalPublishedAt *time.Time
-		var originalPublishedCity *string
-		// content 与 scheduler 使用不同的数据存储，不能纳入同一数据库事务。
-		// 先提交文章计划，随后登记 Scheduler；登记失败时只回滚仍属于本次计划的草稿。
-		if err = d.tx(ctx, func(ctx context.Context) error {
-			article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleID)}})
-			if err != nil {
-				return err
-			}
-			if err = article.CanPublish(access, new(scheduledAt), now); err != nil {
-				return err
-			}
-			if err = d.validatePublishActivity(ctx, article, scheduledAt); err != nil {
-				return err
-			}
-			originalPublishedAt = article.PublishedAt
-			originalPublishedCity = article.PublishedCity
-			return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
-				ArticleID: articleID, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
-				PublishedAt: new(scheduledAt), PublishedCity: req.PublishedCity,
-				ClearPublishedCity: req.PublishedCity == nil, UpdatedBy: new(operatorUserID),
-			})
-		}); err != nil {
-			return err
-		}
-		if err = d.delayedTaskClient.RegisterPublishScheduledArticle(ctx, articleID, operatorUserID, scheduledAt); err != nil {
-			// 重新读取并比对计划时间，避免并发重设后错误清除新计划。
-			rollbackErr := d.tx(ctx, func(ctx context.Context) error {
-				article, getErr := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleID)}})
-				if getErr != nil || article.PublishedAt == nil ||
-					!article.PublishedAt.UTC().Truncate(time.Second).Equal(scheduledAt) ||
-					(article.PublishedCity == nil) != (req.PublishedCity == nil) ||
-					(article.PublishedCity != nil && req.PublishedCity != nil && *article.PublishedCity != *req.PublishedCity) {
-					return getErr
-				}
-				restore := &repo.ArticleUpdatePublishStatusReq{
-					ArticleID: articleID, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
-					PublishedAt: originalPublishedAt, ClearPublished: originalPublishedAt == nil,
-					PublishedCity: originalPublishedCity, ClearPublishedCity: originalPublishedCity == nil,
-					UpdatedBy: new(operatorUserID),
-				}
-				return d.articleRepo.UpdatePublishStatus(ctx, restore)
-			})
-			if rollbackErr != nil {
-				d.log.WarnContext(ctx, "rollback scheduled article publish failed", slog.Int64("article_id", articleID), slog.Any("err", rollbackErr))
-			}
-			return err
-		}
-		return nil
+		return d.scheduleArticlePublish(ctx, req, access, now)
 	}
-	var lotteryDrawAt *time.Time
-	var pollEndsAt *time.Time
-	rewardSetupArticle, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleID)}})
+	plan, err := d.prepareImmediatePublish(ctx, req, access, now)
+	if err != nil || plan == nil {
+		return err
+	}
+	if err = d.executeArticlePublish(ctx, req, plan, now); err != nil {
+		return err
+	}
+	return d.registerArticlePublishTasks(ctx, req, plan)
+}
+
+func (d *ArticleUsecase) scheduleArticlePublish(ctx context.Context, req *ArticlePublishReq, access *model.ContentAccess, now time.Time) error {
+	if access.Scope != enum.ContentAccessScopeAuthor {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+	}
+	scheduledAt := req.ScheduledAt.UTC().Truncate(time.Second)
+	operatorUserID := access.ActorUserID
+	var originalPublishedAt *time.Time
+	var originalPublishedCity *string
+	if err := d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
+		if err != nil {
+			return err
+		}
+		if err = article.CanPublish(access, new(scheduledAt), now); err != nil {
+			return err
+		}
+		if err = d.validatePublishActivity(ctx, article, scheduledAt); err != nil {
+			return err
+		}
+		originalPublishedAt = article.PublishedAt
+		originalPublishedCity = article.PublishedCity
+		return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+			ArticleID: req.ArticleID, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
+			PublishedAt: new(scheduledAt), PublishedCity: req.PublishedCity,
+			ClearPublishedCity: req.PublishedCity == nil, UpdatedBy: new(operatorUserID),
+		})
+	}); err != nil {
+		return err
+	}
+	if err := d.delayedTaskClient.RegisterPublishScheduledArticle(ctx, req.ArticleID, operatorUserID, scheduledAt); err != nil {
+		d.rollbackScheduledArticlePublish(ctx, req, operatorUserID, scheduledAt, originalPublishedAt, originalPublishedCity)
+		return err
+	}
+	return nil
+}
+
+func (d *ArticleUsecase) rollbackScheduledArticlePublish(ctx context.Context, req *ArticlePublishReq, operatorUserID int64, scheduledAt time.Time, originalPublishedAt *time.Time, originalPublishedCity *string) {
+	rollbackErr := d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
+		if err != nil || !d.matchesScheduledPublish(article, req.PublishedCity, scheduledAt) {
+			return err
+		}
+		return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+			ArticleID: req.ArticleID, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
+			PublishedAt: originalPublishedAt, ClearPublished: originalPublishedAt == nil,
+			PublishedCity: originalPublishedCity, ClearPublishedCity: originalPublishedCity == nil,
+			UpdatedBy: new(operatorUserID),
+		})
+	})
+	if rollbackErr != nil {
+		d.log.WarnContext(ctx, "rollback scheduled article publish failed", slog.Int64("article_id", req.ArticleID), slog.Any("err", rollbackErr))
+	}
+}
+
+func (d *ArticleUsecase) matchesScheduledPublish(article *model.Article, publishedCity *string, scheduledAt time.Time) bool {
+	return article != nil && article.PublishedAt != nil &&
+		article.PublishedAt.UTC().Truncate(time.Second).Equal(scheduledAt) &&
+		(article.PublishedCity == nil) == (publishedCity == nil) &&
+		(article.PublishedCity == nil || *article.PublishedCity == *publishedCity)
+}
+
+func (d *ArticleUsecase) prepareImmediatePublish(ctx context.Context, req *ArticlePublishReq, access *model.ContentAccess, now time.Time) (*articlePublishPlan, error) {
+	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
 	if err != nil {
 		if req.ScheduledAt != nil {
 			if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND {
-				return nil
+				return nil, nil
 			}
 		}
-		return err
+		return nil, err
 	}
 	if req.ScheduledAt != nil && access.Scope == enum.ContentAccessScopeInternalTask &&
-		(rewardSetupArticle.PublishStatus != enum.ArticlePublishStatusDraft || rewardSetupArticle.PublishedAt == nil || !rewardSetupArticle.PublishedAt.UTC().Truncate(time.Second).Equal(req.ScheduledAt.UTC().Truncate(time.Second))) {
+		(article.PublishStatus != enum.ArticlePublishStatusDraft || article.PublishedAt == nil || !article.PublishedAt.UTC().Truncate(time.Second).Equal(req.ScheduledAt.UTC().Truncate(time.Second))) {
+		return nil, nil
+	}
+	if err = article.CanPublish(access, nil, now); err != nil {
+		return nil, err
+	}
+	if err = d.validatePublishActivity(ctx, article, now); err != nil {
+		return nil, err
+	}
+	if article.CreatedBy == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	plan := &articlePublishPlan{article: article, rewardSetupPoints: d.articleRewardSetupPoints(article)}
+	if err = d.loadArticlePublishTasks(ctx, plan); err != nil {
+		return nil, err
+	}
+	return plan, nil
+}
+
+func (d *ArticleUsecase) articleRewardSetupPoints(article *model.Article) *int64 {
+	if article.RewardContent == nil || article.RewardPoints == nil {
 		return nil
 	}
-	if err = rewardSetupArticle.CanPublish(access, nil, now); err != nil {
-		return err
+	points := int64(20)
+	if d.business != nil && d.business.GetArticle().GetRewardSetupPoints() > 0 {
+		points = d.business.GetArticle().GetRewardSetupPoints()
 	}
-	if err = d.validatePublishActivity(ctx, rewardSetupArticle, now); err != nil {
-		return err
-	}
-	if rewardSetupArticle.CreatedBy == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	var rewardSetupPoints *int64
-	if rewardSetupArticle.RewardContent != nil && rewardSetupArticle.RewardPoints != nil {
-		points := int64(20)
-		if d.business != nil && d.business.GetArticle().GetRewardSetupPoints() > 0 {
-			points = d.business.GetArticle().GetRewardSetupPoints()
-		}
-		rewardSetupPoints = new(points)
-	}
-	if rewardSetupArticle.Type == enum.ArticleTypeLottery {
-		lottery, lotteryErr := d.articleLotteryRepo.Get(ctx, articleID, 0)
-		if lotteryErr != nil || lottery == nil {
+	return new(points)
+}
+
+func (d *ArticleUsecase) loadArticlePublishTasks(ctx context.Context, plan *articlePublishPlan) error {
+	switch plan.article.Type {
+	case enum.ArticleTypeLottery:
+		lottery, err := d.articleLotteryRepo.Get(ctx, plan.article.ID, 0)
+		if err != nil || lottery == nil {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
-		lotteryDrawAt = new(lottery.DrawAt)
-	}
-	if rewardSetupArticle.Type == enum.ArticleTypePoll {
-		poll, pollErr := d.articlePollRepo.Get(ctx, articleID, 0)
-		if pollErr != nil || poll == nil {
+		plan.lotteryDrawAt = new(lottery.DrawAt)
+	case enum.ArticleTypePoll:
+		poll, err := d.articlePollRepo.Get(ctx, plan.article.ID, 0)
+		if err != nil || poll == nil {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
-		pollEndsAt = new(poll.EndsAt)
+		plan.pollEndsAt = new(poll.EndsAt)
 	}
-	publish := &contentv1.TCCArticlePublish_Req{ArticleId: articleID, OperatorUserId: *rewardSetupArticle.CreatedBy, City: req.PublishedCity, RewardSetupPoints: rewardSetupPoints, PublishedAt: timestamppb.New(now)}
-	_, err = d.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
-		if err = d.branches.Call(ctx, tcc, constant.ContentServiceName.String(), publish, contentv1.TCCArticlePublishService_Try_FullMethodName, contentv1.TCCArticlePublishService_Confirm_FullMethodName, contentv1.TCCArticlePublishService_Cancel_FullMethodName, &contentv1.TCCArticlePublish_Resp{}); err != nil {
+	return nil
+}
+
+func (d *ArticleUsecase) executeArticlePublish(ctx context.Context, req *ArticlePublishReq, plan *articlePublishPlan, now time.Time) error {
+	publish := &contentv1.TCCArticlePublish_Req{ArticleId: req.ArticleID, OperatorUserId: *plan.article.CreatedBy, City: req.PublishedCity, RewardSetupPoints: plan.rewardSetupPoints, PublishedAt: timestamppb.New(now)}
+	_, err := d.dtm.InTCC(ctx, func(tcc *dtmgrpc.TccGrpc) error {
+		if err := d.branches.Call(ctx, tcc, constant.ContentServiceName.String(), publish, contentv1.TCCArticlePublishService_Try_FullMethodName, contentv1.TCCArticlePublishService_Confirm_FullMethodName, contentv1.TCCArticlePublishService_Cancel_FullMethodName, &contentv1.TCCArticlePublish_Resp{}); err != nil {
 			return err
 		}
-		if rewardSetupPoints == nil {
+		if plan.rewardSetupPoints == nil {
 			return nil
 		}
-		charge := &economyv1.TCCPoints_Req{UserId: *rewardSetupArticle.CreatedBy, Amount: *rewardSetupPoints, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE, IdempotencyKey: new(fmt.Sprintf("article reward setup:%d", articleID))}
+		charge := &economyv1.TCCPoints_Req{UserId: *plan.article.CreatedBy, Amount: *plan.rewardSetupPoints, RecordType: economyv1enum.EconomyRecordType_ECONOMY_RECORD_TYPE_ARTICLE_REWARD_SETUP_EXPENSE, IdempotencyKey: new(fmt.Sprintf("article reward setup:%d", req.ArticleID))}
 		return d.branches.Call(ctx, tcc, constant.EconomyServiceName.String(), charge, economyv1.TCCPointsService_Try_FullMethodName, economyv1.TCCPointsService_Confirm_FullMethodName, economyv1.TCCPointsService_Cancel_FullMethodName, &economyv1.TCCPoints_Resp{})
 	})
-	if err != nil {
-		return err
-	}
-	if lotteryDrawAt != nil {
-		if err = d.delayedTaskClient.RegisterLotteryDraw(ctx, articleID, *lotteryDrawAt); err != nil {
+	return err
+}
+
+func (d *ArticleUsecase) registerArticlePublishTasks(ctx context.Context, req *ArticlePublishReq, plan *articlePublishPlan) error {
+	if plan.lotteryDrawAt != nil {
+		if err := d.delayedTaskClient.RegisterLotteryDraw(ctx, req.ArticleID, *plan.lotteryDrawAt); err != nil {
 			return err
 		}
 	}
-	if pollEndsAt != nil {
-		if err = d.delayedTaskClient.RegisterPollFinish(ctx, articleID, *pollEndsAt); err != nil {
+	if plan.pollEndsAt != nil {
+		if err := d.delayedTaskClient.RegisterPollFinish(ctx, req.ArticleID, *plan.pollEndsAt); err != nil {
 			return err
 		}
 	}
 	if req.ScheduledAt == nil {
-		if cancelErr := d.delayedTaskClient.CancelPublishScheduledArticle(ctx, articleID); cancelErr != nil {
-			d.log.WarnContext(ctx, "cancel scheduled article publish failed", slog.Int64("article_id", articleID), slog.Any("err", cancelErr))
+		if err := d.delayedTaskClient.CancelPublishScheduledArticle(ctx, req.ArticleID); err != nil {
+			d.log.WarnContext(ctx, "cancel scheduled article publish failed", slog.Int64("article_id", req.ArticleID), slog.Any("err", err))
 		}
 	}
 	return nil

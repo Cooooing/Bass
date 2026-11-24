@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log/slog"
 
 	event "common/proto/gen/common/enums/event/v1"
@@ -9,6 +11,8 @@ import (
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"
 )
+
+var errEventHandlerNotFound = errors.New("event handler not found")
 
 type EventHandler interface {
 	Handle(ctx context.Context, req *EventHandleReq) error
@@ -21,14 +25,19 @@ type EventHandleReq struct {
 	Language         notifyenum.Language
 }
 
+type EventHandlerBinding struct {
+	Handler          EventHandler
+	NotificationType notifyenum.NotificationType
+}
+
 type EventUsecase struct {
 	log           *slog.Logger
-	eventHandlers map[event.EventSubject][]EventHandler
+	eventHandlers map[event.EventSubject][]EventHandlerBinding
 }
 
 func NewEventUsecase(
 	logger *slog.Logger,
-	eventHandlers map[event.EventSubject][]EventHandler,
+	eventHandlers map[event.EventSubject][]EventHandlerBinding,
 ) *EventUsecase {
 	return &EventUsecase{
 		log:           logger,
@@ -40,13 +49,24 @@ func (u *EventUsecase) Dispatch(ctx context.Context, req *EventHandleReq) error 
 	if req == nil || req.Event == nil || req.Event.GetEventId() == "" {
 		return nil
 	}
-	for _, handler := range u.eventHandlers[req.Event.GetSubject()] {
-		if handler == nil {
+	bindings := u.eventHandlers[req.Event.GetSubject()]
+	if len(bindings) == 0 {
+		return fmt.Errorf("%w: %s", errEventHandlerNotFound, req.Event.GetSubject())
+	}
+	handled := false
+	for _, binding := range bindings {
+		if binding.Handler == nil {
 			continue
 		}
-		if err := handler.Handle(ctx, req); err != nil {
+		handled = true
+		handlerReq := *req
+		handlerReq.NotificationType = binding.NotificationType
+		if err := binding.Handler.Handle(ctx, &handlerReq); err != nil {
 			return err
 		}
+	}
+	if !handled {
+		return fmt.Errorf("%w: %s", errEventHandlerNotFound, req.Event.GetSubject())
 	}
 	return nil
 }

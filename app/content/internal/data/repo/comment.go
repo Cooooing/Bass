@@ -313,89 +313,97 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 	if req == nil {
 		req = &repo.CommentGetReq{}
 	}
-	if req.Filter != nil {
-		filter := req.Filter
-		if filter.ParentID != nil {
-			query = query.Where(commentent.ParentIDEQ(*filter.ParentID))
-		}
-		if filter.ReplyID != nil {
-			query = query.Where(commentent.ReplyIDEQ(*filter.ReplyID))
-		}
-		if filter.CommentID != nil {
-			query = query.Where(commentent.IDEQ(*filter.CommentID))
-		}
-		if len(filter.CommentIDs) > 0 {
-			query = query.Where(commentent.IDIn(filter.CommentIDs...))
-		}
-		if filter.ArticleID != nil {
-			query = query.Where(commentent.ArticleIDEQ(*filter.ArticleID))
-		}
-		if len(filter.ArticleIDs) > 0 {
-			query = query.Where(commentent.ArticleIDIn(filter.ArticleIDs...))
-		}
-		if filter.CreatedBy != nil {
-			query = query.Where(commentent.CreatedByEQ(*filter.CreatedBy))
-		}
-		if len(filter.ExcludedUserIDs) > 0 {
-			query = query.Where(commentent.CreatedByNotIn(filter.ExcludedUserIDs...))
-		}
-		if len(filter.ExcludedIDs) > 0 {
-			query = query.Where(commentent.IDNotIn(filter.ExcludedIDs...))
-		}
-		if filter.Restriction != nil {
-			query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*filter.Restriction)))
-		}
-		if len(filter.Restrictions) > 0 {
-			query = query.Where(commentent.RestrictionIn(lo.Map(filter.Restrictions, func(item enum.ContentRestriction, _ int) commentent.Restriction {
-				return commentent.Restriction(item)
-			})...))
-		}
-		if filter.Level != nil {
-			query = query.Where(commentent.LevelEQ(*filter.Level))
-		}
-		if filter.Order != nil {
-			switch *filter.Order {
-			case enum.CommentOrderNewest:
-				query = query.Order(gen.Desc(commentent.FieldCreatedAt, commentent.FieldID))
-			case enum.CommentOrderOldest:
-				query = query.Order(gen.Asc(commentent.FieldCreatedAt, commentent.FieldID))
-			case enum.CommentOrderHottest:
-				query = query.
-					Order(func(s *sql.Selector) {
-						s.OrderExpr(sql.Expr(`
+	query = r.applyCommentFilter(query, req.Filter)
+	query = r.applyCommentScope(query, req.Scope)
+	if req.Filter == nil || req.Filter.Order == nil {
+		return query.Order(gen.Desc(commentent.FieldCreatedAt, commentent.FieldID))
+	}
+	return query
+}
+
+func (r *CommentRepo) applyCommentFilter(query *gen.CommentQuery, filter *model.CommentFilter) *gen.CommentQuery {
+	if filter == nil {
+		return query
+	}
+	if filter.ParentID != nil {
+		query = query.Where(commentent.ParentIDEQ(*filter.ParentID))
+	}
+	if filter.ReplyID != nil {
+		query = query.Where(commentent.ReplyIDEQ(*filter.ReplyID))
+	}
+	if filter.CommentID != nil {
+		query = query.Where(commentent.IDEQ(*filter.CommentID))
+	}
+	if len(filter.CommentIDs) > 0 {
+		query = query.Where(commentent.IDIn(filter.CommentIDs...))
+	}
+	if filter.ArticleID != nil {
+		query = query.Where(commentent.ArticleIDEQ(*filter.ArticleID))
+	}
+	if len(filter.ArticleIDs) > 0 {
+		query = query.Where(commentent.ArticleIDIn(filter.ArticleIDs...))
+	}
+	if filter.CreatedBy != nil {
+		query = query.Where(commentent.CreatedByEQ(*filter.CreatedBy))
+	}
+	if len(filter.ExcludedUserIDs) > 0 {
+		query = query.Where(commentent.CreatedByNotIn(filter.ExcludedUserIDs...))
+	}
+	if len(filter.ExcludedIDs) > 0 {
+		query = query.Where(commentent.IDNotIn(filter.ExcludedIDs...))
+	}
+	if filter.Restriction != nil {
+		query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*filter.Restriction)))
+	}
+	if len(filter.Restrictions) > 0 {
+		query = query.Where(commentent.RestrictionIn(lo.Map(filter.Restrictions, func(item enum.ContentRestriction, _ int) commentent.Restriction {
+			return commentent.Restriction(item)
+		})...))
+	}
+	if filter.Level != nil {
+		query = query.Where(commentent.LevelEQ(*filter.Level))
+	}
+	if filter.Order != nil {
+		switch *filter.Order {
+		case enum.CommentOrderNewest:
+			query = query.Order(gen.Desc(commentent.FieldCreatedAt, commentent.FieldID))
+		case enum.CommentOrderOldest:
+			query = query.Order(gen.Asc(commentent.FieldCreatedAt, commentent.FieldID))
+		case enum.CommentOrderHottest:
+			query = query.
+				Order(func(s *sql.Selector) {
+					s.OrderExpr(sql.Expr(`
         (
             (reply_count * 6 + like_count * 4 + thank_count * 2)
             /
             pow((extract(epoch from (now() - created_at)) / 3600) + 1.5, 1.8)
         ) DESC`))
-					}, gen.Desc(commentent.FieldID))
-			}
+				}, gen.Desc(commentent.FieldID))
 		}
 	}
-	if req.Scope != nil {
-		scope := req.Scope
-		if scope.CreatedBy != nil {
-			query = query.Where(commentent.CreatedByEQ(*scope.CreatedBy))
-		}
-		if scope.Restriction != nil {
-			query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*scope.Restriction)))
-		}
-		if len(scope.Restrictions) > 0 {
-			query = query.Where(commentent.RestrictionIn(lo.Map(scope.Restrictions, func(item enum.ContentRestriction, _ int) commentent.Restriction {
-				return commentent.Restriction(item)
-			})...))
-		}
-		if scope.ArticlePublicVisible {
-			query = query.Where(commentent.HasArticleWith(
-				articleent.DeletedAtIsNil(),
-				articleent.PublishStatusIn(articleent.PublishStatusPublished, articleent.PublishStatusArchived),
-				articleent.VisibilityEQ(articleent.VisibilityPublic),
-				articleent.RestrictionIn(articleent.RestrictionNone, articleent.RestrictionLocked),
-			))
-		}
+	return query
+}
+
+func (r *CommentRepo) applyCommentScope(query *gen.CommentQuery, scope *model.CommentScopeFilter) *gen.CommentQuery {
+	if scope == nil {
+		return query
 	}
-	if req.Filter == nil || req.Filter.Order == nil {
-		query = query.Order(gen.Desc(commentent.FieldCreatedAt, commentent.FieldID))
+	if scope.CreatedBy != nil {
+		query = query.Where(commentent.CreatedByEQ(*scope.CreatedBy))
+	}
+	if scope.Restriction != nil {
+		query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*scope.Restriction)))
+	}
+	if len(scope.Restrictions) > 0 {
+		query = query.Where(commentent.RestrictionIn(lo.Map(scope.Restrictions, func(item enum.ContentRestriction, _ int) commentent.Restriction { return commentent.Restriction(item) })...))
+	}
+	if scope.ArticlePublicVisible {
+		query = query.Where(commentent.HasArticleWith(
+			articleent.DeletedAtIsNil(),
+			articleent.PublishStatusIn(articleent.PublishStatusPublished, articleent.PublishStatusArchived),
+			articleent.VisibilityEQ(articleent.VisibilityPublic),
+			articleent.RestrictionIn(articleent.RestrictionNone, articleent.RestrictionLocked),
+		))
 	}
 	return query
 }

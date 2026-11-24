@@ -162,115 +162,24 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 }
 
 func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo.ListCommentThreadsReq) (*repo.ListCommentThreadsResp, error) {
-	var pageReq *commonmodel.PageReq
-	if req.Page != nil {
-		pageReq = &commonmodel.PageReq{
-			Page: req.Page.Page,
-			Size: req.Page.Size,
-		}
+	acceptedRoot, err := r.loadThreadRoot(ctx, req, req.AcceptedAnswerID)
+	if err != nil {
+		return nil, err
 	}
-	order := contentv1enum.CommentOrder_COMMENT_ORDER_HOTTEST
-	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
-		order = contentv1enum.CommentOrder(*req.Order)
+	pinnedRoot, err := r.loadThreadRoot(ctx, req, req.PinnedCommentID)
+	if err != nil {
+		return nil, err
 	}
-	var acceptedRoot *contentv1.PageComments_Resp_Comment
-	if req.AcceptedAnswerID != nil {
-		acceptedReply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
-			Page:   (&commonmodel.PageReq{Page: 1, Size: 1}).ToProto(),
-			Query:  &contentv1.PageComments_Req_CommentQueryParams{CommentId: req.AcceptedAnswerID, ArticleId: new(req.ArticleID), Level: new(int32(1)), ExcludedUserIds: req.ExcludedUserIDs},
-			Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
-		})
-		if err != nil {
-			return nil, err
-		}
-		if len(acceptedReply.GetRows()) == 1 {
-			acceptedRoot = acceptedReply.GetRows()[0]
-		}
-	}
-	var pinnedRoot *contentv1.PageComments_Resp_Comment
-	if req.PinnedCommentID != nil {
-		pinnedReply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
-			Page:   (&commonmodel.PageReq{Page: 1, Size: 1}).ToProto(),
-			Query:  &contentv1.PageComments_Req_CommentQueryParams{CommentId: req.PinnedCommentID, ArticleId: new(req.ArticleID), Level: new(int32(1)), ExcludedUserIds: req.ExcludedUserIDs},
-			Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
-		})
-		if err != nil {
-			return nil, err
-		}
-		if len(pinnedReply.GetRows()) == 1 {
-			pinnedRoot = pinnedReply.GetRows()[0]
-		}
-	}
-	excludedCommentIDs := []int64(nil)
-	if acceptedRoot != nil {
-		excludedCommentIDs = append(excludedCommentIDs, acceptedRoot.GetId())
-	}
-	if pinnedRoot != nil {
-		excludedCommentIDs = append(excludedCommentIDs, pinnedRoot.GetId())
-	}
-	reply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
-		Page: pageReq.ToProto(),
-		Query: &contentv1.PageComments_Req_CommentQueryParams{
-			ArticleId:          new(req.ArticleID),
-			Level:              new(int32(1)),
-			Order:              new(order),
-			ExcludedUserIds:    req.ExcludedUserIDs,
-			ExcludedCommentIds: excludedCommentIDs,
-		},
-		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
-	})
+	reply, err := r.pageCommentThreadRoots(ctx, req, acceptedRoot, pinnedRoot)
 	if err != nil {
 		return nil, err
 	}
 	rootIDs := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) int64 {
 		return item.GetId()
 	})
-	previewMap := map[int64][]*contentv1.PageComments_Resp_Comment{}
-	if len(rootIDs) > 0 {
-		previewLimit := int32(0)
-		if req.ReplyPreviewLimit != nil {
-			previewLimit = *req.ReplyPreviewLimit
-		}
-		if previewLimit <= 0 {
-			previewLimit = 3
-		}
-		if previewLimit > 5 {
-			previewLimit = 5
-		}
-		previews, err := r.contentClient.Comment.ListCommentReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Req{
-			ArticleId:       req.ArticleID,
-			ParentIds:       rootIDs,
-			LimitPerParent:  previewLimit,
-			Order:           new(contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST),
-			Access:          &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
-			ExcludedUserIds: req.ExcludedUserIDs,
-		})
-		if err != nil {
-			return nil, err
-		}
-		previewMap = lo.SliceToMap(previews.GetRows(), func(item *contentv1.ListCommentReplyPreviews_Resp_CommentReplyPreview) (int64, []*contentv1.PageComments_Resp_Comment) {
-			rows := lo.Map(item.GetRows(), func(row *contentv1.ListCommentReplyPreviews_Resp_Comment, _ int) *contentv1.PageComments_Resp_Comment {
-				return &contentv1.PageComments_Resp_Comment{
-					CreatedAt:   row.GetCreatedAt(),
-					UpdatedAt:   row.GetUpdatedAt(),
-					CreatedBy:   row.CreatedBy,
-					UpdatedBy:   row.UpdatedBy,
-					Id:          row.GetId(),
-					ArticleId:   row.GetArticleId(),
-					Content:     row.GetContent(),
-					Level:       row.GetLevel(),
-					ParentId:    row.ParentId,
-					ReplyId:     row.ReplyId,
-					ThankCount:  row.GetThankCount(),
-					LikeCount:   row.GetLikeCount(),
-					ReplyCount:  row.GetReplyCount(),
-					ReplyUserId: row.ReplyUserId,
-					Restriction: row.GetRestriction(),
-					DeletedAt:   row.GetDeletedAt(),
-				}
-			})
-			return item.GetParentId(), rows
-		})
+	previewMap, err := r.loadCommentThreadPreviews(ctx, req, rootIDs)
+	if err != nil {
+		return nil, err
 	}
 	allComments := append([]*contentv1.PageComments_Resp_Comment{}, reply.GetRows()...)
 	if acceptedRoot != nil {
@@ -347,6 +256,100 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		result.AcceptedAnswer = &repo.CommentThread{Root: r.commentListItem(acceptedRoot, articles[acceptedRoot.GetArticleId()], profiles, states[acceptedRoot.GetId()]), ReplyCount: acceptedRoot.GetReplyCount(), HasMoreReplies: acceptedRoot.GetReplyCount() > 0}
 	}
 	return result, nil
+}
+
+// loadThreadRoot 读取采纳或置顶的一级评论；缺少标识时不发起查询。
+func (r *ContentCommentClient) loadThreadRoot(ctx context.Context, req *repo.ListCommentThreadsReq, commentID *int64) (*contentv1.PageComments_Resp_Comment, error) {
+	if commentID == nil {
+		return nil, nil
+	}
+	reply, err := r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
+		Page: (&commonmodel.PageReq{Page: 1, Size: 1}).ToProto(),
+		Query: &contentv1.PageComments_Req_CommentQueryParams{
+			CommentId:       commentID,
+			ArticleId:       new(req.ArticleID),
+			Level:           new(int32(1)),
+			ExcludedUserIds: req.ExcludedUserIDs,
+		},
+		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
+	})
+	if err != nil || len(reply.GetRows()) != 1 {
+		return nil, err
+	}
+	return reply.GetRows()[0], nil
+}
+
+func (r *ContentCommentClient) pageCommentThreadRoots(ctx context.Context, req *repo.ListCommentThreadsReq, acceptedRoot, pinnedRoot *contentv1.PageComments_Resp_Comment) (*contentv1.PageComments_Resp, error) {
+	order := contentv1enum.CommentOrder_COMMENT_ORDER_HOTTEST
+	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
+		order = contentv1enum.CommentOrder(*req.Order)
+	}
+	excludedCommentIDs := make([]int64, 0, 2)
+	if acceptedRoot != nil {
+		excludedCommentIDs = append(excludedCommentIDs, acceptedRoot.GetId())
+	}
+	if pinnedRoot != nil {
+		excludedCommentIDs = append(excludedCommentIDs, pinnedRoot.GetId())
+	}
+	return r.contentClient.Comment.PageComments(ctx, &contentv1.PageComments_Req{
+		Page: req.Page.ToProto(),
+		Query: &contentv1.PageComments_Req_CommentQueryParams{
+			ArticleId:          new(req.ArticleID),
+			Level:              new(int32(1)),
+			Order:              new(order),
+			ExcludedUserIds:    req.ExcludedUserIDs,
+			ExcludedCommentIds: excludedCommentIDs,
+		},
+		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
+	})
+}
+
+func (r *ContentCommentClient) loadCommentThreadPreviews(ctx context.Context, req *repo.ListCommentThreadsReq, rootIDs []int64) (map[int64][]*contentv1.PageComments_Resp_Comment, error) {
+	if len(rootIDs) == 0 {
+		return map[int64][]*contentv1.PageComments_Resp_Comment{}, nil
+	}
+	previewLimit := int32(3)
+	if req.ReplyPreviewLimit != nil {
+		previewLimit = *req.ReplyPreviewLimit
+	}
+	if previewLimit <= 0 {
+		previewLimit = 3
+	} else {
+		previewLimit = min(previewLimit, 5)
+	}
+	previews, err := r.contentClient.Comment.ListCommentReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Req{
+		ArticleId:       req.ArticleID,
+		ParentIds:       rootIDs,
+		LimitPerParent:  previewLimit,
+		Order:           new(contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST),
+		Access:          &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
+		ExcludedUserIds: req.ExcludedUserIDs,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return lo.SliceToMap(previews.GetRows(), func(item *contentv1.ListCommentReplyPreviews_Resp_CommentReplyPreview) (int64, []*contentv1.PageComments_Resp_Comment) {
+		return item.GetParentId(), lo.Map(item.GetRows(), func(row *contentv1.ListCommentReplyPreviews_Resp_Comment, _ int) *contentv1.PageComments_Resp_Comment {
+			return &contentv1.PageComments_Resp_Comment{
+				CreatedAt:   row.GetCreatedAt(),
+				UpdatedAt:   row.GetUpdatedAt(),
+				CreatedBy:   row.CreatedBy,
+				UpdatedBy:   row.UpdatedBy,
+				Id:          row.GetId(),
+				ArticleId:   row.GetArticleId(),
+				Content:     row.GetContent(),
+				Level:       row.GetLevel(),
+				ParentId:    row.ParentId,
+				ReplyId:     row.ReplyId,
+				ThankCount:  row.GetThankCount(),
+				LikeCount:   row.GetLikeCount(),
+				ReplyCount:  row.GetReplyCount(),
+				ReplyUserId: row.ReplyUserId,
+				Restriction: row.GetRestriction(),
+				DeletedAt:   row.GetDeletedAt(),
+			}
+		})
+	}), nil
 }
 
 func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo.ListCommentRepliesReq) (*repo.ListCommentRepliesResp, error) {

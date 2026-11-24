@@ -19,6 +19,7 @@ type InboxEventRepo interface {
 	ClaimRetry(ctx context.Context, req *InboxEventClaimRetryReq) (bool, error)
 	MarkProcessed(ctx context.Context, req *InboxEventMarkProcessedReq) error
 	MarkFailed(ctx context.Context, req *InboxEventMarkFailedReq) error
+	MarkDead(ctx context.Context, req *InboxEventMarkDeadReq) error
 }
 
 type InboxEventSaveProcessingReq struct {
@@ -54,6 +55,11 @@ type InboxEventMarkFailedReq struct {
 	EventID   string
 	LastError string
 	MaxRetry  int32
+}
+
+type InboxEventMarkDeadReq struct {
+	EventID   string
+	LastError string
 }
 
 type InboxEventQuery struct {

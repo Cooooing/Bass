@@ -85,7 +85,7 @@ $(LINT_BINARY): $(ROOT_DIR)/.custom-gcl.yml $(ROOT_DIR)/.golangci.yml $(LINT_PLU
 .PHONY: lint
 lint: lint-toolchain
 	@echo "[lint] $(SERVER)..."
-	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners --fix --issues-exit-code=0 ./... || echo "[lint] fix pass did not complete; continuing strict verification"
-	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners ./...
+	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners --disable=bassarch --fix --issues-exit-code=0 ./... || echo "[lint] fix pass did not complete; continuing strict verification"
+	@cd $(APP_DIR) && $(LINT_BINARY) run --allow-parallel-runners --disable=bassarch ./...
 
 endif

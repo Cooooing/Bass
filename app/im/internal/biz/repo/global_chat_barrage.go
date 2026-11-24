@@ -7,10 +7,10 @@ import (
 )
 
 type GlobalChatBarrageRepo interface {
-	Get(context.Context, int64) (*model.GlobalChatBarrage, error)
-	NextID(context.Context) (int64, error)
-	CreatePending(context.Context, *model.GlobalChatBarrage) (*model.GlobalChatBarrage, error)
-	Publish(context.Context, int64) (*model.GlobalChatBarrage, error)
-	Cancel(context.Context, int64) error
-	List(context.Context, *int64, int, int) ([]*model.GlobalChatBarrage, int64, error)
+	Get(ctx context.Context, barrageID int64) (*model.GlobalChatBarrage, error)
+	NextID(ctx context.Context) (int64, error)
+	CreatePending(ctx context.Context, barrage *model.GlobalChatBarrage) (*model.GlobalChatBarrage, error)
+	Publish(ctx context.Context, barrageID int64) (*model.GlobalChatBarrage, error)
+	Cancel(ctx context.Context, barrageID int64) error
+	List(ctx context.Context, afterID *int64, limit, offset int) ([]*model.GlobalChatBarrage, int64, error)
 }

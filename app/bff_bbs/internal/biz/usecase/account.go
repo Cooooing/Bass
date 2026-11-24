@@ -140,62 +140,99 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 		Account:    u.accountProfile(account),
 		Visibility: u.profileVisibility(privacy),
 	}
-	if viewerID == account.ID || privacy.PublicPoints == nil || *privacy.PublicPoints {
-		economyAccount, err := u.economyClient.GetAccount(ctx, account.ID)
-		if err != nil {
-			return nil, err
-		}
-		profile.Points = new(economyAccount.Balance)
+	if err = u.loadProfilePoints(ctx, profile, account, privacy, viewerID); err != nil {
+		return nil, err
 	}
-	if viewerID == account.ID || privacy.PublicOnlineStatus == nil || *privacy.PublicOnlineStatus {
-		onlineStatuses, queryErr := u.realtimeHub.Hub.QueryRealtimeOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: []int64{account.ID}})
-		if queryErr != nil {
-			u.log.WarnContext(ctx, "query profile online status failed", "user_id", account.ID, "error", queryErr)
-		} else {
-			online := onlineStatuses.GetOnlineStatuses()[account.ID]
-			profile.Online = &online
-		}
-	}
+	u.loadProfileOnlineStatus(ctx, profile, account, privacy, viewerID)
 	if lastLogin != nil {
 		profile.LastSuccessLoginAt = timestamppb.New(*lastLogin)
 	}
+	if err = u.loadProfileImages(ctx, profile, account); err != nil {
+		return nil, err
+	}
+	if err = u.loadProfileLocation(ctx, profile, account, privacy, viewerID); err != nil {
+		return nil, err
+	}
+	if err = u.loadProfileViewerRelation(ctx, profile, account.ID, viewerID); err != nil {
+		return nil, err
+	}
+	return profile, nil
+}
+
+func (u *AccountUsecase) loadProfilePoints(ctx context.Context, profile *bbsuserv1.Profile, account *model.AccountProfile, privacy *repo.PrivacySetting, viewerID int64) error {
+	if viewerID != account.ID && privacy.PublicPoints != nil && !*privacy.PublicPoints {
+		return nil
+	}
+	economyAccount, err := u.economyClient.GetAccount(ctx, account.ID)
+	if err != nil {
+		return err
+	}
+	profile.Points = new(economyAccount.Balance)
+	return nil
+}
+
+func (u *AccountUsecase) loadProfileOnlineStatus(ctx context.Context, profile *bbsuserv1.Profile, account *model.AccountProfile, privacy *repo.PrivacySetting, viewerID int64) {
+	if viewerID != account.ID && privacy.PublicOnlineStatus != nil && !*privacy.PublicOnlineStatus {
+		return
+	}
+	onlineStatuses, err := u.realtimeHub.Hub.QueryRealtimeOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: []int64{account.ID}})
+	if err != nil {
+		u.log.WarnContext(ctx, "query profile online status failed", "user_id", account.ID, "error", err)
+		return
+	}
+	online := onlineStatuses.GetOnlineStatuses()[account.ID]
+	profile.Online = &online
+}
+
+func (u *AccountUsecase) loadProfileImages(ctx context.Context, profile *bbsuserv1.Profile, account *model.AccountProfile) error {
 	avatarURL := u.defaultAvatarURL(account.Name)
 	if account.AvatarAssetID != nil && *account.AvatarAssetID > 0 {
 		asset, err := u.assetClient.Get(ctx, *account.AvatarAssetID)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		if asset != nil && asset.URL != "" {
 			avatarURL = asset.URL
 		}
 	}
 	profile.Account.AvatarUrl = &avatarURL
-	if account.BackgroundAssetID != nil && *account.BackgroundAssetID > 0 {
-		asset, err := u.assetClient.Get(ctx, *account.BackgroundAssetID)
-		if err != nil {
-			return nil, err
-		}
-		if asset != nil && asset.URL != "" {
-			profile.BackgroundUrl = &asset.URL
-		}
+	if account.BackgroundAssetID == nil || *account.BackgroundAssetID <= 0 {
+		return nil
 	}
-	if viewerID == account.ID || privacy.PublicLocation == nil || *privacy.PublicLocation {
-		location, err := u.locationClient.GetCurrentLocation(ctx, account.ID)
-		if err != nil {
-			return nil, err
-		}
-		if location != nil {
-			profile.Location = &bbsuserv1.ProfileLocation{Country: location.Country, Province: location.Province, City: location.City}
-		}
+	asset, err := u.assetClient.Get(ctx, *account.BackgroundAssetID)
+	if err != nil {
+		return err
 	}
-	if viewerID != 0 {
-		status, err := u.relationClient.GetStatus(ctx, &repo.GetStatusRelationReq{ActorID: viewerID, TargetID: account.ID})
-		if err != nil {
-			return nil, err
-		}
-		profile.ViewerRelation = u.profileRelation(status)
+	if asset != nil && asset.URL != "" {
+		profile.BackgroundUrl = &asset.URL
 	}
-	return profile, nil
+	return nil
+}
+
+func (u *AccountUsecase) loadProfileLocation(ctx context.Context, profile *bbsuserv1.Profile, account *model.AccountProfile, privacy *repo.PrivacySetting, viewerID int64) error {
+	if viewerID != account.ID && privacy.PublicLocation != nil && !*privacy.PublicLocation {
+		return nil
+	}
+	location, err := u.locationClient.GetCurrentLocation(ctx, account.ID)
+	if err != nil {
+		return err
+	}
+	if location != nil {
+		profile.Location = &bbsuserv1.ProfileLocation{Country: location.Country, Province: location.Province, City: location.City}
+	}
+	return nil
+}
+
+func (u *AccountUsecase) loadProfileViewerRelation(ctx context.Context, profile *bbsuserv1.Profile, accountID, viewerID int64) error {
+	if viewerID == 0 {
+		return nil
+	}
+	status, err := u.relationClient.GetStatus(ctx, &repo.GetStatusRelationReq{ActorID: viewerID, TargetID: accountID})
+	if err != nil {
+		return err
+	}
+	profile.ViewerRelation = u.profileRelation(status)
+	return nil
 }
 
 func (u *AccountUsecase) SearchMentionAccounts(ctx context.Context, userID int64, query string, page *commonmodel.PageReq) ([]*bbsuserv1.AccountProfile, *commonmodel.PageResp, error) {

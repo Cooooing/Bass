@@ -613,131 +613,140 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 	if req == nil {
 		req = &repo.ArticleGetReq{}
 	}
-	if req.Filter != nil {
-		filter := req.Filter
-		if filter.ArticleID != nil {
-			query = query.Where(articleent.IDEQ(*filter.ArticleID))
+	query = r.applyArticleFilter(query, req.Filter)
+	query = r.applyArticleScope(query, req.Scope)
+	if req.Filter == nil || req.Filter.Order == nil {
+		return query.Order(gen.Desc(articleent.FieldCreatedAt))
+	}
+	return query
+}
+
+func (r *ArticleRepo) applyArticleFilter(query *gen.ArticleQuery, filter *model.ArticleFilter) *gen.ArticleQuery {
+	if filter == nil {
+		return query
+	}
+	if filter.ArticleID != nil {
+		query = query.Where(articleent.IDEQ(*filter.ArticleID))
+	}
+	if len(filter.ArticleIDs) > 0 {
+		query = query.Where(articleent.IDIn(filter.ArticleIDs...))
+	}
+	if filter.TagID != nil {
+		query = query.Where(articleent.HasTagsWith(tagent.IDEQ(*filter.TagID), tagent.DeletedAtIsNil()))
+	}
+	if filter.DomainID != nil {
+		query = query.Where(articleent.HasTagsWith(tagent.DomainIDEQ(*filter.DomainID), tagent.DeletedAtIsNil()))
+	}
+	if filter.PublishStatus != nil {
+		query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(*filter.PublishStatus)))
+	}
+	if len(filter.PublishStatuses) > 0 {
+		query = query.Where(articleent.PublishStatusIn(lo.Map(filter.PublishStatuses, func(item enum.ArticlePublishStatus, _ int) articleent.PublishStatus {
+			return articleent.PublishStatus(item)
+		})...))
+	}
+	if filter.Visibility != nil {
+		query = query.Where(articleent.VisibilityEQ(articleent.Visibility(*filter.Visibility)))
+	}
+	if len(filter.Visibilities) > 0 {
+		query = query.Where(articleent.VisibilityIn(lo.Map(filter.Visibilities, func(item enum.ArticleVisibility, _ int) articleent.Visibility {
+			return articleent.Visibility(item)
+		})...))
+	}
+	if filter.Restriction != nil {
+		query = query.Where(articleent.RestrictionEQ(articleent.Restriction(*filter.Restriction)))
+	}
+	if len(filter.Restrictions) > 0 {
+		query = query.Where(articleent.RestrictionIn(lo.Map(filter.Restrictions, func(item enum.ContentRestriction, _ int) articleent.Restriction {
+			return articleent.Restriction(item)
+		})...))
+	}
+	if filter.AuthorID != nil {
+		query = query.Where(articleent.CreatedByEQ(*filter.AuthorID))
+	}
+	if len(filter.AuthorIDs) > 0 {
+		query = query.Where(articleent.CreatedByIn(filter.AuthorIDs...))
+	}
+	if len(filter.ExcludedAuthorIDs) > 0 {
+		query = query.Where(articleent.CreatedByNotIn(filter.ExcludedAuthorIDs...))
+	}
+	if filter.Type != nil {
+		query = query.Where(articleent.TypeEQ(articleent.Type(*filter.Type)))
+	}
+	if filter.PublishedAtEnd != nil {
+		query = query.Where(articleent.PublishedAtLTE(*filter.PublishedAtEnd))
+	}
+	if filter.PublishedCity != nil {
+		query = query.Where(articleent.PublishedCityEQ(*filter.PublishedCity))
+	}
+	if filter.Scheduled != nil {
+		query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusDraft)))
+		if *filter.Scheduled {
+			query = query.Where(articleent.PublishedAtNotNil())
+		} else {
+			query = query.Where(articleent.PublishedAtIsNil())
 		}
-		if len(filter.ArticleIDs) > 0 {
-			query = query.Where(articleent.IDIn(filter.ArticleIDs...))
-		}
-		if filter.TagID != nil {
-			query = query.Where(articleent.HasTagsWith(tagent.IDEQ(*filter.TagID), tagent.DeletedAtIsNil()))
-		}
-		if filter.DomainID != nil {
-			query = query.Where(articleent.HasTagsWith(tagent.DomainIDEQ(*filter.DomainID), tagent.DeletedAtIsNil()))
-		}
-		if filter.PublishStatus != nil {
-			query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(*filter.PublishStatus)))
-		}
-		if len(filter.PublishStatuses) > 0 {
-			query = query.Where(articleent.PublishStatusIn(lo.Map(filter.PublishStatuses, func(item enum.ArticlePublishStatus, _ int) articleent.PublishStatus {
-				return articleent.PublishStatus(item)
-			})...))
-		}
-		if filter.Visibility != nil {
-			query = query.Where(articleent.VisibilityEQ(articleent.Visibility(*filter.Visibility)))
-		}
-		if len(filter.Visibilities) > 0 {
-			query = query.Where(articleent.VisibilityIn(lo.Map(filter.Visibilities, func(item enum.ArticleVisibility, _ int) articleent.Visibility {
-				return articleent.Visibility(item)
-			})...))
-		}
-		if filter.Restriction != nil {
-			query = query.Where(articleent.RestrictionEQ(articleent.Restriction(*filter.Restriction)))
-		}
-		if len(filter.Restrictions) > 0 {
-			query = query.Where(articleent.RestrictionIn(lo.Map(filter.Restrictions, func(item enum.ContentRestriction, _ int) articleent.Restriction {
-				return articleent.Restriction(item)
-			})...))
-		}
-		if filter.AuthorID != nil {
-			query = query.Where(articleent.CreatedByEQ(*filter.AuthorID))
-		}
-		if len(filter.AuthorIDs) > 0 {
-			query = query.Where(articleent.CreatedByIn(filter.AuthorIDs...))
-		}
-		if len(filter.ExcludedAuthorIDs) > 0 {
-			query = query.Where(articleent.CreatedByNotIn(filter.ExcludedAuthorIDs...))
-		}
-		if filter.Type != nil {
-			query = query.Where(articleent.TypeEQ(articleent.Type(*filter.Type)))
-		}
-		if filter.PublishedAtEnd != nil {
-			query = query.Where(articleent.PublishedAtLTE(*filter.PublishedAtEnd))
-		}
-		if filter.PublishedCity != nil {
-			query = query.Where(articleent.PublishedCityEQ(*filter.PublishedCity))
-		}
-		if filter.Scheduled != nil {
-			query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusDraft)))
-			if *filter.Scheduled {
-				query = query.Where(articleent.PublishedAtNotNil())
-			} else {
-				query = query.Where(articleent.PublishedAtIsNil())
-			}
-		}
-		if filter.Order != nil {
-			switch *filter.Order {
-			case enum.ArticleOrderNewest:
-				query = query.Order(gen.Desc(articleent.FieldCreatedAt))
-			case enum.ArticleOrderHottest:
-				query = query.Where(articleent.CreatedAtGTE(time.Now().Add(-30 * 24 * time.Hour))).
-					Order(func(s *sql.Selector) {
-						s.OrderExpr(sql.Expr(`
+	}
+	if filter.Order != nil {
+		switch *filter.Order {
+		case enum.ArticleOrderNewest:
+			query = query.Order(gen.Desc(articleent.FieldCreatedAt))
+		case enum.ArticleOrderHottest:
+			query = query.Where(articleent.CreatedAtGTE(time.Now().Add(-30 * 24 * time.Hour))).
+				Order(func(s *sql.Selector) {
+					s.OrderExpr(sql.Expr(`
         (
             (reply_count * 8 + like_count * 4 + collect_count * 6 + thank_count * 2 + reward_count * 3)
             /
             pow((extract(epoch from (now() - created_at)) / 3600) + 2 , 1.3)
         ) DESC`))
-					})
-			}
+				})
 		}
 	}
-	if req.Scope != nil {
-		scope := req.Scope
-		if scope.PublicVisibleOnly {
-			published := enum.ArticlePublishStatusPublished
-			public := enum.ArticleVisibilityPublic
-			none := enum.ContentRestrictionNone
-			locked := enum.ContentRestrictionLocked
-			query = query.Where(
-				articleent.PublishStatusEQ(articleent.PublishStatus(published)),
-				articleent.VisibilityEQ(articleent.Visibility(public)),
-				articleent.RestrictionIn(articleent.Restriction(none), articleent.Restriction(locked)),
-			)
-		} else {
-			if scope.PublishStatus != nil {
-				query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(*scope.PublishStatus)))
-			}
-			if len(scope.PublishStatuses) > 0 {
-				query = query.Where(articleent.PublishStatusIn(lo.Map(scope.PublishStatuses, func(item enum.ArticlePublishStatus, _ int) articleent.PublishStatus {
-					return articleent.PublishStatus(item)
-				})...))
-			}
-			if scope.Visibility != nil {
-				query = query.Where(articleent.VisibilityEQ(articleent.Visibility(*scope.Visibility)))
-			}
-			if len(scope.Visibilities) > 0 {
-				query = query.Where(articleent.VisibilityIn(lo.Map(scope.Visibilities, func(item enum.ArticleVisibility, _ int) articleent.Visibility {
-					return articleent.Visibility(item)
-				})...))
-			}
-			if scope.Restriction != nil {
-				query = query.Where(articleent.RestrictionEQ(articleent.Restriction(*scope.Restriction)))
-			}
-			if len(scope.Restrictions) > 0 {
-				query = query.Where(articleent.RestrictionIn(lo.Map(scope.Restrictions, func(item enum.ContentRestriction, _ int) articleent.Restriction {
-					return articleent.Restriction(item)
-				})...))
-			}
-		}
-		if scope.AuthorID != nil {
-			query = query.Where(articleent.CreatedByEQ(*scope.AuthorID))
-		}
+	return query
+}
+
+func (r *ArticleRepo) applyArticleScope(query *gen.ArticleQuery, scope *model.ArticleScopeFilter) *gen.ArticleQuery {
+	if scope == nil {
+		return query
 	}
-	if req.Filter == nil || req.Filter.Order == nil {
-		query = query.Order(gen.Desc(articleent.FieldCreatedAt))
+	if scope.PublicVisibleOnly {
+		return r.applyPublicArticleScope(query, scope)
+	}
+	if scope.PublishStatus != nil {
+		query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(*scope.PublishStatus)))
+	}
+	if len(scope.PublishStatuses) > 0 {
+		query = query.Where(articleent.PublishStatusIn(lo.Map(scope.PublishStatuses, func(item enum.ArticlePublishStatus, _ int) articleent.PublishStatus {
+			return articleent.PublishStatus(item)
+		})...))
+	}
+	if scope.Visibility != nil {
+		query = query.Where(articleent.VisibilityEQ(articleent.Visibility(*scope.Visibility)))
+	}
+	if len(scope.Visibilities) > 0 {
+		query = query.Where(articleent.VisibilityIn(lo.Map(scope.Visibilities, func(item enum.ArticleVisibility, _ int) articleent.Visibility { return articleent.Visibility(item) })...))
+	}
+	if scope.Restriction != nil {
+		query = query.Where(articleent.RestrictionEQ(articleent.Restriction(*scope.Restriction)))
+	}
+	if len(scope.Restrictions) > 0 {
+		query = query.Where(articleent.RestrictionIn(lo.Map(scope.Restrictions, func(item enum.ContentRestriction, _ int) articleent.Restriction { return articleent.Restriction(item) })...))
+	}
+	if scope.AuthorID != nil {
+		query = query.Where(articleent.CreatedByEQ(*scope.AuthorID))
+	}
+	return query
+}
+
+func (r *ArticleRepo) applyPublicArticleScope(query *gen.ArticleQuery, scope *model.ArticleScopeFilter) *gen.ArticleQuery {
+	query = query.Where(
+		articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusPublished)),
+		articleent.VisibilityEQ(articleent.Visibility(enum.ArticleVisibilityPublic)),
+		articleent.RestrictionIn(articleent.Restriction(enum.ContentRestrictionNone), articleent.Restriction(enum.ContentRestrictionLocked)),
+	)
+	if scope.AuthorID != nil {
+		query = query.Where(articleent.CreatedByEQ(*scope.AuthorID))
 	}
 	return query
 }

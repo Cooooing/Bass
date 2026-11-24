@@ -226,13 +226,25 @@ make init                         # 首次使用时全局安装锁定版本的�
 make api                          # 生成共享 Protobuf 产物
 make gen                          # 生成所有服务产物
 make build                        # 构建所有服务二进制
-make lint                         # 格式化并检查所有服务
+make proto-lint                   # 检查并格式化 Proto 契约
+make go-lint                      # 格式化并检查所有 Go 服务
+make lint                         # 依次执行 proto-lint 和 go-lint
 make -C app/user gen              # 生成一个服务的产物
 make -C app/bff_bbs doc           # 生成 BFF OpenAPI 文档
 make -C app/bff_bbs sdk           # 生成 BFF SDK
 ```
 
 构建修改过的服务前，请执行对应的生成命令，生成契约、Ent 代码和 Wire 输出。
+
+## 提交门禁
+
+每次提交前必须在仓库根目录运行：
+
+```bash
+make lint
+```
+
+该命令先检查并格式化 Proto 契约，再检查定制 golangci 插件及全部 app 服务。只有命令以成功状态结束、全部检查通过后，才允许提交代码；不得以局部模块通过或忽略剩余错误替代根级验证。
 
 ## 运行注意事项
 

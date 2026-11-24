@@ -28,19 +28,19 @@ import {
  */
 export interface EmojiGroup {
     /**
-     * 
+     * 分组 ID。
      * @type {string}
      * @memberof EmojiGroup
      */
     id?: string;
     /**
-     * 
+     * 分组名称。
      * @type {string}
      * @memberof EmojiGroup
      */
     name?: string;
     /**
-     * 
+     * 分组内可用表情。
      * @type {Array<EmojiItem>}
      * @memberof EmojiGroup
      */

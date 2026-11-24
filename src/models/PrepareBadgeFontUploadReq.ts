@@ -20,19 +20,19 @@ import { mapValues } from '../runtime';
  */
 export interface PrepareBadgeFontUploadReq {
     /**
-     * 
+     * 文件 SHA-256，小写十六进制。
      * @type {string}
      * @memberof PrepareBadgeFontUploadReq
      */
     hash: string;
     /**
-     * 
+     * 上传字体 MIME 类型。
      * @type {string}
      * @memberof PrepareBadgeFontUploadReq
      */
     mimeType: string;
     /**
-     * 
+     * 文件大小，最大 5 MiB。
      * @type {string}
      * @memberof PrepareBadgeFontUploadReq
      */

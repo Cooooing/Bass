@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SendGlobalChatMessageReq
  */
 export interface SendGlobalChatMessageReq {
     /**
-     * 
+     * 客户端幂等消息 ID。
      * @type {string}
      * @memberof SendGlobalChatMessageReq
      */
     clientMessageId?: string;
     /**
-     * 
+     * 原始 Markdown 内容。
      * @type {string}
      * @memberof SendGlobalChatMessageReq
      */

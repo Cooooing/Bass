@@ -28,7 +28,7 @@ import {
  */
 export interface UpsertBadgeDraftResp {
     /**
-     * 
+     * 已保存草稿。
      * @type {BadgeDraft}
      * @memberof UpsertBadgeDraftResp
      */

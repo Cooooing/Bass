@@ -22,19 +22,19 @@ import {
 } from './AccountProfile';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CompleteProfileImageUploadAccountResp
  */
 export interface CompleteProfileImageUploadAccountResp {
     /**
-     * 
+     * 协议字段。
      * @type {AccountProfile}
      * @memberof CompleteProfileImageUploadAccountResp
      */
     profile?: AccountProfile;
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof CompleteProfileImageUploadAccountResp
      */

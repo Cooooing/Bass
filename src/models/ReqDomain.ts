@@ -14,55 +14,55 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqDomain
  */
 export interface ReqDomain {
     /**
-     * 
+     * 稳定编码
      * @type {string}
      * @memberof ReqDomain
      */
     code: string;
     /**
-     * 
+     * 领域名称
      * @type {string}
      * @memberof ReqDomain
      */
     name: string;
     /**
-     * 
+     * 描述
      * @type {string}
      * @memberof ReqDomain
      */
     description?: string;
     /**
-     * 
+     * 启停状态
      * @type {ReqDomainStatusEnum}
      * @memberof ReqDomain
      */
     status?: ReqDomainStatusEnum;
     /**
-     * 
+     * 链接
      * @type {string}
      * @memberof ReqDomain
      */
     url?: string;
     /**
-     * 
+     * 图标
      * @type {string}
      * @memberof ReqDomain
      */
     icon?: string;
     /**
-     * 
+     * 是否在导航中展示
      * @type {boolean}
      * @memberof ReqDomain
      */
     isNav?: boolean;
     /**
-     * 
+     * 排序值，越小越靠前
      * @type {number}
      * @memberof ReqDomain
      */

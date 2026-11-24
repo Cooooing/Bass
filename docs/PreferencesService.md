@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](PreferencesService.md#getcurrent) | **POST** /v1/user/preference/get-current |  |
-| [**updateCurrent**](PreferencesService.md#updatecurrent) | **POST** /v1/user/preference/update-current |  |
+| [**getCurrentPreferences**](PreferencesService.md#getcurrentpreferences) | **POST** /v1/user/preference/get-current |  |
+| [**updateCurrentPreferences**](PreferencesService.md#updatecurrentpreferences) | **POST** /v1/user/preference/update-current |  |
 
 
 
-## getCurrent
+## getCurrentPreferences
 
-> GetCurrentPreferencesResp getCurrent(body)
+> GetCurrentPreferencesResp getCurrentPreferences(body)
 
 
 
@@ -24,7 +24,7 @@ import {
   Configuration,
   PreferencesService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetCurrentRequest } from '@bass/bbs-sdk-fetch';
+import type { GetCurrentPreferencesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -33,10 +33,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies GetCurrentRequest;
+  } satisfies GetCurrentPreferencesRequest;
 
   try {
-    const data = await api.getCurrent(body);
+    const data = await api.getCurrentPreferences(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## updateCurrent
+## updateCurrentPreferences
 
-> UpdateCurrentPreferencesResp updateCurrent(updateCurrentPreferencesReq)
+> UpdateCurrentPreferencesResp updateCurrentPreferences(updateCurrentPreferencesReq)
 
 
 
@@ -91,7 +91,7 @@ import {
   Configuration,
   PreferencesService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdateCurrentRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdateCurrentPreferencesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -100,10 +100,10 @@ async function example() {
   const body = {
     // UpdateCurrentPreferencesReq
     updateCurrentPreferencesReq: ...,
-  } satisfies UpdateCurrentRequest;
+  } satisfies UpdateCurrentPreferencesRequest;
 
   try {
-    const data = await api.updateCurrent(body);
+    const data = await api.updateCurrentPreferences(body);
     console.log(data);
   } catch (error) {
     console.error(error);

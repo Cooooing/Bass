@@ -22,49 +22,49 @@ import {
 } from './ArticlePollOption';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticlePoll
  */
 export interface ArticlePoll {
     /**
-     * 
+     * 截止时间
      * @type {Date}
      * @memberof ArticlePoll
      */
     endsAt?: Date;
     /**
-     * 
+     * 每人最多选择数
      * @type {number}
      * @memberof ArticlePoll
      */
     maxChoices?: number;
     /**
-     * 
+     * 投票选项
      * @type {Array<ArticlePollOption>}
      * @memberof ArticlePoll
      */
     options?: Array<ArticlePollOption>;
     /**
-     * 
+     * 当前账号已选选项 ID
      * @type {Array<string>}
      * @memberof ArticlePoll
      */
     selectedOptionIds?: Array<string>;
     /**
-     * 
+     * 当前账号是否可查看实时结果
      * @type {boolean}
      * @memberof ArticlePoll
      */
     resultVisible?: boolean;
     /**
-     * 
+     * 已投票账号数
      * @type {string}
      * @memberof ArticlePoll
      */
     participantCount?: string;
     /**
-     * 
+     * 所有选项累计票数
      * @type {string}
      * @memberof ArticlePoll
      */

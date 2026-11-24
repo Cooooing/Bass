@@ -1,6 +1,7 @@
 
 # AccountProfile
 
+协议消息。
 
 ## Properties
 
@@ -11,13 +12,11 @@ Name | Type
 `nickname` | string
 `url` | string
 `avatarUrl` | string
-`backgroundAssetId` | string
 `introduction` | string
 `mbti` | string
 `status` | string
 `followCount` | number
 `followerCount` | number
-`profileUrl` | string
 `createdAt` | Date
 `updatedAt` | Date
 
@@ -33,13 +32,11 @@ const example = {
   "nickname": null,
   "url": null,
   "avatarUrl": null,
-  "backgroundAssetId": null,
   "introduction": null,
   "mbti": null,
   "status": null,
   "followCount": null,
   "followerCount": null,
-  "profileUrl": null,
   "createdAt": null,
   "updatedAt": null,
 } satisfies AccountProfile

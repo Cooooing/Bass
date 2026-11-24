@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SetPrivateChatSessionPinnedReq
  */
 export interface SetPrivateChatSessionPinnedReq {
     /**
-     * 
+     * 对端账号 ID。
      * @type {string}
      * @memberof SetPrivateChatSessionPinnedReq
      */
     peerUserId?: string;
     /**
-     * 
+     * 是否置顶。
      * @type {boolean}
      * @memberof SetPrivateChatSessionPinnedReq
      */

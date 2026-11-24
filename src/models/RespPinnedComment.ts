@@ -22,13 +22,13 @@ import {
 } from './RespCommentThread';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespPinnedComment
  */
 export interface RespPinnedComment {
     /**
-     * 
+     * 独立置顶评论线程
      * @type {RespCommentThread}
      * @memberof RespPinnedComment
      */

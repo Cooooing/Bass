@@ -84,31 +84,31 @@ import {
     ThankCommentRespToJSON,
 } from '../models/ThankCommentResp';
 
-export interface CreateRequest {
+export interface CreateCommentRequest {
     createCommentReq: CreateCommentReq;
 }
 
-export interface LikeRequest {
+export interface LikeCommentRequest {
     likeCommentReq: LikeCommentReq;
 }
 
-export interface ListRequest {
-    listCommentsReq: ListCommentsReq;
-}
-
-export interface ListRepliesRequest {
+export interface ListCommentRepliesRequest {
     listCommentRepliesReq: ListCommentRepliesReq;
 }
 
-export interface ListThreadsRequest {
+export interface ListCommentThreadsRequest {
     listCommentThreadsReq: ListCommentThreadsReq;
 }
 
-export interface ListTimelineRequest {
+export interface ListCommentTimelineRequest {
     listCommentTimelineReq: ListCommentTimelineReq;
 }
 
-export interface ThankRequest {
+export interface ListCommentsRequest {
+    listCommentsReq: ListCommentsReq;
+}
+
+export interface ThankCommentRequest {
     thankCommentReq: ThankCommentReq;
 }
 
@@ -120,12 +120,12 @@ export interface ThankRequest {
  */
 export interface CommentServiceInterface {
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createComment without sending the request
      * @param {CreateCommentReq} createCommentReq 
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts>;
+    createCommentRequestOpts(requestParameters: CreateCommentRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 创建评论。
@@ -134,20 +134,20 @@ export interface CommentServiceInterface {
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCommentResp>>;
+    createCommentRaw(requestParameters: CreateCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCommentResp>>;
 
     /**
      * 创建评论。
      */
-    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCommentResp>;
+    createComment(requestParameters: CreateCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCommentResp>;
 
     /**
-     * Creates request options for like without sending the request
+     * Creates request options for likeComment without sending the request
      * @param {LikeCommentReq} likeCommentReq 
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    likeRequestOpts(requestParameters: LikeRequest): Promise<runtime.RequestOpts>;
+    likeCommentRequestOpts(requestParameters: LikeCommentRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 点赞或取消点赞评论。
@@ -156,42 +156,20 @@ export interface CommentServiceInterface {
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    likeRaw(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeCommentResp>>;
+    likeCommentRaw(requestParameters: LikeCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeCommentResp>>;
 
     /**
      * 点赞或取消点赞评论。
      */
-    like(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeCommentResp>;
+    likeComment(requestParameters: LikeCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeCommentResp>;
 
     /**
-     * Creates request options for list without sending the request
-     * @param {ListCommentsReq} listCommentsReq 
-     * @throws {RequiredError}
-     * @memberof CommentServiceInterface
-     */
-    listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 分页查询评论列表。
-     * @param {ListCommentsReq} listCommentsReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CommentServiceInterface
-     */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentsResp>>;
-
-    /**
-     * 分页查询评论列表。
-     */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentsResp>;
-
-    /**
-     * Creates request options for listReplies without sending the request
+     * Creates request options for listCommentReplies without sending the request
      * @param {ListCommentRepliesReq} listCommentRepliesReq 
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    listRepliesRequestOpts(requestParameters: ListRepliesRequest): Promise<runtime.RequestOpts>;
+    listCommentRepliesRequestOpts(requestParameters: ListCommentRepliesRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 分页查询评论回复。
@@ -200,20 +178,20 @@ export interface CommentServiceInterface {
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    listRepliesRaw(requestParameters: ListRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentRepliesResp>>;
+    listCommentRepliesRaw(requestParameters: ListCommentRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentRepliesResp>>;
 
     /**
      * 分页查询评论回复。
      */
-    listReplies(requestParameters: ListRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentRepliesResp>;
+    listCommentReplies(requestParameters: ListCommentRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentRepliesResp>;
 
     /**
-     * Creates request options for listThreads without sending the request
+     * Creates request options for listCommentThreads without sending the request
      * @param {ListCommentThreadsReq} listCommentThreadsReq 
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    listThreadsRequestOpts(requestParameters: ListThreadsRequest): Promise<runtime.RequestOpts>;
+    listCommentThreadsRequestOpts(requestParameters: ListCommentThreadsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 分页查询评论楼层。
@@ -222,20 +200,20 @@ export interface CommentServiceInterface {
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    listThreadsRaw(requestParameters: ListThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentThreadsResp>>;
+    listCommentThreadsRaw(requestParameters: ListCommentThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentThreadsResp>>;
 
     /**
      * 分页查询评论楼层。
      */
-    listThreads(requestParameters: ListThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentThreadsResp>;
+    listCommentThreads(requestParameters: ListCommentThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentThreadsResp>;
 
     /**
-     * Creates request options for listTimeline without sending the request
+     * Creates request options for listCommentTimeline without sending the request
      * @param {ListCommentTimelineReq} listCommentTimelineReq 
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    listTimelineRequestOpts(requestParameters: ListTimelineRequest): Promise<runtime.RequestOpts>;
+    listCommentTimelineRequestOpts(requestParameters: ListCommentTimelineRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 分页查询评论时间线。
@@ -244,20 +222,42 @@ export interface CommentServiceInterface {
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    listTimelineRaw(requestParameters: ListTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentTimelineResp>>;
+    listCommentTimelineRaw(requestParameters: ListCommentTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentTimelineResp>>;
 
     /**
      * 分页查询评论时间线。
      */
-    listTimeline(requestParameters: ListTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentTimelineResp>;
+    listCommentTimeline(requestParameters: ListCommentTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentTimelineResp>;
 
     /**
-     * Creates request options for thank without sending the request
+     * Creates request options for listComments without sending the request
+     * @param {ListCommentsReq} listCommentsReq 
+     * @throws {RequiredError}
+     * @memberof CommentServiceInterface
+     */
+    listCommentsRequestOpts(requestParameters: ListCommentsRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 分页查询评论列表。
+     * @param {ListCommentsReq} listCommentsReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommentServiceInterface
+     */
+    listCommentsRaw(requestParameters: ListCommentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentsResp>>;
+
+    /**
+     * 分页查询评论列表。
+     */
+    listComments(requestParameters: ListCommentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentsResp>;
+
+    /**
+     * Creates request options for thankComment without sending the request
      * @param {ThankCommentReq} thankCommentReq 
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    thankRequestOpts(requestParameters: ThankRequest): Promise<runtime.RequestOpts>;
+    thankCommentRequestOpts(requestParameters: ThankCommentRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 感谢或取消感谢评论。
@@ -266,12 +266,12 @@ export interface CommentServiceInterface {
      * @throws {RequiredError}
      * @memberof CommentServiceInterface
      */
-    thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankCommentResp>>;
+    thankCommentRaw(requestParameters: ThankCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankCommentResp>>;
 
     /**
      * 感谢或取消感谢评论。
      */
-    thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankCommentResp>;
+    thankComment(requestParameters: ThankCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankCommentResp>;
 
 }
 
@@ -281,13 +281,13 @@ export interface CommentServiceInterface {
 export class CommentService extends runtime.BaseAPI implements CommentServiceInterface {
 
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createComment without sending the request
      */
-    async createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts> {
+    async createCommentRequestOpts(requestParameters: CreateCommentRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['createCommentReq'] == null) {
             throw new runtime.RequiredError(
                 'createCommentReq',
-                'Required parameter "createCommentReq" was null or undefined when calling create().'
+                'Required parameter "createCommentReq" was null or undefined when calling createComment().'
             );
         }
 
@@ -312,8 +312,8 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 创建评论。
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCommentResp>> {
-        const requestOptions = await this.createRequestOpts(requestParameters);
+    async createCommentRaw(requestParameters: CreateCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateCommentResp>> {
+        const requestOptions = await this.createCommentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateCommentRespFromJSON(jsonValue));
@@ -322,19 +322,19 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 创建评论。
      */
-    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCommentResp> {
-        const response = await this.createRaw(requestParameters, initOverrides);
+    async createComment(requestParameters: CreateCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateCommentResp> {
+        const response = await this.createCommentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for like without sending the request
+     * Creates request options for likeComment without sending the request
      */
-    async likeRequestOpts(requestParameters: LikeRequest): Promise<runtime.RequestOpts> {
+    async likeCommentRequestOpts(requestParameters: LikeCommentRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['likeCommentReq'] == null) {
             throw new runtime.RequiredError(
                 'likeCommentReq',
-                'Required parameter "likeCommentReq" was null or undefined when calling like().'
+                'Required parameter "likeCommentReq" was null or undefined when calling likeComment().'
             );
         }
 
@@ -359,8 +359,8 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 点赞或取消点赞评论。
      */
-    async likeRaw(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeCommentResp>> {
-        const requestOptions = await this.likeRequestOpts(requestParameters);
+    async likeCommentRaw(requestParameters: LikeCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeCommentResp>> {
+        const requestOptions = await this.likeCommentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => LikeCommentRespFromJSON(jsonValue));
@@ -369,66 +369,19 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 点赞或取消点赞评论。
      */
-    async like(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeCommentResp> {
-        const response = await this.likeRaw(requestParameters, initOverrides);
+    async likeComment(requestParameters: LikeCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeCommentResp> {
+        const response = await this.likeCommentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listCommentReplies without sending the request
      */
-    async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listCommentsReq'] == null) {
-            throw new runtime.RequiredError(
-                'listCommentsReq',
-                'Required parameter "listCommentsReq" was null or undefined when calling list().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/content/comment/list`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ListCommentsReqToJSON(requestParameters['listCommentsReq']),
-        };
-    }
-
-    /**
-     * 分页查询评论列表。
-     */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentsResp>> {
-        const requestOptions = await this.listRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListCommentsRespFromJSON(jsonValue));
-    }
-
-    /**
-     * 分页查询评论列表。
-     */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentsResp> {
-        const response = await this.listRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for listReplies without sending the request
-     */
-    async listRepliesRequestOpts(requestParameters: ListRepliesRequest): Promise<runtime.RequestOpts> {
+    async listCommentRepliesRequestOpts(requestParameters: ListCommentRepliesRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['listCommentRepliesReq'] == null) {
             throw new runtime.RequiredError(
                 'listCommentRepliesReq',
-                'Required parameter "listCommentRepliesReq" was null or undefined when calling listReplies().'
+                'Required parameter "listCommentRepliesReq" was null or undefined when calling listCommentReplies().'
             );
         }
 
@@ -453,8 +406,8 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 分页查询评论回复。
      */
-    async listRepliesRaw(requestParameters: ListRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentRepliesResp>> {
-        const requestOptions = await this.listRepliesRequestOpts(requestParameters);
+    async listCommentRepliesRaw(requestParameters: ListCommentRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentRepliesResp>> {
+        const requestOptions = await this.listCommentRepliesRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListCommentRepliesRespFromJSON(jsonValue));
@@ -463,19 +416,19 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 分页查询评论回复。
      */
-    async listReplies(requestParameters: ListRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentRepliesResp> {
-        const response = await this.listRepliesRaw(requestParameters, initOverrides);
+    async listCommentReplies(requestParameters: ListCommentRepliesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentRepliesResp> {
+        const response = await this.listCommentRepliesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for listThreads without sending the request
+     * Creates request options for listCommentThreads without sending the request
      */
-    async listThreadsRequestOpts(requestParameters: ListThreadsRequest): Promise<runtime.RequestOpts> {
+    async listCommentThreadsRequestOpts(requestParameters: ListCommentThreadsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['listCommentThreadsReq'] == null) {
             throw new runtime.RequiredError(
                 'listCommentThreadsReq',
-                'Required parameter "listCommentThreadsReq" was null or undefined when calling listThreads().'
+                'Required parameter "listCommentThreadsReq" was null or undefined when calling listCommentThreads().'
             );
         }
 
@@ -500,8 +453,8 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 分页查询评论楼层。
      */
-    async listThreadsRaw(requestParameters: ListThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentThreadsResp>> {
-        const requestOptions = await this.listThreadsRequestOpts(requestParameters);
+    async listCommentThreadsRaw(requestParameters: ListCommentThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentThreadsResp>> {
+        const requestOptions = await this.listCommentThreadsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListCommentThreadsRespFromJSON(jsonValue));
@@ -510,19 +463,19 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 分页查询评论楼层。
      */
-    async listThreads(requestParameters: ListThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentThreadsResp> {
-        const response = await this.listThreadsRaw(requestParameters, initOverrides);
+    async listCommentThreads(requestParameters: ListCommentThreadsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentThreadsResp> {
+        const response = await this.listCommentThreadsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for listTimeline without sending the request
+     * Creates request options for listCommentTimeline without sending the request
      */
-    async listTimelineRequestOpts(requestParameters: ListTimelineRequest): Promise<runtime.RequestOpts> {
+    async listCommentTimelineRequestOpts(requestParameters: ListCommentTimelineRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['listCommentTimelineReq'] == null) {
             throw new runtime.RequiredError(
                 'listCommentTimelineReq',
-                'Required parameter "listCommentTimelineReq" was null or undefined when calling listTimeline().'
+                'Required parameter "listCommentTimelineReq" was null or undefined when calling listCommentTimeline().'
             );
         }
 
@@ -547,8 +500,8 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 分页查询评论时间线。
      */
-    async listTimelineRaw(requestParameters: ListTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentTimelineResp>> {
-        const requestOptions = await this.listTimelineRequestOpts(requestParameters);
+    async listCommentTimelineRaw(requestParameters: ListCommentTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentTimelineResp>> {
+        const requestOptions = await this.listCommentTimelineRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListCommentTimelineRespFromJSON(jsonValue));
@@ -557,19 +510,66 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 分页查询评论时间线。
      */
-    async listTimeline(requestParameters: ListTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentTimelineResp> {
-        const response = await this.listTimelineRaw(requestParameters, initOverrides);
+    async listCommentTimeline(requestParameters: ListCommentTimelineRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentTimelineResp> {
+        const response = await this.listCommentTimelineRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for thank without sending the request
+     * Creates request options for listComments without sending the request
      */
-    async thankRequestOpts(requestParameters: ThankRequest): Promise<runtime.RequestOpts> {
+    async listCommentsRequestOpts(requestParameters: ListCommentsRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listCommentsReq'] == null) {
+            throw new runtime.RequiredError(
+                'listCommentsReq',
+                'Required parameter "listCommentsReq" was null or undefined when calling listComments().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/comment/list`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListCommentsReqToJSON(requestParameters['listCommentsReq']),
+        };
+    }
+
+    /**
+     * 分页查询评论列表。
+     */
+    async listCommentsRaw(requestParameters: ListCommentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListCommentsResp>> {
+        const requestOptions = await this.listCommentsRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListCommentsRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 分页查询评论列表。
+     */
+    async listComments(requestParameters: ListCommentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListCommentsResp> {
+        const response = await this.listCommentsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for thankComment without sending the request
+     */
+    async thankCommentRequestOpts(requestParameters: ThankCommentRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['thankCommentReq'] == null) {
             throw new runtime.RequiredError(
                 'thankCommentReq',
-                'Required parameter "thankCommentReq" was null or undefined when calling thank().'
+                'Required parameter "thankCommentReq" was null or undefined when calling thankComment().'
             );
         }
 
@@ -594,8 +594,8 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 感谢或取消感谢评论。
      */
-    async thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankCommentResp>> {
-        const requestOptions = await this.thankRequestOpts(requestParameters);
+    async thankCommentRaw(requestParameters: ThankCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankCommentResp>> {
+        const requestOptions = await this.thankCommentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ThankCommentRespFromJSON(jsonValue));
@@ -604,8 +604,8 @@ export class CommentService extends runtime.BaseAPI implements CommentServiceInt
     /**
      * 感谢或取消感谢评论。
      */
-    async thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankCommentResp> {
-        const response = await this.thankRaw(requestParameters, initOverrides);
+    async thankComment(requestParameters: ThankCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankCommentResp> {
+        const response = await this.thankCommentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

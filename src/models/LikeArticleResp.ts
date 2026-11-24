@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface LikeArticleResp
  */
 export interface LikeArticleResp {
     /**
-     * 
+     * 是否已点赞
      * @type {boolean}
      * @memberof LikeArticleResp
      */

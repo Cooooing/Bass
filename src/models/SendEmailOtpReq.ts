@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SendEmailOtpReq
  */
 export interface SendEmailOtpReq {
     /**
-     * 
+     * 邮箱地址
      * @type {string}
      * @memberof SendEmailOtpReq
      */

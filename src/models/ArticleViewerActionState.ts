@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleViewerActionState
  */
 export interface ArticleViewerActionState {
     /**
-     * 
+     * 是否已点赞
      * @type {boolean}
      * @memberof ArticleViewerActionState
      */
     liked?: boolean;
     /**
-     * 
+     * 是否已感谢
      * @type {boolean}
      * @memberof ArticleViewerActionState
      */
     thanked?: boolean;
     /**
-     * 
+     * 是否已收藏
      * @type {boolean}
      * @memberof ArticleViewerActionState
      */
     collected?: boolean;
     /**
-     * 
+     * 是否已打赏
      * @type {boolean}
      * @memberof ArticleViewerActionState
      */
     rewarded?: boolean;
     /**
-     * 
+     * 是否已关注
      * @type {boolean}
      * @memberof ArticleViewerActionState
      */

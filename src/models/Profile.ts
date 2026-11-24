@@ -43,55 +43,55 @@ import {
 } from './AccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface Profile
  */
 export interface Profile {
     /**
-     * 
+     * 协议字段。
      * @type {AccountProfile}
      * @memberof Profile
      */
     account?: AccountProfile;
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof Profile
      */
     backgroundUrl?: string;
     /**
-     * 
+     * 协议字段。
      * @type {ProfileLocation}
      * @memberof Profile
      */
     location?: ProfileLocation;
     /**
-     * 
+     * 协议字段。
      * @type {Date}
      * @memberof Profile
      */
     lastSuccessLoginAt?: Date;
     /**
-     * 
+     * 协议字段。
      * @type {ProfileVisibility}
      * @memberof Profile
      */
     visibility?: ProfileVisibility;
     /**
-     * 
+     * 协议字段。
      * @type {ProfileRelation}
      * @memberof Profile
      */
     viewerRelation?: ProfileRelation;
     /**
-     * 
+     * 仅本人或允许公开在线状态的账号返回。
      * @type {boolean}
      * @memberof Profile
      */
     online?: boolean;
     /**
-     * 
+     * 仅本人或允许公开积分的账号返回。
      * @type {string}
      * @memberof Profile
      */

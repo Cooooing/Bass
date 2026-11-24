@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CompleteBadgeImageUploadResp
  */
 export interface CompleteBadgeImageUploadResp {
     /**
-     * 
+     * 已确认资源的 ID。
      * @type {string}
      * @memberof CompleteBadgeImageUploadResp
      */
     assetId?: string;
     /**
-     * 
+     * 可公开访问的图片地址。
      * @type {string}
      * @memberof CompleteBadgeImageUploadResp
      */

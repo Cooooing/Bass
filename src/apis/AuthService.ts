@@ -106,9 +106,9 @@ export interface AuthServiceInterface {
 
     /**
      * Creates request options for checkRegistrationAvailability without sending the request
-     * @param {string} [name] 
-     * @param {string} [email] 
-     * @param {string} [phone] 
+     * @param {string} [name] 待检查的账号名
+     * @param {string} [email] 待检查的邮箱
+     * @param {string} [phone] 待检查的手机号
      * @throws {RequiredError}
      * @memberof AuthServiceInterface
      */
@@ -116,9 +116,9 @@ export interface AuthServiceInterface {
 
     /**
      * 检查注册字段是否可用。
-     * @param {string} [name] 
-     * @param {string} [email] 
-     * @param {string} [phone] 
+     * @param {string} [name] 待检查的账号名
+     * @param {string} [email] 待检查的邮箱
+     * @param {string} [phone] 待检查的手机号
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthServiceInterface

@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqEmailCredential
  */
 export interface ReqEmailCredential {
     /**
-     * 
+     * 邮箱地址
      * @type {string}
      * @memberof ReqEmailCredential
      */
     email?: string;
     /**
-     * 
+     * 邮箱 OTP
      * @type {string}
      * @memberof ReqEmailCredential
      */

@@ -22,79 +22,79 @@ import {
 } from './RespAccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespArticleBrief
  */
 export interface RespArticleBrief {
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof RespArticleBrief
      */
     id?: string;
     /**
-     * 
+     * 标题
      * @type {string}
      * @memberof RespArticleBrief
      */
     title?: string;
     /**
-     * 
+     * 文章类型
      * @type {RespArticleBriefTypeEnum}
      * @memberof RespArticleBrief
      */
     type?: RespArticleBriefTypeEnum;
     /**
-     * 
+     * 作者展示资料
      * @type {RespAccountProfile}
      * @memberof RespArticleBrief
      */
     authorUser?: RespAccountProfile;
     /**
-     * 
+     * 封面图片 URL
      * @type {string}
      * @memberof RespArticleBrief
      */
     coverImageUrl?: string;
     /**
-     * 
+     * 发布状态
      * @type {RespArticleBriefPublishStatusEnum}
      * @memberof RespArticleBrief
      */
     publishStatus?: RespArticleBriefPublishStatusEnum;
     /**
-     * 
+     * 可见范围
      * @type {RespArticleBriefVisibilityEnum}
      * @memberof RespArticleBrief
      */
     visibility?: RespArticleBriefVisibilityEnum;
     /**
-     * 
+     * 管理限制
      * @type {RespArticleBriefRestrictionEnum}
      * @memberof RespArticleBrief
      */
     restriction?: RespArticleBriefRestrictionEnum;
     /**
-     * 
+     * 创建账号 ID
      * @type {string}
      * @memberof RespArticleBrief
      */
     createdBy?: string;
     /**
-     * 
+     * 更新账号 ID
      * @type {string}
      * @memberof RespArticleBrief
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof RespArticleBrief
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof RespArticleBrief
      */

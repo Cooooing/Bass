@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SearchArticlesReq
  */
 export interface SearchArticlesReq {
     /**
-     * 
+     * 必填，搜索词
      * @type {string}
      * @memberof SearchArticlesReq
      */
     query: string;
     /**
-     * 
+     * 可选，不透明续页游标
      * @type {string}
      * @memberof SearchArticlesReq
      */
     cursor?: string;
     /**
-     * 
+     * 可选，返回条数
      * @type {number}
      * @memberof SearchArticlesReq
      */

@@ -29,19 +29,19 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface SearchMentionAccountsResp
  */
 export interface SearchMentionAccountsResp {
     /**
-     * 
+     * 最多五个可提及账号候选。
      * @type {Array<AccountProfile>}
      * @memberof SearchMentionAccountsResp
      */
     rows?: Array<AccountProfile>;
     /**
-     * 
+     * 分页结果。
      * @type {PageResp}
      * @memberof SearchMentionAccountsResp
      */

@@ -1,6 +1,7 @@
 
 # ListCommentsResp
 
+响应结果。
 
 ## Properties
 

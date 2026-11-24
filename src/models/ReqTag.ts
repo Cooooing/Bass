@@ -14,49 +14,49 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqTag
  */
 export interface ReqTag {
     /**
-     * 
+     * 稳定编码
      * @type {string}
      * @memberof ReqTag
      */
     code: string;
     /**
-     * 
+     * 标签名称
      * @type {string}
      * @memberof ReqTag
      */
     name: string;
     /**
-     * 
+     * 描述
      * @type {string}
      * @memberof ReqTag
      */
     description?: string;
     /**
-     * 
+     * 领域 ID
      * @type {string}
      * @memberof ReqTag
      */
     domainId?: string;
     /**
-     * 
+     * 启停状态
      * @type {ReqTagStatusEnum}
      * @memberof ReqTag
      */
     status?: ReqTagStatusEnum;
     /**
-     * 
+     * 图标
      * @type {string}
      * @memberof ReqTag
      */
     icon?: string;
     /**
-     * 
+     * 排序值，越小越靠前
      * @type {number}
      * @memberof ReqTag
      */

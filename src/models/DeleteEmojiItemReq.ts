@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface DeleteEmojiItemReq
  */
 export interface DeleteEmojiItemReq {
     /**
-     * 
+     * 待删除表情项 ID。
      * @type {string}
      * @memberof DeleteEmojiItemReq
      */

@@ -22,19 +22,19 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListPointRecordsReq
  */
 export interface ListPointRecordsReq {
     /**
-     * 
+     * 账号名，必填
      * @type {string}
      * @memberof ListPointRecordsReq
      */
     name: string;
     /**
-     * 
+     * 分页参数
      * @type {PageReq}
      * @memberof ListPointRecordsReq
      */

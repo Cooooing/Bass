@@ -34,11 +34,11 @@ import {
     ListPostscriptsRespToJSON,
 } from '../models/ListPostscriptsResp';
 
-export interface AddRequest {
+export interface AddPostscriptRequest {
     addPostscriptReq: AddPostscriptReq;
 }
 
-export interface ListRequest {
+export interface ListPostscriptsRequest {
     listPostscriptsReq: ListPostscriptsReq;
 }
 
@@ -50,12 +50,12 @@ export interface ListRequest {
  */
 export interface PostscriptServiceInterface {
     /**
-     * Creates request options for add without sending the request
+     * Creates request options for addPostscript without sending the request
      * @param {AddPostscriptReq} addPostscriptReq 
      * @throws {RequiredError}
      * @memberof PostscriptServiceInterface
      */
-    addRequestOpts(requestParameters: AddRequest): Promise<runtime.RequestOpts>;
+    addPostscriptRequestOpts(requestParameters: AddPostscriptRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 添加文章附言。
@@ -64,20 +64,20 @@ export interface PostscriptServiceInterface {
      * @throws {RequiredError}
      * @memberof PostscriptServiceInterface
      */
-    addRaw(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddPostscriptResp>>;
+    addPostscriptRaw(requestParameters: AddPostscriptRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddPostscriptResp>>;
 
     /**
      * 添加文章附言。
      */
-    add(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddPostscriptResp>;
+    addPostscript(requestParameters: AddPostscriptRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddPostscriptResp>;
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listPostscripts without sending the request
      * @param {ListPostscriptsReq} listPostscriptsReq 
      * @throws {RequiredError}
      * @memberof PostscriptServiceInterface
      */
-    listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
+    listPostscriptsRequestOpts(requestParameters: ListPostscriptsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 查询文章附言列表。
@@ -86,12 +86,12 @@ export interface PostscriptServiceInterface {
      * @throws {RequiredError}
      * @memberof PostscriptServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPostscriptsResp>>;
+    listPostscriptsRaw(requestParameters: ListPostscriptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPostscriptsResp>>;
 
     /**
      * 查询文章附言列表。
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListPostscriptsResp>;
+    listPostscripts(requestParameters: ListPostscriptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListPostscriptsResp>;
 
 }
 
@@ -101,13 +101,13 @@ export interface PostscriptServiceInterface {
 export class PostscriptService extends runtime.BaseAPI implements PostscriptServiceInterface {
 
     /**
-     * Creates request options for add without sending the request
+     * Creates request options for addPostscript without sending the request
      */
-    async addRequestOpts(requestParameters: AddRequest): Promise<runtime.RequestOpts> {
+    async addPostscriptRequestOpts(requestParameters: AddPostscriptRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['addPostscriptReq'] == null) {
             throw new runtime.RequiredError(
                 'addPostscriptReq',
-                'Required parameter "addPostscriptReq" was null or undefined when calling add().'
+                'Required parameter "addPostscriptReq" was null or undefined when calling addPostscript().'
             );
         }
 
@@ -132,8 +132,8 @@ export class PostscriptService extends runtime.BaseAPI implements PostscriptServ
     /**
      * 添加文章附言。
      */
-    async addRaw(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddPostscriptResp>> {
-        const requestOptions = await this.addRequestOpts(requestParameters);
+    async addPostscriptRaw(requestParameters: AddPostscriptRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddPostscriptResp>> {
+        const requestOptions = await this.addPostscriptRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AddPostscriptRespFromJSON(jsonValue));
@@ -142,19 +142,19 @@ export class PostscriptService extends runtime.BaseAPI implements PostscriptServ
     /**
      * 添加文章附言。
      */
-    async add(requestParameters: AddRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddPostscriptResp> {
-        const response = await this.addRaw(requestParameters, initOverrides);
+    async addPostscript(requestParameters: AddPostscriptRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddPostscriptResp> {
+        const response = await this.addPostscriptRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listPostscripts without sending the request
      */
-    async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
+    async listPostscriptsRequestOpts(requestParameters: ListPostscriptsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['listPostscriptsReq'] == null) {
             throw new runtime.RequiredError(
                 'listPostscriptsReq',
-                'Required parameter "listPostscriptsReq" was null or undefined when calling list().'
+                'Required parameter "listPostscriptsReq" was null or undefined when calling listPostscripts().'
             );
         }
 
@@ -179,8 +179,8 @@ export class PostscriptService extends runtime.BaseAPI implements PostscriptServ
     /**
      * 查询文章附言列表。
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPostscriptsResp>> {
-        const requestOptions = await this.listRequestOpts(requestParameters);
+    async listPostscriptsRaw(requestParameters: ListPostscriptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPostscriptsResp>> {
+        const requestOptions = await this.listPostscriptsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListPostscriptsRespFromJSON(jsonValue));
@@ -189,8 +189,8 @@ export class PostscriptService extends runtime.BaseAPI implements PostscriptServ
     /**
      * 查询文章附言列表。
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListPostscriptsResp> {
-        const response = await this.listRaw(requestParameters, initOverrides);
+    async listPostscripts(requestParameters: ListPostscriptsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListPostscriptsResp> {
+        const response = await this.listPostscriptsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

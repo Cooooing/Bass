@@ -14,61 +14,61 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticlePostscript
  */
 export interface ArticlePostscript {
     /**
-     * 
+     * 附言 ID
      * @type {string}
      * @memberof ArticlePostscript
      */
     id?: string;
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof ArticlePostscript
      */
     articleId?: string;
     /**
-     * 
+     * 原始内容
      * @type {string}
      * @memberof ArticlePostscript
      */
     content?: string;
     /**
-     * 
+     * 渲染内容
      * @type {string}
      * @memberof ArticlePostscript
      */
     contentRender?: string;
     /**
-     * 
+     * 治理限制
      * @type {ArticlePostscriptRestrictionEnum}
      * @memberof ArticlePostscript
      */
     restriction?: ArticlePostscriptRestrictionEnum;
     /**
-     * 
+     * 创建账号 ID
      * @type {string}
      * @memberof ArticlePostscript
      */
     createdBy?: string;
     /**
-     * 
+     * 更新账号 ID
      * @type {string}
      * @memberof ArticlePostscript
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof ArticlePostscript
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof ArticlePostscript
      */

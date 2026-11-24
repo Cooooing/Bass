@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdatePasswordAccountReq
  */
 export interface UpdatePasswordAccountReq {
     /**
-     * 
+     * 旧密码，必填
      * @type {string}
      * @memberof UpdatePasswordAccountReq
      */
     oldPassword: string;
     /**
-     * 
+     * 新密码，必填
      * @type {string}
      * @memberof UpdatePasswordAccountReq
      */

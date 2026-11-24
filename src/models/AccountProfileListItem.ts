@@ -29,19 +29,19 @@ import {
 } from './AccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface AccountProfileListItem
  */
 export interface AccountProfileListItem {
     /**
-     * 
+     * 协议字段。
      * @type {AccountProfile}
      * @memberof AccountProfileListItem
      */
     account?: AccountProfile;
     /**
-     * 
+     * 协议字段。
      * @type {ProfileRelation}
      * @memberof AccountProfileListItem
      */

@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetLivenessResp
  */
 export interface GetLivenessResp {
     /**
-     * 
+     * 当前活跃度总分。
      * @type {number}
      * @memberof GetLivenessResp
      */
     score?: number;
     /**
-     * 
+     * 每日活跃度上限。
      * @type {number}
      * @memberof GetLivenessResp
      */
     maxScore?: number;
     /**
-     * 
+     * 自动签到所需的最低活跃度。
      * @type {number}
      * @memberof GetLivenessResp
      */

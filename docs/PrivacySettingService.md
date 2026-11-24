@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](PrivacySettingService.md#getcurrent) | **POST** /v1/user/privacy-setting/get-current |  |
-| [**updateCurrent**](PrivacySettingService.md#updatecurrent) | **POST** /v1/user/privacy-setting/update-current |  |
+| [**getCurrentPrivacySetting**](PrivacySettingService.md#getcurrentprivacysetting) | **POST** /v1/user/privacy-setting/get-current |  |
+| [**updateCurrentPrivacySetting**](PrivacySettingService.md#updatecurrentprivacysetting) | **POST** /v1/user/privacy-setting/update-current |  |
 
 
 
-## getCurrent
+## getCurrentPrivacySetting
 
-> GetCurrentPrivacySettingResp getCurrent(body)
+> GetCurrentPrivacySettingResp getCurrentPrivacySetting(body)
 
 
 
@@ -24,7 +24,7 @@ import {
   Configuration,
   PrivacySettingService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetCurrentRequest } from '@bass/bbs-sdk-fetch';
+import type { GetCurrentPrivacySettingRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -33,10 +33,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies GetCurrentRequest;
+  } satisfies GetCurrentPrivacySettingRequest;
 
   try {
-    const data = await api.getCurrent(body);
+    const data = await api.getCurrentPrivacySetting(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## updateCurrent
+## updateCurrentPrivacySetting
 
-> UpdateCurrentPrivacySettingResp updateCurrent(updateCurrentPrivacySettingReq)
+> UpdateCurrentPrivacySettingResp updateCurrentPrivacySetting(updateCurrentPrivacySettingReq)
 
 
 
@@ -91,7 +91,7 @@ import {
   Configuration,
   PrivacySettingService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdateCurrentRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdateCurrentPrivacySettingRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -100,10 +100,10 @@ async function example() {
   const body = {
     // UpdateCurrentPrivacySettingReq
     updateCurrentPrivacySettingReq: ...,
-  } satisfies UpdateCurrentRequest;
+  } satisfies UpdateCurrentPrivacySettingRequest;
 
   try {
-    const data = await api.updateCurrent(body);
+    const data = await api.updateCurrentPrivacySetting(body);
     console.log(data);
   } catch (error) {
     console.error(error);

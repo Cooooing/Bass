@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface RevokePrivateChatMessageReq
  */
 export interface RevokePrivateChatMessageReq {
     /**
-     * 
+     * 消息 ID。
      * @type {string}
      * @memberof RevokePrivateChatMessageReq
      */

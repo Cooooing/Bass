@@ -1,6 +1,7 @@
 
 # PrepareBadgeImageUploadResp
 
+响应结果。
 
 ## Properties
 

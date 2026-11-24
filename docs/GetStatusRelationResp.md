@@ -1,6 +1,7 @@
 
 # GetStatusRelationResp
 
+响应结果。
 
 ## Properties
 

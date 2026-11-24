@@ -14,85 +14,85 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespDomain
  */
 export interface RespDomain {
     /**
-     * 
+     * 领域 ID
      * @type {string}
      * @memberof RespDomain
      */
     id?: string;
     /**
-     * 
+     * 稳定编码
      * @type {string}
      * @memberof RespDomain
      */
     code?: string;
     /**
-     * 
+     * 领域名称
      * @type {string}
      * @memberof RespDomain
      */
     name?: string;
     /**
-     * 
+     * 描述
      * @type {string}
      * @memberof RespDomain
      */
     description?: string;
     /**
-     * 
+     * 启停状态
      * @type {RespDomainStatusEnum}
      * @memberof RespDomain
      */
     status?: RespDomainStatusEnum;
     /**
-     * 
+     * 链接
      * @type {string}
      * @memberof RespDomain
      */
     url?: string;
     /**
-     * 
+     * 图标
      * @type {string}
      * @memberof RespDomain
      */
     icon?: string;
     /**
-     * 
+     * 是否在导航中展示
      * @type {boolean}
      * @memberof RespDomain
      */
     isNav?: boolean;
     /**
-     * 
+     * 排序值，越小越靠前
      * @type {number}
      * @memberof RespDomain
      */
     sort?: number;
     /**
-     * 
+     * 创建用户 ID
      * @type {string}
      * @memberof RespDomain
      */
     createdBy?: string;
     /**
-     * 
+     * 更新用户 ID
      * @type {string}
      * @memberof RespDomain
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof RespDomain
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof RespDomain
      */

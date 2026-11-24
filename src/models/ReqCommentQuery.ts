@@ -14,61 +14,61 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqCommentQuery
  */
 export interface ReqCommentQuery {
     /**
-     * 
+     * 评论 ID
      * @type {string}
      * @memberof ReqCommentQuery
      */
     commentId?: string;
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof ReqCommentQuery
      */
     articleId?: string;
     /**
-     * 
+     * 父评论 ID
      * @type {string}
      * @memberof ReqCommentQuery
      */
     parentId?: string;
     /**
-     * 
+     * 回复的评论 ID
      * @type {string}
      * @memberof ReqCommentQuery
      */
     replyId?: string;
     /**
-     * 
+     * 排序方式
      * @type {ReqCommentQueryOrderEnum}
      * @memberof ReqCommentQuery
      */
     order?: ReqCommentQueryOrderEnum;
     /**
-     * 
+     * 评论账号 ID
      * @type {string}
      * @memberof ReqCommentQuery
      */
     userId?: string;
     /**
-     * 
+     * 评论层级
      * @type {number}
      * @memberof ReqCommentQuery
      */
     level?: number;
     /**
-     * 
+     * 管理限制
      * @type {ReqCommentQueryRestrictionEnum}
      * @memberof ReqCommentQuery
      */
     restriction?: ReqCommentQueryRestrictionEnum;
     /**
-     * 
+     * 管理限制列表
      * @type {Array<ReqCommentQueryRestrictionsEnum>}
      * @memberof ReqCommentQuery
      */

@@ -29,61 +29,61 @@ import {
 } from './ArticlePollDraft';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqArticle
  */
 export interface ReqArticle {
     /**
-     * 
+     * 必填，标题
      * @type {string}
      * @memberof ReqArticle
      */
     title: string;
     /**
-     * 
+     * 必填，正文
      * @type {string}
      * @memberof ReqArticle
      */
     content: string;
     /**
-     * 
+     * 可选，打赏区内容
      * @type {string}
      * @memberof ReqArticle
      */
     rewardContent?: string;
     /**
-     * 
+     * 可选，打赏积分
      * @type {number}
      * @memberof ReqArticle
      */
     rewardPoints?: number;
     /**
-     * 
+     * 必填，文章类型
      * @type {ReqArticleTypeEnum}
      * @memberof ReqArticle
      */
     type: ReqArticleTypeEnum;
     /**
-     * 
+     * 可选，创作声明
      * @type {string}
      * @memberof ReqArticle
      */
     statement?: string;
     /**
-     * 
+     * 可选，是否允许评论
      * @type {boolean}
      * @memberof ReqArticle
      */
     commentable?: boolean;
     /**
-     * 
+     * 可选，投票文章的草稿配置
      * @type {ArticlePollDraft}
      * @memberof ReqArticle
      */
     poll?: ArticlePollDraft;
     /**
-     * 
+     * 可选，抽奖文章的草稿配置
      * @type {ArticleLotteryDraft}
      * @memberof ReqArticle
      */

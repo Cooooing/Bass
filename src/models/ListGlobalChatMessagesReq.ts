@@ -22,19 +22,19 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListGlobalChatMessagesReq
  */
 export interface ListGlobalChatMessagesReq {
     /**
-     * 
+     * 向前分页游标。
      * @type {string}
      * @memberof ListGlobalChatMessagesReq
      */
     beforeId?: string;
     /**
-     * 
+     * 分页参数。
      * @type {PageReq}
      * @memberof ListGlobalChatMessagesReq
      */

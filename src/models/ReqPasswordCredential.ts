@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqPasswordCredential
  */
 export interface ReqPasswordCredential {
     /**
-     * 
+     * 账号名、邮箱或手机号
      * @type {string}
      * @memberof ReqPasswordCredential
      */
     account?: string;
     /**
-     * 
+     * 密码
      * @type {string}
      * @memberof ReqPasswordCredential
      */
     password?: string;
     /**
-     * 
+     * 账号启用 TOTP 时作为 TOTP code
      * @type {string}
      * @memberof ReqPasswordCredential
      */

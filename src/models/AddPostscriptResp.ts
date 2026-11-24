@@ -22,13 +22,13 @@ import {
 } from './ArticlePostscript';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface AddPostscriptResp
  */
 export interface AddPostscriptResp {
     /**
-     * 
+     * 创建后的文章附言。
      * @type {ArticlePostscript}
      * @memberof AddPostscriptResp
      */

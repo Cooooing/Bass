@@ -29,19 +29,19 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListCommentTimelineResp
  */
 export interface ListCommentTimelineResp {
     /**
-     * 
+     * 分页结果
      * @type {PageResp}
      * @memberof ListCommentTimelineResp
      */
     page?: PageResp;
     /**
-     * 
+     * 评论列表
      * @type {Array<CommentListItem>}
      * @memberof ListCommentTimelineResp
      */

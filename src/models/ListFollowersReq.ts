@@ -22,19 +22,19 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListFollowersReq
  */
 export interface ListFollowersReq {
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof ListFollowersReq
      */
     name: string;
     /**
-     * 
+     * 协议字段。
      * @type {PageReq}
      * @memberof ListFollowersReq
      */

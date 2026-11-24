@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CompleteProfileImageUploadAccountReq
  */
 export interface CompleteProfileImageUploadAccountReq {
     /**
-     * 
+     * 协议字段。
      * @type {CompleteProfileImageUploadAccountReqPurposeEnum}
      * @memberof CompleteProfileImageUploadAccountReq
      */
     purpose: CompleteProfileImageUploadAccountReqPurposeEnum;
     /**
-     * 
+     * 文件 SHA-256；回调尚未入库时返回可重试错误
      * @type {string}
      * @memberof CompleteProfileImageUploadAccountReq
      */

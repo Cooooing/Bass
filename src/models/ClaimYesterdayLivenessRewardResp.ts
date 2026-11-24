@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ClaimYesterdayLivenessRewardResp
  */
 export interface ClaimYesterdayLivenessRewardResp {
     /**
-     * 
+     * 本次领取的积分。
      * @type {string}
      * @memberof ClaimYesterdayLivenessRewardResp
      */
     rewardPoints?: string;
     /**
-     * 
+     * 是否已成功领取。
      * @type {boolean}
      * @memberof ClaimYesterdayLivenessRewardResp
      */

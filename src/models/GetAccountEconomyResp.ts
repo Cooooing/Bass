@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetAccountEconomyResp
  */
 export interface GetAccountEconomyResp {
     /**
-     * 
+     * 当前积分
      * @type {string}
      * @memberof GetAccountEconomyResp
      */
     balance?: string;
     /**
-     * 
+     * 累计获得
      * @type {string}
      * @memberof GetAccountEconomyResp
      */
     totalIncome?: string;
     /**
-     * 
+     * 累计消耗
      * @type {string}
      * @memberof GetAccountEconomyResp
      */

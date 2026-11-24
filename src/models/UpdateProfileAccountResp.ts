@@ -22,13 +22,13 @@ import {
 } from './AccountProfile';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface UpdateProfileAccountResp
  */
 export interface UpdateProfileAccountResp {
     /**
-     * 
+     * 更新后的账号资料
      * @type {AccountProfile}
      * @memberof UpdateProfileAccountResp
      */

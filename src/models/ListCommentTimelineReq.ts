@@ -22,25 +22,25 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListCommentTimelineReq
  */
 export interface ListCommentTimelineReq {
     /**
-     * 
+     * 分页参数
      * @type {PageReq}
      * @memberof ListCommentTimelineReq
      */
     page?: PageReq;
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof ListCommentTimelineReq
      */
     articleId: string;
     /**
-     * 
+     * 排序方式
      * @type {ListCommentTimelineReqOrderEnum}
      * @memberof ListCommentTimelineReq
      */

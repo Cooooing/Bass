@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface PrepareMarkdownImageUploadReq
  */
 export interface PrepareMarkdownImageUploadReq {
     /**
-     * 
+     * 文件 SHA-256，小写十六进制。
      * @type {string}
      * @memberof PrepareMarkdownImageUploadReq
      */
     hash: string;
     /**
-     * 
+     * 上传 MIME 类型。
      * @type {string}
      * @memberof PrepareMarkdownImageUploadReq
      */
     mimeType: string;
     /**
-     * 
+     * 文件大小，最大 5 MiB。
      * @type {string}
      * @memberof PrepareMarkdownImageUploadReq
      */

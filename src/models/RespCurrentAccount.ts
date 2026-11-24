@@ -36,25 +36,25 @@ import {
 } from './AccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespCurrentAccount
  */
 export interface RespCurrentAccount {
     /**
-     * 
+     * 账号展示资料
      * @type {AccountProfile}
      * @memberof RespCurrentAccount
      */
     profile?: AccountProfile;
     /**
-     * 
+     * 账号联系方式
      * @type {AccountContact}
      * @memberof RespCurrentAccount
      */
     contact?: AccountContact;
     /**
-     * 
+     * 当前账号地理资料
      * @type {ProfileLocation}
      * @memberof RespCurrentAccount
      */

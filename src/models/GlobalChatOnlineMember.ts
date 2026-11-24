@@ -14,31 +14,31 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface GlobalChatOnlineMember
  */
 export interface GlobalChatOnlineMember {
     /**
-     * 
+     * 在线账号 ID。
      * @type {string}
      * @memberof GlobalChatOnlineMember
      */
     userId?: string;
     /**
-     * 
+     * 用户名。
      * @type {string}
      * @memberof GlobalChatOnlineMember
      */
     name?: string;
     /**
-     * 
+     * 昵称。
      * @type {string}
      * @memberof GlobalChatOnlineMember
      */
     nickname?: string;
     /**
-     * 
+     * 头像地址。
      * @type {string}
      * @memberof GlobalChatOnlineMember
      */

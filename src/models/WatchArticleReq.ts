@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface WatchArticleReq
  */
 export interface WatchArticleReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof WatchArticleReq
      */
     articleId: string;
     /**
-     * 
+     * 必填，是否关注
      * @type {boolean}
      * @memberof WatchArticleReq
      */

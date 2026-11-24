@@ -22,13 +22,13 @@ import {
 } from './PrivateChatMessage';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface RevokePrivateChatMessageResp
  */
 export interface RevokePrivateChatMessageResp {
     /**
-     * 
+     * 已撤回消息。
      * @type {PrivateChatMessage}
      * @memberof RevokePrivateChatMessageResp
      */

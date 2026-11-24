@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ProfileVisibility
  */
 export interface ProfileVisibility {
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileVisibility
      */
     articleList?: boolean;
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileVisibility
      */
     commentList?: boolean;
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileVisibility
      */
     followerList?: boolean;
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileVisibility
      */
     followingList?: boolean;
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileVisibility
      */

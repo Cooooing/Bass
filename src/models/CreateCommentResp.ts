@@ -22,13 +22,13 @@ import {
 } from './RespCommentDetail';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CreateCommentResp
  */
 export interface CreateCommentResp {
     /**
-     * 
+     * 创建后的评论
      * @type {RespCommentDetail}
      * @memberof CreateCommentResp
      */

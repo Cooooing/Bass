@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespPointRecord
  */
 export interface RespPointRecord {
     /**
-     * 
+     * 记录创建时间
      * @type {Date}
      * @memberof RespPointRecord
      */
     createdAt?: Date;
     /**
-     * 
+     * 流水类型展示文案
      * @type {string}
      * @memberof RespPointRecord
      */
     typeLabel?: string;
     /**
-     * 
+     * 收入或支出方向
      * @type {RespPointRecordDirectionEnum}
      * @memberof RespPointRecord
      */
     direction?: RespPointRecordDirectionEnum;
     /**
-     * 
+     * 绝对变动积分
      * @type {string}
      * @memberof RespPointRecord
      */
     amount?: string;
     /**
-     * 
+     * 变动后的积分余额
      * @type {string}
      * @memberof RespPointRecord
      */

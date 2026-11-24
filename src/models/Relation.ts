@@ -14,43 +14,43 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface Relation
  */
 export interface Relation {
     /**
-     * 
+     * 关系 ID
      * @type {string}
      * @memberof Relation
      */
     id?: string;
     /**
-     * 
+     * 关系类型
      * @type {RelationTypeEnum}
      * @memberof Relation
      */
     type?: RelationTypeEnum;
     /**
-     * 
+     * 发起账号 ID
      * @type {string}
      * @memberof Relation
      */
     actorId?: string;
     /**
-     * 
+     * 目标账号 ID
      * @type {string}
      * @memberof Relation
      */
     targetId?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof Relation
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof Relation
      */

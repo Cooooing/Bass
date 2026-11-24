@@ -1,24 +1,23 @@
 
-# PageMoonbreezesResp
+# AvatarAccountResp
 
+Resp 通过 raw_body 返回头像原始字节及内容类型。
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`rows` | [Array&lt;Moonbreeze&gt;](Moonbreeze.md)
-`nextCursor` | string
+`rawBody` | [ImageResp](ImageResp.md)
 
 ## Example
 
 ```typescript
-import type { PageMoonbreezesResp } from '@bass/bbs-sdk-fetch'
+import type { AvatarAccountResp } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "rows": null,
-  "nextCursor": null,
-} satisfies PageMoonbreezesResp
+  "rawBody": null,
+} satisfies AvatarAccountResp
 
 console.log(example)
 
@@ -27,7 +26,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as PageMoonbreezesResp
+const exampleParsed = JSON.parse(exampleJSON) as AvatarAccountResp
 console.log(exampleParsed)
 ```
 

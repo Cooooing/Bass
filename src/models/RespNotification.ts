@@ -14,61 +14,61 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespNotification
  */
 export interface RespNotification {
     /**
-     * 
+     * 通知 ID
      * @type {string}
      * @memberof RespNotification
      */
     id?: string;
     /**
-     * 
+     * 来源事件 ID
      * @type {string}
      * @memberof RespNotification
      */
     eventId?: string;
     /**
-     * 
+     * 接收账号 ID
      * @type {string}
      * @memberof RespNotification
      */
     receiverId?: string;
     /**
-     * 
+     * 通知类型
      * @type {RespNotificationNotificationTypeEnum}
      * @memberof RespNotification
      */
     notificationType?: RespNotificationNotificationTypeEnum;
     /**
-     * 
+     * 通知标题
      * @type {string}
      * @memberof RespNotification
      */
     title?: string;
     /**
-     * 
+     * 通知内容
      * @type {string}
      * @memberof RespNotification
      */
     content?: string;
     /**
-     * 
+     * 已读时间
      * @type {Date}
      * @memberof RespNotification
      */
     readAt?: Date;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof RespNotification
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof RespNotification
      */

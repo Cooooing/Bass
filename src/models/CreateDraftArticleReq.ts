@@ -22,13 +22,13 @@ import {
 } from './ReqArticle';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateDraftArticleReq
  */
 export interface CreateDraftArticleReq {
     /**
-     * 
+     * 必填，草稿内容
      * @type {ReqArticle}
      * @memberof CreateDraftArticleReq
      */

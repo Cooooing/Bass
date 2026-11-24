@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticlePollOption
  */
 export interface ArticlePollOption {
     /**
-     * 
+     * 选项 ID
      * @type {string}
      * @memberof ArticlePollOption
      */
     id?: string;
     /**
-     * 
+     * 选项内容
      * @type {string}
      * @memberof ArticlePollOption
      */
     content?: string;
     /**
-     * 
+     * 可见时的票数
      * @type {number}
      * @memberof ArticlePollOption
      */

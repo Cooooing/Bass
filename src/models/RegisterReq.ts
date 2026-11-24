@@ -29,43 +29,43 @@ import {
 } from './ReqPhoneCredential';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface RegisterReq
  */
 export interface RegisterReq {
     /**
-     * 
+     * 注册方式
      * @type {RegisterReqTypeEnum}
      * @memberof RegisterReq
      */
     type: RegisterReqTypeEnum;
     /**
-     * 
+     * 账号名
      * @type {string}
      * @memberof RegisterReq
      */
     name: string;
     /**
-     * 
+     * 账号密码
      * @type {string}
      * @memberof RegisterReq
      */
     password: string;
     /**
-     * 
+     * 昵称
      * @type {string}
      * @memberof RegisterReq
      */
     nickname?: string;
     /**
-     * 
+     * 邮箱注册凭证
      * @type {ReqEmailCredential}
      * @memberof RegisterReq
      */
     emailCredential?: ReqEmailCredential;
     /**
-     * 
+     * 手机注册凭证
      * @type {ReqPhoneCredential}
      * @memberof RegisterReq
      */

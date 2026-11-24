@@ -29,19 +29,19 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface PageWatchedArticlesResp
  */
 export interface PageWatchedArticlesResp {
     /**
-     * 
+     * 分页结果
      * @type {PageResp}
      * @memberof PageWatchedArticlesResp
      */
     page?: PageResp;
     /**
-     * 
+     * 关注文章列表
      * @type {Array<ArticleListItem>}
      * @memberof PageWatchedArticlesResp
      */

@@ -1,6 +1,7 @@
 
 # RespTag
 
+协议消息。
 
 ## Properties
 

@@ -29,19 +29,19 @@ import {
 } from './GlobalChatBarrage';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListGlobalChatBarragesResp
  */
 export interface ListGlobalChatBarragesResp {
     /**
-     * 
+     * 分页信息。
      * @type {PageResp}
      * @memberof ListGlobalChatBarragesResp
      */
     page?: PageResp;
     /**
-     * 
+     * 已发布弹幕。
      * @type {Array<GlobalChatBarrage>}
      * @memberof ListGlobalChatBarragesResp
      */

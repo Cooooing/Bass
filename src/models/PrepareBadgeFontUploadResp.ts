@@ -20,19 +20,19 @@ import { mapValues } from '../runtime';
  */
 export interface PrepareBadgeFontUploadResp {
     /**
-     * 
+     * 已存在资源的 ID。
      * @type {string}
      * @memberof PrepareBadgeFontUploadResp
      */
     assetId?: string;
     /**
-     * 
+     * 新资源的 MinIO multipart POST 地址。
      * @type {string}
      * @memberof PrepareBadgeFontUploadResp
      */
     uploadUrl?: string;
     /**
-     * 
+     * MinIO multipart POST 表单字段。
      * @type {{ [key: string]: string; }}
      * @memberof PrepareBadgeFontUploadResp
      */

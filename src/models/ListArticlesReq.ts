@@ -29,19 +29,19 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListArticlesReq
  */
 export interface ListArticlesReq {
     /**
-     * 
+     * 可选，分页参数
      * @type {PageReq}
      * @memberof ListArticlesReq
      */
     page?: PageReq;
     /**
-     * 
+     * 可选，查询条件
      * @type {ReqArticleQuery}
      * @memberof ListArticlesReq
      */

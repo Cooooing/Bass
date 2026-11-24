@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface PrepareBadgeImageUploadResp
  */
 export interface PrepareBadgeImageUploadResp {
     /**
-     * 
+     * 已存在资源的 ID。
      * @type {string}
      * @memberof PrepareBadgeImageUploadResp
      */
     assetId?: string;
     /**
-     * 
+     * 新资源的 MinIO multipart POST 地址。
      * @type {string}
      * @memberof PrepareBadgeImageUploadResp
      */
     uploadUrl?: string;
     /**
-     * 
+     * MinIO multipart POST 表单字段。
      * @type {{ [key: string]: string; }}
      * @memberof PrepareBadgeImageUploadResp
      */

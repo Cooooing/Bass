@@ -1,6 +1,7 @@
 
 # ListFollowingArticlesResp
 
+响应结果。
 
 ## Properties
 

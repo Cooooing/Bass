@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface BlockRelationReq
  */
 export interface BlockRelationReq {
     /**
-     * 
+     * 目标账号 ID
      * @type {string}
      * @memberof BlockRelationReq
      */

@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface MarkReadNotificationResp
  */
 export interface MarkReadNotificationResp {
     /**
-     * 
+     * 成功标记的通知数量
      * @type {number}
      * @memberof MarkReadNotificationResp
      */

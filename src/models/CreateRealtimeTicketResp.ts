@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CreateRealtimeTicketResp
  */
 export interface CreateRealtimeTicketResp {
     /**
-     * 
+     * 一次性 SSE 建连凭证。
      * @type {string}
      * @memberof CreateRealtimeTicketResp
      */
     ticket?: string;
     /**
-     * 
+     * 有效期秒数。
      * @type {string}
      * @memberof CreateRealtimeTicketResp
      */
     expiresInSeconds?: string;
     /**
-     * 
+     * realtime node SSE 路径。
      * @type {string}
      * @memberof CreateRealtimeTicketResp
      */

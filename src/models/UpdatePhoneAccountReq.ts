@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdatePhoneAccountReq
  */
 export interface UpdatePhoneAccountReq {
     /**
-     * 
+     * 新手机号，必填
      * @type {string}
      * @memberof UpdatePhoneAccountReq
      */
     phone: string;
     /**
-     * 
+     * 手机 OTP，必填
      * @type {string}
      * @memberof UpdatePhoneAccountReq
      */

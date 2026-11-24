@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface VoteArticlePollReq
  */
 export interface VoteArticlePollReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof VoteArticlePollReq
      */
     articleId: string;
     /**
-     * 
+     * 必填，所选选项 ID
      * @type {Array<string>}
      * @memberof VoteArticlePollReq
      */

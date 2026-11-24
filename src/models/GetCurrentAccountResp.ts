@@ -22,13 +22,13 @@ import {
 } from './RespCurrentAccount';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetCurrentAccountResp
  */
 export interface GetCurrentAccountResp {
     /**
-     * 
+     * 当前账号完整资料
      * @type {RespCurrentAccount}
      * @memberof GetCurrentAccountResp
      */

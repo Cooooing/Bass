@@ -1,6 +1,7 @@
 
 # CreateCommentResp
 
+响应结果。
 
 ## Properties
 

@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface RewardArticleResp
  */
 export interface RewardArticleResp {
     /**
-     * 
+     * 是否已完成打赏
      * @type {boolean}
      * @memberof RewardArticleResp
      */

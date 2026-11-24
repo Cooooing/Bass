@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ReorderEmojiGroupsReq
  */
 export interface ReorderEmojiGroupsReq {
     /**
-     * 
+     * 按最终展示顺序排列的完整分组 ID 序列。
      * @type {Array<string>}
      * @memberof ReorderEmojiGroupsReq
      */

@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespTotp
  */
 export interface RespTotp {
     /**
-     * 
+     * 账号 ID
      * @type {string}
      * @memberof RespTotp
      */
     userId?: string;
     /**
-     * 
+     * 是否启用 TOTP
      * @type {boolean}
      * @memberof RespTotp
      */
     enable?: boolean;
     /**
-     * 
+     * 启用时间
      * @type {Date}
      * @memberof RespTotp
      */

@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](HolidayService.md#getcurrent) | **POST** /v1/platform/holiday/get-current |  |
+| [**getCurrentHoliday**](HolidayService.md#getcurrentholiday) | **POST** /v1/platform/holiday/get-current |  |
 
 
 
-## getCurrent
+## getCurrentHoliday
 
-> GetCurrentHolidayResp getCurrent(body)
+> GetCurrentHolidayResp getCurrentHoliday(body)
 
 
 
@@ -23,7 +23,7 @@ import {
   Configuration,
   HolidayService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetCurrentRequest } from '@bass/bbs-sdk-fetch';
+import type { GetCurrentHolidayRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -32,10 +32,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies GetCurrentRequest;
+  } satisfies GetCurrentHolidayRequest;
 
   try {
-    const data = await api.getCurrent(body);
+    const data = await api.getCurrentHoliday(body);
     console.log(data);
   } catch (error) {
     console.error(error);

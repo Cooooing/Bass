@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface SendPhoneOtpResp
  */
 export interface SendPhoneOtpResp {
     /**
-     * 
+     * 非生产环境返回验证码，生产环境为空
      * @type {string}
      * @memberof SendPhoneOtpResp
      */

@@ -19,7 +19,7 @@ import {
     GetCurrentHolidayRespToJSON,
 } from '../models/GetCurrentHolidayResp';
 
-export interface GetCurrentRequest {
+export interface GetCurrentHolidayRequest {
     body: object;
 }
 
@@ -31,12 +31,12 @@ export interface GetCurrentRequest {
  */
 export interface HolidayServiceInterface {
     /**
-     * Creates request options for getCurrent without sending the request
+     * Creates request options for getCurrentHoliday without sending the request
      * @param {object} body 
      * @throws {RequiredError}
      * @memberof HolidayServiceInterface
      */
-    getCurrentRequestOpts(requestParameters: GetCurrentRequest): Promise<runtime.RequestOpts>;
+    getCurrentHolidayRequestOpts(requestParameters: GetCurrentHolidayRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 获取当前节假日状态。
@@ -45,12 +45,12 @@ export interface HolidayServiceInterface {
      * @throws {RequiredError}
      * @memberof HolidayServiceInterface
      */
-    getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentHolidayResp>>;
+    getCurrentHolidayRaw(requestParameters: GetCurrentHolidayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentHolidayResp>>;
 
     /**
      * 获取当前节假日状态。
      */
-    getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentHolidayResp>;
+    getCurrentHoliday(requestParameters: GetCurrentHolidayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentHolidayResp>;
 
 }
 
@@ -60,13 +60,13 @@ export interface HolidayServiceInterface {
 export class HolidayService extends runtime.BaseAPI implements HolidayServiceInterface {
 
     /**
-     * Creates request options for getCurrent without sending the request
+     * Creates request options for getCurrentHoliday without sending the request
      */
-    async getCurrentRequestOpts(requestParameters: GetCurrentRequest): Promise<runtime.RequestOpts> {
+    async getCurrentHolidayRequestOpts(requestParameters: GetCurrentHolidayRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
-                'Required parameter "body" was null or undefined when calling getCurrent().'
+                'Required parameter "body" was null or undefined when calling getCurrentHoliday().'
             );
         }
 
@@ -91,8 +91,8 @@ export class HolidayService extends runtime.BaseAPI implements HolidayServiceInt
     /**
      * 获取当前节假日状态。
      */
-    async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentHolidayResp>> {
-        const requestOptions = await this.getCurrentRequestOpts(requestParameters);
+    async getCurrentHolidayRaw(requestParameters: GetCurrentHolidayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentHolidayResp>> {
+        const requestOptions = await this.getCurrentHolidayRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentHolidayRespFromJSON(jsonValue));
@@ -101,8 +101,8 @@ export class HolidayService extends runtime.BaseAPI implements HolidayServiceInt
     /**
      * 获取当前节假日状态。
      */
-    async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentHolidayResp> {
-        const response = await this.getCurrentRaw(requestParameters, initOverrides);
+    async getCurrentHoliday(requestParameters: GetCurrentHolidayRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentHolidayResp> {
+        const response = await this.getCurrentHolidayRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

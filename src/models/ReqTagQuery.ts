@@ -14,49 +14,49 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqTagQuery
  */
 export interface ReqTagQuery {
     /**
-     * 
+     * 标签 ID 列表
      * @type {Array<string>}
      * @memberof ReqTagQuery
      */
     ids?: Array<string>;
     /**
-     * 
+     * 稳定编码
      * @type {string}
      * @memberof ReqTagQuery
      */
     code?: string;
     /**
-     * 
+     * 标签名称
      * @type {string}
      * @memberof ReqTagQuery
      */
     name?: string;
     /**
-     * 
+     * 标签名称列表
      * @type {Array<string>}
      * @memberof ReqTagQuery
      */
     names?: Array<string>;
     /**
-     * 
+     * 描述
      * @type {string}
      * @memberof ReqTagQuery
      */
     description?: string;
     /**
-     * 
+     * 启停状态
      * @type {ReqTagQueryStatusEnum}
      * @memberof ReqTagQuery
      */
     status?: ReqTagQueryStatusEnum;
     /**
-     * 
+     * 领域 ID
      * @type {string}
      * @memberof ReqTagQuery
      */

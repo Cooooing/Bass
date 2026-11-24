@@ -36,31 +36,31 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListCommentThreadsResp
  */
 export interface ListCommentThreadsResp {
     /**
-     * 
+     * 分页结果
      * @type {PageResp}
      * @memberof ListCommentThreadsResp
      */
     page?: PageResp;
     /**
-     * 
+     * 评论楼层列表
      * @type {Array<RespCommentThread>}
      * @memberof ListCommentThreadsResp
      */
     rows?: Array<RespCommentThread>;
     /**
-     * 
+     * 问答已采纳回答；不可见时不返回
      * @type {RespPinnedComment}
      * @memberof ListCommentThreadsResp
      */
     acceptedAnswer?: RespPinnedComment;
     /**
-     * 
+     * 作者手动置顶评论；不可见时不返回
      * @type {RespPinnedComment}
      * @memberof ListCommentThreadsResp
      */

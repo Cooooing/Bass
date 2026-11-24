@@ -22,13 +22,13 @@ import {
 } from './EmojiItem';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface AddEmojiItemResp
  */
 export interface AddEmojiItemResp {
     /**
-     * 
+     * 已添加表情项。
      * @type {EmojiItem}
      * @memberof AddEmojiItemResp
      */

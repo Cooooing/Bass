@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespLocation
  */
 export interface RespLocation {
     /**
-     * 
+     * 国家或地区
      * @type {string}
      * @memberof RespLocation
      */
     country?: string;
     /**
-     * 
+     * 省份或州
      * @type {string}
      * @memberof RespLocation
      */
     province?: string;
     /**
-     * 
+     * 城市
      * @type {string}
      * @memberof RespLocation
      */

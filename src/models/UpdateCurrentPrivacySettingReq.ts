@@ -14,55 +14,55 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdateCurrentPrivacySettingReq
  */
 export interface UpdateCurrentPrivacySettingReq {
     /**
-     * 
+     * 是否公开积分
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
     publicPoints?: boolean;
     /**
-     * 
+     * 是否公开粉丝列表
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
     publicFollowerList?: boolean;
     /**
-     * 
+     * 是否公开关注列表
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
     publicFollowingList?: boolean;
     /**
-     * 
+     * 是否公开帖子列表
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
     publicArticleList?: boolean;
     /**
-     * 
+     * 是否公开回复列表
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
     publicCommentList?: boolean;
     /**
-     * 
+     * 是否公开在线状态
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
     publicOnlineStatus?: boolean;
     /**
-     * 
+     * 是否公开地理资料
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
     publicLocation?: boolean;
     /**
-     * 
+     * 是否公开清风明月列表
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */

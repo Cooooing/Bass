@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ProfileLocation
  */
 export interface ProfileLocation {
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof ProfileLocation
      */
     country?: string;
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof ProfileLocation
      */
     province?: string;
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof ProfileLocation
      */

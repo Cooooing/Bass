@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListEmojiGroupsReq
  */
 export interface ListEmojiGroupsReq {
     /**
-     * 
+     * 按表情别名进行的模糊查询。
      * @type {string}
      * @memberof ListEmojiGroupsReq
      */

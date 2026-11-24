@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface CommentViewerActionState
  */
 export interface CommentViewerActionState {
     /**
-     * 
+     * 是否已点赞
      * @type {boolean}
      * @memberof CommentViewerActionState
      */
     liked?: boolean;
     /**
-     * 
+     * 是否已感谢
      * @type {boolean}
      * @memberof CommentViewerActionState
      */

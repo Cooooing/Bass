@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**bindArticle**](TagService.md#bindarticle) | **POST** /v1/content/tag/bind-article |  |
-| [**create**](TagService.md#create) | **POST** /v1/content/tag/create |  |
-| [**list**](TagService.md#list) | **POST** /v1/content/tag/list |  |
+| [**bindArticleTags**](TagService.md#bindarticletags) | **POST** /v1/content/tag/bind-article |  |
+| [**createTag**](TagService.md#createtag) | **POST** /v1/content/tag/create |  |
 | [**listArticleTags**](TagService.md#listarticletags) | **POST** /v1/content/tag/list-article-tags |  |
-| [**unbindArticle**](TagService.md#unbindarticle) | **POST** /v1/content/tag/unbind-article |  |
-| [**update**](TagService.md#update) | **POST** /v1/content/tag/update |  |
+| [**listTags**](TagService.md#listtags) | **POST** /v1/content/tag/list |  |
+| [**unbindArticleTags**](TagService.md#unbindarticletags) | **POST** /v1/content/tag/unbind-article |  |
+| [**updateTag**](TagService.md#updatetag) | **POST** /v1/content/tag/update |  |
 
 
 
-## bindArticle
+## bindArticleTags
 
-> object bindArticle(bindArticleTagsReq)
+> object bindArticleTags(bindArticleTagsReq)
 
 
 
@@ -28,7 +28,7 @@ import {
   Configuration,
   TagService,
 } from '@bass/bbs-sdk-fetch';
-import type { BindArticleRequest } from '@bass/bbs-sdk-fetch';
+import type { BindArticleTagsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -37,10 +37,10 @@ async function example() {
   const body = {
     // BindArticleTagsReq
     bindArticleTagsReq: ...,
-  } satisfies BindArticleRequest;
+  } satisfies BindArticleTagsRequest;
 
   try {
-    const data = await api.bindArticle(body);
+    const data = await api.bindArticleTags(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -80,9 +80,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## create
+## createTag
 
-> CreateTagResp create(createTagReq)
+> CreateTagResp createTag(createTagReq)
 
 
 
@@ -95,7 +95,7 @@ import {
   Configuration,
   TagService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateTagRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -104,10 +104,10 @@ async function example() {
   const body = {
     // CreateTagReq
     createTagReq: ...,
-  } satisfies CreateRequest;
+  } satisfies CreateTagRequest;
 
   try {
-    const data = await api.create(body);
+    const data = await api.createTag(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -128,73 +128,6 @@ example().catch(console.error);
 ### Return type
 
 [**CreateTagResp**](CreateTagResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## list
-
-> ListTagsResp list(listTagsReq)
-
-
-
-查询标签列表。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  TagService,
-} from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new TagService();
-
-  const body = {
-    // ListTagsReq
-    listTagsReq: ...,
-  } satisfies ListRequest;
-
-  try {
-    const data = await api.list(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **listTagsReq** | [ListTagsReq](ListTagsReq.md) |  | |
-
-### Return type
-
-[**ListTagsResp**](ListTagsResp.md)
 
 ### Authorization
 
@@ -281,9 +214,76 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## unbindArticle
+## listTags
 
-> object unbindArticle(unbindArticleTagsReq)
+> ListTagsResp listTags(listTagsReq)
+
+
+
+查询标签列表。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  TagService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListTagsRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new TagService();
+
+  const body = {
+    // ListTagsReq
+    listTagsReq: ...,
+  } satisfies ListTagsRequest;
+
+  try {
+    const data = await api.listTags(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listTagsReq** | [ListTagsReq](ListTagsReq.md) |  | |
+
+### Return type
+
+[**ListTagsResp**](ListTagsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## unbindArticleTags
+
+> object unbindArticleTags(unbindArticleTagsReq)
 
 
 
@@ -296,7 +296,7 @@ import {
   Configuration,
   TagService,
 } from '@bass/bbs-sdk-fetch';
-import type { UnbindArticleRequest } from '@bass/bbs-sdk-fetch';
+import type { UnbindArticleTagsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -305,10 +305,10 @@ async function example() {
   const body = {
     // UnbindArticleTagsReq
     unbindArticleTagsReq: ...,
-  } satisfies UnbindArticleRequest;
+  } satisfies UnbindArticleTagsRequest;
 
   try {
-    const data = await api.unbindArticle(body);
+    const data = await api.unbindArticleTags(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -348,9 +348,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## update
+## updateTag
 
-> UpdateTagResp update(updateTagReq)
+> UpdateTagResp updateTag(updateTagReq)
 
 
 
@@ -363,7 +363,7 @@ import {
   Configuration,
   TagService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdateRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdateTagRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -372,10 +372,10 @@ async function example() {
   const body = {
     // UpdateTagReq
     updateTagReq: ...,
-  } satisfies UpdateRequest;
+  } satisfies UpdateTagRequest;
 
   try {
-    const data = await api.update(body);
+    const data = await api.updateTag(body);
     console.log(data);
   } catch (error) {
     console.error(error);

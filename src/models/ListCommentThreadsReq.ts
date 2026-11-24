@@ -22,31 +22,31 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListCommentThreadsReq
  */
 export interface ListCommentThreadsReq {
     /**
-     * 
+     * 分页参数
      * @type {PageReq}
      * @memberof ListCommentThreadsReq
      */
     page?: PageReq;
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof ListCommentThreadsReq
      */
     articleId: string;
     /**
-     * 
+     * 顶层评论排序方式
      * @type {ListCommentThreadsReqOrderEnum}
      * @memberof ListCommentThreadsReq
      */
     order?: ListCommentThreadsReqOrderEnum;
     /**
-     * 
+     * 每个楼层返回的回复预览数量
      * @type {number}
      * @memberof ListCommentThreadsReq
      */

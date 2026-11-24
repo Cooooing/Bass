@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**add**](PostscriptService.md#add) | **POST** /v1/content/postscript/add |  |
-| [**list**](PostscriptService.md#list) | **POST** /v1/content/postscript/list |  |
+| [**addPostscript**](PostscriptService.md#addpostscript) | **POST** /v1/content/postscript/add |  |
+| [**listPostscripts**](PostscriptService.md#listpostscripts) | **POST** /v1/content/postscript/list |  |
 
 
 
-## add
+## addPostscript
 
-> AddPostscriptResp add(addPostscriptReq)
+> AddPostscriptResp addPostscript(addPostscriptReq)
 
 
 
@@ -24,7 +24,7 @@ import {
   Configuration,
   PostscriptService,
 } from '@bass/bbs-sdk-fetch';
-import type { AddRequest } from '@bass/bbs-sdk-fetch';
+import type { AddPostscriptRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -33,10 +33,10 @@ async function example() {
   const body = {
     // AddPostscriptReq
     addPostscriptReq: ...,
-  } satisfies AddRequest;
+  } satisfies AddPostscriptRequest;
 
   try {
-    const data = await api.add(body);
+    const data = await api.addPostscript(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -76,9 +76,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## list
+## listPostscripts
 
-> ListPostscriptsResp list(listPostscriptsReq)
+> ListPostscriptsResp listPostscripts(listPostscriptsReq)
 
 
 
@@ -91,7 +91,7 @@ import {
   Configuration,
   PostscriptService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
+import type { ListPostscriptsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -100,10 +100,10 @@ async function example() {
   const body = {
     // ListPostscriptsReq
     listPostscriptsReq: ...,
-  } satisfies ListRequest;
+  } satisfies ListPostscriptsRequest;
 
   try {
-    const data = await api.list(body);
+    const data = await api.listPostscripts(body);
     console.log(data);
   } catch (error) {
     console.error(error);

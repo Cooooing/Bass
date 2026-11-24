@@ -22,13 +22,13 @@ import {
 } from './GlobalChatMessage';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface RevokeGlobalChatMessageResp
  */
 export interface RevokeGlobalChatMessageResp {
     /**
-     * 
+     * 已撤回消息。
      * @type {GlobalChatMessage}
      * @memberof RevokeGlobalChatMessageResp
      */

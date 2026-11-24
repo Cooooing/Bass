@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespPreference
  */
 export interface RespPreference {
     /**
-     * 
+     * 账号 ID
      * @type {string}
      * @memberof RespPreference
      */
     userId?: string;
     /**
-     * 
+     * 时区
      * @type {string}
      * @memberof RespPreference
      */
     timezone?: string;
     /**
-     * 
+     * 桌面端主题
      * @type {string}
      * @memberof RespPreference
      */
     theme?: string;
     /**
-     * 
+     * 移动端主题
      * @type {string}
      * @memberof RespPreference
      */
     mobileTheme?: string;
     /**
-     * 
+     * 界面语言
      * @type {RespPreferenceLanguageEnum}
      * @memberof RespPreference
      */

@@ -14,91 +14,79 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface AccountProfile
  */
 export interface AccountProfile {
     /**
-     * 
+     * 账号 ID
      * @type {string}
      * @memberof AccountProfile
      */
     id?: string;
     /**
-     * 
+     * 账号名
      * @type {string}
      * @memberof AccountProfile
      */
     name?: string;
     /**
-     * 
+     * 昵称
      * @type {string}
      * @memberof AccountProfile
      */
     nickname?: string;
     /**
-     * 
+     * 个人主页
      * @type {string}
      * @memberof AccountProfile
      */
     url?: string;
     /**
-     * 
+     * 头像 URL
      * @type {string}
      * @memberof AccountProfile
      */
     avatarUrl?: string;
     /**
-     * 
-     * @type {string}
-     * @memberof AccountProfile
-     */
-    backgroundAssetId?: string;
-    /**
-     * 
+     * 个人简介
      * @type {string}
      * @memberof AccountProfile
      */
     introduction?: string;
     /**
-     * 
+     * MBTI 类型，规范化为大写
      * @type {string}
      * @memberof AccountProfile
      */
     mbti?: string;
     /**
-     * 
+     * 账号状态
      * @type {AccountProfileStatusEnum}
      * @memberof AccountProfile
      */
     status?: AccountProfileStatusEnum;
     /**
-     * 
+     * 关注数
      * @type {number}
      * @memberof AccountProfile
      */
     followCount?: number;
     /**
-     * 
+     * 粉丝数
      * @type {number}
      * @memberof AccountProfile
      */
     followerCount?: number;
     /**
-     * 
-     * @type {string}
-     * @memberof AccountProfile
-     */
-    profileUrl?: string;
-    /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof AccountProfile
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof AccountProfile
      */
@@ -140,13 +128,11 @@ export function AccountProfileFromJSONTyped(json: any, ignoreDiscriminator: bool
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'url': json['url'] == null ? undefined : json['url'],
         'avatarUrl': json['avatar_url'] == null ? undefined : json['avatar_url'],
-        'backgroundAssetId': json['background_asset_id'] == null ? undefined : json['background_asset_id'],
         'introduction': json['introduction'] == null ? undefined : json['introduction'],
         'mbti': json['mbti'] == null ? undefined : json['mbti'],
         'status': json['status'] == null ? undefined : json['status'],
         'followCount': json['follow_count'] == null ? undefined : json['follow_count'],
         'followerCount': json['follower_count'] == null ? undefined : json['follower_count'],
-        'profileUrl': json['profile_url'] == null ? undefined : json['profile_url'],
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
         'updatedAt': json['updated_at'] == null ? undefined : (new Date(json['updated_at'])),
     };
@@ -168,13 +154,11 @@ export function AccountProfileToJSONTyped(value?: AccountProfile | null, ignoreD
         'nickname': value['nickname'],
         'url': value['url'],
         'avatar_url': value['avatarUrl'],
-        'background_asset_id': value['backgroundAssetId'],
         'introduction': value['introduction'],
         'mbti': value['mbti'],
         'status': value['status'],
         'follow_count': value['followCount'],
         'follower_count': value['followerCount'],
-        'profile_url': value['profileUrl'],
         'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),
         'updated_at': value['updatedAt'] == null ? value['updatedAt'] : value['updatedAt'].toISOString(),
     };

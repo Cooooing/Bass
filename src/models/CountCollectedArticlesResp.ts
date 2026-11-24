@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CountCollectedArticlesResp
  */
 export interface CountCollectedArticlesResp {
     /**
-     * 
+     * 当前收藏文章数量。
      * @type {number}
      * @memberof CountCollectedArticlesResp
      */

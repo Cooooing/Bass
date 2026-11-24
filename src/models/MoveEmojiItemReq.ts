@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface MoveEmojiItemReq
  */
 export interface MoveEmojiItemReq {
     /**
-     * 
+     * 待移动表情项 ID。
      * @type {string}
      * @memberof MoveEmojiItemReq
      */
     itemId?: string;
     /**
-     * 
+     * 目标分组 ID。
      * @type {string}
      * @memberof MoveEmojiItemReq
      */

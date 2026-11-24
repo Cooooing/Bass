@@ -14,79 +14,79 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespAccountBasic
  */
 export interface RespAccountBasic {
     /**
-     * 
+     * 账号 ID
      * @type {string}
      * @memberof RespAccountBasic
      */
     id?: string;
     /**
-     * 
+     * 账号名
      * @type {string}
      * @memberof RespAccountBasic
      */
     name?: string;
     /**
-     * 
+     * 昵称
      * @type {string}
      * @memberof RespAccountBasic
      */
     nickname?: string;
     /**
-     * 
+     * 个人主页 URL
      * @type {string}
      * @memberof RespAccountBasic
      */
     url?: string;
     /**
-     * 
+     * 头像 URL
      * @type {string}
      * @memberof RespAccountBasic
      */
     avatarUrl?: string;
     /**
-     * 
+     * 个人简介
      * @type {string}
      * @memberof RespAccountBasic
      */
     introduction?: string;
     /**
-     * 
+     * MBTI 类型，规范化为大写
      * @type {string}
      * @memberof RespAccountBasic
      */
     mbti?: string;
     /**
-     * 
+     * 账号状态
      * @type {RespAccountBasicStatusEnum}
      * @memberof RespAccountBasic
      */
     status?: RespAccountBasicStatusEnum;
     /**
-     * 
+     * 关注数
      * @type {number}
      * @memberof RespAccountBasic
      */
     followCount?: number;
     /**
-     * 
+     * 粉丝数
      * @type {number}
      * @memberof RespAccountBasic
      */
     followerCount?: number;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof RespAccountBasic
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof RespAccountBasic
      */

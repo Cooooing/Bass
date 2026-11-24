@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CancelAccountReq
  */
 export interface CancelAccountReq {
     /**
-     * 
+     * 当前密码
      * @type {string}
      * @memberof CancelAccountReq
      */
     password: string;
     /**
-     * 
+     * 启用 TOTP 时作为 TOTP code
      * @type {string}
      * @memberof CancelAccountReq
      */

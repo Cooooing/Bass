@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CollectArticleResp
  */
 export interface CollectArticleResp {
     /**
-     * 
+     * 是否已收藏
      * @type {boolean}
      * @memberof CollectArticleResp
      */

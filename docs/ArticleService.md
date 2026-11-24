@@ -4,35 +4,35 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**acceptAnswer**](ArticleService.md#acceptanswer) | **POST** /v1/content/article/answer/accept |  |
-| [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive |  |
-| [**cancelPublish**](ArticleService.md#cancelpublish) | **POST** /v1/content/article/publish/cancel |  |
-| [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect |  |
-| [**countCollected**](ArticleService.md#countcollected) | **POST** /v1/content/article/collect/count |  |
-| [**createDraft**](ArticleService.md#createdraft) | **POST** /v1/content/article/draft/create |  |
-| [**discardDraft**](ArticleService.md#discarddraft) | **POST** /v1/content/article/draft/discard |  |
-| [**enterLottery**](ArticleService.md#enterlottery) | **POST** /v1/content/article/lottery/entry |  |
-| [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
-| [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
-| [**list**](ArticleService.md#list) | **POST** /v1/content/article/list |  |
-| [**listFollowing**](ArticleService.md#listfollowing) | **POST** /v1/content/article/following/list |  |
-| [**listNearby**](ArticleService.md#listnearby) | **POST** /v1/content/article/nearby/list |  |
-| [**pageCollected**](ArticleService.md#pagecollected) | **POST** /v1/content/article/collected/page |  |
-| [**pageViewHistory**](ArticleService.md#pageviewhistory) | **POST** /v1/content/article/view-history/page |  |
-| [**pageWatched**](ArticleService.md#pagewatched) | **POST** /v1/content/article/watched/page |  |
-| [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
-| [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
-| [**setPinnedComment**](ArticleService.md#setpinnedcomment) | **POST** /v1/content/article/comment/pin |  |
-| [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
-| [**updateDraft**](ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update |  |
-| [**votePoll**](ArticleService.md#votepoll) | **POST** /v1/content/article/poll/vote |  |
-| [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch |  |
+| [**acceptArticleAnswer**](ArticleService.md#acceptarticleanswer) | **POST** /v1/content/article/answer/accept |  |
+| [**archiveArticle**](ArticleService.md#archivearticle) | **POST** /v1/content/article/archive |  |
+| [**cancelPublishArticle**](ArticleService.md#cancelpublisharticle) | **POST** /v1/content/article/publish/cancel |  |
+| [**collectArticle**](ArticleService.md#collectarticle) | **POST** /v1/content/article/collect |  |
+| [**countCollectedArticles**](ArticleService.md#countcollectedarticles) | **POST** /v1/content/article/collect/count |  |
+| [**createDraftArticle**](ArticleService.md#createdraftarticle) | **POST** /v1/content/article/draft/create |  |
+| [**discardDraftArticle**](ArticleService.md#discarddraftarticle) | **POST** /v1/content/article/draft/discard |  |
+| [**enterArticleLottery**](ArticleService.md#enterarticlelottery) | **POST** /v1/content/article/lottery/entry |  |
+| [**getArticle**](ArticleService.md#getarticle) | **POST** /v1/content/article/get |  |
+| [**likeArticle**](ArticleService.md#likearticle) | **POST** /v1/content/article/like |  |
+| [**listArticles**](ArticleService.md#listarticles) | **POST** /v1/content/article/list |  |
+| [**listFollowingArticles**](ArticleService.md#listfollowingarticles) | **POST** /v1/content/article/following/list |  |
+| [**listNearbyArticles**](ArticleService.md#listnearbyarticles) | **POST** /v1/content/article/nearby/list |  |
+| [**pageArticleViewHistory**](ArticleService.md#pagearticleviewhistory) | **POST** /v1/content/article/view-history/page |  |
+| [**pageCollectedArticles**](ArticleService.md#pagecollectedarticles) | **POST** /v1/content/article/collected/page |  |
+| [**pageWatchedArticles**](ArticleService.md#pagewatchedarticles) | **POST** /v1/content/article/watched/page |  |
+| [**publishArticle**](ArticleService.md#publisharticle) | **POST** /v1/content/article/publish |  |
+| [**rewardArticle**](ArticleService.md#rewardarticle) | **POST** /v1/content/article/reward |  |
+| [**setPinnedArticleComment**](ArticleService.md#setpinnedarticlecomment) | **POST** /v1/content/article/comment/pin |  |
+| [**thankArticle**](ArticleService.md#thankarticle) | **POST** /v1/content/article/thank |  |
+| [**updateDraftArticle**](ArticleService.md#updatedraftarticle) | **POST** /v1/content/article/draft/update |  |
+| [**voteArticlePoll**](ArticleService.md#votearticlepoll) | **POST** /v1/content/article/poll/vote |  |
+| [**watchArticle**](ArticleService.md#watcharticle) | **POST** /v1/content/article/watch |  |
 
 
 
-## acceptAnswer
+## acceptArticleAnswer
 
-> object acceptAnswer(acceptArticleAnswerReq)
+> object acceptArticleAnswer(acceptArticleAnswerReq)
 
 
 
@@ -45,7 +45,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { AcceptAnswerRequest } from '@bass/bbs-sdk-fetch';
+import type { AcceptArticleAnswerRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -54,10 +54,10 @@ async function example() {
   const body = {
     // AcceptArticleAnswerReq
     acceptArticleAnswerReq: ...,
-  } satisfies AcceptAnswerRequest;
+  } satisfies AcceptArticleAnswerRequest;
 
   try {
-    const data = await api.acceptAnswer(body);
+    const data = await api.acceptArticleAnswer(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -97,9 +97,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## archive
+## archiveArticle
 
-> object archive(archiveArticleReq)
+> object archiveArticle(archiveArticleReq)
 
 
 
@@ -112,7 +112,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { ArchiveRequest } from '@bass/bbs-sdk-fetch';
+import type { ArchiveArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -121,10 +121,10 @@ async function example() {
   const body = {
     // ArchiveArticleReq
     archiveArticleReq: ...,
-  } satisfies ArchiveRequest;
+  } satisfies ArchiveArticleRequest;
 
   try {
-    const data = await api.archive(body);
+    const data = await api.archiveArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -164,9 +164,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## cancelPublish
+## cancelPublishArticle
 
-> object cancelPublish(cancelPublishArticleReq)
+> object cancelPublishArticle(cancelPublishArticleReq)
 
 
 
@@ -179,7 +179,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { CancelPublishRequest } from '@bass/bbs-sdk-fetch';
+import type { CancelPublishArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -188,10 +188,10 @@ async function example() {
   const body = {
     // CancelPublishArticleReq
     cancelPublishArticleReq: ...,
-  } satisfies CancelPublishRequest;
+  } satisfies CancelPublishArticleRequest;
 
   try {
-    const data = await api.cancelPublish(body);
+    const data = await api.cancelPublishArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -231,9 +231,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## collect
+## collectArticle
 
-> CollectArticleResp collect(collectArticleReq)
+> CollectArticleResp collectArticle(collectArticleReq)
 
 
 
@@ -246,7 +246,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { CollectRequest } from '@bass/bbs-sdk-fetch';
+import type { CollectArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -255,10 +255,10 @@ async function example() {
   const body = {
     // CollectArticleReq
     collectArticleReq: ...,
-  } satisfies CollectRequest;
+  } satisfies CollectArticleRequest;
 
   try {
-    const data = await api.collect(body);
+    const data = await api.collectArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -298,9 +298,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## countCollected
+## countCollectedArticles
 
-> CountCollectedArticlesResp countCollected(body)
+> CountCollectedArticlesResp countCollectedArticles(body)
 
 
 
@@ -313,7 +313,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { CountCollectedRequest } from '@bass/bbs-sdk-fetch';
+import type { CountCollectedArticlesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -322,10 +322,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies CountCollectedRequest;
+  } satisfies CountCollectedArticlesRequest;
 
   try {
-    const data = await api.countCollected(body);
+    const data = await api.countCollectedArticles(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -365,9 +365,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## createDraft
+## createDraftArticle
 
-> CreateDraftArticleResp createDraft(createDraftArticleReq)
+> CreateDraftArticleResp createDraftArticle(createDraftArticleReq)
 
 
 
@@ -380,7 +380,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateDraftRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateDraftArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -389,10 +389,10 @@ async function example() {
   const body = {
     // CreateDraftArticleReq
     createDraftArticleReq: ...,
-  } satisfies CreateDraftRequest;
+  } satisfies CreateDraftArticleRequest;
 
   try {
-    const data = await api.createDraft(body);
+    const data = await api.createDraftArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -432,9 +432,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## discardDraft
+## discardDraftArticle
 
-> object discardDraft(discardDraftArticleReq)
+> object discardDraftArticle(discardDraftArticleReq)
 
 
 
@@ -447,7 +447,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { DiscardDraftRequest } from '@bass/bbs-sdk-fetch';
+import type { DiscardDraftArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -456,10 +456,10 @@ async function example() {
   const body = {
     // DiscardDraftArticleReq
     discardDraftArticleReq: ...,
-  } satisfies DiscardDraftRequest;
+  } satisfies DiscardDraftArticleRequest;
 
   try {
-    const data = await api.discardDraft(body);
+    const data = await api.discardDraftArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -499,9 +499,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## enterLottery
+## enterArticleLottery
 
-> object enterLottery(enterArticleLotteryReq)
+> object enterArticleLottery(enterArticleLotteryReq)
 
 
 
@@ -514,7 +514,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { EnterLotteryRequest } from '@bass/bbs-sdk-fetch';
+import type { EnterArticleLotteryRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -523,10 +523,10 @@ async function example() {
   const body = {
     // EnterArticleLotteryReq
     enterArticleLotteryReq: ...,
-  } satisfies EnterLotteryRequest;
+  } satisfies EnterArticleLotteryRequest;
 
   try {
-    const data = await api.enterLottery(body);
+    const data = await api.enterArticleLottery(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -566,9 +566,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## get
+## getArticle
 
-> GetArticleResp get(getArticleReq)
+> GetArticleResp getArticle(getArticleReq)
 
 
 
@@ -581,7 +581,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetRequest } from '@bass/bbs-sdk-fetch';
+import type { GetArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -590,10 +590,10 @@ async function example() {
   const body = {
     // GetArticleReq
     getArticleReq: ...,
-  } satisfies GetRequest;
+  } satisfies GetArticleRequest;
 
   try {
-    const data = await api.get(body);
+    const data = await api.getArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -633,9 +633,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## like
+## likeArticle
 
-> LikeArticleResp like(likeArticleReq)
+> LikeArticleResp likeArticle(likeArticleReq)
 
 
 
@@ -648,7 +648,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { LikeRequest } from '@bass/bbs-sdk-fetch';
+import type { LikeArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -657,10 +657,10 @@ async function example() {
   const body = {
     // LikeArticleReq
     likeArticleReq: ...,
-  } satisfies LikeRequest;
+  } satisfies LikeArticleRequest;
 
   try {
-    const data = await api.like(body);
+    const data = await api.likeArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -700,9 +700,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## list
+## listArticles
 
-> ListArticlesResp list(listArticlesReq)
+> ListArticlesResp listArticles(listArticlesReq)
 
 
 
@@ -715,7 +715,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
+import type { ListArticlesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -724,10 +724,10 @@ async function example() {
   const body = {
     // ListArticlesReq
     listArticlesReq: ...,
-  } satisfies ListRequest;
+  } satisfies ListArticlesRequest;
 
   try {
-    const data = await api.list(body);
+    const data = await api.listArticles(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -767,9 +767,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listFollowing
+## listFollowingArticles
 
-> ListFollowingArticlesResp listFollowing(listFollowingArticlesReq)
+> ListFollowingArticlesResp listFollowingArticles(listFollowingArticlesReq)
 
 
 
@@ -782,7 +782,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListFollowingRequest } from '@bass/bbs-sdk-fetch';
+import type { ListFollowingArticlesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -791,10 +791,10 @@ async function example() {
   const body = {
     // ListFollowingArticlesReq
     listFollowingArticlesReq: ...,
-  } satisfies ListFollowingRequest;
+  } satisfies ListFollowingArticlesRequest;
 
   try {
-    const data = await api.listFollowing(body);
+    const data = await api.listFollowingArticles(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -834,9 +834,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listNearby
+## listNearbyArticles
 
-> ListNearbyArticlesResp listNearby(listNearbyArticlesReq)
+> ListNearbyArticlesResp listNearbyArticles(listNearbyArticlesReq)
 
 
 
@@ -849,7 +849,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListNearbyRequest } from '@bass/bbs-sdk-fetch';
+import type { ListNearbyArticlesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -858,10 +858,10 @@ async function example() {
   const body = {
     // ListNearbyArticlesReq
     listNearbyArticlesReq: ...,
-  } satisfies ListNearbyRequest;
+  } satisfies ListNearbyArticlesRequest;
 
   try {
-    const data = await api.listNearby(body);
+    const data = await api.listNearbyArticles(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -901,76 +901,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## pageCollected
+## pageArticleViewHistory
 
-> PageCollectedArticlesResp pageCollected(pageCollectedArticlesReq)
-
-
-
-查询当前账号收藏的文章。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ArticleService,
-} from '@bass/bbs-sdk-fetch';
-import type { PageCollectedRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new ArticleService();
-
-  const body = {
-    // PageCollectedArticlesReq
-    pageCollectedArticlesReq: ...,
-  } satisfies PageCollectedRequest;
-
-  try {
-    const data = await api.pageCollected(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **pageCollectedArticlesReq** | [PageCollectedArticlesReq](PageCollectedArticlesReq.md) |  | |
-
-### Return type
-
-[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## pageViewHistory
-
-> PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
+> PageArticleViewHistoryResp pageArticleViewHistory(pageArticleViewHistoryReq)
 
 
 
@@ -983,7 +916,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { PageViewHistoryRequest } from '@bass/bbs-sdk-fetch';
+import type { PageArticleViewHistoryRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -992,10 +925,10 @@ async function example() {
   const body = {
     // PageArticleViewHistoryReq
     pageArticleViewHistoryReq: ...,
-  } satisfies PageViewHistoryRequest;
+  } satisfies PageArticleViewHistoryRequest;
 
   try {
-    const data = await api.pageViewHistory(body);
+    const data = await api.pageArticleViewHistory(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1035,9 +968,76 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## pageWatched
+## pageCollectedArticles
 
-> PageWatchedArticlesResp pageWatched(pageWatchedArticlesReq)
+> PageCollectedArticlesResp pageCollectedArticles(pageCollectedArticlesReq)
+
+
+
+查询当前账号收藏的文章。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { PageCollectedArticlesRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // PageCollectedArticlesReq
+    pageCollectedArticlesReq: ...,
+  } satisfies PageCollectedArticlesRequest;
+
+  try {
+    const data = await api.pageCollectedArticles(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **pageCollectedArticlesReq** | [PageCollectedArticlesReq](PageCollectedArticlesReq.md) |  | |
+
+### Return type
+
+[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## pageWatchedArticles
+
+> PageWatchedArticlesResp pageWatchedArticles(pageWatchedArticlesReq)
 
 
 
@@ -1050,7 +1050,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { PageWatchedRequest } from '@bass/bbs-sdk-fetch';
+import type { PageWatchedArticlesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1059,10 +1059,10 @@ async function example() {
   const body = {
     // PageWatchedArticlesReq
     pageWatchedArticlesReq: ...,
-  } satisfies PageWatchedRequest;
+  } satisfies PageWatchedArticlesRequest;
 
   try {
-    const data = await api.pageWatched(body);
+    const data = await api.pageWatchedArticles(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1102,9 +1102,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## publish
+## publishArticle
 
-> object publish(publishArticleReq)
+> object publishArticle(publishArticleReq)
 
 
 
@@ -1117,7 +1117,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { PublishRequest } from '@bass/bbs-sdk-fetch';
+import type { PublishArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1126,10 +1126,10 @@ async function example() {
   const body = {
     // PublishArticleReq
     publishArticleReq: ...,
-  } satisfies PublishRequest;
+  } satisfies PublishArticleRequest;
 
   try {
-    const data = await api.publish(body);
+    const data = await api.publishArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1169,9 +1169,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## reward
+## rewardArticle
 
-> RewardArticleResp reward(rewardArticleReq)
+> RewardArticleResp rewardArticle(rewardArticleReq)
 
 
 
@@ -1184,7 +1184,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { RewardRequest } from '@bass/bbs-sdk-fetch';
+import type { RewardArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1193,10 +1193,10 @@ async function example() {
   const body = {
     // RewardArticleReq
     rewardArticleReq: ...,
-  } satisfies RewardRequest;
+  } satisfies RewardArticleRequest;
 
   try {
-    const data = await api.reward(body);
+    const data = await api.rewardArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1236,9 +1236,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## setPinnedComment
+## setPinnedArticleComment
 
-> object setPinnedComment(setPinnedArticleCommentReq)
+> object setPinnedArticleComment(setPinnedArticleCommentReq)
 
 
 
@@ -1251,7 +1251,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { SetPinnedCommentRequest } from '@bass/bbs-sdk-fetch';
+import type { SetPinnedArticleCommentRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1260,10 +1260,10 @@ async function example() {
   const body = {
     // SetPinnedArticleCommentReq
     setPinnedArticleCommentReq: ...,
-  } satisfies SetPinnedCommentRequest;
+  } satisfies SetPinnedArticleCommentRequest;
 
   try {
-    const data = await api.setPinnedComment(body);
+    const data = await api.setPinnedArticleComment(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1303,9 +1303,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## thank
+## thankArticle
 
-> ThankArticleResp thank(thankArticleReq)
+> ThankArticleResp thankArticle(thankArticleReq)
 
 
 
@@ -1318,7 +1318,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { ThankRequest } from '@bass/bbs-sdk-fetch';
+import type { ThankArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1327,10 +1327,10 @@ async function example() {
   const body = {
     // ThankArticleReq
     thankArticleReq: ...,
-  } satisfies ThankRequest;
+  } satisfies ThankArticleRequest;
 
   try {
-    const data = await api.thank(body);
+    const data = await api.thankArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1370,9 +1370,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## updateDraft
+## updateDraftArticle
 
-> UpdateDraftArticleResp updateDraft(updateDraftArticleReq)
+> UpdateDraftArticleResp updateDraftArticle(updateDraftArticleReq)
 
 
 
@@ -1385,7 +1385,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdateDraftRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdateDraftArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1394,10 +1394,10 @@ async function example() {
   const body = {
     // UpdateDraftArticleReq
     updateDraftArticleReq: ...,
-  } satisfies UpdateDraftRequest;
+  } satisfies UpdateDraftArticleRequest;
 
   try {
-    const data = await api.updateDraft(body);
+    const data = await api.updateDraftArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1437,9 +1437,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## votePoll
+## voteArticlePoll
 
-> object votePoll(voteArticlePollReq)
+> object voteArticlePoll(voteArticlePollReq)
 
 
 
@@ -1452,7 +1452,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { VotePollRequest } from '@bass/bbs-sdk-fetch';
+import type { VoteArticlePollRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1461,10 +1461,10 @@ async function example() {
   const body = {
     // VoteArticlePollReq
     voteArticlePollReq: ...,
-  } satisfies VotePollRequest;
+  } satisfies VoteArticlePollRequest;
 
   try {
-    const data = await api.votePoll(body);
+    const data = await api.voteArticlePoll(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -1504,9 +1504,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## watch
+## watchArticle
 
-> WatchArticleResp watch(watchArticleReq)
+> WatchArticleResp watchArticle(watchArticleReq)
 
 
 
@@ -1519,7 +1519,7 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { WatchRequest } from '@bass/bbs-sdk-fetch';
+import type { WatchArticleRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -1528,10 +1528,10 @@ async function example() {
   const body = {
     // WatchArticleReq
     watchArticleReq: ...,
-  } satisfies WatchRequest;
+  } satisfies WatchArticleRequest;
 
   try {
-    const data = await api.watch(body);
+    const data = await api.watchArticle(body);
     console.log(data);
   } catch (error) {
     console.error(error);

@@ -29,115 +29,115 @@ import {
 } from './CommentViewerActionState';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface CommentListItem
  */
 export interface CommentListItem {
     /**
-     * 
+     * 评论 ID
      * @type {string}
      * @memberof CommentListItem
      */
     id?: string;
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof CommentListItem
      */
     articleId?: string;
     /**
-     * 
+     * 原始内容
      * @type {string}
      * @memberof CommentListItem
      */
     content?: string;
     /**
-     * 
+     * 渲染后的内容
      * @type {string}
      * @memberof CommentListItem
      */
     contentRender?: string;
     /**
-     * 
+     * 评论层级
      * @type {number}
      * @memberof CommentListItem
      */
     level?: number;
     /**
-     * 
+     * 父评论 ID
      * @type {string}
      * @memberof CommentListItem
      */
     parentId?: string;
     /**
-     * 
+     * 回复的评论 ID
      * @type {string}
      * @memberof CommentListItem
      */
     replyId?: string;
     /**
-     * 
+     * 回复数量
      * @type {number}
      * @memberof CommentListItem
      */
     replyCount?: number;
     /**
-     * 
+     * 点赞数量
      * @type {number}
      * @memberof CommentListItem
      */
     likeCount?: number;
     /**
-     * 
+     * 感谢数量
      * @type {number}
      * @memberof CommentListItem
      */
     thankCount?: number;
     /**
-     * 
+     * 评论账号展示资料
      * @type {AccountProfile}
      * @memberof CommentListItem
      */
     user?: AccountProfile;
     /**
-     * 
+     * 被回复账号展示资料
      * @type {AccountProfile}
      * @memberof CommentListItem
      */
     replyUser?: AccountProfile;
     /**
-     * 
+     * 当前查看账号的评论行为状态
      * @type {CommentViewerActionState}
      * @memberof CommentListItem
      */
     viewerActionState?: CommentViewerActionState;
     /**
-     * 
+     * 管理限制
      * @type {CommentListItemRestrictionEnum}
      * @memberof CommentListItem
      */
     restriction?: CommentListItemRestrictionEnum;
     /**
-     * 
+     * 创建账号 ID
      * @type {string}
      * @memberof CommentListItem
      */
     createdBy?: string;
     /**
-     * 
+     * 更新账号 ID
      * @type {string}
      * @memberof CommentListItem
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof CommentListItem
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof CommentListItem
      */

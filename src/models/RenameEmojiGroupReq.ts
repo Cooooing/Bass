@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface RenameEmojiGroupReq
  */
 export interface RenameEmojiGroupReq {
     /**
-     * 
+     * 待修改分组 ID。
      * @type {string}
      * @memberof RenameEmojiGroupReq
      */
     groupId?: string;
     /**
-     * 
+     * 新分组名称。
      * @type {string}
      * @memberof RenameEmojiGroupReq
      */

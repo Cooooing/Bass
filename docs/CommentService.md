@@ -4,19 +4,19 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**create**](CommentService.md#create) | **POST** /v1/content/comment/create |  |
-| [**like**](CommentService.md#like) | **POST** /v1/content/comment/like |  |
-| [**list**](CommentService.md#list) | **POST** /v1/content/comment/list |  |
-| [**listReplies**](CommentService.md#listreplies) | **POST** /v1/content/comment/list-replies |  |
-| [**listThreads**](CommentService.md#listthreads) | **POST** /v1/content/comment/list-threads |  |
-| [**listTimeline**](CommentService.md#listtimeline) | **POST** /v1/content/comment/list-timeline |  |
-| [**thank**](CommentService.md#thank) | **POST** /v1/content/comment/thank |  |
+| [**createComment**](CommentService.md#createcomment) | **POST** /v1/content/comment/create |  |
+| [**likeComment**](CommentService.md#likecomment) | **POST** /v1/content/comment/like |  |
+| [**listCommentReplies**](CommentService.md#listcommentreplies) | **POST** /v1/content/comment/list-replies |  |
+| [**listCommentThreads**](CommentService.md#listcommentthreads) | **POST** /v1/content/comment/list-threads |  |
+| [**listCommentTimeline**](CommentService.md#listcommenttimeline) | **POST** /v1/content/comment/list-timeline |  |
+| [**listComments**](CommentService.md#listcomments) | **POST** /v1/content/comment/list |  |
+| [**thankComment**](CommentService.md#thankcomment) | **POST** /v1/content/comment/thank |  |
 
 
 
-## create
+## createComment
 
-> CreateCommentResp create(createCommentReq)
+> CreateCommentResp createComment(createCommentReq)
 
 
 
@@ -29,7 +29,7 @@ import {
   Configuration,
   CommentService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateCommentRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -38,10 +38,10 @@ async function example() {
   const body = {
     // CreateCommentReq
     createCommentReq: ...,
-  } satisfies CreateRequest;
+  } satisfies CreateCommentRequest;
 
   try {
-    const data = await api.create(body);
+    const data = await api.createComment(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -81,9 +81,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## like
+## likeComment
 
-> LikeCommentResp like(likeCommentReq)
+> LikeCommentResp likeComment(likeCommentReq)
 
 
 
@@ -96,7 +96,7 @@ import {
   Configuration,
   CommentService,
 } from '@bass/bbs-sdk-fetch';
-import type { LikeRequest } from '@bass/bbs-sdk-fetch';
+import type { LikeCommentRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -105,10 +105,10 @@ async function example() {
   const body = {
     // LikeCommentReq
     likeCommentReq: ...,
-  } satisfies LikeRequest;
+  } satisfies LikeCommentRequest;
 
   try {
-    const data = await api.like(body);
+    const data = await api.likeComment(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -148,76 +148,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## list
+## listCommentReplies
 
-> ListCommentsResp list(listCommentsReq)
-
-
-
-分页查询评论列表。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  CommentService,
-} from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new CommentService();
-
-  const body = {
-    // ListCommentsReq
-    listCommentsReq: ...,
-  } satisfies ListRequest;
-
-  try {
-    const data = await api.list(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **listCommentsReq** | [ListCommentsReq](ListCommentsReq.md) |  | |
-
-### Return type
-
-[**ListCommentsResp**](ListCommentsResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## listReplies
-
-> ListCommentRepliesResp listReplies(listCommentRepliesReq)
+> ListCommentRepliesResp listCommentReplies(listCommentRepliesReq)
 
 
 
@@ -230,7 +163,7 @@ import {
   Configuration,
   CommentService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListRepliesRequest } from '@bass/bbs-sdk-fetch';
+import type { ListCommentRepliesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -239,10 +172,10 @@ async function example() {
   const body = {
     // ListCommentRepliesReq
     listCommentRepliesReq: ...,
-  } satisfies ListRepliesRequest;
+  } satisfies ListCommentRepliesRequest;
 
   try {
-    const data = await api.listReplies(body);
+    const data = await api.listCommentReplies(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -282,9 +215,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listThreads
+## listCommentThreads
 
-> ListCommentThreadsResp listThreads(listCommentThreadsReq)
+> ListCommentThreadsResp listCommentThreads(listCommentThreadsReq)
 
 
 
@@ -297,7 +230,7 @@ import {
   Configuration,
   CommentService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListThreadsRequest } from '@bass/bbs-sdk-fetch';
+import type { ListCommentThreadsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -306,10 +239,10 @@ async function example() {
   const body = {
     // ListCommentThreadsReq
     listCommentThreadsReq: ...,
-  } satisfies ListThreadsRequest;
+  } satisfies ListCommentThreadsRequest;
 
   try {
-    const data = await api.listThreads(body);
+    const data = await api.listCommentThreads(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -349,9 +282,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listTimeline
+## listCommentTimeline
 
-> ListCommentTimelineResp listTimeline(listCommentTimelineReq)
+> ListCommentTimelineResp listCommentTimeline(listCommentTimelineReq)
 
 
 
@@ -364,7 +297,7 @@ import {
   Configuration,
   CommentService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListTimelineRequest } from '@bass/bbs-sdk-fetch';
+import type { ListCommentTimelineRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -373,10 +306,10 @@ async function example() {
   const body = {
     // ListCommentTimelineReq
     listCommentTimelineReq: ...,
-  } satisfies ListTimelineRequest;
+  } satisfies ListCommentTimelineRequest;
 
   try {
-    const data = await api.listTimeline(body);
+    const data = await api.listCommentTimeline(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -416,9 +349,76 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## thank
+## listComments
 
-> ThankCommentResp thank(thankCommentReq)
+> ListCommentsResp listComments(listCommentsReq)
+
+
+
+分页查询评论列表。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  CommentService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListCommentsRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new CommentService();
+
+  const body = {
+    // ListCommentsReq
+    listCommentsReq: ...,
+  } satisfies ListCommentsRequest;
+
+  try {
+    const data = await api.listComments(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listCommentsReq** | [ListCommentsReq](ListCommentsReq.md) |  | |
+
+### Return type
+
+[**ListCommentsResp**](ListCommentsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## thankComment
+
+> ThankCommentResp thankComment(thankCommentReq)
 
 
 
@@ -431,7 +431,7 @@ import {
   Configuration,
   CommentService,
 } from '@bass/bbs-sdk-fetch';
-import type { ThankRequest } from '@bass/bbs-sdk-fetch';
+import type { ThankCommentRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -440,10 +440,10 @@ async function example() {
   const body = {
     // ThankCommentReq
     thankCommentReq: ...,
-  } satisfies ThankRequest;
+  } satisfies ThankCommentRequest;
 
   try {
-    const data = await api.thank(body);
+    const data = await api.thankComment(body);
     console.log(data);
   } catch (error) {
     console.error(error);

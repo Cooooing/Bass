@@ -114,51 +114,51 @@ import {
     ReorderEmojiItemsReqToJSON,
 } from '../models/ReorderEmojiItemsReq';
 
-export interface AddItemRequest {
+export interface AddEmojiItemRequest {
     addEmojiItemReq: AddEmojiItemReq;
 }
 
-export interface CreateGroupRequest {
+export interface CreateEmojiGroupRequest {
     createEmojiGroupReq: CreateEmojiGroupReq;
 }
 
-export interface CreateShareRequest {
+export interface CreateEmojiShareRequest {
     createEmojiShareReq: CreateEmojiShareReq;
 }
 
-export interface DeleteGroupRequest {
+export interface DeleteEmojiGroupRequest {
     deleteEmojiGroupReq: DeleteEmojiGroupReq;
 }
 
-export interface DeleteItemRequest {
+export interface DeleteEmojiItemRequest {
     deleteEmojiItemReq: DeleteEmojiItemReq;
 }
 
-export interface ImportShareRequest {
+export interface ImportEmojiShareRequest {
     importEmojiShareReq: ImportEmojiShareReq;
 }
 
-export interface ListRequest {
+export interface ListEmojiGroupsRequest {
     listEmojiGroupsReq: ListEmojiGroupsReq;
 }
 
-export interface MoveItemRequest {
+export interface MoveEmojiItemRequest {
     moveEmojiItemReq: MoveEmojiItemReq;
 }
 
-export interface RenameGroupRequest {
+export interface RenameEmojiGroupRequest {
     renameEmojiGroupReq: RenameEmojiGroupReq;
 }
 
-export interface RenameItemRequest {
+export interface RenameEmojiItemRequest {
     renameEmojiItemReq: RenameEmojiItemReq;
 }
 
-export interface ReorderGroupsRequest {
+export interface ReorderEmojiGroupsRequest {
     reorderEmojiGroupsReq: ReorderEmojiGroupsReq;
 }
 
-export interface ReorderItemsRequest {
+export interface ReorderEmojiItemsRequest {
     reorderEmojiItemsReq: ReorderEmojiItemsReq;
 }
 
@@ -170,12 +170,12 @@ export interface ReorderItemsRequest {
  */
 export interface EmojiServiceInterface {
     /**
-     * Creates request options for addItem without sending the request
+     * Creates request options for addEmojiItem without sending the request
      * @param {AddEmojiItemReq} addEmojiItemReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    addItemRequestOpts(requestParameters: AddItemRequest): Promise<runtime.RequestOpts>;
+    addEmojiItemRequestOpts(requestParameters: AddEmojiItemRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 向分组加入已上传图片。
@@ -184,20 +184,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    addItemRaw(requestParameters: AddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddEmojiItemResp>>;
+    addEmojiItemRaw(requestParameters: AddEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddEmojiItemResp>>;
 
     /**
      * 向分组加入已上传图片。
      */
-    addItem(requestParameters: AddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddEmojiItemResp>;
+    addEmojiItem(requestParameters: AddEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddEmojiItemResp>;
 
     /**
-     * Creates request options for createGroup without sending the request
+     * Creates request options for createEmojiGroup without sending the request
      * @param {CreateEmojiGroupReq} createEmojiGroupReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    createGroupRequestOpts(requestParameters: CreateGroupRequest): Promise<runtime.RequestOpts>;
+    createEmojiGroupRequestOpts(requestParameters: CreateEmojiGroupRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 创建一个表情分组。
@@ -206,20 +206,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    createGroupRaw(requestParameters: CreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiGroupResp>>;
+    createEmojiGroupRaw(requestParameters: CreateEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiGroupResp>>;
 
     /**
      * 创建一个表情分组。
      */
-    createGroup(requestParameters: CreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiGroupResp>;
+    createEmojiGroup(requestParameters: CreateEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiGroupResp>;
 
     /**
-     * Creates request options for createShare without sending the request
+     * Creates request options for createEmojiShare without sending the request
      * @param {CreateEmojiShareReq} createEmojiShareReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    createShareRequestOpts(requestParameters: CreateShareRequest): Promise<runtime.RequestOpts>;
+    createEmojiShareRequestOpts(requestParameters: CreateEmojiShareRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 生成七天有效的分组分享码。
@@ -228,20 +228,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    createShareRaw(requestParameters: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiShareResp>>;
+    createEmojiShareRaw(requestParameters: CreateEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiShareResp>>;
 
     /**
      * 生成七天有效的分组分享码。
      */
-    createShare(requestParameters: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiShareResp>;
+    createEmojiShare(requestParameters: CreateEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiShareResp>;
 
     /**
-     * Creates request options for deleteGroup without sending the request
+     * Creates request options for deleteEmojiGroup without sending the request
      * @param {DeleteEmojiGroupReq} deleteEmojiGroupReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    deleteGroupRequestOpts(requestParameters: DeleteGroupRequest): Promise<runtime.RequestOpts>;
+    deleteEmojiGroupRequestOpts(requestParameters: DeleteEmojiGroupRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 删除一个表情分组。
@@ -250,20 +250,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    deleteGroupRaw(requestParameters: DeleteGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    deleteEmojiGroupRaw(requestParameters: DeleteEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 删除一个表情分组。
      */
-    deleteGroup(requestParameters: DeleteGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    deleteEmojiGroup(requestParameters: DeleteEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for deleteItem without sending the request
+     * Creates request options for deleteEmojiItem without sending the request
      * @param {DeleteEmojiItemReq} deleteEmojiItemReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    deleteItemRequestOpts(requestParameters: DeleteItemRequest): Promise<runtime.RequestOpts>;
+    deleteEmojiItemRequestOpts(requestParameters: DeleteEmojiItemRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 从分组移除表情。
@@ -272,20 +272,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    deleteItemRaw(requestParameters: DeleteItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    deleteEmojiItemRaw(requestParameters: DeleteEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 从分组移除表情。
      */
-    deleteItem(requestParameters: DeleteItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    deleteEmojiItem(requestParameters: DeleteEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for importShare without sending the request
+     * Creates request options for importEmojiShare without sending the request
      * @param {ImportEmojiShareReq} importEmojiShareReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    importShareRequestOpts(requestParameters: ImportShareRequest): Promise<runtime.RequestOpts>;
+    importEmojiShareRequestOpts(requestParameters: ImportEmojiShareRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 把分享码导入为一个新分组。
@@ -294,20 +294,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    importShareRaw(requestParameters: ImportShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImportEmojiShareResp>>;
+    importEmojiShareRaw(requestParameters: ImportEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImportEmojiShareResp>>;
 
     /**
      * 把分享码导入为一个新分组。
      */
-    importShare(requestParameters: ImportShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImportEmojiShareResp>;
+    importEmojiShare(requestParameters: ImportEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImportEmojiShareResp>;
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listEmojiGroups without sending the request
      * @param {ListEmojiGroupsReq} listEmojiGroupsReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
+    listEmojiGroupsRequestOpts(requestParameters: ListEmojiGroupsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 查询当前账号的表情分组。
@@ -316,20 +316,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEmojiGroupsResp>>;
+    listEmojiGroupsRaw(requestParameters: ListEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEmojiGroupsResp>>;
 
     /**
      * 查询当前账号的表情分组。
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEmojiGroupsResp>;
+    listEmojiGroups(requestParameters: ListEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEmojiGroupsResp>;
 
     /**
-     * Creates request options for moveItem without sending the request
+     * Creates request options for moveEmojiItem without sending the request
      * @param {MoveEmojiItemReq} moveEmojiItemReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    moveItemRequestOpts(requestParameters: MoveItemRequest): Promise<runtime.RequestOpts>;
+    moveEmojiItemRequestOpts(requestParameters: MoveEmojiItemRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 将表情移动到另一个当前账号分组。
@@ -338,20 +338,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    moveItemRaw(requestParameters: MoveItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MoveEmojiItemResp>>;
+    moveEmojiItemRaw(requestParameters: MoveEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MoveEmojiItemResp>>;
 
     /**
      * 将表情移动到另一个当前账号分组。
      */
-    moveItem(requestParameters: MoveItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MoveEmojiItemResp>;
+    moveEmojiItem(requestParameters: MoveEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MoveEmojiItemResp>;
 
     /**
-     * Creates request options for renameGroup without sending the request
+     * Creates request options for renameEmojiGroup without sending the request
      * @param {RenameEmojiGroupReq} renameEmojiGroupReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    renameGroupRequestOpts(requestParameters: RenameGroupRequest): Promise<runtime.RequestOpts>;
+    renameEmojiGroupRequestOpts(requestParameters: RenameEmojiGroupRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 重命名一个表情分组。
@@ -360,20 +360,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    renameGroupRaw(requestParameters: RenameGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiGroupResp>>;
+    renameEmojiGroupRaw(requestParameters: RenameEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiGroupResp>>;
 
     /**
      * 重命名一个表情分组。
      */
-    renameGroup(requestParameters: RenameGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiGroupResp>;
+    renameEmojiGroup(requestParameters: RenameEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiGroupResp>;
 
     /**
-     * Creates request options for renameItem without sending the request
+     * Creates request options for renameEmojiItem without sending the request
      * @param {RenameEmojiItemReq} renameEmojiItemReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    renameItemRequestOpts(requestParameters: RenameItemRequest): Promise<runtime.RequestOpts>;
+    renameEmojiItemRequestOpts(requestParameters: RenameEmojiItemRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 重命名一个表情别名。
@@ -382,20 +382,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    renameItemRaw(requestParameters: RenameItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiItemResp>>;
+    renameEmojiItemRaw(requestParameters: RenameEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiItemResp>>;
 
     /**
      * 重命名一个表情别名。
      */
-    renameItem(requestParameters: RenameItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiItemResp>;
+    renameEmojiItem(requestParameters: RenameEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiItemResp>;
 
     /**
-     * Creates request options for reorderGroups without sending the request
+     * Creates request options for reorderEmojiGroups without sending the request
      * @param {ReorderEmojiGroupsReq} reorderEmojiGroupsReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    reorderGroupsRequestOpts(requestParameters: ReorderGroupsRequest): Promise<runtime.RequestOpts>;
+    reorderEmojiGroupsRequestOpts(requestParameters: ReorderEmojiGroupsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 重排表情分组。
@@ -404,20 +404,20 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    reorderGroupsRaw(requestParameters: ReorderGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    reorderEmojiGroupsRaw(requestParameters: ReorderEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 重排表情分组。
      */
-    reorderGroups(requestParameters: ReorderGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    reorderEmojiGroups(requestParameters: ReorderEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for reorderItems without sending the request
+     * Creates request options for reorderEmojiItems without sending the request
      * @param {ReorderEmojiItemsReq} reorderEmojiItemsReq 
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    reorderItemsRequestOpts(requestParameters: ReorderItemsRequest): Promise<runtime.RequestOpts>;
+    reorderEmojiItemsRequestOpts(requestParameters: ReorderEmojiItemsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 重排同一分组内的表情。
@@ -426,12 +426,12 @@ export interface EmojiServiceInterface {
      * @throws {RequiredError}
      * @memberof EmojiServiceInterface
      */
-    reorderItemsRaw(requestParameters: ReorderItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    reorderEmojiItemsRaw(requestParameters: ReorderEmojiItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * 重排同一分组内的表情。
      */
-    reorderItems(requestParameters: ReorderItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    reorderEmojiItems(requestParameters: ReorderEmojiItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
 }
 
@@ -441,13 +441,13 @@ export interface EmojiServiceInterface {
 export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterface {
 
     /**
-     * Creates request options for addItem without sending the request
+     * Creates request options for addEmojiItem without sending the request
      */
-    async addItemRequestOpts(requestParameters: AddItemRequest): Promise<runtime.RequestOpts> {
+    async addEmojiItemRequestOpts(requestParameters: AddEmojiItemRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['addEmojiItemReq'] == null) {
             throw new runtime.RequiredError(
                 'addEmojiItemReq',
-                'Required parameter "addEmojiItemReq" was null or undefined when calling addItem().'
+                'Required parameter "addEmojiItemReq" was null or undefined when calling addEmojiItem().'
             );
         }
 
@@ -472,8 +472,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 向分组加入已上传图片。
      */
-    async addItemRaw(requestParameters: AddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddEmojiItemResp>> {
-        const requestOptions = await this.addItemRequestOpts(requestParameters);
+    async addEmojiItemRaw(requestParameters: AddEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddEmojiItemResp>> {
+        const requestOptions = await this.addEmojiItemRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => AddEmojiItemRespFromJSON(jsonValue));
@@ -482,19 +482,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 向分组加入已上传图片。
      */
-    async addItem(requestParameters: AddItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddEmojiItemResp> {
-        const response = await this.addItemRaw(requestParameters, initOverrides);
+    async addEmojiItem(requestParameters: AddEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddEmojiItemResp> {
+        const response = await this.addEmojiItemRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for createGroup without sending the request
+     * Creates request options for createEmojiGroup without sending the request
      */
-    async createGroupRequestOpts(requestParameters: CreateGroupRequest): Promise<runtime.RequestOpts> {
+    async createEmojiGroupRequestOpts(requestParameters: CreateEmojiGroupRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['createEmojiGroupReq'] == null) {
             throw new runtime.RequiredError(
                 'createEmojiGroupReq',
-                'Required parameter "createEmojiGroupReq" was null or undefined when calling createGroup().'
+                'Required parameter "createEmojiGroupReq" was null or undefined when calling createEmojiGroup().'
             );
         }
 
@@ -519,8 +519,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 创建一个表情分组。
      */
-    async createGroupRaw(requestParameters: CreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiGroupResp>> {
-        const requestOptions = await this.createGroupRequestOpts(requestParameters);
+    async createEmojiGroupRaw(requestParameters: CreateEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiGroupResp>> {
+        const requestOptions = await this.createEmojiGroupRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateEmojiGroupRespFromJSON(jsonValue));
@@ -529,19 +529,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 创建一个表情分组。
      */
-    async createGroup(requestParameters: CreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiGroupResp> {
-        const response = await this.createGroupRaw(requestParameters, initOverrides);
+    async createEmojiGroup(requestParameters: CreateEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiGroupResp> {
+        const response = await this.createEmojiGroupRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for createShare without sending the request
+     * Creates request options for createEmojiShare without sending the request
      */
-    async createShareRequestOpts(requestParameters: CreateShareRequest): Promise<runtime.RequestOpts> {
+    async createEmojiShareRequestOpts(requestParameters: CreateEmojiShareRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['createEmojiShareReq'] == null) {
             throw new runtime.RequiredError(
                 'createEmojiShareReq',
-                'Required parameter "createEmojiShareReq" was null or undefined when calling createShare().'
+                'Required parameter "createEmojiShareReq" was null or undefined when calling createEmojiShare().'
             );
         }
 
@@ -566,8 +566,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 生成七天有效的分组分享码。
      */
-    async createShareRaw(requestParameters: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiShareResp>> {
-        const requestOptions = await this.createShareRequestOpts(requestParameters);
+    async createEmojiShareRaw(requestParameters: CreateEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateEmojiShareResp>> {
+        const requestOptions = await this.createEmojiShareRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateEmojiShareRespFromJSON(jsonValue));
@@ -576,19 +576,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 生成七天有效的分组分享码。
      */
-    async createShare(requestParameters: CreateShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiShareResp> {
-        const response = await this.createShareRaw(requestParameters, initOverrides);
+    async createEmojiShare(requestParameters: CreateEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateEmojiShareResp> {
+        const response = await this.createEmojiShareRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for deleteGroup without sending the request
+     * Creates request options for deleteEmojiGroup without sending the request
      */
-    async deleteGroupRequestOpts(requestParameters: DeleteGroupRequest): Promise<runtime.RequestOpts> {
+    async deleteEmojiGroupRequestOpts(requestParameters: DeleteEmojiGroupRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deleteEmojiGroupReq'] == null) {
             throw new runtime.RequiredError(
                 'deleteEmojiGroupReq',
-                'Required parameter "deleteEmojiGroupReq" was null or undefined when calling deleteGroup().'
+                'Required parameter "deleteEmojiGroupReq" was null or undefined when calling deleteEmojiGroup().'
             );
         }
 
@@ -613,8 +613,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 删除一个表情分组。
      */
-    async deleteGroupRaw(requestParameters: DeleteGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.deleteGroupRequestOpts(requestParameters);
+    async deleteEmojiGroupRaw(requestParameters: DeleteEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.deleteEmojiGroupRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -623,19 +623,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 删除一个表情分组。
      */
-    async deleteGroup(requestParameters: DeleteGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.deleteGroupRaw(requestParameters, initOverrides);
+    async deleteEmojiGroup(requestParameters: DeleteEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.deleteEmojiGroupRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for deleteItem without sending the request
+     * Creates request options for deleteEmojiItem without sending the request
      */
-    async deleteItemRequestOpts(requestParameters: DeleteItemRequest): Promise<runtime.RequestOpts> {
+    async deleteEmojiItemRequestOpts(requestParameters: DeleteEmojiItemRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deleteEmojiItemReq'] == null) {
             throw new runtime.RequiredError(
                 'deleteEmojiItemReq',
-                'Required parameter "deleteEmojiItemReq" was null or undefined when calling deleteItem().'
+                'Required parameter "deleteEmojiItemReq" was null or undefined when calling deleteEmojiItem().'
             );
         }
 
@@ -660,8 +660,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 从分组移除表情。
      */
-    async deleteItemRaw(requestParameters: DeleteItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.deleteItemRequestOpts(requestParameters);
+    async deleteEmojiItemRaw(requestParameters: DeleteEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.deleteEmojiItemRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -670,19 +670,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 从分组移除表情。
      */
-    async deleteItem(requestParameters: DeleteItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.deleteItemRaw(requestParameters, initOverrides);
+    async deleteEmojiItem(requestParameters: DeleteEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.deleteEmojiItemRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for importShare without sending the request
+     * Creates request options for importEmojiShare without sending the request
      */
-    async importShareRequestOpts(requestParameters: ImportShareRequest): Promise<runtime.RequestOpts> {
+    async importEmojiShareRequestOpts(requestParameters: ImportEmojiShareRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['importEmojiShareReq'] == null) {
             throw new runtime.RequiredError(
                 'importEmojiShareReq',
-                'Required parameter "importEmojiShareReq" was null or undefined when calling importShare().'
+                'Required parameter "importEmojiShareReq" was null or undefined when calling importEmojiShare().'
             );
         }
 
@@ -707,8 +707,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 把分享码导入为一个新分组。
      */
-    async importShareRaw(requestParameters: ImportShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImportEmojiShareResp>> {
-        const requestOptions = await this.importShareRequestOpts(requestParameters);
+    async importEmojiShareRaw(requestParameters: ImportEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImportEmojiShareResp>> {
+        const requestOptions = await this.importEmojiShareRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ImportEmojiShareRespFromJSON(jsonValue));
@@ -717,19 +717,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 把分享码导入为一个新分组。
      */
-    async importShare(requestParameters: ImportShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImportEmojiShareResp> {
-        const response = await this.importShareRaw(requestParameters, initOverrides);
+    async importEmojiShare(requestParameters: ImportEmojiShareRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImportEmojiShareResp> {
+        const response = await this.importEmojiShareRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listEmojiGroups without sending the request
      */
-    async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
+    async listEmojiGroupsRequestOpts(requestParameters: ListEmojiGroupsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['listEmojiGroupsReq'] == null) {
             throw new runtime.RequiredError(
                 'listEmojiGroupsReq',
-                'Required parameter "listEmojiGroupsReq" was null or undefined when calling list().'
+                'Required parameter "listEmojiGroupsReq" was null or undefined when calling listEmojiGroups().'
             );
         }
 
@@ -754,8 +754,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 查询当前账号的表情分组。
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEmojiGroupsResp>> {
-        const requestOptions = await this.listRequestOpts(requestParameters);
+    async listEmojiGroupsRaw(requestParameters: ListEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListEmojiGroupsResp>> {
+        const requestOptions = await this.listEmojiGroupsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListEmojiGroupsRespFromJSON(jsonValue));
@@ -764,19 +764,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 查询当前账号的表情分组。
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEmojiGroupsResp> {
-        const response = await this.listRaw(requestParameters, initOverrides);
+    async listEmojiGroups(requestParameters: ListEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListEmojiGroupsResp> {
+        const response = await this.listEmojiGroupsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for moveItem without sending the request
+     * Creates request options for moveEmojiItem without sending the request
      */
-    async moveItemRequestOpts(requestParameters: MoveItemRequest): Promise<runtime.RequestOpts> {
+    async moveEmojiItemRequestOpts(requestParameters: MoveEmojiItemRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['moveEmojiItemReq'] == null) {
             throw new runtime.RequiredError(
                 'moveEmojiItemReq',
-                'Required parameter "moveEmojiItemReq" was null or undefined when calling moveItem().'
+                'Required parameter "moveEmojiItemReq" was null or undefined when calling moveEmojiItem().'
             );
         }
 
@@ -801,8 +801,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 将表情移动到另一个当前账号分组。
      */
-    async moveItemRaw(requestParameters: MoveItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MoveEmojiItemResp>> {
-        const requestOptions = await this.moveItemRequestOpts(requestParameters);
+    async moveEmojiItemRaw(requestParameters: MoveEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MoveEmojiItemResp>> {
+        const requestOptions = await this.moveEmojiItemRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => MoveEmojiItemRespFromJSON(jsonValue));
@@ -811,19 +811,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 将表情移动到另一个当前账号分组。
      */
-    async moveItem(requestParameters: MoveItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MoveEmojiItemResp> {
-        const response = await this.moveItemRaw(requestParameters, initOverrides);
+    async moveEmojiItem(requestParameters: MoveEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MoveEmojiItemResp> {
+        const response = await this.moveEmojiItemRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for renameGroup without sending the request
+     * Creates request options for renameEmojiGroup without sending the request
      */
-    async renameGroupRequestOpts(requestParameters: RenameGroupRequest): Promise<runtime.RequestOpts> {
+    async renameEmojiGroupRequestOpts(requestParameters: RenameEmojiGroupRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['renameEmojiGroupReq'] == null) {
             throw new runtime.RequiredError(
                 'renameEmojiGroupReq',
-                'Required parameter "renameEmojiGroupReq" was null or undefined when calling renameGroup().'
+                'Required parameter "renameEmojiGroupReq" was null or undefined when calling renameEmojiGroup().'
             );
         }
 
@@ -848,8 +848,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重命名一个表情分组。
      */
-    async renameGroupRaw(requestParameters: RenameGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiGroupResp>> {
-        const requestOptions = await this.renameGroupRequestOpts(requestParameters);
+    async renameEmojiGroupRaw(requestParameters: RenameEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiGroupResp>> {
+        const requestOptions = await this.renameEmojiGroupRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RenameEmojiGroupRespFromJSON(jsonValue));
@@ -858,19 +858,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重命名一个表情分组。
      */
-    async renameGroup(requestParameters: RenameGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiGroupResp> {
-        const response = await this.renameGroupRaw(requestParameters, initOverrides);
+    async renameEmojiGroup(requestParameters: RenameEmojiGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiGroupResp> {
+        const response = await this.renameEmojiGroupRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for renameItem without sending the request
+     * Creates request options for renameEmojiItem without sending the request
      */
-    async renameItemRequestOpts(requestParameters: RenameItemRequest): Promise<runtime.RequestOpts> {
+    async renameEmojiItemRequestOpts(requestParameters: RenameEmojiItemRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['renameEmojiItemReq'] == null) {
             throw new runtime.RequiredError(
                 'renameEmojiItemReq',
-                'Required parameter "renameEmojiItemReq" was null or undefined when calling renameItem().'
+                'Required parameter "renameEmojiItemReq" was null or undefined when calling renameEmojiItem().'
             );
         }
 
@@ -895,8 +895,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重命名一个表情别名。
      */
-    async renameItemRaw(requestParameters: RenameItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiItemResp>> {
-        const requestOptions = await this.renameItemRequestOpts(requestParameters);
+    async renameEmojiItemRaw(requestParameters: RenameEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenameEmojiItemResp>> {
+        const requestOptions = await this.renameEmojiItemRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => RenameEmojiItemRespFromJSON(jsonValue));
@@ -905,19 +905,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重命名一个表情别名。
      */
-    async renameItem(requestParameters: RenameItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiItemResp> {
-        const response = await this.renameItemRaw(requestParameters, initOverrides);
+    async renameEmojiItem(requestParameters: RenameEmojiItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenameEmojiItemResp> {
+        const response = await this.renameEmojiItemRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for reorderGroups without sending the request
+     * Creates request options for reorderEmojiGroups without sending the request
      */
-    async reorderGroupsRequestOpts(requestParameters: ReorderGroupsRequest): Promise<runtime.RequestOpts> {
+    async reorderEmojiGroupsRequestOpts(requestParameters: ReorderEmojiGroupsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['reorderEmojiGroupsReq'] == null) {
             throw new runtime.RequiredError(
                 'reorderEmojiGroupsReq',
-                'Required parameter "reorderEmojiGroupsReq" was null or undefined when calling reorderGroups().'
+                'Required parameter "reorderEmojiGroupsReq" was null or undefined when calling reorderEmojiGroups().'
             );
         }
 
@@ -942,8 +942,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重排表情分组。
      */
-    async reorderGroupsRaw(requestParameters: ReorderGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.reorderGroupsRequestOpts(requestParameters);
+    async reorderEmojiGroupsRaw(requestParameters: ReorderEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.reorderEmojiGroupsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -952,19 +952,19 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重排表情分组。
      */
-    async reorderGroups(requestParameters: ReorderGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.reorderGroupsRaw(requestParameters, initOverrides);
+    async reorderEmojiGroups(requestParameters: ReorderEmojiGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.reorderEmojiGroupsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for reorderItems without sending the request
+     * Creates request options for reorderEmojiItems without sending the request
      */
-    async reorderItemsRequestOpts(requestParameters: ReorderItemsRequest): Promise<runtime.RequestOpts> {
+    async reorderEmojiItemsRequestOpts(requestParameters: ReorderEmojiItemsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['reorderEmojiItemsReq'] == null) {
             throw new runtime.RequiredError(
                 'reorderEmojiItemsReq',
-                'Required parameter "reorderEmojiItemsReq" was null or undefined when calling reorderItems().'
+                'Required parameter "reorderEmojiItemsReq" was null or undefined when calling reorderEmojiItems().'
             );
         }
 
@@ -989,8 +989,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重排同一分组内的表情。
      */
-    async reorderItemsRaw(requestParameters: ReorderItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.reorderItemsRequestOpts(requestParameters);
+    async reorderEmojiItemsRaw(requestParameters: ReorderEmojiItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.reorderEmojiItemsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -999,8 +999,8 @@ export class EmojiService extends runtime.BaseAPI implements EmojiServiceInterfa
     /**
      * 重排同一分组内的表情。
      */
-    async reorderItems(requestParameters: ReorderItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.reorderItemsRaw(requestParameters, initOverrides);
+    async reorderEmojiItems(requestParameters: ReorderEmojiItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.reorderEmojiItemsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

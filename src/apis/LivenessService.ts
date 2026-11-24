@@ -24,7 +24,7 @@ import {
     GetLivenessRespToJSON,
 } from '../models/GetLivenessResp';
 
-export interface ClaimYesterdayRewardRequest {
+export interface ClaimYesterdayLivenessRewardRequest {
     body: object;
 }
 
@@ -36,25 +36,26 @@ export interface ClaimYesterdayRewardRequest {
  */
 export interface LivenessServiceInterface {
     /**
-     * Creates request options for claimYesterdayReward without sending the request
+     * Creates request options for claimYesterdayLivenessReward without sending the request
      * @param {object} body 
      * @throws {RequiredError}
      * @memberof LivenessServiceInterface
      */
-    claimYesterdayRewardRequestOpts(requestParameters: ClaimYesterdayRewardRequest): Promise<runtime.RequestOpts>;
+    claimYesterdayLivenessRewardRequestOpts(requestParameters: ClaimYesterdayLivenessRewardRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LivenessServiceInterface
      */
-    claimYesterdayRewardRaw(requestParameters: ClaimYesterdayRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimYesterdayLivenessRewardResp>>;
+    claimYesterdayLivenessRewardRaw(requestParameters: ClaimYesterdayLivenessRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimYesterdayLivenessRewardResp>>;
 
     /**
+     * 服务方法。
      */
-    claimYesterdayReward(requestParameters: ClaimYesterdayRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimYesterdayLivenessRewardResp>;
+    claimYesterdayLivenessReward(requestParameters: ClaimYesterdayLivenessRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimYesterdayLivenessRewardResp>;
 
     /**
      * Creates request options for getLiveness without sending the request
@@ -64,7 +65,7 @@ export interface LivenessServiceInterface {
     getLivenessRequestOpts(): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof LivenessServiceInterface
@@ -72,6 +73,7 @@ export interface LivenessServiceInterface {
     getLivenessRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetLivenessResp>>;
 
     /**
+     * 服务方法。
      */
     getLiveness(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetLivenessResp>;
 
@@ -83,13 +85,13 @@ export interface LivenessServiceInterface {
 export class LivenessService extends runtime.BaseAPI implements LivenessServiceInterface {
 
     /**
-     * Creates request options for claimYesterdayReward without sending the request
+     * Creates request options for claimYesterdayLivenessReward without sending the request
      */
-    async claimYesterdayRewardRequestOpts(requestParameters: ClaimYesterdayRewardRequest): Promise<runtime.RequestOpts> {
+    async claimYesterdayLivenessRewardRequestOpts(requestParameters: ClaimYesterdayLivenessRewardRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
-                'Required parameter "body" was null or undefined when calling claimYesterdayReward().'
+                'Required parameter "body" was null or undefined when calling claimYesterdayLivenessReward().'
             );
         }
 
@@ -112,18 +114,20 @@ export class LivenessService extends runtime.BaseAPI implements LivenessServiceI
     }
 
     /**
+     * 服务方法。
      */
-    async claimYesterdayRewardRaw(requestParameters: ClaimYesterdayRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimYesterdayLivenessRewardResp>> {
-        const requestOptions = await this.claimYesterdayRewardRequestOpts(requestParameters);
+    async claimYesterdayLivenessRewardRaw(requestParameters: ClaimYesterdayLivenessRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClaimYesterdayLivenessRewardResp>> {
+        const requestOptions = await this.claimYesterdayLivenessRewardRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ClaimYesterdayLivenessRewardRespFromJSON(jsonValue));
     }
 
     /**
+     * 服务方法。
      */
-    async claimYesterdayReward(requestParameters: ClaimYesterdayRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimYesterdayLivenessRewardResp> {
-        const response = await this.claimYesterdayRewardRaw(requestParameters, initOverrides);
+    async claimYesterdayLivenessReward(requestParameters: ClaimYesterdayLivenessRewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClaimYesterdayLivenessRewardResp> {
+        const response = await this.claimYesterdayLivenessRewardRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -147,6 +151,7 @@ export class LivenessService extends runtime.BaseAPI implements LivenessServiceI
     }
 
     /**
+     * 服务方法。
      */
     async getLivenessRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetLivenessResp>> {
         const requestOptions = await this.getLivenessRequestOpts();
@@ -156,6 +161,7 @@ export class LivenessService extends runtime.BaseAPI implements LivenessServiceI
     }
 
     /**
+     * 服务方法。
      */
     async getLiveness(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetLivenessResp> {
         const response = await this.getLivenessRaw(initOverrides);

@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface AddEmojiItemReq
  */
 export interface AddEmojiItemReq {
     /**
-     * 
+     * 可选目标分组 ID；缺省时加入默认分组。
      * @type {string}
      * @memberof AddEmojiItemReq
      */
     groupId?: string;
     /**
-     * 
+     * 已确认可用的平台图片资产 ID。
      * @type {string}
      * @memberof AddEmojiItemReq
      */
     assetId?: string;
     /**
-     * 
+     * 可选表情别名。
      * @type {string}
      * @memberof AddEmojiItemReq
      */

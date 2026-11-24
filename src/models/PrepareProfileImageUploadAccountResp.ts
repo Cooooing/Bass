@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface PrepareProfileImageUploadAccountResp
  */
 export interface PrepareProfileImageUploadAccountResp {
     /**
-     * 
+     * 已存在时直接返回
      * @type {string}
      * @memberof PrepareProfileImageUploadAccountResp
      */
     assetId?: string;
     /**
-     * 
+     * 新资源的 MinIO multipart POST 地址
      * @type {string}
      * @memberof PrepareProfileImageUploadAccountResp
      */
     uploadUrl?: string;
     /**
-     * 
+     * 协议字段。
      * @type {{ [key: string]: string; }}
      * @memberof PrepareProfileImageUploadAccountResp
      */

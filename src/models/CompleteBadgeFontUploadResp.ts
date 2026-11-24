@@ -20,13 +20,13 @@ import { mapValues } from '../runtime';
  */
 export interface CompleteBadgeFontUploadResp {
     /**
-     * 
+     * 已确认资源的 ID。
      * @type {string}
      * @memberof CompleteBadgeFontUploadResp
      */
     assetId?: string;
     /**
-     * 
+     * 前端本地预览可用的字体公开地址。
      * @type {string}
      * @memberof CompleteBadgeFontUploadResp
      */

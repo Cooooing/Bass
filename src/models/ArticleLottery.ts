@@ -22,37 +22,37 @@ import {
 } from './ArticleLotteryPrize';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleLottery
  */
 export interface ArticleLottery {
     /**
-     * 
+     * 开奖时间
      * @type {Date}
      * @memberof ArticleLottery
      */
     drawAt?: Date;
     /**
-     * 
+     * 实际开奖时间
      * @type {Date}
      * @memberof ArticleLottery
      */
     drawnAt?: Date;
     /**
-     * 
+     * 有效报名人数
      * @type {string}
      * @memberof ArticleLottery
      */
     entryCount?: string;
     /**
-     * 
+     * 当前账号是否已报名
      * @type {boolean}
      * @memberof ArticleLottery
      */
     entered?: boolean;
     /**
-     * 
+     * 奖项和中奖结果
      * @type {Array<ArticleLotteryPrize>}
      * @memberof ArticleLottery
      */

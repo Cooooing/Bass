@@ -29,19 +29,19 @@ import {
 } from './RespNotification';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListNotificationsResp
  */
 export interface ListNotificationsResp {
     /**
-     * 
+     * 分页结果
      * @type {PageResp}
      * @memberof ListNotificationsResp
      */
     page?: PageResp;
     /**
-     * 
+     * 通知列表
      * @type {Array<RespNotification>}
      * @memberof ListNotificationsResp
      */

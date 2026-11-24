@@ -22,13 +22,13 @@ import {
 } from './EmojiGroup';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface RenameEmojiGroupResp
  */
 export interface RenameEmojiGroupResp {
     /**
-     * 
+     * 已重命名分组。
      * @type {EmojiGroup}
      * @memberof RenameEmojiGroupResp
      */

@@ -22,19 +22,19 @@ import {
 } from './ArticleLotteryPrizeDraft';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleLotteryDraft
  */
 export interface ArticleLotteryDraft {
     /**
-     * 
+     * 奖项配置
      * @type {Array<ArticleLotteryPrizeDraft>}
      * @memberof ArticleLotteryDraft
      */
     prizes?: Array<ArticleLotteryPrizeDraft>;
     /**
-     * 
+     * 开奖时间
      * @type {Date}
      * @memberof ArticleLotteryDraft
      */

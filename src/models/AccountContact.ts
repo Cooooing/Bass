@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface AccountContact
  */
 export interface AccountContact {
     /**
-     * 
+     * 账号 ID
      * @type {string}
      * @memberof AccountContact
      */
     userId?: string;
     /**
-     * 
+     * 邮箱地址
      * @type {string}
      * @memberof AccountContact
      */
     email?: string;
     /**
-     * 
+     * 手机号
      * @type {string}
      * @memberof AccountContact
      */

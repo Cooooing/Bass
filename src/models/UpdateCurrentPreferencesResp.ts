@@ -22,13 +22,13 @@ import {
 } from './RespPreference';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface UpdateCurrentPreferencesResp
  */
 export interface UpdateCurrentPreferencesResp {
     /**
-     * 
+     * 更新后的账号偏好设置
      * @type {RespPreference}
      * @memberof UpdateCurrentPreferencesResp
      */

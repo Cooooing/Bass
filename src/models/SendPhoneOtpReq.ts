@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SendPhoneOtpReq
  */
 export interface SendPhoneOtpReq {
     /**
-     * 
+     * 手机号
      * @type {string}
      * @memberof SendPhoneOtpReq
      */

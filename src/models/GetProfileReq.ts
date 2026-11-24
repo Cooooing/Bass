@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface GetProfileReq
  */
 export interface GetProfileReq {
     /**
-     * 
+     * 账号名，必填
      * @type {string}
      * @memberof GetProfileReq
      */

@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface PageWatchingMoonbreezesReq
  */
 export interface PageWatchingMoonbreezesReq {
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof PageWatchingMoonbreezesReq
      */
     cursor?: string;
     /**
-     * 
+     * 协议字段。
      * @type {number}
      * @memberof PageWatchingMoonbreezesReq
      */

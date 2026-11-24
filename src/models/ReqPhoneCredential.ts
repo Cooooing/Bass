@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqPhoneCredential
  */
 export interface ReqPhoneCredential {
     /**
-     * 
+     * 手机号
      * @type {string}
      * @memberof ReqPhoneCredential
      */
     phone?: string;
     /**
-     * 
+     * 手机 OTP
      * @type {string}
      * @memberof ReqPhoneCredential
      */

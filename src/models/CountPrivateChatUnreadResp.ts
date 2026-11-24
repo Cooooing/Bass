@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CountPrivateChatUnreadResp
  */
 export interface CountPrivateChatUnreadResp {
     /**
-     * 
+     * 未读消息总数。
      * @type {number}
      * @memberof CountPrivateChatUnreadResp
      */

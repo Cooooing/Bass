@@ -22,13 +22,13 @@ import {
 } from './ArticleDetail';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetArticleResp
  */
 export interface GetArticleResp {
     /**
-     * 
+     * 文章详情
      * @type {ArticleDetail}
      * @memberof GetArticleResp
      */

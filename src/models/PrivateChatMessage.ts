@@ -14,55 +14,55 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface PrivateChatMessage
  */
 export interface PrivateChatMessage {
     /**
-     * 
+     * 消息 ID。
      * @type {string}
      * @memberof PrivateChatMessage
      */
     id?: string;
     /**
-     * 
+     * 发送账号 ID。
      * @type {string}
      * @memberof PrivateChatMessage
      */
     senderId?: string;
     /**
-     * 
+     * 接收账号 ID。
      * @type {string}
      * @memberof PrivateChatMessage
      */
     receiverId?: string;
     /**
-     * 
+     * 原始 Markdown 内容。
      * @type {string}
      * @memberof PrivateChatMessage
      */
     content?: string;
     /**
-     * 
+     * 消息类型。
      * @type {PrivateChatMessageMessageTypeEnum}
      * @memberof PrivateChatMessage
      */
     messageType?: PrivateChatMessageMessageTypeEnum;
     /**
-     * 
+     * 是否已撤回。
      * @type {boolean}
      * @memberof PrivateChatMessage
      */
     revoked?: boolean;
     /**
-     * 
+     * 创建时间。
      * @type {Date}
      * @memberof PrivateChatMessage
      */
     createdAt?: Date;
     /**
-     * 
+     * 撤回时间。
      * @type {Date}
      * @memberof PrivateChatMessage
      */

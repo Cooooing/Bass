@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SendPrivateChatMessageReq
  */
 export interface SendPrivateChatMessageReq {
     /**
-     * 
+     * 接收账号 ID。
      * @type {string}
      * @memberof SendPrivateChatMessageReq
      */
     receiverId?: string;
     /**
-     * 
+     * 客户端幂等消息 ID。
      * @type {string}
      * @memberof SendPrivateChatMessageReq
      */
     clientMessageId?: string;
     /**
-     * 
+     * 原始 Markdown 内容。
      * @type {string}
      * @memberof SendPrivateChatMessageReq
      */

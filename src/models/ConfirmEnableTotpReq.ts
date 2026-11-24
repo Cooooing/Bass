@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ConfirmEnableTotpReq
  */
 export interface ConfirmEnableTotpReq {
     /**
-     * 
+     * TOTP 验证码
      * @type {string}
      * @memberof ConfirmEnableTotpReq
      */

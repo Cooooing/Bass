@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface PrepareMarkdownImageUploadResp
  */
 export interface PrepareMarkdownImageUploadResp {
     /**
-     * 
+     * 已存在资源的 ID。
      * @type {string}
      * @memberof PrepareMarkdownImageUploadResp
      */
     assetId?: string;
     /**
-     * 
+     * 新资源的 MinIO multipart POST 地址。
      * @type {string}
      * @memberof PrepareMarkdownImageUploadResp
      */
     uploadUrl?: string;
     /**
-     * 
+     * MinIO multipart POST 表单字段。
      * @type {{ [key: string]: string; }}
      * @memberof PrepareMarkdownImageUploadResp
      */

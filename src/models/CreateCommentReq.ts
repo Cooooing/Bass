@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateCommentReq
  */
 export interface CreateCommentReq {
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof CreateCommentReq
      */
     articleId: string;
     /**
-     * 
+     * 评论内容
      * @type {string}
      * @memberof CreateCommentReq
      */
     content: string;
     /**
-     * 
+     * 回复的评论 ID
      * @type {string}
      * @memberof CreateCommentReq
      */

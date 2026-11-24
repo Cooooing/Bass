@@ -29,19 +29,19 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface PageArticleViewHistoryResp
  */
 export interface PageArticleViewHistoryResp {
     /**
-     * 
+     * 协议字段。
      * @type {Array<ArticleViewHistoryItem>}
      * @memberof PageArticleViewHistoryResp
      */
     rows?: Array<ArticleViewHistoryItem>;
     /**
-     * 
+     * 协议字段。
      * @type {PageResp}
      * @memberof PageArticleViewHistoryResp
      */

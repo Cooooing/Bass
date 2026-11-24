@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface GlobalChatTopic
  */
 export interface GlobalChatTopic {
     /**
-     * 
+     * 话题记录 ID。
      * @type {string}
      * @memberof GlobalChatTopic
      */
     id?: string;
     /**
-     * 
+     * 设置话题的账号 ID。
      * @type {string}
      * @memberof GlobalChatTopic
      */
     userId?: string;
     /**
-     * 
+     * 话题内容。
      * @type {string}
      * @memberof GlobalChatTopic
      */
     content?: string;
     /**
-     * 
+     * 本次设置实际消耗的积分。
      * @type {string}
      * @memberof GlobalChatTopic
      */
     pointsCost?: string;
     /**
-     * 
+     * 话题设置时间。
      * @type {Date}
      * @memberof GlobalChatTopic
      */

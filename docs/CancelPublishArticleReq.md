@@ -1,6 +1,7 @@
 
 # CancelPublishArticleReq
 
+请求参数。
 
 ## Properties
 

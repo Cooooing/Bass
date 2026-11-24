@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface GetArticleReq
  */
 export interface GetArticleReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof GetArticleReq
      */
     articleId: string;
     /**
-     * 
+     * 可选，预期发布状态；未传按已发布查询
      * @type {GetArticleReqPublishStatusEnum}
      * @memberof GetArticleReq
      */

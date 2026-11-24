@@ -29,19 +29,19 @@ import {
 } from './AccountProfileListItem';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListFollowersResp
  */
 export interface ListFollowersResp {
     /**
-     * 
+     * 协议字段。
      * @type {PageResp}
      * @memberof ListFollowersResp
      */
     page?: PageResp;
     /**
-     * 
+     * 协议字段。
      * @type {Array<AccountProfileListItem>}
      * @memberof ListFollowersResp
      */

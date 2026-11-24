@@ -28,25 +28,25 @@ import {
  */
 export interface UpsertBadgeDraftReq {
     /**
-     * 
+     * 待保存草稿 ID。
      * @type {string}
      * @memberof UpsertBadgeDraftReq
      */
     draftId?: string;
     /**
-     * 
+     * 草稿名称。
      * @type {string}
      * @memberof UpsertBadgeDraftReq
      */
     name?: string;
     /**
-     * 
+     * 草稿说明。
      * @type {string}
      * @memberof UpsertBadgeDraftReq
      */
     description?: string;
     /**
-     * 
+     * 草稿渲染参数。
      * @type {RenderSpec}
      * @memberof UpsertBadgeDraftReq
      */

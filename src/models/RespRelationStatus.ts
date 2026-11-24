@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespRelationStatus
  */
 export interface RespRelationStatus {
     /**
-     * 
+     * 目标账号 ID
      * @type {string}
      * @memberof RespRelationStatus
      */
     targetId?: string;
     /**
-     * 
+     * 当前账号是否关注目标账号
      * @type {boolean}
      * @memberof RespRelationStatus
      */
     following?: boolean;
     /**
-     * 
+     * 目标账号是否关注当前账号
      * @type {boolean}
      * @memberof RespRelationStatus
      */
     followedBy?: boolean;
     /**
-     * 
+     * 当前账号是否拉黑目标账号
      * @type {boolean}
      * @memberof RespRelationStatus
      */
     blocking?: boolean;
     /**
-     * 
+     * 目标账号是否拉黑当前账号
      * @type {boolean}
      * @memberof RespRelationStatus
      */

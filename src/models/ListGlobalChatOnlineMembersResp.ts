@@ -22,13 +22,13 @@ import {
 } from './GlobalChatOnlineMember';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListGlobalChatOnlineMembersResp
  */
 export interface ListGlobalChatOnlineMembersResp {
     /**
-     * 
+     * 在线成员列表。
      * @type {Array<GlobalChatOnlineMember>}
      * @memberof ListGlobalChatOnlineMembersResp
      */

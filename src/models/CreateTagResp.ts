@@ -22,13 +22,13 @@ import {
 } from './RespTag';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CreateTagResp
  */
 export interface CreateTagResp {
     /**
-     * 
+     * 标签信息
      * @type {RespTag}
      * @memberof CreateTagResp
      */

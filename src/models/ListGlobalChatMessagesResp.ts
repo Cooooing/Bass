@@ -29,19 +29,19 @@ import {
 } from './GlobalChatMessage';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListGlobalChatMessagesResp
  */
 export interface ListGlobalChatMessagesResp {
     /**
-     * 
+     * 分页信息。
      * @type {PageResp}
      * @memberof ListGlobalChatMessagesResp
      */
     page?: PageResp;
     /**
-     * 
+     * 消息列表。
      * @type {Array<GlobalChatMessage>}
      * @memberof ListGlobalChatMessagesResp
      */

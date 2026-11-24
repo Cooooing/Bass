@@ -22,19 +22,19 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SearchMentionAccountsReq
  */
 export interface SearchMentionAccountsReq {
     /**
-     * 
+     * 用户名或昵称搜索词，可为空。
      * @type {string}
      * @memberof SearchMentionAccountsReq
      */
     query?: string;
     /**
-     * 
+     * 分页参数。
      * @type {PageReq}
      * @memberof SearchMentionAccountsReq
      */

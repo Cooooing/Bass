@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface LikeArticleReq
  */
 export interface LikeArticleReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof LikeArticleReq
      */
     articleId: string;
     /**
-     * 
+     * 必填，是否点赞
      * @type {boolean}
      * @memberof LikeArticleReq
      */

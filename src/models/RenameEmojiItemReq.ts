@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface RenameEmojiItemReq
  */
 export interface RenameEmojiItemReq {
     /**
-     * 
+     * 待重命名表情项 ID。
      * @type {string}
      * @memberof RenameEmojiItemReq
      */
     itemId?: string;
     /**
-     * 
+     * 新表情别名。
      * @type {string}
      * @memberof RenameEmojiItemReq
      */

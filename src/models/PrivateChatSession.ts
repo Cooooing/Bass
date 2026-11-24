@@ -29,55 +29,55 @@ import {
 } from './PrivateChatMessage';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface PrivateChatSession
  */
 export interface PrivateChatSession {
     /**
-     * 
+     * 对端账号 ID。
      * @type {string}
      * @memberof PrivateChatSession
      */
     peerUserId?: string;
     /**
-     * 
+     * 最后已读消息 ID。
      * @type {string}
      * @memberof PrivateChatSession
      */
     lastReadMessageId?: string;
     /**
-     * 
+     * 未读消息数。
      * @type {number}
      * @memberof PrivateChatSession
      */
     unreadCount?: number;
     /**
-     * 
+     * 是否免打扰。
      * @type {boolean}
      * @memberof PrivateChatSession
      */
     muted?: boolean;
     /**
-     * 
+     * 是否置顶。
      * @type {boolean}
      * @memberof PrivateChatSession
      */
     pinned?: boolean;
     /**
-     * 
+     * 最后一条消息。
      * @type {PrivateChatMessage}
      * @memberof PrivateChatSession
      */
     lastMessage?: PrivateChatMessage;
     /**
-     * 
+     * 最后消息时间。
      * @type {Date}
      * @memberof PrivateChatSession
      */
     lastMessageAt?: Date;
     /**
-     * 
+     * 对端展示资料。
      * @type {PrivateChatMember}
      * @memberof PrivateChatSession
      */

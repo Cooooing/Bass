@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListArticleTagsReq
  */
 export interface ListArticleTagsReq {
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof ListArticleTagsReq
      */

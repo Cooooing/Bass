@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleTag
  */
 export interface ArticleTag {
     /**
-     * 
+     * 标签 ID
      * @type {string}
      * @memberof ArticleTag
      */
     id?: string;
     /**
-     * 
+     * 稳定编码
      * @type {string}
      * @memberof ArticleTag
      */
     code?: string;
     /**
-     * 
+     * 标签名称
      * @type {string}
      * @memberof ArticleTag
      */
     name?: string;
     /**
-     * 
+     * 图标
      * @type {string}
      * @memberof ArticleTag
      */
     icon?: string;
     /**
-     * 
+     * 所属领域 ID
      * @type {string}
      * @memberof ArticleTag
      */

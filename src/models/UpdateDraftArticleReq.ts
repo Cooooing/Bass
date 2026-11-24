@@ -22,19 +22,19 @@ import {
 } from './ReqArticle';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdateDraftArticleReq
  */
 export interface UpdateDraftArticleReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof UpdateDraftArticleReq
      */
     articleId: string;
     /**
-     * 
+     * 必填，草稿内容
      * @type {ReqArticle}
      * @memberof UpdateDraftArticleReq
      */

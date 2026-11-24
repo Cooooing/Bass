@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateEmojiShareReq
  */
 export interface CreateEmojiShareReq {
     /**
-     * 
+     * 待分享分组 ID。
      * @type {string}
      * @memberof CreateEmojiShareReq
      */

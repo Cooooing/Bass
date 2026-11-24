@@ -29,19 +29,19 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListPrivateChatSessionsResp
  */
 export interface ListPrivateChatSessionsResp {
     /**
-     * 
+     * 分页信息。
      * @type {PageResp}
      * @memberof ListPrivateChatSessionsResp
      */
     page?: PageResp;
     /**
-     * 
+     * 会话列表。
      * @type {Array<PrivateChatSession>}
      * @memberof ListPrivateChatSessionsResp
      */

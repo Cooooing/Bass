@@ -22,13 +22,13 @@ import {
 } from './RespRelationStatus';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetStatusRelationResp
  */
 export interface GetStatusRelationResp {
     /**
-     * 
+     * 关系状态
      * @type {RespRelationStatus}
      * @memberof GetStatusRelationResp
      */

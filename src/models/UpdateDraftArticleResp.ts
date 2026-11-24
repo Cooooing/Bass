@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface UpdateDraftArticleResp
  */
 export interface UpdateDraftArticleResp {
     /**
-     * 
+     * 已保存草稿的文章 ID
      * @type {string}
      * @memberof UpdateDraftArticleResp
      */

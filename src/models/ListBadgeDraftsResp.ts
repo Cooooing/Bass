@@ -28,7 +28,7 @@ import {
  */
 export interface ListBadgeDraftsResp {
     /**
-     * 
+     * 草稿列表。
      * @type {Array<BadgeDraft>}
      * @memberof ListBadgeDraftsResp
      */

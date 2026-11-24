@@ -14,79 +14,79 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ReqArticleQuery
  */
 export interface ReqArticleQuery {
     /**
-     * 
+     * 可选，标签 ID
      * @type {string}
      * @memberof ReqArticleQuery
      */
     tagId?: string;
     /**
-     * 
+     * 可选，领域 ID
      * @type {string}
      * @memberof ReqArticleQuery
      */
     domainId?: string;
     /**
-     * 
+     * 可选，文章类型
      * @type {ReqArticleQueryTypeEnum}
      * @memberof ReqArticleQuery
      */
     type?: ReqArticleQueryTypeEnum;
     /**
-     * 
+     * 可选，排序方式
      * @type {ReqArticleQueryOrderEnum}
      * @memberof ReqArticleQuery
      */
     order?: ReqArticleQueryOrderEnum;
     /**
-     * 
+     * 可选，作者账号 ID
      * @type {string}
      * @memberof ReqArticleQuery
      */
     authorId?: string;
     /**
-     * 
+     * 可选，发布状态
      * @type {ReqArticleQueryPublishStatusEnum}
      * @memberof ReqArticleQuery
      */
     publishStatus?: ReqArticleQueryPublishStatusEnum;
     /**
-     * 
+     * 可选，发布状态列表
      * @type {Array<ReqArticleQueryPublishStatusesEnum>}
      * @memberof ReqArticleQuery
      */
     publishStatuses?: Array<ReqArticleQueryPublishStatusesEnum>;
     /**
-     * 
+     * 可选，可见范围
      * @type {ReqArticleQueryVisibilityEnum}
      * @memberof ReqArticleQuery
      */
     visibility?: ReqArticleQueryVisibilityEnum;
     /**
-     * 
+     * 可选，可见范围列表
      * @type {Array<ReqArticleQueryVisibilitiesEnum>}
      * @memberof ReqArticleQuery
      */
     visibilities?: Array<ReqArticleQueryVisibilitiesEnum>;
     /**
-     * 
+     * 可选，治理限制
      * @type {ReqArticleQueryRestrictionEnum}
      * @memberof ReqArticleQuery
      */
     restriction?: ReqArticleQueryRestrictionEnum;
     /**
-     * 
+     * 可选，治理限制列表
      * @type {Array<ReqArticleQueryRestrictionsEnum>}
      * @memberof ReqArticleQuery
      */
     restrictions?: Array<ReqArticleQueryRestrictionsEnum>;
     /**
-     * 
+     * 可选，仅本人草稿：是否已设置发布时间
      * @type {boolean}
      * @memberof ReqArticleQuery
      */

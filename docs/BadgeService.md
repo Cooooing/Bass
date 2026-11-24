@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**deleteDraft**](BadgeService.md#deletedraft) | **POST** /v1/badge/draft/delete |  |
-| [**listDrafts**](BadgeService.md#listdrafts) | **POST** /v1/badge/draft/list |  |
-| [**renderMaker**](BadgeService.md#rendermaker) | **GET** /v1/badge/maker/render |  |
-| [**renderPublished**](BadgeService.md#renderpublished) | **GET** /v1/badge/render |  |
-| [**upsertDraft**](BadgeService.md#upsertdraft) | **POST** /v1/badge/draft/upsert |  |
+| [**deleteBadgeDraft**](BadgeService.md#deletebadgedraft) | **POST** /v1/badge/draft/delete |  |
+| [**listBadgeDrafts**](BadgeService.md#listbadgedrafts) | **POST** /v1/badge/draft/list |  |
+| [**renderMakerBadge**](BadgeService.md#rendermakerbadge) | **GET** /v1/badge/maker/render |  |
+| [**renderPublishedBadge**](BadgeService.md#renderpublishedbadge) | **GET** /v1/badge/render |  |
+| [**upsertBadgeDraft**](BadgeService.md#upsertbadgedraft) | **POST** /v1/badge/draft/upsert |  |
 
 
 
-## deleteDraft
+## deleteBadgeDraft
 
-> object deleteDraft(deleteBadgeDraftReq)
+> object deleteBadgeDraft(deleteBadgeDraftReq)
 
 
 
@@ -27,7 +27,7 @@ import {
   Configuration,
   BadgeService,
 } from '@bass/bbs-sdk-fetch';
-import type { DeleteDraftRequest } from '@bass/bbs-sdk-fetch';
+import type { DeleteBadgeDraftRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -36,10 +36,10 @@ async function example() {
   const body = {
     // DeleteBadgeDraftReq
     deleteBadgeDraftReq: ...,
-  } satisfies DeleteDraftRequest;
+  } satisfies DeleteBadgeDraftRequest;
 
   try {
-    const data = await api.deleteDraft(body);
+    const data = await api.deleteBadgeDraft(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -79,9 +79,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listDrafts
+## listBadgeDrafts
 
-> ListBadgeDraftsResp listDrafts(body)
+> ListBadgeDraftsResp listBadgeDrafts(body)
 
 
 
@@ -94,7 +94,7 @@ import {
   Configuration,
   BadgeService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListDraftsRequest } from '@bass/bbs-sdk-fetch';
+import type { ListBadgeDraftsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -103,10 +103,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies ListDraftsRequest;
+  } satisfies ListBadgeDraftsRequest;
 
   try {
-    const data = await api.listDrafts(body);
+    const data = await api.listBadgeDrafts(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -146,9 +146,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## renderMaker
+## renderMakerBadge
 
-> ImageResp renderMaker(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId)
+> RenderMakerBadgeResp renderMakerBadge(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId)
 
 
 
@@ -161,47 +161,47 @@ import {
   Configuration,
   BadgeService,
 } from '@bass/bbs-sdk-fetch';
-import type { RenderMakerRequest } from '@bass/bbs-sdk-fetch';
+import type { RenderMakerBadgeRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new BadgeService();
 
   const body = {
-    // string (optional)
+    // string | Platform 已确认可用的徽章图标资源 ID。 (optional)
     renderSpecImageAssetId: renderSpecImageAssetId_example,
-    // string (optional)
+    // string | 文字条内容。 (optional)
     renderSpecText: renderSpecText_example,
-    // Array<string> (optional)
+    // Array<string> | 背景颜色列表。 (optional)
     renderSpecBackgroundColors: ...,
-    // Array<string> (optional)
+    // Array<string> | 文字颜色列表。 (optional)
     renderSpecTextColors: ...,
-    // string (optional)
+    // string | 背景渐变方向或角度。 (optional)
     renderSpecBackgroundDirection: renderSpecBackgroundDirection_example,
-    // string (optional)
+    // string | 文字渐变方向或角度。 (optional)
     renderSpecTextDirection: renderSpecTextDirection_example,
-    // number (optional)
+    // number | 图标边长。 (optional)
     renderSpecSize: 56,
-    // number (optional)
+    // number | 图标边距。 (optional)
     renderSpecBorder: 56,
-    // number (optional)
+    // number | 文字条长度。 (optional)
     renderSpecTextBarLength: 56,
-    // number (optional)
+    // number | 文字字号。 (optional)
     renderSpecTextSize: 56,
-    // number (optional)
+    // number | 文字条圆角。 (optional)
     renderSpecTextBarRadius: 56,
-    // number (optional)
+    // number | 整体缩放比例。 (optional)
     renderSpecScale: 1.2,
-    // number (optional)
+    // number | 阴影强度。 (optional)
     renderSpecShadow: 1.2,
-    // number (optional)
+    // number | 动画时长。 (optional)
     renderSpecAnimationSeconds: 1.2,
-    // string (optional)
+    // string | Platform 已确认可用的自定义字体资源 ID。 (optional)
     renderSpecFontAssetId: renderSpecFontAssetId_example,
-  } satisfies RenderMakerRequest;
+  } satisfies RenderMakerBadgeRequest;
 
   try {
-    const data = await api.renderMaker(body);
+    const data = await api.renderMakerBadge(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -217,25 +217,25 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **renderSpecImageAssetId** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecText** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecBackgroundColors** | `Array<string>` |  | [Optional] |
-| **renderSpecTextColors** | `Array<string>` |  | [Optional] |
-| **renderSpecBackgroundDirection** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecTextDirection** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecSize** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecBorder** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecTextBarLength** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecTextSize** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecTextBarRadius** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecScale** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecShadow** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecAnimationSeconds** | `number` |  | [Optional] [Defaults to `undefined`] |
-| **renderSpecFontAssetId** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **renderSpecImageAssetId** | `string` | Platform 已确认可用的徽章图标资源 ID。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecText** | `string` | 文字条内容。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecBackgroundColors** | `Array<string>` | 背景颜色列表。 | [Optional] |
+| **renderSpecTextColors** | `Array<string>` | 文字颜色列表。 | [Optional] |
+| **renderSpecBackgroundDirection** | `string` | 背景渐变方向或角度。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecTextDirection** | `string` | 文字渐变方向或角度。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecSize** | `number` | 图标边长。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecBorder** | `number` | 图标边距。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecTextBarLength** | `number` | 文字条长度。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecTextSize** | `number` | 文字字号。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecTextBarRadius** | `number` | 文字条圆角。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecScale** | `number` | 整体缩放比例。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecShadow** | `number` | 阴影强度。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecAnimationSeconds** | `number` | 动画时长。 | [Optional] [Defaults to `undefined`] |
+| **renderSpecFontAssetId** | `string` | Platform 已确认可用的自定义字体资源 ID。 | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 
-[**ImageResp**](ImageResp.md)
+[**RenderMakerBadgeResp**](RenderMakerBadgeResp.md)
 
 ### Authorization
 
@@ -255,9 +255,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## renderPublished
+## renderPublishedBadge
 
-> ImageResp renderPublished(code)
+> RenderPublishedBadgeResp renderPublishedBadge(code)
 
 
 
@@ -270,19 +270,19 @@ import {
   Configuration,
   BadgeService,
 } from '@bass/bbs-sdk-fetch';
-import type { RenderPublishedRequest } from '@bass/bbs-sdk-fetch';
+import type { RenderPublishedBadgeRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new BadgeService();
 
   const body = {
-    // string (optional)
+    // string | 已发布徽章稳定编码。 (optional)
     code: code_example,
-  } satisfies RenderPublishedRequest;
+  } satisfies RenderPublishedBadgeRequest;
 
   try {
-    const data = await api.renderPublished(body);
+    const data = await api.renderPublishedBadge(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -298,11 +298,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **code** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **code** | `string` | 已发布徽章稳定编码。 | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 
-[**ImageResp**](ImageResp.md)
+[**RenderPublishedBadgeResp**](RenderPublishedBadgeResp.md)
 
 ### Authorization
 
@@ -322,9 +322,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## upsertDraft
+## upsertBadgeDraft
 
-> UpsertBadgeDraftResp upsertDraft(upsertBadgeDraftReq)
+> UpsertBadgeDraftResp upsertBadgeDraft(upsertBadgeDraftReq)
 
 
 
@@ -337,7 +337,7 @@ import {
   Configuration,
   BadgeService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpsertDraftRequest } from '@bass/bbs-sdk-fetch';
+import type { UpsertBadgeDraftRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -346,10 +346,10 @@ async function example() {
   const body = {
     // UpsertBadgeDraftReq
     upsertBadgeDraftReq: ...,
-  } satisfies UpsertDraftRequest;
+  } satisfies UpsertBadgeDraftRequest;
 
   try {
-    const data = await api.upsertDraft(body);
+    const data = await api.upsertBadgeDraft(body);
     console.log(data);
   } catch (error) {
     console.error(error);

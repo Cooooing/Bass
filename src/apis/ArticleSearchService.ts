@@ -24,7 +24,7 @@ import {
     SearchArticlesRespToJSON,
 } from '../models/SearchArticlesResp';
 
-export interface SearchRequest {
+export interface SearchArticlesRequest {
     searchArticlesReq: SearchArticlesReq;
 }
 
@@ -36,25 +36,26 @@ export interface SearchRequest {
  */
 export interface ArticleSearchServiceInterface {
     /**
-     * Creates request options for search without sending the request
+     * Creates request options for searchArticles without sending the request
      * @param {SearchArticlesReq} searchArticlesReq 
      * @throws {RequiredError}
      * @memberof ArticleSearchServiceInterface
      */
-    searchRequestOpts(requestParameters: SearchRequest): Promise<runtime.RequestOpts>;
+    searchArticlesRequestOpts(requestParameters: SearchArticlesRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {SearchArticlesReq} searchArticlesReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleSearchServiceInterface
      */
-    searchRaw(requestParameters: SearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SearchArticlesResp>>;
+    searchArticlesRaw(requestParameters: SearchArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SearchArticlesResp>>;
 
     /**
+     * 服务方法。
      */
-    search(requestParameters: SearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchArticlesResp>;
+    searchArticles(requestParameters: SearchArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchArticlesResp>;
 
 }
 
@@ -64,13 +65,13 @@ export interface ArticleSearchServiceInterface {
 export class ArticleSearchService extends runtime.BaseAPI implements ArticleSearchServiceInterface {
 
     /**
-     * Creates request options for search without sending the request
+     * Creates request options for searchArticles without sending the request
      */
-    async searchRequestOpts(requestParameters: SearchRequest): Promise<runtime.RequestOpts> {
+    async searchArticlesRequestOpts(requestParameters: SearchArticlesRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['searchArticlesReq'] == null) {
             throw new runtime.RequiredError(
                 'searchArticlesReq',
-                'Required parameter "searchArticlesReq" was null or undefined when calling search().'
+                'Required parameter "searchArticlesReq" was null or undefined when calling searchArticles().'
             );
         }
 
@@ -93,18 +94,20 @@ export class ArticleSearchService extends runtime.BaseAPI implements ArticleSear
     }
 
     /**
+     * 服务方法。
      */
-    async searchRaw(requestParameters: SearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SearchArticlesResp>> {
-        const requestOptions = await this.searchRequestOpts(requestParameters);
+    async searchArticlesRaw(requestParameters: SearchArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SearchArticlesResp>> {
+        const requestOptions = await this.searchArticlesRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => SearchArticlesRespFromJSON(jsonValue));
     }
 
     /**
+     * 服务方法。
      */
-    async search(requestParameters: SearchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchArticlesResp> {
-        const response = await this.searchRaw(requestParameters, initOverrides);
+    async searchArticles(requestParameters: SearchArticlesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchArticlesResp> {
+        const response = await this.searchArticlesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

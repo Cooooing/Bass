@@ -22,19 +22,19 @@ import {
 } from './ReqDomain';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdateDomainReq
  */
 export interface UpdateDomainReq {
     /**
-     * 
+     * 领域 ID
      * @type {string}
      * @memberof UpdateDomainReq
      */
     domainId: string;
     /**
-     * 
+     * 领域信息
      * @type {ReqDomain}
      * @memberof UpdateDomainReq
      */

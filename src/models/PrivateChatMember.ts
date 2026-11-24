@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface PrivateChatMember
  */
 export interface PrivateChatMember {
     /**
-     * 
+     * 账号 ID。
      * @type {string}
      * @memberof PrivateChatMember
      */
     userId?: string;
     /**
-     * 
+     * 用户名。
      * @type {string}
      * @memberof PrivateChatMember
      */
     name?: string;
     /**
-     * 
+     * 昵称。
      * @type {string}
      * @memberof PrivateChatMember
      */
     nickname?: string;
     /**
-     * 
+     * 头像地址。
      * @type {string}
      * @memberof PrivateChatMember
      */
     avatarUrl?: string;
     /**
-     * 
+     * 是否存在有效实时连接。
      * @type {boolean}
      * @memberof PrivateChatMember
      */

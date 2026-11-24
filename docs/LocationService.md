@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](LocationService.md#getcurrent) | **POST** /v1/platform/location/get-current |  |
+| [**getCurrentLocation**](LocationService.md#getcurrentlocation) | **POST** /v1/platform/location/get-current |  |
 
 
 
-## getCurrent
+## getCurrentLocation
 
-> GetCurrentLocationResp getCurrent(body)
+> GetCurrentLocationResp getCurrentLocation(body)
 
 
 
@@ -23,7 +23,7 @@ import {
   Configuration,
   LocationService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetCurrentRequest } from '@bass/bbs-sdk-fetch';
+import type { GetCurrentLocationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -32,10 +32,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies GetCurrentRequest;
+  } satisfies GetCurrentLocationRequest;
 
   try {
-    const data = await api.getCurrent(body);
+    const data = await api.getCurrentLocation(body);
     console.log(data);
   } catch (error) {
     console.error(error);

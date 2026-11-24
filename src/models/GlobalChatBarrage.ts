@@ -22,43 +22,43 @@ import {
 } from './GlobalChatMember';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface GlobalChatBarrage
  */
 export interface GlobalChatBarrage {
     /**
-     * 
+     * 弹幕 ID。
      * @type {string}
      * @memberof GlobalChatBarrage
      */
     id?: string;
     /**
-     * 
+     * 发送账号 ID。
      * @type {string}
      * @memberof GlobalChatBarrage
      */
     userId?: string;
     /**
-     * 
+     * 纯文本弹幕内容。
      * @type {string}
      * @memberof GlobalChatBarrage
      */
     content?: string;
     /**
-     * 
+     * 本次实际消耗的积分。
      * @type {string}
      * @memberof GlobalChatBarrage
      */
     pointsCost?: string;
     /**
-     * 
+     * 发送者展示资料。
      * @type {GlobalChatMember}
      * @memberof GlobalChatBarrage
      */
     sender?: GlobalChatMember;
     /**
-     * 
+     * 创建时间。
      * @type {Date}
      * @memberof GlobalChatBarrage
      */

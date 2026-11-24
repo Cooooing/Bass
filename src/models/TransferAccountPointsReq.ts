@@ -14,31 +14,31 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface TransferAccountPointsReq
  */
 export interface TransferAccountPointsReq {
     /**
-     * 
+     * 收款账号名，必填
      * @type {string}
      * @memberof TransferAccountPointsReq
      */
     targetName: string;
     /**
-     * 
+     * 转账积分数量，必填
      * @type {string}
      * @memberof TransferAccountPointsReq
      */
     amount: string;
     /**
-     * 
+     * 转账备注
      * @type {string}
      * @memberof TransferAccountPointsReq
      */
     remark?: string;
     /**
-     * 
+     * 本次转账的技术幂等键，必填
      * @type {string}
      * @memberof TransferAccountPointsReq
      */

@@ -14,31 +14,31 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ProfileRelation
  */
 export interface ProfileRelation {
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileRelation
      */
     following?: boolean;
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileRelation
      */
     followedBy?: boolean;
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileRelation
      */
     blocking?: boolean;
     /**
-     * 
+     * 协议字段。
      * @type {boolean}
      * @memberof ProfileRelation
      */

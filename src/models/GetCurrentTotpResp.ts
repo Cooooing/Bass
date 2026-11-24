@@ -22,13 +22,13 @@ import {
 } from './RespTotp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetCurrentTotpResp
  */
 export interface GetCurrentTotpResp {
     /**
-     * 
+     * TOTP 状态
      * @type {RespTotp}
      * @memberof GetCurrentTotpResp
      */

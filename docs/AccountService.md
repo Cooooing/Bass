@@ -4,27 +4,27 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar |  |
-| [**completeProfileImageUpload**](AccountService.md#completeprofileimageupload) | **POST** /v1/user/account/complete-profile-image-upload |  |
-| [**getCurrent**](AccountService.md#getcurrent) | **POST** /v1/user/account/get-current |  |
-| [**getEconomyAccount**](AccountService.md#geteconomyaccount) | **POST** /v1/user/account/economy/get |  |
+| [**avatarAccount**](AccountService.md#avataraccount) | **GET** /v1/user/account/avatar |  |
+| [**completeProfileImageUploadAccount**](AccountService.md#completeprofileimageuploadaccount) | **POST** /v1/user/account/complete-profile-image-upload |  |
+| [**getAccountEconomy**](AccountService.md#getaccounteconomy) | **POST** /v1/user/account/economy/get |  |
+| [**getCurrentAccount**](AccountService.md#getcurrentaccount) | **POST** /v1/user/account/get-current |  |
 | [**getProfile**](AccountService.md#getprofile) | **POST** /v1/user/account/get-profile |  |
 | [**listFollowers**](AccountService.md#listfollowers) | **POST** /v1/user/account/list-followers |  |
 | [**listFollowing**](AccountService.md#listfollowing) | **POST** /v1/user/account/list-following |  |
 | [**listPointRecords**](AccountService.md#listpointrecords) | **POST** /v1/user/account/list-point-records |  |
-| [**prepareProfileImageUpload**](AccountService.md#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
-| [**searchMention**](AccountService.md#searchmention) | **POST** /v1/user/account/search-mention |  |
-| [**transferPoints**](AccountService.md#transferpoints) | **POST** /v1/user/account/economy/transfer |  |
-| [**updateEmail**](AccountService.md#updateemail) | **POST** /v1/user/account/update-email |  |
-| [**updatePassword**](AccountService.md#updatepassword) | **POST** /v1/user/account/update-password |  |
-| [**updatePhone**](AccountService.md#updatephone) | **POST** /v1/user/account/update-phone |  |
-| [**updateProfile**](AccountService.md#updateprofile) | **POST** /v1/user/account/update-profile |  |
+| [**prepareProfileImageUploadAccount**](AccountService.md#prepareprofileimageuploadaccount) | **POST** /v1/user/account/prepare-profile-image-upload |  |
+| [**searchMentionAccounts**](AccountService.md#searchmentionaccounts) | **POST** /v1/user/account/search-mention |  |
+| [**transferAccountPoints**](AccountService.md#transferaccountpoints) | **POST** /v1/user/account/economy/transfer |  |
+| [**updateEmailAccount**](AccountService.md#updateemailaccount) | **POST** /v1/user/account/update-email |  |
+| [**updatePasswordAccount**](AccountService.md#updatepasswordaccount) | **POST** /v1/user/account/update-password |  |
+| [**updatePhoneAccount**](AccountService.md#updatephoneaccount) | **POST** /v1/user/account/update-phone |  |
+| [**updateProfileAccount**](AccountService.md#updateprofileaccount) | **POST** /v1/user/account/update-profile |  |
 
 
 
-## avatar
+## avatarAccount
 
-> ImageResp avatar(name)
+> AvatarAccountResp avatarAccount(name)
 
 
 
@@ -37,19 +37,19 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { AvatarRequest } from '@bass/bbs-sdk-fetch';
+import type { AvatarAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new AccountService();
 
   const body = {
-    // string (optional)
+    // string | 账号名，必填 (optional)
     name: name_example,
-  } satisfies AvatarRequest;
+  } satisfies AvatarAccountRequest;
 
   try {
-    const data = await api.avatar(body);
+    const data = await api.avatarAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -65,11 +65,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **name** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **name** | `string` | 账号名，必填 | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 
-[**ImageResp**](ImageResp.md)
+[**AvatarAccountResp**](AvatarAccountResp.md)
 
 ### Authorization
 
@@ -89,9 +89,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## completeProfileImageUpload
+## completeProfileImageUploadAccount
 
-> CompleteProfileImageUploadAccountResp completeProfileImageUpload(completeProfileImageUploadAccountReq)
+> CompleteProfileImageUploadAccountResp completeProfileImageUploadAccount(completeProfileImageUploadAccountReq)
 
 
 
@@ -104,7 +104,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { CompleteProfileImageUploadRequest } from '@bass/bbs-sdk-fetch';
+import type { CompleteProfileImageUploadAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -113,10 +113,10 @@ async function example() {
   const body = {
     // CompleteProfileImageUploadAccountReq
     completeProfileImageUploadAccountReq: ...,
-  } satisfies CompleteProfileImageUploadRequest;
+  } satisfies CompleteProfileImageUploadAccountRequest;
 
   try {
-    const data = await api.completeProfileImageUpload(body);
+    const data = await api.completeProfileImageUploadAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -156,76 +156,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## getCurrent
+## getAccountEconomy
 
-> GetCurrentAccountResp getCurrent(body)
-
-
-
-获取当前账号完整资料
-
-### Example
-
-```ts
-import {
-  Configuration,
-  AccountService,
-} from '@bass/bbs-sdk-fetch';
-import type { GetCurrentRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new AccountService();
-
-  const body = {
-    // object
-    body: Object,
-  } satisfies GetCurrentRequest;
-
-  try {
-    const data = await api.getCurrent(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **body** | `object` |  | |
-
-### Return type
-
-[**GetCurrentAccountResp**](GetCurrentAccountResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## getEconomyAccount
-
-> GetAccountEconomyResp getEconomyAccount(body)
+> GetAccountEconomyResp getAccountEconomy(body)
 
 
 
@@ -238,7 +171,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetEconomyAccountRequest } from '@bass/bbs-sdk-fetch';
+import type { GetAccountEconomyRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -247,10 +180,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies GetEconomyAccountRequest;
+  } satisfies GetAccountEconomyRequest;
 
   try {
-    const data = await api.getEconomyAccount(body);
+    const data = await api.getAccountEconomy(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -271,6 +204,73 @@ example().catch(console.error);
 ### Return type
 
 [**GetAccountEconomyResp**](GetAccountEconomyResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## getCurrentAccount
+
+> GetCurrentAccountResp getCurrentAccount(body)
+
+
+
+获取当前账号完整资料
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { GetCurrentAccountRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // object
+    body: Object,
+  } satisfies GetCurrentAccountRequest;
+
+  try {
+    const data = await api.getCurrentAccount(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **body** | `object` |  | |
+
+### Return type
+
+[**GetCurrentAccountResp**](GetCurrentAccountResp.md)
 
 ### Authorization
 
@@ -558,9 +558,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## prepareProfileImageUpload
+## prepareProfileImageUploadAccount
 
-> PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadAccountReq)
+> PrepareProfileImageUploadAccountResp prepareProfileImageUploadAccount(prepareProfileImageUploadAccountReq)
 
 
 
@@ -573,7 +573,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { PrepareProfileImageUploadRequest } from '@bass/bbs-sdk-fetch';
+import type { PrepareProfileImageUploadAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -582,10 +582,10 @@ async function example() {
   const body = {
     // PrepareProfileImageUploadAccountReq
     prepareProfileImageUploadAccountReq: ...,
-  } satisfies PrepareProfileImageUploadRequest;
+  } satisfies PrepareProfileImageUploadAccountRequest;
 
   try {
-    const data = await api.prepareProfileImageUpload(body);
+    const data = await api.prepareProfileImageUploadAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -625,9 +625,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## searchMention
+## searchMentionAccounts
 
-> SearchMentionAccountsResp searchMention(searchMentionAccountsReq)
+> SearchMentionAccountsResp searchMentionAccounts(searchMentionAccountsReq)
 
 
 
@@ -640,7 +640,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { SearchMentionRequest } from '@bass/bbs-sdk-fetch';
+import type { SearchMentionAccountsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -649,10 +649,10 @@ async function example() {
   const body = {
     // SearchMentionAccountsReq
     searchMentionAccountsReq: ...,
-  } satisfies SearchMentionRequest;
+  } satisfies SearchMentionAccountsRequest;
 
   try {
-    const data = await api.searchMention(body);
+    const data = await api.searchMentionAccounts(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -692,9 +692,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## transferPoints
+## transferAccountPoints
 
-> TransferAccountPointsResp transferPoints(transferAccountPointsReq)
+> TransferAccountPointsResp transferAccountPoints(transferAccountPointsReq)
 
 
 
@@ -707,7 +707,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { TransferPointsRequest } from '@bass/bbs-sdk-fetch';
+import type { TransferAccountPointsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -716,10 +716,10 @@ async function example() {
   const body = {
     // TransferAccountPointsReq
     transferAccountPointsReq: ...,
-  } satisfies TransferPointsRequest;
+  } satisfies TransferAccountPointsRequest;
 
   try {
-    const data = await api.transferPoints(body);
+    const data = await api.transferAccountPoints(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -759,9 +759,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## updateEmail
+## updateEmailAccount
 
-> object updateEmail(updateEmailAccountReq)
+> object updateEmailAccount(updateEmailAccountReq)
 
 
 
@@ -774,7 +774,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdateEmailRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdateEmailAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -783,10 +783,10 @@ async function example() {
   const body = {
     // UpdateEmailAccountReq
     updateEmailAccountReq: ...,
-  } satisfies UpdateEmailRequest;
+  } satisfies UpdateEmailAccountRequest;
 
   try {
-    const data = await api.updateEmail(body);
+    const data = await api.updateEmailAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -826,9 +826,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## updatePassword
+## updatePasswordAccount
 
-> object updatePassword(updatePasswordAccountReq)
+> object updatePasswordAccount(updatePasswordAccountReq)
 
 
 
@@ -841,7 +841,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdatePasswordRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdatePasswordAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -850,10 +850,10 @@ async function example() {
   const body = {
     // UpdatePasswordAccountReq
     updatePasswordAccountReq: ...,
-  } satisfies UpdatePasswordRequest;
+  } satisfies UpdatePasswordAccountRequest;
 
   try {
-    const data = await api.updatePassword(body);
+    const data = await api.updatePasswordAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -893,9 +893,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## updatePhone
+## updatePhoneAccount
 
-> object updatePhone(updatePhoneAccountReq)
+> object updatePhoneAccount(updatePhoneAccountReq)
 
 
 
@@ -908,7 +908,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdatePhoneRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdatePhoneAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -917,10 +917,10 @@ async function example() {
   const body = {
     // UpdatePhoneAccountReq
     updatePhoneAccountReq: ...,
-  } satisfies UpdatePhoneRequest;
+  } satisfies UpdatePhoneAccountRequest;
 
   try {
-    const data = await api.updatePhone(body);
+    const data = await api.updatePhoneAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -960,9 +960,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## updateProfile
+## updateProfileAccount
 
-> UpdateProfileAccountResp updateProfile(updateProfileAccountReq)
+> UpdateProfileAccountResp updateProfileAccount(updateProfileAccountReq)
 
 
 
@@ -975,7 +975,7 @@ import {
   Configuration,
   AccountService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdateProfileRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdateProfileAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -984,10 +984,10 @@ async function example() {
   const body = {
     // UpdateProfileAccountReq
     updateProfileAccountReq: ...,
-  } satisfies UpdateProfileRequest;
+  } satisfies UpdateProfileAccountRequest;
 
   try {
-    const data = await api.updateProfile(body);
+    const data = await api.updateProfileAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);

@@ -1,6 +1,7 @@
 
 # PageCollectedArticlesResp
 
+响应结果。
 
 ## Properties
 

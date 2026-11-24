@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**countUnread**](NotificationService.md#countunread) | **POST** /v1/notify/notification/count-unread |  |
-| [**list**](NotificationService.md#list) | **POST** /v1/notify/notification/list |  |
-| [**markRead**](NotificationService.md#markread) | **POST** /v1/notify/notification/mark-read |  |
+| [**countUnreadNotifications**](NotificationService.md#countunreadnotifications) | **POST** /v1/notify/notification/count-unread |  |
+| [**listNotifications**](NotificationService.md#listnotifications) | **POST** /v1/notify/notification/list |  |
+| [**markReadNotification**](NotificationService.md#markreadnotification) | **POST** /v1/notify/notification/mark-read |  |
 
 
 
-## countUnread
+## countUnreadNotifications
 
-> CountUnreadNotificationsResp countUnread(body)
+> CountUnreadNotificationsResp countUnreadNotifications(body)
 
 
 
@@ -25,7 +25,7 @@ import {
   Configuration,
   NotificationService,
 } from '@bass/bbs-sdk-fetch';
-import type { CountUnreadRequest } from '@bass/bbs-sdk-fetch';
+import type { CountUnreadNotificationsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -34,10 +34,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies CountUnreadRequest;
+  } satisfies CountUnreadNotificationsRequest;
 
   try {
-    const data = await api.countUnread(body);
+    const data = await api.countUnreadNotifications(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -77,9 +77,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## list
+## listNotifications
 
-> ListNotificationsResp list(listNotificationsReq)
+> ListNotificationsResp listNotifications(listNotificationsReq)
 
 
 
@@ -92,7 +92,7 @@ import {
   Configuration,
   NotificationService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
+import type { ListNotificationsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -101,10 +101,10 @@ async function example() {
   const body = {
     // ListNotificationsReq
     listNotificationsReq: ...,
-  } satisfies ListRequest;
+  } satisfies ListNotificationsRequest;
 
   try {
-    const data = await api.list(body);
+    const data = await api.listNotifications(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -144,9 +144,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## markRead
+## markReadNotification
 
-> MarkReadNotificationResp markRead(markReadNotificationReq)
+> MarkReadNotificationResp markReadNotification(markReadNotificationReq)
 
 
 
@@ -159,7 +159,7 @@ import {
   Configuration,
   NotificationService,
 } from '@bass/bbs-sdk-fetch';
-import type { MarkReadRequest } from '@bass/bbs-sdk-fetch';
+import type { MarkReadNotificationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -168,10 +168,10 @@ async function example() {
   const body = {
     // MarkReadNotificationReq
     markReadNotificationReq: ...,
-  } satisfies MarkReadRequest;
+  } satisfies MarkReadNotificationRequest;
 
   try {
-    const data = await api.markRead(body);
+    const data = await api.markReadNotification(body);
     console.log(data);
   } catch (error) {
     console.error(error);

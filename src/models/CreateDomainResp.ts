@@ -22,13 +22,13 @@ import {
 } from './RespDomain';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CreateDomainResp
  */
 export interface CreateDomainResp {
     /**
-     * 
+     * 领域信息
      * @type {RespDomain}
      * @memberof CreateDomainResp
      */

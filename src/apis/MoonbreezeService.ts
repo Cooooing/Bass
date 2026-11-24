@@ -29,34 +29,44 @@ import {
     PageMemberMoonbreezesReqToJSON,
 } from '../models/PageMemberMoonbreezesReq';
 import {
-    type PageMoonbreezesResp,
-    PageMoonbreezesRespFromJSON,
-    PageMoonbreezesRespToJSON,
-} from '../models/PageMoonbreezesResp';
+    type PageMemberMoonbreezesResp,
+    PageMemberMoonbreezesRespFromJSON,
+    PageMemberMoonbreezesRespToJSON,
+} from '../models/PageMemberMoonbreezesResp';
 import {
     type PagePublicMoonbreezesReq,
     PagePublicMoonbreezesReqFromJSON,
     PagePublicMoonbreezesReqToJSON,
 } from '../models/PagePublicMoonbreezesReq';
 import {
+    type PagePublicMoonbreezesResp,
+    PagePublicMoonbreezesRespFromJSON,
+    PagePublicMoonbreezesRespToJSON,
+} from '../models/PagePublicMoonbreezesResp';
+import {
     type PageWatchingMoonbreezesReq,
     PageWatchingMoonbreezesReqFromJSON,
     PageWatchingMoonbreezesReqToJSON,
 } from '../models/PageWatchingMoonbreezesReq';
+import {
+    type PageWatchingMoonbreezesResp,
+    PageWatchingMoonbreezesRespFromJSON,
+    PageWatchingMoonbreezesRespToJSON,
+} from '../models/PageWatchingMoonbreezesResp';
 
-export interface CreateRequest {
+export interface CreateMoonbreezeRequest {
     createMoonbreezeReq: CreateMoonbreezeReq;
 }
 
-export interface PageMemberRequest {
+export interface PageMemberMoonbreezesRequest {
     pageMemberMoonbreezesReq: PageMemberMoonbreezesReq;
 }
 
-export interface PagePublicRequest {
+export interface PagePublicMoonbreezesRequest {
     pagePublicMoonbreezesReq: PagePublicMoonbreezesReq;
 }
 
-export interface PageWatchingRequest {
+export interface PageWatchingMoonbreezesRequest {
     pageWatchingMoonbreezesReq: PageWatchingMoonbreezesReq;
 }
 
@@ -68,88 +78,92 @@ export interface PageWatchingRequest {
  */
 export interface MoonbreezeServiceInterface {
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createMoonbreeze without sending the request
      * @param {CreateMoonbreezeReq} createMoonbreezeReq 
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts>;
+    createMoonbreezeRequestOpts(requestParameters: CreateMoonbreezeRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {CreateMoonbreezeReq} createMoonbreezeReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateMoonbreezeResp>>;
+    createMoonbreezeRaw(requestParameters: CreateMoonbreezeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateMoonbreezeResp>>;
 
     /**
+     * 服务方法。
      */
-    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateMoonbreezeResp>;
+    createMoonbreeze(requestParameters: CreateMoonbreezeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateMoonbreezeResp>;
 
     /**
-     * Creates request options for pageMember without sending the request
+     * Creates request options for pageMemberMoonbreezes without sending the request
      * @param {PageMemberMoonbreezesReq} pageMemberMoonbreezesReq 
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    pageMemberRequestOpts(requestParameters: PageMemberRequest): Promise<runtime.RequestOpts>;
+    pageMemberMoonbreezesRequestOpts(requestParameters: PageMemberMoonbreezesRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {PageMemberMoonbreezesReq} pageMemberMoonbreezesReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    pageMemberRaw(requestParameters: PageMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMoonbreezesResp>>;
+    pageMemberMoonbreezesRaw(requestParameters: PageMemberMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMemberMoonbreezesResp>>;
 
     /**
+     * 服务方法。
      */
-    pageMember(requestParameters: PageMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMoonbreezesResp>;
+    pageMemberMoonbreezes(requestParameters: PageMemberMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMemberMoonbreezesResp>;
 
     /**
-     * Creates request options for pagePublic without sending the request
+     * Creates request options for pagePublicMoonbreezes without sending the request
      * @param {PagePublicMoonbreezesReq} pagePublicMoonbreezesReq 
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    pagePublicRequestOpts(requestParameters: PagePublicRequest): Promise<runtime.RequestOpts>;
+    pagePublicMoonbreezesRequestOpts(requestParameters: PagePublicMoonbreezesRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {PagePublicMoonbreezesReq} pagePublicMoonbreezesReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    pagePublicRaw(requestParameters: PagePublicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMoonbreezesResp>>;
+    pagePublicMoonbreezesRaw(requestParameters: PagePublicMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagePublicMoonbreezesResp>>;
 
     /**
+     * 服务方法。
      */
-    pagePublic(requestParameters: PagePublicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMoonbreezesResp>;
+    pagePublicMoonbreezes(requestParameters: PagePublicMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagePublicMoonbreezesResp>;
 
     /**
-     * Creates request options for pageWatching without sending the request
+     * Creates request options for pageWatchingMoonbreezes without sending the request
      * @param {PageWatchingMoonbreezesReq} pageWatchingMoonbreezesReq 
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    pageWatchingRequestOpts(requestParameters: PageWatchingRequest): Promise<runtime.RequestOpts>;
+    pageWatchingMoonbreezesRequestOpts(requestParameters: PageWatchingMoonbreezesRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {PageWatchingMoonbreezesReq} pageWatchingMoonbreezesReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MoonbreezeServiceInterface
      */
-    pageWatchingRaw(requestParameters: PageWatchingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMoonbreezesResp>>;
+    pageWatchingMoonbreezesRaw(requestParameters: PageWatchingMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageWatchingMoonbreezesResp>>;
 
     /**
+     * 服务方法。
      */
-    pageWatching(requestParameters: PageWatchingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMoonbreezesResp>;
+    pageWatchingMoonbreezes(requestParameters: PageWatchingMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageWatchingMoonbreezesResp>;
 
 }
 
@@ -159,13 +173,13 @@ export interface MoonbreezeServiceInterface {
 export class MoonbreezeService extends runtime.BaseAPI implements MoonbreezeServiceInterface {
 
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createMoonbreeze without sending the request
      */
-    async createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts> {
+    async createMoonbreezeRequestOpts(requestParameters: CreateMoonbreezeRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['createMoonbreezeReq'] == null) {
             throw new runtime.RequiredError(
                 'createMoonbreezeReq',
-                'Required parameter "createMoonbreezeReq" was null or undefined when calling create().'
+                'Required parameter "createMoonbreezeReq" was null or undefined when calling createMoonbreeze().'
             );
         }
 
@@ -188,29 +202,31 @@ export class MoonbreezeService extends runtime.BaseAPI implements MoonbreezeServ
     }
 
     /**
+     * 服务方法。
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateMoonbreezeResp>> {
-        const requestOptions = await this.createRequestOpts(requestParameters);
+    async createMoonbreezeRaw(requestParameters: CreateMoonbreezeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateMoonbreezeResp>> {
+        const requestOptions = await this.createMoonbreezeRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateMoonbreezeRespFromJSON(jsonValue));
     }
 
     /**
+     * 服务方法。
      */
-    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateMoonbreezeResp> {
-        const response = await this.createRaw(requestParameters, initOverrides);
+    async createMoonbreeze(requestParameters: CreateMoonbreezeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateMoonbreezeResp> {
+        const response = await this.createMoonbreezeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for pageMember without sending the request
+     * Creates request options for pageMemberMoonbreezes without sending the request
      */
-    async pageMemberRequestOpts(requestParameters: PageMemberRequest): Promise<runtime.RequestOpts> {
+    async pageMemberMoonbreezesRequestOpts(requestParameters: PageMemberMoonbreezesRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['pageMemberMoonbreezesReq'] == null) {
             throw new runtime.RequiredError(
                 'pageMemberMoonbreezesReq',
-                'Required parameter "pageMemberMoonbreezesReq" was null or undefined when calling pageMember().'
+                'Required parameter "pageMemberMoonbreezesReq" was null or undefined when calling pageMemberMoonbreezes().'
             );
         }
 
@@ -233,29 +249,31 @@ export class MoonbreezeService extends runtime.BaseAPI implements MoonbreezeServ
     }
 
     /**
+     * 服务方法。
      */
-    async pageMemberRaw(requestParameters: PageMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMoonbreezesResp>> {
-        const requestOptions = await this.pageMemberRequestOpts(requestParameters);
+    async pageMemberMoonbreezesRaw(requestParameters: PageMemberMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMemberMoonbreezesResp>> {
+        const requestOptions = await this.pageMemberMoonbreezesRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PageMoonbreezesRespFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PageMemberMoonbreezesRespFromJSON(jsonValue));
     }
 
     /**
+     * 服务方法。
      */
-    async pageMember(requestParameters: PageMemberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMoonbreezesResp> {
-        const response = await this.pageMemberRaw(requestParameters, initOverrides);
+    async pageMemberMoonbreezes(requestParameters: PageMemberMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMemberMoonbreezesResp> {
+        const response = await this.pageMemberMoonbreezesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for pagePublic without sending the request
+     * Creates request options for pagePublicMoonbreezes without sending the request
      */
-    async pagePublicRequestOpts(requestParameters: PagePublicRequest): Promise<runtime.RequestOpts> {
+    async pagePublicMoonbreezesRequestOpts(requestParameters: PagePublicMoonbreezesRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['pagePublicMoonbreezesReq'] == null) {
             throw new runtime.RequiredError(
                 'pagePublicMoonbreezesReq',
-                'Required parameter "pagePublicMoonbreezesReq" was null or undefined when calling pagePublic().'
+                'Required parameter "pagePublicMoonbreezesReq" was null or undefined when calling pagePublicMoonbreezes().'
             );
         }
 
@@ -278,29 +296,31 @@ export class MoonbreezeService extends runtime.BaseAPI implements MoonbreezeServ
     }
 
     /**
+     * 服务方法。
      */
-    async pagePublicRaw(requestParameters: PagePublicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMoonbreezesResp>> {
-        const requestOptions = await this.pagePublicRequestOpts(requestParameters);
+    async pagePublicMoonbreezesRaw(requestParameters: PagePublicMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PagePublicMoonbreezesResp>> {
+        const requestOptions = await this.pagePublicMoonbreezesRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PageMoonbreezesRespFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PagePublicMoonbreezesRespFromJSON(jsonValue));
     }
 
     /**
+     * 服务方法。
      */
-    async pagePublic(requestParameters: PagePublicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMoonbreezesResp> {
-        const response = await this.pagePublicRaw(requestParameters, initOverrides);
+    async pagePublicMoonbreezes(requestParameters: PagePublicMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PagePublicMoonbreezesResp> {
+        const response = await this.pagePublicMoonbreezesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for pageWatching without sending the request
+     * Creates request options for pageWatchingMoonbreezes without sending the request
      */
-    async pageWatchingRequestOpts(requestParameters: PageWatchingRequest): Promise<runtime.RequestOpts> {
+    async pageWatchingMoonbreezesRequestOpts(requestParameters: PageWatchingMoonbreezesRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['pageWatchingMoonbreezesReq'] == null) {
             throw new runtime.RequiredError(
                 'pageWatchingMoonbreezesReq',
-                'Required parameter "pageWatchingMoonbreezesReq" was null or undefined when calling pageWatching().'
+                'Required parameter "pageWatchingMoonbreezesReq" was null or undefined when calling pageWatchingMoonbreezes().'
             );
         }
 
@@ -323,18 +343,20 @@ export class MoonbreezeService extends runtime.BaseAPI implements MoonbreezeServ
     }
 
     /**
+     * 服务方法。
      */
-    async pageWatchingRaw(requestParameters: PageWatchingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageMoonbreezesResp>> {
-        const requestOptions = await this.pageWatchingRequestOpts(requestParameters);
+    async pageWatchingMoonbreezesRaw(requestParameters: PageWatchingMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageWatchingMoonbreezesResp>> {
+        const requestOptions = await this.pageWatchingMoonbreezesRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PageMoonbreezesRespFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PageWatchingMoonbreezesRespFromJSON(jsonValue));
     }
 
     /**
+     * 服务方法。
      */
-    async pageWatching(requestParameters: PageWatchingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageMoonbreezesResp> {
-        const response = await this.pageWatchingRaw(requestParameters, initOverrides);
+    async pageWatchingMoonbreezes(requestParameters: PageWatchingMoonbreezesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageWatchingMoonbreezesResp> {
+        const response = await this.pageWatchingMoonbreezesRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

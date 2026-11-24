@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SetPrivateChatSessionMutedReq
  */
 export interface SetPrivateChatSessionMutedReq {
     /**
-     * 
+     * 对端账号 ID。
      * @type {string}
      * @memberof SetPrivateChatSessionMutedReq
      */
     peerUserId?: string;
     /**
-     * 
+     * 是否免打扰。
      * @type {boolean}
      * @memberof SetPrivateChatSessionMutedReq
      */

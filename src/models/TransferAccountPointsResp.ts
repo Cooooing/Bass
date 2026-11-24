@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface TransferAccountPointsResp
  */
 export interface TransferAccountPointsResp {
     /**
-     * 
+     * 转账后的当前积分
      * @type {string}
      * @memberof TransferAccountPointsResp
      */

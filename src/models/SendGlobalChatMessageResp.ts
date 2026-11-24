@@ -22,13 +22,13 @@ import {
 } from './GlobalChatMessage';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface SendGlobalChatMessageResp
  */
 export interface SendGlobalChatMessageResp {
     /**
-     * 
+     * 消息。
      * @type {GlobalChatMessage}
      * @memberof SendGlobalChatMessageResp
      */

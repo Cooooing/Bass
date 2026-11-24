@@ -36,127 +36,127 @@ import {
 } from './RespAccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespCommentListItem
  */
 export interface RespCommentListItem {
     /**
-     * 
+     * 评论 ID
      * @type {string}
      * @memberof RespCommentListItem
      */
     id?: string;
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof RespCommentListItem
      */
     articleId?: string;
     /**
-     * 
+     * 原始内容
      * @type {string}
      * @memberof RespCommentListItem
      */
     content?: string;
     /**
-     * 
+     * 渲染后的内容
      * @type {string}
      * @memberof RespCommentListItem
      */
     contentRender?: string;
     /**
-     * 
+     * 评论层级
      * @type {number}
      * @memberof RespCommentListItem
      */
     level?: number;
     /**
-     * 
+     * 父评论 ID
      * @type {string}
      * @memberof RespCommentListItem
      */
     parentId?: string;
     /**
-     * 
+     * 回复的评论 ID
      * @type {string}
      * @memberof RespCommentListItem
      */
     replyId?: string;
     /**
-     * 
+     * 回复数量
      * @type {number}
      * @memberof RespCommentListItem
      */
     replyCount?: number;
     /**
-     * 
+     * 点赞数量
      * @type {number}
      * @memberof RespCommentListItem
      */
     likeCount?: number;
     /**
-     * 
+     * 感谢数量
      * @type {number}
      * @memberof RespCommentListItem
      */
     thankCount?: number;
     /**
-     * 
+     * 评论账号展示资料
      * @type {RespAccountProfile}
      * @memberof RespCommentListItem
      */
     user?: RespAccountProfile;
     /**
-     * 
+     * 被回复账号展示资料
      * @type {RespAccountProfile}
      * @memberof RespCommentListItem
      */
     replyUser?: RespAccountProfile;
     /**
-     * 
+     * 所属文章摘要
      * @type {RespArticleBrief}
      * @memberof RespCommentListItem
      */
     article?: RespArticleBrief;
     /**
-     * 
+     * 当前查看账号的评论行为状态
      * @type {RespCommentViewerActionState}
      * @memberof RespCommentListItem
      */
     viewerActionState?: RespCommentViewerActionState;
     /**
-     * 
+     * 管理限制
      * @type {RespCommentListItemRestrictionEnum}
      * @memberof RespCommentListItem
      */
     restriction?: RespCommentListItemRestrictionEnum;
     /**
-     * 
+     * 逻辑删除时间
      * @type {Date}
      * @memberof RespCommentListItem
      */
     deletedAt?: Date;
     /**
-     * 
+     * 创建账号 ID
      * @type {string}
      * @memberof RespCommentListItem
      */
     createdBy?: string;
     /**
-     * 
+     * 更新账号 ID
      * @type {string}
      * @memberof RespCommentListItem
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof RespCommentListItem
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof RespCommentListItem
      */

@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface MarkPrivateChatSessionReadReq
  */
 export interface MarkPrivateChatSessionReadReq {
     /**
-     * 
+     * 对端账号 ID。
      * @type {string}
      * @memberof MarkPrivateChatSessionReadReq
      */
     peerUserId?: string;
     /**
-     * 
+     * 最后已读消息 ID。
      * @type {string}
      * @memberof MarkPrivateChatSessionReadReq
      */

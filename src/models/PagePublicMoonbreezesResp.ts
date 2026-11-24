@@ -22,37 +22,37 @@ import {
 } from './Moonbreeze';
 
 /**
- * 
+ * 响应结果。
  * @export
- * @interface PageMoonbreezesResp
+ * @interface PagePublicMoonbreezesResp
  */
-export interface PageMoonbreezesResp {
+export interface PagePublicMoonbreezesResp {
     /**
-     * 
+     * 协议字段。
      * @type {Array<Moonbreeze>}
-     * @memberof PageMoonbreezesResp
+     * @memberof PagePublicMoonbreezesResp
      */
     rows?: Array<Moonbreeze>;
     /**
-     * 
+     * 协议字段。
      * @type {string}
-     * @memberof PageMoonbreezesResp
+     * @memberof PagePublicMoonbreezesResp
      */
     nextCursor?: string;
 }
 
 /**
- * Check if a given object implements the PageMoonbreezesResp interface.
+ * Check if a given object implements the PagePublicMoonbreezesResp interface.
  */
-export function instanceOfPageMoonbreezesResp(value: object): value is PageMoonbreezesResp {
+export function instanceOfPagePublicMoonbreezesResp(value: object): value is PagePublicMoonbreezesResp {
     return true;
 }
 
-export function PageMoonbreezesRespFromJSON(json: any): PageMoonbreezesResp {
-    return PageMoonbreezesRespFromJSONTyped(json, false);
+export function PagePublicMoonbreezesRespFromJSON(json: any): PagePublicMoonbreezesResp {
+    return PagePublicMoonbreezesRespFromJSONTyped(json, false);
 }
 
-export function PageMoonbreezesRespFromJSONTyped(json: any, ignoreDiscriminator: boolean): PageMoonbreezesResp {
+export function PagePublicMoonbreezesRespFromJSONTyped(json: any, ignoreDiscriminator: boolean): PagePublicMoonbreezesResp {
     if (json == null) {
         return json;
     }
@@ -63,11 +63,11 @@ export function PageMoonbreezesRespFromJSONTyped(json: any, ignoreDiscriminator:
     };
 }
 
-export function PageMoonbreezesRespToJSON(json: any): PageMoonbreezesResp {
-    return PageMoonbreezesRespToJSONTyped(json, false);
+export function PagePublicMoonbreezesRespToJSON(json: any): PagePublicMoonbreezesResp {
+    return PagePublicMoonbreezesRespToJSONTyped(json, false);
 }
 
-export function PageMoonbreezesRespToJSONTyped(value?: PageMoonbreezesResp | null, ignoreDiscriminator: boolean = false): any {
+export function PagePublicMoonbreezesRespToJSONTyped(value?: PagePublicMoonbreezesResp | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

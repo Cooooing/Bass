@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface BeginEnableTotpResp
  */
 export interface BeginEnableTotpResp {
     /**
-     * 
+     * TOTP 绑定 URL
      * @type {string}
      * @memberof BeginEnableTotpResp
      */
     url?: string;
     /**
-     * 
+     * TOTP 二维码图片数据
      * @type {string}
      * @memberof BeginEnableTotpResp
      */

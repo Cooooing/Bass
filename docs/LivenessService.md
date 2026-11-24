@@ -4,16 +4,18 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**claimYesterdayReward**](LivenessService.md#claimyesterdayreward) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
+| [**claimYesterdayLivenessReward**](LivenessService.md#claimyesterdaylivenessreward) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
 | [**getLiveness**](LivenessService.md#getliveness) | **GET** /v1/user/liveness |  |
 
 
 
-## claimYesterdayReward
+## claimYesterdayLivenessReward
 
-> ClaimYesterdayLivenessRewardResp claimYesterdayReward(body)
+> ClaimYesterdayLivenessRewardResp claimYesterdayLivenessReward(body)
 
 
+
+服务方法。
 
 ### Example
 
@@ -22,7 +24,7 @@ import {
   Configuration,
   LivenessService,
 } from '@bass/bbs-sdk-fetch';
-import type { ClaimYesterdayRewardRequest } from '@bass/bbs-sdk-fetch';
+import type { ClaimYesterdayLivenessRewardRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -31,10 +33,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies ClaimYesterdayRewardRequest;
+  } satisfies ClaimYesterdayLivenessRewardRequest;
 
   try {
-    const data = await api.claimYesterdayReward(body);
+    const data = await api.claimYesterdayLivenessReward(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -79,6 +81,8 @@ No authorization required
 > GetLivenessResp getLiveness()
 
 
+
+服务方法。
 
 ### Example
 

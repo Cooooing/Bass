@@ -30,6 +30,7 @@ docs/ArticleViewHistoryItem.md
 docs/ArticleViewerActionState.md
 docs/AssetService.md
 docs/AuthService.md
+docs/AvatarAccountResp.md
 docs/BadgeDraft.md
 docs/BadgeService.md
 docs/BeginEnableTotpResp.md
@@ -176,13 +177,15 @@ docs/PageArticleViewHistoryResp.md
 docs/PageCollectedArticlesReq.md
 docs/PageCollectedArticlesResp.md
 docs/PageMemberMoonbreezesReq.md
-docs/PageMoonbreezesResp.md
+docs/PageMemberMoonbreezesResp.md
 docs/PagePublicMoonbreezesReq.md
+docs/PagePublicMoonbreezesResp.md
 docs/PageReq.md
 docs/PageResp.md
 docs/PageWatchedArticlesReq.md
 docs/PageWatchedArticlesResp.md
 docs/PageWatchingMoonbreezesReq.md
+docs/PageWatchingMoonbreezesResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
 docs/PrepareBadgeFontUploadReq.md
@@ -213,6 +216,8 @@ docs/RenameEmojiGroupReq.md
 docs/RenameEmojiGroupResp.md
 docs/RenameEmojiItemReq.md
 docs/RenameEmojiItemResp.md
+docs/RenderMakerBadgeResp.md
+docs/RenderPublishedBadgeResp.md
 docs/RenderSpec.md
 docs/ReorderEmojiGroupsReq.md
 docs/ReorderEmojiItemsReq.md
@@ -350,6 +355,7 @@ src/models/ArticlePostscript.ts
 src/models/ArticleTag.ts
 src/models/ArticleViewHistoryItem.ts
 src/models/ArticleViewerActionState.ts
+src/models/AvatarAccountResp.ts
 src/models/BadgeDraft.ts
 src/models/BeginEnableTotpResp.ts
 src/models/BindArticleTagsReq.ts
@@ -485,13 +491,15 @@ src/models/PageArticleViewHistoryResp.ts
 src/models/PageCollectedArticlesReq.ts
 src/models/PageCollectedArticlesResp.ts
 src/models/PageMemberMoonbreezesReq.ts
-src/models/PageMoonbreezesResp.ts
+src/models/PageMemberMoonbreezesResp.ts
 src/models/PagePublicMoonbreezesReq.ts
+src/models/PagePublicMoonbreezesResp.ts
 src/models/PageReq.ts
 src/models/PageResp.ts
 src/models/PageWatchedArticlesReq.ts
 src/models/PageWatchedArticlesResp.ts
 src/models/PageWatchingMoonbreezesReq.ts
+src/models/PageWatchingMoonbreezesResp.ts
 src/models/PrepareBadgeFontUploadReq.ts
 src/models/PrepareBadgeFontUploadResp.ts
 src/models/PrepareBadgeImageUploadReq.ts
@@ -516,6 +524,8 @@ src/models/RenameEmojiGroupReq.ts
 src/models/RenameEmojiGroupResp.ts
 src/models/RenameEmojiItemReq.ts
 src/models/RenameEmojiItemResp.ts
+src/models/RenderMakerBadgeResp.ts
+src/models/RenderPublishedBadgeResp.ts
 src/models/RenderSpec.ts
 src/models/ReorderEmojiGroupsReq.ts
 src/models/ReorderEmojiItemsReq.ts

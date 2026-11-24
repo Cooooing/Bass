@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SetGlobalChatTopicReq
  */
 export interface SetGlobalChatTopicReq {
     /**
-     * 
+     * 话题内容。
      * @type {string}
      * @memberof SetGlobalChatTopicReq
      */

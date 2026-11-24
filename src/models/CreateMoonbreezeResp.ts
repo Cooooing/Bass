@@ -22,13 +22,13 @@ import {
 } from './Moonbreeze';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CreateMoonbreezeResp
  */
 export interface CreateMoonbreezeResp {
     /**
-     * 
+     * 协议字段。
      * @type {Moonbreeze}
      * @memberof CreateMoonbreezeResp
      */

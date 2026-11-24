@@ -29,19 +29,19 @@ import {
 } from './RespPointRecord';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListPointRecordsResp
  */
 export interface ListPointRecordsResp {
     /**
-     * 
+     * 积分流水列表
      * @type {Array<RespPointRecord>}
      * @memberof ListPointRecordsResp
      */
     rows?: Array<RespPointRecord>;
     /**
-     * 
+     * 分页结果
      * @type {PageResp}
      * @memberof ListPointRecordsResp
      */

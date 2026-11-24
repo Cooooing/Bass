@@ -22,13 +22,13 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListFollowingArticlesReq
  */
 export interface ListFollowingArticlesReq {
     /**
-     * 
+     * 可选，分页参数
      * @type {PageReq}
      * @memberof ListFollowingArticlesReq
      */

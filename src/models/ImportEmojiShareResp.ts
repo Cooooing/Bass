@@ -22,19 +22,19 @@ import {
 } from './EmojiGroup';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ImportEmojiShareResp
  */
 export interface ImportEmojiShareResp {
     /**
-     * 
+     * 新建的导入分组。
      * @type {EmojiGroup}
      * @memberof ImportEmojiShareResp
      */
     group?: EmojiGroup;
     /**
-     * 
+     * 因资源不可用而跳过的表情数。
      * @type {number}
      * @memberof ImportEmojiShareResp
      */

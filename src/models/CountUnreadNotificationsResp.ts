@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CountUnreadNotificationsResp
  */
 export interface CountUnreadNotificationsResp {
     /**
-     * 
+     * 未读通知数量
      * @type {string}
      * @memberof CountUnreadNotificationsResp
      */

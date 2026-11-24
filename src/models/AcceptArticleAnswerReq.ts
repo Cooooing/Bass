@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface AcceptArticleAnswerReq
  */
 export interface AcceptArticleAnswerReq {
     /**
-     * 
+     * 问答文章 ID
      * @type {string}
      * @memberof AcceptArticleAnswerReq
      */
     articleId: string;
     /**
-     * 
+     * 采纳的一级回答 ID
      * @type {string}
      * @memberof AcceptArticleAnswerReq
      */

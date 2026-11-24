@@ -4,15 +4,17 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**search**](ArticleSearchService.md#search) | **POST** /v1/content/article/search |  |
+| [**searchArticles**](ArticleSearchService.md#searcharticles) | **POST** /v1/content/article/search |  |
 
 
 
-## search
+## searchArticles
 
-> SearchArticlesResp search(searchArticlesReq)
+> SearchArticlesResp searchArticles(searchArticlesReq)
 
 
+
+服务方法。
 
 ### Example
 
@@ -21,7 +23,7 @@ import {
   Configuration,
   ArticleSearchService,
 } from '@bass/bbs-sdk-fetch';
-import type { SearchRequest } from '@bass/bbs-sdk-fetch';
+import type { SearchArticlesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -30,10 +32,10 @@ async function example() {
   const body = {
     // SearchArticlesReq
     searchArticlesReq: ...,
-  } satisfies SearchRequest;
+  } satisfies SearchArticlesRequest;
 
   try {
-    const data = await api.search(body);
+    const data = await api.searchArticles(body);
     console.log(data);
   } catch (error) {
     console.error(error);

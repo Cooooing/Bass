@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SendGlobalChatBarrageReq
  */
 export interface SendGlobalChatBarrageReq {
     /**
-     * 
+     * 原始弹幕内容。
      * @type {string}
      * @memberof SendGlobalChatBarrageReq
      */

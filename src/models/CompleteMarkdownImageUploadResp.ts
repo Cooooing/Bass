@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CompleteMarkdownImageUploadResp
  */
 export interface CompleteMarkdownImageUploadResp {
     /**
-     * 
+     * 已确认资源的 ID。
      * @type {string}
      * @memberof CompleteMarkdownImageUploadResp
      */
     assetId?: string;
     /**
-     * 
+     * 前端本地预览使用的公开图片地址。
      * @type {string}
      * @memberof CompleteMarkdownImageUploadResp
      */

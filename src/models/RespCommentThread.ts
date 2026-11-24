@@ -22,31 +22,31 @@ import {
 } from './RespCommentListItem';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespCommentThread
  */
 export interface RespCommentThread {
     /**
-     * 
+     * 顶层评论
      * @type {RespCommentListItem}
      * @memberof RespCommentThread
      */
     root?: RespCommentListItem;
     /**
-     * 
+     * 回复预览列表
      * @type {Array<RespCommentListItem>}
      * @memberof RespCommentThread
      */
     previewReplies?: Array<RespCommentListItem>;
     /**
-     * 
+     * 回复数量
      * @type {number}
      * @memberof RespCommentThread
      */
     replyCount?: number;
     /**
-     * 
+     * 是否还有更多回复
      * @type {boolean}
      * @memberof RespCommentThread
      */

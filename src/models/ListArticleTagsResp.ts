@@ -22,13 +22,13 @@ import {
 } from './RespTag';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListArticleTagsResp
  */
 export interface ListArticleTagsResp {
     /**
-     * 
+     * 标签列表
      * @type {Array<RespTag>}
      * @memberof ListArticleTagsResp
      */

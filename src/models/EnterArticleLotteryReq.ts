@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface EnterArticleLotteryReq
  */
 export interface EnterArticleLotteryReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof EnterArticleLotteryReq
      */
     articleId: string;
     /**
-     * 
+     * true 报名，false 撤销报名
      * @type {boolean}
      * @memberof EnterArticleLotteryReq
      */

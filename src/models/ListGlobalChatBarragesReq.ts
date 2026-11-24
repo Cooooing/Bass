@@ -22,19 +22,19 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListGlobalChatBarragesReq
  */
 export interface ListGlobalChatBarragesReq {
     /**
-     * 
+     * 按发送账号筛选；仅管理端可用。
      * @type {string}
      * @memberof ListGlobalChatBarragesReq
      */
     userId?: string;
     /**
-     * 
+     * 分页参数。
      * @type {PageReq}
      * @memberof ListGlobalChatBarragesReq
      */

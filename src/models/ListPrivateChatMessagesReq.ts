@@ -22,25 +22,25 @@ import {
 } from './PageReq';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ListPrivateChatMessagesReq
  */
 export interface ListPrivateChatMessagesReq {
     /**
-     * 
+     * 对端账号 ID。
      * @type {string}
      * @memberof ListPrivateChatMessagesReq
      */
     peerUserId?: string;
     /**
-     * 
+     * 向前分页游标。
      * @type {string}
      * @memberof ListPrivateChatMessagesReq
      */
     beforeId?: string;
     /**
-     * 
+     * 分页参数。
      * @type {PageReq}
      * @memberof ListPrivateChatMessagesReq
      */

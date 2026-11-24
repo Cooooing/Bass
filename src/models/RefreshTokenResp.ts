@@ -14,37 +14,37 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface RefreshTokenResp
  */
 export interface RefreshTokenResp {
     /**
-     * 
+     * 新的访问令牌
      * @type {string}
      * @memberof RefreshTokenResp
      */
     accessToken?: string;
     /**
-     * 
+     * 新的刷新令牌
      * @type {string}
      * @memberof RefreshTokenResp
      */
     refreshToken?: string;
     /**
-     * 
+     * 访问令牌过期时间
      * @type {Date}
      * @memberof RefreshTokenResp
      */
     accessTokenExpiresAt?: Date;
     /**
-     * 
+     * 刷新令牌空闲过期时间
      * @type {Date}
      * @memberof RefreshTokenResp
      */
     refreshTokenExpiresAt?: Date;
     /**
-     * 
+     * session 绝对过期时间
      * @type {Date}
      * @memberof RefreshTokenResp
      */

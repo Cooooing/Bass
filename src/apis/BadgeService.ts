@@ -19,15 +19,20 @@ import {
     DeleteBadgeDraftReqToJSON,
 } from '../models/DeleteBadgeDraftReq';
 import {
-    type ImageResp,
-    ImageRespFromJSON,
-    ImageRespToJSON,
-} from '../models/ImageResp';
-import {
     type ListBadgeDraftsResp,
     ListBadgeDraftsRespFromJSON,
     ListBadgeDraftsRespToJSON,
 } from '../models/ListBadgeDraftsResp';
+import {
+    type RenderMakerBadgeResp,
+    RenderMakerBadgeRespFromJSON,
+    RenderMakerBadgeRespToJSON,
+} from '../models/RenderMakerBadgeResp';
+import {
+    type RenderPublishedBadgeResp,
+    RenderPublishedBadgeRespFromJSON,
+    RenderPublishedBadgeRespToJSON,
+} from '../models/RenderPublishedBadgeResp';
 import {
     type UpsertBadgeDraftReq,
     UpsertBadgeDraftReqFromJSON,
@@ -39,15 +44,15 @@ import {
     UpsertBadgeDraftRespToJSON,
 } from '../models/UpsertBadgeDraftResp';
 
-export interface DeleteDraftRequest {
+export interface DeleteBadgeDraftRequest {
     deleteBadgeDraftReq: DeleteBadgeDraftReq;
 }
 
-export interface ListDraftsRequest {
+export interface ListBadgeDraftsRequest {
     body: object;
 }
 
-export interface RenderMakerRequest {
+export interface RenderMakerBadgeRequest {
     renderSpecImageAssetId?: string;
     renderSpecText?: string;
     renderSpecBackgroundColors?: Array<string>;
@@ -65,11 +70,11 @@ export interface RenderMakerRequest {
     renderSpecFontAssetId?: string;
 }
 
-export interface RenderPublishedRequest {
+export interface RenderPublishedBadgeRequest {
     code?: string;
 }
 
-export interface UpsertDraftRequest {
+export interface UpsertBadgeDraftRequest {
     upsertBadgeDraftReq: UpsertBadgeDraftReq;
 }
 
@@ -81,12 +86,12 @@ export interface UpsertDraftRequest {
  */
 export interface BadgeServiceInterface {
     /**
-     * Creates request options for deleteDraft without sending the request
+     * Creates request options for deleteBadgeDraft without sending the request
      * @param {DeleteBadgeDraftReq} deleteBadgeDraftReq 
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    deleteDraftRequestOpts(requestParameters: DeleteDraftRequest): Promise<runtime.RequestOpts>;
+    deleteBadgeDraftRequestOpts(requestParameters: DeleteBadgeDraftRequest): Promise<runtime.RequestOpts>;
 
     /**
      * DeleteDraft 删除一个未发布草稿。
@@ -95,20 +100,20 @@ export interface BadgeServiceInterface {
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    deleteDraftRaw(requestParameters: DeleteDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    deleteBadgeDraftRaw(requestParameters: DeleteBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
      * DeleteDraft 删除一个未发布草稿。
      */
-    deleteDraft(requestParameters: DeleteDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    deleteBadgeDraft(requestParameters: DeleteBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for listDrafts without sending the request
+     * Creates request options for listBadgeDrafts without sending the request
      * @param {object} body 
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    listDraftsRequestOpts(requestParameters: ListDraftsRequest): Promise<runtime.RequestOpts>;
+    listBadgeDraftsRequestOpts(requestParameters: ListBadgeDraftsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * ListDrafts 返回当前登录用户的徽章草稿。
@@ -117,92 +122,92 @@ export interface BadgeServiceInterface {
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    listDraftsRaw(requestParameters: ListDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBadgeDraftsResp>>;
+    listBadgeDraftsRaw(requestParameters: ListBadgeDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBadgeDraftsResp>>;
 
     /**
      * ListDrafts 返回当前登录用户的徽章草稿。
      */
-    listDrafts(requestParameters: ListDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBadgeDraftsResp>;
+    listBadgeDrafts(requestParameters: ListBadgeDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBadgeDraftsResp>;
 
     /**
-     * Creates request options for renderMaker without sending the request
-     * @param {string} [renderSpecImageAssetId] 
-     * @param {string} [renderSpecText] 
-     * @param {Array<string>} [renderSpecBackgroundColors] 
-     * @param {Array<string>} [renderSpecTextColors] 
-     * @param {string} [renderSpecBackgroundDirection] 
-     * @param {string} [renderSpecTextDirection] 
-     * @param {number} [renderSpecSize] 
-     * @param {number} [renderSpecBorder] 
-     * @param {number} [renderSpecTextBarLength] 
-     * @param {number} [renderSpecTextSize] 
-     * @param {number} [renderSpecTextBarRadius] 
-     * @param {number} [renderSpecScale] 
-     * @param {number} [renderSpecShadow] 
-     * @param {number} [renderSpecAnimationSeconds] 
-     * @param {string} [renderSpecFontAssetId] 
+     * Creates request options for renderMakerBadge without sending the request
+     * @param {string} [renderSpecImageAssetId] Platform 已确认可用的徽章图标资源 ID。
+     * @param {string} [renderSpecText] 文字条内容。
+     * @param {Array<string>} [renderSpecBackgroundColors] 背景颜色列表。
+     * @param {Array<string>} [renderSpecTextColors] 文字颜色列表。
+     * @param {string} [renderSpecBackgroundDirection] 背景渐变方向或角度。
+     * @param {string} [renderSpecTextDirection] 文字渐变方向或角度。
+     * @param {number} [renderSpecSize] 图标边长。
+     * @param {number} [renderSpecBorder] 图标边距。
+     * @param {number} [renderSpecTextBarLength] 文字条长度。
+     * @param {number} [renderSpecTextSize] 文字字号。
+     * @param {number} [renderSpecTextBarRadius] 文字条圆角。
+     * @param {number} [renderSpecScale] 整体缩放比例。
+     * @param {number} [renderSpecShadow] 阴影强度。
+     * @param {number} [renderSpecAnimationSeconds] 动画时长。
+     * @param {string} [renderSpecFontAssetId] Platform 已确认可用的自定义字体资源 ID。
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    renderMakerRequestOpts(requestParameters: RenderMakerRequest): Promise<runtime.RequestOpts>;
+    renderMakerBadgeRequestOpts(requestParameters: RenderMakerBadgeRequest): Promise<runtime.RequestOpts>;
 
     /**
      * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-     * @param {string} [renderSpecImageAssetId] 
-     * @param {string} [renderSpecText] 
-     * @param {Array<string>} [renderSpecBackgroundColors] 
-     * @param {Array<string>} [renderSpecTextColors] 
-     * @param {string} [renderSpecBackgroundDirection] 
-     * @param {string} [renderSpecTextDirection] 
-     * @param {number} [renderSpecSize] 
-     * @param {number} [renderSpecBorder] 
-     * @param {number} [renderSpecTextBarLength] 
-     * @param {number} [renderSpecTextSize] 
-     * @param {number} [renderSpecTextBarRadius] 
-     * @param {number} [renderSpecScale] 
-     * @param {number} [renderSpecShadow] 
-     * @param {number} [renderSpecAnimationSeconds] 
-     * @param {string} [renderSpecFontAssetId] 
+     * @param {string} [renderSpecImageAssetId] Platform 已确认可用的徽章图标资源 ID。
+     * @param {string} [renderSpecText] 文字条内容。
+     * @param {Array<string>} [renderSpecBackgroundColors] 背景颜色列表。
+     * @param {Array<string>} [renderSpecTextColors] 文字颜色列表。
+     * @param {string} [renderSpecBackgroundDirection] 背景渐变方向或角度。
+     * @param {string} [renderSpecTextDirection] 文字渐变方向或角度。
+     * @param {number} [renderSpecSize] 图标边长。
+     * @param {number} [renderSpecBorder] 图标边距。
+     * @param {number} [renderSpecTextBarLength] 文字条长度。
+     * @param {number} [renderSpecTextSize] 文字字号。
+     * @param {number} [renderSpecTextBarRadius] 文字条圆角。
+     * @param {number} [renderSpecScale] 整体缩放比例。
+     * @param {number} [renderSpecShadow] 阴影强度。
+     * @param {number} [renderSpecAnimationSeconds] 动画时长。
+     * @param {string} [renderSpecFontAssetId] Platform 已确认可用的自定义字体资源 ID。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    renderMakerRaw(requestParameters: RenderMakerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>>;
+    renderMakerBadgeRaw(requestParameters: RenderMakerBadgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenderMakerBadgeResp>>;
 
     /**
      * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
      */
-    renderMaker(requestParameters: RenderMakerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp>;
+    renderMakerBadge(requestParameters: RenderMakerBadgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenderMakerBadgeResp>;
 
     /**
-     * Creates request options for renderPublished without sending the request
-     * @param {string} [code] 
+     * Creates request options for renderPublishedBadge without sending the request
+     * @param {string} [code] 已发布徽章稳定编码。
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    renderPublishedRequestOpts(requestParameters: RenderPublishedRequest): Promise<runtime.RequestOpts>;
+    renderPublishedBadgeRequestOpts(requestParameters: RenderPublishedBadgeRequest): Promise<runtime.RequestOpts>;
 
     /**
      * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-     * @param {string} [code] 
+     * @param {string} [code] 已发布徽章稳定编码。
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    renderPublishedRaw(requestParameters: RenderPublishedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>>;
+    renderPublishedBadgeRaw(requestParameters: RenderPublishedBadgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenderPublishedBadgeResp>>;
 
     /**
      * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
      */
-    renderPublished(requestParameters: RenderPublishedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp>;
+    renderPublishedBadge(requestParameters: RenderPublishedBadgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenderPublishedBadgeResp>;
 
     /**
-     * Creates request options for upsertDraft without sending the request
+     * Creates request options for upsertBadgeDraft without sending the request
      * @param {UpsertBadgeDraftReq} upsertBadgeDraftReq 
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    upsertDraftRequestOpts(requestParameters: UpsertDraftRequest): Promise<runtime.RequestOpts>;
+    upsertBadgeDraftRequestOpts(requestParameters: UpsertBadgeDraftRequest): Promise<runtime.RequestOpts>;
 
     /**
      * UpsertDraft 保存当前登录用户的徽章草稿。
@@ -211,12 +216,12 @@ export interface BadgeServiceInterface {
      * @throws {RequiredError}
      * @memberof BadgeServiceInterface
      */
-    upsertDraftRaw(requestParameters: UpsertDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertBadgeDraftResp>>;
+    upsertBadgeDraftRaw(requestParameters: UpsertBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertBadgeDraftResp>>;
 
     /**
      * UpsertDraft 保存当前登录用户的徽章草稿。
      */
-    upsertDraft(requestParameters: UpsertDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertBadgeDraftResp>;
+    upsertBadgeDraft(requestParameters: UpsertBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertBadgeDraftResp>;
 
 }
 
@@ -226,13 +231,13 @@ export interface BadgeServiceInterface {
 export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterface {
 
     /**
-     * Creates request options for deleteDraft without sending the request
+     * Creates request options for deleteBadgeDraft without sending the request
      */
-    async deleteDraftRequestOpts(requestParameters: DeleteDraftRequest): Promise<runtime.RequestOpts> {
+    async deleteBadgeDraftRequestOpts(requestParameters: DeleteBadgeDraftRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['deleteBadgeDraftReq'] == null) {
             throw new runtime.RequiredError(
                 'deleteBadgeDraftReq',
-                'Required parameter "deleteBadgeDraftReq" was null or undefined when calling deleteDraft().'
+                'Required parameter "deleteBadgeDraftReq" was null or undefined when calling deleteBadgeDraft().'
             );
         }
 
@@ -257,8 +262,8 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * DeleteDraft 删除一个未发布草稿。
      */
-    async deleteDraftRaw(requestParameters: DeleteDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.deleteDraftRequestOpts(requestParameters);
+    async deleteBadgeDraftRaw(requestParameters: DeleteBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.deleteBadgeDraftRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -267,19 +272,19 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * DeleteDraft 删除一个未发布草稿。
      */
-    async deleteDraft(requestParameters: DeleteDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.deleteDraftRaw(requestParameters, initOverrides);
+    async deleteBadgeDraft(requestParameters: DeleteBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.deleteBadgeDraftRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for listDrafts without sending the request
+     * Creates request options for listBadgeDrafts without sending the request
      */
-    async listDraftsRequestOpts(requestParameters: ListDraftsRequest): Promise<runtime.RequestOpts> {
+    async listBadgeDraftsRequestOpts(requestParameters: ListBadgeDraftsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
-                'Required parameter "body" was null or undefined when calling listDrafts().'
+                'Required parameter "body" was null or undefined when calling listBadgeDrafts().'
             );
         }
 
@@ -304,8 +309,8 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * ListDrafts 返回当前登录用户的徽章草稿。
      */
-    async listDraftsRaw(requestParameters: ListDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBadgeDraftsResp>> {
-        const requestOptions = await this.listDraftsRequestOpts(requestParameters);
+    async listBadgeDraftsRaw(requestParameters: ListBadgeDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBadgeDraftsResp>> {
+        const requestOptions = await this.listBadgeDraftsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListBadgeDraftsRespFromJSON(jsonValue));
@@ -314,15 +319,15 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * ListDrafts 返回当前登录用户的徽章草稿。
      */
-    async listDrafts(requestParameters: ListDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBadgeDraftsResp> {
-        const response = await this.listDraftsRaw(requestParameters, initOverrides);
+    async listBadgeDrafts(requestParameters: ListBadgeDraftsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBadgeDraftsResp> {
+        const response = await this.listBadgeDraftsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for renderMaker without sending the request
+     * Creates request options for renderMakerBadge without sending the request
      */
-    async renderMakerRequestOpts(requestParameters: RenderMakerRequest): Promise<runtime.RequestOpts> {
+    async renderMakerBadgeRequestOpts(requestParameters: RenderMakerBadgeRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['renderSpecImageAssetId'] != null) {
@@ -401,25 +406,25 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
      */
-    async renderMakerRaw(requestParameters: RenderMakerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>> {
-        const requestOptions = await this.renderMakerRequestOpts(requestParameters);
+    async renderMakerBadgeRaw(requestParameters: RenderMakerBadgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenderMakerBadgeResp>> {
+        const requestOptions = await this.renderMakerBadgeRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ImageRespFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => RenderMakerBadgeRespFromJSON(jsonValue));
     }
 
     /**
      * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
      */
-    async renderMaker(requestParameters: RenderMakerRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp> {
-        const response = await this.renderMakerRaw(requestParameters, initOverrides);
+    async renderMakerBadge(requestParameters: RenderMakerBadgeRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenderMakerBadgeResp> {
+        const response = await this.renderMakerBadgeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for renderPublished without sending the request
+     * Creates request options for renderPublishedBadge without sending the request
      */
-    async renderPublishedRequestOpts(requestParameters: RenderPublishedRequest): Promise<runtime.RequestOpts> {
+    async renderPublishedBadgeRequestOpts(requestParameters: RenderPublishedBadgeRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['code'] != null) {
@@ -442,29 +447,29 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
      */
-    async renderPublishedRaw(requestParameters: RenderPublishedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>> {
-        const requestOptions = await this.renderPublishedRequestOpts(requestParameters);
+    async renderPublishedBadgeRaw(requestParameters: RenderPublishedBadgeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RenderPublishedBadgeResp>> {
+        const requestOptions = await this.renderPublishedBadgeRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ImageRespFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => RenderPublishedBadgeRespFromJSON(jsonValue));
     }
 
     /**
      * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
      */
-    async renderPublished(requestParameters: RenderPublishedRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp> {
-        const response = await this.renderPublishedRaw(requestParameters, initOverrides);
+    async renderPublishedBadge(requestParameters: RenderPublishedBadgeRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RenderPublishedBadgeResp> {
+        const response = await this.renderPublishedBadgeRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for upsertDraft without sending the request
+     * Creates request options for upsertBadgeDraft without sending the request
      */
-    async upsertDraftRequestOpts(requestParameters: UpsertDraftRequest): Promise<runtime.RequestOpts> {
+    async upsertBadgeDraftRequestOpts(requestParameters: UpsertBadgeDraftRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['upsertBadgeDraftReq'] == null) {
             throw new runtime.RequiredError(
                 'upsertBadgeDraftReq',
-                'Required parameter "upsertBadgeDraftReq" was null or undefined when calling upsertDraft().'
+                'Required parameter "upsertBadgeDraftReq" was null or undefined when calling upsertBadgeDraft().'
             );
         }
 
@@ -489,8 +494,8 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * UpsertDraft 保存当前登录用户的徽章草稿。
      */
-    async upsertDraftRaw(requestParameters: UpsertDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertBadgeDraftResp>> {
-        const requestOptions = await this.upsertDraftRequestOpts(requestParameters);
+    async upsertBadgeDraftRaw(requestParameters: UpsertBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpsertBadgeDraftResp>> {
+        const requestOptions = await this.upsertBadgeDraftRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UpsertBadgeDraftRespFromJSON(jsonValue));
@@ -499,8 +504,8 @@ export class BadgeService extends runtime.BaseAPI implements BadgeServiceInterfa
     /**
      * UpsertDraft 保存当前登录用户的徽章草稿。
      */
-    async upsertDraft(requestParameters: UpsertDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertBadgeDraftResp> {
-        const response = await this.upsertDraftRaw(requestParameters, initOverrides);
+    async upsertBadgeDraft(requestParameters: UpsertBadgeDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpsertBadgeDraftResp> {
+        const response = await this.upsertBadgeDraftRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

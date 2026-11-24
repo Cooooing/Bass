@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ThankCommentResp
  */
 export interface ThankCommentResp {
     /**
-     * 
+     * 是否已感谢
      * @type {boolean}
      * @memberof ThankCommentResp
      */

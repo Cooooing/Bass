@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface RevokeGlobalChatMessageReq
  */
 export interface RevokeGlobalChatMessageReq {
     /**
-     * 
+     * 消息 ID。
      * @type {string}
      * @memberof RevokeGlobalChatMessageReq
      */

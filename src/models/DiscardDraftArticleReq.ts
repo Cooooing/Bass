@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface DiscardDraftArticleReq
  */
 export interface DiscardDraftArticleReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof DiscardDraftArticleReq
      */

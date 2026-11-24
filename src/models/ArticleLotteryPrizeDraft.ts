@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleLotteryPrizeDraft
  */
 export interface ArticleLotteryPrizeDraft {
     /**
-     * 
+     * 奖项名称
      * @type {string}
      * @memberof ArticleLotteryPrizeDraft
      */
     name?: string;
     /**
-     * 
+     * 奖项说明
      * @type {string}
      * @memberof ArticleLotteryPrizeDraft
      */
     description?: string;
     /**
-     * 
+     * 中奖名额
      * @type {number}
      * @memberof ArticleLotteryPrizeDraft
      */

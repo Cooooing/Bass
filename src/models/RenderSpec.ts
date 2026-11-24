@@ -20,91 +20,91 @@ import { mapValues } from '../runtime';
  */
 export interface RenderSpec {
     /**
-     * 
+     * Platform 已确认可用的徽章图标资源 ID。
      * @type {string}
      * @memberof RenderSpec
      */
     imageAssetId?: string;
     /**
-     * 
+     * 文字条内容。
      * @type {string}
      * @memberof RenderSpec
      */
     text?: string;
     /**
-     * 
+     * 背景颜色列表。
      * @type {Array<string>}
      * @memberof RenderSpec
      */
     backgroundColors?: Array<string>;
     /**
-     * 
+     * 文字颜色列表。
      * @type {Array<string>}
      * @memberof RenderSpec
      */
     textColors?: Array<string>;
     /**
-     * 
+     * 背景渐变方向或角度。
      * @type {string}
      * @memberof RenderSpec
      */
     backgroundDirection?: string;
     /**
-     * 
+     * 文字渐变方向或角度。
      * @type {string}
      * @memberof RenderSpec
      */
     textDirection?: string;
     /**
-     * 
+     * 图标边长。
      * @type {number}
      * @memberof RenderSpec
      */
     size?: number;
     /**
-     * 
+     * 图标边距。
      * @type {number}
      * @memberof RenderSpec
      */
     border?: number;
     /**
-     * 
+     * 文字条长度。
      * @type {number}
      * @memberof RenderSpec
      */
     textBarLength?: number;
     /**
-     * 
+     * 文字字号。
      * @type {number}
      * @memberof RenderSpec
      */
     textSize?: number;
     /**
-     * 
+     * 文字条圆角。
      * @type {number}
      * @memberof RenderSpec
      */
     textBarRadius?: number;
     /**
-     * 
+     * 整体缩放比例。
      * @type {number}
      * @memberof RenderSpec
      */
     scale?: number;
     /**
-     * 
+     * 阴影强度。
      * @type {number}
      * @memberof RenderSpec
      */
     shadow?: number;
     /**
-     * 
+     * 动画时长。
      * @type {number}
      * @memberof RenderSpec
      */
     animationSeconds?: number;
     /**
-     * 
+     * Platform 已确认可用的自定义字体资源 ID。
      * @type {string}
      * @memberof RenderSpec
      */

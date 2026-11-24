@@ -22,19 +22,19 @@ import {
 } from './ArticleListItem';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleViewHistoryItem
  */
 export interface ArticleViewHistoryItem {
     /**
-     * 
+     * 当前仍可展示的文章
      * @type {ArticleListItem}
      * @memberof ArticleViewHistoryItem
      */
     article?: ArticleListItem;
     /**
-     * 
+     * 最近浏览时间
      * @type {Date}
      * @memberof ArticleViewHistoryItem
      */

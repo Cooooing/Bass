@@ -4,15 +4,17 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**createTicket**](RealtimeService.md#createticket) | **POST** /v1/realtime/ticket |  |
+| [**createRealtimeTicket**](RealtimeService.md#createrealtimeticket) | **POST** /v1/realtime/ticket |  |
 
 
 
-## createTicket
+## createRealtimeTicket
 
-> CreateRealtimeTicketResp createTicket(body)
+> CreateRealtimeTicketResp createRealtimeTicket(body)
 
 
+
+服务方法。
 
 ### Example
 
@@ -21,7 +23,7 @@ import {
   Configuration,
   RealtimeService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateTicketRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateRealtimeTicketRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -30,10 +32,10 @@ async function example() {
   const body = {
     // object
     body: Object,
-  } satisfies CreateTicketRequest;
+  } satisfies CreateRealtimeTicketRequest;
 
   try {
-    const data = await api.createTicket(body);
+    const data = await api.createRealtimeTicket(body);
     console.log(data);
   } catch (error) {
     console.error(error);

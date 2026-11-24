@@ -22,37 +22,37 @@ import {
 } from './AccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface Moonbreeze
  */
 export interface Moonbreeze {
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof Moonbreeze
      */
     id?: string;
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof Moonbreeze
      */
     content?: string;
     /**
-     * 
+     * 协议字段。
      * @type {AccountProfile}
      * @memberof Moonbreeze
      */
     author?: AccountProfile;
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof Moonbreeze
      */
     city?: string;
     /**
-     * 
+     * 协议字段。
      * @type {Date}
      * @memberof Moonbreeze
      */

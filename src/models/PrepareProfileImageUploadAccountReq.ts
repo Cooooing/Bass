@@ -14,31 +14,31 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface PrepareProfileImageUploadAccountReq
  */
 export interface PrepareProfileImageUploadAccountReq {
     /**
-     * 
+     * 图片用途，必填；仅用于 BFF 业务校验
      * @type {PrepareProfileImageUploadAccountReqPurposeEnum}
      * @memberof PrepareProfileImageUploadAccountReq
      */
     purpose: PrepareProfileImageUploadAccountReqPurposeEnum;
     /**
-     * 
+     * 文件 SHA-256，小写十六进制
      * @type {string}
      * @memberof PrepareProfileImageUploadAccountReq
      */
     hash: string;
     /**
-     * 
+     * 上传 MIME 类型
      * @type {string}
      * @memberof PrepareProfileImageUploadAccountReq
      */
     mimeType: string;
     /**
-     * 
+     * 文件大小，最大 2 MiB
      * @type {string}
      * @memberof PrepareProfileImageUploadAccountReq
      */

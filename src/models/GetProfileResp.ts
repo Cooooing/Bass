@@ -22,13 +22,13 @@ import {
 } from './Profile';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetProfileResp
  */
 export interface GetProfileResp {
     /**
-     * 
+     * 协议字段。
      * @type {Profile}
      * @memberof GetProfileResp
      */

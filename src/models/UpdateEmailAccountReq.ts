@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdateEmailAccountReq
  */
 export interface UpdateEmailAccountReq {
     /**
-     * 
+     * 新邮箱地址，必填
      * @type {string}
      * @memberof UpdateEmailAccountReq
      */
     email: string;
     /**
-     * 
+     * 邮箱 OTP，必填
      * @type {string}
      * @memberof UpdateEmailAccountReq
      */

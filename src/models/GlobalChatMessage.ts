@@ -22,55 +22,55 @@ import {
 } from './GlobalChatMember';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface GlobalChatMessage
  */
 export interface GlobalChatMessage {
     /**
-     * 
+     * 消息 ID。
      * @type {string}
      * @memberof GlobalChatMessage
      */
     id?: string;
     /**
-     * 
+     * 发送账号 ID。
      * @type {string}
      * @memberof GlobalChatMessage
      */
     senderId?: string;
     /**
-     * 
+     * 原始 Markdown 内容。
      * @type {string}
      * @memberof GlobalChatMessage
      */
     content?: string;
     /**
-     * 
+     * 消息类型。
      * @type {GlobalChatMessageMessageTypeEnum}
      * @memberof GlobalChatMessage
      */
     messageType?: GlobalChatMessageMessageTypeEnum;
     /**
-     * 
+     * 是否已撤回。
      * @type {boolean}
      * @memberof GlobalChatMessage
      */
     revoked?: boolean;
     /**
-     * 
+     * 发送者展示资料。
      * @type {GlobalChatMember}
      * @memberof GlobalChatMessage
      */
     sender?: GlobalChatMember;
     /**
-     * 
+     * 创建时间。
      * @type {Date}
      * @memberof GlobalChatMessage
      */
     createdAt?: Date;
     /**
-     * 
+     * 撤回时间。
      * @type {Date}
      * @memberof GlobalChatMessage
      */

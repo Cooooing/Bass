@@ -29,19 +29,19 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListDomainsResp
  */
 export interface ListDomainsResp {
     /**
-     * 
+     * 分页结果
      * @type {PageResp}
      * @memberof ListDomainsResp
      */
     page?: PageResp;
     /**
-     * 
+     * 领域列表
      * @type {Array<RespDomain>}
      * @memberof ListDomainsResp
      */

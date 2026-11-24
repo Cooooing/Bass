@@ -20,7 +20,7 @@ import { mapValues } from '../runtime';
  */
 export interface DeleteBadgeDraftReq {
     /**
-     * 
+     * 草稿 ID。
      * @type {string}
      * @memberof DeleteBadgeDraftReq
      */

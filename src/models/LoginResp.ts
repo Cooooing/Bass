@@ -22,43 +22,43 @@ import {
 } from './RespAccount';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface LoginResp
  */
 export interface LoginResp {
     /**
-     * 
+     * 访问令牌
      * @type {string}
      * @memberof LoginResp
      */
     accessToken?: string;
     /**
-     * 
+     * 刷新令牌
      * @type {string}
      * @memberof LoginResp
      */
     refreshToken?: string;
     /**
-     * 
+     * 访问令牌过期时间
      * @type {Date}
      * @memberof LoginResp
      */
     accessTokenExpiresAt?: Date;
     /**
-     * 
+     * 刷新令牌空闲过期时间
      * @type {Date}
      * @memberof LoginResp
      */
     refreshTokenExpiresAt?: Date;
     /**
-     * 
+     * session 绝对过期时间
      * @type {Date}
      * @memberof LoginResp
      */
     sessionExpiresAt?: Date;
     /**
-     * 
+     * 当前账号完整资料
      * @type {RespAccount}
      * @memberof LoginResp
      */

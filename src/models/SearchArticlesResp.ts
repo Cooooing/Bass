@@ -22,19 +22,19 @@ import {
 } from './ArticleListItem';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface SearchArticlesResp
  */
 export interface SearchArticlesResp {
     /**
-     * 
+     * 文章列表
      * @type {Array<ArticleListItem>}
      * @memberof SearchArticlesResp
      */
     rows?: Array<ArticleListItem>;
     /**
-     * 
+     * 下一页游标
      * @type {string}
      * @memberof SearchArticlesResp
      */

@@ -22,13 +22,13 @@ import {
 } from './RespPrivacySetting';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface UpdateCurrentPrivacySettingResp
  */
 export interface UpdateCurrentPrivacySettingResp {
     /**
-     * 
+     * 更新后的账号隐私设置
      * @type {RespPrivacySetting}
      * @memberof UpdateCurrentPrivacySettingResp
      */

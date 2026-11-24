@@ -19,7 +19,7 @@ import {
     GetCurrentLocationRespToJSON,
 } from '../models/GetCurrentLocationResp';
 
-export interface GetCurrentRequest {
+export interface GetCurrentLocationRequest {
     body: object;
 }
 
@@ -31,12 +31,12 @@ export interface GetCurrentRequest {
  */
 export interface LocationServiceInterface {
     /**
-     * Creates request options for getCurrent without sending the request
+     * Creates request options for getCurrentLocation without sending the request
      * @param {object} body 
      * @throws {RequiredError}
      * @memberof LocationServiceInterface
      */
-    getCurrentRequestOpts(requestParameters: GetCurrentRequest): Promise<runtime.RequestOpts>;
+    getCurrentLocationRequestOpts(requestParameters: GetCurrentLocationRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 按当前请求来源 IP 获取地理数据。
@@ -45,12 +45,12 @@ export interface LocationServiceInterface {
      * @throws {RequiredError}
      * @memberof LocationServiceInterface
      */
-    getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationResp>>;
+    getCurrentLocationRaw(requestParameters: GetCurrentLocationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationResp>>;
 
     /**
      * 按当前请求来源 IP 获取地理数据。
      */
-    getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationResp>;
+    getCurrentLocation(requestParameters: GetCurrentLocationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationResp>;
 
 }
 
@@ -60,13 +60,13 @@ export interface LocationServiceInterface {
 export class LocationService extends runtime.BaseAPI implements LocationServiceInterface {
 
     /**
-     * Creates request options for getCurrent without sending the request
+     * Creates request options for getCurrentLocation without sending the request
      */
-    async getCurrentRequestOpts(requestParameters: GetCurrentRequest): Promise<runtime.RequestOpts> {
+    async getCurrentLocationRequestOpts(requestParameters: GetCurrentLocationRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
-                'Required parameter "body" was null or undefined when calling getCurrent().'
+                'Required parameter "body" was null or undefined when calling getCurrentLocation().'
             );
         }
 
@@ -91,8 +91,8 @@ export class LocationService extends runtime.BaseAPI implements LocationServiceI
     /**
      * 按当前请求来源 IP 获取地理数据。
      */
-    async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationResp>> {
-        const requestOptions = await this.getCurrentRequestOpts(requestParameters);
+    async getCurrentLocationRaw(requestParameters: GetCurrentLocationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationResp>> {
+        const requestOptions = await this.getCurrentLocationRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentLocationRespFromJSON(jsonValue));
@@ -101,8 +101,8 @@ export class LocationService extends runtime.BaseAPI implements LocationServiceI
     /**
      * 按当前请求来源 IP 获取地理数据。
      */
-    async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationResp> {
-        const response = await this.getCurrentRaw(requestParameters, initOverrides);
+    async getCurrentLocation(requestParameters: GetCurrentLocationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationResp> {
+        const response = await this.getCurrentLocationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

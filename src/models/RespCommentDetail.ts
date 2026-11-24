@@ -36,127 +36,127 @@ import {
 } from './RespAccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespCommentDetail
  */
 export interface RespCommentDetail {
     /**
-     * 
+     * 评论 ID
      * @type {string}
      * @memberof RespCommentDetail
      */
     id?: string;
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof RespCommentDetail
      */
     articleId?: string;
     /**
-     * 
+     * 原始内容
      * @type {string}
      * @memberof RespCommentDetail
      */
     content?: string;
     /**
-     * 
+     * 渲染后的内容
      * @type {string}
      * @memberof RespCommentDetail
      */
     contentRender?: string;
     /**
-     * 
+     * 评论层级
      * @type {number}
      * @memberof RespCommentDetail
      */
     level?: number;
     /**
-     * 
+     * 父评论 ID
      * @type {string}
      * @memberof RespCommentDetail
      */
     parentId?: string;
     /**
-     * 
+     * 回复的评论 ID
      * @type {string}
      * @memberof RespCommentDetail
      */
     replyId?: string;
     /**
-     * 
+     * 回复数量
      * @type {number}
      * @memberof RespCommentDetail
      */
     replyCount?: number;
     /**
-     * 
+     * 点赞数量
      * @type {number}
      * @memberof RespCommentDetail
      */
     likeCount?: number;
     /**
-     * 
+     * 感谢数量
      * @type {number}
      * @memberof RespCommentDetail
      */
     thankCount?: number;
     /**
-     * 
+     * 评论账号展示资料
      * @type {RespAccountProfile}
      * @memberof RespCommentDetail
      */
     user?: RespAccountProfile;
     /**
-     * 
+     * 被回复账号展示资料
      * @type {RespAccountProfile}
      * @memberof RespCommentDetail
      */
     replyUser?: RespAccountProfile;
     /**
-     * 
+     * 所属文章摘要
      * @type {RespArticleBrief}
      * @memberof RespCommentDetail
      */
     article?: RespArticleBrief;
     /**
-     * 
+     * 当前查看账号的评论行为状态
      * @type {RespCommentViewerActionState}
      * @memberof RespCommentDetail
      */
     viewerActionState?: RespCommentViewerActionState;
     /**
-     * 
+     * 管理限制
      * @type {RespCommentDetailRestrictionEnum}
      * @memberof RespCommentDetail
      */
     restriction?: RespCommentDetailRestrictionEnum;
     /**
-     * 
+     * 逻辑删除时间
      * @type {Date}
      * @memberof RespCommentDetail
      */
     deletedAt?: Date;
     /**
-     * 
+     * 创建账号 ID
      * @type {string}
      * @memberof RespCommentDetail
      */
     createdBy?: string;
     /**
-     * 
+     * 更新账号 ID
      * @type {string}
      * @memberof RespCommentDetail
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof RespCommentDetail
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof RespCommentDetail
      */

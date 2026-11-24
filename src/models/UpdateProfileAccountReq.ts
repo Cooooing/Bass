@@ -14,31 +14,31 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdateProfileAccountReq
  */
 export interface UpdateProfileAccountReq {
     /**
-     * 
+     * 昵称，选填
      * @type {string}
      * @memberof UpdateProfileAccountReq
      */
     nickname?: string;
     /**
-     * 
+     * 个人主页 URL，选填
      * @type {string}
      * @memberof UpdateProfileAccountReq
      */
     url?: string;
     /**
-     * 
+     * 个人简介，选填
      * @type {string}
      * @memberof UpdateProfileAccountReq
      */
     introduction?: string;
     /**
-     * 
+     * MBTI 类型，选填；空字符串表示清除
      * @type {string}
      * @memberof UpdateProfileAccountReq
      */

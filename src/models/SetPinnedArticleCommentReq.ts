@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface SetPinnedArticleCommentReq
  */
 export interface SetPinnedArticleCommentReq {
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof SetPinnedArticleCommentReq
      */
     articleId: string;
     /**
-     * 
+     * 置顶的一级评论，未传表示取消
      * @type {string}
      * @memberof SetPinnedArticleCommentReq
      */

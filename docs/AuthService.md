@@ -102,11 +102,11 @@ async function example() {
   const api = new AuthService();
 
   const body = {
-    // string (optional)
+    // string | 待检查的账号名 (optional)
     name: name_example,
-    // string (optional)
+    // string | 待检查的邮箱 (optional)
     email: email_example,
-    // string (optional)
+    // string | 待检查的手机号 (optional)
     phone: phone_example,
   } satisfies CheckRegistrationAvailabilityRequest;
 
@@ -127,9 +127,9 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **name** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **email** | `string` |  | [Optional] [Defaults to `undefined`] |
-| **phone** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **name** | `string` | 待检查的账号名 | [Optional] [Defaults to `undefined`] |
+| **email** | `string` | 待检查的邮箱 | [Optional] [Defaults to `undefined`] |
+| **phone** | `string` | 待检查的手机号 | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 

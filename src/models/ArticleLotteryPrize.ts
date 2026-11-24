@@ -22,37 +22,37 @@ import {
 } from './AccountProfile';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleLotteryPrize
  */
 export interface ArticleLotteryPrize {
     /**
-     * 
+     * 奖项 ID
      * @type {string}
      * @memberof ArticleLotteryPrize
      */
     id?: string;
     /**
-     * 
+     * 奖项名称
      * @type {string}
      * @memberof ArticleLotteryPrize
      */
     name?: string;
     /**
-     * 
+     * 奖项说明
      * @type {string}
      * @memberof ArticleLotteryPrize
      */
     description?: string;
     /**
-     * 
+     * 中奖名额
      * @type {number}
      * @memberof ArticleLotteryPrize
      */
     winnerLimit?: number;
     /**
-     * 
+     * 按抽取顺序的中奖账号资料
      * @type {Array<AccountProfile>}
      * @memberof ArticleLotteryPrize
      */

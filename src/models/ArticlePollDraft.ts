@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticlePollDraft
  */
 export interface ArticlePollDraft {
     /**
-     * 
+     * 投票选项
      * @type {Array<string>}
      * @memberof ArticlePollDraft
      */
     options?: Array<string>;
     /**
-     * 
+     * 截止时间
      * @type {Date}
      * @memberof ArticlePollDraft
      */
     endsAt?: Date;
     /**
-     * 
+     * 每人最多选择数
      * @type {number}
      * @memberof ArticlePollDraft
      */

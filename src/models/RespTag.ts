@@ -14,85 +14,85 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespTag
  */
 export interface RespTag {
     /**
-     * 
+     * 标签 ID
      * @type {string}
      * @memberof RespTag
      */
     id?: string;
     /**
-     * 
+     * 稳定编码
      * @type {string}
      * @memberof RespTag
      */
     code?: string;
     /**
-     * 
+     * 标签名称
      * @type {string}
      * @memberof RespTag
      */
     name?: string;
     /**
-     * 
+     * 描述
      * @type {string}
      * @memberof RespTag
      */
     description?: string;
     /**
-     * 
+     * 领域 ID
      * @type {string}
      * @memberof RespTag
      */
     domainId?: string;
     /**
-     * 
+     * 启停状态
      * @type {RespTagStatusEnum}
      * @memberof RespTag
      */
     status?: RespTagStatusEnum;
     /**
-     * 
+     * 图标
      * @type {string}
      * @memberof RespTag
      */
     icon?: string;
     /**
-     * 
+     * 排序值，越小越靠前
      * @type {number}
      * @memberof RespTag
      */
     sort?: number;
     /**
-     * 
+     * 文章数量
      * @type {number}
      * @memberof RespTag
      */
     articleCount?: number;
     /**
-     * 
+     * 创建用户 ID
      * @type {string}
      * @memberof RespTag
      */
     createdBy?: string;
     /**
-     * 
+     * 更新用户 ID
      * @type {string}
      * @memberof RespTag
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof RespTag
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof RespTag
      */

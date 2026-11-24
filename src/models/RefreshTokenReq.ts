@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface RefreshTokenReq
  */
 export interface RefreshTokenReq {
     /**
-     * 
+     * 刷新令牌
      * @type {string}
      * @memberof RefreshTokenReq
      */

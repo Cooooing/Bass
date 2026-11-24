@@ -22,13 +22,13 @@ import {
 } from './ReqTag';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateTagReq
  */
 export interface CreateTagReq {
     /**
-     * 
+     * 标签信息
      * @type {ReqTag}
      * @memberof CreateTagReq
      */

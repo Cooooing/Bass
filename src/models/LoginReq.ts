@@ -36,31 +36,31 @@ import {
 } from './ReqPasswordCredential';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface LoginReq
  */
 export interface LoginReq {
     /**
-     * 
+     * 登录方式
      * @type {LoginReqTypeEnum}
      * @memberof LoginReq
      */
     type: LoginReqTypeEnum;
     /**
-     * 
+     * 密码登录凭证
      * @type {ReqPasswordCredential}
      * @memberof LoginReq
      */
     passwordCredential?: ReqPasswordCredential;
     /**
-     * 
+     * 邮箱登录凭证
      * @type {ReqEmailCredential}
      * @memberof LoginReq
      */
     emailCredential?: ReqEmailCredential;
     /**
-     * 
+     * 手机登录凭证
      * @type {ReqPhoneCredential}
      * @memberof LoginReq
      */

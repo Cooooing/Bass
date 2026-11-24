@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface WatchArticleResp
  */
 export interface WatchArticleResp {
     /**
-     * 
+     * 是否已关注
      * @type {boolean}
      * @memberof WatchArticleResp
      */

@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface PublishArticleReq
  */
 export interface PublishArticleReq {
     /**
-     * 
+     * 必填，文章 ID
      * @type {string}
      * @memberof PublishArticleReq
      */
     articleId: string;
     /**
-     * 
+     * 可选，定时发布时间
      * @type {Date}
      * @memberof PublishArticleReq
      */

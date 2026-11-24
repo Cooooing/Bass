@@ -29,19 +29,19 @@ import {
 } from './PageResp';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListFollowersRelationsResp
  */
 export interface ListFollowersRelationsResp {
     /**
-     * 
+     * 分页结果
      * @type {PageResp}
      * @memberof ListFollowersRelationsResp
      */
     page?: PageResp;
     /**
-     * 
+     * 账号关系列表
      * @type {Array<Relation>}
      * @memberof ListFollowersRelationsResp
      */

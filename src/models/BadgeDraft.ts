@@ -28,31 +28,31 @@ import {
  */
 export interface BadgeDraft {
     /**
-     * 
+     * 草稿主键。
      * @type {string}
      * @memberof BadgeDraft
      */
     id?: string;
     /**
-     * 
+     * 草稿名称。
      * @type {string}
      * @memberof BadgeDraft
      */
     name?: string;
     /**
-     * 
+     * 草稿说明。
      * @type {string}
      * @memberof BadgeDraft
      */
     description?: string;
     /**
-     * 
+     * 草稿渲染参数。
      * @type {RenderSpec}
      * @memberof BadgeDraft
      */
     renderSpec?: RenderSpec;
     /**
-     * 
+     * 设计者用户 ID。
      * @type {string}
      * @memberof BadgeDraft
      */

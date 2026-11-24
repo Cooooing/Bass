@@ -1,6 +1,7 @@
 
 # SearchMentionAccountsReq
 
+请求参数。
 
 ## Properties
 

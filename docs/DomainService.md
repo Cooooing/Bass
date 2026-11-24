@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**create**](DomainService.md#create) | **POST** /v1/content/domain/create |  |
-| [**list**](DomainService.md#list) | **POST** /v1/content/domain/list |  |
-| [**update**](DomainService.md#update) | **POST** /v1/content/domain/update |  |
+| [**createDomain**](DomainService.md#createdomain) | **POST** /v1/content/domain/create |  |
+| [**listDomains**](DomainService.md#listdomains) | **POST** /v1/content/domain/list |  |
+| [**updateDomain**](DomainService.md#updatedomain) | **POST** /v1/content/domain/update |  |
 
 
 
-## create
+## createDomain
 
-> CreateDomainResp create(createDomainReq)
+> CreateDomainResp createDomain(createDomainReq)
 
 
 
@@ -25,7 +25,7 @@ import {
   Configuration,
   DomainService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateDomainRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -34,10 +34,10 @@ async function example() {
   const body = {
     // CreateDomainReq
     createDomainReq: ...,
-  } satisfies CreateRequest;
+  } satisfies CreateDomainRequest;
 
   try {
-    const data = await api.create(body);
+    const data = await api.createDomain(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -77,9 +77,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## list
+## listDomains
 
-> ListDomainsResp list(listDomainsReq)
+> ListDomainsResp listDomains(listDomainsReq)
 
 
 
@@ -92,7 +92,7 @@ import {
   Configuration,
   DomainService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
+import type { ListDomainsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -101,10 +101,10 @@ async function example() {
   const body = {
     // ListDomainsReq
     listDomainsReq: ...,
-  } satisfies ListRequest;
+  } satisfies ListDomainsRequest;
 
   try {
-    const data = await api.list(body);
+    const data = await api.listDomains(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -144,9 +144,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## update
+## updateDomain
 
-> UpdateDomainResp update(updateDomainReq)
+> UpdateDomainResp updateDomain(updateDomainReq)
 
 
 
@@ -159,7 +159,7 @@ import {
   Configuration,
   DomainService,
 } from '@bass/bbs-sdk-fetch';
-import type { UpdateRequest } from '@bass/bbs-sdk-fetch';
+import type { UpdateDomainRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -168,10 +168,10 @@ async function example() {
   const body = {
     // UpdateDomainReq
     updateDomainReq: ...,
-  } satisfies UpdateRequest;
+  } satisfies UpdateDomainRequest;
 
   try {
-    const data = await api.update(body);
+    const data = await api.updateDomain(body);
     console.log(data);
   } catch (error) {
     console.error(error);

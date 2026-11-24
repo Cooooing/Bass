@@ -14,31 +14,31 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UpdateCurrentPreferencesReq
  */
 export interface UpdateCurrentPreferencesReq {
     /**
-     * 
+     * 时区
      * @type {string}
      * @memberof UpdateCurrentPreferencesReq
      */
     timezone?: string;
     /**
-     * 
+     * 桌面端主题
      * @type {string}
      * @memberof UpdateCurrentPreferencesReq
      */
     theme?: string;
     /**
-     * 
+     * 移动端主题
      * @type {string}
      * @memberof UpdateCurrentPreferencesReq
      */
     mobileTheme?: string;
     /**
-     * 
+     * 界面语言
      * @type {UpdateCurrentPreferencesReqLanguageEnum}
      * @memberof UpdateCurrentPreferencesReq
      */

@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface PrepareBadgeImageUploadReq
  */
 export interface PrepareBadgeImageUploadReq {
     /**
-     * 
+     * 文件 SHA-256，小写十六进制。
      * @type {string}
      * @memberof PrepareBadgeImageUploadReq
      */
     hash: string;
     /**
-     * 
+     * 上传图片 MIME 类型。
      * @type {string}
      * @memberof PrepareBadgeImageUploadReq
      */
     mimeType: string;
     /**
-     * 
+     * 文件大小，最大 5 MiB。
      * @type {string}
      * @memberof PrepareBadgeImageUploadReq
      */

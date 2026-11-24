@@ -14,25 +14,25 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CheckRegistrationAvailabilityResp
  */
 export interface CheckRegistrationAvailabilityResp {
     /**
-     * 
+     * 账号名是否可用
      * @type {boolean}
      * @memberof CheckRegistrationAvailabilityResp
      */
     nameAvailable?: boolean;
     /**
-     * 
+     * 邮箱是否可继续用于注册
      * @type {boolean}
      * @memberof CheckRegistrationAvailabilityResp
      */
     emailCanRegister?: boolean;
     /**
-     * 
+     * 手机号是否可继续用于注册
      * @type {boolean}
      * @memberof CheckRegistrationAvailabilityResp
      */

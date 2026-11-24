@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**addItem**](EmojiService.md#additem) | **POST** /v1/im/emoji/items |  |
-| [**createGroup**](EmojiService.md#creategroup) | **POST** /v1/im/emoji/groups |  |
-| [**createShare**](EmojiService.md#createshare) | **POST** /v1/im/emoji/shares |  |
-| [**deleteGroup**](EmojiService.md#deletegroup) | **POST** /v1/im/emoji/groups/delete |  |
-| [**deleteItem**](EmojiService.md#deleteitem) | **POST** /v1/im/emoji/items/delete |  |
-| [**importShare**](EmojiService.md#importshare) | **POST** /v1/im/emoji/shares/import |  |
-| [**list**](EmojiService.md#list) | **POST** /v1/im/emoji/groups/list |  |
-| [**moveItem**](EmojiService.md#moveitem) | **POST** /v1/im/emoji/items/move |  |
-| [**renameGroup**](EmojiService.md#renamegroup) | **POST** /v1/im/emoji/groups/rename |  |
-| [**renameItem**](EmojiService.md#renameitem) | **POST** /v1/im/emoji/items/rename |  |
-| [**reorderGroups**](EmojiService.md#reordergroups) | **POST** /v1/im/emoji/groups/reorder |  |
-| [**reorderItems**](EmojiService.md#reorderitems) | **POST** /v1/im/emoji/items/reorder |  |
+| [**addEmojiItem**](EmojiService.md#addemojiitem) | **POST** /v1/im/emoji/items |  |
+| [**createEmojiGroup**](EmojiService.md#createemojigroup) | **POST** /v1/im/emoji/groups |  |
+| [**createEmojiShare**](EmojiService.md#createemojishare) | **POST** /v1/im/emoji/shares |  |
+| [**deleteEmojiGroup**](EmojiService.md#deleteemojigroup) | **POST** /v1/im/emoji/groups/delete |  |
+| [**deleteEmojiItem**](EmojiService.md#deleteemojiitem) | **POST** /v1/im/emoji/items/delete |  |
+| [**importEmojiShare**](EmojiService.md#importemojishare) | **POST** /v1/im/emoji/shares/import |  |
+| [**listEmojiGroups**](EmojiService.md#listemojigroups) | **POST** /v1/im/emoji/groups/list |  |
+| [**moveEmojiItem**](EmojiService.md#moveemojiitem) | **POST** /v1/im/emoji/items/move |  |
+| [**renameEmojiGroup**](EmojiService.md#renameemojigroup) | **POST** /v1/im/emoji/groups/rename |  |
+| [**renameEmojiItem**](EmojiService.md#renameemojiitem) | **POST** /v1/im/emoji/items/rename |  |
+| [**reorderEmojiGroups**](EmojiService.md#reorderemojigroups) | **POST** /v1/im/emoji/groups/reorder |  |
+| [**reorderEmojiItems**](EmojiService.md#reorderemojiitems) | **POST** /v1/im/emoji/items/reorder |  |
 
 
 
-## addItem
+## addEmojiItem
 
-> AddEmojiItemResp addItem(addEmojiItemReq)
+> AddEmojiItemResp addEmojiItem(addEmojiItemReq)
 
 
 
@@ -34,7 +34,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { AddItemRequest } from '@bass/bbs-sdk-fetch';
+import type { AddEmojiItemRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -43,10 +43,10 @@ async function example() {
   const body = {
     // AddEmojiItemReq
     addEmojiItemReq: ...,
-  } satisfies AddItemRequest;
+  } satisfies AddEmojiItemRequest;
 
   try {
-    const data = await api.addItem(body);
+    const data = await api.addEmojiItem(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -86,9 +86,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## createGroup
+## createEmojiGroup
 
-> CreateEmojiGroupResp createGroup(createEmojiGroupReq)
+> CreateEmojiGroupResp createEmojiGroup(createEmojiGroupReq)
 
 
 
@@ -101,7 +101,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateGroupRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateEmojiGroupRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -110,10 +110,10 @@ async function example() {
   const body = {
     // CreateEmojiGroupReq
     createEmojiGroupReq: ...,
-  } satisfies CreateGroupRequest;
+  } satisfies CreateEmojiGroupRequest;
 
   try {
-    const data = await api.createGroup(body);
+    const data = await api.createEmojiGroup(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -153,9 +153,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## createShare
+## createEmojiShare
 
-> CreateEmojiShareResp createShare(createEmojiShareReq)
+> CreateEmojiShareResp createEmojiShare(createEmojiShareReq)
 
 
 
@@ -168,7 +168,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateShareRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateEmojiShareRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -177,10 +177,10 @@ async function example() {
   const body = {
     // CreateEmojiShareReq
     createEmojiShareReq: ...,
-  } satisfies CreateShareRequest;
+  } satisfies CreateEmojiShareRequest;
 
   try {
-    const data = await api.createShare(body);
+    const data = await api.createEmojiShare(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -220,9 +220,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## deleteGroup
+## deleteEmojiGroup
 
-> object deleteGroup(deleteEmojiGroupReq)
+> object deleteEmojiGroup(deleteEmojiGroupReq)
 
 
 
@@ -235,7 +235,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { DeleteGroupRequest } from '@bass/bbs-sdk-fetch';
+import type { DeleteEmojiGroupRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -244,10 +244,10 @@ async function example() {
   const body = {
     // DeleteEmojiGroupReq
     deleteEmojiGroupReq: ...,
-  } satisfies DeleteGroupRequest;
+  } satisfies DeleteEmojiGroupRequest;
 
   try {
-    const data = await api.deleteGroup(body);
+    const data = await api.deleteEmojiGroup(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -287,9 +287,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## deleteItem
+## deleteEmojiItem
 
-> object deleteItem(deleteEmojiItemReq)
+> object deleteEmojiItem(deleteEmojiItemReq)
 
 
 
@@ -302,7 +302,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { DeleteItemRequest } from '@bass/bbs-sdk-fetch';
+import type { DeleteEmojiItemRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -311,10 +311,10 @@ async function example() {
   const body = {
     // DeleteEmojiItemReq
     deleteEmojiItemReq: ...,
-  } satisfies DeleteItemRequest;
+  } satisfies DeleteEmojiItemRequest;
 
   try {
-    const data = await api.deleteItem(body);
+    const data = await api.deleteEmojiItem(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -354,9 +354,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## importShare
+## importEmojiShare
 
-> ImportEmojiShareResp importShare(importEmojiShareReq)
+> ImportEmojiShareResp importEmojiShare(importEmojiShareReq)
 
 
 
@@ -369,7 +369,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { ImportShareRequest } from '@bass/bbs-sdk-fetch';
+import type { ImportEmojiShareRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -378,10 +378,10 @@ async function example() {
   const body = {
     // ImportEmojiShareReq
     importEmojiShareReq: ...,
-  } satisfies ImportShareRequest;
+  } satisfies ImportEmojiShareRequest;
 
   try {
-    const data = await api.importShare(body);
+    const data = await api.importEmojiShare(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -421,9 +421,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## list
+## listEmojiGroups
 
-> ListEmojiGroupsResp list(listEmojiGroupsReq)
+> ListEmojiGroupsResp listEmojiGroups(listEmojiGroupsReq)
 
 
 
@@ -436,7 +436,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListRequest } from '@bass/bbs-sdk-fetch';
+import type { ListEmojiGroupsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -445,10 +445,10 @@ async function example() {
   const body = {
     // ListEmojiGroupsReq
     listEmojiGroupsReq: ...,
-  } satisfies ListRequest;
+  } satisfies ListEmojiGroupsRequest;
 
   try {
-    const data = await api.list(body);
+    const data = await api.listEmojiGroups(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -488,9 +488,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## moveItem
+## moveEmojiItem
 
-> MoveEmojiItemResp moveItem(moveEmojiItemReq)
+> MoveEmojiItemResp moveEmojiItem(moveEmojiItemReq)
 
 
 
@@ -503,7 +503,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { MoveItemRequest } from '@bass/bbs-sdk-fetch';
+import type { MoveEmojiItemRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -512,10 +512,10 @@ async function example() {
   const body = {
     // MoveEmojiItemReq
     moveEmojiItemReq: ...,
-  } satisfies MoveItemRequest;
+  } satisfies MoveEmojiItemRequest;
 
   try {
-    const data = await api.moveItem(body);
+    const data = await api.moveEmojiItem(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -555,9 +555,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## renameGroup
+## renameEmojiGroup
 
-> RenameEmojiGroupResp renameGroup(renameEmojiGroupReq)
+> RenameEmojiGroupResp renameEmojiGroup(renameEmojiGroupReq)
 
 
 
@@ -570,7 +570,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { RenameGroupRequest } from '@bass/bbs-sdk-fetch';
+import type { RenameEmojiGroupRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -579,10 +579,10 @@ async function example() {
   const body = {
     // RenameEmojiGroupReq
     renameEmojiGroupReq: ...,
-  } satisfies RenameGroupRequest;
+  } satisfies RenameEmojiGroupRequest;
 
   try {
-    const data = await api.renameGroup(body);
+    const data = await api.renameEmojiGroup(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -622,9 +622,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## renameItem
+## renameEmojiItem
 
-> RenameEmojiItemResp renameItem(renameEmojiItemReq)
+> RenameEmojiItemResp renameEmojiItem(renameEmojiItemReq)
 
 
 
@@ -637,7 +637,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { RenameItemRequest } from '@bass/bbs-sdk-fetch';
+import type { RenameEmojiItemRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -646,10 +646,10 @@ async function example() {
   const body = {
     // RenameEmojiItemReq
     renameEmojiItemReq: ...,
-  } satisfies RenameItemRequest;
+  } satisfies RenameEmojiItemRequest;
 
   try {
-    const data = await api.renameItem(body);
+    const data = await api.renameEmojiItem(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -689,9 +689,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## reorderGroups
+## reorderEmojiGroups
 
-> object reorderGroups(reorderEmojiGroupsReq)
+> object reorderEmojiGroups(reorderEmojiGroupsReq)
 
 
 
@@ -704,7 +704,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { ReorderGroupsRequest } from '@bass/bbs-sdk-fetch';
+import type { ReorderEmojiGroupsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -713,10 +713,10 @@ async function example() {
   const body = {
     // ReorderEmojiGroupsReq
     reorderEmojiGroupsReq: ...,
-  } satisfies ReorderGroupsRequest;
+  } satisfies ReorderEmojiGroupsRequest;
 
   try {
-    const data = await api.reorderGroups(body);
+    const data = await api.reorderEmojiGroups(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -756,9 +756,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## reorderItems
+## reorderEmojiItems
 
-> object reorderItems(reorderEmojiItemsReq)
+> object reorderEmojiItems(reorderEmojiItemsReq)
 
 
 
@@ -771,7 +771,7 @@ import {
   Configuration,
   EmojiService,
 } from '@bass/bbs-sdk-fetch';
-import type { ReorderItemsRequest } from '@bass/bbs-sdk-fetch';
+import type { ReorderEmojiItemsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -780,10 +780,10 @@ async function example() {
   const body = {
     // ReorderEmojiItemsReq
     reorderEmojiItemsReq: ...,
-  } satisfies ReorderItemsRequest;
+  } satisfies ReorderEmojiItemsRequest;
 
   try {
-    const data = await api.reorderItems(body);
+    const data = await api.reorderEmojiItems(body);
     console.log(data);
   } catch (error) {
     console.error(error);

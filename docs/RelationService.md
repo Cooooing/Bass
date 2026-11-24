@@ -4,20 +4,20 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**block**](RelationService.md#block) | **POST** /v1/user/relation/block |  |
-| [**follow**](RelationService.md#follow) | **POST** /v1/user/relation/follow |  |
-| [**getStatus**](RelationService.md#getstatus) | **POST** /v1/user/relation/get-status |  |
-| [**listBlocked**](RelationService.md#listblocked) | **POST** /v1/user/relation/list-blocked |  |
-| [**listFollowers**](RelationService.md#listfollowers) | **POST** /v1/user/relation/list-followers |  |
-| [**listFollowing**](RelationService.md#listfollowing) | **POST** /v1/user/relation/list-following |  |
-| [**unblock**](RelationService.md#unblock) | **POST** /v1/user/relation/unblock |  |
-| [**unfollow**](RelationService.md#unfollow) | **POST** /v1/user/relation/unfollow |  |
+| [**blockRelation**](RelationService.md#blockrelation) | **POST** /v1/user/relation/block |  |
+| [**followRelation**](RelationService.md#followrelation) | **POST** /v1/user/relation/follow |  |
+| [**getStatusRelation**](RelationService.md#getstatusrelation) | **POST** /v1/user/relation/get-status |  |
+| [**listBlockedRelations**](RelationService.md#listblockedrelations) | **POST** /v1/user/relation/list-blocked |  |
+| [**listFollowersRelations**](RelationService.md#listfollowersrelations) | **POST** /v1/user/relation/list-followers |  |
+| [**listFollowingRelations**](RelationService.md#listfollowingrelations) | **POST** /v1/user/relation/list-following |  |
+| [**unblockRelation**](RelationService.md#unblockrelation) | **POST** /v1/user/relation/unblock |  |
+| [**unfollowRelation**](RelationService.md#unfollowrelation) | **POST** /v1/user/relation/unfollow |  |
 
 
 
-## block
+## blockRelation
 
-> object block(blockRelationReq)
+> object blockRelation(blockRelationReq)
 
 
 
@@ -30,7 +30,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { BlockRequest } from '@bass/bbs-sdk-fetch';
+import type { BlockRelationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -39,10 +39,10 @@ async function example() {
   const body = {
     // BlockRelationReq
     blockRelationReq: ...,
-  } satisfies BlockRequest;
+  } satisfies BlockRelationRequest;
 
   try {
-    const data = await api.block(body);
+    const data = await api.blockRelation(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -82,9 +82,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## follow
+## followRelation
 
-> object follow(followRelationReq)
+> object followRelation(followRelationReq)
 
 
 
@@ -97,7 +97,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { FollowRequest } from '@bass/bbs-sdk-fetch';
+import type { FollowRelationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -106,10 +106,10 @@ async function example() {
   const body = {
     // FollowRelationReq
     followRelationReq: ...,
-  } satisfies FollowRequest;
+  } satisfies FollowRelationRequest;
 
   try {
-    const data = await api.follow(body);
+    const data = await api.followRelation(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -149,9 +149,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## getStatus
+## getStatusRelation
 
-> GetStatusRelationResp getStatus(getStatusRelationReq)
+> GetStatusRelationResp getStatusRelation(getStatusRelationReq)
 
 
 
@@ -164,7 +164,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { GetStatusRequest } from '@bass/bbs-sdk-fetch';
+import type { GetStatusRelationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -173,10 +173,10 @@ async function example() {
   const body = {
     // GetStatusRelationReq
     getStatusRelationReq: ...,
-  } satisfies GetStatusRequest;
+  } satisfies GetStatusRelationRequest;
 
   try {
-    const data = await api.getStatus(body);
+    const data = await api.getStatusRelation(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -216,9 +216,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listBlocked
+## listBlockedRelations
 
-> ListBlockedRelationsResp listBlocked(listBlockedRelationsReq)
+> ListBlockedRelationsResp listBlockedRelations(listBlockedRelationsReq)
 
 
 
@@ -231,7 +231,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListBlockedRequest } from '@bass/bbs-sdk-fetch';
+import type { ListBlockedRelationsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -240,10 +240,10 @@ async function example() {
   const body = {
     // ListBlockedRelationsReq
     listBlockedRelationsReq: ...,
-  } satisfies ListBlockedRequest;
+  } satisfies ListBlockedRelationsRequest;
 
   try {
-    const data = await api.listBlocked(body);
+    const data = await api.listBlockedRelations(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -283,9 +283,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listFollowers
+## listFollowersRelations
 
-> ListFollowersRelationsResp listFollowers(listFollowersRelationsReq)
+> ListFollowersRelationsResp listFollowersRelations(listFollowersRelationsReq)
 
 
 
@@ -298,7 +298,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListFollowersRequest } from '@bass/bbs-sdk-fetch';
+import type { ListFollowersRelationsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -307,10 +307,10 @@ async function example() {
   const body = {
     // ListFollowersRelationsReq
     listFollowersRelationsReq: ...,
-  } satisfies ListFollowersRequest;
+  } satisfies ListFollowersRelationsRequest;
 
   try {
-    const data = await api.listFollowers(body);
+    const data = await api.listFollowersRelations(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -350,9 +350,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listFollowing
+## listFollowingRelations
 
-> ListFollowingRelationsResp listFollowing(listFollowingRelationsReq)
+> ListFollowingRelationsResp listFollowingRelations(listFollowingRelationsReq)
 
 
 
@@ -365,7 +365,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { ListFollowingRequest } from '@bass/bbs-sdk-fetch';
+import type { ListFollowingRelationsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -374,10 +374,10 @@ async function example() {
   const body = {
     // ListFollowingRelationsReq
     listFollowingRelationsReq: ...,
-  } satisfies ListFollowingRequest;
+  } satisfies ListFollowingRelationsRequest;
 
   try {
-    const data = await api.listFollowing(body);
+    const data = await api.listFollowingRelations(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -417,9 +417,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## unblock
+## unblockRelation
 
-> object unblock(unblockRelationReq)
+> object unblockRelation(unblockRelationReq)
 
 
 
@@ -432,7 +432,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { UnblockRequest } from '@bass/bbs-sdk-fetch';
+import type { UnblockRelationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -441,10 +441,10 @@ async function example() {
   const body = {
     // UnblockRelationReq
     unblockRelationReq: ...,
-  } satisfies UnblockRequest;
+  } satisfies UnblockRelationRequest;
 
   try {
-    const data = await api.unblock(body);
+    const data = await api.unblockRelation(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -484,9 +484,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## unfollow
+## unfollowRelation
 
-> object unfollow(unfollowRelationReq)
+> object unfollowRelation(unfollowRelationReq)
 
 
 
@@ -499,7 +499,7 @@ import {
   Configuration,
   RelationService,
 } from '@bass/bbs-sdk-fetch';
-import type { UnfollowRequest } from '@bass/bbs-sdk-fetch';
+import type { UnfollowRelationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -508,10 +508,10 @@ async function example() {
   const body = {
     // UnfollowRelationReq
     unfollowRelationReq: ...,
-  } satisfies UnfollowRequest;
+  } satisfies UnfollowRelationRequest;
 
   try {
-    const data = await api.unfollow(body);
+    const data = await api.unfollowRelation(body);
     console.log(data);
   } catch (error) {
     console.error(error);

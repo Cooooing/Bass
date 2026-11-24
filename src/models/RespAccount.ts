@@ -29,19 +29,19 @@ import {
 } from './RespAccountContact';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespAccount
  */
 export interface RespAccount {
     /**
-     * 
+     * 基础信息
      * @type {RespAccountBasic}
      * @memberof RespAccount
      */
     basic?: RespAccountBasic;
     /**
-     * 
+     * 联系方式
      * @type {RespAccountContact}
      * @memberof RespAccount
      */

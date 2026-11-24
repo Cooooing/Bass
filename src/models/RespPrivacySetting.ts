@@ -14,61 +14,61 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 协议消息。
  * @export
  * @interface RespPrivacySetting
  */
 export interface RespPrivacySetting {
     /**
-     * 
+     * 账号 ID
      * @type {string}
      * @memberof RespPrivacySetting
      */
     userId?: string;
     /**
-     * 
+     * 是否公开积分
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
     publicPoints?: boolean;
     /**
-     * 
+     * 是否公开粉丝列表
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
     publicFollowerList?: boolean;
     /**
-     * 
+     * 是否公开关注列表
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
     publicFollowingList?: boolean;
     /**
-     * 
+     * 是否公开帖子列表
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
     publicArticleList?: boolean;
     /**
-     * 
+     * 是否公开回复列表
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
     publicCommentList?: boolean;
     /**
-     * 
+     * 是否公开在线状态
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
     publicOnlineStatus?: boolean;
     /**
-     * 
+     * 是否公开地理资料
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
     publicLocation?: boolean;
     /**
-     * 
+     * 是否公开清风明月列表
      * @type {boolean}
      * @memberof RespPrivacySetting
      */

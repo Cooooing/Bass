@@ -22,13 +22,13 @@ import {
 } from './GlobalChatTopic';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetGlobalChatTopicResp
  */
 export interface GetGlobalChatTopicResp {
     /**
-     * 
+     * 当前话题；未设置时为空。
      * @type {GlobalChatTopic}
      * @memberof GetGlobalChatTopicResp
      */

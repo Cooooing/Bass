@@ -19,7 +19,7 @@ import {
     CreateRealtimeTicketRespToJSON,
 } from '../models/CreateRealtimeTicketResp';
 
-export interface CreateTicketRequest {
+export interface CreateRealtimeTicketRequest {
     body: object;
 }
 
@@ -31,25 +31,26 @@ export interface CreateTicketRequest {
  */
 export interface RealtimeServiceInterface {
     /**
-     * Creates request options for createTicket without sending the request
+     * Creates request options for createRealtimeTicket without sending the request
      * @param {object} body 
      * @throws {RequiredError}
      * @memberof RealtimeServiceInterface
      */
-    createTicketRequestOpts(requestParameters: CreateTicketRequest): Promise<runtime.RequestOpts>;
+    createRealtimeTicketRequestOpts(requestParameters: CreateRealtimeTicketRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 
+     * 服务方法。
      * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RealtimeServiceInterface
      */
-    createTicketRaw(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateRealtimeTicketResp>>;
+    createRealtimeTicketRaw(requestParameters: CreateRealtimeTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateRealtimeTicketResp>>;
 
     /**
+     * 服务方法。
      */
-    createTicket(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateRealtimeTicketResp>;
+    createRealtimeTicket(requestParameters: CreateRealtimeTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateRealtimeTicketResp>;
 
 }
 
@@ -59,13 +60,13 @@ export interface RealtimeServiceInterface {
 export class RealtimeService extends runtime.BaseAPI implements RealtimeServiceInterface {
 
     /**
-     * Creates request options for createTicket without sending the request
+     * Creates request options for createRealtimeTicket without sending the request
      */
-    async createTicketRequestOpts(requestParameters: CreateTicketRequest): Promise<runtime.RequestOpts> {
+    async createRealtimeTicketRequestOpts(requestParameters: CreateRealtimeTicketRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
-                'Required parameter "body" was null or undefined when calling createTicket().'
+                'Required parameter "body" was null or undefined when calling createRealtimeTicket().'
             );
         }
 
@@ -88,18 +89,20 @@ export class RealtimeService extends runtime.BaseAPI implements RealtimeServiceI
     }
 
     /**
+     * 服务方法。
      */
-    async createTicketRaw(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateRealtimeTicketResp>> {
-        const requestOptions = await this.createTicketRequestOpts(requestParameters);
+    async createRealtimeTicketRaw(requestParameters: CreateRealtimeTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateRealtimeTicketResp>> {
+        const requestOptions = await this.createRealtimeTicketRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateRealtimeTicketRespFromJSON(jsonValue));
     }
 
     /**
+     * 服务方法。
      */
-    async createTicket(requestParameters: CreateTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateRealtimeTicketResp> {
-        const response = await this.createTicketRaw(requestParameters, initOverrides);
+    async createRealtimeTicket(requestParameters: CreateRealtimeTicketRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateRealtimeTicketResp> {
+        const response = await this.createRealtimeTicketRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

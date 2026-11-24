@@ -22,13 +22,13 @@ import {
 } from './EmojiGroup';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface ListEmojiGroupsResp
  */
 export interface ListEmojiGroupsResp {
     /**
-     * 
+     * 表情分组列表。
      * @type {Array<EmojiGroup>}
      * @memberof ListEmojiGroupsResp
      */

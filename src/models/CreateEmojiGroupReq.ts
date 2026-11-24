@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateEmojiGroupReq
  */
 export interface CreateEmojiGroupReq {
     /**
-     * 
+     * 新分组名称。
      * @type {string}
      * @memberof CreateEmojiGroupReq
      */

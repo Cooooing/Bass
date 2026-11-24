@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 响应结果。
  * @export
  * @interface CreateEmojiShareResp
  */
 export interface CreateEmojiShareResp {
     /**
-     * 
+     * 高熵分享码。
      * @type {string}
      * @memberof CreateEmojiShareResp
      */
     code?: string;
     /**
-     * 
+     * 分享码剩余有效秒数。
      * @type {string}
      * @memberof CreateEmojiShareResp
      */

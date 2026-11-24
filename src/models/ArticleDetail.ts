@@ -64,247 +64,247 @@ import {
 } from './ArticleDomain';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleDetail
  */
 export interface ArticleDetail {
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof ArticleDetail
      */
     id?: string;
     /**
-     * 
+     * 标题
      * @type {string}
      * @memberof ArticleDetail
      */
     title?: string;
     /**
-     * 
+     * 原始内容
      * @type {string}
      * @memberof ArticleDetail
      */
     content?: string;
     /**
-     * 
+     * 渲染内容
      * @type {string}
      * @memberof ArticleDetail
      */
     contentRender?: string;
     /**
-     * 
+     * 是否有附言
      * @type {boolean}
      * @memberof ArticleDetail
      */
     hasPostscript?: boolean;
     /**
-     * 
+     * 是否有打赏区
      * @type {boolean}
      * @memberof ArticleDetail
      */
     hasReward?: boolean;
     /**
-     * 
+     * 打赏后可见内容
      * @type {string}
      * @memberof ArticleDetail
      */
     rewardContent?: string;
     /**
-     * 
+     * 渲染打赏内容
      * @type {string}
      * @memberof ArticleDetail
      */
     rewardContentRender?: string;
     /**
-     * 
+     * 打赏积分
      * @type {number}
      * @memberof ArticleDetail
      */
     rewardPoints?: number;
     /**
-     * 
+     * 文章类型
      * @type {ArticleDetailTypeEnum}
      * @memberof ArticleDetail
      */
     type?: ArticleDetailTypeEnum;
     /**
-     * 
+     * 创作声明
      * @type {string}
      * @memberof ArticleDetail
      */
     statement?: string;
     /**
-     * 
+     * 是否允许评论
      * @type {boolean}
      * @memberof ArticleDetail
      */
     commentable?: boolean;
     /**
-     * 
+     * 浏览数
      * @type {number}
      * @memberof ArticleDetail
      */
     viewCount?: number;
     /**
-     * 
+     * 感谢数
      * @type {number}
      * @memberof ArticleDetail
      */
     thankCount?: number;
     /**
-     * 
+     * 点赞数
      * @type {number}
      * @memberof ArticleDetail
      */
     likeCount?: number;
     /**
-     * 
+     * 收藏数
      * @type {number}
      * @memberof ArticleDetail
      */
     collectCount?: number;
     /**
-     * 
+     * 关注数
      * @type {number}
      * @memberof ArticleDetail
      */
     watchCount?: number;
     /**
-     * 
+     * 打赏数
      * @type {number}
      * @memberof ArticleDetail
      */
     rewardCount?: number;
     /**
-     * 
+     * 回复数
      * @type {number}
      * @memberof ArticleDetail
      */
     replyCount?: number;
     /**
-     * 
+     * 作者资料
      * @type {AccountProfile}
      * @memberof ArticleDetail
      */
     authorUser?: AccountProfile;
     /**
-     * 
+     * 最后回复用户
      * @type {AccountProfile}
      * @memberof ArticleDetail
      */
     lastReplyUser?: AccountProfile;
     /**
-     * 
+     * 最后回复时间
      * @type {Date}
      * @memberof ArticleDetail
      */
     lastReplyAt?: Date;
     /**
-     * 
+     * 封面图片 URL
      * @type {string}
      * @memberof ArticleDetail
      */
     coverImageUrl?: string;
     /**
-     * 
+     * 当前用户互动状态
      * @type {ArticleViewerActionState}
      * @memberof ArticleDetail
      */
     viewerActionState?: ArticleViewerActionState;
     /**
-     * 
+     * 发布时间
      * @type {Date}
      * @memberof ArticleDetail
      */
     publishedAt?: Date;
     /**
-     * 
+     * 附言列表
      * @type {Array<ArticlePostscript>}
      * @memberof ArticleDetail
      */
     postscripts?: Array<ArticlePostscript>;
     /**
-     * 
+     * 发布状态
      * @type {ArticleDetailPublishStatusEnum}
      * @memberof ArticleDetail
      */
     publishStatus?: ArticleDetailPublishStatusEnum;
     /**
-     * 
+     * 可见范围
      * @type {ArticleDetailVisibilityEnum}
      * @memberof ArticleDetail
      */
     visibility?: ArticleDetailVisibilityEnum;
     /**
-     * 
+     * 治理限制
      * @type {ArticleDetailRestrictionEnum}
      * @memberof ArticleDetail
      */
     restriction?: ArticleDetailRestrictionEnum;
     /**
-     * 
+     * 编辑时间
      * @type {Date}
      * @memberof ArticleDetail
      */
     editedAt?: Date;
     /**
-     * 
+     * 文章标签
      * @type {Array<ArticleTag>}
      * @memberof ArticleDetail
      */
     tags?: Array<ArticleTag>;
     /**
-     * 
+     * 文章所属领域
      * @type {Array<ArticleDomain>}
      * @memberof ArticleDetail
      */
     domains?: Array<ArticleDomain>;
     /**
-     * 
+     * 发布时城市快照
      * @type {string}
      * @memberof ArticleDetail
      */
     city?: string;
     /**
-     * 
+     * 问答已采纳评论 ID
      * @type {string}
      * @memberof ArticleDetail
      */
     acceptedCommentId?: string;
     /**
-     * 
+     * 投票详情
      * @type {ArticlePoll}
      * @memberof ArticleDetail
      */
     poll?: ArticlePoll;
     /**
-     * 
+     * 抽奖详情
      * @type {ArticleLottery}
      * @memberof ArticleDetail
      */
     lottery?: ArticleLottery;
     /**
-     * 
+     * 创建账号 ID
      * @type {string}
      * @memberof ArticleDetail
      */
     createdBy?: string;
     /**
-     * 
+     * 更新账号 ID
      * @type {string}
      * @memberof ArticleDetail
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof ArticleDetail
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof ArticleDetail
      */

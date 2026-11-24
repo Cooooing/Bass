@@ -4,18 +4,20 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**create**](MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create |  |
-| [**pageMember**](MoonbreezeService.md#pagemember) | **POST** /v1/content/moonbreeze/page-member |  |
-| [**pagePublic**](MoonbreezeService.md#pagepublic) | **POST** /v1/content/moonbreeze/page-public |  |
-| [**pageWatching**](MoonbreezeService.md#pagewatching) | **POST** /v1/content/moonbreeze/page-watching |  |
+| [**createMoonbreeze**](MoonbreezeService.md#createmoonbreeze) | **POST** /v1/content/moonbreeze/create |  |
+| [**pageMemberMoonbreezes**](MoonbreezeService.md#pagemembermoonbreezes) | **POST** /v1/content/moonbreeze/page-member |  |
+| [**pagePublicMoonbreezes**](MoonbreezeService.md#pagepublicmoonbreezes) | **POST** /v1/content/moonbreeze/page-public |  |
+| [**pageWatchingMoonbreezes**](MoonbreezeService.md#pagewatchingmoonbreezes) | **POST** /v1/content/moonbreeze/page-watching |  |
 
 
 
-## create
+## createMoonbreeze
 
-> CreateMoonbreezeResp create(createMoonbreezeReq)
+> CreateMoonbreezeResp createMoonbreeze(createMoonbreezeReq)
 
 
+
+服务方法。
 
 ### Example
 
@@ -24,7 +26,7 @@ import {
   Configuration,
   MoonbreezeService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateMoonbreezeRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -33,10 +35,10 @@ async function example() {
   const body = {
     // CreateMoonbreezeReq
     createMoonbreezeReq: ...,
-  } satisfies CreateRequest;
+  } satisfies CreateMoonbreezeRequest;
 
   try {
-    const data = await api.create(body);
+    const data = await api.createMoonbreeze(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -76,11 +78,13 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## pageMember
+## pageMemberMoonbreezes
 
-> PageMoonbreezesResp pageMember(pageMemberMoonbreezesReq)
+> PageMemberMoonbreezesResp pageMemberMoonbreezes(pageMemberMoonbreezesReq)
 
 
+
+服务方法。
 
 ### Example
 
@@ -89,7 +93,7 @@ import {
   Configuration,
   MoonbreezeService,
 } from '@bass/bbs-sdk-fetch';
-import type { PageMemberRequest } from '@bass/bbs-sdk-fetch';
+import type { PageMemberMoonbreezesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -98,10 +102,10 @@ async function example() {
   const body = {
     // PageMemberMoonbreezesReq
     pageMemberMoonbreezesReq: ...,
-  } satisfies PageMemberRequest;
+  } satisfies PageMemberMoonbreezesRequest;
 
   try {
-    const data = await api.pageMember(body);
+    const data = await api.pageMemberMoonbreezes(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -121,7 +125,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PageMemberMoonbreezesResp**](PageMemberMoonbreezesResp.md)
 
 ### Authorization
 
@@ -141,11 +145,13 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## pagePublic
+## pagePublicMoonbreezes
 
-> PageMoonbreezesResp pagePublic(pagePublicMoonbreezesReq)
+> PagePublicMoonbreezesResp pagePublicMoonbreezes(pagePublicMoonbreezesReq)
 
 
+
+服务方法。
 
 ### Example
 
@@ -154,7 +160,7 @@ import {
   Configuration,
   MoonbreezeService,
 } from '@bass/bbs-sdk-fetch';
-import type { PagePublicRequest } from '@bass/bbs-sdk-fetch';
+import type { PagePublicMoonbreezesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -163,10 +169,10 @@ async function example() {
   const body = {
     // PagePublicMoonbreezesReq
     pagePublicMoonbreezesReq: ...,
-  } satisfies PagePublicRequest;
+  } satisfies PagePublicMoonbreezesRequest;
 
   try {
-    const data = await api.pagePublic(body);
+    const data = await api.pagePublicMoonbreezes(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -186,7 +192,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PagePublicMoonbreezesResp**](PagePublicMoonbreezesResp.md)
 
 ### Authorization
 
@@ -206,11 +212,13 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## pageWatching
+## pageWatchingMoonbreezes
 
-> PageMoonbreezesResp pageWatching(pageWatchingMoonbreezesReq)
+> PageWatchingMoonbreezesResp pageWatchingMoonbreezes(pageWatchingMoonbreezesReq)
 
 
+
+服务方法。
 
 ### Example
 
@@ -219,7 +227,7 @@ import {
   Configuration,
   MoonbreezeService,
 } from '@bass/bbs-sdk-fetch';
-import type { PageWatchingRequest } from '@bass/bbs-sdk-fetch';
+import type { PageWatchingMoonbreezesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
@@ -228,10 +236,10 @@ async function example() {
   const body = {
     // PageWatchingMoonbreezesReq
     pageWatchingMoonbreezesReq: ...,
-  } satisfies PageWatchingRequest;
+  } satisfies PageWatchingMoonbreezesRequest;
 
   try {
-    const data = await api.pageWatching(body);
+    const data = await api.pageWatchingMoonbreezes(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -251,7 +259,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PageWatchingMoonbreezesResp**](PageWatchingMoonbreezesResp.md)
 
 ### Authorization
 

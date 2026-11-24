@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface ReorderEmojiItemsReq
  */
 export interface ReorderEmojiItemsReq {
     /**
-     * 
+     * 可选目标分组 ID；为空时重排未分组表情。
      * @type {string}
      * @memberof ReorderEmojiItemsReq
      */
     groupId?: string;
     /**
-     * 
+     * 按最终展示顺序排列的完整表情项 ID 序列。
      * @type {Array<string>}
      * @memberof ReorderEmojiItemsReq
      */

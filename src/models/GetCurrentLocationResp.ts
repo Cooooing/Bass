@@ -22,13 +22,13 @@ import {
 } from './RespLocation';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface GetCurrentLocationResp
  */
 export interface GetCurrentLocationResp {
     /**
-     * 
+     * 当前请求来源地理数据
      * @type {RespLocation}
      * @memberof GetCurrentLocationResp
      */

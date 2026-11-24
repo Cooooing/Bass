@@ -44,15 +44,15 @@ import {
     UpdateDomainRespToJSON,
 } from '../models/UpdateDomainResp';
 
-export interface CreateRequest {
+export interface CreateDomainRequest {
     createDomainReq: CreateDomainReq;
 }
 
-export interface ListRequest {
+export interface ListDomainsRequest {
     listDomainsReq: ListDomainsReq;
 }
 
-export interface UpdateRequest {
+export interface UpdateDomainRequest {
     updateDomainReq: UpdateDomainReq;
 }
 
@@ -64,12 +64,12 @@ export interface UpdateRequest {
  */
 export interface DomainServiceInterface {
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createDomain without sending the request
      * @param {CreateDomainReq} createDomainReq 
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
-    createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts>;
+    createDomainRequestOpts(requestParameters: CreateDomainRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 创建领域。
@@ -78,20 +78,20 @@ export interface DomainServiceInterface {
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
-    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDomainResp>>;
+    createDomainRaw(requestParameters: CreateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDomainResp>>;
 
     /**
      * 创建领域。
      */
-    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDomainResp>;
+    createDomain(requestParameters: CreateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDomainResp>;
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listDomains without sending the request
      * @param {ListDomainsReq} listDomainsReq 
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
-    listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
+    listDomainsRequestOpts(requestParameters: ListDomainsRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 查询领域列表。
@@ -100,20 +100,20 @@ export interface DomainServiceInterface {
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsResp>>;
+    listDomainsRaw(requestParameters: ListDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsResp>>;
 
     /**
      * 查询领域列表。
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsResp>;
+    listDomains(requestParameters: ListDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsResp>;
 
     /**
-     * Creates request options for update without sending the request
+     * Creates request options for updateDomain without sending the request
      * @param {UpdateDomainReq} updateDomainReq 
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
-    updateRequestOpts(requestParameters: UpdateRequest): Promise<runtime.RequestOpts>;
+    updateDomainRequestOpts(requestParameters: UpdateDomainRequest): Promise<runtime.RequestOpts>;
 
     /**
      * 更新领域。
@@ -122,12 +122,12 @@ export interface DomainServiceInterface {
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
-    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDomainResp>>;
+    updateDomainRaw(requestParameters: UpdateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDomainResp>>;
 
     /**
      * 更新领域。
      */
-    update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDomainResp>;
+    updateDomain(requestParameters: UpdateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDomainResp>;
 
 }
 
@@ -137,13 +137,13 @@ export interface DomainServiceInterface {
 export class DomainService extends runtime.BaseAPI implements DomainServiceInterface {
 
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createDomain without sending the request
      */
-    async createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts> {
+    async createDomainRequestOpts(requestParameters: CreateDomainRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['createDomainReq'] == null) {
             throw new runtime.RequiredError(
                 'createDomainReq',
-                'Required parameter "createDomainReq" was null or undefined when calling create().'
+                'Required parameter "createDomainReq" was null or undefined when calling createDomain().'
             );
         }
 
@@ -168,8 +168,8 @@ export class DomainService extends runtime.BaseAPI implements DomainServiceInter
     /**
      * 创建领域。
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDomainResp>> {
-        const requestOptions = await this.createRequestOpts(requestParameters);
+    async createDomainRaw(requestParameters: CreateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDomainResp>> {
+        const requestOptions = await this.createDomainRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => CreateDomainRespFromJSON(jsonValue));
@@ -178,19 +178,19 @@ export class DomainService extends runtime.BaseAPI implements DomainServiceInter
     /**
      * 创建领域。
      */
-    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDomainResp> {
-        const response = await this.createRaw(requestParameters, initOverrides);
+    async createDomain(requestParameters: CreateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDomainResp> {
+        const response = await this.createDomainRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for list without sending the request
+     * Creates request options for listDomains without sending the request
      */
-    async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
+    async listDomainsRequestOpts(requestParameters: ListDomainsRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['listDomainsReq'] == null) {
             throw new runtime.RequiredError(
                 'listDomainsReq',
-                'Required parameter "listDomainsReq" was null or undefined when calling list().'
+                'Required parameter "listDomainsReq" was null or undefined when calling listDomains().'
             );
         }
 
@@ -215,8 +215,8 @@ export class DomainService extends runtime.BaseAPI implements DomainServiceInter
     /**
      * 查询领域列表。
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsResp>> {
-        const requestOptions = await this.listRequestOpts(requestParameters);
+    async listDomainsRaw(requestParameters: ListDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsResp>> {
+        const requestOptions = await this.listDomainsRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ListDomainsRespFromJSON(jsonValue));
@@ -225,19 +225,19 @@ export class DomainService extends runtime.BaseAPI implements DomainServiceInter
     /**
      * 查询领域列表。
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsResp> {
-        const response = await this.listRaw(requestParameters, initOverrides);
+    async listDomains(requestParameters: ListDomainsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsResp> {
+        const response = await this.listDomainsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for update without sending the request
+     * Creates request options for updateDomain without sending the request
      */
-    async updateRequestOpts(requestParameters: UpdateRequest): Promise<runtime.RequestOpts> {
+    async updateDomainRequestOpts(requestParameters: UpdateDomainRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['updateDomainReq'] == null) {
             throw new runtime.RequiredError(
                 'updateDomainReq',
-                'Required parameter "updateDomainReq" was null or undefined when calling update().'
+                'Required parameter "updateDomainReq" was null or undefined when calling updateDomain().'
             );
         }
 
@@ -262,8 +262,8 @@ export class DomainService extends runtime.BaseAPI implements DomainServiceInter
     /**
      * 更新领域。
      */
-    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDomainResp>> {
-        const requestOptions = await this.updateRequestOpts(requestParameters);
+    async updateDomainRaw(requestParameters: UpdateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDomainResp>> {
+        const requestOptions = await this.updateDomainRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UpdateDomainRespFromJSON(jsonValue));
@@ -272,8 +272,8 @@ export class DomainService extends runtime.BaseAPI implements DomainServiceInter
     /**
      * 更新领域。
      */
-    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDomainResp> {
-        const response = await this.updateRaw(requestParameters, initOverrides);
+    async updateDomain(requestParameters: UpdateDomainRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDomainResp> {
+        const response = await this.updateDomainRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

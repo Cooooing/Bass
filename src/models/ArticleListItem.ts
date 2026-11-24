@@ -43,199 +43,199 @@ import {
 } from './ArticleDomain';
 
 /**
- * 
+ * 协议消息。
  * @export
  * @interface ArticleListItem
  */
 export interface ArticleListItem {
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof ArticleListItem
      */
     id?: string;
     /**
-     * 
+     * 标题
      * @type {string}
      * @memberof ArticleListItem
      */
     title?: string;
     /**
-     * 
+     * 摘要原文
      * @type {string}
      * @memberof ArticleListItem
      */
     content?: string;
     /**
-     * 
+     * 摘要渲染内容
      * @type {string}
      * @memberof ArticleListItem
      */
     contentRender?: string;
     /**
-     * 
+     * 是否有附言
      * @type {boolean}
      * @memberof ArticleListItem
      */
     hasPostscript?: boolean;
     /**
-     * 
+     * 是否有打赏区
      * @type {boolean}
      * @memberof ArticleListItem
      */
     hasReward?: boolean;
     /**
-     * 
+     * 文章类型
      * @type {ArticleListItemTypeEnum}
      * @memberof ArticleListItem
      */
     type?: ArticleListItemTypeEnum;
     /**
-     * 
+     * 创作声明
      * @type {string}
      * @memberof ArticleListItem
      */
     statement?: string;
     /**
-     * 
+     * 是否允许评论
      * @type {boolean}
      * @memberof ArticleListItem
      */
     commentable?: boolean;
     /**
-     * 
+     * 浏览数
      * @type {number}
      * @memberof ArticleListItem
      */
     viewCount?: number;
     /**
-     * 
+     * 感谢数
      * @type {number}
      * @memberof ArticleListItem
      */
     thankCount?: number;
     /**
-     * 
+     * 点赞数
      * @type {number}
      * @memberof ArticleListItem
      */
     likeCount?: number;
     /**
-     * 
+     * 收藏数
      * @type {number}
      * @memberof ArticleListItem
      */
     collectCount?: number;
     /**
-     * 
+     * 关注数
      * @type {number}
      * @memberof ArticleListItem
      */
     watchCount?: number;
     /**
-     * 
+     * 打赏数
      * @type {number}
      * @memberof ArticleListItem
      */
     rewardCount?: number;
     /**
-     * 
+     * 回复数
      * @type {number}
      * @memberof ArticleListItem
      */
     replyCount?: number;
     /**
-     * 
+     * 作者资料
      * @type {AccountProfile}
      * @memberof ArticleListItem
      */
     authorUser?: AccountProfile;
     /**
-     * 
+     * 最后回复用户
      * @type {AccountProfile}
      * @memberof ArticleListItem
      */
     lastReplyUser?: AccountProfile;
     /**
-     * 
+     * 最后回复时间
      * @type {Date}
      * @memberof ArticleListItem
      */
     lastReplyAt?: Date;
     /**
-     * 
+     * 封面图片 URL
      * @type {string}
      * @memberof ArticleListItem
      */
     coverImageUrl?: string;
     /**
-     * 
+     * 当前用户互动状态
      * @type {ArticleViewerActionState}
      * @memberof ArticleListItem
      */
     viewerActionState?: ArticleViewerActionState;
     /**
-     * 
+     * 发布时间
      * @type {Date}
      * @memberof ArticleListItem
      */
     publishedAt?: Date;
     /**
-     * 
+     * 发布状态
      * @type {ArticleListItemPublishStatusEnum}
      * @memberof ArticleListItem
      */
     publishStatus?: ArticleListItemPublishStatusEnum;
     /**
-     * 
+     * 可见范围
      * @type {ArticleListItemVisibilityEnum}
      * @memberof ArticleListItem
      */
     visibility?: ArticleListItemVisibilityEnum;
     /**
-     * 
+     * 治理限制
      * @type {ArticleListItemRestrictionEnum}
      * @memberof ArticleListItem
      */
     restriction?: ArticleListItemRestrictionEnum;
     /**
-     * 
+     * 编辑时间
      * @type {Date}
      * @memberof ArticleListItem
      */
     editedAt?: Date;
     /**
-     * 
+     * 文章标签
      * @type {Array<ArticleTag>}
      * @memberof ArticleListItem
      */
     tags?: Array<ArticleTag>;
     /**
-     * 
+     * 文章所属领域
      * @type {Array<ArticleDomain>}
      * @memberof ArticleListItem
      */
     domains?: Array<ArticleDomain>;
     /**
-     * 
+     * 创建账号 ID
      * @type {string}
      * @memberof ArticleListItem
      */
     createdBy?: string;
     /**
-     * 
+     * 更新账号 ID
      * @type {string}
      * @memberof ArticleListItem
      */
     updatedBy?: string;
     /**
-     * 
+     * 创建时间
      * @type {Date}
      * @memberof ArticleListItem
      */
     createdAt?: Date;
     /**
-     * 
+     * 更新时间
      * @type {Date}
      * @memberof ArticleListItem
      */

@@ -22,13 +22,13 @@ import {
 } from './ReqDomain';
 
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateDomainReq
  */
 export interface CreateDomainReq {
     /**
-     * 
+     * 领域信息
      * @type {ReqDomain}
      * @memberof CreateDomainReq
      */

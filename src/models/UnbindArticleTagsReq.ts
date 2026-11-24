@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface UnbindArticleTagsReq
  */
 export interface UnbindArticleTagsReq {
     /**
-     * 
+     * 文章 ID
      * @type {string}
      * @memberof UnbindArticleTagsReq
      */
     articleId: string;
     /**
-     * 
+     * 标签 ID 列表
      * @type {Array<string>}
      * @memberof UnbindArticleTagsReq
      */

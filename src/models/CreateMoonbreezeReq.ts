@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface CreateMoonbreezeReq
  */
 export interface CreateMoonbreezeReq {
     /**
-     * 
+     * 协议字段。
      * @type {string}
      * @memberof CreateMoonbreezeReq
      */

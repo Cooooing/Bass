@@ -20,25 +20,25 @@ import { mapValues } from '../runtime';
  */
 export interface EmojiItem {
     /**
-     * 
+     * 表情项 ID。
      * @type {string}
      * @memberof EmojiItem
      */
     id?: string;
     /**
-     * 
+     * 平台图片资产 ID。
      * @type {string}
      * @memberof EmojiItem
      */
     assetId?: string;
     /**
-     * 
+     * 可选表情别名。
      * @type {string}
      * @memberof EmojiItem
      */
     name?: string;
     /**
-     * 
+     * 可插入 Markdown 的公开图片地址。
      * @type {string}
      * @memberof EmojiItem
      */

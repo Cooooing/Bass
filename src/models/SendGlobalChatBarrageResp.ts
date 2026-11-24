@@ -22,13 +22,13 @@ import {
 } from './GlobalChatBarrage';
 
 /**
- * 
+ * 响应结果。
  * @export
  * @interface SendGlobalChatBarrageResp
  */
 export interface SendGlobalChatBarrageResp {
     /**
-     * 
+     * 已发布的弹幕。
      * @type {GlobalChatBarrage}
      * @memberof SendGlobalChatBarrageResp
      */

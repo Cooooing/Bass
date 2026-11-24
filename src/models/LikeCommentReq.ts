@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface LikeCommentReq
  */
 export interface LikeCommentReq {
     /**
-     * 
+     * 评论 ID
      * @type {string}
      * @memberof LikeCommentReq
      */
     id: string;
     /**
-     * 
+     * 是否点赞
      * @type {boolean}
      * @memberof LikeCommentReq
      */

@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * 
+ * 请求参数。
  * @export
  * @interface AddPostscriptReq
  */
 export interface AddPostscriptReq {
     /**
-     * 
+     * 必填，文章 ID。
      * @type {string}
      * @memberof AddPostscriptReq
      */
     articleId: string;
     /**
-     * 
+     * 必填，附言内容。
      * @type {string}
      * @memberof AddPostscriptReq
      */

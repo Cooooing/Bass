@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateCharacterResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateCharacterResp {
+    /// 角色
     #[serde(rename = "row", skip_serializing_if = "Option::is_none")]
     pub row: Option<models::Character>,
 }
 
 impl CreateCharacterResp {
+    /// 响应结果。
     pub fn new() -> CreateCharacterResp {
         CreateCharacterResp {
             row: None,

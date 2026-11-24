@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create**](CharacterService.md#create) | **POST** /v1/game-idle/character/create | 
-[**list**](CharacterService.md#list) | **POST** /v1/game-idle/character/list | 
+[**create_character**](CharacterService.md#create_character) | **POST** /v1/game-idle/character/create | 
+[**list_character**](CharacterService.md#list_character) | **POST** /v1/game-idle/character/list | 
 
 
 
-## create
+## create_character
 
-> models::CreateCharacterResp create(create_character_req)
+> models::CreateCharacterResp create_character(create_character_req)
 
 
 创建角色。
@@ -39,9 +39,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list
+## list_character
 
-> models::ListCharacterResp list(body)
+> models::ListCharacterResp list_character(body)
 
 
 查询当前账号角色列表。

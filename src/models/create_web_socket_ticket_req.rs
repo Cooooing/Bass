@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateWebSocketTicketReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateWebSocketTicketReq {
+    /// 角色 ID
     #[serde(rename = "character_id", skip_serializing_if = "Option::is_none")]
     pub character_id: Option<String>,
 }
 
 impl CreateWebSocketTicketReq {
+    /// 请求参数。
     pub fn new() -> CreateWebSocketTicketReq {
         CreateWebSocketTicketReq {
             character_id: None,

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateCharacterReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateCharacterReq {
+    /// 角色名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
 impl CreateCharacterReq {
+    /// 请求参数。
     pub fn new() -> CreateCharacterReq {
         CreateCharacterReq {
             name: None,

@@ -11,27 +11,37 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// LoginAccountResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LoginAccountResp {
+    /// 访问令牌
     #[serde(rename = "access_token", skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
+    /// 刷新令牌
     #[serde(rename = "refresh_token", skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
+    /// 访问令牌过期时间
     #[serde(rename = "access_token_expires_at", skip_serializing_if = "Option::is_none")]
     pub access_token_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 刷新令牌过期时间
     #[serde(rename = "refresh_token_expires_at", skip_serializing_if = "Option::is_none")]
     pub refresh_token_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// session 过期时间
     #[serde(rename = "session_expires_at", skip_serializing_if = "Option::is_none")]
     pub session_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 当前账号 ID
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 账号名
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 昵称
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
 }
 
 impl LoginAccountResp {
+    /// 响应结果。
     pub fn new() -> LoginAccountResp {
         LoginAccountResp {
             access_token: None,

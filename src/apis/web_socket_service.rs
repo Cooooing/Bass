@@ -23,7 +23,7 @@ pub trait WebSocketService: Send + Sync {
     /// POST /v1/game-idle/ws/create-ticket
     ///
     /// 创建角色 WS 连接凭证。
-    async fn create_ticket<'create_web_socket_ticket_req>(&self, create_web_socket_ticket_req: models::CreateWebSocketTicketReq) -> Result<models::CreateWebSocketTicketResp, Error<CreateTicketError>>;
+    async fn create_web_socket_ticket<'create_web_socket_ticket_req>(&self, create_web_socket_ticket_req: models::CreateWebSocketTicketReq) -> Result<models::CreateWebSocketTicketResp, Error<CreateWebSocketTicketError>>;
 }
 
 pub struct WebSocketServiceClient {
@@ -41,7 +41,7 @@ impl WebSocketServiceClient {
 #[async_trait]
 impl WebSocketService for WebSocketServiceClient {
     /// 创建角色 WS 连接凭证。
-    async fn create_ticket<'create_web_socket_ticket_req>(&self, create_web_socket_ticket_req: models::CreateWebSocketTicketReq) -> Result<models::CreateWebSocketTicketResp, Error<CreateTicketError>> {
+    async fn create_web_socket_ticket<'create_web_socket_ticket_req>(&self, create_web_socket_ticket_req: models::CreateWebSocketTicketReq) -> Result<models::CreateWebSocketTicketResp, Error<CreateWebSocketTicketError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -73,7 +73,7 @@ impl WebSocketService for WebSocketServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateWebSocketTicketResp`")))),
             }
         } else {
-            let local_var_entity: Option<CreateTicketError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateWebSocketTicketError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -81,10 +81,10 @@ impl WebSocketService for WebSocketServiceClient {
 
 }
 
-/// struct for typed errors of method [`WebSocketService::create_ticket`]
+/// struct for typed errors of method [`WebSocketService::create_web_socket_ticket`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CreateTicketError {
+pub enum CreateWebSocketTicketError {
     UnknownValue(serde_json::Value),
 }
 

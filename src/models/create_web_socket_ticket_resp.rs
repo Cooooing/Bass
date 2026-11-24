@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateWebSocketTicketResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateWebSocketTicketResp {
+    /// 角色 ID
     #[serde(rename = "character_id", skip_serializing_if = "Option::is_none")]
     pub character_id: Option<String>,
+    /// WS 连接凭证
     #[serde(rename = "ticket", skip_serializing_if = "Option::is_none")]
     pub ticket: Option<String>,
+    /// 剩余有效秒数
     #[serde(rename = "expires_in_seconds", skip_serializing_if = "Option::is_none")]
     pub expires_in_seconds: Option<String>,
+    /// WS 连接路径
     #[serde(rename = "path", skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
 }
 
 impl CreateWebSocketTicketResp {
+    /// 响应结果。
     pub fn new() -> CreateWebSocketTicketResp {
         CreateWebSocketTicketResp {
             character_id: None,

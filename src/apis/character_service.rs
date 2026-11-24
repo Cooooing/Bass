@@ -23,12 +23,12 @@ pub trait CharacterService: Send + Sync {
     /// POST /v1/game-idle/character/create
     ///
     /// 创建角色。
-    async fn create<'create_character_req>(&self, create_character_req: models::CreateCharacterReq) -> Result<models::CreateCharacterResp, Error<CreateError>>;
+    async fn create_character<'create_character_req>(&self, create_character_req: models::CreateCharacterReq) -> Result<models::CreateCharacterResp, Error<CreateCharacterError>>;
 
     /// POST /v1/game-idle/character/list
     ///
     /// 查询当前账号角色列表。
-    async fn list<'body>(&self, body: serde_json::Value) -> Result<models::ListCharacterResp, Error<ListError>>;
+    async fn list_character<'body>(&self, body: serde_json::Value) -> Result<models::ListCharacterResp, Error<ListCharacterError>>;
 }
 
 pub struct CharacterServiceClient {
@@ -46,7 +46,7 @@ impl CharacterServiceClient {
 #[async_trait]
 impl CharacterService for CharacterServiceClient {
     /// 创建角色。
-    async fn create<'create_character_req>(&self, create_character_req: models::CreateCharacterReq) -> Result<models::CreateCharacterResp, Error<CreateError>> {
+    async fn create_character<'create_character_req>(&self, create_character_req: models::CreateCharacterReq) -> Result<models::CreateCharacterResp, Error<CreateCharacterError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -78,14 +78,14 @@ impl CharacterService for CharacterServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateCharacterResp`")))),
             }
         } else {
-            let local_var_entity: Option<CreateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateCharacterError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 查询当前账号角色列表。
-    async fn list<'body>(&self, body: serde_json::Value) -> Result<models::ListCharacterResp, Error<ListError>> {
+    async fn list_character<'body>(&self, body: serde_json::Value) -> Result<models::ListCharacterResp, Error<ListCharacterError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -117,7 +117,7 @@ impl CharacterService for CharacterServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListCharacterResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListCharacterError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -125,17 +125,17 @@ impl CharacterService for CharacterServiceClient {
 
 }
 
-/// struct for typed errors of method [`CharacterService::create`]
+/// struct for typed errors of method [`CharacterService::create_character`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CreateError {
+pub enum CreateCharacterError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`CharacterService::list`]
+/// struct for typed errors of method [`CharacterService::list_character`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListError {
+pub enum ListCharacterError {
     UnknownValue(serde_json::Value),
 }
 

@@ -26,11 +26,11 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/game-idle/auth/login | 
-*AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/game-idle/auth/register | 
-*CharacterService* | [**create**](docs/CharacterService.md#create) | **POST** /v1/game-idle/character/create | 
-*CharacterService* | [**list**](docs/CharacterService.md#list) | **POST** /v1/game-idle/character/list | 
-*WebSocketService* | [**create_ticket**](docs/WebSocketService.md#create_ticket) | **POST** /v1/game-idle/ws/create-ticket | 
+*AuthService* | [**login_account**](docs/AuthService.md#login_account) | **POST** /v1/game-idle/auth/login | 
+*AuthService* | [**register_account**](docs/AuthService.md#register_account) | **POST** /v1/game-idle/auth/register | 
+*CharacterService* | [**create_character**](docs/CharacterService.md#create_character) | **POST** /v1/game-idle/character/create | 
+*CharacterService* | [**list_character**](docs/CharacterService.md#list_character) | **POST** /v1/game-idle/character/list | 
+*WebSocketService* | [**create_web_socket_ticket**](docs/WebSocketService.md#create_web_socket_ticket) | **POST** /v1/game-idle/ws/create-ticket | 
 
 
 ## Documentation For Models

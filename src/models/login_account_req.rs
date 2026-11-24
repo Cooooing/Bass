@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// LoginAccountReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LoginAccountReq {
+    /// 邮箱
     #[serde(rename = "email")]
     pub email: String,
+    /// 账号密码
     #[serde(rename = "password")]
     pub password: String,
 }
 
 impl LoginAccountReq {
+    /// 请求参数。
     pub fn new(email: String, password: String) -> LoginAccountReq {
         LoginAccountReq {
             email,

@@ -23,12 +23,12 @@ pub trait AuthService: Send + Sync {
     /// POST /v1/game-idle/auth/login
     ///
     /// 登录账号。
-    async fn login<'login_account_req>(&self, login_account_req: models::LoginAccountReq) -> Result<models::LoginAccountResp, Error<LoginError>>;
+    async fn login_account<'login_account_req>(&self, login_account_req: models::LoginAccountReq) -> Result<models::LoginAccountResp, Error<LoginAccountError>>;
 
     /// POST /v1/game-idle/auth/register
     ///
     /// 注册账号。
-    async fn register<'register_account_req>(&self, register_account_req: models::RegisterAccountReq) -> Result<serde_json::Value, Error<RegisterError>>;
+    async fn register_account<'register_account_req>(&self, register_account_req: models::RegisterAccountReq) -> Result<serde_json::Value, Error<RegisterAccountError>>;
 }
 
 pub struct AuthServiceClient {
@@ -46,7 +46,7 @@ impl AuthServiceClient {
 #[async_trait]
 impl AuthService for AuthServiceClient {
     /// 登录账号。
-    async fn login<'login_account_req>(&self, login_account_req: models::LoginAccountReq) -> Result<models::LoginAccountResp, Error<LoginError>> {
+    async fn login_account<'login_account_req>(&self, login_account_req: models::LoginAccountReq) -> Result<models::LoginAccountResp, Error<LoginAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -78,14 +78,14 @@ impl AuthService for AuthServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::LoginAccountResp`")))),
             }
         } else {
-            let local_var_entity: Option<LoginError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<LoginAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 注册账号。
-    async fn register<'register_account_req>(&self, register_account_req: models::RegisterAccountReq) -> Result<serde_json::Value, Error<RegisterError>> {
+    async fn register_account<'register_account_req>(&self, register_account_req: models::RegisterAccountReq) -> Result<serde_json::Value, Error<RegisterAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -117,7 +117,7 @@ impl AuthService for AuthServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<RegisterError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<RegisterAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -125,17 +125,17 @@ impl AuthService for AuthServiceClient {
 
 }
 
-/// struct for typed errors of method [`AuthService::login`]
+/// struct for typed errors of method [`AuthService::login_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum LoginError {
+pub enum LoginAccountError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AuthService::register`]
+/// struct for typed errors of method [`AuthService::register_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RegisterError {
+pub enum RegisterAccountError {
     UnknownValue(serde_json::Value),
 }
 

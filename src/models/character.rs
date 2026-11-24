@@ -11,29 +11,40 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// Character : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Character {
+    /// 角色 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 角色名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 角色状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 角色槽位
     #[serde(rename = "slot", skip_serializing_if = "Option::is_none")]
     pub slot: Option<i32>,
+    /// 行动队列容量上限
     #[serde(rename = "action_queue_capacity", skip_serializing_if = "Option::is_none")]
     pub action_queue_capacity: Option<i32>,
+    /// 最大离线收益结算秒数
     #[serde(rename = "max_offline_seconds", skip_serializing_if = "Option::is_none")]
     pub max_offline_seconds: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 最近离线时间
     #[serde(rename = "last_offline_at", skip_serializing_if = "Option::is_none")]
     pub last_offline_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl Character {
+    /// 协议消息。
     pub fn new() -> Character {
         Character {
             id: None,
@@ -48,7 +59,7 @@ impl Character {
         }
     }
 }
-/// 
+/// 角色状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "CHARACTER_STATUS_UNSPECIFIED")]

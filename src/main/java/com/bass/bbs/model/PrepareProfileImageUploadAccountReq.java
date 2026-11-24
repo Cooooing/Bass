@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PrepareProfileImageUploadAccountReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   PrepareProfileImageUploadAccountReq.JSON_PROPERTY_PURPOSE,
@@ -41,7 +41,7 @@ import com.bass.bbs.ApiClient;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class PrepareProfileImageUploadAccountReq {
   /**
-   * Gets or Sets purpose
+   * 图片用途，必填；仅用于 BFF 业务校验
    */
   public enum PurposeEnum {
     PROFILE_IMAGE_PURPOSE_UNSPECIFIED(String.valueOf("PROFILE_IMAGE_PURPOSE_UNSPECIFIED")),
@@ -102,7 +102,7 @@ public class PrepareProfileImageUploadAccountReq {
   }
 
   /**
-   * Get purpose
+   * 图片用途，必填；仅用于 BFF 业务校验
    * @return purpose
    */
   @javax.annotation.Nonnull
@@ -126,7 +126,7 @@ public class PrepareProfileImageUploadAccountReq {
   }
 
   /**
-   * Get hash
+   * 文件 SHA-256，小写十六进制
    * @return hash
    */
   @javax.annotation.Nonnull
@@ -150,7 +150,7 @@ public class PrepareProfileImageUploadAccountReq {
   }
 
   /**
-   * Get mimeType
+   * 上传 MIME 类型
    * @return mimeType
    */
   @javax.annotation.Nonnull
@@ -174,7 +174,7 @@ public class PrepareProfileImageUploadAccountReq {
   }
 
   /**
-   * Get size
+   * 文件大小，最大 2 MiB
    * @return size
    */
   @javax.annotation.Nonnull

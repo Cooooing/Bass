@@ -165,50 +165,50 @@ public class LocationService {
   /**
    * 
    * 按当前请求来源 IP 获取地理数据。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentLocationRequest}
    * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationResp getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
-    return getCurrent(apiRequest, null);
+  public GetCurrentLocationResp getCurrentLocation(APIGetCurrentLocationRequest apiRequest) throws ApiException {
+    return getCurrentLocation(apiRequest, null);
   }
 
   /**
    * 
    * 按当前请求来源 IP 获取地理数据。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentLocationRequest}
    * @param headers Optional headers to include in the request
    * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationResp getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetCurrentLocationResp getCurrentLocation(APIGetCurrentLocationRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return getCurrent(body, headers);
+    return getCurrentLocation(body, headers);
   }
 
   /**
    * 
    * 按当前请求来源 IP 获取地理数据。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentLocationRequest}
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
-    return getCurrentWithHttpInfo(apiRequest, null);
+  public ApiResponse<GetCurrentLocationResp> getCurrentLocationWithHttpInfo(APIGetCurrentLocationRequest apiRequest) throws ApiException {
+    return getCurrentLocationWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 按当前请求来源 IP 获取地理数据。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentLocationRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentLocationResp> getCurrentLocationWithHttpInfo(APIGetCurrentLocationRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return getCurrentWithHttpInfo(body, headers);
+    return getCurrentLocationWithHttpInfo(body, headers);
   }
 
   /**
@@ -218,8 +218,8 @@ public class LocationService {
    * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationResp getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
-    return getCurrent(body, null);
+  public GetCurrentLocationResp getCurrentLocation(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getCurrentLocation(body, null);
   }
 
   /**
@@ -230,8 +230,8 @@ public class LocationService {
    * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationResp getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetCurrentLocationResp> localVarResponse = getCurrentWithHttpInfo(body, headers);
+  public GetCurrentLocationResp getCurrentLocation(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetCurrentLocationResp> localVarResponse = getCurrentLocationWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -242,8 +242,8 @@ public class LocationService {
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return getCurrentWithHttpInfo(body, null);
+  public ApiResponse<GetCurrentLocationResp> getCurrentLocationWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getCurrentLocationWithHttpInfo(body, null);
   }
 
   /**
@@ -254,8 +254,8 @@ public class LocationService {
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = getCurrentRequestBuilder(body, headers);
+  public ApiResponse<GetCurrentLocationResp> getCurrentLocationWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getCurrentLocationRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -266,7 +266,7 @@ public class LocationService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("getCurrent", localVarResponse);
+          throw getApiException("getCurrentLocation", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -302,10 +302,10 @@ public class LocationService {
     }
   }
 
-  private HttpRequest.Builder getCurrentRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder getCurrentLocationRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling getCurrent");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling getCurrentLocation");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -335,11 +335,11 @@ public class LocationService {
   }
 
 
-  public static final class APIGetCurrentRequest {
+  public static final class APIGetCurrentLocationRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APIGetCurrentRequest(Builder builder) {
+    private APIGetCurrentLocationRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -357,8 +357,8 @@ public class LocationService {
         this.body = body;
         return this;
       }
-      public APIGetCurrentRequest build() {
-        return new APIGetCurrentRequest(this);
+      public APIGetCurrentLocationRequest build() {
+        return new APIGetCurrentLocationRequest(this);
       }
     }
   }

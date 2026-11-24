@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RegisterReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   RegisterReq.JSON_PROPERTY_TYPE,
@@ -45,7 +45,7 @@ import com.bass.bbs.ApiClient;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class RegisterReq {
   /**
-   * Gets or Sets type
+   * 注册方式
    */
   public enum TypeEnum {
     REGISTER_TYPE_UNSPECIFIED(String.valueOf("REGISTER_TYPE_UNSPECIFIED")),
@@ -114,7 +114,7 @@ public class RegisterReq {
   }
 
   /**
-   * Get type
+   * 注册方式
    * @return type
    */
   @javax.annotation.Nonnull
@@ -138,7 +138,7 @@ public class RegisterReq {
   }
 
   /**
-   * Get name
+   * 账号名
    * @return name
    */
   @javax.annotation.Nonnull
@@ -162,7 +162,7 @@ public class RegisterReq {
   }
 
   /**
-   * Get password
+   * 账号密码
    * @return password
    */
   @javax.annotation.Nonnull
@@ -186,7 +186,7 @@ public class RegisterReq {
   }
 
   /**
-   * Get nickname
+   * 昵称
    * @return nickname
    */
   @javax.annotation.Nullable
@@ -210,7 +210,7 @@ public class RegisterReq {
   }
 
   /**
-   * Get emailCredential
+   * 邮箱注册凭证
    * @return emailCredential
    */
   @javax.annotation.Nullable
@@ -234,7 +234,7 @@ public class RegisterReq {
   }
 
   /**
-   * Get phoneCredential
+   * 手机注册凭证
    * @return phoneCredential
    */
   @javax.annotation.Nullable

@@ -38,20 +38,20 @@ public class LivenessServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void claimYesterdayRewardTest() throws ApiException {
+    public void claimYesterdayLivenessRewardTest() throws ApiException {
         Object body = null;
         
-        LivenessService.APIclaimYesterdayRewardRequest request = LivenessService.APIclaimYesterdayRewardRequest.newBuilder()
+        LivenessService.APIclaimYesterdayLivenessRewardRequest request = LivenessService.APIclaimYesterdayLivenessRewardRequest.newBuilder()
           .body(body)
           .build();
         ClaimYesterdayLivenessRewardResp response = 
-        api.claimYesterdayReward(request);
+        api.claimYesterdayLivenessReward(request);
 
         // TODO: test validations
     }
@@ -59,7 +59,7 @@ public class LivenessServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails

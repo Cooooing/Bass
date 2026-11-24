@@ -165,98 +165,98 @@ public class LivenessService {
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIClaimYesterdayLivenessRewardRequest}
    * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(APIClaimYesterdayRewardRequest apiRequest) throws ApiException {
-    return claimYesterdayReward(apiRequest, null);
+  public ClaimYesterdayLivenessRewardResp claimYesterdayLivenessReward(APIClaimYesterdayLivenessRewardRequest apiRequest) throws ApiException {
+    return claimYesterdayLivenessReward(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIClaimYesterdayLivenessRewardRequest}
    * @param headers Optional headers to include in the request
    * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(APIClaimYesterdayRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ClaimYesterdayLivenessRewardResp claimYesterdayLivenessReward(APIClaimYesterdayLivenessRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return claimYesterdayReward(body, headers);
+    return claimYesterdayLivenessReward(body, headers);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIClaimYesterdayLivenessRewardRequest}
    * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(APIClaimYesterdayRewardRequest apiRequest) throws ApiException {
-    return claimYesterdayRewardWithHttpInfo(apiRequest, null);
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayLivenessRewardWithHttpInfo(APIClaimYesterdayLivenessRewardRequest apiRequest) throws ApiException {
+    return claimYesterdayLivenessRewardWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIClaimYesterdayRewardRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIClaimYesterdayLivenessRewardRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(APIClaimYesterdayRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayLivenessRewardWithHttpInfo(APIClaimYesterdayLivenessRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return claimYesterdayRewardWithHttpInfo(body, headers);
+    return claimYesterdayLivenessRewardWithHttpInfo(body, headers);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(@javax.annotation.Nonnull Object body) throws ApiException {
-    return claimYesterdayReward(body, null);
+  public ClaimYesterdayLivenessRewardResp claimYesterdayLivenessReward(@javax.annotation.Nonnull Object body) throws ApiException {
+    return claimYesterdayLivenessReward(body, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return ClaimYesterdayLivenessRewardResp
    * @throws ApiException if fails to make API call
    */
-  public ClaimYesterdayLivenessRewardResp claimYesterdayReward(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<ClaimYesterdayLivenessRewardResp> localVarResponse = claimYesterdayRewardWithHttpInfo(body, headers);
+  public ClaimYesterdayLivenessRewardResp claimYesterdayLivenessReward(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<ClaimYesterdayLivenessRewardResp> localVarResponse = claimYesterdayLivenessRewardWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return claimYesterdayRewardWithHttpInfo(body, null);
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayLivenessRewardWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return claimYesterdayLivenessRewardWithHttpInfo(body, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ClaimYesterdayLivenessRewardResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = claimYesterdayRewardRequestBuilder(body, headers);
+  public ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayLivenessRewardWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = claimYesterdayLivenessRewardRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -267,7 +267,7 @@ public class LivenessService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("claimYesterdayReward", localVarResponse);
+          throw getApiException("claimYesterdayLivenessReward", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -303,10 +303,10 @@ public class LivenessService {
     }
   }
 
-  private HttpRequest.Builder claimYesterdayRewardRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder claimYesterdayLivenessRewardRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling claimYesterdayReward");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling claimYesterdayLivenessReward");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -336,11 +336,11 @@ public class LivenessService {
   }
 
 
-  public static final class APIClaimYesterdayRewardRequest {
+  public static final class APIClaimYesterdayLivenessRewardRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APIClaimYesterdayRewardRequest(Builder builder) {
+    private APIClaimYesterdayLivenessRewardRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -358,15 +358,15 @@ public class LivenessService {
         this.body = body;
         return this;
       }
-      public APIClaimYesterdayRewardRequest build() {
-        return new APIClaimYesterdayRewardRequest(this);
+      public APIClaimYesterdayLivenessRewardRequest build() {
+        return new APIClaimYesterdayLivenessRewardRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @return GetLivenessResp
    * @throws ApiException if fails to make API call
    */
@@ -376,7 +376,7 @@ public class LivenessService {
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param headers Optional headers to include in the request
    * @return GetLivenessResp
    * @throws ApiException if fails to make API call
@@ -388,7 +388,7 @@ public class LivenessService {
 
   /**
    * 
-   * 
+   * 服务方法。
    * @return ApiResponse&lt;GetLivenessResp&gt;
    * @throws ApiException if fails to make API call
    */
@@ -398,7 +398,7 @@ public class LivenessService {
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetLivenessResp&gt;
    * @throws ApiException if fails to make API call

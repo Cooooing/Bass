@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateCurrentPreferencesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   UpdateCurrentPreferencesReq.JSON_PROPERTY_TIMEZONE,
@@ -53,7 +53,7 @@ public class UpdateCurrentPreferencesReq {
   private String mobileTheme;
 
   /**
-   * Gets or Sets language
+   * 界面语言
    */
   public enum LanguageEnum {
     LANGUAGE_UNSPECIFIED(String.valueOf("LANGUAGE_UNSPECIFIED")),
@@ -104,7 +104,7 @@ public class UpdateCurrentPreferencesReq {
   }
 
   /**
-   * Get timezone
+   * 时区
    * @return timezone
    */
   @javax.annotation.Nullable
@@ -128,7 +128,7 @@ public class UpdateCurrentPreferencesReq {
   }
 
   /**
-   * Get theme
+   * 桌面端主题
    * @return theme
    */
   @javax.annotation.Nullable
@@ -152,7 +152,7 @@ public class UpdateCurrentPreferencesReq {
   }
 
   /**
-   * Get mobileTheme
+   * 移动端主题
    * @return mobileTheme
    */
   @javax.annotation.Nullable
@@ -176,7 +176,7 @@ public class UpdateCurrentPreferencesReq {
   }
 
   /**
-   * Get language
+   * 界面语言
    * @return language
    */
   @javax.annotation.Nullable

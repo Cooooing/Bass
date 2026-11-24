@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CancelAccountReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CancelAccountReq.JSON_PROPERTY_PASSWORD,
@@ -55,7 +55,7 @@ public class CancelAccountReq {
   }
 
   /**
-   * Get password
+   * 当前密码
    * @return password
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class CancelAccountReq {
   }
 
   /**
-   * Get code
+   * 启用 TOTP 时作为 TOTP code
    * @return code
    */
   @javax.annotation.Nullable

@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GlobalChatMessage
+ * 协议消息。
  */
 @JsonPropertyOrder({
   GlobalChatMessage.JSON_PROPERTY_ID,
@@ -59,7 +59,7 @@ public class GlobalChatMessage {
   private String content;
 
   /**
-   * Gets or Sets messageType
+   * 消息类型。
    */
   public enum MessageTypeEnum {
     IM_MESSAGE_TYPE_UNSPECIFIED(String.valueOf("IM_MESSAGE_TYPE_UNSPECIFIED")),
@@ -124,7 +124,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get id
+   * 消息 ID。
    * @return id
    */
   @javax.annotation.Nullable
@@ -148,7 +148,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get senderId
+   * 发送账号 ID。
    * @return senderId
    */
   @javax.annotation.Nullable
@@ -172,7 +172,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get content
+   * 原始 Markdown 内容。
    * @return content
    */
   @javax.annotation.Nullable
@@ -196,7 +196,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get messageType
+   * 消息类型。
    * @return messageType
    */
   @javax.annotation.Nullable
@@ -220,7 +220,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get revoked
+   * 是否已撤回。
    * @return revoked
    */
   @javax.annotation.Nullable
@@ -244,7 +244,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get sender
+   * 发送者展示资料。
    * @return sender
    */
   @javax.annotation.Nullable
@@ -268,7 +268,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get createdAt
+   * 创建时间。
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -292,7 +292,7 @@ public class GlobalChatMessage {
   }
 
   /**
-   * Get revokedAt
+   * 撤回时间。
    * @return revokedAt
    */
   @javax.annotation.Nullable

@@ -8,7 +8,7 @@ Resp 返回草稿行。
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**rows** | [**List&lt;BadgeDraft&gt;**](BadgeDraft.md) |  |  [optional] |
+|**rows** | [**List&lt;BadgeDraft&gt;**](BadgeDraft.md) | 草稿列表。 |  [optional] |
 
 
 

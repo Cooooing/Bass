@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleLotteryPrize
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleLotteryPrize.JSON_PROPERTY_ID,
@@ -73,7 +73,7 @@ public class ArticleLotteryPrize {
   }
 
   /**
-   * Get id
+   * 奖项 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -97,7 +97,7 @@ public class ArticleLotteryPrize {
   }
 
   /**
-   * Get name
+   * 奖项名称
    * @return name
    */
   @javax.annotation.Nullable
@@ -121,7 +121,7 @@ public class ArticleLotteryPrize {
   }
 
   /**
-   * Get description
+   * 奖项说明
    * @return description
    */
   @javax.annotation.Nullable
@@ -145,7 +145,7 @@ public class ArticleLotteryPrize {
   }
 
   /**
-   * Get winnerLimit
+   * 中奖名额
    * @return winnerLimit
    */
   @javax.annotation.Nullable
@@ -177,7 +177,7 @@ public class ArticleLotteryPrize {
   }
 
   /**
-   * Get winnerUsers
+   * 按抽取顺序的中奖账号资料
    * @return winnerUsers
    */
   @javax.annotation.Nullable

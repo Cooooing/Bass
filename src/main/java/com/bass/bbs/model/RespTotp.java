@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespTotp
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespTotp.JSON_PROPERTY_USER_ID,
@@ -61,7 +61,7 @@ public class RespTotp {
   }
 
   /**
-   * Get userId
+   * 账号 ID
    * @return userId
    */
   @javax.annotation.Nullable
@@ -85,7 +85,7 @@ public class RespTotp {
   }
 
   /**
-   * Get enable
+   * 是否启用 TOTP
    * @return enable
    */
   @javax.annotation.Nullable
@@ -109,7 +109,7 @@ public class RespTotp {
   }
 
   /**
-   * Get enableTime
+   * 启用时间
    * @return enableTime
    */
   @javax.annotation.Nullable

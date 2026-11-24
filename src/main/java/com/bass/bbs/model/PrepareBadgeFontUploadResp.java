@@ -62,7 +62,7 @@ public class PrepareBadgeFontUploadResp {
   }
 
   /**
-   * Get assetId
+   * 已存在资源的 ID。
    * @return assetId
    */
   @javax.annotation.Nullable
@@ -86,7 +86,7 @@ public class PrepareBadgeFontUploadResp {
   }
 
   /**
-   * Get uploadUrl
+   * 新资源的 MinIO multipart POST 地址。
    * @return uploadUrl
    */
   @javax.annotation.Nullable
@@ -118,7 +118,7 @@ public class PrepareBadgeFontUploadResp {
   }
 
   /**
-   * Get formFields
+   * MinIO multipart POST 表单字段。
    * @return formFields
    */
   @javax.annotation.Nullable

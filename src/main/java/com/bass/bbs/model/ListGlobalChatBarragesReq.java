@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListGlobalChatBarragesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListGlobalChatBarragesReq.JSON_PROPERTY_USER_ID,
@@ -56,7 +56,7 @@ public class ListGlobalChatBarragesReq {
   }
 
   /**
-   * Get userId
+   * 按发送账号筛选；仅管理端可用。
    * @return userId
    */
   @javax.annotation.Nullable
@@ -80,7 +80,7 @@ public class ListGlobalChatBarragesReq {
   }
 
   /**
-   * Get page
+   * 分页参数。
    * @return page
    */
   @javax.annotation.Nullable

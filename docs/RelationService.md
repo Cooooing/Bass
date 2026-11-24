@@ -4,28 +4,28 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**block**](RelationService.md#block) | **POST** /v1/user/relation/block |  |
-| [**blockWithHttpInfo**](RelationService.md#blockWithHttpInfo) | **POST** /v1/user/relation/block |  |
-| [**follow**](RelationService.md#follow) | **POST** /v1/user/relation/follow |  |
-| [**followWithHttpInfo**](RelationService.md#followWithHttpInfo) | **POST** /v1/user/relation/follow |  |
-| [**getStatus**](RelationService.md#getStatus) | **POST** /v1/user/relation/get-status |  |
-| [**getStatusWithHttpInfo**](RelationService.md#getStatusWithHttpInfo) | **POST** /v1/user/relation/get-status |  |
-| [**listBlocked**](RelationService.md#listBlocked) | **POST** /v1/user/relation/list-blocked |  |
-| [**listBlockedWithHttpInfo**](RelationService.md#listBlockedWithHttpInfo) | **POST** /v1/user/relation/list-blocked |  |
-| [**listFollowers**](RelationService.md#listFollowers) | **POST** /v1/user/relation/list-followers |  |
-| [**listFollowersWithHttpInfo**](RelationService.md#listFollowersWithHttpInfo) | **POST** /v1/user/relation/list-followers |  |
-| [**listFollowing**](RelationService.md#listFollowing) | **POST** /v1/user/relation/list-following |  |
-| [**listFollowingWithHttpInfo**](RelationService.md#listFollowingWithHttpInfo) | **POST** /v1/user/relation/list-following |  |
-| [**unblock**](RelationService.md#unblock) | **POST** /v1/user/relation/unblock |  |
-| [**unblockWithHttpInfo**](RelationService.md#unblockWithHttpInfo) | **POST** /v1/user/relation/unblock |  |
-| [**unfollow**](RelationService.md#unfollow) | **POST** /v1/user/relation/unfollow |  |
-| [**unfollowWithHttpInfo**](RelationService.md#unfollowWithHttpInfo) | **POST** /v1/user/relation/unfollow |  |
+| [**blockRelation**](RelationService.md#blockRelation) | **POST** /v1/user/relation/block |  |
+| [**blockRelationWithHttpInfo**](RelationService.md#blockRelationWithHttpInfo) | **POST** /v1/user/relation/block |  |
+| [**followRelation**](RelationService.md#followRelation) | **POST** /v1/user/relation/follow |  |
+| [**followRelationWithHttpInfo**](RelationService.md#followRelationWithHttpInfo) | **POST** /v1/user/relation/follow |  |
+| [**getStatusRelation**](RelationService.md#getStatusRelation) | **POST** /v1/user/relation/get-status |  |
+| [**getStatusRelationWithHttpInfo**](RelationService.md#getStatusRelationWithHttpInfo) | **POST** /v1/user/relation/get-status |  |
+| [**listBlockedRelations**](RelationService.md#listBlockedRelations) | **POST** /v1/user/relation/list-blocked |  |
+| [**listBlockedRelationsWithHttpInfo**](RelationService.md#listBlockedRelationsWithHttpInfo) | **POST** /v1/user/relation/list-blocked |  |
+| [**listFollowersRelations**](RelationService.md#listFollowersRelations) | **POST** /v1/user/relation/list-followers |  |
+| [**listFollowersRelationsWithHttpInfo**](RelationService.md#listFollowersRelationsWithHttpInfo) | **POST** /v1/user/relation/list-followers |  |
+| [**listFollowingRelations**](RelationService.md#listFollowingRelations) | **POST** /v1/user/relation/list-following |  |
+| [**listFollowingRelationsWithHttpInfo**](RelationService.md#listFollowingRelationsWithHttpInfo) | **POST** /v1/user/relation/list-following |  |
+| [**unblockRelation**](RelationService.md#unblockRelation) | **POST** /v1/user/relation/unblock |  |
+| [**unblockRelationWithHttpInfo**](RelationService.md#unblockRelationWithHttpInfo) | **POST** /v1/user/relation/unblock |  |
+| [**unfollowRelation**](RelationService.md#unfollowRelation) | **POST** /v1/user/relation/unfollow |  |
+| [**unfollowRelationWithHttpInfo**](RelationService.md#unfollowRelationWithHttpInfo) | **POST** /v1/user/relation/unfollow |  |
 
 
 
-## block
+## blockRelation
 
-> Object block(blockRequest)
+> Object blockRelation(blockRelationRequest)
 
 
 
@@ -50,13 +50,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         BlockRelationReq blockRelationReq = new BlockRelationReq(); // BlockRelationReq | 
         try {
-            APIblockRequest request = APIblockRequest.newBuilder()
+            APIblockRelationRequest request = APIblockRelationRequest.newBuilder()
                 .blockRelationReq(blockRelationReq)
                 .build();
-            Object result = apiInstance.block(request);
+            Object result = apiInstance.blockRelation(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#block");
+            System.err.println("Exception when calling RelationService#blockRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -70,7 +70,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| blockRequest | [**APIblockRequest**](RelationService.md#APIblockRequest)|-|-|
+| blockRelationRequest | [**APIblockRelationRequest**](RelationService.md#APIblockRelationRequest)|-|-|
 
 ### Return type
 
@@ -91,9 +91,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## blockWithHttpInfo
+## blockRelationWithHttpInfo
 
-> ApiResponse<Object> blockWithHttpInfo(blockRequest)
+> ApiResponse<Object> blockRelationWithHttpInfo(blockRelationRequest)
 
 
 
@@ -119,15 +119,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         BlockRelationReq blockRelationReq = new BlockRelationReq(); // BlockRelationReq | 
         try {
-            APIblockRequest request = APIblockRequest.newBuilder()
+            APIblockRelationRequest request = APIblockRelationRequest.newBuilder()
                 .blockRelationReq(blockRelationReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.blockWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.blockRelationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#block");
+            System.err.println("Exception when calling RelationService#blockRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -141,7 +141,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| blockRequest | [**APIblockRequest**](RelationService.md#APIblockRequest)|-|-|
+| blockRelationRequest | [**APIblockRelationRequest**](RelationService.md#APIblockRelationRequest)|-|-|
 
 ### Return type
 
@@ -163,8 +163,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIblockRequest"></a>
-## APIblockRequest
+<a id="APIblockRelationRequest"></a>
+## APIblockRelationRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -173,9 +173,9 @@ No authorization required
 
 
 
-## follow
+## followRelation
 
-> Object follow(followRequest)
+> Object followRelation(followRelationRequest)
 
 
 
@@ -200,13 +200,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         FollowRelationReq followRelationReq = new FollowRelationReq(); // FollowRelationReq | 
         try {
-            APIfollowRequest request = APIfollowRequest.newBuilder()
+            APIfollowRelationRequest request = APIfollowRelationRequest.newBuilder()
                 .followRelationReq(followRelationReq)
                 .build();
-            Object result = apiInstance.follow(request);
+            Object result = apiInstance.followRelation(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#follow");
+            System.err.println("Exception when calling RelationService#followRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -220,7 +220,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| followRequest | [**APIfollowRequest**](RelationService.md#APIfollowRequest)|-|-|
+| followRelationRequest | [**APIfollowRelationRequest**](RelationService.md#APIfollowRelationRequest)|-|-|
 
 ### Return type
 
@@ -241,9 +241,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## followWithHttpInfo
+## followRelationWithHttpInfo
 
-> ApiResponse<Object> followWithHttpInfo(followRequest)
+> ApiResponse<Object> followRelationWithHttpInfo(followRelationRequest)
 
 
 
@@ -269,15 +269,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         FollowRelationReq followRelationReq = new FollowRelationReq(); // FollowRelationReq | 
         try {
-            APIfollowRequest request = APIfollowRequest.newBuilder()
+            APIfollowRelationRequest request = APIfollowRelationRequest.newBuilder()
                 .followRelationReq(followRelationReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.followWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.followRelationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#follow");
+            System.err.println("Exception when calling RelationService#followRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -291,7 +291,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| followRequest | [**APIfollowRequest**](RelationService.md#APIfollowRequest)|-|-|
+| followRelationRequest | [**APIfollowRelationRequest**](RelationService.md#APIfollowRelationRequest)|-|-|
 
 ### Return type
 
@@ -313,8 +313,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIfollowRequest"></a>
-## APIfollowRequest
+<a id="APIfollowRelationRequest"></a>
+## APIfollowRelationRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -323,9 +323,9 @@ No authorization required
 
 
 
-## getStatus
+## getStatusRelation
 
-> GetStatusRelationResp getStatus(getStatusRequest)
+> GetStatusRelationResp getStatusRelation(getStatusRelationRequest)
 
 
 
@@ -350,13 +350,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         GetStatusRelationReq getStatusRelationReq = new GetStatusRelationReq(); // GetStatusRelationReq | 
         try {
-            APIgetStatusRequest request = APIgetStatusRequest.newBuilder()
+            APIgetStatusRelationRequest request = APIgetStatusRelationRequest.newBuilder()
                 .getStatusRelationReq(getStatusRelationReq)
                 .build();
-            GetStatusRelationResp result = apiInstance.getStatus(request);
+            GetStatusRelationResp result = apiInstance.getStatusRelation(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#getStatus");
+            System.err.println("Exception when calling RelationService#getStatusRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -370,7 +370,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getStatusRequest | [**APIgetStatusRequest**](RelationService.md#APIgetStatusRequest)|-|-|
+| getStatusRelationRequest | [**APIgetStatusRelationRequest**](RelationService.md#APIgetStatusRelationRequest)|-|-|
 
 ### Return type
 
@@ -391,9 +391,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getStatusWithHttpInfo
+## getStatusRelationWithHttpInfo
 
-> ApiResponse<GetStatusRelationResp> getStatusWithHttpInfo(getStatusRequest)
+> ApiResponse<GetStatusRelationResp> getStatusRelationWithHttpInfo(getStatusRelationRequest)
 
 
 
@@ -419,15 +419,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         GetStatusRelationReq getStatusRelationReq = new GetStatusRelationReq(); // GetStatusRelationReq | 
         try {
-            APIgetStatusRequest request = APIgetStatusRequest.newBuilder()
+            APIgetStatusRelationRequest request = APIgetStatusRelationRequest.newBuilder()
                 .getStatusRelationReq(getStatusRelationReq)
                 .build();
-            ApiResponse<GetStatusRelationResp> response = apiInstance.getStatusWithHttpInfo(request);
+            ApiResponse<GetStatusRelationResp> response = apiInstance.getStatusRelationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#getStatus");
+            System.err.println("Exception when calling RelationService#getStatusRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -441,7 +441,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getStatusRequest | [**APIgetStatusRequest**](RelationService.md#APIgetStatusRequest)|-|-|
+| getStatusRelationRequest | [**APIgetStatusRelationRequest**](RelationService.md#APIgetStatusRelationRequest)|-|-|
 
 ### Return type
 
@@ -463,8 +463,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIgetStatusRequest"></a>
-## APIgetStatusRequest
+<a id="APIgetStatusRelationRequest"></a>
+## APIgetStatusRelationRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -473,9 +473,9 @@ No authorization required
 
 
 
-## listBlocked
+## listBlockedRelations
 
-> ListBlockedRelationsResp listBlocked(listBlockedRequest)
+> ListBlockedRelationsResp listBlockedRelations(listBlockedRelationsRequest)
 
 
 
@@ -500,13 +500,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         ListBlockedRelationsReq listBlockedRelationsReq = new ListBlockedRelationsReq(); // ListBlockedRelationsReq | 
         try {
-            APIlistBlockedRequest request = APIlistBlockedRequest.newBuilder()
+            APIlistBlockedRelationsRequest request = APIlistBlockedRelationsRequest.newBuilder()
                 .listBlockedRelationsReq(listBlockedRelationsReq)
                 .build();
-            ListBlockedRelationsResp result = apiInstance.listBlocked(request);
+            ListBlockedRelationsResp result = apiInstance.listBlockedRelations(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#listBlocked");
+            System.err.println("Exception when calling RelationService#listBlockedRelations");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -520,7 +520,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listBlockedRequest | [**APIlistBlockedRequest**](RelationService.md#APIlistBlockedRequest)|-|-|
+| listBlockedRelationsRequest | [**APIlistBlockedRelationsRequest**](RelationService.md#APIlistBlockedRelationsRequest)|-|-|
 
 ### Return type
 
@@ -541,9 +541,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listBlockedWithHttpInfo
+## listBlockedRelationsWithHttpInfo
 
-> ApiResponse<ListBlockedRelationsResp> listBlockedWithHttpInfo(listBlockedRequest)
+> ApiResponse<ListBlockedRelationsResp> listBlockedRelationsWithHttpInfo(listBlockedRelationsRequest)
 
 
 
@@ -569,15 +569,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         ListBlockedRelationsReq listBlockedRelationsReq = new ListBlockedRelationsReq(); // ListBlockedRelationsReq | 
         try {
-            APIlistBlockedRequest request = APIlistBlockedRequest.newBuilder()
+            APIlistBlockedRelationsRequest request = APIlistBlockedRelationsRequest.newBuilder()
                 .listBlockedRelationsReq(listBlockedRelationsReq)
                 .build();
-            ApiResponse<ListBlockedRelationsResp> response = apiInstance.listBlockedWithHttpInfo(request);
+            ApiResponse<ListBlockedRelationsResp> response = apiInstance.listBlockedRelationsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#listBlocked");
+            System.err.println("Exception when calling RelationService#listBlockedRelations");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -591,7 +591,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listBlockedRequest | [**APIlistBlockedRequest**](RelationService.md#APIlistBlockedRequest)|-|-|
+| listBlockedRelationsRequest | [**APIlistBlockedRelationsRequest**](RelationService.md#APIlistBlockedRelationsRequest)|-|-|
 
 ### Return type
 
@@ -613,8 +613,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistBlockedRequest"></a>
-## APIlistBlockedRequest
+<a id="APIlistBlockedRelationsRequest"></a>
+## APIlistBlockedRelationsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -623,9 +623,9 @@ No authorization required
 
 
 
-## listFollowers
+## listFollowersRelations
 
-> ListFollowersRelationsResp listFollowers(listFollowersRequest)
+> ListFollowersRelationsResp listFollowersRelations(listFollowersRelationsRequest)
 
 
 
@@ -650,13 +650,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         ListFollowersRelationsReq listFollowersRelationsReq = new ListFollowersRelationsReq(); // ListFollowersRelationsReq | 
         try {
-            APIlistFollowersRequest request = APIlistFollowersRequest.newBuilder()
+            APIlistFollowersRelationsRequest request = APIlistFollowersRelationsRequest.newBuilder()
                 .listFollowersRelationsReq(listFollowersRelationsReq)
                 .build();
-            ListFollowersRelationsResp result = apiInstance.listFollowers(request);
+            ListFollowersRelationsResp result = apiInstance.listFollowersRelations(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#listFollowers");
+            System.err.println("Exception when calling RelationService#listFollowersRelations");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -670,7 +670,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listFollowersRequest | [**APIlistFollowersRequest**](RelationService.md#APIlistFollowersRequest)|-|-|
+| listFollowersRelationsRequest | [**APIlistFollowersRelationsRequest**](RelationService.md#APIlistFollowersRelationsRequest)|-|-|
 
 ### Return type
 
@@ -691,9 +691,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listFollowersWithHttpInfo
+## listFollowersRelationsWithHttpInfo
 
-> ApiResponse<ListFollowersRelationsResp> listFollowersWithHttpInfo(listFollowersRequest)
+> ApiResponse<ListFollowersRelationsResp> listFollowersRelationsWithHttpInfo(listFollowersRelationsRequest)
 
 
 
@@ -719,15 +719,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         ListFollowersRelationsReq listFollowersRelationsReq = new ListFollowersRelationsReq(); // ListFollowersRelationsReq | 
         try {
-            APIlistFollowersRequest request = APIlistFollowersRequest.newBuilder()
+            APIlistFollowersRelationsRequest request = APIlistFollowersRelationsRequest.newBuilder()
                 .listFollowersRelationsReq(listFollowersRelationsReq)
                 .build();
-            ApiResponse<ListFollowersRelationsResp> response = apiInstance.listFollowersWithHttpInfo(request);
+            ApiResponse<ListFollowersRelationsResp> response = apiInstance.listFollowersRelationsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#listFollowers");
+            System.err.println("Exception when calling RelationService#listFollowersRelations");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -741,7 +741,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listFollowersRequest | [**APIlistFollowersRequest**](RelationService.md#APIlistFollowersRequest)|-|-|
+| listFollowersRelationsRequest | [**APIlistFollowersRelationsRequest**](RelationService.md#APIlistFollowersRelationsRequest)|-|-|
 
 ### Return type
 
@@ -763,8 +763,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistFollowersRequest"></a>
-## APIlistFollowersRequest
+<a id="APIlistFollowersRelationsRequest"></a>
+## APIlistFollowersRelationsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -773,9 +773,9 @@ No authorization required
 
 
 
-## listFollowing
+## listFollowingRelations
 
-> ListFollowingRelationsResp listFollowing(listFollowingRequest)
+> ListFollowingRelationsResp listFollowingRelations(listFollowingRelationsRequest)
 
 
 
@@ -800,13 +800,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         ListFollowingRelationsReq listFollowingRelationsReq = new ListFollowingRelationsReq(); // ListFollowingRelationsReq | 
         try {
-            APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
+            APIlistFollowingRelationsRequest request = APIlistFollowingRelationsRequest.newBuilder()
                 .listFollowingRelationsReq(listFollowingRelationsReq)
                 .build();
-            ListFollowingRelationsResp result = apiInstance.listFollowing(request);
+            ListFollowingRelationsResp result = apiInstance.listFollowingRelations(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#listFollowing");
+            System.err.println("Exception when calling RelationService#listFollowingRelations");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -820,7 +820,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listFollowingRequest | [**APIlistFollowingRequest**](RelationService.md#APIlistFollowingRequest)|-|-|
+| listFollowingRelationsRequest | [**APIlistFollowingRelationsRequest**](RelationService.md#APIlistFollowingRelationsRequest)|-|-|
 
 ### Return type
 
@@ -841,9 +841,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listFollowingWithHttpInfo
+## listFollowingRelationsWithHttpInfo
 
-> ApiResponse<ListFollowingRelationsResp> listFollowingWithHttpInfo(listFollowingRequest)
+> ApiResponse<ListFollowingRelationsResp> listFollowingRelationsWithHttpInfo(listFollowingRelationsRequest)
 
 
 
@@ -869,15 +869,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         ListFollowingRelationsReq listFollowingRelationsReq = new ListFollowingRelationsReq(); // ListFollowingRelationsReq | 
         try {
-            APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
+            APIlistFollowingRelationsRequest request = APIlistFollowingRelationsRequest.newBuilder()
                 .listFollowingRelationsReq(listFollowingRelationsReq)
                 .build();
-            ApiResponse<ListFollowingRelationsResp> response = apiInstance.listFollowingWithHttpInfo(request);
+            ApiResponse<ListFollowingRelationsResp> response = apiInstance.listFollowingRelationsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#listFollowing");
+            System.err.println("Exception when calling RelationService#listFollowingRelations");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -891,7 +891,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listFollowingRequest | [**APIlistFollowingRequest**](RelationService.md#APIlistFollowingRequest)|-|-|
+| listFollowingRelationsRequest | [**APIlistFollowingRelationsRequest**](RelationService.md#APIlistFollowingRelationsRequest)|-|-|
 
 ### Return type
 
@@ -913,8 +913,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistFollowingRequest"></a>
-## APIlistFollowingRequest
+<a id="APIlistFollowingRelationsRequest"></a>
+## APIlistFollowingRelationsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -923,9 +923,9 @@ No authorization required
 
 
 
-## unblock
+## unblockRelation
 
-> Object unblock(unblockRequest)
+> Object unblockRelation(unblockRelationRequest)
 
 
 
@@ -950,13 +950,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         UnblockRelationReq unblockRelationReq = new UnblockRelationReq(); // UnblockRelationReq | 
         try {
-            APIunblockRequest request = APIunblockRequest.newBuilder()
+            APIunblockRelationRequest request = APIunblockRelationRequest.newBuilder()
                 .unblockRelationReq(unblockRelationReq)
                 .build();
-            Object result = apiInstance.unblock(request);
+            Object result = apiInstance.unblockRelation(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#unblock");
+            System.err.println("Exception when calling RelationService#unblockRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -970,7 +970,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| unblockRequest | [**APIunblockRequest**](RelationService.md#APIunblockRequest)|-|-|
+| unblockRelationRequest | [**APIunblockRelationRequest**](RelationService.md#APIunblockRelationRequest)|-|-|
 
 ### Return type
 
@@ -991,9 +991,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## unblockWithHttpInfo
+## unblockRelationWithHttpInfo
 
-> ApiResponse<Object> unblockWithHttpInfo(unblockRequest)
+> ApiResponse<Object> unblockRelationWithHttpInfo(unblockRelationRequest)
 
 
 
@@ -1019,15 +1019,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         UnblockRelationReq unblockRelationReq = new UnblockRelationReq(); // UnblockRelationReq | 
         try {
-            APIunblockRequest request = APIunblockRequest.newBuilder()
+            APIunblockRelationRequest request = APIunblockRelationRequest.newBuilder()
                 .unblockRelationReq(unblockRelationReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.unblockWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.unblockRelationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#unblock");
+            System.err.println("Exception when calling RelationService#unblockRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1041,7 +1041,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| unblockRequest | [**APIunblockRequest**](RelationService.md#APIunblockRequest)|-|-|
+| unblockRelationRequest | [**APIunblockRelationRequest**](RelationService.md#APIunblockRelationRequest)|-|-|
 
 ### Return type
 
@@ -1063,8 +1063,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIunblockRequest"></a>
-## APIunblockRequest
+<a id="APIunblockRelationRequest"></a>
+## APIunblockRelationRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1073,9 +1073,9 @@ No authorization required
 
 
 
-## unfollow
+## unfollowRelation
 
-> Object unfollow(unfollowRequest)
+> Object unfollowRelation(unfollowRelationRequest)
 
 
 
@@ -1100,13 +1100,13 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         UnfollowRelationReq unfollowRelationReq = new UnfollowRelationReq(); // UnfollowRelationReq | 
         try {
-            APIunfollowRequest request = APIunfollowRequest.newBuilder()
+            APIunfollowRelationRequest request = APIunfollowRelationRequest.newBuilder()
                 .unfollowRelationReq(unfollowRelationReq)
                 .build();
-            Object result = apiInstance.unfollow(request);
+            Object result = apiInstance.unfollowRelation(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#unfollow");
+            System.err.println("Exception when calling RelationService#unfollowRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1120,7 +1120,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| unfollowRequest | [**APIunfollowRequest**](RelationService.md#APIunfollowRequest)|-|-|
+| unfollowRelationRequest | [**APIunfollowRelationRequest**](RelationService.md#APIunfollowRelationRequest)|-|-|
 
 ### Return type
 
@@ -1141,9 +1141,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## unfollowWithHttpInfo
+## unfollowRelationWithHttpInfo
 
-> ApiResponse<Object> unfollowWithHttpInfo(unfollowRequest)
+> ApiResponse<Object> unfollowRelationWithHttpInfo(unfollowRelationRequest)
 
 
 
@@ -1169,15 +1169,15 @@ public class Example {
         RelationService apiInstance = new RelationService(defaultClient);
         UnfollowRelationReq unfollowRelationReq = new UnfollowRelationReq(); // UnfollowRelationReq | 
         try {
-            APIunfollowRequest request = APIunfollowRequest.newBuilder()
+            APIunfollowRelationRequest request = APIunfollowRelationRequest.newBuilder()
                 .unfollowRelationReq(unfollowRelationReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.unfollowWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.unfollowRelationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RelationService#unfollow");
+            System.err.println("Exception when calling RelationService#unfollowRelation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1191,7 +1191,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| unfollowRequest | [**APIunfollowRequest**](RelationService.md#APIunfollowRequest)|-|-|
+| unfollowRelationRequest | [**APIunfollowRelationRequest**](RelationService.md#APIunfollowRelationRequest)|-|-|
 
 ### Return type
 
@@ -1213,8 +1213,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIunfollowRequest"></a>
-## APIunfollowRequest
+<a id="APIunfollowRelationRequest"></a>
+## APIunfollowRelationRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

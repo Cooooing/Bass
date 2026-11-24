@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqDomainQuery
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqDomainQuery.JSON_PROPERTY_IDS,
@@ -63,7 +63,7 @@ public class ReqDomainQuery {
   private String description;
 
   /**
-   * Gets or Sets status
+   * 启停状态
    */
   public enum StatusEnum {
     DOMAIN_STATUS_UNSPECIFIED(String.valueOf("DOMAIN_STATUS_UNSPECIFIED")),
@@ -132,7 +132,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get ids
+   * 领域 ID 列表
    * @return ids
    */
   @javax.annotation.Nullable
@@ -156,7 +156,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get code
+   * 稳定编码
    * @return code
    */
   @javax.annotation.Nullable
@@ -180,7 +180,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get name
+   * 领域名称
    * @return name
    */
   @javax.annotation.Nullable
@@ -204,7 +204,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get description
+   * 描述
    * @return description
    */
   @javax.annotation.Nullable
@@ -228,7 +228,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get status
+   * 启停状态
    * @return status
    */
   @javax.annotation.Nullable
@@ -252,7 +252,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get url
+   * 链接
    * @return url
    */
   @javax.annotation.Nullable
@@ -276,7 +276,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get icon
+   * 图标
    * @return icon
    */
   @javax.annotation.Nullable
@@ -300,7 +300,7 @@ public class ReqDomainQuery {
   }
 
   /**
-   * Get isNav
+   * 是否在导航中展示
    * @return isNav
    */
   @javax.annotation.Nullable

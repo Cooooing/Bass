@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateEmojiShareResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CreateEmojiShareResp.JSON_PROPERTY_CODE,
@@ -55,7 +55,7 @@ public class CreateEmojiShareResp {
   }
 
   /**
-   * Get code
+   * 高熵分享码。
    * @return code
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class CreateEmojiShareResp {
   }
 
   /**
-   * Get expiresInSeconds
+   * 分享码剩余有效秒数。
    * @return expiresInSeconds
    */
   @javax.annotation.Nullable

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespAccountBasic
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespAccountBasic.JSON_PROPERTY_ID,
@@ -78,7 +78,7 @@ public class RespAccountBasic {
   private String mbti;
 
   /**
-   * Gets or Sets status
+   * 账号状态
    */
   public enum StatusEnum {
     ACCOUNT_STATUS_UNSPECIFIED(String.valueOf("ACCOUNT_STATUS_UNSPECIFIED")),
@@ -145,7 +145,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get id
+   * 账号 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -169,7 +169,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get name
+   * 账号名
    * @return name
    */
   @javax.annotation.Nullable
@@ -193,7 +193,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get nickname
+   * 昵称
    * @return nickname
    */
   @javax.annotation.Nullable
@@ -217,7 +217,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get url
+   * 个人主页 URL
    * @return url
    */
   @javax.annotation.Nullable
@@ -241,7 +241,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get avatarUrl
+   * 头像 URL
    * @return avatarUrl
    */
   @javax.annotation.Nullable
@@ -265,7 +265,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get introduction
+   * 个人简介
    * @return introduction
    */
   @javax.annotation.Nullable
@@ -289,7 +289,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get mbti
+   * MBTI 类型，规范化为大写
    * @return mbti
    */
   @javax.annotation.Nullable
@@ -313,7 +313,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get status
+   * 账号状态
    * @return status
    */
   @javax.annotation.Nullable
@@ -337,7 +337,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get followCount
+   * 关注数
    * @return followCount
    */
   @javax.annotation.Nullable
@@ -361,7 +361,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get followerCount
+   * 粉丝数
    * @return followerCount
    */
   @javax.annotation.Nullable
@@ -385,7 +385,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -409,7 +409,7 @@ public class RespAccountBasic {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

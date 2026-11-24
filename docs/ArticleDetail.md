@@ -2,51 +2,52 @@
 
 # ArticleDetail
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**id** | **String** |  |  [optional] |
-|**title** | **String** |  |  [optional] |
-|**content** | **String** |  |  [optional] |
-|**contentRender** | **String** |  |  [optional] |
-|**hasPostscript** | **Boolean** |  |  [optional] |
-|**hasReward** | **Boolean** |  |  [optional] |
-|**rewardContent** | **String** |  |  [optional] |
-|**rewardContentRender** | **String** |  |  [optional] |
-|**rewardPoints** | **Integer** |  |  [optional] |
-|**type** | [**TypeEnum**](#TypeEnum) |  |  [optional] |
-|**statement** | **String** |  |  [optional] |
-|**commentable** | **Boolean** |  |  [optional] |
-|**viewCount** | **Integer** |  |  [optional] |
-|**thankCount** | **Integer** |  |  [optional] |
-|**likeCount** | **Integer** |  |  [optional] |
-|**collectCount** | **Integer** |  |  [optional] |
-|**watchCount** | **Integer** |  |  [optional] |
-|**rewardCount** | **Integer** |  |  [optional] |
-|**replyCount** | **Integer** |  |  [optional] |
-|**authorUser** | [**AccountProfile**](AccountProfile.md) |  |  [optional] |
-|**lastReplyUser** | [**AccountProfile**](AccountProfile.md) |  |  [optional] |
-|**lastReplyAt** | **OffsetDateTime** |  |  [optional] |
-|**coverImageUrl** | **String** |  |  [optional] |
-|**viewerActionState** | [**ArticleViewerActionState**](ArticleViewerActionState.md) |  |  [optional] |
-|**publishedAt** | **OffsetDateTime** |  |  [optional] |
-|**postscripts** | [**List&lt;ArticlePostscript&gt;**](ArticlePostscript.md) |  |  [optional] |
-|**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) |  |  [optional] |
-|**visibility** | [**VisibilityEnum**](#VisibilityEnum) |  |  [optional] |
-|**restriction** | [**RestrictionEnum**](#RestrictionEnum) |  |  [optional] |
-|**editedAt** | **OffsetDateTime** |  |  [optional] |
-|**tags** | [**List&lt;ArticleTag&gt;**](ArticleTag.md) |  |  [optional] |
-|**domains** | [**List&lt;ArticleDomain&gt;**](ArticleDomain.md) |  |  [optional] |
-|**city** | **String** |  |  [optional] |
-|**acceptedCommentId** | **String** |  |  [optional] |
-|**poll** | [**ArticlePoll**](ArticlePoll.md) |  |  [optional] |
-|**lottery** | [**ArticleLottery**](ArticleLottery.md) |  |  [optional] |
-|**createdBy** | **String** |  |  [optional] |
-|**updatedBy** | **String** |  |  [optional] |
-|**createdAt** | **OffsetDateTime** |  |  [optional] |
-|**updatedAt** | **OffsetDateTime** |  |  [optional] |
+|**id** | **String** | 文章 ID |  [optional] |
+|**title** | **String** | 标题 |  [optional] |
+|**content** | **String** | 原始内容 |  [optional] |
+|**contentRender** | **String** | 渲染内容 |  [optional] |
+|**hasPostscript** | **Boolean** | 是否有附言 |  [optional] |
+|**hasReward** | **Boolean** | 是否有打赏区 |  [optional] |
+|**rewardContent** | **String** | 打赏后可见内容 |  [optional] |
+|**rewardContentRender** | **String** | 渲染打赏内容 |  [optional] |
+|**rewardPoints** | **Integer** | 打赏积分 |  [optional] |
+|**type** | [**TypeEnum**](#TypeEnum) | 文章类型 |  [optional] |
+|**statement** | **String** | 创作声明 |  [optional] |
+|**commentable** | **Boolean** | 是否允许评论 |  [optional] |
+|**viewCount** | **Integer** | 浏览数 |  [optional] |
+|**thankCount** | **Integer** | 感谢数 |  [optional] |
+|**likeCount** | **Integer** | 点赞数 |  [optional] |
+|**collectCount** | **Integer** | 收藏数 |  [optional] |
+|**watchCount** | **Integer** | 关注数 |  [optional] |
+|**rewardCount** | **Integer** | 打赏数 |  [optional] |
+|**replyCount** | **Integer** | 回复数 |  [optional] |
+|**authorUser** | [**AccountProfile**](AccountProfile.md) | 作者资料 |  [optional] |
+|**lastReplyUser** | [**AccountProfile**](AccountProfile.md) | 最后回复用户 |  [optional] |
+|**lastReplyAt** | **OffsetDateTime** | 最后回复时间 |  [optional] |
+|**coverImageUrl** | **String** | 封面图片 URL |  [optional] |
+|**viewerActionState** | [**ArticleViewerActionState**](ArticleViewerActionState.md) | 当前用户互动状态 |  [optional] |
+|**publishedAt** | **OffsetDateTime** | 发布时间 |  [optional] |
+|**postscripts** | [**List&lt;ArticlePostscript&gt;**](ArticlePostscript.md) | 附言列表 |  [optional] |
+|**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) | 发布状态 |  [optional] |
+|**visibility** | [**VisibilityEnum**](#VisibilityEnum) | 可见范围 |  [optional] |
+|**restriction** | [**RestrictionEnum**](#RestrictionEnum) | 治理限制 |  [optional] |
+|**editedAt** | **OffsetDateTime** | 编辑时间 |  [optional] |
+|**tags** | [**List&lt;ArticleTag&gt;**](ArticleTag.md) | 文章标签 |  [optional] |
+|**domains** | [**List&lt;ArticleDomain&gt;**](ArticleDomain.md) | 文章所属领域 |  [optional] |
+|**city** | **String** | 发布时城市快照 |  [optional] |
+|**acceptedCommentId** | **String** | 问答已采纳评论 ID |  [optional] |
+|**poll** | [**ArticlePoll**](ArticlePoll.md) | 投票详情 |  [optional] |
+|**lottery** | [**ArticleLottery**](ArticleLottery.md) | 抽奖详情 |  [optional] |
+|**createdBy** | **String** | 创建账号 ID |  [optional] |
+|**updatedBy** | **String** | 更新账号 ID |  [optional] |
+|**createdAt** | **OffsetDateTime** | 创建时间 |  [optional] |
+|**updatedAt** | **OffsetDateTime** | 更新时间 |  [optional] |
 
 
 

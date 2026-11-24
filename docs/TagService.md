@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**bindArticle**](TagService.md#bindArticle) | **POST** /v1/content/tag/bind-article |  |
-| [**bindArticleWithHttpInfo**](TagService.md#bindArticleWithHttpInfo) | **POST** /v1/content/tag/bind-article |  |
-| [**callList**](TagService.md#callList) | **POST** /v1/content/tag/list |  |
-| [**callListWithHttpInfo**](TagService.md#callListWithHttpInfo) | **POST** /v1/content/tag/list |  |
-| [**create**](TagService.md#create) | **POST** /v1/content/tag/create |  |
-| [**createWithHttpInfo**](TagService.md#createWithHttpInfo) | **POST** /v1/content/tag/create |  |
+| [**bindArticleTags**](TagService.md#bindArticleTags) | **POST** /v1/content/tag/bind-article |  |
+| [**bindArticleTagsWithHttpInfo**](TagService.md#bindArticleTagsWithHttpInfo) | **POST** /v1/content/tag/bind-article |  |
+| [**createTag**](TagService.md#createTag) | **POST** /v1/content/tag/create |  |
+| [**createTagWithHttpInfo**](TagService.md#createTagWithHttpInfo) | **POST** /v1/content/tag/create |  |
 | [**listArticleTags**](TagService.md#listArticleTags) | **POST** /v1/content/tag/list-article-tags |  |
 | [**listArticleTagsWithHttpInfo**](TagService.md#listArticleTagsWithHttpInfo) | **POST** /v1/content/tag/list-article-tags |  |
-| [**unbindArticle**](TagService.md#unbindArticle) | **POST** /v1/content/tag/unbind-article |  |
-| [**unbindArticleWithHttpInfo**](TagService.md#unbindArticleWithHttpInfo) | **POST** /v1/content/tag/unbind-article |  |
-| [**update**](TagService.md#update) | **POST** /v1/content/tag/update |  |
-| [**updateWithHttpInfo**](TagService.md#updateWithHttpInfo) | **POST** /v1/content/tag/update |  |
+| [**listTags**](TagService.md#listTags) | **POST** /v1/content/tag/list |  |
+| [**listTagsWithHttpInfo**](TagService.md#listTagsWithHttpInfo) | **POST** /v1/content/tag/list |  |
+| [**unbindArticleTags**](TagService.md#unbindArticleTags) | **POST** /v1/content/tag/unbind-article |  |
+| [**unbindArticleTagsWithHttpInfo**](TagService.md#unbindArticleTagsWithHttpInfo) | **POST** /v1/content/tag/unbind-article |  |
+| [**updateTag**](TagService.md#updateTag) | **POST** /v1/content/tag/update |  |
+| [**updateTagWithHttpInfo**](TagService.md#updateTagWithHttpInfo) | **POST** /v1/content/tag/update |  |
 
 
 
-## bindArticle
+## bindArticleTags
 
-> Object bindArticle(bindArticleRequest)
+> Object bindArticleTags(bindArticleTagsRequest)
 
 
 
@@ -46,13 +46,13 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         BindArticleTagsReq bindArticleTagsReq = new BindArticleTagsReq(); // BindArticleTagsReq | 
         try {
-            APIbindArticleRequest request = APIbindArticleRequest.newBuilder()
+            APIbindArticleTagsRequest request = APIbindArticleTagsRequest.newBuilder()
                 .bindArticleTagsReq(bindArticleTagsReq)
                 .build();
-            Object result = apiInstance.bindArticle(request);
+            Object result = apiInstance.bindArticleTags(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#bindArticle");
+            System.err.println("Exception when calling TagService#bindArticleTags");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -66,7 +66,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| bindArticleRequest | [**APIbindArticleRequest**](TagService.md#APIbindArticleRequest)|-|-|
+| bindArticleTagsRequest | [**APIbindArticleTagsRequest**](TagService.md#APIbindArticleTagsRequest)|-|-|
 
 ### Return type
 
@@ -87,9 +87,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## bindArticleWithHttpInfo
+## bindArticleTagsWithHttpInfo
 
-> ApiResponse<Object> bindArticleWithHttpInfo(bindArticleRequest)
+> ApiResponse<Object> bindArticleTagsWithHttpInfo(bindArticleTagsRequest)
 
 
 
@@ -115,15 +115,15 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         BindArticleTagsReq bindArticleTagsReq = new BindArticleTagsReq(); // BindArticleTagsReq | 
         try {
-            APIbindArticleRequest request = APIbindArticleRequest.newBuilder()
+            APIbindArticleTagsRequest request = APIbindArticleTagsRequest.newBuilder()
                 .bindArticleTagsReq(bindArticleTagsReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.bindArticleWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.bindArticleTagsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#bindArticle");
+            System.err.println("Exception when calling TagService#bindArticleTags");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -137,7 +137,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| bindArticleRequest | [**APIbindArticleRequest**](TagService.md#APIbindArticleRequest)|-|-|
+| bindArticleTagsRequest | [**APIbindArticleTagsRequest**](TagService.md#APIbindArticleTagsRequest)|-|-|
 
 ### Return type
 
@@ -159,8 +159,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIbindArticleRequest"></a>
-## APIbindArticleRequest
+<a id="APIbindArticleTagsRequest"></a>
+## APIbindArticleTagsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -169,159 +169,9 @@ No authorization required
 
 
 
-## callList
+## createTag
 
-> ListTagsResp callList(callListRequest)
-
-
-
-查询标签列表。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.TagService;
-import com.bass.bbs.api.TagService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        TagService apiInstance = new TagService(defaultClient);
-        ListTagsReq listTagsReq = new ListTagsReq(); // ListTagsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listTagsReq(listTagsReq)
-                .build();
-            ListTagsResp result = apiInstance.callList(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](TagService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-[**ListTagsResp**](ListTagsResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## callListWithHttpInfo
-
-> ApiResponse<ListTagsResp> callListWithHttpInfo(callListRequest)
-
-
-
-查询标签列表。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.TagService;
-import com.bass.bbs.api.TagService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        TagService apiInstance = new TagService(defaultClient);
-        ListTagsReq listTagsReq = new ListTagsReq(); // ListTagsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listTagsReq(listTagsReq)
-                .build();
-            ApiResponse<ListTagsResp> response = apiInstance.callListWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](TagService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**ListTagsResp**](ListTagsResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIcallListRequest"></a>
-## APIcallListRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **listTagsReq** | [**ListTagsReq**](ListTagsReq.md) |  | |
-
-
-
-## create
-
-> CreateTagResp create(createRequest)
+> CreateTagResp createTag(createTagRequest)
 
 
 
@@ -346,13 +196,13 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         CreateTagReq createTagReq = new CreateTagReq(); // CreateTagReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
+            APIcreateTagRequest request = APIcreateTagRequest.newBuilder()
                 .createTagReq(createTagReq)
                 .build();
-            CreateTagResp result = apiInstance.create(request);
+            CreateTagResp result = apiInstance.createTag(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#create");
+            System.err.println("Exception when calling TagService#createTag");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -366,7 +216,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](TagService.md#APIcreateRequest)|-|-|
+| createTagRequest | [**APIcreateTagRequest**](TagService.md#APIcreateTagRequest)|-|-|
 
 ### Return type
 
@@ -387,9 +237,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createWithHttpInfo
+## createTagWithHttpInfo
 
-> ApiResponse<CreateTagResp> createWithHttpInfo(createRequest)
+> ApiResponse<CreateTagResp> createTagWithHttpInfo(createTagRequest)
 
 
 
@@ -415,15 +265,15 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         CreateTagReq createTagReq = new CreateTagReq(); // CreateTagReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
+            APIcreateTagRequest request = APIcreateTagRequest.newBuilder()
                 .createTagReq(createTagReq)
                 .build();
-            ApiResponse<CreateTagResp> response = apiInstance.createWithHttpInfo(request);
+            ApiResponse<CreateTagResp> response = apiInstance.createTagWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#create");
+            System.err.println("Exception when calling TagService#createTag");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -437,7 +287,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](TagService.md#APIcreateRequest)|-|-|
+| createTagRequest | [**APIcreateTagRequest**](TagService.md#APIcreateTagRequest)|-|-|
 
 ### Return type
 
@@ -459,8 +309,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateRequest"></a>
-## APIcreateRequest
+<a id="APIcreateTagRequest"></a>
+## APIcreateTagRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -619,9 +469,159 @@ No authorization required
 
 
 
-## unbindArticle
+## listTags
 
-> Object unbindArticle(unbindArticleRequest)
+> ListTagsResp listTags(listTagsRequest)
+
+
+
+查询标签列表。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.TagService;
+import com.bass.bbs.api.TagService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        TagService apiInstance = new TagService(defaultClient);
+        ListTagsReq listTagsReq = new ListTagsReq(); // ListTagsReq | 
+        try {
+            APIlistTagsRequest request = APIlistTagsRequest.newBuilder()
+                .listTagsReq(listTagsReq)
+                .build();
+            ListTagsResp result = apiInstance.listTags(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling TagService#listTags");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listTagsRequest | [**APIlistTagsRequest**](TagService.md#APIlistTagsRequest)|-|-|
+
+### Return type
+
+[**ListTagsResp**](ListTagsResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listTagsWithHttpInfo
+
+> ApiResponse<ListTagsResp> listTagsWithHttpInfo(listTagsRequest)
+
+
+
+查询标签列表。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.TagService;
+import com.bass.bbs.api.TagService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        TagService apiInstance = new TagService(defaultClient);
+        ListTagsReq listTagsReq = new ListTagsReq(); // ListTagsReq | 
+        try {
+            APIlistTagsRequest request = APIlistTagsRequest.newBuilder()
+                .listTagsReq(listTagsReq)
+                .build();
+            ApiResponse<ListTagsResp> response = apiInstance.listTagsWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling TagService#listTags");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listTagsRequest | [**APIlistTagsRequest**](TagService.md#APIlistTagsRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListTagsResp**](ListTagsResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistTagsRequest"></a>
+## APIlistTagsRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listTagsReq** | [**ListTagsReq**](ListTagsReq.md) |  | |
+
+
+
+## unbindArticleTags
+
+> Object unbindArticleTags(unbindArticleTagsRequest)
 
 
 
@@ -646,13 +646,13 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         UnbindArticleTagsReq unbindArticleTagsReq = new UnbindArticleTagsReq(); // UnbindArticleTagsReq | 
         try {
-            APIunbindArticleRequest request = APIunbindArticleRequest.newBuilder()
+            APIunbindArticleTagsRequest request = APIunbindArticleTagsRequest.newBuilder()
                 .unbindArticleTagsReq(unbindArticleTagsReq)
                 .build();
-            Object result = apiInstance.unbindArticle(request);
+            Object result = apiInstance.unbindArticleTags(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#unbindArticle");
+            System.err.println("Exception when calling TagService#unbindArticleTags");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -666,7 +666,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| unbindArticleRequest | [**APIunbindArticleRequest**](TagService.md#APIunbindArticleRequest)|-|-|
+| unbindArticleTagsRequest | [**APIunbindArticleTagsRequest**](TagService.md#APIunbindArticleTagsRequest)|-|-|
 
 ### Return type
 
@@ -687,9 +687,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## unbindArticleWithHttpInfo
+## unbindArticleTagsWithHttpInfo
 
-> ApiResponse<Object> unbindArticleWithHttpInfo(unbindArticleRequest)
+> ApiResponse<Object> unbindArticleTagsWithHttpInfo(unbindArticleTagsRequest)
 
 
 
@@ -715,15 +715,15 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         UnbindArticleTagsReq unbindArticleTagsReq = new UnbindArticleTagsReq(); // UnbindArticleTagsReq | 
         try {
-            APIunbindArticleRequest request = APIunbindArticleRequest.newBuilder()
+            APIunbindArticleTagsRequest request = APIunbindArticleTagsRequest.newBuilder()
                 .unbindArticleTagsReq(unbindArticleTagsReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.unbindArticleWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.unbindArticleTagsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#unbindArticle");
+            System.err.println("Exception when calling TagService#unbindArticleTags");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -737,7 +737,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| unbindArticleRequest | [**APIunbindArticleRequest**](TagService.md#APIunbindArticleRequest)|-|-|
+| unbindArticleTagsRequest | [**APIunbindArticleTagsRequest**](TagService.md#APIunbindArticleTagsRequest)|-|-|
 
 ### Return type
 
@@ -759,8 +759,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIunbindArticleRequest"></a>
-## APIunbindArticleRequest
+<a id="APIunbindArticleTagsRequest"></a>
+## APIunbindArticleTagsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -769,9 +769,9 @@ No authorization required
 
 
 
-## update
+## updateTag
 
-> UpdateTagResp update(updateRequest)
+> UpdateTagResp updateTag(updateTagRequest)
 
 
 
@@ -796,13 +796,13 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         UpdateTagReq updateTagReq = new UpdateTagReq(); // UpdateTagReq | 
         try {
-            APIupdateRequest request = APIupdateRequest.newBuilder()
+            APIupdateTagRequest request = APIupdateTagRequest.newBuilder()
                 .updateTagReq(updateTagReq)
                 .build();
-            UpdateTagResp result = apiInstance.update(request);
+            UpdateTagResp result = apiInstance.updateTag(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#update");
+            System.err.println("Exception when calling TagService#updateTag");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -816,7 +816,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateRequest | [**APIupdateRequest**](TagService.md#APIupdateRequest)|-|-|
+| updateTagRequest | [**APIupdateTagRequest**](TagService.md#APIupdateTagRequest)|-|-|
 
 ### Return type
 
@@ -837,9 +837,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updateWithHttpInfo
+## updateTagWithHttpInfo
 
-> ApiResponse<UpdateTagResp> updateWithHttpInfo(updateRequest)
+> ApiResponse<UpdateTagResp> updateTagWithHttpInfo(updateTagRequest)
 
 
 
@@ -865,15 +865,15 @@ public class Example {
         TagService apiInstance = new TagService(defaultClient);
         UpdateTagReq updateTagReq = new UpdateTagReq(); // UpdateTagReq | 
         try {
-            APIupdateRequest request = APIupdateRequest.newBuilder()
+            APIupdateTagRequest request = APIupdateTagRequest.newBuilder()
                 .updateTagReq(updateTagReq)
                 .build();
-            ApiResponse<UpdateTagResp> response = apiInstance.updateWithHttpInfo(request);
+            ApiResponse<UpdateTagResp> response = apiInstance.updateTagWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling TagService#update");
+            System.err.println("Exception when calling TagService#updateTag");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -887,7 +887,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateRequest | [**APIupdateRequest**](TagService.md#APIupdateRequest)|-|-|
+| updateTagRequest | [**APIupdateTagRequest**](TagService.md#APIupdateTagRequest)|-|-|
 
 ### Return type
 
@@ -909,8 +909,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdateRequest"></a>
-## APIupdateRequest
+<a id="APIupdateTagRequest"></a>
+## APIupdateTagRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

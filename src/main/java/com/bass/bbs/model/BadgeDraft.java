@@ -71,7 +71,7 @@ public class BadgeDraft {
   }
 
   /**
-   * Get id
+   * 草稿主键。
    * @return id
    */
   @javax.annotation.Nullable
@@ -95,7 +95,7 @@ public class BadgeDraft {
   }
 
   /**
-   * Get name
+   * 草稿名称。
    * @return name
    */
   @javax.annotation.Nullable
@@ -119,7 +119,7 @@ public class BadgeDraft {
   }
 
   /**
-   * Get description
+   * 草稿说明。
    * @return description
    */
   @javax.annotation.Nullable
@@ -143,7 +143,7 @@ public class BadgeDraft {
   }
 
   /**
-   * Get renderSpec
+   * 草稿渲染参数。
    * @return renderSpec
    */
   @javax.annotation.Nullable
@@ -167,7 +167,7 @@ public class BadgeDraft {
   }
 
   /**
-   * Get designerUserId
+   * 设计者用户 ID。
    * @return designerUserId
    */
   @javax.annotation.Nullable

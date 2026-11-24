@@ -38,20 +38,20 @@ public class ArticleSearchServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void searchTest() throws ApiException {
+    public void searchArticlesTest() throws ApiException {
         SearchArticlesReq searchArticlesReq = null;
         
-        ArticleSearchService.APIsearchRequest request = ArticleSearchService.APIsearchRequest.newBuilder()
+        ArticleSearchService.APIsearchArticlesRequest request = ArticleSearchService.APIsearchArticlesRequest.newBuilder()
           .searchArticlesReq(searchArticlesReq)
           .build();
         SearchArticlesResp response = 
-        api.search(request);
+        api.searchArticles(request);
 
         // TODO: test validations
     }

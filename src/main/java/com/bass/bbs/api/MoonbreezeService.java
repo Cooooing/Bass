@@ -21,9 +21,11 @@ import com.bass.bbs.Pair;
 import com.bass.bbs.model.CreateMoonbreezeReq;
 import com.bass.bbs.model.CreateMoonbreezeResp;
 import com.bass.bbs.model.PageMemberMoonbreezesReq;
-import com.bass.bbs.model.PageMoonbreezesResp;
+import com.bass.bbs.model.PageMemberMoonbreezesResp;
 import com.bass.bbs.model.PagePublicMoonbreezesReq;
+import com.bass.bbs.model.PagePublicMoonbreezesResp;
 import com.bass.bbs.model.PageWatchingMoonbreezesReq;
+import com.bass.bbs.model.PageWatchingMoonbreezesResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -169,98 +171,98 @@ public class MoonbreezeService {
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateMoonbreezeRequest}
    * @return CreateMoonbreezeResp
    * @throws ApiException if fails to make API call
    */
-  public CreateMoonbreezeResp create(APICreateRequest apiRequest) throws ApiException {
-    return create(apiRequest, null);
+  public CreateMoonbreezeResp createMoonbreeze(APICreateMoonbreezeRequest apiRequest) throws ApiException {
+    return createMoonbreeze(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateMoonbreezeRequest}
    * @param headers Optional headers to include in the request
    * @return CreateMoonbreezeResp
    * @throws ApiException if fails to make API call
    */
-  public CreateMoonbreezeResp create(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateMoonbreezeResp createMoonbreeze(APICreateMoonbreezeRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CreateMoonbreezeReq createMoonbreezeReq = apiRequest.createMoonbreezeReq();
-    return create(createMoonbreezeReq, headers);
+    return createMoonbreeze(createMoonbreezeReq, headers);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateMoonbreezeRequest}
    * @return ApiResponse&lt;CreateMoonbreezeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateMoonbreezeResp> createWithHttpInfo(APICreateRequest apiRequest) throws ApiException {
-    return createWithHttpInfo(apiRequest, null);
+  public ApiResponse<CreateMoonbreezeResp> createMoonbreezeWithHttpInfo(APICreateMoonbreezeRequest apiRequest) throws ApiException {
+    return createMoonbreezeWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateMoonbreezeRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateMoonbreezeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateMoonbreezeResp> createWithHttpInfo(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CreateMoonbreezeResp> createMoonbreezeWithHttpInfo(APICreateMoonbreezeRequest apiRequest, Map<String, String> headers) throws ApiException {
     CreateMoonbreezeReq createMoonbreezeReq = apiRequest.createMoonbreezeReq();
-    return createWithHttpInfo(createMoonbreezeReq, headers);
+    return createMoonbreezeWithHttpInfo(createMoonbreezeReq, headers);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param createMoonbreezeReq  (required)
    * @return CreateMoonbreezeResp
    * @throws ApiException if fails to make API call
    */
-  public CreateMoonbreezeResp create(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq) throws ApiException {
-    return create(createMoonbreezeReq, null);
+  public CreateMoonbreezeResp createMoonbreeze(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq) throws ApiException {
+    return createMoonbreeze(createMoonbreezeReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param createMoonbreezeReq  (required)
    * @param headers Optional headers to include in the request
    * @return CreateMoonbreezeResp
    * @throws ApiException if fails to make API call
    */
-  public CreateMoonbreezeResp create(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateMoonbreezeResp> localVarResponse = createWithHttpInfo(createMoonbreezeReq, headers);
+  public CreateMoonbreezeResp createMoonbreeze(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateMoonbreezeResp> localVarResponse = createMoonbreezeWithHttpInfo(createMoonbreezeReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param createMoonbreezeReq  (required)
    * @return ApiResponse&lt;CreateMoonbreezeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateMoonbreezeResp> createWithHttpInfo(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq) throws ApiException {
-    return createWithHttpInfo(createMoonbreezeReq, null);
+  public ApiResponse<CreateMoonbreezeResp> createMoonbreezeWithHttpInfo(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq) throws ApiException {
+    return createMoonbreezeWithHttpInfo(createMoonbreezeReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param createMoonbreezeReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateMoonbreezeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateMoonbreezeResp> createWithHttpInfo(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createRequestBuilder(createMoonbreezeReq, headers);
+  public ApiResponse<CreateMoonbreezeResp> createMoonbreezeWithHttpInfo(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createMoonbreezeRequestBuilder(createMoonbreezeReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -271,7 +273,7 @@ public class MoonbreezeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("create", localVarResponse);
+          throw getApiException("createMoonbreeze", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -307,10 +309,10 @@ public class MoonbreezeService {
     }
   }
 
-  private HttpRequest.Builder createRequestBuilder(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder createMoonbreezeRequestBuilder(@javax.annotation.Nonnull CreateMoonbreezeReq createMoonbreezeReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'createMoonbreezeReq' is set
     if (createMoonbreezeReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'createMoonbreezeReq' when calling create");
+      throw new ApiException(400, "Missing the required parameter 'createMoonbreezeReq' when calling createMoonbreeze");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -340,11 +342,11 @@ public class MoonbreezeService {
   }
 
 
-  public static final class APICreateRequest {
+  public static final class APICreateMoonbreezeRequest {
     @javax.annotation.Nonnull
     private CreateMoonbreezeReq createMoonbreezeReq; //  (required)
 
-    private APICreateRequest(Builder builder) {
+    private APICreateMoonbreezeRequest(Builder builder) {
       this.createMoonbreezeReq = builder.createMoonbreezeReq;
     }
     @javax.annotation.Nonnull
@@ -362,106 +364,106 @@ public class MoonbreezeService {
         this.createMoonbreezeReq = createMoonbreezeReq;
         return this;
       }
-      public APICreateRequest build() {
-        return new APICreateRequest(this);
+      public APICreateMoonbreezeRequest build() {
+        return new APICreateMoonbreezeRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageMemberRequest}
-   * @return PageMoonbreezesResp
+   * 服务方法。
+   * @param apiRequest {@link APIPageMemberMoonbreezesRequest}
+   * @return PageMemberMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageMember(APIPageMemberRequest apiRequest) throws ApiException {
-    return pageMember(apiRequest, null);
+  public PageMemberMoonbreezesResp pageMemberMoonbreezes(APIPageMemberMoonbreezesRequest apiRequest) throws ApiException {
+    return pageMemberMoonbreezes(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageMemberRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIPageMemberMoonbreezesRequest}
    * @param headers Optional headers to include in the request
-   * @return PageMoonbreezesResp
+   * @return PageMemberMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageMember(APIPageMemberRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public PageMemberMoonbreezesResp pageMemberMoonbreezes(APIPageMemberMoonbreezesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     PageMemberMoonbreezesReq pageMemberMoonbreezesReq = apiRequest.pageMemberMoonbreezesReq();
-    return pageMember(pageMemberMoonbreezesReq, headers);
+    return pageMemberMoonbreezes(pageMemberMoonbreezesReq, headers);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageMemberRequest}
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * 服务方法。
+   * @param apiRequest {@link APIPageMemberMoonbreezesRequest}
+   * @return ApiResponse&lt;PageMemberMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageMemberWithHttpInfo(APIPageMemberRequest apiRequest) throws ApiException {
-    return pageMemberWithHttpInfo(apiRequest, null);
+  public ApiResponse<PageMemberMoonbreezesResp> pageMemberMoonbreezesWithHttpInfo(APIPageMemberMoonbreezesRequest apiRequest) throws ApiException {
+    return pageMemberMoonbreezesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageMemberRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIPageMemberMoonbreezesRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PageMemberMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageMemberWithHttpInfo(APIPageMemberRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<PageMemberMoonbreezesResp> pageMemberMoonbreezesWithHttpInfo(APIPageMemberMoonbreezesRequest apiRequest, Map<String, String> headers) throws ApiException {
     PageMemberMoonbreezesReq pageMemberMoonbreezesReq = apiRequest.pageMemberMoonbreezesReq();
-    return pageMemberWithHttpInfo(pageMemberMoonbreezesReq, headers);
+    return pageMemberMoonbreezesWithHttpInfo(pageMemberMoonbreezesReq, headers);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageMemberMoonbreezesReq  (required)
-   * @return PageMoonbreezesResp
+   * @return PageMemberMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageMember(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq) throws ApiException {
-    return pageMember(pageMemberMoonbreezesReq, null);
+  public PageMemberMoonbreezesResp pageMemberMoonbreezes(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq) throws ApiException {
+    return pageMemberMoonbreezes(pageMemberMoonbreezesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageMemberMoonbreezesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return PageMoonbreezesResp
+   * @return PageMemberMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageMember(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<PageMoonbreezesResp> localVarResponse = pageMemberWithHttpInfo(pageMemberMoonbreezesReq, headers);
+  public PageMemberMoonbreezesResp pageMemberMoonbreezes(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageMemberMoonbreezesResp> localVarResponse = pageMemberMoonbreezesWithHttpInfo(pageMemberMoonbreezesReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageMemberMoonbreezesReq  (required)
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PageMemberMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageMemberWithHttpInfo(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq) throws ApiException {
-    return pageMemberWithHttpInfo(pageMemberMoonbreezesReq, null);
+  public ApiResponse<PageMemberMoonbreezesResp> pageMemberMoonbreezesWithHttpInfo(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq) throws ApiException {
+    return pageMemberMoonbreezesWithHttpInfo(pageMemberMoonbreezesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageMemberMoonbreezesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PageMemberMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageMemberWithHttpInfo(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = pageMemberRequestBuilder(pageMemberMoonbreezesReq, headers);
+  public ApiResponse<PageMemberMoonbreezesResp> pageMemberMoonbreezesWithHttpInfo(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageMemberMoonbreezesRequestBuilder(pageMemberMoonbreezesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -472,11 +474,11 @@ public class MoonbreezeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("pageMember", localVarResponse);
+          throw getApiException("pageMemberMoonbreezes", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<PageMoonbreezesResp>(
+          return new ApiResponse<PageMemberMoonbreezesResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -486,10 +488,10 @@ public class MoonbreezeService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        PageMoonbreezesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageMoonbreezesResp>() {});
+        PageMemberMoonbreezesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageMemberMoonbreezesResp>() {});
         
 
-        return new ApiResponse<PageMoonbreezesResp>(
+        return new ApiResponse<PageMemberMoonbreezesResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -508,10 +510,10 @@ public class MoonbreezeService {
     }
   }
 
-  private HttpRequest.Builder pageMemberRequestBuilder(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder pageMemberMoonbreezesRequestBuilder(@javax.annotation.Nonnull PageMemberMoonbreezesReq pageMemberMoonbreezesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'pageMemberMoonbreezesReq' is set
     if (pageMemberMoonbreezesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'pageMemberMoonbreezesReq' when calling pageMember");
+      throw new ApiException(400, "Missing the required parameter 'pageMemberMoonbreezesReq' when calling pageMemberMoonbreezes");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -541,11 +543,11 @@ public class MoonbreezeService {
   }
 
 
-  public static final class APIPageMemberRequest {
+  public static final class APIPageMemberMoonbreezesRequest {
     @javax.annotation.Nonnull
     private PageMemberMoonbreezesReq pageMemberMoonbreezesReq; //  (required)
 
-    private APIPageMemberRequest(Builder builder) {
+    private APIPageMemberMoonbreezesRequest(Builder builder) {
       this.pageMemberMoonbreezesReq = builder.pageMemberMoonbreezesReq;
     }
     @javax.annotation.Nonnull
@@ -563,106 +565,106 @@ public class MoonbreezeService {
         this.pageMemberMoonbreezesReq = pageMemberMoonbreezesReq;
         return this;
       }
-      public APIPageMemberRequest build() {
-        return new APIPageMemberRequest(this);
+      public APIPageMemberMoonbreezesRequest build() {
+        return new APIPageMemberMoonbreezesRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPagePublicRequest}
-   * @return PageMoonbreezesResp
+   * 服务方法。
+   * @param apiRequest {@link APIPagePublicMoonbreezesRequest}
+   * @return PagePublicMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pagePublic(APIPagePublicRequest apiRequest) throws ApiException {
-    return pagePublic(apiRequest, null);
+  public PagePublicMoonbreezesResp pagePublicMoonbreezes(APIPagePublicMoonbreezesRequest apiRequest) throws ApiException {
+    return pagePublicMoonbreezes(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPagePublicRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIPagePublicMoonbreezesRequest}
    * @param headers Optional headers to include in the request
-   * @return PageMoonbreezesResp
+   * @return PagePublicMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pagePublic(APIPagePublicRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public PagePublicMoonbreezesResp pagePublicMoonbreezes(APIPagePublicMoonbreezesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     PagePublicMoonbreezesReq pagePublicMoonbreezesReq = apiRequest.pagePublicMoonbreezesReq();
-    return pagePublic(pagePublicMoonbreezesReq, headers);
+    return pagePublicMoonbreezes(pagePublicMoonbreezesReq, headers);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPagePublicRequest}
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * 服务方法。
+   * @param apiRequest {@link APIPagePublicMoonbreezesRequest}
+   * @return ApiResponse&lt;PagePublicMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pagePublicWithHttpInfo(APIPagePublicRequest apiRequest) throws ApiException {
-    return pagePublicWithHttpInfo(apiRequest, null);
+  public ApiResponse<PagePublicMoonbreezesResp> pagePublicMoonbreezesWithHttpInfo(APIPagePublicMoonbreezesRequest apiRequest) throws ApiException {
+    return pagePublicMoonbreezesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPagePublicRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIPagePublicMoonbreezesRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PagePublicMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pagePublicWithHttpInfo(APIPagePublicRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<PagePublicMoonbreezesResp> pagePublicMoonbreezesWithHttpInfo(APIPagePublicMoonbreezesRequest apiRequest, Map<String, String> headers) throws ApiException {
     PagePublicMoonbreezesReq pagePublicMoonbreezesReq = apiRequest.pagePublicMoonbreezesReq();
-    return pagePublicWithHttpInfo(pagePublicMoonbreezesReq, headers);
+    return pagePublicMoonbreezesWithHttpInfo(pagePublicMoonbreezesReq, headers);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pagePublicMoonbreezesReq  (required)
-   * @return PageMoonbreezesResp
+   * @return PagePublicMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pagePublic(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq) throws ApiException {
-    return pagePublic(pagePublicMoonbreezesReq, null);
+  public PagePublicMoonbreezesResp pagePublicMoonbreezes(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq) throws ApiException {
+    return pagePublicMoonbreezes(pagePublicMoonbreezesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pagePublicMoonbreezesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return PageMoonbreezesResp
+   * @return PagePublicMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pagePublic(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<PageMoonbreezesResp> localVarResponse = pagePublicWithHttpInfo(pagePublicMoonbreezesReq, headers);
+  public PagePublicMoonbreezesResp pagePublicMoonbreezes(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PagePublicMoonbreezesResp> localVarResponse = pagePublicMoonbreezesWithHttpInfo(pagePublicMoonbreezesReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pagePublicMoonbreezesReq  (required)
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PagePublicMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pagePublicWithHttpInfo(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq) throws ApiException {
-    return pagePublicWithHttpInfo(pagePublicMoonbreezesReq, null);
+  public ApiResponse<PagePublicMoonbreezesResp> pagePublicMoonbreezesWithHttpInfo(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq) throws ApiException {
+    return pagePublicMoonbreezesWithHttpInfo(pagePublicMoonbreezesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pagePublicMoonbreezesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PagePublicMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pagePublicWithHttpInfo(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = pagePublicRequestBuilder(pagePublicMoonbreezesReq, headers);
+  public ApiResponse<PagePublicMoonbreezesResp> pagePublicMoonbreezesWithHttpInfo(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pagePublicMoonbreezesRequestBuilder(pagePublicMoonbreezesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -673,11 +675,11 @@ public class MoonbreezeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("pagePublic", localVarResponse);
+          throw getApiException("pagePublicMoonbreezes", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<PageMoonbreezesResp>(
+          return new ApiResponse<PagePublicMoonbreezesResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -687,10 +689,10 @@ public class MoonbreezeService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        PageMoonbreezesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageMoonbreezesResp>() {});
+        PagePublicMoonbreezesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PagePublicMoonbreezesResp>() {});
         
 
-        return new ApiResponse<PageMoonbreezesResp>(
+        return new ApiResponse<PagePublicMoonbreezesResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -709,10 +711,10 @@ public class MoonbreezeService {
     }
   }
 
-  private HttpRequest.Builder pagePublicRequestBuilder(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder pagePublicMoonbreezesRequestBuilder(@javax.annotation.Nonnull PagePublicMoonbreezesReq pagePublicMoonbreezesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'pagePublicMoonbreezesReq' is set
     if (pagePublicMoonbreezesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'pagePublicMoonbreezesReq' when calling pagePublic");
+      throw new ApiException(400, "Missing the required parameter 'pagePublicMoonbreezesReq' when calling pagePublicMoonbreezes");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -742,11 +744,11 @@ public class MoonbreezeService {
   }
 
 
-  public static final class APIPagePublicRequest {
+  public static final class APIPagePublicMoonbreezesRequest {
     @javax.annotation.Nonnull
     private PagePublicMoonbreezesReq pagePublicMoonbreezesReq; //  (required)
 
-    private APIPagePublicRequest(Builder builder) {
+    private APIPagePublicMoonbreezesRequest(Builder builder) {
       this.pagePublicMoonbreezesReq = builder.pagePublicMoonbreezesReq;
     }
     @javax.annotation.Nonnull
@@ -764,106 +766,106 @@ public class MoonbreezeService {
         this.pagePublicMoonbreezesReq = pagePublicMoonbreezesReq;
         return this;
       }
-      public APIPagePublicRequest build() {
-        return new APIPagePublicRequest(this);
+      public APIPagePublicMoonbreezesRequest build() {
+        return new APIPagePublicMoonbreezesRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageWatchingRequest}
-   * @return PageMoonbreezesResp
+   * 服务方法。
+   * @param apiRequest {@link APIPageWatchingMoonbreezesRequest}
+   * @return PageWatchingMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageWatching(APIPageWatchingRequest apiRequest) throws ApiException {
-    return pageWatching(apiRequest, null);
+  public PageWatchingMoonbreezesResp pageWatchingMoonbreezes(APIPageWatchingMoonbreezesRequest apiRequest) throws ApiException {
+    return pageWatchingMoonbreezes(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageWatchingRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIPageWatchingMoonbreezesRequest}
    * @param headers Optional headers to include in the request
-   * @return PageMoonbreezesResp
+   * @return PageWatchingMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageWatching(APIPageWatchingRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public PageWatchingMoonbreezesResp pageWatchingMoonbreezes(APIPageWatchingMoonbreezesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq = apiRequest.pageWatchingMoonbreezesReq();
-    return pageWatching(pageWatchingMoonbreezesReq, headers);
+    return pageWatchingMoonbreezes(pageWatchingMoonbreezesReq, headers);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageWatchingRequest}
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * 服务方法。
+   * @param apiRequest {@link APIPageWatchingMoonbreezesRequest}
+   * @return ApiResponse&lt;PageWatchingMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageWatchingWithHttpInfo(APIPageWatchingRequest apiRequest) throws ApiException {
-    return pageWatchingWithHttpInfo(apiRequest, null);
+  public ApiResponse<PageWatchingMoonbreezesResp> pageWatchingMoonbreezesWithHttpInfo(APIPageWatchingMoonbreezesRequest apiRequest) throws ApiException {
+    return pageWatchingMoonbreezesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APIPageWatchingRequest}
+   * 服务方法。
+   * @param apiRequest {@link APIPageWatchingMoonbreezesRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PageWatchingMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageWatchingWithHttpInfo(APIPageWatchingRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<PageWatchingMoonbreezesResp> pageWatchingMoonbreezesWithHttpInfo(APIPageWatchingMoonbreezesRequest apiRequest, Map<String, String> headers) throws ApiException {
     PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq = apiRequest.pageWatchingMoonbreezesReq();
-    return pageWatchingWithHttpInfo(pageWatchingMoonbreezesReq, headers);
+    return pageWatchingMoonbreezesWithHttpInfo(pageWatchingMoonbreezesReq, headers);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageWatchingMoonbreezesReq  (required)
-   * @return PageMoonbreezesResp
+   * @return PageWatchingMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageWatching(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq) throws ApiException {
-    return pageWatching(pageWatchingMoonbreezesReq, null);
+  public PageWatchingMoonbreezesResp pageWatchingMoonbreezes(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq) throws ApiException {
+    return pageWatchingMoonbreezes(pageWatchingMoonbreezesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageWatchingMoonbreezesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return PageMoonbreezesResp
+   * @return PageWatchingMoonbreezesResp
    * @throws ApiException if fails to make API call
    */
-  public PageMoonbreezesResp pageWatching(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<PageMoonbreezesResp> localVarResponse = pageWatchingWithHttpInfo(pageWatchingMoonbreezesReq, headers);
+  public PageWatchingMoonbreezesResp pageWatchingMoonbreezes(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageWatchingMoonbreezesResp> localVarResponse = pageWatchingMoonbreezesWithHttpInfo(pageWatchingMoonbreezesReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageWatchingMoonbreezesReq  (required)
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PageWatchingMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageWatchingWithHttpInfo(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq) throws ApiException {
-    return pageWatchingWithHttpInfo(pageWatchingMoonbreezesReq, null);
+  public ApiResponse<PageWatchingMoonbreezesResp> pageWatchingMoonbreezesWithHttpInfo(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq) throws ApiException {
+    return pageWatchingMoonbreezesWithHttpInfo(pageWatchingMoonbreezesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param pageWatchingMoonbreezesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageMoonbreezesResp&gt;
+   * @return ApiResponse&lt;PageWatchingMoonbreezesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageMoonbreezesResp> pageWatchingWithHttpInfo(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = pageWatchingRequestBuilder(pageWatchingMoonbreezesReq, headers);
+  public ApiResponse<PageWatchingMoonbreezesResp> pageWatchingMoonbreezesWithHttpInfo(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageWatchingMoonbreezesRequestBuilder(pageWatchingMoonbreezesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -874,11 +876,11 @@ public class MoonbreezeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("pageWatching", localVarResponse);
+          throw getApiException("pageWatchingMoonbreezes", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<PageMoonbreezesResp>(
+          return new ApiResponse<PageWatchingMoonbreezesResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -888,10 +890,10 @@ public class MoonbreezeService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        PageMoonbreezesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageMoonbreezesResp>() {});
+        PageWatchingMoonbreezesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageWatchingMoonbreezesResp>() {});
         
 
-        return new ApiResponse<PageMoonbreezesResp>(
+        return new ApiResponse<PageWatchingMoonbreezesResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -910,10 +912,10 @@ public class MoonbreezeService {
     }
   }
 
-  private HttpRequest.Builder pageWatchingRequestBuilder(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder pageWatchingMoonbreezesRequestBuilder(@javax.annotation.Nonnull PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'pageWatchingMoonbreezesReq' is set
     if (pageWatchingMoonbreezesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'pageWatchingMoonbreezesReq' when calling pageWatching");
+      throw new ApiException(400, "Missing the required parameter 'pageWatchingMoonbreezesReq' when calling pageWatchingMoonbreezes");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -943,11 +945,11 @@ public class MoonbreezeService {
   }
 
 
-  public static final class APIPageWatchingRequest {
+  public static final class APIPageWatchingMoonbreezesRequest {
     @javax.annotation.Nonnull
     private PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq; //  (required)
 
-    private APIPageWatchingRequest(Builder builder) {
+    private APIPageWatchingMoonbreezesRequest(Builder builder) {
       this.pageWatchingMoonbreezesReq = builder.pageWatchingMoonbreezesReq;
     }
     @javax.annotation.Nonnull
@@ -965,8 +967,8 @@ public class MoonbreezeService {
         this.pageWatchingMoonbreezesReq = pageWatchingMoonbreezesReq;
         return this;
       }
-      public APIPageWatchingRequest build() {
-        return new APIPageWatchingRequest(this);
+      public APIPageWatchingMoonbreezesRequest build() {
+        return new APIPageWatchingMoonbreezesRequest(this);
       }
     }
   }

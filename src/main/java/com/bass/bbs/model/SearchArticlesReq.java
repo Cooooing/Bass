@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SearchArticlesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SearchArticlesReq.JSON_PROPERTY_QUERY,
@@ -60,7 +60,7 @@ public class SearchArticlesReq {
   }
 
   /**
-   * Get query
+   * 必填，搜索词
    * @return query
    */
   @javax.annotation.Nonnull
@@ -84,7 +84,7 @@ public class SearchArticlesReq {
   }
 
   /**
-   * Get cursor
+   * 可选，不透明续页游标
    * @return cursor
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class SearchArticlesReq {
   }
 
   /**
-   * Get size
+   * 可选，返回条数
    * @return size
    */
   @javax.annotation.Nullable

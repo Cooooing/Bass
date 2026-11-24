@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateDomainResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   UpdateDomainResp.JSON_PROPERTY_DOMAIN
@@ -51,7 +51,7 @@ public class UpdateDomainResp {
   }
 
   /**
-   * Get domain
+   * 领域信息
    * @return domain
    */
   @javax.annotation.Nullable

@@ -4,16 +4,18 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**search**](ArticleSearchService.md#search) | **POST** /v1/content/article/search |  |
-| [**searchWithHttpInfo**](ArticleSearchService.md#searchWithHttpInfo) | **POST** /v1/content/article/search |  |
+| [**searchArticles**](ArticleSearchService.md#searchArticles) | **POST** /v1/content/article/search |  |
+| [**searchArticlesWithHttpInfo**](ArticleSearchService.md#searchArticlesWithHttpInfo) | **POST** /v1/content/article/search |  |
 
 
 
-## search
+## searchArticles
 
-> SearchArticlesResp search(searchRequest)
+> SearchArticlesResp searchArticles(searchArticlesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -34,13 +36,13 @@ public class Example {
         ArticleSearchService apiInstance = new ArticleSearchService(defaultClient);
         SearchArticlesReq searchArticlesReq = new SearchArticlesReq(); // SearchArticlesReq | 
         try {
-            APIsearchRequest request = APIsearchRequest.newBuilder()
+            APIsearchArticlesRequest request = APIsearchArticlesRequest.newBuilder()
                 .searchArticlesReq(searchArticlesReq)
                 .build();
-            SearchArticlesResp result = apiInstance.search(request);
+            SearchArticlesResp result = apiInstance.searchArticles(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleSearchService#search");
+            System.err.println("Exception when calling ArticleSearchService#searchArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -54,7 +56,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| searchRequest | [**APIsearchRequest**](ArticleSearchService.md#APIsearchRequest)|-|-|
+| searchArticlesRequest | [**APIsearchArticlesRequest**](ArticleSearchService.md#APIsearchArticlesRequest)|-|-|
 
 ### Return type
 
@@ -75,11 +77,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## searchWithHttpInfo
+## searchArticlesWithHttpInfo
 
-> ApiResponse<SearchArticlesResp> searchWithHttpInfo(searchRequest)
+> ApiResponse<SearchArticlesResp> searchArticlesWithHttpInfo(searchArticlesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -101,15 +105,15 @@ public class Example {
         ArticleSearchService apiInstance = new ArticleSearchService(defaultClient);
         SearchArticlesReq searchArticlesReq = new SearchArticlesReq(); // SearchArticlesReq | 
         try {
-            APIsearchRequest request = APIsearchRequest.newBuilder()
+            APIsearchArticlesRequest request = APIsearchArticlesRequest.newBuilder()
                 .searchArticlesReq(searchArticlesReq)
                 .build();
-            ApiResponse<SearchArticlesResp> response = apiInstance.searchWithHttpInfo(request);
+            ApiResponse<SearchArticlesResp> response = apiInstance.searchArticlesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleSearchService#search");
+            System.err.println("Exception when calling ArticleSearchService#searchArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -123,7 +127,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| searchRequest | [**APIsearchRequest**](ArticleSearchService.md#APIsearchRequest)|-|-|
+| searchArticlesRequest | [**APIsearchArticlesRequest**](ArticleSearchService.md#APIsearchArticlesRequest)|-|-|
 
 ### Return type
 
@@ -145,8 +149,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIsearchRequest"></a>
-## APIsearchRequest
+<a id="APIsearchArticlesRequest"></a>
+## APIsearchArticlesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

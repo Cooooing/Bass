@@ -2,16 +2,17 @@
 
 # RespPointRecord
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**createdAt** | **OffsetDateTime** |  |  [optional] |
-|**typeLabel** | **String** |  |  [optional] |
-|**direction** | [**DirectionEnum**](#DirectionEnum) |  |  [optional] |
-|**amount** | **String** |  |  [optional] |
-|**balanceAfter** | **String** |  |  [optional] |
+|**createdAt** | **OffsetDateTime** | 记录创建时间 |  [optional] |
+|**typeLabel** | **String** | 流水类型展示文案 |  [optional] |
+|**direction** | [**DirectionEnum**](#DirectionEnum) | 收入或支出方向 |  [optional] |
+|**amount** | **String** | 绝对变动积分 |  [optional] |
+|**balanceAfter** | **String** | 变动后的积分余额 |  [optional] |
 
 
 

@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListEmojiGroupsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListEmojiGroupsResp.JSON_PROPERTY_ROWS
@@ -61,7 +61,7 @@ public class ListEmojiGroupsResp {
   }
 
   /**
-   * Get rows
+   * 表情分组列表。
    * @return rows
    */
   @javax.annotation.Nullable

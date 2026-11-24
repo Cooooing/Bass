@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SetPrivateChatSessionPinnedReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SetPrivateChatSessionPinnedReq.JSON_PROPERTY_PEER_USER_ID,
@@ -55,7 +55,7 @@ public class SetPrivateChatSessionPinnedReq {
   }
 
   /**
-   * Get peerUserId
+   * 对端账号 ID。
    * @return peerUserId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class SetPrivateChatSessionPinnedReq {
   }
 
   /**
-   * Get pinned
+   * 是否置顶。
    * @return pinned
    */
   @javax.annotation.Nullable

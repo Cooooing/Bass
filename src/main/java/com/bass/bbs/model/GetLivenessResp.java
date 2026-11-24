@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetLivenessResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetLivenessResp.JSON_PROPERTY_SCORE,
@@ -60,7 +60,7 @@ public class GetLivenessResp {
   }
 
   /**
-   * Get score
+   * 当前活跃度总分。
    * @return score
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class GetLivenessResp {
   }
 
   /**
-   * Get maxScore
+   * 每日活跃度上限。
    * @return maxScore
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class GetLivenessResp {
   }
 
   /**
-   * Get checkinScore
+   * 自动签到所需的最低活跃度。
    * @return checkinScore
    */
   @javax.annotation.Nullable

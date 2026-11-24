@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CollectArticleResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CollectArticleResp.JSON_PROPERTY_COLLECTED
@@ -50,7 +50,7 @@ public class CollectArticleResp {
   }
 
   /**
-   * Get collected
+   * 是否已收藏
    * @return collected
    */
   @javax.annotation.Nullable

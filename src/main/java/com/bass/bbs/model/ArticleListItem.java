@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleListItem
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleListItem.JSON_PROPERTY_ID,
@@ -100,7 +100,7 @@ public class ArticleListItem {
   private Boolean hasReward;
 
   /**
-   * Gets or Sets type
+   * 文章类型
    */
   public enum TypeEnum {
     ARTICLE_TYPE_UNSPECIFIED(String.valueOf("ARTICLE_TYPE_UNSPECIFIED")),
@@ -207,7 +207,7 @@ public class ArticleListItem {
   private OffsetDateTime publishedAt;
 
   /**
-   * Gets or Sets publishStatus
+   * 发布状态
    */
   public enum PublishStatusEnum {
     ARTICLE_PUBLISH_STATUS_UNSPECIFIED(String.valueOf("ARTICLE_PUBLISH_STATUS_UNSPECIFIED")),
@@ -250,7 +250,7 @@ public class ArticleListItem {
   private PublishStatusEnum publishStatus;
 
   /**
-   * Gets or Sets visibility
+   * 可见范围
    */
   public enum VisibilityEnum {
     ARTICLE_VISIBILITY_UNSPECIFIED(String.valueOf("ARTICLE_VISIBILITY_UNSPECIFIED")),
@@ -291,7 +291,7 @@ public class ArticleListItem {
   private VisibilityEnum visibility;
 
   /**
-   * Gets or Sets restriction
+   * 治理限制
    */
   public enum RestrictionEnum {
     CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
@@ -370,7 +370,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get id
+   * 文章 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -394,7 +394,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get title
+   * 标题
    * @return title
    */
   @javax.annotation.Nullable
@@ -418,7 +418,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get content
+   * 摘要原文
    * @return content
    */
   @javax.annotation.Nullable
@@ -442,7 +442,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get contentRender
+   * 摘要渲染内容
    * @return contentRender
    */
   @javax.annotation.Nullable
@@ -466,7 +466,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get hasPostscript
+   * 是否有附言
    * @return hasPostscript
    */
   @javax.annotation.Nullable
@@ -490,7 +490,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get hasReward
+   * 是否有打赏区
    * @return hasReward
    */
   @javax.annotation.Nullable
@@ -514,7 +514,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get type
+   * 文章类型
    * @return type
    */
   @javax.annotation.Nullable
@@ -538,7 +538,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get statement
+   * 创作声明
    * @return statement
    */
   @javax.annotation.Nullable
@@ -562,7 +562,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get commentable
+   * 是否允许评论
    * @return commentable
    */
   @javax.annotation.Nullable
@@ -586,7 +586,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get viewCount
+   * 浏览数
    * @return viewCount
    */
   @javax.annotation.Nullable
@@ -610,7 +610,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get thankCount
+   * 感谢数
    * @return thankCount
    */
   @javax.annotation.Nullable
@@ -634,7 +634,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get likeCount
+   * 点赞数
    * @return likeCount
    */
   @javax.annotation.Nullable
@@ -658,7 +658,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get collectCount
+   * 收藏数
    * @return collectCount
    */
   @javax.annotation.Nullable
@@ -682,7 +682,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get watchCount
+   * 关注数
    * @return watchCount
    */
   @javax.annotation.Nullable
@@ -706,7 +706,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get rewardCount
+   * 打赏数
    * @return rewardCount
    */
   @javax.annotation.Nullable
@@ -730,7 +730,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get replyCount
+   * 回复数
    * @return replyCount
    */
   @javax.annotation.Nullable
@@ -754,7 +754,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get authorUser
+   * 作者资料
    * @return authorUser
    */
   @javax.annotation.Nullable
@@ -778,7 +778,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get lastReplyUser
+   * 最后回复用户
    * @return lastReplyUser
    */
   @javax.annotation.Nullable
@@ -802,7 +802,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get lastReplyAt
+   * 最后回复时间
    * @return lastReplyAt
    */
   @javax.annotation.Nullable
@@ -826,7 +826,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get coverImageUrl
+   * 封面图片 URL
    * @return coverImageUrl
    */
   @javax.annotation.Nullable
@@ -850,7 +850,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get viewerActionState
+   * 当前用户互动状态
    * @return viewerActionState
    */
   @javax.annotation.Nullable
@@ -874,7 +874,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get publishedAt
+   * 发布时间
    * @return publishedAt
    */
   @javax.annotation.Nullable
@@ -898,7 +898,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get publishStatus
+   * 发布状态
    * @return publishStatus
    */
   @javax.annotation.Nullable
@@ -922,7 +922,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get visibility
+   * 可见范围
    * @return visibility
    */
   @javax.annotation.Nullable
@@ -946,7 +946,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get restriction
+   * 治理限制
    * @return restriction
    */
   @javax.annotation.Nullable
@@ -970,7 +970,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get editedAt
+   * 编辑时间
    * @return editedAt
    */
   @javax.annotation.Nullable
@@ -1002,7 +1002,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get tags
+   * 文章标签
    * @return tags
    */
   @javax.annotation.Nullable
@@ -1034,7 +1034,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get domains
+   * 文章所属领域
    * @return domains
    */
   @javax.annotation.Nullable
@@ -1058,7 +1058,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get createdBy
+   * 创建账号 ID
    * @return createdBy
    */
   @javax.annotation.Nullable
@@ -1082,7 +1082,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get updatedBy
+   * 更新账号 ID
    * @return updatedBy
    */
   @javax.annotation.Nullable
@@ -1106,7 +1106,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -1130,7 +1130,7 @@ public class ArticleListItem {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

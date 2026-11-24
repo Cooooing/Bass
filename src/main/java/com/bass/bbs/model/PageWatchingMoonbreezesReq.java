@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PageWatchingMoonbreezesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   PageWatchingMoonbreezesReq.JSON_PROPERTY_CURSOR,
@@ -55,7 +55,7 @@ public class PageWatchingMoonbreezesReq {
   }
 
   /**
-   * Get cursor
+   * 协议字段。
    * @return cursor
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class PageWatchingMoonbreezesReq {
   }
 
   /**
-   * Get size
+   * 协议字段。
    * @return size
    */
   @javax.annotation.Nullable

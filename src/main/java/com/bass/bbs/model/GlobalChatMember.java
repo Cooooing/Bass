@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GlobalChatMember
+ * 协议消息。
  */
 @JsonPropertyOrder({
   GlobalChatMember.JSON_PROPERTY_USER_ID,
@@ -65,7 +65,7 @@ public class GlobalChatMember {
   }
 
   /**
-   * Get userId
+   * 账号 ID。
    * @return userId
    */
   @javax.annotation.Nullable
@@ -89,7 +89,7 @@ public class GlobalChatMember {
   }
 
   /**
-   * Get name
+   * 用户名。
    * @return name
    */
   @javax.annotation.Nullable
@@ -113,7 +113,7 @@ public class GlobalChatMember {
   }
 
   /**
-   * Get nickname
+   * 昵称。
    * @return nickname
    */
   @javax.annotation.Nullable
@@ -137,7 +137,7 @@ public class GlobalChatMember {
   }
 
   /**
-   * Get avatarUrl
+   * 头像地址。
    * @return avatarUrl
    */
   @javax.annotation.Nullable

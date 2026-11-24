@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticlePollDraft
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticlePollDraft.JSON_PROPERTY_OPTIONS,
@@ -71,7 +71,7 @@ public class ArticlePollDraft {
   }
 
   /**
-   * Get options
+   * 投票选项
    * @return options
    */
   @javax.annotation.Nullable
@@ -95,7 +95,7 @@ public class ArticlePollDraft {
   }
 
   /**
-   * Get endsAt
+   * 截止时间
    * @return endsAt
    */
   @javax.annotation.Nullable
@@ -119,7 +119,7 @@ public class ArticlePollDraft {
   }
 
   /**
-   * Get maxChoices
+   * 每人最多选择数
    * @return maxChoices
    */
   @javax.annotation.Nullable

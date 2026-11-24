@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RenameEmojiItemReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   RenameEmojiItemReq.JSON_PROPERTY_ITEM_ID,
@@ -55,7 +55,7 @@ public class RenameEmojiItemReq {
   }
 
   /**
-   * Get itemId
+   * 待重命名表情项 ID。
    * @return itemId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class RenameEmojiItemReq {
   }
 
   /**
-   * Get name
+   * 新表情别名。
    * @return name
    */
   @javax.annotation.Nullable

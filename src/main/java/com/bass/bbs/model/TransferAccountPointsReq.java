@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * TransferAccountPointsReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   TransferAccountPointsReq.JSON_PROPERTY_TARGET_NAME,
@@ -65,7 +65,7 @@ public class TransferAccountPointsReq {
   }
 
   /**
-   * Get targetName
+   * 收款账号名，必填
    * @return targetName
    */
   @javax.annotation.Nonnull
@@ -89,7 +89,7 @@ public class TransferAccountPointsReq {
   }
 
   /**
-   * Get amount
+   * 转账积分数量，必填
    * @return amount
    */
   @javax.annotation.Nonnull
@@ -113,7 +113,7 @@ public class TransferAccountPointsReq {
   }
 
   /**
-   * Get remark
+   * 转账备注
    * @return remark
    */
   @javax.annotation.Nullable
@@ -137,7 +137,7 @@ public class TransferAccountPointsReq {
   }
 
   /**
-   * Get idempotencyKey
+   * 本次转账的技术幂等键，必填
    * @return idempotencyKey
    */
   @javax.annotation.Nonnull

@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListGlobalChatOnlineMembersResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListGlobalChatOnlineMembersResp.JSON_PROPERTY_ROWS
@@ -61,7 +61,7 @@ public class ListGlobalChatOnlineMembersResp {
   }
 
   /**
-   * Get rows
+   * 在线成员列表。
    * @return rows
    */
   @javax.annotation.Nullable

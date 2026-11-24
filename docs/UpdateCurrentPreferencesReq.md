@@ -2,15 +2,16 @@
 
 # UpdateCurrentPreferencesReq
 
+请求参数。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**timezone** | **String** |  |  [optional] |
-|**theme** | **String** |  |  [optional] |
-|**mobileTheme** | **String** |  |  [optional] |
-|**language** | [**LanguageEnum**](#LanguageEnum) |  |  [optional] |
+|**timezone** | **String** | 时区 |  [optional] |
+|**theme** | **String** | 桌面端主题 |  [optional] |
+|**mobileTheme** | **String** | 移动端主题 |  [optional] |
+|**language** | [**LanguageEnum**](#LanguageEnum) | 界面语言 |  [optional] |
 
 
 

@@ -122,7 +122,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get imageAssetId
+   * Platform 已确认可用的徽章图标资源 ID。
    * @return imageAssetId
    */
   @javax.annotation.Nullable
@@ -146,7 +146,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get text
+   * 文字条内容。
    * @return text
    */
   @javax.annotation.Nullable
@@ -178,7 +178,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get backgroundColors
+   * 背景颜色列表。
    * @return backgroundColors
    */
   @javax.annotation.Nullable
@@ -210,7 +210,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get textColors
+   * 文字颜色列表。
    * @return textColors
    */
   @javax.annotation.Nullable
@@ -234,7 +234,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get backgroundDirection
+   * 背景渐变方向或角度。
    * @return backgroundDirection
    */
   @javax.annotation.Nullable
@@ -258,7 +258,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get textDirection
+   * 文字渐变方向或角度。
    * @return textDirection
    */
   @javax.annotation.Nullable
@@ -282,7 +282,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get size
+   * 图标边长。
    * @return size
    */
   @javax.annotation.Nullable
@@ -306,7 +306,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get border
+   * 图标边距。
    * @return border
    */
   @javax.annotation.Nullable
@@ -330,7 +330,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get textBarLength
+   * 文字条长度。
    * @return textBarLength
    */
   @javax.annotation.Nullable
@@ -354,7 +354,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get textSize
+   * 文字字号。
    * @return textSize
    */
   @javax.annotation.Nullable
@@ -378,7 +378,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get textBarRadius
+   * 文字条圆角。
    * @return textBarRadius
    */
   @javax.annotation.Nullable
@@ -402,7 +402,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get scale
+   * 整体缩放比例。
    * @return scale
    */
   @javax.annotation.Nullable
@@ -426,7 +426,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get shadow
+   * 阴影强度。
    * @return shadow
    */
   @javax.annotation.Nullable
@@ -450,7 +450,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get animationSeconds
+   * 动画时长。
    * @return animationSeconds
    */
   @javax.annotation.Nullable
@@ -474,7 +474,7 @@ public class RenderSpec {
   }
 
   /**
-   * Get fontAssetId
+   * Platform 已确认可用的自定义字体资源 ID。
    * @return fontAssetId
    */
   @javax.annotation.Nullable

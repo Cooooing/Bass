@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * AccountContact
+ * 协议消息。
  */
 @JsonPropertyOrder({
   AccountContact.JSON_PROPERTY_USER_ID,
@@ -60,7 +60,7 @@ public class AccountContact {
   }
 
   /**
-   * Get userId
+   * 账号 ID
    * @return userId
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class AccountContact {
   }
 
   /**
-   * Get email
+   * 邮箱地址
    * @return email
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class AccountContact {
   }
 
   /**
-   * Get phone
+   * 手机号
    * @return phone
    */
   @javax.annotation.Nullable

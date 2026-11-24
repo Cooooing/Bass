@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqPhoneCredential
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqPhoneCredential.JSON_PROPERTY_PHONE,
@@ -55,7 +55,7 @@ public class ReqPhoneCredential {
   }
 
   /**
-   * Get phone
+   * 手机号
    * @return phone
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class ReqPhoneCredential {
   }
 
   /**
-   * Get code
+   * 手机 OTP
    * @return code
    */
   @javax.annotation.Nullable

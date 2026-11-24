@@ -63,7 +63,7 @@ public class EmojiGroup {
   }
 
   /**
-   * Get id
+   * 分组 ID。
    * @return id
    */
   @javax.annotation.Nullable
@@ -87,7 +87,7 @@ public class EmojiGroup {
   }
 
   /**
-   * Get name
+   * 分组名称。
    * @return name
    */
   @javax.annotation.Nullable
@@ -119,7 +119,7 @@ public class EmojiGroup {
   }
 
   /**
-   * Get items
+   * 分组内可用表情。
    * @return items
    */
   @javax.annotation.Nullable

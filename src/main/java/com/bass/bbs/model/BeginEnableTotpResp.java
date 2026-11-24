@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * BeginEnableTotpResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   BeginEnableTotpResp.JSON_PROPERTY_URL,
@@ -55,7 +55,7 @@ public class BeginEnableTotpResp {
   }
 
   /**
-   * Get url
+   * TOTP 绑定 URL
    * @return url
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class BeginEnableTotpResp {
   }
 
   /**
-   * Get qrCode
+   * TOTP 二维码图片数据
    * @return qrCode
    */
   @javax.annotation.Nullable

@@ -43,14 +43,14 @@ public class LocationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getCurrentTest() throws ApiException {
+    public void getCurrentLocationTest() throws ApiException {
         Object body = null;
         
-        LocationService.APIgetCurrentRequest request = LocationService.APIgetCurrentRequest.newBuilder()
+        LocationService.APIgetCurrentLocationRequest request = LocationService.APIgetCurrentLocationRequest.newBuilder()
           .body(body)
           .build();
         GetCurrentLocationResp response = 
-        api.getCurrent(request);
+        api.getCurrentLocation(request);
 
         // TODO: test validations
     }

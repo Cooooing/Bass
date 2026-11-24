@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SearchMentionAccountsReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SearchMentionAccountsReq.JSON_PROPERTY_QUERY,
@@ -56,7 +56,7 @@ public class SearchMentionAccountsReq {
   }
 
   /**
-   * Get query
+   * 用户名或昵称搜索词，可为空。
    * @return query
    */
   @javax.annotation.Nullable
@@ -80,7 +80,7 @@ public class SearchMentionAccountsReq {
   }
 
   /**
-   * Get page
+   * 分页参数。
    * @return page
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetAccountEconomyResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetAccountEconomyResp.JSON_PROPERTY_BALANCE,
@@ -60,7 +60,7 @@ public class GetAccountEconomyResp {
   }
 
   /**
-   * Get balance
+   * 当前积分
    * @return balance
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class GetAccountEconomyResp {
   }
 
   /**
-   * Get totalIncome
+   * 累计获得
    * @return totalIncome
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class GetAccountEconomyResp {
   }
 
   /**
-   * Get totalExpense
+   * 累计消耗
    * @return totalExpense
    */
   @javax.annotation.Nullable

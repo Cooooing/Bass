@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RefreshTokenReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   RefreshTokenReq.JSON_PROPERTY_REFRESH_TOKEN
@@ -50,7 +50,7 @@ public class RefreshTokenReq {
   }
 
   /**
-   * Get refreshToken
+   * 刷新令牌
    * @return refreshToken
    */
   @javax.annotation.Nonnull

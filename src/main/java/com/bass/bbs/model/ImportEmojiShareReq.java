@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ImportEmojiShareReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ImportEmojiShareReq.JSON_PROPERTY_CODE
@@ -50,7 +50,7 @@ public class ImportEmojiShareReq {
   }
 
   /**
-   * Get code
+   * 待导入分享码。
    * @return code
    */
   @javax.annotation.Nullable

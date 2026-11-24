@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListPointRecordsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListPointRecordsResp.JSON_PROPERTY_ROWS,
@@ -67,7 +67,7 @@ public class ListPointRecordsResp {
   }
 
   /**
-   * Get rows
+   * 积分流水列表
    * @return rows
    */
   @javax.annotation.Nullable
@@ -91,7 +91,7 @@ public class ListPointRecordsResp {
   }
 
   /**
-   * Get page
+   * 分页结果
    * @return page
    */
   @javax.annotation.Nullable

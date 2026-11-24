@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqArticle
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqArticle.JSON_PROPERTY_TITLE,
@@ -64,7 +64,7 @@ public class ReqArticle {
   private Integer rewardPoints;
 
   /**
-   * Gets or Sets type
+   * 必填，文章类型
    */
   public enum TypeEnum {
     ARTICLE_TYPE_UNSPECIFIED(String.valueOf("ARTICLE_TYPE_UNSPECIFIED")),
@@ -135,7 +135,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get title
+   * 必填，标题
    * @return title
    */
   @javax.annotation.Nonnull
@@ -159,7 +159,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get content
+   * 必填，正文
    * @return content
    */
   @javax.annotation.Nonnull
@@ -183,7 +183,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get rewardContent
+   * 可选，打赏区内容
    * @return rewardContent
    */
   @javax.annotation.Nullable
@@ -207,7 +207,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get rewardPoints
+   * 可选，打赏积分
    * @return rewardPoints
    */
   @javax.annotation.Nullable
@@ -231,7 +231,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get type
+   * 必填，文章类型
    * @return type
    */
   @javax.annotation.Nonnull
@@ -255,7 +255,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get statement
+   * 可选，创作声明
    * @return statement
    */
   @javax.annotation.Nullable
@@ -279,7 +279,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get commentable
+   * 可选，是否允许评论
    * @return commentable
    */
   @javax.annotation.Nullable
@@ -303,7 +303,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get poll
+   * 可选，投票文章的草稿配置
    * @return poll
    */
   @javax.annotation.Nullable
@@ -327,7 +327,7 @@ public class ReqArticle {
   }
 
   /**
-   * Get lottery
+   * 可选，抽奖文章的草稿配置
    * @return lottery
    */
   @javax.annotation.Nullable

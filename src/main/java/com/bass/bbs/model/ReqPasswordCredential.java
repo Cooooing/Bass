@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqPasswordCredential
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqPasswordCredential.JSON_PROPERTY_ACCOUNT,
@@ -60,7 +60,7 @@ public class ReqPasswordCredential {
   }
 
   /**
-   * Get account
+   * 账号名、邮箱或手机号
    * @return account
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class ReqPasswordCredential {
   }
 
   /**
-   * Get password
+   * 密码
    * @return password
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class ReqPasswordCredential {
   }
 
   /**
-   * Get code
+   * 账号启用 TOTP 时作为 TOTP code
    * @return code
    */
   @javax.annotation.Nullable

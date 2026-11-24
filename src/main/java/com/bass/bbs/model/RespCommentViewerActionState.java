@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespCommentViewerActionState
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespCommentViewerActionState.JSON_PROPERTY_LIKED,
@@ -55,7 +55,7 @@ public class RespCommentViewerActionState {
   }
 
   /**
-   * Get liked
+   * 是否已点赞
    * @return liked
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class RespCommentViewerActionState {
   }
 
   /**
-   * Get thanked
+   * 是否已感谢
    * @return thanked
    */
   @javax.annotation.Nullable

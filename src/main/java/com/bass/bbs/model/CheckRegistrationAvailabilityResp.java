@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CheckRegistrationAvailabilityResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CheckRegistrationAvailabilityResp.JSON_PROPERTY_NAME_AVAILABLE,
@@ -60,7 +60,7 @@ public class CheckRegistrationAvailabilityResp {
   }
 
   /**
-   * Get nameAvailable
+   * 账号名是否可用
    * @return nameAvailable
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class CheckRegistrationAvailabilityResp {
   }
 
   /**
-   * Get emailCanRegister
+   * 邮箱是否可继续用于注册
    * @return emailCanRegister
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class CheckRegistrationAvailabilityResp {
   }
 
   /**
-   * Get phoneCanRegister
+   * 手机号是否可继续用于注册
    * @return phoneCanRegister
    */
   @javax.annotation.Nullable

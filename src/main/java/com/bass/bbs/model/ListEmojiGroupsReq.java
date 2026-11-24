@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListEmojiGroupsReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListEmojiGroupsReq.JSON_PROPERTY_QUERY
@@ -50,7 +50,7 @@ public class ListEmojiGroupsReq {
   }
 
   /**
-   * Get query
+   * 按表情别名进行的模糊查询。
    * @return query
    */
   @javax.annotation.Nullable

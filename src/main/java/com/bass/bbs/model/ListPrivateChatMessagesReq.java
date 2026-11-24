@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListPrivateChatMessagesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListPrivateChatMessagesReq.JSON_PROPERTY_PEER_USER_ID,
@@ -61,7 +61,7 @@ public class ListPrivateChatMessagesReq {
   }
 
   /**
-   * Get peerUserId
+   * 对端账号 ID。
    * @return peerUserId
    */
   @javax.annotation.Nullable
@@ -85,7 +85,7 @@ public class ListPrivateChatMessagesReq {
   }
 
   /**
-   * Get beforeId
+   * 向前分页游标。
    * @return beforeId
    */
   @javax.annotation.Nullable
@@ -109,7 +109,7 @@ public class ListPrivateChatMessagesReq {
   }
 
   /**
-   * Get page
+   * 分页参数。
    * @return page
    */
   @javax.annotation.Nullable

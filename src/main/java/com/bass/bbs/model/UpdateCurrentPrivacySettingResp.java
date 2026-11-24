@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateCurrentPrivacySettingResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   UpdateCurrentPrivacySettingResp.JSON_PROPERTY_PRIVACY_SETTING
@@ -51,7 +51,7 @@ public class UpdateCurrentPrivacySettingResp {
   }
 
   /**
-   * Get privacySetting
+   * 更新后的账号隐私设置
    * @return privacySetting
    */
   @javax.annotation.Nullable

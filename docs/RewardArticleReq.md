@@ -2,12 +2,13 @@
 
 # RewardArticleReq
 
+请求参数。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**articleId** | **String** |  |  |
+|**articleId** | **String** | 必填，文章 ID |  |
 
 
 

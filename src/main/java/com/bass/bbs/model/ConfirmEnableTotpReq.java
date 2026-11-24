@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ConfirmEnableTotpReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ConfirmEnableTotpReq.JSON_PROPERTY_CODE
@@ -50,7 +50,7 @@ public class ConfirmEnableTotpReq {
   }
 
   /**
-   * Get code
+   * TOTP 验证码
    * @return code
    */
   @javax.annotation.Nonnull

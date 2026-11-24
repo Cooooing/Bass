@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar |  |
-| [**avatarWithHttpInfo**](AccountService.md#avatarWithHttpInfo) | **GET** /v1/user/account/avatar |  |
-| [**completeProfileImageUpload**](AccountService.md#completeProfileImageUpload) | **POST** /v1/user/account/complete-profile-image-upload |  |
-| [**completeProfileImageUploadWithHttpInfo**](AccountService.md#completeProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload |  |
-| [**getCurrent**](AccountService.md#getCurrent) | **POST** /v1/user/account/get-current |  |
-| [**getCurrentWithHttpInfo**](AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current |  |
-| [**getEconomyAccount**](AccountService.md#getEconomyAccount) | **POST** /v1/user/account/economy/get |  |
-| [**getEconomyAccountWithHttpInfo**](AccountService.md#getEconomyAccountWithHttpInfo) | **POST** /v1/user/account/economy/get |  |
+| [**avatarAccount**](AccountService.md#avatarAccount) | **GET** /v1/user/account/avatar |  |
+| [**avatarAccountWithHttpInfo**](AccountService.md#avatarAccountWithHttpInfo) | **GET** /v1/user/account/avatar |  |
+| [**completeProfileImageUploadAccount**](AccountService.md#completeProfileImageUploadAccount) | **POST** /v1/user/account/complete-profile-image-upload |  |
+| [**completeProfileImageUploadAccountWithHttpInfo**](AccountService.md#completeProfileImageUploadAccountWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload |  |
+| [**getAccountEconomy**](AccountService.md#getAccountEconomy) | **POST** /v1/user/account/economy/get |  |
+| [**getAccountEconomyWithHttpInfo**](AccountService.md#getAccountEconomyWithHttpInfo) | **POST** /v1/user/account/economy/get |  |
+| [**getCurrentAccount**](AccountService.md#getCurrentAccount) | **POST** /v1/user/account/get-current |  |
+| [**getCurrentAccountWithHttpInfo**](AccountService.md#getCurrentAccountWithHttpInfo) | **POST** /v1/user/account/get-current |  |
 | [**getProfile**](AccountService.md#getProfile) | **POST** /v1/user/account/get-profile |  |
 | [**getProfileWithHttpInfo**](AccountService.md#getProfileWithHttpInfo) | **POST** /v1/user/account/get-profile |  |
 | [**listFollowers**](AccountService.md#listFollowers) | **POST** /v1/user/account/list-followers |  |
@@ -20,26 +20,26 @@ All URIs are relative to *http://localhost*
 | [**listFollowingWithHttpInfo**](AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following |  |
 | [**listPointRecords**](AccountService.md#listPointRecords) | **POST** /v1/user/account/list-point-records |  |
 | [**listPointRecordsWithHttpInfo**](AccountService.md#listPointRecordsWithHttpInfo) | **POST** /v1/user/account/list-point-records |  |
-| [**prepareProfileImageUpload**](AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
-| [**prepareProfileImageUploadWithHttpInfo**](AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload |  |
-| [**searchMention**](AccountService.md#searchMention) | **POST** /v1/user/account/search-mention |  |
-| [**searchMentionWithHttpInfo**](AccountService.md#searchMentionWithHttpInfo) | **POST** /v1/user/account/search-mention |  |
-| [**transferPoints**](AccountService.md#transferPoints) | **POST** /v1/user/account/economy/transfer |  |
-| [**transferPointsWithHttpInfo**](AccountService.md#transferPointsWithHttpInfo) | **POST** /v1/user/account/economy/transfer |  |
-| [**updateEmail**](AccountService.md#updateEmail) | **POST** /v1/user/account/update-email |  |
-| [**updateEmailWithHttpInfo**](AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email |  |
-| [**updatePassword**](AccountService.md#updatePassword) | **POST** /v1/user/account/update-password |  |
-| [**updatePasswordWithHttpInfo**](AccountService.md#updatePasswordWithHttpInfo) | **POST** /v1/user/account/update-password |  |
-| [**updatePhone**](AccountService.md#updatePhone) | **POST** /v1/user/account/update-phone |  |
-| [**updatePhoneWithHttpInfo**](AccountService.md#updatePhoneWithHttpInfo) | **POST** /v1/user/account/update-phone |  |
-| [**updateProfile**](AccountService.md#updateProfile) | **POST** /v1/user/account/update-profile |  |
-| [**updateProfileWithHttpInfo**](AccountService.md#updateProfileWithHttpInfo) | **POST** /v1/user/account/update-profile |  |
+| [**prepareProfileImageUploadAccount**](AccountService.md#prepareProfileImageUploadAccount) | **POST** /v1/user/account/prepare-profile-image-upload |  |
+| [**prepareProfileImageUploadAccountWithHttpInfo**](AccountService.md#prepareProfileImageUploadAccountWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload |  |
+| [**searchMentionAccounts**](AccountService.md#searchMentionAccounts) | **POST** /v1/user/account/search-mention |  |
+| [**searchMentionAccountsWithHttpInfo**](AccountService.md#searchMentionAccountsWithHttpInfo) | **POST** /v1/user/account/search-mention |  |
+| [**transferAccountPoints**](AccountService.md#transferAccountPoints) | **POST** /v1/user/account/economy/transfer |  |
+| [**transferAccountPointsWithHttpInfo**](AccountService.md#transferAccountPointsWithHttpInfo) | **POST** /v1/user/account/economy/transfer |  |
+| [**updateEmailAccount**](AccountService.md#updateEmailAccount) | **POST** /v1/user/account/update-email |  |
+| [**updateEmailAccountWithHttpInfo**](AccountService.md#updateEmailAccountWithHttpInfo) | **POST** /v1/user/account/update-email |  |
+| [**updatePasswordAccount**](AccountService.md#updatePasswordAccount) | **POST** /v1/user/account/update-password |  |
+| [**updatePasswordAccountWithHttpInfo**](AccountService.md#updatePasswordAccountWithHttpInfo) | **POST** /v1/user/account/update-password |  |
+| [**updatePhoneAccount**](AccountService.md#updatePhoneAccount) | **POST** /v1/user/account/update-phone |  |
+| [**updatePhoneAccountWithHttpInfo**](AccountService.md#updatePhoneAccountWithHttpInfo) | **POST** /v1/user/account/update-phone |  |
+| [**updateProfileAccount**](AccountService.md#updateProfileAccount) | **POST** /v1/user/account/update-profile |  |
+| [**updateProfileAccountWithHttpInfo**](AccountService.md#updateProfileAccountWithHttpInfo) | **POST** /v1/user/account/update-profile |  |
 
 
 
-## avatar
+## avatarAccount
 
-> ImageResp avatar(avatarRequest)
+> AvatarAccountResp avatarAccount(avatarAccountRequest)
 
 
 
@@ -62,15 +62,15 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        String name = "name_example"; // String | 
+        String name = "name_example"; // String | 账号名，必填
         try {
-            APIavatarRequest request = APIavatarRequest.newBuilder()
+            APIavatarAccountRequest request = APIavatarAccountRequest.newBuilder()
                 .name(name)
                 .build();
-            ImageResp result = apiInstance.avatar(request);
+            AvatarAccountResp result = apiInstance.avatarAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#avatar");
+            System.err.println("Exception when calling AccountService#avatarAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -84,11 +84,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| avatarRequest | [**APIavatarRequest**](AccountService.md#APIavatarRequest)|-|-|
+| avatarAccountRequest | [**APIavatarAccountRequest**](AccountService.md#APIavatarAccountRequest)|-|-|
 
 ### Return type
 
-[**ImageResp**](ImageResp.md)
+[**AvatarAccountResp**](AvatarAccountResp.md)
 
 
 ### Authorization
@@ -105,9 +105,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## avatarWithHttpInfo
+## avatarAccountWithHttpInfo
 
-> ApiResponse<ImageResp> avatarWithHttpInfo(avatarRequest)
+> ApiResponse<AvatarAccountResp> avatarAccountWithHttpInfo(avatarAccountRequest)
 
 
 
@@ -131,17 +131,17 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        String name = "name_example"; // String | 
+        String name = "name_example"; // String | 账号名，必填
         try {
-            APIavatarRequest request = APIavatarRequest.newBuilder()
+            APIavatarAccountRequest request = APIavatarAccountRequest.newBuilder()
                 .name(name)
                 .build();
-            ApiResponse<ImageResp> response = apiInstance.avatarWithHttpInfo(request);
+            ApiResponse<AvatarAccountResp> response = apiInstance.avatarAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#avatar");
+            System.err.println("Exception when calling AccountService#avatarAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -155,11 +155,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| avatarRequest | [**APIavatarRequest**](AccountService.md#APIavatarRequest)|-|-|
+| avatarAccountRequest | [**APIavatarAccountRequest**](AccountService.md#APIavatarAccountRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**ImageResp**](ImageResp.md)>
+ApiResponse<[**AvatarAccountResp**](AvatarAccountResp.md)>
 
 
 ### Authorization
@@ -177,19 +177,19 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIavatarRequest"></a>
-## APIavatarRequest
+<a id="APIavatarAccountRequest"></a>
+## APIavatarAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **name** | **String** |  | [optional] |
+| **name** | **String** | 账号名，必填 | [optional] |
 
 
 
-## completeProfileImageUpload
+## completeProfileImageUploadAccount
 
-> CompleteProfileImageUploadAccountResp completeProfileImageUpload(completeProfileImageUploadRequest)
+> CompleteProfileImageUploadAccountResp completeProfileImageUploadAccount(completeProfileImageUploadAccountRequest)
 
 
 
@@ -214,13 +214,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = new CompleteProfileImageUploadAccountReq(); // CompleteProfileImageUploadAccountReq | 
         try {
-            APIcompleteProfileImageUploadRequest request = APIcompleteProfileImageUploadRequest.newBuilder()
+            APIcompleteProfileImageUploadAccountRequest request = APIcompleteProfileImageUploadAccountRequest.newBuilder()
                 .completeProfileImageUploadAccountReq(completeProfileImageUploadAccountReq)
                 .build();
-            CompleteProfileImageUploadAccountResp result = apiInstance.completeProfileImageUpload(request);
+            CompleteProfileImageUploadAccountResp result = apiInstance.completeProfileImageUploadAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#completeProfileImageUpload");
+            System.err.println("Exception when calling AccountService#completeProfileImageUploadAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -234,7 +234,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| completeProfileImageUploadRequest | [**APIcompleteProfileImageUploadRequest**](AccountService.md#APIcompleteProfileImageUploadRequest)|-|-|
+| completeProfileImageUploadAccountRequest | [**APIcompleteProfileImageUploadAccountRequest**](AccountService.md#APIcompleteProfileImageUploadAccountRequest)|-|-|
 
 ### Return type
 
@@ -255,9 +255,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## completeProfileImageUploadWithHttpInfo
+## completeProfileImageUploadAccountWithHttpInfo
 
-> ApiResponse<CompleteProfileImageUploadAccountResp> completeProfileImageUploadWithHttpInfo(completeProfileImageUploadRequest)
+> ApiResponse<CompleteProfileImageUploadAccountResp> completeProfileImageUploadAccountWithHttpInfo(completeProfileImageUploadAccountRequest)
 
 
 
@@ -283,15 +283,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = new CompleteProfileImageUploadAccountReq(); // CompleteProfileImageUploadAccountReq | 
         try {
-            APIcompleteProfileImageUploadRequest request = APIcompleteProfileImageUploadRequest.newBuilder()
+            APIcompleteProfileImageUploadAccountRequest request = APIcompleteProfileImageUploadAccountRequest.newBuilder()
                 .completeProfileImageUploadAccountReq(completeProfileImageUploadAccountReq)
                 .build();
-            ApiResponse<CompleteProfileImageUploadAccountResp> response = apiInstance.completeProfileImageUploadWithHttpInfo(request);
+            ApiResponse<CompleteProfileImageUploadAccountResp> response = apiInstance.completeProfileImageUploadAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#completeProfileImageUpload");
+            System.err.println("Exception when calling AccountService#completeProfileImageUploadAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -305,7 +305,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| completeProfileImageUploadRequest | [**APIcompleteProfileImageUploadRequest**](AccountService.md#APIcompleteProfileImageUploadRequest)|-|-|
+| completeProfileImageUploadAccountRequest | [**APIcompleteProfileImageUploadAccountRequest**](AccountService.md#APIcompleteProfileImageUploadAccountRequest)|-|-|
 
 ### Return type
 
@@ -327,8 +327,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcompleteProfileImageUploadRequest"></a>
-## APIcompleteProfileImageUploadRequest
+<a id="APIcompleteProfileImageUploadAccountRequest"></a>
+## APIcompleteProfileImageUploadAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -337,159 +337,9 @@ No authorization required
 
 
 
-## getCurrent
+## getAccountEconomy
 
-> GetCurrentAccountResp getCurrent(getCurrentRequest)
-
-
-
-获取当前账号完整资料
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.AccountService;
-import com.bass.bbs.api.AccountService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        AccountService apiInstance = new AccountService(defaultClient);
-        Object body = null; // Object | 
-        try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
-                .body(body)
-                .build();
-            GetCurrentAccountResp result = apiInstance.getCurrent(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#getCurrent");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](AccountService.md#APIgetCurrentRequest)|-|-|
-
-### Return type
-
-[**GetCurrentAccountResp**](GetCurrentAccountResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## getCurrentWithHttpInfo
-
-> ApiResponse<GetCurrentAccountResp> getCurrentWithHttpInfo(getCurrentRequest)
-
-
-
-获取当前账号完整资料
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.AccountService;
-import com.bass.bbs.api.AccountService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        AccountService apiInstance = new AccountService(defaultClient);
-        Object body = null; // Object | 
-        try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
-                .body(body)
-                .build();
-            ApiResponse<GetCurrentAccountResp> response = apiInstance.getCurrentWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#getCurrent");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](AccountService.md#APIgetCurrentRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**GetCurrentAccountResp**](GetCurrentAccountResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIgetCurrentRequest"></a>
-## APIgetCurrentRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **body** | **Object** |  | |
-
-
-
-## getEconomyAccount
-
-> GetAccountEconomyResp getEconomyAccount(getEconomyAccountRequest)
+> GetAccountEconomyResp getAccountEconomy(getAccountEconomyRequest)
 
 
 
@@ -514,13 +364,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetEconomyAccountRequest request = APIgetEconomyAccountRequest.newBuilder()
+            APIgetAccountEconomyRequest request = APIgetAccountEconomyRequest.newBuilder()
                 .body(body)
                 .build();
-            GetAccountEconomyResp result = apiInstance.getEconomyAccount(request);
+            GetAccountEconomyResp result = apiInstance.getAccountEconomy(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#getEconomyAccount");
+            System.err.println("Exception when calling AccountService#getAccountEconomy");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -534,7 +384,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getEconomyAccountRequest | [**APIgetEconomyAccountRequest**](AccountService.md#APIgetEconomyAccountRequest)|-|-|
+| getAccountEconomyRequest | [**APIgetAccountEconomyRequest**](AccountService.md#APIgetAccountEconomyRequest)|-|-|
 
 ### Return type
 
@@ -555,9 +405,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getEconomyAccountWithHttpInfo
+## getAccountEconomyWithHttpInfo
 
-> ApiResponse<GetAccountEconomyResp> getEconomyAccountWithHttpInfo(getEconomyAccountRequest)
+> ApiResponse<GetAccountEconomyResp> getAccountEconomyWithHttpInfo(getAccountEconomyRequest)
 
 
 
@@ -583,15 +433,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetEconomyAccountRequest request = APIgetEconomyAccountRequest.newBuilder()
+            APIgetAccountEconomyRequest request = APIgetAccountEconomyRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetAccountEconomyResp> response = apiInstance.getEconomyAccountWithHttpInfo(request);
+            ApiResponse<GetAccountEconomyResp> response = apiInstance.getAccountEconomyWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#getEconomyAccount");
+            System.err.println("Exception when calling AccountService#getAccountEconomy");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -605,7 +455,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getEconomyAccountRequest | [**APIgetEconomyAccountRequest**](AccountService.md#APIgetEconomyAccountRequest)|-|-|
+| getAccountEconomyRequest | [**APIgetAccountEconomyRequest**](AccountService.md#APIgetAccountEconomyRequest)|-|-|
 
 ### Return type
 
@@ -627,8 +477,158 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIgetEconomyAccountRequest"></a>
-## APIgetEconomyAccountRequest
+<a id="APIgetAccountEconomyRequest"></a>
+## APIgetAccountEconomyRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **body** | **Object** |  | |
+
+
+
+## getCurrentAccount
+
+> GetCurrentAccountResp getCurrentAccount(getCurrentAccountRequest)
+
+
+
+获取当前账号完整资料
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIgetCurrentAccountRequest request = APIgetCurrentAccountRequest.newBuilder()
+                .body(body)
+                .build();
+            GetCurrentAccountResp result = apiInstance.getCurrentAccount(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#getCurrentAccount");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| getCurrentAccountRequest | [**APIgetCurrentAccountRequest**](AccountService.md#APIgetCurrentAccountRequest)|-|-|
+
+### Return type
+
+[**GetCurrentAccountResp**](GetCurrentAccountResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## getCurrentAccountWithHttpInfo
+
+> ApiResponse<GetCurrentAccountResp> getCurrentAccountWithHttpInfo(getCurrentAccountRequest)
+
+
+
+获取当前账号完整资料
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIgetCurrentAccountRequest request = APIgetCurrentAccountRequest.newBuilder()
+                .body(body)
+                .build();
+            ApiResponse<GetCurrentAccountResp> response = apiInstance.getCurrentAccountWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#getCurrentAccount");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| getCurrentAccountRequest | [**APIgetCurrentAccountRequest**](AccountService.md#APIgetCurrentAccountRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**GetCurrentAccountResp**](GetCurrentAccountResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIgetCurrentAccountRequest"></a>
+## APIgetCurrentAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1237,9 +1237,9 @@ No authorization required
 
 
 
-## prepareProfileImageUpload
+## prepareProfileImageUploadAccount
 
-> PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadRequest)
+> PrepareProfileImageUploadAccountResp prepareProfileImageUploadAccount(prepareProfileImageUploadAccountRequest)
 
 
 
@@ -1264,13 +1264,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = new PrepareProfileImageUploadAccountReq(); // PrepareProfileImageUploadAccountReq | 
         try {
-            APIprepareProfileImageUploadRequest request = APIprepareProfileImageUploadRequest.newBuilder()
+            APIprepareProfileImageUploadAccountRequest request = APIprepareProfileImageUploadAccountRequest.newBuilder()
                 .prepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq)
                 .build();
-            PrepareProfileImageUploadAccountResp result = apiInstance.prepareProfileImageUpload(request);
+            PrepareProfileImageUploadAccountResp result = apiInstance.prepareProfileImageUploadAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#prepareProfileImageUpload");
+            System.err.println("Exception when calling AccountService#prepareProfileImageUploadAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1284,7 +1284,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| prepareProfileImageUploadRequest | [**APIprepareProfileImageUploadRequest**](AccountService.md#APIprepareProfileImageUploadRequest)|-|-|
+| prepareProfileImageUploadAccountRequest | [**APIprepareProfileImageUploadAccountRequest**](AccountService.md#APIprepareProfileImageUploadAccountRequest)|-|-|
 
 ### Return type
 
@@ -1305,9 +1305,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## prepareProfileImageUploadWithHttpInfo
+## prepareProfileImageUploadAccountWithHttpInfo
 
-> ApiResponse<PrepareProfileImageUploadAccountResp> prepareProfileImageUploadWithHttpInfo(prepareProfileImageUploadRequest)
+> ApiResponse<PrepareProfileImageUploadAccountResp> prepareProfileImageUploadAccountWithHttpInfo(prepareProfileImageUploadAccountRequest)
 
 
 
@@ -1333,15 +1333,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = new PrepareProfileImageUploadAccountReq(); // PrepareProfileImageUploadAccountReq | 
         try {
-            APIprepareProfileImageUploadRequest request = APIprepareProfileImageUploadRequest.newBuilder()
+            APIprepareProfileImageUploadAccountRequest request = APIprepareProfileImageUploadAccountRequest.newBuilder()
                 .prepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq)
                 .build();
-            ApiResponse<PrepareProfileImageUploadAccountResp> response = apiInstance.prepareProfileImageUploadWithHttpInfo(request);
+            ApiResponse<PrepareProfileImageUploadAccountResp> response = apiInstance.prepareProfileImageUploadAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#prepareProfileImageUpload");
+            System.err.println("Exception when calling AccountService#prepareProfileImageUploadAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1355,7 +1355,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| prepareProfileImageUploadRequest | [**APIprepareProfileImageUploadRequest**](AccountService.md#APIprepareProfileImageUploadRequest)|-|-|
+| prepareProfileImageUploadAccountRequest | [**APIprepareProfileImageUploadAccountRequest**](AccountService.md#APIprepareProfileImageUploadAccountRequest)|-|-|
 
 ### Return type
 
@@ -1377,8 +1377,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIprepareProfileImageUploadRequest"></a>
-## APIprepareProfileImageUploadRequest
+<a id="APIprepareProfileImageUploadAccountRequest"></a>
+## APIprepareProfileImageUploadAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1387,9 +1387,9 @@ No authorization required
 
 
 
-## searchMention
+## searchMentionAccounts
 
-> SearchMentionAccountsResp searchMention(searchMentionRequest)
+> SearchMentionAccountsResp searchMentionAccounts(searchMentionAccountsRequest)
 
 
 
@@ -1414,13 +1414,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         SearchMentionAccountsReq searchMentionAccountsReq = new SearchMentionAccountsReq(); // SearchMentionAccountsReq | 
         try {
-            APIsearchMentionRequest request = APIsearchMentionRequest.newBuilder()
+            APIsearchMentionAccountsRequest request = APIsearchMentionAccountsRequest.newBuilder()
                 .searchMentionAccountsReq(searchMentionAccountsReq)
                 .build();
-            SearchMentionAccountsResp result = apiInstance.searchMention(request);
+            SearchMentionAccountsResp result = apiInstance.searchMentionAccounts(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#searchMention");
+            System.err.println("Exception when calling AccountService#searchMentionAccounts");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1434,7 +1434,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| searchMentionRequest | [**APIsearchMentionRequest**](AccountService.md#APIsearchMentionRequest)|-|-|
+| searchMentionAccountsRequest | [**APIsearchMentionAccountsRequest**](AccountService.md#APIsearchMentionAccountsRequest)|-|-|
 
 ### Return type
 
@@ -1455,9 +1455,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## searchMentionWithHttpInfo
+## searchMentionAccountsWithHttpInfo
 
-> ApiResponse<SearchMentionAccountsResp> searchMentionWithHttpInfo(searchMentionRequest)
+> ApiResponse<SearchMentionAccountsResp> searchMentionAccountsWithHttpInfo(searchMentionAccountsRequest)
 
 
 
@@ -1483,15 +1483,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         SearchMentionAccountsReq searchMentionAccountsReq = new SearchMentionAccountsReq(); // SearchMentionAccountsReq | 
         try {
-            APIsearchMentionRequest request = APIsearchMentionRequest.newBuilder()
+            APIsearchMentionAccountsRequest request = APIsearchMentionAccountsRequest.newBuilder()
                 .searchMentionAccountsReq(searchMentionAccountsReq)
                 .build();
-            ApiResponse<SearchMentionAccountsResp> response = apiInstance.searchMentionWithHttpInfo(request);
+            ApiResponse<SearchMentionAccountsResp> response = apiInstance.searchMentionAccountsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#searchMention");
+            System.err.println("Exception when calling AccountService#searchMentionAccounts");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1505,7 +1505,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| searchMentionRequest | [**APIsearchMentionRequest**](AccountService.md#APIsearchMentionRequest)|-|-|
+| searchMentionAccountsRequest | [**APIsearchMentionAccountsRequest**](AccountService.md#APIsearchMentionAccountsRequest)|-|-|
 
 ### Return type
 
@@ -1527,8 +1527,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIsearchMentionRequest"></a>
-## APIsearchMentionRequest
+<a id="APIsearchMentionAccountsRequest"></a>
+## APIsearchMentionAccountsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1537,9 +1537,9 @@ No authorization required
 
 
 
-## transferPoints
+## transferAccountPoints
 
-> TransferAccountPointsResp transferPoints(transferPointsRequest)
+> TransferAccountPointsResp transferAccountPoints(transferAccountPointsRequest)
 
 
 
@@ -1564,13 +1564,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         TransferAccountPointsReq transferAccountPointsReq = new TransferAccountPointsReq(); // TransferAccountPointsReq | 
         try {
-            APItransferPointsRequest request = APItransferPointsRequest.newBuilder()
+            APItransferAccountPointsRequest request = APItransferAccountPointsRequest.newBuilder()
                 .transferAccountPointsReq(transferAccountPointsReq)
                 .build();
-            TransferAccountPointsResp result = apiInstance.transferPoints(request);
+            TransferAccountPointsResp result = apiInstance.transferAccountPoints(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#transferPoints");
+            System.err.println("Exception when calling AccountService#transferAccountPoints");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1584,7 +1584,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| transferPointsRequest | [**APItransferPointsRequest**](AccountService.md#APItransferPointsRequest)|-|-|
+| transferAccountPointsRequest | [**APItransferAccountPointsRequest**](AccountService.md#APItransferAccountPointsRequest)|-|-|
 
 ### Return type
 
@@ -1605,9 +1605,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## transferPointsWithHttpInfo
+## transferAccountPointsWithHttpInfo
 
-> ApiResponse<TransferAccountPointsResp> transferPointsWithHttpInfo(transferPointsRequest)
+> ApiResponse<TransferAccountPointsResp> transferAccountPointsWithHttpInfo(transferAccountPointsRequest)
 
 
 
@@ -1633,15 +1633,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         TransferAccountPointsReq transferAccountPointsReq = new TransferAccountPointsReq(); // TransferAccountPointsReq | 
         try {
-            APItransferPointsRequest request = APItransferPointsRequest.newBuilder()
+            APItransferAccountPointsRequest request = APItransferAccountPointsRequest.newBuilder()
                 .transferAccountPointsReq(transferAccountPointsReq)
                 .build();
-            ApiResponse<TransferAccountPointsResp> response = apiInstance.transferPointsWithHttpInfo(request);
+            ApiResponse<TransferAccountPointsResp> response = apiInstance.transferAccountPointsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#transferPoints");
+            System.err.println("Exception when calling AccountService#transferAccountPoints");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1655,7 +1655,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| transferPointsRequest | [**APItransferPointsRequest**](AccountService.md#APItransferPointsRequest)|-|-|
+| transferAccountPointsRequest | [**APItransferAccountPointsRequest**](AccountService.md#APItransferAccountPointsRequest)|-|-|
 
 ### Return type
 
@@ -1677,8 +1677,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APItransferPointsRequest"></a>
-## APItransferPointsRequest
+<a id="APItransferAccountPointsRequest"></a>
+## APItransferAccountPointsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1687,9 +1687,9 @@ No authorization required
 
 
 
-## updateEmail
+## updateEmailAccount
 
-> Object updateEmail(updateEmailRequest)
+> Object updateEmailAccount(updateEmailAccountRequest)
 
 
 
@@ -1714,13 +1714,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdateEmailAccountReq updateEmailAccountReq = new UpdateEmailAccountReq(); // UpdateEmailAccountReq | 
         try {
-            APIupdateEmailRequest request = APIupdateEmailRequest.newBuilder()
+            APIupdateEmailAccountRequest request = APIupdateEmailAccountRequest.newBuilder()
                 .updateEmailAccountReq(updateEmailAccountReq)
                 .build();
-            Object result = apiInstance.updateEmail(request);
+            Object result = apiInstance.updateEmailAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updateEmail");
+            System.err.println("Exception when calling AccountService#updateEmailAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1734,7 +1734,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateEmailRequest | [**APIupdateEmailRequest**](AccountService.md#APIupdateEmailRequest)|-|-|
+| updateEmailAccountRequest | [**APIupdateEmailAccountRequest**](AccountService.md#APIupdateEmailAccountRequest)|-|-|
 
 ### Return type
 
@@ -1755,9 +1755,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updateEmailWithHttpInfo
+## updateEmailAccountWithHttpInfo
 
-> ApiResponse<Object> updateEmailWithHttpInfo(updateEmailRequest)
+> ApiResponse<Object> updateEmailAccountWithHttpInfo(updateEmailAccountRequest)
 
 
 
@@ -1783,15 +1783,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdateEmailAccountReq updateEmailAccountReq = new UpdateEmailAccountReq(); // UpdateEmailAccountReq | 
         try {
-            APIupdateEmailRequest request = APIupdateEmailRequest.newBuilder()
+            APIupdateEmailAccountRequest request = APIupdateEmailAccountRequest.newBuilder()
                 .updateEmailAccountReq(updateEmailAccountReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.updateEmailWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.updateEmailAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updateEmail");
+            System.err.println("Exception when calling AccountService#updateEmailAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1805,7 +1805,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateEmailRequest | [**APIupdateEmailRequest**](AccountService.md#APIupdateEmailRequest)|-|-|
+| updateEmailAccountRequest | [**APIupdateEmailAccountRequest**](AccountService.md#APIupdateEmailAccountRequest)|-|-|
 
 ### Return type
 
@@ -1827,8 +1827,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdateEmailRequest"></a>
-## APIupdateEmailRequest
+<a id="APIupdateEmailAccountRequest"></a>
+## APIupdateEmailAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1837,9 +1837,9 @@ No authorization required
 
 
 
-## updatePassword
+## updatePasswordAccount
 
-> Object updatePassword(updatePasswordRequest)
+> Object updatePasswordAccount(updatePasswordAccountRequest)
 
 
 
@@ -1864,13 +1864,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdatePasswordAccountReq updatePasswordAccountReq = new UpdatePasswordAccountReq(); // UpdatePasswordAccountReq | 
         try {
-            APIupdatePasswordRequest request = APIupdatePasswordRequest.newBuilder()
+            APIupdatePasswordAccountRequest request = APIupdatePasswordAccountRequest.newBuilder()
                 .updatePasswordAccountReq(updatePasswordAccountReq)
                 .build();
-            Object result = apiInstance.updatePassword(request);
+            Object result = apiInstance.updatePasswordAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updatePassword");
+            System.err.println("Exception when calling AccountService#updatePasswordAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1884,7 +1884,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updatePasswordRequest | [**APIupdatePasswordRequest**](AccountService.md#APIupdatePasswordRequest)|-|-|
+| updatePasswordAccountRequest | [**APIupdatePasswordAccountRequest**](AccountService.md#APIupdatePasswordAccountRequest)|-|-|
 
 ### Return type
 
@@ -1905,9 +1905,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updatePasswordWithHttpInfo
+## updatePasswordAccountWithHttpInfo
 
-> ApiResponse<Object> updatePasswordWithHttpInfo(updatePasswordRequest)
+> ApiResponse<Object> updatePasswordAccountWithHttpInfo(updatePasswordAccountRequest)
 
 
 
@@ -1933,15 +1933,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdatePasswordAccountReq updatePasswordAccountReq = new UpdatePasswordAccountReq(); // UpdatePasswordAccountReq | 
         try {
-            APIupdatePasswordRequest request = APIupdatePasswordRequest.newBuilder()
+            APIupdatePasswordAccountRequest request = APIupdatePasswordAccountRequest.newBuilder()
                 .updatePasswordAccountReq(updatePasswordAccountReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.updatePasswordWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.updatePasswordAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updatePassword");
+            System.err.println("Exception when calling AccountService#updatePasswordAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1955,7 +1955,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updatePasswordRequest | [**APIupdatePasswordRequest**](AccountService.md#APIupdatePasswordRequest)|-|-|
+| updatePasswordAccountRequest | [**APIupdatePasswordAccountRequest**](AccountService.md#APIupdatePasswordAccountRequest)|-|-|
 
 ### Return type
 
@@ -1977,8 +1977,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdatePasswordRequest"></a>
-## APIupdatePasswordRequest
+<a id="APIupdatePasswordAccountRequest"></a>
+## APIupdatePasswordAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1987,9 +1987,9 @@ No authorization required
 
 
 
-## updatePhone
+## updatePhoneAccount
 
-> Object updatePhone(updatePhoneRequest)
+> Object updatePhoneAccount(updatePhoneAccountRequest)
 
 
 
@@ -2014,13 +2014,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdatePhoneAccountReq updatePhoneAccountReq = new UpdatePhoneAccountReq(); // UpdatePhoneAccountReq | 
         try {
-            APIupdatePhoneRequest request = APIupdatePhoneRequest.newBuilder()
+            APIupdatePhoneAccountRequest request = APIupdatePhoneAccountRequest.newBuilder()
                 .updatePhoneAccountReq(updatePhoneAccountReq)
                 .build();
-            Object result = apiInstance.updatePhone(request);
+            Object result = apiInstance.updatePhoneAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updatePhone");
+            System.err.println("Exception when calling AccountService#updatePhoneAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2034,7 +2034,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updatePhoneRequest | [**APIupdatePhoneRequest**](AccountService.md#APIupdatePhoneRequest)|-|-|
+| updatePhoneAccountRequest | [**APIupdatePhoneAccountRequest**](AccountService.md#APIupdatePhoneAccountRequest)|-|-|
 
 ### Return type
 
@@ -2055,9 +2055,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updatePhoneWithHttpInfo
+## updatePhoneAccountWithHttpInfo
 
-> ApiResponse<Object> updatePhoneWithHttpInfo(updatePhoneRequest)
+> ApiResponse<Object> updatePhoneAccountWithHttpInfo(updatePhoneAccountRequest)
 
 
 
@@ -2083,15 +2083,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdatePhoneAccountReq updatePhoneAccountReq = new UpdatePhoneAccountReq(); // UpdatePhoneAccountReq | 
         try {
-            APIupdatePhoneRequest request = APIupdatePhoneRequest.newBuilder()
+            APIupdatePhoneAccountRequest request = APIupdatePhoneAccountRequest.newBuilder()
                 .updatePhoneAccountReq(updatePhoneAccountReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.updatePhoneWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.updatePhoneAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updatePhone");
+            System.err.println("Exception when calling AccountService#updatePhoneAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -2105,7 +2105,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updatePhoneRequest | [**APIupdatePhoneRequest**](AccountService.md#APIupdatePhoneRequest)|-|-|
+| updatePhoneAccountRequest | [**APIupdatePhoneAccountRequest**](AccountService.md#APIupdatePhoneAccountRequest)|-|-|
 
 ### Return type
 
@@ -2127,8 +2127,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdatePhoneRequest"></a>
-## APIupdatePhoneRequest
+<a id="APIupdatePhoneAccountRequest"></a>
+## APIupdatePhoneAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -2137,9 +2137,9 @@ No authorization required
 
 
 
-## updateProfile
+## updateProfileAccount
 
-> UpdateProfileAccountResp updateProfile(updateProfileRequest)
+> UpdateProfileAccountResp updateProfileAccount(updateProfileAccountRequest)
 
 
 
@@ -2164,13 +2164,13 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdateProfileAccountReq updateProfileAccountReq = new UpdateProfileAccountReq(); // UpdateProfileAccountReq | 
         try {
-            APIupdateProfileRequest request = APIupdateProfileRequest.newBuilder()
+            APIupdateProfileAccountRequest request = APIupdateProfileAccountRequest.newBuilder()
                 .updateProfileAccountReq(updateProfileAccountReq)
                 .build();
-            UpdateProfileAccountResp result = apiInstance.updateProfile(request);
+            UpdateProfileAccountResp result = apiInstance.updateProfileAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updateProfile");
+            System.err.println("Exception when calling AccountService#updateProfileAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2184,7 +2184,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateProfileRequest | [**APIupdateProfileRequest**](AccountService.md#APIupdateProfileRequest)|-|-|
+| updateProfileAccountRequest | [**APIupdateProfileAccountRequest**](AccountService.md#APIupdateProfileAccountRequest)|-|-|
 
 ### Return type
 
@@ -2205,9 +2205,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updateProfileWithHttpInfo
+## updateProfileAccountWithHttpInfo
 
-> ApiResponse<UpdateProfileAccountResp> updateProfileWithHttpInfo(updateProfileRequest)
+> ApiResponse<UpdateProfileAccountResp> updateProfileAccountWithHttpInfo(updateProfileAccountRequest)
 
 
 
@@ -2233,15 +2233,15 @@ public class Example {
         AccountService apiInstance = new AccountService(defaultClient);
         UpdateProfileAccountReq updateProfileAccountReq = new UpdateProfileAccountReq(); // UpdateProfileAccountReq | 
         try {
-            APIupdateProfileRequest request = APIupdateProfileRequest.newBuilder()
+            APIupdateProfileAccountRequest request = APIupdateProfileAccountRequest.newBuilder()
                 .updateProfileAccountReq(updateProfileAccountReq)
                 .build();
-            ApiResponse<UpdateProfileAccountResp> response = apiInstance.updateProfileWithHttpInfo(request);
+            ApiResponse<UpdateProfileAccountResp> response = apiInstance.updateProfileAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#updateProfile");
+            System.err.println("Exception when calling AccountService#updateProfileAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -2255,7 +2255,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateProfileRequest | [**APIupdateProfileRequest**](AccountService.md#APIupdateProfileRequest)|-|-|
+| updateProfileAccountRequest | [**APIupdateProfileAccountRequest**](AccountService.md#APIupdateProfileAccountRequest)|-|-|
 
 ### Return type
 
@@ -2277,8 +2277,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdateProfileRequest"></a>
-## APIupdateProfileRequest
+<a id="APIupdateProfileAccountRequest"></a>
+## APIupdateProfileAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

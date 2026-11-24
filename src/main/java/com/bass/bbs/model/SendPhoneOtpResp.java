@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SendPhoneOtpResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   SendPhoneOtpResp.JSON_PROPERTY_CODE
@@ -50,7 +50,7 @@ public class SendPhoneOtpResp {
   }
 
   /**
-   * Get code
+   * 非生产环境返回验证码，生产环境为空
    * @return code
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateEmojiShareReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateEmojiShareReq.JSON_PROPERTY_GROUP_ID
@@ -50,7 +50,7 @@ public class CreateEmojiShareReq {
   }
 
   /**
-   * Get groupId
+   * 待分享分组 ID。
    * @return groupId
    */
   @javax.annotation.Nullable

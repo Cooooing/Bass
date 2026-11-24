@@ -2,23 +2,24 @@
 
 # ReqArticleQuery
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**tagId** | **String** |  |  [optional] |
-|**domainId** | **String** |  |  [optional] |
-|**type** | [**TypeEnum**](#TypeEnum) |  |  [optional] |
-|**order** | [**OrderEnum**](#OrderEnum) |  |  [optional] |
-|**authorId** | **String** |  |  [optional] |
-|**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) |  |  [optional] |
-|**publishStatuses** | [**List&lt;PublishStatusesEnum&gt;**](#List&lt;PublishStatusesEnum&gt;) |  |  [optional] |
-|**visibility** | [**VisibilityEnum**](#VisibilityEnum) |  |  [optional] |
-|**visibilities** | [**List&lt;VisibilitiesEnum&gt;**](#List&lt;VisibilitiesEnum&gt;) |  |  [optional] |
-|**restriction** | [**RestrictionEnum**](#RestrictionEnum) |  |  [optional] |
-|**restrictions** | [**List&lt;RestrictionsEnum&gt;**](#List&lt;RestrictionsEnum&gt;) |  |  [optional] |
-|**scheduled** | **Boolean** |  |  [optional] |
+|**tagId** | **String** | 可选，标签 ID |  [optional] |
+|**domainId** | **String** | 可选，领域 ID |  [optional] |
+|**type** | [**TypeEnum**](#TypeEnum) | 可选，文章类型 |  [optional] |
+|**order** | [**OrderEnum**](#OrderEnum) | 可选，排序方式 |  [optional] |
+|**authorId** | **String** | 可选，作者账号 ID |  [optional] |
+|**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) | 可选，发布状态 |  [optional] |
+|**publishStatuses** | [**List&lt;PublishStatusesEnum&gt;**](#List&lt;PublishStatusesEnum&gt;) | 可选，发布状态列表 |  [optional] |
+|**visibility** | [**VisibilityEnum**](#VisibilityEnum) | 可选，可见范围 |  [optional] |
+|**visibilities** | [**List&lt;VisibilitiesEnum&gt;**](#List&lt;VisibilitiesEnum&gt;) | 可选，可见范围列表 |  [optional] |
+|**restriction** | [**RestrictionEnum**](#RestrictionEnum) | 可选，治理限制 |  [optional] |
+|**restrictions** | [**List&lt;RestrictionsEnum&gt;**](#List&lt;RestrictionsEnum&gt;) | 可选，治理限制列表 |  [optional] |
+|**scheduled** | **Boolean** | 可选，仅本人草稿：是否已设置发布时间 |  [optional] |
 
 
 

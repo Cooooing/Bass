@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticlePollOption
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticlePollOption.JSON_PROPERTY_ID,
@@ -60,7 +60,7 @@ public class ArticlePollOption {
   }
 
   /**
-   * Get id
+   * 选项 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class ArticlePollOption {
   }
 
   /**
-   * Get content
+   * 选项内容
    * @return content
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class ArticlePollOption {
   }
 
   /**
-   * Get voteCount
+   * 可见时的票数
    * @return voteCount
    */
   @javax.annotation.Nullable

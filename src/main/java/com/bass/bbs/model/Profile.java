@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * Profile
+ * 协议消息。
  */
 @JsonPropertyOrder({
   Profile.JSON_PROPERTY_ACCOUNT,
@@ -90,7 +90,7 @@ public class Profile {
   }
 
   /**
-   * Get account
+   * 协议字段。
    * @return account
    */
   @javax.annotation.Nullable
@@ -114,7 +114,7 @@ public class Profile {
   }
 
   /**
-   * Get backgroundUrl
+   * 协议字段。
    * @return backgroundUrl
    */
   @javax.annotation.Nullable
@@ -138,7 +138,7 @@ public class Profile {
   }
 
   /**
-   * Get location
+   * 协议字段。
    * @return location
    */
   @javax.annotation.Nullable
@@ -162,7 +162,7 @@ public class Profile {
   }
 
   /**
-   * Get lastSuccessLoginAt
+   * 协议字段。
    * @return lastSuccessLoginAt
    */
   @javax.annotation.Nullable
@@ -186,7 +186,7 @@ public class Profile {
   }
 
   /**
-   * Get visibility
+   * 协议字段。
    * @return visibility
    */
   @javax.annotation.Nullable
@@ -210,7 +210,7 @@ public class Profile {
   }
 
   /**
-   * Get viewerRelation
+   * 协议字段。
    * @return viewerRelation
    */
   @javax.annotation.Nullable
@@ -234,7 +234,7 @@ public class Profile {
   }
 
   /**
-   * Get online
+   * 仅本人或允许公开在线状态的账号返回。
    * @return online
    */
   @javax.annotation.Nullable
@@ -258,7 +258,7 @@ public class Profile {
   }
 
   /**
-   * Get points
+   * 仅本人或允许公开积分的账号返回。
    * @return points
    */
   @javax.annotation.Nullable

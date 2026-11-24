@@ -33,14 +33,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PageMoonbreezesResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
-  PageMoonbreezesResp.JSON_PROPERTY_ROWS,
-  PageMoonbreezesResp.JSON_PROPERTY_NEXT_CURSOR
+  PageMemberMoonbreezesResp.JSON_PROPERTY_ROWS,
+  PageMemberMoonbreezesResp.JSON_PROPERTY_NEXT_CURSOR
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class PageMoonbreezesResp {
+public class PageMemberMoonbreezesResp {
   public static final String JSON_PROPERTY_ROWS = "rows";
   @javax.annotation.Nullable
   private List<Moonbreeze> rows = new ArrayList<>();
@@ -49,15 +49,15 @@ public class PageMoonbreezesResp {
   @javax.annotation.Nullable
   private String nextCursor;
 
-  public PageMoonbreezesResp() { 
+  public PageMemberMoonbreezesResp() { 
   }
 
-  public PageMoonbreezesResp rows(@javax.annotation.Nullable List<Moonbreeze> rows) {
+  public PageMemberMoonbreezesResp rows(@javax.annotation.Nullable List<Moonbreeze> rows) {
     this.rows = rows;
     return this;
   }
 
-  public PageMoonbreezesResp addRowsItem(Moonbreeze rowsItem) {
+  public PageMemberMoonbreezesResp addRowsItem(Moonbreeze rowsItem) {
     if (this.rows == null) {
       this.rows = new ArrayList<>();
     }
@@ -66,7 +66,7 @@ public class PageMoonbreezesResp {
   }
 
   /**
-   * Get rows
+   * 协议字段。
    * @return rows
    */
   @javax.annotation.Nullable
@@ -84,13 +84,13 @@ public class PageMoonbreezesResp {
   }
 
 
-  public PageMoonbreezesResp nextCursor(@javax.annotation.Nullable String nextCursor) {
+  public PageMemberMoonbreezesResp nextCursor(@javax.annotation.Nullable String nextCursor) {
     this.nextCursor = nextCursor;
     return this;
   }
 
   /**
-   * Get nextCursor
+   * 协议字段。
    * @return nextCursor
    */
   @javax.annotation.Nullable
@@ -109,7 +109,7 @@ public class PageMoonbreezesResp {
 
 
   /**
-   * Return true if this PageMoonbreezes_Resp object is equal to o.
+   * Return true if this PageMemberMoonbreezes_Resp object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -119,9 +119,9 @@ public class PageMoonbreezesResp {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PageMoonbreezesResp pageMoonbreezesResp = (PageMoonbreezesResp) o;
-    return Objects.equals(this.rows, pageMoonbreezesResp.rows) &&
-        Objects.equals(this.nextCursor, pageMoonbreezesResp.nextCursor);
+    PageMemberMoonbreezesResp pageMemberMoonbreezesResp = (PageMemberMoonbreezesResp) o;
+    return Objects.equals(this.rows, pageMemberMoonbreezesResp.rows) &&
+        Objects.equals(this.nextCursor, pageMemberMoonbreezesResp.nextCursor);
   }
 
   @Override
@@ -132,7 +132,7 @@ public class PageMoonbreezesResp {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PageMoonbreezesResp {\n");
+    sb.append("class PageMemberMoonbreezesResp {\n");
     sb.append("    rows: ").append(toIndentedString(rows)).append("\n");
     sb.append("    nextCursor: ").append(toIndentedString(nextCursor)).append("\n");
     sb.append("}");

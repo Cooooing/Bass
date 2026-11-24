@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespCommentThread
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespCommentThread.JSON_PROPERTY_ROOT,
@@ -68,7 +68,7 @@ public class RespCommentThread {
   }
 
   /**
-   * Get root
+   * 顶层评论
    * @return root
    */
   @javax.annotation.Nullable
@@ -100,7 +100,7 @@ public class RespCommentThread {
   }
 
   /**
-   * Get previewReplies
+   * 回复预览列表
    * @return previewReplies
    */
   @javax.annotation.Nullable
@@ -124,7 +124,7 @@ public class RespCommentThread {
   }
 
   /**
-   * Get replyCount
+   * 回复数量
    * @return replyCount
    */
   @javax.annotation.Nullable
@@ -148,7 +148,7 @@ public class RespCommentThread {
   }
 
   /**
-   * Get hasMoreReplies
+   * 是否还有更多回复
    * @return hasMoreReplies
    */
   @javax.annotation.Nullable

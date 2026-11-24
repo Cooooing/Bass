@@ -4,36 +4,36 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**addItem**](EmojiService.md#addItem) | **POST** /v1/im/emoji/items |  |
-| [**addItemWithHttpInfo**](EmojiService.md#addItemWithHttpInfo) | **POST** /v1/im/emoji/items |  |
-| [**callList**](EmojiService.md#callList) | **POST** /v1/im/emoji/groups/list |  |
-| [**callListWithHttpInfo**](EmojiService.md#callListWithHttpInfo) | **POST** /v1/im/emoji/groups/list |  |
-| [**createGroup**](EmojiService.md#createGroup) | **POST** /v1/im/emoji/groups |  |
-| [**createGroupWithHttpInfo**](EmojiService.md#createGroupWithHttpInfo) | **POST** /v1/im/emoji/groups |  |
-| [**createShare**](EmojiService.md#createShare) | **POST** /v1/im/emoji/shares |  |
-| [**createShareWithHttpInfo**](EmojiService.md#createShareWithHttpInfo) | **POST** /v1/im/emoji/shares |  |
-| [**deleteGroup**](EmojiService.md#deleteGroup) | **POST** /v1/im/emoji/groups/delete |  |
-| [**deleteGroupWithHttpInfo**](EmojiService.md#deleteGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/delete |  |
-| [**deleteItem**](EmojiService.md#deleteItem) | **POST** /v1/im/emoji/items/delete |  |
-| [**deleteItemWithHttpInfo**](EmojiService.md#deleteItemWithHttpInfo) | **POST** /v1/im/emoji/items/delete |  |
-| [**importShare**](EmojiService.md#importShare) | **POST** /v1/im/emoji/shares/import |  |
-| [**importShareWithHttpInfo**](EmojiService.md#importShareWithHttpInfo) | **POST** /v1/im/emoji/shares/import |  |
-| [**moveItem**](EmojiService.md#moveItem) | **POST** /v1/im/emoji/items/move |  |
-| [**moveItemWithHttpInfo**](EmojiService.md#moveItemWithHttpInfo) | **POST** /v1/im/emoji/items/move |  |
-| [**renameGroup**](EmojiService.md#renameGroup) | **POST** /v1/im/emoji/groups/rename |  |
-| [**renameGroupWithHttpInfo**](EmojiService.md#renameGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/rename |  |
-| [**renameItem**](EmojiService.md#renameItem) | **POST** /v1/im/emoji/items/rename |  |
-| [**renameItemWithHttpInfo**](EmojiService.md#renameItemWithHttpInfo) | **POST** /v1/im/emoji/items/rename |  |
-| [**reorderGroups**](EmojiService.md#reorderGroups) | **POST** /v1/im/emoji/groups/reorder |  |
-| [**reorderGroupsWithHttpInfo**](EmojiService.md#reorderGroupsWithHttpInfo) | **POST** /v1/im/emoji/groups/reorder |  |
-| [**reorderItems**](EmojiService.md#reorderItems) | **POST** /v1/im/emoji/items/reorder |  |
-| [**reorderItemsWithHttpInfo**](EmojiService.md#reorderItemsWithHttpInfo) | **POST** /v1/im/emoji/items/reorder |  |
+| [**addEmojiItem**](EmojiService.md#addEmojiItem) | **POST** /v1/im/emoji/items |  |
+| [**addEmojiItemWithHttpInfo**](EmojiService.md#addEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items |  |
+| [**createEmojiGroup**](EmojiService.md#createEmojiGroup) | **POST** /v1/im/emoji/groups |  |
+| [**createEmojiGroupWithHttpInfo**](EmojiService.md#createEmojiGroupWithHttpInfo) | **POST** /v1/im/emoji/groups |  |
+| [**createEmojiShare**](EmojiService.md#createEmojiShare) | **POST** /v1/im/emoji/shares |  |
+| [**createEmojiShareWithHttpInfo**](EmojiService.md#createEmojiShareWithHttpInfo) | **POST** /v1/im/emoji/shares |  |
+| [**deleteEmojiGroup**](EmojiService.md#deleteEmojiGroup) | **POST** /v1/im/emoji/groups/delete |  |
+| [**deleteEmojiGroupWithHttpInfo**](EmojiService.md#deleteEmojiGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/delete |  |
+| [**deleteEmojiItem**](EmojiService.md#deleteEmojiItem) | **POST** /v1/im/emoji/items/delete |  |
+| [**deleteEmojiItemWithHttpInfo**](EmojiService.md#deleteEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items/delete |  |
+| [**importEmojiShare**](EmojiService.md#importEmojiShare) | **POST** /v1/im/emoji/shares/import |  |
+| [**importEmojiShareWithHttpInfo**](EmojiService.md#importEmojiShareWithHttpInfo) | **POST** /v1/im/emoji/shares/import |  |
+| [**listEmojiGroups**](EmojiService.md#listEmojiGroups) | **POST** /v1/im/emoji/groups/list |  |
+| [**listEmojiGroupsWithHttpInfo**](EmojiService.md#listEmojiGroupsWithHttpInfo) | **POST** /v1/im/emoji/groups/list |  |
+| [**moveEmojiItem**](EmojiService.md#moveEmojiItem) | **POST** /v1/im/emoji/items/move |  |
+| [**moveEmojiItemWithHttpInfo**](EmojiService.md#moveEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items/move |  |
+| [**renameEmojiGroup**](EmojiService.md#renameEmojiGroup) | **POST** /v1/im/emoji/groups/rename |  |
+| [**renameEmojiGroupWithHttpInfo**](EmojiService.md#renameEmojiGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/rename |  |
+| [**renameEmojiItem**](EmojiService.md#renameEmojiItem) | **POST** /v1/im/emoji/items/rename |  |
+| [**renameEmojiItemWithHttpInfo**](EmojiService.md#renameEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items/rename |  |
+| [**reorderEmojiGroups**](EmojiService.md#reorderEmojiGroups) | **POST** /v1/im/emoji/groups/reorder |  |
+| [**reorderEmojiGroupsWithHttpInfo**](EmojiService.md#reorderEmojiGroupsWithHttpInfo) | **POST** /v1/im/emoji/groups/reorder |  |
+| [**reorderEmojiItems**](EmojiService.md#reorderEmojiItems) | **POST** /v1/im/emoji/items/reorder |  |
+| [**reorderEmojiItemsWithHttpInfo**](EmojiService.md#reorderEmojiItemsWithHttpInfo) | **POST** /v1/im/emoji/items/reorder |  |
 
 
 
-## addItem
+## addEmojiItem
 
-> AddEmojiItemResp addItem(addItemRequest)
+> AddEmojiItemResp addEmojiItem(addEmojiItemRequest)
 
 
 
@@ -58,13 +58,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         AddEmojiItemReq addEmojiItemReq = new AddEmojiItemReq(); // AddEmojiItemReq | 
         try {
-            APIaddItemRequest request = APIaddItemRequest.newBuilder()
+            APIaddEmojiItemRequest request = APIaddEmojiItemRequest.newBuilder()
                 .addEmojiItemReq(addEmojiItemReq)
                 .build();
-            AddEmojiItemResp result = apiInstance.addItem(request);
+            AddEmojiItemResp result = apiInstance.addEmojiItem(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#addItem");
+            System.err.println("Exception when calling EmojiService#addEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -78,7 +78,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| addItemRequest | [**APIaddItemRequest**](EmojiService.md#APIaddItemRequest)|-|-|
+| addEmojiItemRequest | [**APIaddEmojiItemRequest**](EmojiService.md#APIaddEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -99,9 +99,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## addItemWithHttpInfo
+## addEmojiItemWithHttpInfo
 
-> ApiResponse<AddEmojiItemResp> addItemWithHttpInfo(addItemRequest)
+> ApiResponse<AddEmojiItemResp> addEmojiItemWithHttpInfo(addEmojiItemRequest)
 
 
 
@@ -127,15 +127,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         AddEmojiItemReq addEmojiItemReq = new AddEmojiItemReq(); // AddEmojiItemReq | 
         try {
-            APIaddItemRequest request = APIaddItemRequest.newBuilder()
+            APIaddEmojiItemRequest request = APIaddEmojiItemRequest.newBuilder()
                 .addEmojiItemReq(addEmojiItemReq)
                 .build();
-            ApiResponse<AddEmojiItemResp> response = apiInstance.addItemWithHttpInfo(request);
+            ApiResponse<AddEmojiItemResp> response = apiInstance.addEmojiItemWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#addItem");
+            System.err.println("Exception when calling EmojiService#addEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -149,7 +149,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| addItemRequest | [**APIaddItemRequest**](EmojiService.md#APIaddItemRequest)|-|-|
+| addEmojiItemRequest | [**APIaddEmojiItemRequest**](EmojiService.md#APIaddEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -171,8 +171,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIaddItemRequest"></a>
-## APIaddItemRequest
+<a id="APIaddEmojiItemRequest"></a>
+## APIaddEmojiItemRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -181,159 +181,9 @@ No authorization required
 
 
 
-## callList
+## createEmojiGroup
 
-> ListEmojiGroupsResp callList(callListRequest)
-
-
-
-查询当前账号的表情分组。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.EmojiService;
-import com.bass.bbs.api.EmojiService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        EmojiService apiInstance = new EmojiService(defaultClient);
-        ListEmojiGroupsReq listEmojiGroupsReq = new ListEmojiGroupsReq(); // ListEmojiGroupsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listEmojiGroupsReq(listEmojiGroupsReq)
-                .build();
-            ListEmojiGroupsResp result = apiInstance.callList(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](EmojiService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-[**ListEmojiGroupsResp**](ListEmojiGroupsResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## callListWithHttpInfo
-
-> ApiResponse<ListEmojiGroupsResp> callListWithHttpInfo(callListRequest)
-
-
-
-查询当前账号的表情分组。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.EmojiService;
-import com.bass.bbs.api.EmojiService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        EmojiService apiInstance = new EmojiService(defaultClient);
-        ListEmojiGroupsReq listEmojiGroupsReq = new ListEmojiGroupsReq(); // ListEmojiGroupsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listEmojiGroupsReq(listEmojiGroupsReq)
-                .build();
-            ApiResponse<ListEmojiGroupsResp> response = apiInstance.callListWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](EmojiService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**ListEmojiGroupsResp**](ListEmojiGroupsResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIcallListRequest"></a>
-## APIcallListRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **listEmojiGroupsReq** | [**ListEmojiGroupsReq**](ListEmojiGroupsReq.md) |  | |
-
-
-
-## createGroup
-
-> CreateEmojiGroupResp createGroup(createGroupRequest)
+> CreateEmojiGroupResp createEmojiGroup(createEmojiGroupRequest)
 
 
 
@@ -358,13 +208,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         CreateEmojiGroupReq createEmojiGroupReq = new CreateEmojiGroupReq(); // CreateEmojiGroupReq | 
         try {
-            APIcreateGroupRequest request = APIcreateGroupRequest.newBuilder()
+            APIcreateEmojiGroupRequest request = APIcreateEmojiGroupRequest.newBuilder()
                 .createEmojiGroupReq(createEmojiGroupReq)
                 .build();
-            CreateEmojiGroupResp result = apiInstance.createGroup(request);
+            CreateEmojiGroupResp result = apiInstance.createEmojiGroup(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#createGroup");
+            System.err.println("Exception when calling EmojiService#createEmojiGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -378,7 +228,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createGroupRequest | [**APIcreateGroupRequest**](EmojiService.md#APIcreateGroupRequest)|-|-|
+| createEmojiGroupRequest | [**APIcreateEmojiGroupRequest**](EmojiService.md#APIcreateEmojiGroupRequest)|-|-|
 
 ### Return type
 
@@ -399,9 +249,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createGroupWithHttpInfo
+## createEmojiGroupWithHttpInfo
 
-> ApiResponse<CreateEmojiGroupResp> createGroupWithHttpInfo(createGroupRequest)
+> ApiResponse<CreateEmojiGroupResp> createEmojiGroupWithHttpInfo(createEmojiGroupRequest)
 
 
 
@@ -427,15 +277,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         CreateEmojiGroupReq createEmojiGroupReq = new CreateEmojiGroupReq(); // CreateEmojiGroupReq | 
         try {
-            APIcreateGroupRequest request = APIcreateGroupRequest.newBuilder()
+            APIcreateEmojiGroupRequest request = APIcreateEmojiGroupRequest.newBuilder()
                 .createEmojiGroupReq(createEmojiGroupReq)
                 .build();
-            ApiResponse<CreateEmojiGroupResp> response = apiInstance.createGroupWithHttpInfo(request);
+            ApiResponse<CreateEmojiGroupResp> response = apiInstance.createEmojiGroupWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#createGroup");
+            System.err.println("Exception when calling EmojiService#createEmojiGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -449,7 +299,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createGroupRequest | [**APIcreateGroupRequest**](EmojiService.md#APIcreateGroupRequest)|-|-|
+| createEmojiGroupRequest | [**APIcreateEmojiGroupRequest**](EmojiService.md#APIcreateEmojiGroupRequest)|-|-|
 
 ### Return type
 
@@ -471,8 +321,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateGroupRequest"></a>
-## APIcreateGroupRequest
+<a id="APIcreateEmojiGroupRequest"></a>
+## APIcreateEmojiGroupRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -481,9 +331,9 @@ No authorization required
 
 
 
-## createShare
+## createEmojiShare
 
-> CreateEmojiShareResp createShare(createShareRequest)
+> CreateEmojiShareResp createEmojiShare(createEmojiShareRequest)
 
 
 
@@ -508,13 +358,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         CreateEmojiShareReq createEmojiShareReq = new CreateEmojiShareReq(); // CreateEmojiShareReq | 
         try {
-            APIcreateShareRequest request = APIcreateShareRequest.newBuilder()
+            APIcreateEmojiShareRequest request = APIcreateEmojiShareRequest.newBuilder()
                 .createEmojiShareReq(createEmojiShareReq)
                 .build();
-            CreateEmojiShareResp result = apiInstance.createShare(request);
+            CreateEmojiShareResp result = apiInstance.createEmojiShare(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#createShare");
+            System.err.println("Exception when calling EmojiService#createEmojiShare");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -528,7 +378,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createShareRequest | [**APIcreateShareRequest**](EmojiService.md#APIcreateShareRequest)|-|-|
+| createEmojiShareRequest | [**APIcreateEmojiShareRequest**](EmojiService.md#APIcreateEmojiShareRequest)|-|-|
 
 ### Return type
 
@@ -549,9 +399,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createShareWithHttpInfo
+## createEmojiShareWithHttpInfo
 
-> ApiResponse<CreateEmojiShareResp> createShareWithHttpInfo(createShareRequest)
+> ApiResponse<CreateEmojiShareResp> createEmojiShareWithHttpInfo(createEmojiShareRequest)
 
 
 
@@ -577,15 +427,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         CreateEmojiShareReq createEmojiShareReq = new CreateEmojiShareReq(); // CreateEmojiShareReq | 
         try {
-            APIcreateShareRequest request = APIcreateShareRequest.newBuilder()
+            APIcreateEmojiShareRequest request = APIcreateEmojiShareRequest.newBuilder()
                 .createEmojiShareReq(createEmojiShareReq)
                 .build();
-            ApiResponse<CreateEmojiShareResp> response = apiInstance.createShareWithHttpInfo(request);
+            ApiResponse<CreateEmojiShareResp> response = apiInstance.createEmojiShareWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#createShare");
+            System.err.println("Exception when calling EmojiService#createEmojiShare");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -599,7 +449,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createShareRequest | [**APIcreateShareRequest**](EmojiService.md#APIcreateShareRequest)|-|-|
+| createEmojiShareRequest | [**APIcreateEmojiShareRequest**](EmojiService.md#APIcreateEmojiShareRequest)|-|-|
 
 ### Return type
 
@@ -621,8 +471,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateShareRequest"></a>
-## APIcreateShareRequest
+<a id="APIcreateEmojiShareRequest"></a>
+## APIcreateEmojiShareRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -631,9 +481,9 @@ No authorization required
 
 
 
-## deleteGroup
+## deleteEmojiGroup
 
-> Object deleteGroup(deleteGroupRequest)
+> Object deleteEmojiGroup(deleteEmojiGroupRequest)
 
 
 
@@ -658,13 +508,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         DeleteEmojiGroupReq deleteEmojiGroupReq = new DeleteEmojiGroupReq(); // DeleteEmojiGroupReq | 
         try {
-            APIdeleteGroupRequest request = APIdeleteGroupRequest.newBuilder()
+            APIdeleteEmojiGroupRequest request = APIdeleteEmojiGroupRequest.newBuilder()
                 .deleteEmojiGroupReq(deleteEmojiGroupReq)
                 .build();
-            Object result = apiInstance.deleteGroup(request);
+            Object result = apiInstance.deleteEmojiGroup(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#deleteGroup");
+            System.err.println("Exception when calling EmojiService#deleteEmojiGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -678,7 +528,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteGroupRequest | [**APIdeleteGroupRequest**](EmojiService.md#APIdeleteGroupRequest)|-|-|
+| deleteEmojiGroupRequest | [**APIdeleteEmojiGroupRequest**](EmojiService.md#APIdeleteEmojiGroupRequest)|-|-|
 
 ### Return type
 
@@ -699,9 +549,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## deleteGroupWithHttpInfo
+## deleteEmojiGroupWithHttpInfo
 
-> ApiResponse<Object> deleteGroupWithHttpInfo(deleteGroupRequest)
+> ApiResponse<Object> deleteEmojiGroupWithHttpInfo(deleteEmojiGroupRequest)
 
 
 
@@ -727,15 +577,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         DeleteEmojiGroupReq deleteEmojiGroupReq = new DeleteEmojiGroupReq(); // DeleteEmojiGroupReq | 
         try {
-            APIdeleteGroupRequest request = APIdeleteGroupRequest.newBuilder()
+            APIdeleteEmojiGroupRequest request = APIdeleteEmojiGroupRequest.newBuilder()
                 .deleteEmojiGroupReq(deleteEmojiGroupReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.deleteGroupWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.deleteEmojiGroupWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#deleteGroup");
+            System.err.println("Exception when calling EmojiService#deleteEmojiGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -749,7 +599,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteGroupRequest | [**APIdeleteGroupRequest**](EmojiService.md#APIdeleteGroupRequest)|-|-|
+| deleteEmojiGroupRequest | [**APIdeleteEmojiGroupRequest**](EmojiService.md#APIdeleteEmojiGroupRequest)|-|-|
 
 ### Return type
 
@@ -771,8 +621,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIdeleteGroupRequest"></a>
-## APIdeleteGroupRequest
+<a id="APIdeleteEmojiGroupRequest"></a>
+## APIdeleteEmojiGroupRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -781,9 +631,9 @@ No authorization required
 
 
 
-## deleteItem
+## deleteEmojiItem
 
-> Object deleteItem(deleteItemRequest)
+> Object deleteEmojiItem(deleteEmojiItemRequest)
 
 
 
@@ -808,13 +658,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         DeleteEmojiItemReq deleteEmojiItemReq = new DeleteEmojiItemReq(); // DeleteEmojiItemReq | 
         try {
-            APIdeleteItemRequest request = APIdeleteItemRequest.newBuilder()
+            APIdeleteEmojiItemRequest request = APIdeleteEmojiItemRequest.newBuilder()
                 .deleteEmojiItemReq(deleteEmojiItemReq)
                 .build();
-            Object result = apiInstance.deleteItem(request);
+            Object result = apiInstance.deleteEmojiItem(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#deleteItem");
+            System.err.println("Exception when calling EmojiService#deleteEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -828,7 +678,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteItemRequest | [**APIdeleteItemRequest**](EmojiService.md#APIdeleteItemRequest)|-|-|
+| deleteEmojiItemRequest | [**APIdeleteEmojiItemRequest**](EmojiService.md#APIdeleteEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -849,9 +699,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## deleteItemWithHttpInfo
+## deleteEmojiItemWithHttpInfo
 
-> ApiResponse<Object> deleteItemWithHttpInfo(deleteItemRequest)
+> ApiResponse<Object> deleteEmojiItemWithHttpInfo(deleteEmojiItemRequest)
 
 
 
@@ -877,15 +727,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         DeleteEmojiItemReq deleteEmojiItemReq = new DeleteEmojiItemReq(); // DeleteEmojiItemReq | 
         try {
-            APIdeleteItemRequest request = APIdeleteItemRequest.newBuilder()
+            APIdeleteEmojiItemRequest request = APIdeleteEmojiItemRequest.newBuilder()
                 .deleteEmojiItemReq(deleteEmojiItemReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.deleteItemWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.deleteEmojiItemWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#deleteItem");
+            System.err.println("Exception when calling EmojiService#deleteEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -899,7 +749,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteItemRequest | [**APIdeleteItemRequest**](EmojiService.md#APIdeleteItemRequest)|-|-|
+| deleteEmojiItemRequest | [**APIdeleteEmojiItemRequest**](EmojiService.md#APIdeleteEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -921,8 +771,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIdeleteItemRequest"></a>
-## APIdeleteItemRequest
+<a id="APIdeleteEmojiItemRequest"></a>
+## APIdeleteEmojiItemRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -931,9 +781,9 @@ No authorization required
 
 
 
-## importShare
+## importEmojiShare
 
-> ImportEmojiShareResp importShare(importShareRequest)
+> ImportEmojiShareResp importEmojiShare(importEmojiShareRequest)
 
 
 
@@ -958,13 +808,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         ImportEmojiShareReq importEmojiShareReq = new ImportEmojiShareReq(); // ImportEmojiShareReq | 
         try {
-            APIimportShareRequest request = APIimportShareRequest.newBuilder()
+            APIimportEmojiShareRequest request = APIimportEmojiShareRequest.newBuilder()
                 .importEmojiShareReq(importEmojiShareReq)
                 .build();
-            ImportEmojiShareResp result = apiInstance.importShare(request);
+            ImportEmojiShareResp result = apiInstance.importEmojiShare(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#importShare");
+            System.err.println("Exception when calling EmojiService#importEmojiShare");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -978,7 +828,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| importShareRequest | [**APIimportShareRequest**](EmojiService.md#APIimportShareRequest)|-|-|
+| importEmojiShareRequest | [**APIimportEmojiShareRequest**](EmojiService.md#APIimportEmojiShareRequest)|-|-|
 
 ### Return type
 
@@ -999,9 +849,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## importShareWithHttpInfo
+## importEmojiShareWithHttpInfo
 
-> ApiResponse<ImportEmojiShareResp> importShareWithHttpInfo(importShareRequest)
+> ApiResponse<ImportEmojiShareResp> importEmojiShareWithHttpInfo(importEmojiShareRequest)
 
 
 
@@ -1027,15 +877,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         ImportEmojiShareReq importEmojiShareReq = new ImportEmojiShareReq(); // ImportEmojiShareReq | 
         try {
-            APIimportShareRequest request = APIimportShareRequest.newBuilder()
+            APIimportEmojiShareRequest request = APIimportEmojiShareRequest.newBuilder()
                 .importEmojiShareReq(importEmojiShareReq)
                 .build();
-            ApiResponse<ImportEmojiShareResp> response = apiInstance.importShareWithHttpInfo(request);
+            ApiResponse<ImportEmojiShareResp> response = apiInstance.importEmojiShareWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#importShare");
+            System.err.println("Exception when calling EmojiService#importEmojiShare");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1049,7 +899,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| importShareRequest | [**APIimportShareRequest**](EmojiService.md#APIimportShareRequest)|-|-|
+| importEmojiShareRequest | [**APIimportEmojiShareRequest**](EmojiService.md#APIimportEmojiShareRequest)|-|-|
 
 ### Return type
 
@@ -1071,8 +921,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIimportShareRequest"></a>
-## APIimportShareRequest
+<a id="APIimportEmojiShareRequest"></a>
+## APIimportEmojiShareRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1081,9 +931,159 @@ No authorization required
 
 
 
-## moveItem
+## listEmojiGroups
 
-> MoveEmojiItemResp moveItem(moveItemRequest)
+> ListEmojiGroupsResp listEmojiGroups(listEmojiGroupsRequest)
+
+
+
+查询当前账号的表情分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ListEmojiGroupsReq listEmojiGroupsReq = new ListEmojiGroupsReq(); // ListEmojiGroupsReq | 
+        try {
+            APIlistEmojiGroupsRequest request = APIlistEmojiGroupsRequest.newBuilder()
+                .listEmojiGroupsReq(listEmojiGroupsReq)
+                .build();
+            ListEmojiGroupsResp result = apiInstance.listEmojiGroups(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#listEmojiGroups");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listEmojiGroupsRequest | [**APIlistEmojiGroupsRequest**](EmojiService.md#APIlistEmojiGroupsRequest)|-|-|
+
+### Return type
+
+[**ListEmojiGroupsResp**](ListEmojiGroupsResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listEmojiGroupsWithHttpInfo
+
+> ApiResponse<ListEmojiGroupsResp> listEmojiGroupsWithHttpInfo(listEmojiGroupsRequest)
+
+
+
+查询当前账号的表情分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ListEmojiGroupsReq listEmojiGroupsReq = new ListEmojiGroupsReq(); // ListEmojiGroupsReq | 
+        try {
+            APIlistEmojiGroupsRequest request = APIlistEmojiGroupsRequest.newBuilder()
+                .listEmojiGroupsReq(listEmojiGroupsReq)
+                .build();
+            ApiResponse<ListEmojiGroupsResp> response = apiInstance.listEmojiGroupsWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#listEmojiGroups");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listEmojiGroupsRequest | [**APIlistEmojiGroupsRequest**](EmojiService.md#APIlistEmojiGroupsRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListEmojiGroupsResp**](ListEmojiGroupsResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistEmojiGroupsRequest"></a>
+## APIlistEmojiGroupsRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listEmojiGroupsReq** | [**ListEmojiGroupsReq**](ListEmojiGroupsReq.md) |  | |
+
+
+
+## moveEmojiItem
+
+> MoveEmojiItemResp moveEmojiItem(moveEmojiItemRequest)
 
 
 
@@ -1108,13 +1108,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         MoveEmojiItemReq moveEmojiItemReq = new MoveEmojiItemReq(); // MoveEmojiItemReq | 
         try {
-            APImoveItemRequest request = APImoveItemRequest.newBuilder()
+            APImoveEmojiItemRequest request = APImoveEmojiItemRequest.newBuilder()
                 .moveEmojiItemReq(moveEmojiItemReq)
                 .build();
-            MoveEmojiItemResp result = apiInstance.moveItem(request);
+            MoveEmojiItemResp result = apiInstance.moveEmojiItem(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#moveItem");
+            System.err.println("Exception when calling EmojiService#moveEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1128,7 +1128,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| moveItemRequest | [**APImoveItemRequest**](EmojiService.md#APImoveItemRequest)|-|-|
+| moveEmojiItemRequest | [**APImoveEmojiItemRequest**](EmojiService.md#APImoveEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -1149,9 +1149,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## moveItemWithHttpInfo
+## moveEmojiItemWithHttpInfo
 
-> ApiResponse<MoveEmojiItemResp> moveItemWithHttpInfo(moveItemRequest)
+> ApiResponse<MoveEmojiItemResp> moveEmojiItemWithHttpInfo(moveEmojiItemRequest)
 
 
 
@@ -1177,15 +1177,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         MoveEmojiItemReq moveEmojiItemReq = new MoveEmojiItemReq(); // MoveEmojiItemReq | 
         try {
-            APImoveItemRequest request = APImoveItemRequest.newBuilder()
+            APImoveEmojiItemRequest request = APImoveEmojiItemRequest.newBuilder()
                 .moveEmojiItemReq(moveEmojiItemReq)
                 .build();
-            ApiResponse<MoveEmojiItemResp> response = apiInstance.moveItemWithHttpInfo(request);
+            ApiResponse<MoveEmojiItemResp> response = apiInstance.moveEmojiItemWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#moveItem");
+            System.err.println("Exception when calling EmojiService#moveEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1199,7 +1199,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| moveItemRequest | [**APImoveItemRequest**](EmojiService.md#APImoveItemRequest)|-|-|
+| moveEmojiItemRequest | [**APImoveEmojiItemRequest**](EmojiService.md#APImoveEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -1221,8 +1221,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APImoveItemRequest"></a>
-## APImoveItemRequest
+<a id="APImoveEmojiItemRequest"></a>
+## APImoveEmojiItemRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1231,9 +1231,9 @@ No authorization required
 
 
 
-## renameGroup
+## renameEmojiGroup
 
-> RenameEmojiGroupResp renameGroup(renameGroupRequest)
+> RenameEmojiGroupResp renameEmojiGroup(renameEmojiGroupRequest)
 
 
 
@@ -1258,13 +1258,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         RenameEmojiGroupReq renameEmojiGroupReq = new RenameEmojiGroupReq(); // RenameEmojiGroupReq | 
         try {
-            APIrenameGroupRequest request = APIrenameGroupRequest.newBuilder()
+            APIrenameEmojiGroupRequest request = APIrenameEmojiGroupRequest.newBuilder()
                 .renameEmojiGroupReq(renameEmojiGroupReq)
                 .build();
-            RenameEmojiGroupResp result = apiInstance.renameGroup(request);
+            RenameEmojiGroupResp result = apiInstance.renameEmojiGroup(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#renameGroup");
+            System.err.println("Exception when calling EmojiService#renameEmojiGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1278,7 +1278,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renameGroupRequest | [**APIrenameGroupRequest**](EmojiService.md#APIrenameGroupRequest)|-|-|
+| renameEmojiGroupRequest | [**APIrenameEmojiGroupRequest**](EmojiService.md#APIrenameEmojiGroupRequest)|-|-|
 
 ### Return type
 
@@ -1299,9 +1299,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## renameGroupWithHttpInfo
+## renameEmojiGroupWithHttpInfo
 
-> ApiResponse<RenameEmojiGroupResp> renameGroupWithHttpInfo(renameGroupRequest)
+> ApiResponse<RenameEmojiGroupResp> renameEmojiGroupWithHttpInfo(renameEmojiGroupRequest)
 
 
 
@@ -1327,15 +1327,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         RenameEmojiGroupReq renameEmojiGroupReq = new RenameEmojiGroupReq(); // RenameEmojiGroupReq | 
         try {
-            APIrenameGroupRequest request = APIrenameGroupRequest.newBuilder()
+            APIrenameEmojiGroupRequest request = APIrenameEmojiGroupRequest.newBuilder()
                 .renameEmojiGroupReq(renameEmojiGroupReq)
                 .build();
-            ApiResponse<RenameEmojiGroupResp> response = apiInstance.renameGroupWithHttpInfo(request);
+            ApiResponse<RenameEmojiGroupResp> response = apiInstance.renameEmojiGroupWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#renameGroup");
+            System.err.println("Exception when calling EmojiService#renameEmojiGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1349,7 +1349,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renameGroupRequest | [**APIrenameGroupRequest**](EmojiService.md#APIrenameGroupRequest)|-|-|
+| renameEmojiGroupRequest | [**APIrenameEmojiGroupRequest**](EmojiService.md#APIrenameEmojiGroupRequest)|-|-|
 
 ### Return type
 
@@ -1371,8 +1371,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIrenameGroupRequest"></a>
-## APIrenameGroupRequest
+<a id="APIrenameEmojiGroupRequest"></a>
+## APIrenameEmojiGroupRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1381,9 +1381,9 @@ No authorization required
 
 
 
-## renameItem
+## renameEmojiItem
 
-> RenameEmojiItemResp renameItem(renameItemRequest)
+> RenameEmojiItemResp renameEmojiItem(renameEmojiItemRequest)
 
 
 
@@ -1408,13 +1408,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         RenameEmojiItemReq renameEmojiItemReq = new RenameEmojiItemReq(); // RenameEmojiItemReq | 
         try {
-            APIrenameItemRequest request = APIrenameItemRequest.newBuilder()
+            APIrenameEmojiItemRequest request = APIrenameEmojiItemRequest.newBuilder()
                 .renameEmojiItemReq(renameEmojiItemReq)
                 .build();
-            RenameEmojiItemResp result = apiInstance.renameItem(request);
+            RenameEmojiItemResp result = apiInstance.renameEmojiItem(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#renameItem");
+            System.err.println("Exception when calling EmojiService#renameEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1428,7 +1428,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renameItemRequest | [**APIrenameItemRequest**](EmojiService.md#APIrenameItemRequest)|-|-|
+| renameEmojiItemRequest | [**APIrenameEmojiItemRequest**](EmojiService.md#APIrenameEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -1449,9 +1449,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## renameItemWithHttpInfo
+## renameEmojiItemWithHttpInfo
 
-> ApiResponse<RenameEmojiItemResp> renameItemWithHttpInfo(renameItemRequest)
+> ApiResponse<RenameEmojiItemResp> renameEmojiItemWithHttpInfo(renameEmojiItemRequest)
 
 
 
@@ -1477,15 +1477,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         RenameEmojiItemReq renameEmojiItemReq = new RenameEmojiItemReq(); // RenameEmojiItemReq | 
         try {
-            APIrenameItemRequest request = APIrenameItemRequest.newBuilder()
+            APIrenameEmojiItemRequest request = APIrenameEmojiItemRequest.newBuilder()
                 .renameEmojiItemReq(renameEmojiItemReq)
                 .build();
-            ApiResponse<RenameEmojiItemResp> response = apiInstance.renameItemWithHttpInfo(request);
+            ApiResponse<RenameEmojiItemResp> response = apiInstance.renameEmojiItemWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#renameItem");
+            System.err.println("Exception when calling EmojiService#renameEmojiItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1499,7 +1499,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renameItemRequest | [**APIrenameItemRequest**](EmojiService.md#APIrenameItemRequest)|-|-|
+| renameEmojiItemRequest | [**APIrenameEmojiItemRequest**](EmojiService.md#APIrenameEmojiItemRequest)|-|-|
 
 ### Return type
 
@@ -1521,8 +1521,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIrenameItemRequest"></a>
-## APIrenameItemRequest
+<a id="APIrenameEmojiItemRequest"></a>
+## APIrenameEmojiItemRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1531,9 +1531,9 @@ No authorization required
 
 
 
-## reorderGroups
+## reorderEmojiGroups
 
-> Object reorderGroups(reorderGroupsRequest)
+> Object reorderEmojiGroups(reorderEmojiGroupsRequest)
 
 
 
@@ -1558,13 +1558,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         ReorderEmojiGroupsReq reorderEmojiGroupsReq = new ReorderEmojiGroupsReq(); // ReorderEmojiGroupsReq | 
         try {
-            APIreorderGroupsRequest request = APIreorderGroupsRequest.newBuilder()
+            APIreorderEmojiGroupsRequest request = APIreorderEmojiGroupsRequest.newBuilder()
                 .reorderEmojiGroupsReq(reorderEmojiGroupsReq)
                 .build();
-            Object result = apiInstance.reorderGroups(request);
+            Object result = apiInstance.reorderEmojiGroups(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#reorderGroups");
+            System.err.println("Exception when calling EmojiService#reorderEmojiGroups");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1578,7 +1578,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| reorderGroupsRequest | [**APIreorderGroupsRequest**](EmojiService.md#APIreorderGroupsRequest)|-|-|
+| reorderEmojiGroupsRequest | [**APIreorderEmojiGroupsRequest**](EmojiService.md#APIreorderEmojiGroupsRequest)|-|-|
 
 ### Return type
 
@@ -1599,9 +1599,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## reorderGroupsWithHttpInfo
+## reorderEmojiGroupsWithHttpInfo
 
-> ApiResponse<Object> reorderGroupsWithHttpInfo(reorderGroupsRequest)
+> ApiResponse<Object> reorderEmojiGroupsWithHttpInfo(reorderEmojiGroupsRequest)
 
 
 
@@ -1627,15 +1627,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         ReorderEmojiGroupsReq reorderEmojiGroupsReq = new ReorderEmojiGroupsReq(); // ReorderEmojiGroupsReq | 
         try {
-            APIreorderGroupsRequest request = APIreorderGroupsRequest.newBuilder()
+            APIreorderEmojiGroupsRequest request = APIreorderEmojiGroupsRequest.newBuilder()
                 .reorderEmojiGroupsReq(reorderEmojiGroupsReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.reorderGroupsWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.reorderEmojiGroupsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#reorderGroups");
+            System.err.println("Exception when calling EmojiService#reorderEmojiGroups");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1649,7 +1649,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| reorderGroupsRequest | [**APIreorderGroupsRequest**](EmojiService.md#APIreorderGroupsRequest)|-|-|
+| reorderEmojiGroupsRequest | [**APIreorderEmojiGroupsRequest**](EmojiService.md#APIreorderEmojiGroupsRequest)|-|-|
 
 ### Return type
 
@@ -1671,8 +1671,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIreorderGroupsRequest"></a>
-## APIreorderGroupsRequest
+<a id="APIreorderEmojiGroupsRequest"></a>
+## APIreorderEmojiGroupsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1681,9 +1681,9 @@ No authorization required
 
 
 
-## reorderItems
+## reorderEmojiItems
 
-> Object reorderItems(reorderItemsRequest)
+> Object reorderEmojiItems(reorderEmojiItemsRequest)
 
 
 
@@ -1708,13 +1708,13 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         ReorderEmojiItemsReq reorderEmojiItemsReq = new ReorderEmojiItemsReq(); // ReorderEmojiItemsReq | 
         try {
-            APIreorderItemsRequest request = APIreorderItemsRequest.newBuilder()
+            APIreorderEmojiItemsRequest request = APIreorderEmojiItemsRequest.newBuilder()
                 .reorderEmojiItemsReq(reorderEmojiItemsReq)
                 .build();
-            Object result = apiInstance.reorderItems(request);
+            Object result = apiInstance.reorderEmojiItems(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#reorderItems");
+            System.err.println("Exception when calling EmojiService#reorderEmojiItems");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1728,7 +1728,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| reorderItemsRequest | [**APIreorderItemsRequest**](EmojiService.md#APIreorderItemsRequest)|-|-|
+| reorderEmojiItemsRequest | [**APIreorderEmojiItemsRequest**](EmojiService.md#APIreorderEmojiItemsRequest)|-|-|
 
 ### Return type
 
@@ -1749,9 +1749,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## reorderItemsWithHttpInfo
+## reorderEmojiItemsWithHttpInfo
 
-> ApiResponse<Object> reorderItemsWithHttpInfo(reorderItemsRequest)
+> ApiResponse<Object> reorderEmojiItemsWithHttpInfo(reorderEmojiItemsRequest)
 
 
 
@@ -1777,15 +1777,15 @@ public class Example {
         EmojiService apiInstance = new EmojiService(defaultClient);
         ReorderEmojiItemsReq reorderEmojiItemsReq = new ReorderEmojiItemsReq(); // ReorderEmojiItemsReq | 
         try {
-            APIreorderItemsRequest request = APIreorderItemsRequest.newBuilder()
+            APIreorderEmojiItemsRequest request = APIreorderEmojiItemsRequest.newBuilder()
                 .reorderEmojiItemsReq(reorderEmojiItemsReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.reorderItemsWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.reorderEmojiItemsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling EmojiService#reorderItems");
+            System.err.println("Exception when calling EmojiService#reorderEmojiItems");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1799,7 +1799,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| reorderItemsRequest | [**APIreorderItemsRequest**](EmojiService.md#APIreorderItemsRequest)|-|-|
+| reorderEmojiItemsRequest | [**APIreorderEmojiItemsRequest**](EmojiService.md#APIreorderEmojiItemsRequest)|-|-|
 
 ### Return type
 
@@ -1821,8 +1821,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIreorderItemsRequest"></a>
-## APIreorderItemsRequest
+<a id="APIreorderEmojiItemsRequest"></a>
+## APIreorderEmojiItemsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

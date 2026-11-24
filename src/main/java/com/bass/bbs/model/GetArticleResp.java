@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetArticleResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetArticleResp.JSON_PROPERTY_ARTICLE
@@ -51,7 +51,7 @@ public class GetArticleResp {
   }
 
   /**
-   * Get article
+   * 文章详情
    * @return article
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespPreference
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespPreference.JSON_PROPERTY_USER_ID,
@@ -58,7 +58,7 @@ public class RespPreference {
   private String mobileTheme;
 
   /**
-   * Gets or Sets language
+   * 界面语言
    */
   public enum LanguageEnum {
     LANGUAGE_UNSPECIFIED(String.valueOf("LANGUAGE_UNSPECIFIED")),
@@ -109,7 +109,7 @@ public class RespPreference {
   }
 
   /**
-   * Get userId
+   * 账号 ID
    * @return userId
    */
   @javax.annotation.Nullable
@@ -133,7 +133,7 @@ public class RespPreference {
   }
 
   /**
-   * Get timezone
+   * 时区
    * @return timezone
    */
   @javax.annotation.Nullable
@@ -157,7 +157,7 @@ public class RespPreference {
   }
 
   /**
-   * Get theme
+   * 桌面端主题
    * @return theme
    */
   @javax.annotation.Nullable
@@ -181,7 +181,7 @@ public class RespPreference {
   }
 
   /**
-   * Get mobileTheme
+   * 移动端主题
    * @return mobileTheme
    */
   @javax.annotation.Nullable
@@ -205,7 +205,7 @@ public class RespPreference {
   }
 
   /**
-   * Get language
+   * 界面语言
    * @return language
    */
   @javax.annotation.Nullable

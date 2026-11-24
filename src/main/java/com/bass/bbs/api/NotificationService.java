@@ -168,252 +168,51 @@ public class NotificationService {
 
   /**
    * 
-   * 分页查询通知列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @return ListNotificationsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListNotificationsResp callList(APICallListRequest apiRequest) throws ApiException {
-    return callList(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 分页查询通知列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ListNotificationsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListNotificationsResp callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    ListNotificationsReq listNotificationsReq = apiRequest.listNotificationsReq();
-    return callList(listNotificationsReq, headers);
-  }
-
-  /**
-   * 
-   * 分页查询通知列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @return ApiResponse&lt;ListNotificationsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListNotificationsResp> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
-    return callListWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 分页查询通知列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListNotificationsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListNotificationsResp> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListNotificationsReq listNotificationsReq = apiRequest.listNotificationsReq();
-    return callListWithHttpInfo(listNotificationsReq, headers);
-  }
-
-  /**
-   * 
-   * 分页查询通知列表。
-   * @param listNotificationsReq  (required)
-   * @return ListNotificationsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListNotificationsResp callList(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq) throws ApiException {
-    return callList(listNotificationsReq, null);
-  }
-
-  /**
-   * 
-   * 分页查询通知列表。
-   * @param listNotificationsReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ListNotificationsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListNotificationsResp callList(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListNotificationsResp> localVarResponse = callListWithHttpInfo(listNotificationsReq, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 分页查询通知列表。
-   * @param listNotificationsReq  (required)
-   * @return ApiResponse&lt;ListNotificationsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListNotificationsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq) throws ApiException {
-    return callListWithHttpInfo(listNotificationsReq, null);
-  }
-
-  /**
-   * 
-   * 分页查询通知列表。
-   * @param listNotificationsReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListNotificationsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListNotificationsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listNotificationsReq, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("callList", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<ListNotificationsResp>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListNotificationsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListNotificationsResp>() {});
-        
-
-        return new ApiResponse<ListNotificationsResp>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listNotificationsReq' is set
-    if (listNotificationsReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'listNotificationsReq' when calling callList");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/notify/notification/list";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listNotificationsReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APICallListRequest {
-    @javax.annotation.Nonnull
-    private ListNotificationsReq listNotificationsReq; //  (required)
-
-    private APICallListRequest(Builder builder) {
-      this.listNotificationsReq = builder.listNotificationsReq;
-    }
-    @javax.annotation.Nonnull
-    public ListNotificationsReq listNotificationsReq() {
-      return listNotificationsReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private ListNotificationsReq listNotificationsReq;
-
-      public Builder listNotificationsReq(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq) {
-        this.listNotificationsReq = listNotificationsReq;
-        return this;
-      }
-      public APICallListRequest build() {
-        return new APICallListRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
    * 统计未读通知数量。
-   * @param apiRequest {@link APICountUnreadRequest}
+   * @param apiRequest {@link APICountUnreadNotificationsRequest}
    * @return CountUnreadNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public CountUnreadNotificationsResp countUnread(APICountUnreadRequest apiRequest) throws ApiException {
-    return countUnread(apiRequest, null);
+  public CountUnreadNotificationsResp countUnreadNotifications(APICountUnreadNotificationsRequest apiRequest) throws ApiException {
+    return countUnreadNotifications(apiRequest, null);
   }
 
   /**
    * 
    * 统计未读通知数量。
-   * @param apiRequest {@link APICountUnreadRequest}
+   * @param apiRequest {@link APICountUnreadNotificationsRequest}
    * @param headers Optional headers to include in the request
    * @return CountUnreadNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public CountUnreadNotificationsResp countUnread(APICountUnreadRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CountUnreadNotificationsResp countUnreadNotifications(APICountUnreadNotificationsRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return countUnread(body, headers);
+    return countUnreadNotifications(body, headers);
   }
 
   /**
    * 
    * 统计未读通知数量。
-   * @param apiRequest {@link APICountUnreadRequest}
+   * @param apiRequest {@link APICountUnreadNotificationsRequest}
    * @return ApiResponse&lt;CountUnreadNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountUnreadNotificationsResp> countUnreadWithHttpInfo(APICountUnreadRequest apiRequest) throws ApiException {
-    return countUnreadWithHttpInfo(apiRequest, null);
+  public ApiResponse<CountUnreadNotificationsResp> countUnreadNotificationsWithHttpInfo(APICountUnreadNotificationsRequest apiRequest) throws ApiException {
+    return countUnreadNotificationsWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 统计未读通知数量。
-   * @param apiRequest {@link APICountUnreadRequest}
+   * @param apiRequest {@link APICountUnreadNotificationsRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CountUnreadNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountUnreadNotificationsResp> countUnreadWithHttpInfo(APICountUnreadRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CountUnreadNotificationsResp> countUnreadNotificationsWithHttpInfo(APICountUnreadNotificationsRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return countUnreadWithHttpInfo(body, headers);
+    return countUnreadNotificationsWithHttpInfo(body, headers);
   }
 
   /**
@@ -423,8 +222,8 @@ public class NotificationService {
    * @return CountUnreadNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public CountUnreadNotificationsResp countUnread(@javax.annotation.Nonnull Object body) throws ApiException {
-    return countUnread(body, null);
+  public CountUnreadNotificationsResp countUnreadNotifications(@javax.annotation.Nonnull Object body) throws ApiException {
+    return countUnreadNotifications(body, null);
   }
 
   /**
@@ -435,8 +234,8 @@ public class NotificationService {
    * @return CountUnreadNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public CountUnreadNotificationsResp countUnread(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<CountUnreadNotificationsResp> localVarResponse = countUnreadWithHttpInfo(body, headers);
+  public CountUnreadNotificationsResp countUnreadNotifications(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<CountUnreadNotificationsResp> localVarResponse = countUnreadNotificationsWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -447,8 +246,8 @@ public class NotificationService {
    * @return ApiResponse&lt;CountUnreadNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountUnreadNotificationsResp> countUnreadWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return countUnreadWithHttpInfo(body, null);
+  public ApiResponse<CountUnreadNotificationsResp> countUnreadNotificationsWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return countUnreadNotificationsWithHttpInfo(body, null);
   }
 
   /**
@@ -459,8 +258,8 @@ public class NotificationService {
    * @return ApiResponse&lt;CountUnreadNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountUnreadNotificationsResp> countUnreadWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = countUnreadRequestBuilder(body, headers);
+  public ApiResponse<CountUnreadNotificationsResp> countUnreadNotificationsWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = countUnreadNotificationsRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -471,7 +270,7 @@ public class NotificationService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("countUnread", localVarResponse);
+          throw getApiException("countUnreadNotifications", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -507,10 +306,10 @@ public class NotificationService {
     }
   }
 
-  private HttpRequest.Builder countUnreadRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder countUnreadNotificationsRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling countUnread");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling countUnreadNotifications");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -540,11 +339,11 @@ public class NotificationService {
   }
 
 
-  public static final class APICountUnreadRequest {
+  public static final class APICountUnreadNotificationsRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APICountUnreadRequest(Builder builder) {
+    private APICountUnreadNotificationsRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -562,106 +361,106 @@ public class NotificationService {
         this.body = body;
         return this;
       }
-      public APICountUnreadRequest build() {
-        return new APICountUnreadRequest(this);
+      public APICountUnreadNotificationsRequest build() {
+        return new APICountUnreadNotificationsRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param apiRequest {@link APIMarkReadRequest}
-   * @return MarkReadNotificationResp
+   * 分页查询通知列表。
+   * @param apiRequest {@link APIListNotificationsRequest}
+   * @return ListNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public MarkReadNotificationResp markRead(APIMarkReadRequest apiRequest) throws ApiException {
-    return markRead(apiRequest, null);
+  public ListNotificationsResp listNotifications(APIListNotificationsRequest apiRequest) throws ApiException {
+    return listNotifications(apiRequest, null);
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param apiRequest {@link APIMarkReadRequest}
+   * 分页查询通知列表。
+   * @param apiRequest {@link APIListNotificationsRequest}
    * @param headers Optional headers to include in the request
-   * @return MarkReadNotificationResp
+   * @return ListNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public MarkReadNotificationResp markRead(APIMarkReadRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListNotificationsResp listNotifications(APIListNotificationsRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    MarkReadNotificationReq markReadNotificationReq = apiRequest.markReadNotificationReq();
-    return markRead(markReadNotificationReq, headers);
+    ListNotificationsReq listNotificationsReq = apiRequest.listNotificationsReq();
+    return listNotifications(listNotificationsReq, headers);
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param apiRequest {@link APIMarkReadRequest}
-   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * 分页查询通知列表。
+   * @param apiRequest {@link APIListNotificationsRequest}
+   * @return ApiResponse&lt;ListNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MarkReadNotificationResp> markReadWithHttpInfo(APIMarkReadRequest apiRequest) throws ApiException {
-    return markReadWithHttpInfo(apiRequest, null);
+  public ApiResponse<ListNotificationsResp> listNotificationsWithHttpInfo(APIListNotificationsRequest apiRequest) throws ApiException {
+    return listNotificationsWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param apiRequest {@link APIMarkReadRequest}
+   * 分页查询通知列表。
+   * @param apiRequest {@link APIListNotificationsRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * @return ApiResponse&lt;ListNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MarkReadNotificationResp> markReadWithHttpInfo(APIMarkReadRequest apiRequest, Map<String, String> headers) throws ApiException {
-    MarkReadNotificationReq markReadNotificationReq = apiRequest.markReadNotificationReq();
-    return markReadWithHttpInfo(markReadNotificationReq, headers);
+  public ApiResponse<ListNotificationsResp> listNotificationsWithHttpInfo(APIListNotificationsRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListNotificationsReq listNotificationsReq = apiRequest.listNotificationsReq();
+    return listNotificationsWithHttpInfo(listNotificationsReq, headers);
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param markReadNotificationReq  (required)
-   * @return MarkReadNotificationResp
+   * 分页查询通知列表。
+   * @param listNotificationsReq  (required)
+   * @return ListNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public MarkReadNotificationResp markRead(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq) throws ApiException {
-    return markRead(markReadNotificationReq, null);
+  public ListNotificationsResp listNotifications(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq) throws ApiException {
+    return listNotifications(listNotificationsReq, null);
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param markReadNotificationReq  (required)
+   * 分页查询通知列表。
+   * @param listNotificationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return MarkReadNotificationResp
+   * @return ListNotificationsResp
    * @throws ApiException if fails to make API call
    */
-  public MarkReadNotificationResp markRead(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<MarkReadNotificationResp> localVarResponse = markReadWithHttpInfo(markReadNotificationReq, headers);
+  public ListNotificationsResp listNotifications(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListNotificationsResp> localVarResponse = listNotificationsWithHttpInfo(listNotificationsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param markReadNotificationReq  (required)
-   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * 分页查询通知列表。
+   * @param listNotificationsReq  (required)
+   * @return ApiResponse&lt;ListNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MarkReadNotificationResp> markReadWithHttpInfo(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq) throws ApiException {
-    return markReadWithHttpInfo(markReadNotificationReq, null);
+  public ApiResponse<ListNotificationsResp> listNotificationsWithHttpInfo(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq) throws ApiException {
+    return listNotificationsWithHttpInfo(listNotificationsReq, null);
   }
 
   /**
    * 
-   * 标记通知为已读。
-   * @param markReadNotificationReq  (required)
+   * 分页查询通知列表。
+   * @param listNotificationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * @return ApiResponse&lt;ListNotificationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MarkReadNotificationResp> markReadWithHttpInfo(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = markReadRequestBuilder(markReadNotificationReq, headers);
+  public ApiResponse<ListNotificationsResp> listNotificationsWithHttpInfo(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listNotificationsRequestBuilder(listNotificationsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -672,7 +471,208 @@ public class NotificationService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("markRead", localVarResponse);
+          throw getApiException("listNotifications", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListNotificationsResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListNotificationsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListNotificationsResp>() {});
+        
+
+        return new ApiResponse<ListNotificationsResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder listNotificationsRequestBuilder(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listNotificationsReq' is set
+    if (listNotificationsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listNotificationsReq' when calling listNotifications");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/notify/notification/list";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listNotificationsReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIListNotificationsRequest {
+    @javax.annotation.Nonnull
+    private ListNotificationsReq listNotificationsReq; //  (required)
+
+    private APIListNotificationsRequest(Builder builder) {
+      this.listNotificationsReq = builder.listNotificationsReq;
+    }
+    @javax.annotation.Nonnull
+    public ListNotificationsReq listNotificationsReq() {
+      return listNotificationsReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private ListNotificationsReq listNotificationsReq;
+
+      public Builder listNotificationsReq(@javax.annotation.Nonnull ListNotificationsReq listNotificationsReq) {
+        this.listNotificationsReq = listNotificationsReq;
+        return this;
+      }
+      public APIListNotificationsRequest build() {
+        return new APIListNotificationsRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param apiRequest {@link APIMarkReadNotificationRequest}
+   * @return MarkReadNotificationResp
+   * @throws ApiException if fails to make API call
+   */
+  public MarkReadNotificationResp markReadNotification(APIMarkReadNotificationRequest apiRequest) throws ApiException {
+    return markReadNotification(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param apiRequest {@link APIMarkReadNotificationRequest}
+   * @param headers Optional headers to include in the request
+   * @return MarkReadNotificationResp
+   * @throws ApiException if fails to make API call
+   */
+  public MarkReadNotificationResp markReadNotification(APIMarkReadNotificationRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    MarkReadNotificationReq markReadNotificationReq = apiRequest.markReadNotificationReq();
+    return markReadNotification(markReadNotificationReq, headers);
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param apiRequest {@link APIMarkReadNotificationRequest}
+   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MarkReadNotificationResp> markReadNotificationWithHttpInfo(APIMarkReadNotificationRequest apiRequest) throws ApiException {
+    return markReadNotificationWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param apiRequest {@link APIMarkReadNotificationRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MarkReadNotificationResp> markReadNotificationWithHttpInfo(APIMarkReadNotificationRequest apiRequest, Map<String, String> headers) throws ApiException {
+    MarkReadNotificationReq markReadNotificationReq = apiRequest.markReadNotificationReq();
+    return markReadNotificationWithHttpInfo(markReadNotificationReq, headers);
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param markReadNotificationReq  (required)
+   * @return MarkReadNotificationResp
+   * @throws ApiException if fails to make API call
+   */
+  public MarkReadNotificationResp markReadNotification(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq) throws ApiException {
+    return markReadNotification(markReadNotificationReq, null);
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param markReadNotificationReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return MarkReadNotificationResp
+   * @throws ApiException if fails to make API call
+   */
+  public MarkReadNotificationResp markReadNotification(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<MarkReadNotificationResp> localVarResponse = markReadNotificationWithHttpInfo(markReadNotificationReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param markReadNotificationReq  (required)
+   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MarkReadNotificationResp> markReadNotificationWithHttpInfo(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq) throws ApiException {
+    return markReadNotificationWithHttpInfo(markReadNotificationReq, null);
+  }
+
+  /**
+   * 
+   * 标记通知为已读。
+   * @param markReadNotificationReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;MarkReadNotificationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MarkReadNotificationResp> markReadNotificationWithHttpInfo(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = markReadNotificationRequestBuilder(markReadNotificationReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("markReadNotification", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -708,10 +708,10 @@ public class NotificationService {
     }
   }
 
-  private HttpRequest.Builder markReadRequestBuilder(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder markReadNotificationRequestBuilder(@javax.annotation.Nonnull MarkReadNotificationReq markReadNotificationReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'markReadNotificationReq' is set
     if (markReadNotificationReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'markReadNotificationReq' when calling markRead");
+      throw new ApiException(400, "Missing the required parameter 'markReadNotificationReq' when calling markReadNotification");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -741,11 +741,11 @@ public class NotificationService {
   }
 
 
-  public static final class APIMarkReadRequest {
+  public static final class APIMarkReadNotificationRequest {
     @javax.annotation.Nonnull
     private MarkReadNotificationReq markReadNotificationReq; //  (required)
 
-    private APIMarkReadRequest(Builder builder) {
+    private APIMarkReadNotificationRequest(Builder builder) {
       this.markReadNotificationReq = builder.markReadNotificationReq;
     }
     @javax.annotation.Nonnull
@@ -763,8 +763,8 @@ public class NotificationService {
         this.markReadNotificationReq = markReadNotificationReq;
         return this;
       }
-      public APIMarkReadRequest build() {
-        return new APIMarkReadRequest(this);
+      public APIMarkReadNotificationRequest build() {
+        return new APIMarkReadNotificationRequest(this);
       }
     }
   }

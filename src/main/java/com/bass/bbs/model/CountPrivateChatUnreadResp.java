@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CountPrivateChatUnreadResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CountPrivateChatUnreadResp.JSON_PROPERTY_COUNT
@@ -50,7 +50,7 @@ public class CountPrivateChatUnreadResp {
   }
 
   /**
-   * Get count
+   * 未读消息总数。
    * @return count
    */
   @javax.annotation.Nullable

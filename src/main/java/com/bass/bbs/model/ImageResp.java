@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ImageResp
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ImageResp.JSON_PROPERTY_DATA,

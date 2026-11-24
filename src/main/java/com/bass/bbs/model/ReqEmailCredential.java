@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqEmailCredential
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqEmailCredential.JSON_PROPERTY_EMAIL,
@@ -55,7 +55,7 @@ public class ReqEmailCredential {
   }
 
   /**
-   * Get email
+   * 邮箱地址
    * @return email
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class ReqEmailCredential {
   }
 
   /**
-   * Get code
+   * 邮箱 OTP
    * @return code
    */
   @javax.annotation.Nullable

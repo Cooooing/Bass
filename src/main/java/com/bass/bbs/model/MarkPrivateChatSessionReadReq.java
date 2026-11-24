@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * MarkPrivateChatSessionReadReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   MarkPrivateChatSessionReadReq.JSON_PROPERTY_PEER_USER_ID,
@@ -55,7 +55,7 @@ public class MarkPrivateChatSessionReadReq {
   }
 
   /**
-   * Get peerUserId
+   * 对端账号 ID。
    * @return peerUserId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class MarkPrivateChatSessionReadReq {
   }
 
   /**
-   * Get messageId
+   * 最后已读消息 ID。
    * @return messageId
    */
   @javax.annotation.Nullable

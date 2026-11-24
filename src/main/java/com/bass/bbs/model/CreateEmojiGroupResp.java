@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateEmojiGroupResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CreateEmojiGroupResp.JSON_PROPERTY_GROUP
@@ -51,7 +51,7 @@ public class CreateEmojiGroupResp {
   }
 
   /**
-   * Get group
+   * 已创建分组。
    * @return group
    */
   @javax.annotation.Nullable

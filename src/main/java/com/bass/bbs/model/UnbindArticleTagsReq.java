@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UnbindArticleTagsReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   UnbindArticleTagsReq.JSON_PROPERTY_ARTICLE_ID,
@@ -57,7 +57,7 @@ public class UnbindArticleTagsReq {
   }
 
   /**
-   * Get articleId
+   * 文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -89,7 +89,7 @@ public class UnbindArticleTagsReq {
   }
 
   /**
-   * Get tagIds
+   * 标签 ID 列表
    * @return tagIds
    */
   @javax.annotation.Nonnull

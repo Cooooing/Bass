@@ -86,15 +86,15 @@ public class AccountServiceExample {
         // Configure clients using the `defaultClient` object, such as
         // overriding the host and port, timeout, etc.
         AccountService apiInstance = new AccountService(defaultClient);
-        String name = "name_example"; // String | 
+        String name = "name_example"; // String | 账号名，必填
         try {
-            APIavatarRequest request = APIavatarRequest.newBuilder()
+            APIavatarAccountRequest request = APIavatarAccountRequest.newBuilder()
                 .name(name)
                 .build();
-            ImageResp result = apiInstance.avatar(request);
+            AvatarAccountResp result = apiInstance.avatarAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AccountService#avatar");
+            System.err.println("Exception when calling AccountService#avatarAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -111,14 +111,14 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AccountService* | [**avatar**](docs/AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
-*AccountService* | [**avatarWithHttpInfo**](docs/AccountService.md#avatarWithHttpInfo) | **GET** /v1/user/account/avatar | 
-*AccountService* | [**completeProfileImageUpload**](docs/AccountService.md#completeProfileImageUpload) | **POST** /v1/user/account/complete-profile-image-upload | 
-*AccountService* | [**completeProfileImageUploadWithHttpInfo**](docs/AccountService.md#completeProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload | 
-*AccountService* | [**getCurrent**](docs/AccountService.md#getCurrent) | **POST** /v1/user/account/get-current | 
-*AccountService* | [**getCurrentWithHttpInfo**](docs/AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current | 
-*AccountService* | [**getEconomyAccount**](docs/AccountService.md#getEconomyAccount) | **POST** /v1/user/account/economy/get | 
-*AccountService* | [**getEconomyAccountWithHttpInfo**](docs/AccountService.md#getEconomyAccountWithHttpInfo) | **POST** /v1/user/account/economy/get | 
+*AccountService* | [**avatarAccount**](docs/AccountService.md#avatarAccount) | **GET** /v1/user/account/avatar | 
+*AccountService* | [**avatarAccountWithHttpInfo**](docs/AccountService.md#avatarAccountWithHttpInfo) | **GET** /v1/user/account/avatar | 
+*AccountService* | [**completeProfileImageUploadAccount**](docs/AccountService.md#completeProfileImageUploadAccount) | **POST** /v1/user/account/complete-profile-image-upload | 
+*AccountService* | [**completeProfileImageUploadAccountWithHttpInfo**](docs/AccountService.md#completeProfileImageUploadAccountWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload | 
+*AccountService* | [**getAccountEconomy**](docs/AccountService.md#getAccountEconomy) | **POST** /v1/user/account/economy/get | 
+*AccountService* | [**getAccountEconomyWithHttpInfo**](docs/AccountService.md#getAccountEconomyWithHttpInfo) | **POST** /v1/user/account/economy/get | 
+*AccountService* | [**getCurrentAccount**](docs/AccountService.md#getCurrentAccount) | **POST** /v1/user/account/get-current | 
+*AccountService* | [**getCurrentAccountWithHttpInfo**](docs/AccountService.md#getCurrentAccountWithHttpInfo) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**getProfile**](docs/AccountService.md#getProfile) | **POST** /v1/user/account/get-profile | 
 *AccountService* | [**getProfileWithHttpInfo**](docs/AccountService.md#getProfileWithHttpInfo) | **POST** /v1/user/account/get-profile | 
 *AccountService* | [**listFollowers**](docs/AccountService.md#listFollowers) | **POST** /v1/user/account/list-followers | 
@@ -127,68 +127,68 @@ Class | Method | HTTP request | Description
 *AccountService* | [**listFollowingWithHttpInfo**](docs/AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following | 
 *AccountService* | [**listPointRecords**](docs/AccountService.md#listPointRecords) | **POST** /v1/user/account/list-point-records | 
 *AccountService* | [**listPointRecordsWithHttpInfo**](docs/AccountService.md#listPointRecordsWithHttpInfo) | **POST** /v1/user/account/list-point-records | 
-*AccountService* | [**prepareProfileImageUpload**](docs/AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload | 
-*AccountService* | [**prepareProfileImageUploadWithHttpInfo**](docs/AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload | 
-*AccountService* | [**searchMention**](docs/AccountService.md#searchMention) | **POST** /v1/user/account/search-mention | 
-*AccountService* | [**searchMentionWithHttpInfo**](docs/AccountService.md#searchMentionWithHttpInfo) | **POST** /v1/user/account/search-mention | 
-*AccountService* | [**transferPoints**](docs/AccountService.md#transferPoints) | **POST** /v1/user/account/economy/transfer | 
-*AccountService* | [**transferPointsWithHttpInfo**](docs/AccountService.md#transferPointsWithHttpInfo) | **POST** /v1/user/account/economy/transfer | 
-*AccountService* | [**updateEmail**](docs/AccountService.md#updateEmail) | **POST** /v1/user/account/update-email | 
-*AccountService* | [**updateEmailWithHttpInfo**](docs/AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email | 
-*AccountService* | [**updatePassword**](docs/AccountService.md#updatePassword) | **POST** /v1/user/account/update-password | 
-*AccountService* | [**updatePasswordWithHttpInfo**](docs/AccountService.md#updatePasswordWithHttpInfo) | **POST** /v1/user/account/update-password | 
-*AccountService* | [**updatePhone**](docs/AccountService.md#updatePhone) | **POST** /v1/user/account/update-phone | 
-*AccountService* | [**updatePhoneWithHttpInfo**](docs/AccountService.md#updatePhoneWithHttpInfo) | **POST** /v1/user/account/update-phone | 
-*AccountService* | [**updateProfile**](docs/AccountService.md#updateProfile) | **POST** /v1/user/account/update-profile | 
-*AccountService* | [**updateProfileWithHttpInfo**](docs/AccountService.md#updateProfileWithHttpInfo) | **POST** /v1/user/account/update-profile | 
-*ArticleSearchService* | [**search**](docs/ArticleSearchService.md#search) | **POST** /v1/content/article/search | 
-*ArticleSearchService* | [**searchWithHttpInfo**](docs/ArticleSearchService.md#searchWithHttpInfo) | **POST** /v1/content/article/search | 
-*ArticleService* | [**acceptAnswer**](docs/ArticleService.md#acceptAnswer) | **POST** /v1/content/article/answer/accept | 
-*ArticleService* | [**acceptAnswerWithHttpInfo**](docs/ArticleService.md#acceptAnswerWithHttpInfo) | **POST** /v1/content/article/answer/accept | 
-*ArticleService* | [**archive**](docs/ArticleService.md#archive) | **POST** /v1/content/article/archive | 
-*ArticleService* | [**archiveWithHttpInfo**](docs/ArticleService.md#archiveWithHttpInfo) | **POST** /v1/content/article/archive | 
-*ArticleService* | [**callList**](docs/ArticleService.md#callList) | **POST** /v1/content/article/list | 
-*ArticleService* | [**callListWithHttpInfo**](docs/ArticleService.md#callListWithHttpInfo) | **POST** /v1/content/article/list | 
-*ArticleService* | [**cancelPublish**](docs/ArticleService.md#cancelPublish) | **POST** /v1/content/article/publish/cancel | 
-*ArticleService* | [**cancelPublishWithHttpInfo**](docs/ArticleService.md#cancelPublishWithHttpInfo) | **POST** /v1/content/article/publish/cancel | 
-*ArticleService* | [**collect**](docs/ArticleService.md#collect) | **POST** /v1/content/article/collect | 
-*ArticleService* | [**collectWithHttpInfo**](docs/ArticleService.md#collectWithHttpInfo) | **POST** /v1/content/article/collect | 
-*ArticleService* | [**countCollected**](docs/ArticleService.md#countCollected) | **POST** /v1/content/article/collect/count | 
-*ArticleService* | [**countCollectedWithHttpInfo**](docs/ArticleService.md#countCollectedWithHttpInfo) | **POST** /v1/content/article/collect/count | 
-*ArticleService* | [**createDraft**](docs/ArticleService.md#createDraft) | **POST** /v1/content/article/draft/create | 
-*ArticleService* | [**createDraftWithHttpInfo**](docs/ArticleService.md#createDraftWithHttpInfo) | **POST** /v1/content/article/draft/create | 
-*ArticleService* | [**discardDraft**](docs/ArticleService.md#discardDraft) | **POST** /v1/content/article/draft/discard | 
-*ArticleService* | [**discardDraftWithHttpInfo**](docs/ArticleService.md#discardDraftWithHttpInfo) | **POST** /v1/content/article/draft/discard | 
-*ArticleService* | [**enterLottery**](docs/ArticleService.md#enterLottery) | **POST** /v1/content/article/lottery/entry | 
-*ArticleService* | [**enterLotteryWithHttpInfo**](docs/ArticleService.md#enterLotteryWithHttpInfo) | **POST** /v1/content/article/lottery/entry | 
-*ArticleService* | [**get**](docs/ArticleService.md#get) | **POST** /v1/content/article/get | 
-*ArticleService* | [**getWithHttpInfo**](docs/ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get | 
-*ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
-*ArticleService* | [**likeWithHttpInfo**](docs/ArticleService.md#likeWithHttpInfo) | **POST** /v1/content/article/like | 
-*ArticleService* | [**listFollowing**](docs/ArticleService.md#listFollowing) | **POST** /v1/content/article/following/list | 
-*ArticleService* | [**listFollowingWithHttpInfo**](docs/ArticleService.md#listFollowingWithHttpInfo) | **POST** /v1/content/article/following/list | 
-*ArticleService* | [**listNearby**](docs/ArticleService.md#listNearby) | **POST** /v1/content/article/nearby/list | 
-*ArticleService* | [**listNearbyWithHttpInfo**](docs/ArticleService.md#listNearbyWithHttpInfo) | **POST** /v1/content/article/nearby/list | 
-*ArticleService* | [**pageCollected**](docs/ArticleService.md#pageCollected) | **POST** /v1/content/article/collected/page | 
-*ArticleService* | [**pageCollectedWithHttpInfo**](docs/ArticleService.md#pageCollectedWithHttpInfo) | **POST** /v1/content/article/collected/page | 
-*ArticleService* | [**pageViewHistory**](docs/ArticleService.md#pageViewHistory) | **POST** /v1/content/article/view-history/page | 
-*ArticleService* | [**pageViewHistoryWithHttpInfo**](docs/ArticleService.md#pageViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page | 
-*ArticleService* | [**pageWatched**](docs/ArticleService.md#pageWatched) | **POST** /v1/content/article/watched/page | 
-*ArticleService* | [**pageWatchedWithHttpInfo**](docs/ArticleService.md#pageWatchedWithHttpInfo) | **POST** /v1/content/article/watched/page | 
-*ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
-*ArticleService* | [**publishWithHttpInfo**](docs/ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish | 
-*ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
-*ArticleService* | [**rewardWithHttpInfo**](docs/ArticleService.md#rewardWithHttpInfo) | **POST** /v1/content/article/reward | 
-*ArticleService* | [**setPinnedComment**](docs/ArticleService.md#setPinnedComment) | **POST** /v1/content/article/comment/pin | 
-*ArticleService* | [**setPinnedCommentWithHttpInfo**](docs/ArticleService.md#setPinnedCommentWithHttpInfo) | **POST** /v1/content/article/comment/pin | 
-*ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
-*ArticleService* | [**thankWithHttpInfo**](docs/ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank | 
-*ArticleService* | [**updateDraft**](docs/ArticleService.md#updateDraft) | **POST** /v1/content/article/draft/update | 
-*ArticleService* | [**updateDraftWithHttpInfo**](docs/ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/draft/update | 
-*ArticleService* | [**votePoll**](docs/ArticleService.md#votePoll) | **POST** /v1/content/article/poll/vote | 
-*ArticleService* | [**votePollWithHttpInfo**](docs/ArticleService.md#votePollWithHttpInfo) | **POST** /v1/content/article/poll/vote | 
-*ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
-*ArticleService* | [**watchWithHttpInfo**](docs/ArticleService.md#watchWithHttpInfo) | **POST** /v1/content/article/watch | 
+*AccountService* | [**prepareProfileImageUploadAccount**](docs/AccountService.md#prepareProfileImageUploadAccount) | **POST** /v1/user/account/prepare-profile-image-upload | 
+*AccountService* | [**prepareProfileImageUploadAccountWithHttpInfo**](docs/AccountService.md#prepareProfileImageUploadAccountWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload | 
+*AccountService* | [**searchMentionAccounts**](docs/AccountService.md#searchMentionAccounts) | **POST** /v1/user/account/search-mention | 
+*AccountService* | [**searchMentionAccountsWithHttpInfo**](docs/AccountService.md#searchMentionAccountsWithHttpInfo) | **POST** /v1/user/account/search-mention | 
+*AccountService* | [**transferAccountPoints**](docs/AccountService.md#transferAccountPoints) | **POST** /v1/user/account/economy/transfer | 
+*AccountService* | [**transferAccountPointsWithHttpInfo**](docs/AccountService.md#transferAccountPointsWithHttpInfo) | **POST** /v1/user/account/economy/transfer | 
+*AccountService* | [**updateEmailAccount**](docs/AccountService.md#updateEmailAccount) | **POST** /v1/user/account/update-email | 
+*AccountService* | [**updateEmailAccountWithHttpInfo**](docs/AccountService.md#updateEmailAccountWithHttpInfo) | **POST** /v1/user/account/update-email | 
+*AccountService* | [**updatePasswordAccount**](docs/AccountService.md#updatePasswordAccount) | **POST** /v1/user/account/update-password | 
+*AccountService* | [**updatePasswordAccountWithHttpInfo**](docs/AccountService.md#updatePasswordAccountWithHttpInfo) | **POST** /v1/user/account/update-password | 
+*AccountService* | [**updatePhoneAccount**](docs/AccountService.md#updatePhoneAccount) | **POST** /v1/user/account/update-phone | 
+*AccountService* | [**updatePhoneAccountWithHttpInfo**](docs/AccountService.md#updatePhoneAccountWithHttpInfo) | **POST** /v1/user/account/update-phone | 
+*AccountService* | [**updateProfileAccount**](docs/AccountService.md#updateProfileAccount) | **POST** /v1/user/account/update-profile | 
+*AccountService* | [**updateProfileAccountWithHttpInfo**](docs/AccountService.md#updateProfileAccountWithHttpInfo) | **POST** /v1/user/account/update-profile | 
+*ArticleSearchService* | [**searchArticles**](docs/ArticleSearchService.md#searchArticles) | **POST** /v1/content/article/search | 
+*ArticleSearchService* | [**searchArticlesWithHttpInfo**](docs/ArticleSearchService.md#searchArticlesWithHttpInfo) | **POST** /v1/content/article/search | 
+*ArticleService* | [**acceptArticleAnswer**](docs/ArticleService.md#acceptArticleAnswer) | **POST** /v1/content/article/answer/accept | 
+*ArticleService* | [**acceptArticleAnswerWithHttpInfo**](docs/ArticleService.md#acceptArticleAnswerWithHttpInfo) | **POST** /v1/content/article/answer/accept | 
+*ArticleService* | [**archiveArticle**](docs/ArticleService.md#archiveArticle) | **POST** /v1/content/article/archive | 
+*ArticleService* | [**archiveArticleWithHttpInfo**](docs/ArticleService.md#archiveArticleWithHttpInfo) | **POST** /v1/content/article/archive | 
+*ArticleService* | [**cancelPublishArticle**](docs/ArticleService.md#cancelPublishArticle) | **POST** /v1/content/article/publish/cancel | 
+*ArticleService* | [**cancelPublishArticleWithHttpInfo**](docs/ArticleService.md#cancelPublishArticleWithHttpInfo) | **POST** /v1/content/article/publish/cancel | 
+*ArticleService* | [**collectArticle**](docs/ArticleService.md#collectArticle) | **POST** /v1/content/article/collect | 
+*ArticleService* | [**collectArticleWithHttpInfo**](docs/ArticleService.md#collectArticleWithHttpInfo) | **POST** /v1/content/article/collect | 
+*ArticleService* | [**countCollectedArticles**](docs/ArticleService.md#countCollectedArticles) | **POST** /v1/content/article/collect/count | 
+*ArticleService* | [**countCollectedArticlesWithHttpInfo**](docs/ArticleService.md#countCollectedArticlesWithHttpInfo) | **POST** /v1/content/article/collect/count | 
+*ArticleService* | [**createDraftArticle**](docs/ArticleService.md#createDraftArticle) | **POST** /v1/content/article/draft/create | 
+*ArticleService* | [**createDraftArticleWithHttpInfo**](docs/ArticleService.md#createDraftArticleWithHttpInfo) | **POST** /v1/content/article/draft/create | 
+*ArticleService* | [**discardDraftArticle**](docs/ArticleService.md#discardDraftArticle) | **POST** /v1/content/article/draft/discard | 
+*ArticleService* | [**discardDraftArticleWithHttpInfo**](docs/ArticleService.md#discardDraftArticleWithHttpInfo) | **POST** /v1/content/article/draft/discard | 
+*ArticleService* | [**enterArticleLottery**](docs/ArticleService.md#enterArticleLottery) | **POST** /v1/content/article/lottery/entry | 
+*ArticleService* | [**enterArticleLotteryWithHttpInfo**](docs/ArticleService.md#enterArticleLotteryWithHttpInfo) | **POST** /v1/content/article/lottery/entry | 
+*ArticleService* | [**getArticle**](docs/ArticleService.md#getArticle) | **POST** /v1/content/article/get | 
+*ArticleService* | [**getArticleWithHttpInfo**](docs/ArticleService.md#getArticleWithHttpInfo) | **POST** /v1/content/article/get | 
+*ArticleService* | [**likeArticle**](docs/ArticleService.md#likeArticle) | **POST** /v1/content/article/like | 
+*ArticleService* | [**likeArticleWithHttpInfo**](docs/ArticleService.md#likeArticleWithHttpInfo) | **POST** /v1/content/article/like | 
+*ArticleService* | [**listArticles**](docs/ArticleService.md#listArticles) | **POST** /v1/content/article/list | 
+*ArticleService* | [**listArticlesWithHttpInfo**](docs/ArticleService.md#listArticlesWithHttpInfo) | **POST** /v1/content/article/list | 
+*ArticleService* | [**listFollowingArticles**](docs/ArticleService.md#listFollowingArticles) | **POST** /v1/content/article/following/list | 
+*ArticleService* | [**listFollowingArticlesWithHttpInfo**](docs/ArticleService.md#listFollowingArticlesWithHttpInfo) | **POST** /v1/content/article/following/list | 
+*ArticleService* | [**listNearbyArticles**](docs/ArticleService.md#listNearbyArticles) | **POST** /v1/content/article/nearby/list | 
+*ArticleService* | [**listNearbyArticlesWithHttpInfo**](docs/ArticleService.md#listNearbyArticlesWithHttpInfo) | **POST** /v1/content/article/nearby/list | 
+*ArticleService* | [**pageArticleViewHistory**](docs/ArticleService.md#pageArticleViewHistory) | **POST** /v1/content/article/view-history/page | 
+*ArticleService* | [**pageArticleViewHistoryWithHttpInfo**](docs/ArticleService.md#pageArticleViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page | 
+*ArticleService* | [**pageCollectedArticles**](docs/ArticleService.md#pageCollectedArticles) | **POST** /v1/content/article/collected/page | 
+*ArticleService* | [**pageCollectedArticlesWithHttpInfo**](docs/ArticleService.md#pageCollectedArticlesWithHttpInfo) | **POST** /v1/content/article/collected/page | 
+*ArticleService* | [**pageWatchedArticles**](docs/ArticleService.md#pageWatchedArticles) | **POST** /v1/content/article/watched/page | 
+*ArticleService* | [**pageWatchedArticlesWithHttpInfo**](docs/ArticleService.md#pageWatchedArticlesWithHttpInfo) | **POST** /v1/content/article/watched/page | 
+*ArticleService* | [**publishArticle**](docs/ArticleService.md#publishArticle) | **POST** /v1/content/article/publish | 
+*ArticleService* | [**publishArticleWithHttpInfo**](docs/ArticleService.md#publishArticleWithHttpInfo) | **POST** /v1/content/article/publish | 
+*ArticleService* | [**rewardArticle**](docs/ArticleService.md#rewardArticle) | **POST** /v1/content/article/reward | 
+*ArticleService* | [**rewardArticleWithHttpInfo**](docs/ArticleService.md#rewardArticleWithHttpInfo) | **POST** /v1/content/article/reward | 
+*ArticleService* | [**setPinnedArticleComment**](docs/ArticleService.md#setPinnedArticleComment) | **POST** /v1/content/article/comment/pin | 
+*ArticleService* | [**setPinnedArticleCommentWithHttpInfo**](docs/ArticleService.md#setPinnedArticleCommentWithHttpInfo) | **POST** /v1/content/article/comment/pin | 
+*ArticleService* | [**thankArticle**](docs/ArticleService.md#thankArticle) | **POST** /v1/content/article/thank | 
+*ArticleService* | [**thankArticleWithHttpInfo**](docs/ArticleService.md#thankArticleWithHttpInfo) | **POST** /v1/content/article/thank | 
+*ArticleService* | [**updateDraftArticle**](docs/ArticleService.md#updateDraftArticle) | **POST** /v1/content/article/draft/update | 
+*ArticleService* | [**updateDraftArticleWithHttpInfo**](docs/ArticleService.md#updateDraftArticleWithHttpInfo) | **POST** /v1/content/article/draft/update | 
+*ArticleService* | [**voteArticlePoll**](docs/ArticleService.md#voteArticlePoll) | **POST** /v1/content/article/poll/vote | 
+*ArticleService* | [**voteArticlePollWithHttpInfo**](docs/ArticleService.md#voteArticlePollWithHttpInfo) | **POST** /v1/content/article/poll/vote | 
+*ArticleService* | [**watchArticle**](docs/ArticleService.md#watchArticle) | **POST** /v1/content/article/watch | 
+*ArticleService* | [**watchArticleWithHttpInfo**](docs/ArticleService.md#watchArticleWithHttpInfo) | **POST** /v1/content/article/watch | 
 *AssetService* | [**completeBadgeFontUpload**](docs/AssetService.md#completeBadgeFontUpload) | **POST** /v1/asset/badge-font/complete | 
 *AssetService* | [**completeBadgeFontUploadWithHttpInfo**](docs/AssetService.md#completeBadgeFontUploadWithHttpInfo) | **POST** /v1/asset/badge-font/complete | 
 *AssetService* | [**completeBadgeImageUpload**](docs/AssetService.md#completeBadgeImageUpload) | **POST** /v1/asset/badge-image/complete | 
@@ -213,60 +213,60 @@ Class | Method | HTTP request | Description
 *AuthService* | [**refreshTokenWithHttpInfo**](docs/AuthService.md#refreshTokenWithHttpInfo) | **POST** /v1/user/auth/refresh-token | 
 *AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
 *AuthService* | [**registerWithHttpInfo**](docs/AuthService.md#registerWithHttpInfo) | **POST** /v1/user/auth/register | 
-*BadgeService* | [**deleteDraft**](docs/BadgeService.md#deleteDraft) | **POST** /v1/badge/draft/delete | 
-*BadgeService* | [**deleteDraftWithHttpInfo**](docs/BadgeService.md#deleteDraftWithHttpInfo) | **POST** /v1/badge/draft/delete | 
-*BadgeService* | [**listDrafts**](docs/BadgeService.md#listDrafts) | **POST** /v1/badge/draft/list | 
-*BadgeService* | [**listDraftsWithHttpInfo**](docs/BadgeService.md#listDraftsWithHttpInfo) | **POST** /v1/badge/draft/list | 
-*BadgeService* | [**renderMaker**](docs/BadgeService.md#renderMaker) | **GET** /v1/badge/maker/render | 
-*BadgeService* | [**renderMakerWithHttpInfo**](docs/BadgeService.md#renderMakerWithHttpInfo) | **GET** /v1/badge/maker/render | 
-*BadgeService* | [**renderPublished**](docs/BadgeService.md#renderPublished) | **GET** /v1/badge/render | 
-*BadgeService* | [**renderPublishedWithHttpInfo**](docs/BadgeService.md#renderPublishedWithHttpInfo) | **GET** /v1/badge/render | 
-*BadgeService* | [**upsertDraft**](docs/BadgeService.md#upsertDraft) | **POST** /v1/badge/draft/upsert | 
-*BadgeService* | [**upsertDraftWithHttpInfo**](docs/BadgeService.md#upsertDraftWithHttpInfo) | **POST** /v1/badge/draft/upsert | 
-*CommentService* | [**callList**](docs/CommentService.md#callList) | **POST** /v1/content/comment/list | 
-*CommentService* | [**callListWithHttpInfo**](docs/CommentService.md#callListWithHttpInfo) | **POST** /v1/content/comment/list | 
-*CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
-*CommentService* | [**createWithHttpInfo**](docs/CommentService.md#createWithHttpInfo) | **POST** /v1/content/comment/create | 
-*CommentService* | [**like**](docs/CommentService.md#like) | **POST** /v1/content/comment/like | 
-*CommentService* | [**likeWithHttpInfo**](docs/CommentService.md#likeWithHttpInfo) | **POST** /v1/content/comment/like | 
-*CommentService* | [**listReplies**](docs/CommentService.md#listReplies) | **POST** /v1/content/comment/list-replies | 
-*CommentService* | [**listRepliesWithHttpInfo**](docs/CommentService.md#listRepliesWithHttpInfo) | **POST** /v1/content/comment/list-replies | 
-*CommentService* | [**listThreads**](docs/CommentService.md#listThreads) | **POST** /v1/content/comment/list-threads | 
-*CommentService* | [**listThreadsWithHttpInfo**](docs/CommentService.md#listThreadsWithHttpInfo) | **POST** /v1/content/comment/list-threads | 
-*CommentService* | [**listTimeline**](docs/CommentService.md#listTimeline) | **POST** /v1/content/comment/list-timeline | 
-*CommentService* | [**listTimelineWithHttpInfo**](docs/CommentService.md#listTimelineWithHttpInfo) | **POST** /v1/content/comment/list-timeline | 
-*CommentService* | [**thank**](docs/CommentService.md#thank) | **POST** /v1/content/comment/thank | 
-*CommentService* | [**thankWithHttpInfo**](docs/CommentService.md#thankWithHttpInfo) | **POST** /v1/content/comment/thank | 
-*DomainService* | [**callList**](docs/DomainService.md#callList) | **POST** /v1/content/domain/list | 
-*DomainService* | [**callListWithHttpInfo**](docs/DomainService.md#callListWithHttpInfo) | **POST** /v1/content/domain/list | 
-*DomainService* | [**create**](docs/DomainService.md#create) | **POST** /v1/content/domain/create | 
-*DomainService* | [**createWithHttpInfo**](docs/DomainService.md#createWithHttpInfo) | **POST** /v1/content/domain/create | 
-*DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
-*DomainService* | [**updateWithHttpInfo**](docs/DomainService.md#updateWithHttpInfo) | **POST** /v1/content/domain/update | 
-*EmojiService* | [**addItem**](docs/EmojiService.md#addItem) | **POST** /v1/im/emoji/items | 
-*EmojiService* | [**addItemWithHttpInfo**](docs/EmojiService.md#addItemWithHttpInfo) | **POST** /v1/im/emoji/items | 
-*EmojiService* | [**callList**](docs/EmojiService.md#callList) | **POST** /v1/im/emoji/groups/list | 
-*EmojiService* | [**callListWithHttpInfo**](docs/EmojiService.md#callListWithHttpInfo) | **POST** /v1/im/emoji/groups/list | 
-*EmojiService* | [**createGroup**](docs/EmojiService.md#createGroup) | **POST** /v1/im/emoji/groups | 
-*EmojiService* | [**createGroupWithHttpInfo**](docs/EmojiService.md#createGroupWithHttpInfo) | **POST** /v1/im/emoji/groups | 
-*EmojiService* | [**createShare**](docs/EmojiService.md#createShare) | **POST** /v1/im/emoji/shares | 
-*EmojiService* | [**createShareWithHttpInfo**](docs/EmojiService.md#createShareWithHttpInfo) | **POST** /v1/im/emoji/shares | 
-*EmojiService* | [**deleteGroup**](docs/EmojiService.md#deleteGroup) | **POST** /v1/im/emoji/groups/delete | 
-*EmojiService* | [**deleteGroupWithHttpInfo**](docs/EmojiService.md#deleteGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/delete | 
-*EmojiService* | [**deleteItem**](docs/EmojiService.md#deleteItem) | **POST** /v1/im/emoji/items/delete | 
-*EmojiService* | [**deleteItemWithHttpInfo**](docs/EmojiService.md#deleteItemWithHttpInfo) | **POST** /v1/im/emoji/items/delete | 
-*EmojiService* | [**importShare**](docs/EmojiService.md#importShare) | **POST** /v1/im/emoji/shares/import | 
-*EmojiService* | [**importShareWithHttpInfo**](docs/EmojiService.md#importShareWithHttpInfo) | **POST** /v1/im/emoji/shares/import | 
-*EmojiService* | [**moveItem**](docs/EmojiService.md#moveItem) | **POST** /v1/im/emoji/items/move | 
-*EmojiService* | [**moveItemWithHttpInfo**](docs/EmojiService.md#moveItemWithHttpInfo) | **POST** /v1/im/emoji/items/move | 
-*EmojiService* | [**renameGroup**](docs/EmojiService.md#renameGroup) | **POST** /v1/im/emoji/groups/rename | 
-*EmojiService* | [**renameGroupWithHttpInfo**](docs/EmojiService.md#renameGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/rename | 
-*EmojiService* | [**renameItem**](docs/EmojiService.md#renameItem) | **POST** /v1/im/emoji/items/rename | 
-*EmojiService* | [**renameItemWithHttpInfo**](docs/EmojiService.md#renameItemWithHttpInfo) | **POST** /v1/im/emoji/items/rename | 
-*EmojiService* | [**reorderGroups**](docs/EmojiService.md#reorderGroups) | **POST** /v1/im/emoji/groups/reorder | 
-*EmojiService* | [**reorderGroupsWithHttpInfo**](docs/EmojiService.md#reorderGroupsWithHttpInfo) | **POST** /v1/im/emoji/groups/reorder | 
-*EmojiService* | [**reorderItems**](docs/EmojiService.md#reorderItems) | **POST** /v1/im/emoji/items/reorder | 
-*EmojiService* | [**reorderItemsWithHttpInfo**](docs/EmojiService.md#reorderItemsWithHttpInfo) | **POST** /v1/im/emoji/items/reorder | 
+*BadgeService* | [**deleteBadgeDraft**](docs/BadgeService.md#deleteBadgeDraft) | **POST** /v1/badge/draft/delete | 
+*BadgeService* | [**deleteBadgeDraftWithHttpInfo**](docs/BadgeService.md#deleteBadgeDraftWithHttpInfo) | **POST** /v1/badge/draft/delete | 
+*BadgeService* | [**listBadgeDrafts**](docs/BadgeService.md#listBadgeDrafts) | **POST** /v1/badge/draft/list | 
+*BadgeService* | [**listBadgeDraftsWithHttpInfo**](docs/BadgeService.md#listBadgeDraftsWithHttpInfo) | **POST** /v1/badge/draft/list | 
+*BadgeService* | [**renderMakerBadge**](docs/BadgeService.md#renderMakerBadge) | **GET** /v1/badge/maker/render | 
+*BadgeService* | [**renderMakerBadgeWithHttpInfo**](docs/BadgeService.md#renderMakerBadgeWithHttpInfo) | **GET** /v1/badge/maker/render | 
+*BadgeService* | [**renderPublishedBadge**](docs/BadgeService.md#renderPublishedBadge) | **GET** /v1/badge/render | 
+*BadgeService* | [**renderPublishedBadgeWithHttpInfo**](docs/BadgeService.md#renderPublishedBadgeWithHttpInfo) | **GET** /v1/badge/render | 
+*BadgeService* | [**upsertBadgeDraft**](docs/BadgeService.md#upsertBadgeDraft) | **POST** /v1/badge/draft/upsert | 
+*BadgeService* | [**upsertBadgeDraftWithHttpInfo**](docs/BadgeService.md#upsertBadgeDraftWithHttpInfo) | **POST** /v1/badge/draft/upsert | 
+*CommentService* | [**createComment**](docs/CommentService.md#createComment) | **POST** /v1/content/comment/create | 
+*CommentService* | [**createCommentWithHttpInfo**](docs/CommentService.md#createCommentWithHttpInfo) | **POST** /v1/content/comment/create | 
+*CommentService* | [**likeComment**](docs/CommentService.md#likeComment) | **POST** /v1/content/comment/like | 
+*CommentService* | [**likeCommentWithHttpInfo**](docs/CommentService.md#likeCommentWithHttpInfo) | **POST** /v1/content/comment/like | 
+*CommentService* | [**listCommentReplies**](docs/CommentService.md#listCommentReplies) | **POST** /v1/content/comment/list-replies | 
+*CommentService* | [**listCommentRepliesWithHttpInfo**](docs/CommentService.md#listCommentRepliesWithHttpInfo) | **POST** /v1/content/comment/list-replies | 
+*CommentService* | [**listCommentThreads**](docs/CommentService.md#listCommentThreads) | **POST** /v1/content/comment/list-threads | 
+*CommentService* | [**listCommentThreadsWithHttpInfo**](docs/CommentService.md#listCommentThreadsWithHttpInfo) | **POST** /v1/content/comment/list-threads | 
+*CommentService* | [**listCommentTimeline**](docs/CommentService.md#listCommentTimeline) | **POST** /v1/content/comment/list-timeline | 
+*CommentService* | [**listCommentTimelineWithHttpInfo**](docs/CommentService.md#listCommentTimelineWithHttpInfo) | **POST** /v1/content/comment/list-timeline | 
+*CommentService* | [**listComments**](docs/CommentService.md#listComments) | **POST** /v1/content/comment/list | 
+*CommentService* | [**listCommentsWithHttpInfo**](docs/CommentService.md#listCommentsWithHttpInfo) | **POST** /v1/content/comment/list | 
+*CommentService* | [**thankComment**](docs/CommentService.md#thankComment) | **POST** /v1/content/comment/thank | 
+*CommentService* | [**thankCommentWithHttpInfo**](docs/CommentService.md#thankCommentWithHttpInfo) | **POST** /v1/content/comment/thank | 
+*DomainService* | [**createDomain**](docs/DomainService.md#createDomain) | **POST** /v1/content/domain/create | 
+*DomainService* | [**createDomainWithHttpInfo**](docs/DomainService.md#createDomainWithHttpInfo) | **POST** /v1/content/domain/create | 
+*DomainService* | [**listDomains**](docs/DomainService.md#listDomains) | **POST** /v1/content/domain/list | 
+*DomainService* | [**listDomainsWithHttpInfo**](docs/DomainService.md#listDomainsWithHttpInfo) | **POST** /v1/content/domain/list | 
+*DomainService* | [**updateDomain**](docs/DomainService.md#updateDomain) | **POST** /v1/content/domain/update | 
+*DomainService* | [**updateDomainWithHttpInfo**](docs/DomainService.md#updateDomainWithHttpInfo) | **POST** /v1/content/domain/update | 
+*EmojiService* | [**addEmojiItem**](docs/EmojiService.md#addEmojiItem) | **POST** /v1/im/emoji/items | 
+*EmojiService* | [**addEmojiItemWithHttpInfo**](docs/EmojiService.md#addEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items | 
+*EmojiService* | [**createEmojiGroup**](docs/EmojiService.md#createEmojiGroup) | **POST** /v1/im/emoji/groups | 
+*EmojiService* | [**createEmojiGroupWithHttpInfo**](docs/EmojiService.md#createEmojiGroupWithHttpInfo) | **POST** /v1/im/emoji/groups | 
+*EmojiService* | [**createEmojiShare**](docs/EmojiService.md#createEmojiShare) | **POST** /v1/im/emoji/shares | 
+*EmojiService* | [**createEmojiShareWithHttpInfo**](docs/EmojiService.md#createEmojiShareWithHttpInfo) | **POST** /v1/im/emoji/shares | 
+*EmojiService* | [**deleteEmojiGroup**](docs/EmojiService.md#deleteEmojiGroup) | **POST** /v1/im/emoji/groups/delete | 
+*EmojiService* | [**deleteEmojiGroupWithHttpInfo**](docs/EmojiService.md#deleteEmojiGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/delete | 
+*EmojiService* | [**deleteEmojiItem**](docs/EmojiService.md#deleteEmojiItem) | **POST** /v1/im/emoji/items/delete | 
+*EmojiService* | [**deleteEmojiItemWithHttpInfo**](docs/EmojiService.md#deleteEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items/delete | 
+*EmojiService* | [**importEmojiShare**](docs/EmojiService.md#importEmojiShare) | **POST** /v1/im/emoji/shares/import | 
+*EmojiService* | [**importEmojiShareWithHttpInfo**](docs/EmojiService.md#importEmojiShareWithHttpInfo) | **POST** /v1/im/emoji/shares/import | 
+*EmojiService* | [**listEmojiGroups**](docs/EmojiService.md#listEmojiGroups) | **POST** /v1/im/emoji/groups/list | 
+*EmojiService* | [**listEmojiGroupsWithHttpInfo**](docs/EmojiService.md#listEmojiGroupsWithHttpInfo) | **POST** /v1/im/emoji/groups/list | 
+*EmojiService* | [**moveEmojiItem**](docs/EmojiService.md#moveEmojiItem) | **POST** /v1/im/emoji/items/move | 
+*EmojiService* | [**moveEmojiItemWithHttpInfo**](docs/EmojiService.md#moveEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items/move | 
+*EmojiService* | [**renameEmojiGroup**](docs/EmojiService.md#renameEmojiGroup) | **POST** /v1/im/emoji/groups/rename | 
+*EmojiService* | [**renameEmojiGroupWithHttpInfo**](docs/EmojiService.md#renameEmojiGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/rename | 
+*EmojiService* | [**renameEmojiItem**](docs/EmojiService.md#renameEmojiItem) | **POST** /v1/im/emoji/items/rename | 
+*EmojiService* | [**renameEmojiItemWithHttpInfo**](docs/EmojiService.md#renameEmojiItemWithHttpInfo) | **POST** /v1/im/emoji/items/rename | 
+*EmojiService* | [**reorderEmojiGroups**](docs/EmojiService.md#reorderEmojiGroups) | **POST** /v1/im/emoji/groups/reorder | 
+*EmojiService* | [**reorderEmojiGroupsWithHttpInfo**](docs/EmojiService.md#reorderEmojiGroupsWithHttpInfo) | **POST** /v1/im/emoji/groups/reorder | 
+*EmojiService* | [**reorderEmojiItems**](docs/EmojiService.md#reorderEmojiItems) | **POST** /v1/im/emoji/items/reorder | 
+*EmojiService* | [**reorderEmojiItemsWithHttpInfo**](docs/EmojiService.md#reorderEmojiItemsWithHttpInfo) | **POST** /v1/im/emoji/items/reorder | 
 *GlobalChatService* | [**getGlobalChatTopic**](docs/GlobalChatService.md#getGlobalChatTopic) | **POST** /v1/im/global-chat/topic/get | 
 *GlobalChatService* | [**getGlobalChatTopicWithHttpInfo**](docs/GlobalChatService.md#getGlobalChatTopicWithHttpInfo) | **POST** /v1/im/global-chat/topic/get | 
 *GlobalChatService* | [**listGlobalChatBarrages**](docs/GlobalChatService.md#listGlobalChatBarrages) | **POST** /v1/im/global-chat/barrages/list | 
@@ -283,28 +283,28 @@ Class | Method | HTTP request | Description
 *GlobalChatService* | [**sendGlobalChatMessageWithHttpInfo**](docs/GlobalChatService.md#sendGlobalChatMessageWithHttpInfo) | **POST** /v1/im/global-chat/messages | 
 *GlobalChatService* | [**setGlobalChatTopic**](docs/GlobalChatService.md#setGlobalChatTopic) | **POST** /v1/im/global-chat/topic/set | 
 *GlobalChatService* | [**setGlobalChatTopicWithHttpInfo**](docs/GlobalChatService.md#setGlobalChatTopicWithHttpInfo) | **POST** /v1/im/global-chat/topic/set | 
-*HolidayService* | [**getCurrent**](docs/HolidayService.md#getCurrent) | **POST** /v1/platform/holiday/get-current | 
-*HolidayService* | [**getCurrentWithHttpInfo**](docs/HolidayService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/holiday/get-current | 
-*LivenessService* | [**claimYesterdayReward**](docs/LivenessService.md#claimYesterdayReward) | **POST** /v1/user/liveness/yesterday-reward/claim | 
-*LivenessService* | [**claimYesterdayRewardWithHttpInfo**](docs/LivenessService.md#claimYesterdayRewardWithHttpInfo) | **POST** /v1/user/liveness/yesterday-reward/claim | 
+*HolidayService* | [**getCurrentHoliday**](docs/HolidayService.md#getCurrentHoliday) | **POST** /v1/platform/holiday/get-current | 
+*HolidayService* | [**getCurrentHolidayWithHttpInfo**](docs/HolidayService.md#getCurrentHolidayWithHttpInfo) | **POST** /v1/platform/holiday/get-current | 
+*LivenessService* | [**claimYesterdayLivenessReward**](docs/LivenessService.md#claimYesterdayLivenessReward) | **POST** /v1/user/liveness/yesterday-reward/claim | 
+*LivenessService* | [**claimYesterdayLivenessRewardWithHttpInfo**](docs/LivenessService.md#claimYesterdayLivenessRewardWithHttpInfo) | **POST** /v1/user/liveness/yesterday-reward/claim | 
 *LivenessService* | [**getLiveness**](docs/LivenessService.md#getLiveness) | **GET** /v1/user/liveness | 
 *LivenessService* | [**getLivenessWithHttpInfo**](docs/LivenessService.md#getLivenessWithHttpInfo) | **GET** /v1/user/liveness | 
-*LocationService* | [**getCurrent**](docs/LocationService.md#getCurrent) | **POST** /v1/platform/location/get-current | 
-*LocationService* | [**getCurrentWithHttpInfo**](docs/LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/location/get-current | 
-*MoonbreezeService* | [**create**](docs/MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
-*MoonbreezeService* | [**createWithHttpInfo**](docs/MoonbreezeService.md#createWithHttpInfo) | **POST** /v1/content/moonbreeze/create | 
-*MoonbreezeService* | [**pageMember**](docs/MoonbreezeService.md#pageMember) | **POST** /v1/content/moonbreeze/page-member | 
-*MoonbreezeService* | [**pageMemberWithHttpInfo**](docs/MoonbreezeService.md#pageMemberWithHttpInfo) | **POST** /v1/content/moonbreeze/page-member | 
-*MoonbreezeService* | [**pagePublic**](docs/MoonbreezeService.md#pagePublic) | **POST** /v1/content/moonbreeze/page-public | 
-*MoonbreezeService* | [**pagePublicWithHttpInfo**](docs/MoonbreezeService.md#pagePublicWithHttpInfo) | **POST** /v1/content/moonbreeze/page-public | 
-*MoonbreezeService* | [**pageWatching**](docs/MoonbreezeService.md#pageWatching) | **POST** /v1/content/moonbreeze/page-watching | 
-*MoonbreezeService* | [**pageWatchingWithHttpInfo**](docs/MoonbreezeService.md#pageWatchingWithHttpInfo) | **POST** /v1/content/moonbreeze/page-watching | 
-*NotificationService* | [**callList**](docs/NotificationService.md#callList) | **POST** /v1/notify/notification/list | 
-*NotificationService* | [**callListWithHttpInfo**](docs/NotificationService.md#callListWithHttpInfo) | **POST** /v1/notify/notification/list | 
-*NotificationService* | [**countUnread**](docs/NotificationService.md#countUnread) | **POST** /v1/notify/notification/count-unread | 
-*NotificationService* | [**countUnreadWithHttpInfo**](docs/NotificationService.md#countUnreadWithHttpInfo) | **POST** /v1/notify/notification/count-unread | 
-*NotificationService* | [**markRead**](docs/NotificationService.md#markRead) | **POST** /v1/notify/notification/mark-read | 
-*NotificationService* | [**markReadWithHttpInfo**](docs/NotificationService.md#markReadWithHttpInfo) | **POST** /v1/notify/notification/mark-read | 
+*LocationService* | [**getCurrentLocation**](docs/LocationService.md#getCurrentLocation) | **POST** /v1/platform/location/get-current | 
+*LocationService* | [**getCurrentLocationWithHttpInfo**](docs/LocationService.md#getCurrentLocationWithHttpInfo) | **POST** /v1/platform/location/get-current | 
+*MoonbreezeService* | [**createMoonbreeze**](docs/MoonbreezeService.md#createMoonbreeze) | **POST** /v1/content/moonbreeze/create | 
+*MoonbreezeService* | [**createMoonbreezeWithHttpInfo**](docs/MoonbreezeService.md#createMoonbreezeWithHttpInfo) | **POST** /v1/content/moonbreeze/create | 
+*MoonbreezeService* | [**pageMemberMoonbreezes**](docs/MoonbreezeService.md#pageMemberMoonbreezes) | **POST** /v1/content/moonbreeze/page-member | 
+*MoonbreezeService* | [**pageMemberMoonbreezesWithHttpInfo**](docs/MoonbreezeService.md#pageMemberMoonbreezesWithHttpInfo) | **POST** /v1/content/moonbreeze/page-member | 
+*MoonbreezeService* | [**pagePublicMoonbreezes**](docs/MoonbreezeService.md#pagePublicMoonbreezes) | **POST** /v1/content/moonbreeze/page-public | 
+*MoonbreezeService* | [**pagePublicMoonbreezesWithHttpInfo**](docs/MoonbreezeService.md#pagePublicMoonbreezesWithHttpInfo) | **POST** /v1/content/moonbreeze/page-public | 
+*MoonbreezeService* | [**pageWatchingMoonbreezes**](docs/MoonbreezeService.md#pageWatchingMoonbreezes) | **POST** /v1/content/moonbreeze/page-watching | 
+*MoonbreezeService* | [**pageWatchingMoonbreezesWithHttpInfo**](docs/MoonbreezeService.md#pageWatchingMoonbreezesWithHttpInfo) | **POST** /v1/content/moonbreeze/page-watching | 
+*NotificationService* | [**countUnreadNotifications**](docs/NotificationService.md#countUnreadNotifications) | **POST** /v1/notify/notification/count-unread | 
+*NotificationService* | [**countUnreadNotificationsWithHttpInfo**](docs/NotificationService.md#countUnreadNotificationsWithHttpInfo) | **POST** /v1/notify/notification/count-unread | 
+*NotificationService* | [**listNotifications**](docs/NotificationService.md#listNotifications) | **POST** /v1/notify/notification/list | 
+*NotificationService* | [**listNotificationsWithHttpInfo**](docs/NotificationService.md#listNotificationsWithHttpInfo) | **POST** /v1/notify/notification/list | 
+*NotificationService* | [**markReadNotification**](docs/NotificationService.md#markReadNotification) | **POST** /v1/notify/notification/mark-read | 
+*NotificationService* | [**markReadNotificationWithHttpInfo**](docs/NotificationService.md#markReadNotificationWithHttpInfo) | **POST** /v1/notify/notification/mark-read | 
 *OtpService* | [**beginEnableTotp**](docs/OtpService.md#beginEnableTotp) | **POST** /v1/user/otp/totp/begin-enable | 
 *OtpService* | [**beginEnableTotpWithHttpInfo**](docs/OtpService.md#beginEnableTotpWithHttpInfo) | **POST** /v1/user/otp/totp/begin-enable | 
 *OtpService* | [**confirmEnableTotp**](docs/OtpService.md#confirmEnableTotp) | **POST** /v1/user/otp/totp/confirm-enable | 
@@ -317,18 +317,18 @@ Class | Method | HTTP request | Description
 *OtpService* | [**sendEmailOtpWithHttpInfo**](docs/OtpService.md#sendEmailOtpWithHttpInfo) | **POST** /v1/user/otp/email/send | 
 *OtpService* | [**sendPhoneOtp**](docs/OtpService.md#sendPhoneOtp) | **POST** /v1/user/otp/phone/send | 
 *OtpService* | [**sendPhoneOtpWithHttpInfo**](docs/OtpService.md#sendPhoneOtpWithHttpInfo) | **POST** /v1/user/otp/phone/send | 
-*PostscriptService* | [**add**](docs/PostscriptService.md#add) | **POST** /v1/content/postscript/add | 
-*PostscriptService* | [**addWithHttpInfo**](docs/PostscriptService.md#addWithHttpInfo) | **POST** /v1/content/postscript/add | 
-*PostscriptService* | [**callList**](docs/PostscriptService.md#callList) | **POST** /v1/content/postscript/list | 
-*PostscriptService* | [**callListWithHttpInfo**](docs/PostscriptService.md#callListWithHttpInfo) | **POST** /v1/content/postscript/list | 
-*PreferencesService* | [**getCurrent**](docs/PreferencesService.md#getCurrent) | **POST** /v1/user/preference/get-current | 
-*PreferencesService* | [**getCurrentWithHttpInfo**](docs/PreferencesService.md#getCurrentWithHttpInfo) | **POST** /v1/user/preference/get-current | 
-*PreferencesService* | [**updateCurrent**](docs/PreferencesService.md#updateCurrent) | **POST** /v1/user/preference/update-current | 
-*PreferencesService* | [**updateCurrentWithHttpInfo**](docs/PreferencesService.md#updateCurrentWithHttpInfo) | **POST** /v1/user/preference/update-current | 
-*PrivacySettingService* | [**getCurrent**](docs/PrivacySettingService.md#getCurrent) | **POST** /v1/user/privacy-setting/get-current | 
-*PrivacySettingService* | [**getCurrentWithHttpInfo**](docs/PrivacySettingService.md#getCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/get-current | 
-*PrivacySettingService* | [**updateCurrent**](docs/PrivacySettingService.md#updateCurrent) | **POST** /v1/user/privacy-setting/update-current | 
-*PrivacySettingService* | [**updateCurrentWithHttpInfo**](docs/PrivacySettingService.md#updateCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/update-current | 
+*PostscriptService* | [**addPostscript**](docs/PostscriptService.md#addPostscript) | **POST** /v1/content/postscript/add | 
+*PostscriptService* | [**addPostscriptWithHttpInfo**](docs/PostscriptService.md#addPostscriptWithHttpInfo) | **POST** /v1/content/postscript/add | 
+*PostscriptService* | [**listPostscripts**](docs/PostscriptService.md#listPostscripts) | **POST** /v1/content/postscript/list | 
+*PostscriptService* | [**listPostscriptsWithHttpInfo**](docs/PostscriptService.md#listPostscriptsWithHttpInfo) | **POST** /v1/content/postscript/list | 
+*PreferencesService* | [**getCurrentPreferences**](docs/PreferencesService.md#getCurrentPreferences) | **POST** /v1/user/preference/get-current | 
+*PreferencesService* | [**getCurrentPreferencesWithHttpInfo**](docs/PreferencesService.md#getCurrentPreferencesWithHttpInfo) | **POST** /v1/user/preference/get-current | 
+*PreferencesService* | [**updateCurrentPreferences**](docs/PreferencesService.md#updateCurrentPreferences) | **POST** /v1/user/preference/update-current | 
+*PreferencesService* | [**updateCurrentPreferencesWithHttpInfo**](docs/PreferencesService.md#updateCurrentPreferencesWithHttpInfo) | **POST** /v1/user/preference/update-current | 
+*PrivacySettingService* | [**getCurrentPrivacySetting**](docs/PrivacySettingService.md#getCurrentPrivacySetting) | **POST** /v1/user/privacy-setting/get-current | 
+*PrivacySettingService* | [**getCurrentPrivacySettingWithHttpInfo**](docs/PrivacySettingService.md#getCurrentPrivacySettingWithHttpInfo) | **POST** /v1/user/privacy-setting/get-current | 
+*PrivacySettingService* | [**updateCurrentPrivacySetting**](docs/PrivacySettingService.md#updateCurrentPrivacySetting) | **POST** /v1/user/privacy-setting/update-current | 
+*PrivacySettingService* | [**updateCurrentPrivacySettingWithHttpInfo**](docs/PrivacySettingService.md#updateCurrentPrivacySettingWithHttpInfo) | **POST** /v1/user/privacy-setting/update-current | 
 *PrivateChatService* | [**countPrivateChatUnread**](docs/PrivateChatService.md#countPrivateChatUnread) | **POST** /v1/im/private-chat/unread-count | 
 *PrivateChatService* | [**countPrivateChatUnreadWithHttpInfo**](docs/PrivateChatService.md#countPrivateChatUnreadWithHttpInfo) | **POST** /v1/im/private-chat/unread-count | 
 *PrivateChatService* | [**listPrivateChatMessages**](docs/PrivateChatService.md#listPrivateChatMessages) | **POST** /v1/im/private-chat/messages/list | 
@@ -345,36 +345,36 @@ Class | Method | HTTP request | Description
 *PrivateChatService* | [**setPrivateChatSessionMutedWithHttpInfo**](docs/PrivateChatService.md#setPrivateChatSessionMutedWithHttpInfo) | **POST** /v1/im/private-chat/muted | 
 *PrivateChatService* | [**setPrivateChatSessionPinned**](docs/PrivateChatService.md#setPrivateChatSessionPinned) | **POST** /v1/im/private-chat/pinned | 
 *PrivateChatService* | [**setPrivateChatSessionPinnedWithHttpInfo**](docs/PrivateChatService.md#setPrivateChatSessionPinnedWithHttpInfo) | **POST** /v1/im/private-chat/pinned | 
-*RealtimeService* | [**createTicket**](docs/RealtimeService.md#createTicket) | **POST** /v1/realtime/ticket | 
-*RealtimeService* | [**createTicketWithHttpInfo**](docs/RealtimeService.md#createTicketWithHttpInfo) | **POST** /v1/realtime/ticket | 
-*RelationService* | [**block**](docs/RelationService.md#block) | **POST** /v1/user/relation/block | 
-*RelationService* | [**blockWithHttpInfo**](docs/RelationService.md#blockWithHttpInfo) | **POST** /v1/user/relation/block | 
-*RelationService* | [**follow**](docs/RelationService.md#follow) | **POST** /v1/user/relation/follow | 
-*RelationService* | [**followWithHttpInfo**](docs/RelationService.md#followWithHttpInfo) | **POST** /v1/user/relation/follow | 
-*RelationService* | [**getStatus**](docs/RelationService.md#getStatus) | **POST** /v1/user/relation/get-status | 
-*RelationService* | [**getStatusWithHttpInfo**](docs/RelationService.md#getStatusWithHttpInfo) | **POST** /v1/user/relation/get-status | 
-*RelationService* | [**listBlocked**](docs/RelationService.md#listBlocked) | **POST** /v1/user/relation/list-blocked | 
-*RelationService* | [**listBlockedWithHttpInfo**](docs/RelationService.md#listBlockedWithHttpInfo) | **POST** /v1/user/relation/list-blocked | 
-*RelationService* | [**listFollowers**](docs/RelationService.md#listFollowers) | **POST** /v1/user/relation/list-followers | 
-*RelationService* | [**listFollowersWithHttpInfo**](docs/RelationService.md#listFollowersWithHttpInfo) | **POST** /v1/user/relation/list-followers | 
-*RelationService* | [**listFollowing**](docs/RelationService.md#listFollowing) | **POST** /v1/user/relation/list-following | 
-*RelationService* | [**listFollowingWithHttpInfo**](docs/RelationService.md#listFollowingWithHttpInfo) | **POST** /v1/user/relation/list-following | 
-*RelationService* | [**unblock**](docs/RelationService.md#unblock) | **POST** /v1/user/relation/unblock | 
-*RelationService* | [**unblockWithHttpInfo**](docs/RelationService.md#unblockWithHttpInfo) | **POST** /v1/user/relation/unblock | 
-*RelationService* | [**unfollow**](docs/RelationService.md#unfollow) | **POST** /v1/user/relation/unfollow | 
-*RelationService* | [**unfollowWithHttpInfo**](docs/RelationService.md#unfollowWithHttpInfo) | **POST** /v1/user/relation/unfollow | 
-*TagService* | [**bindArticle**](docs/TagService.md#bindArticle) | **POST** /v1/content/tag/bind-article | 
-*TagService* | [**bindArticleWithHttpInfo**](docs/TagService.md#bindArticleWithHttpInfo) | **POST** /v1/content/tag/bind-article | 
-*TagService* | [**callList**](docs/TagService.md#callList) | **POST** /v1/content/tag/list | 
-*TagService* | [**callListWithHttpInfo**](docs/TagService.md#callListWithHttpInfo) | **POST** /v1/content/tag/list | 
-*TagService* | [**create**](docs/TagService.md#create) | **POST** /v1/content/tag/create | 
-*TagService* | [**createWithHttpInfo**](docs/TagService.md#createWithHttpInfo) | **POST** /v1/content/tag/create | 
+*RealtimeService* | [**createRealtimeTicket**](docs/RealtimeService.md#createRealtimeTicket) | **POST** /v1/realtime/ticket | 
+*RealtimeService* | [**createRealtimeTicketWithHttpInfo**](docs/RealtimeService.md#createRealtimeTicketWithHttpInfo) | **POST** /v1/realtime/ticket | 
+*RelationService* | [**blockRelation**](docs/RelationService.md#blockRelation) | **POST** /v1/user/relation/block | 
+*RelationService* | [**blockRelationWithHttpInfo**](docs/RelationService.md#blockRelationWithHttpInfo) | **POST** /v1/user/relation/block | 
+*RelationService* | [**followRelation**](docs/RelationService.md#followRelation) | **POST** /v1/user/relation/follow | 
+*RelationService* | [**followRelationWithHttpInfo**](docs/RelationService.md#followRelationWithHttpInfo) | **POST** /v1/user/relation/follow | 
+*RelationService* | [**getStatusRelation**](docs/RelationService.md#getStatusRelation) | **POST** /v1/user/relation/get-status | 
+*RelationService* | [**getStatusRelationWithHttpInfo**](docs/RelationService.md#getStatusRelationWithHttpInfo) | **POST** /v1/user/relation/get-status | 
+*RelationService* | [**listBlockedRelations**](docs/RelationService.md#listBlockedRelations) | **POST** /v1/user/relation/list-blocked | 
+*RelationService* | [**listBlockedRelationsWithHttpInfo**](docs/RelationService.md#listBlockedRelationsWithHttpInfo) | **POST** /v1/user/relation/list-blocked | 
+*RelationService* | [**listFollowersRelations**](docs/RelationService.md#listFollowersRelations) | **POST** /v1/user/relation/list-followers | 
+*RelationService* | [**listFollowersRelationsWithHttpInfo**](docs/RelationService.md#listFollowersRelationsWithHttpInfo) | **POST** /v1/user/relation/list-followers | 
+*RelationService* | [**listFollowingRelations**](docs/RelationService.md#listFollowingRelations) | **POST** /v1/user/relation/list-following | 
+*RelationService* | [**listFollowingRelationsWithHttpInfo**](docs/RelationService.md#listFollowingRelationsWithHttpInfo) | **POST** /v1/user/relation/list-following | 
+*RelationService* | [**unblockRelation**](docs/RelationService.md#unblockRelation) | **POST** /v1/user/relation/unblock | 
+*RelationService* | [**unblockRelationWithHttpInfo**](docs/RelationService.md#unblockRelationWithHttpInfo) | **POST** /v1/user/relation/unblock | 
+*RelationService* | [**unfollowRelation**](docs/RelationService.md#unfollowRelation) | **POST** /v1/user/relation/unfollow | 
+*RelationService* | [**unfollowRelationWithHttpInfo**](docs/RelationService.md#unfollowRelationWithHttpInfo) | **POST** /v1/user/relation/unfollow | 
+*TagService* | [**bindArticleTags**](docs/TagService.md#bindArticleTags) | **POST** /v1/content/tag/bind-article | 
+*TagService* | [**bindArticleTagsWithHttpInfo**](docs/TagService.md#bindArticleTagsWithHttpInfo) | **POST** /v1/content/tag/bind-article | 
+*TagService* | [**createTag**](docs/TagService.md#createTag) | **POST** /v1/content/tag/create | 
+*TagService* | [**createTagWithHttpInfo**](docs/TagService.md#createTagWithHttpInfo) | **POST** /v1/content/tag/create | 
 *TagService* | [**listArticleTags**](docs/TagService.md#listArticleTags) | **POST** /v1/content/tag/list-article-tags | 
 *TagService* | [**listArticleTagsWithHttpInfo**](docs/TagService.md#listArticleTagsWithHttpInfo) | **POST** /v1/content/tag/list-article-tags | 
-*TagService* | [**unbindArticle**](docs/TagService.md#unbindArticle) | **POST** /v1/content/tag/unbind-article | 
-*TagService* | [**unbindArticleWithHttpInfo**](docs/TagService.md#unbindArticleWithHttpInfo) | **POST** /v1/content/tag/unbind-article | 
-*TagService* | [**update**](docs/TagService.md#update) | **POST** /v1/content/tag/update | 
-*TagService* | [**updateWithHttpInfo**](docs/TagService.md#updateWithHttpInfo) | **POST** /v1/content/tag/update | 
+*TagService* | [**listTags**](docs/TagService.md#listTags) | **POST** /v1/content/tag/list | 
+*TagService* | [**listTagsWithHttpInfo**](docs/TagService.md#listTagsWithHttpInfo) | **POST** /v1/content/tag/list | 
+*TagService* | [**unbindArticleTags**](docs/TagService.md#unbindArticleTags) | **POST** /v1/content/tag/unbind-article | 
+*TagService* | [**unbindArticleTagsWithHttpInfo**](docs/TagService.md#unbindArticleTagsWithHttpInfo) | **POST** /v1/content/tag/unbind-article | 
+*TagService* | [**updateTag**](docs/TagService.md#updateTag) | **POST** /v1/content/tag/update | 
+*TagService* | [**updateTagWithHttpInfo**](docs/TagService.md#updateTagWithHttpInfo) | **POST** /v1/content/tag/update | 
 
 
 ## Documentation for Models
@@ -402,6 +402,7 @@ Class | Method | HTTP request | Description
  - [ArticleTag](docs/ArticleTag.md)
  - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
  - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
+ - [AvatarAccountResp](docs/AvatarAccountResp.md)
  - [BadgeDraft](docs/BadgeDraft.md)
  - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
  - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
@@ -537,13 +538,15 @@ Class | Method | HTTP request | Description
  - [PageCollectedArticlesReq](docs/PageCollectedArticlesReq.md)
  - [PageCollectedArticlesResp](docs/PageCollectedArticlesResp.md)
  - [PageMemberMoonbreezesReq](docs/PageMemberMoonbreezesReq.md)
- - [PageMoonbreezesResp](docs/PageMoonbreezesResp.md)
+ - [PageMemberMoonbreezesResp](docs/PageMemberMoonbreezesResp.md)
  - [PagePublicMoonbreezesReq](docs/PagePublicMoonbreezesReq.md)
+ - [PagePublicMoonbreezesResp](docs/PagePublicMoonbreezesResp.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
  - [PageWatchedArticlesReq](docs/PageWatchedArticlesReq.md)
  - [PageWatchedArticlesResp](docs/PageWatchedArticlesResp.md)
  - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
+ - [PageWatchingMoonbreezesResp](docs/PageWatchingMoonbreezesResp.md)
  - [PrepareBadgeFontUploadReq](docs/PrepareBadgeFontUploadReq.md)
  - [PrepareBadgeFontUploadResp](docs/PrepareBadgeFontUploadResp.md)
  - [PrepareBadgeImageUploadReq](docs/PrepareBadgeImageUploadReq.md)
@@ -568,6 +571,8 @@ Class | Method | HTTP request | Description
  - [RenameEmojiGroupResp](docs/RenameEmojiGroupResp.md)
  - [RenameEmojiItemReq](docs/RenameEmojiItemReq.md)
  - [RenameEmojiItemResp](docs/RenameEmojiItemResp.md)
+ - [RenderMakerBadgeResp](docs/RenderMakerBadgeResp.md)
+ - [RenderPublishedBadgeResp](docs/RenderPublishedBadgeResp.md)
  - [RenderSpec](docs/RenderSpec.md)
  - [ReorderEmojiGroupsReq](docs/ReorderEmojiGroupsReq.md)
  - [ReorderEmojiItemsReq](docs/ReorderEmojiItemsReq.md)

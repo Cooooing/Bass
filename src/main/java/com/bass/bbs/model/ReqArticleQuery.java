@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqArticleQuery
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqArticleQuery.JSON_PROPERTY_TAG_ID,
@@ -59,7 +59,7 @@ public class ReqArticleQuery {
   private String domainId;
 
   /**
-   * Gets or Sets type
+   * 可选，文章类型
    */
   public enum TypeEnum {
     ARTICLE_TYPE_UNSPECIFIED(String.valueOf("ARTICLE_TYPE_UNSPECIFIED")),
@@ -106,7 +106,7 @@ public class ReqArticleQuery {
   private TypeEnum type;
 
   /**
-   * Gets or Sets order
+   * 可选，排序方式
    */
   public enum OrderEnum {
     ARTICLE_ORDER_UNSPECIFIED(String.valueOf("ARTICLE_ORDER_UNSPECIFIED")),
@@ -151,7 +151,7 @@ public class ReqArticleQuery {
   private String authorId;
 
   /**
-   * Gets or Sets publishStatus
+   * 可选，发布状态
    */
   public enum PublishStatusEnum {
     ARTICLE_PUBLISH_STATUS_UNSPECIFIED(String.valueOf("ARTICLE_PUBLISH_STATUS_UNSPECIFIED")),
@@ -237,7 +237,7 @@ public class ReqArticleQuery {
   private List<PublishStatusesEnum> publishStatuses = new ArrayList<>();
 
   /**
-   * Gets or Sets visibility
+   * 可选，可见范围
    */
   public enum VisibilityEnum {
     ARTICLE_VISIBILITY_UNSPECIFIED(String.valueOf("ARTICLE_VISIBILITY_UNSPECIFIED")),
@@ -319,7 +319,7 @@ public class ReqArticleQuery {
   private List<VisibilitiesEnum> visibilities = new ArrayList<>();
 
   /**
-   * Gets or Sets restriction
+   * 可选，治理限制
    */
   public enum RestrictionEnum {
     CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
@@ -417,7 +417,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get tagId
+   * 可选，标签 ID
    * @return tagId
    */
   @javax.annotation.Nullable
@@ -441,7 +441,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get domainId
+   * 可选，领域 ID
    * @return domainId
    */
   @javax.annotation.Nullable
@@ -465,7 +465,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get type
+   * 可选，文章类型
    * @return type
    */
   @javax.annotation.Nullable
@@ -489,7 +489,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get order
+   * 可选，排序方式
    * @return order
    */
   @javax.annotation.Nullable
@@ -513,7 +513,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get authorId
+   * 可选，作者账号 ID
    * @return authorId
    */
   @javax.annotation.Nullable
@@ -537,7 +537,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get publishStatus
+   * 可选，发布状态
    * @return publishStatus
    */
   @javax.annotation.Nullable
@@ -569,7 +569,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get publishStatuses
+   * 可选，发布状态列表
    * @return publishStatuses
    */
   @javax.annotation.Nullable
@@ -593,7 +593,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get visibility
+   * 可选，可见范围
    * @return visibility
    */
   @javax.annotation.Nullable
@@ -625,7 +625,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get visibilities
+   * 可选，可见范围列表
    * @return visibilities
    */
   @javax.annotation.Nullable
@@ -649,7 +649,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get restriction
+   * 可选，治理限制
    * @return restriction
    */
   @javax.annotation.Nullable
@@ -681,7 +681,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get restrictions
+   * 可选，治理限制列表
    * @return restrictions
    */
   @javax.annotation.Nullable
@@ -705,7 +705,7 @@ public class ReqArticleQuery {
   }
 
   /**
-   * Get scheduled
+   * 可选，仅本人草稿：是否已设置发布时间
    * @return scheduled
    */
   @javax.annotation.Nullable

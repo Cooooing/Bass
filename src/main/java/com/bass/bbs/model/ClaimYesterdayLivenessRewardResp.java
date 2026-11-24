@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ClaimYesterdayLivenessRewardResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ClaimYesterdayLivenessRewardResp.JSON_PROPERTY_REWARD_POINTS,
@@ -55,7 +55,7 @@ public class ClaimYesterdayLivenessRewardResp {
   }
 
   /**
-   * Get rewardPoints
+   * 本次领取的积分。
    * @return rewardPoints
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class ClaimYesterdayLivenessRewardResp {
   }
 
   /**
-   * Get claimed
+   * 是否已成功领取。
    * @return claimed
    */
   @javax.annotation.Nullable

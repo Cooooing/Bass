@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReorderEmojiGroupsReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ReorderEmojiGroupsReq.JSON_PROPERTY_GROUP_IDS
@@ -60,7 +60,7 @@ public class ReorderEmojiGroupsReq {
   }
 
   /**
-   * Get groupIds
+   * 按最终展示顺序排列的完整分组 ID 序列。
    * @return groupIds
    */
   @javax.annotation.Nullable

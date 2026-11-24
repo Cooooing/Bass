@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateDraftArticleResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   UpdateDraftArticleResp.JSON_PROPERTY_ARTICLE_ID
@@ -50,7 +50,7 @@ public class UpdateDraftArticleResp {
   }
 
   /**
-   * Get articleId
+   * 已保存草稿的文章 ID
    * @return articleId
    */
   @javax.annotation.Nullable

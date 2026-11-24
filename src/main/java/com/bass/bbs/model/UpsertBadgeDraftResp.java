@@ -51,7 +51,7 @@ public class UpsertBadgeDraftResp {
   }
 
   /**
-   * Get draft
+   * 已保存草稿。
    * @return draft
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CompleteBadgeImageUploadReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CompleteBadgeImageUploadReq.JSON_PROPERTY_HASH
@@ -50,7 +50,7 @@ public class CompleteBadgeImageUploadReq {
   }
 
   /**
-   * Get hash
+   * 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
    * @return hash
    */
   @javax.annotation.Nonnull

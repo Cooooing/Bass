@@ -61,7 +61,7 @@ public class ListBadgeDraftsResp {
   }
 
   /**
-   * Get rows
+   * 草稿列表。
    * @return rows
    */
   @javax.annotation.Nullable

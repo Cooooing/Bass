@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CommentListItem
+ * 协议消息。
  */
 @JsonPropertyOrder({
   CommentListItem.JSON_PROPERTY_ID,
@@ -110,7 +110,7 @@ public class CommentListItem {
   private CommentViewerActionState viewerActionState;
 
   /**
-   * Gets or Sets restriction
+   * 管理限制
    */
   public enum RestrictionEnum {
     CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
@@ -177,7 +177,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get id
+   * 评论 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -201,7 +201,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get articleId
+   * 文章 ID
    * @return articleId
    */
   @javax.annotation.Nullable
@@ -225,7 +225,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get content
+   * 原始内容
    * @return content
    */
   @javax.annotation.Nullable
@@ -249,7 +249,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get contentRender
+   * 渲染后的内容
    * @return contentRender
    */
   @javax.annotation.Nullable
@@ -273,7 +273,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get level
+   * 评论层级
    * @return level
    */
   @javax.annotation.Nullable
@@ -297,7 +297,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get parentId
+   * 父评论 ID
    * @return parentId
    */
   @javax.annotation.Nullable
@@ -321,7 +321,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get replyId
+   * 回复的评论 ID
    * @return replyId
    */
   @javax.annotation.Nullable
@@ -345,7 +345,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get replyCount
+   * 回复数量
    * @return replyCount
    */
   @javax.annotation.Nullable
@@ -369,7 +369,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get likeCount
+   * 点赞数量
    * @return likeCount
    */
   @javax.annotation.Nullable
@@ -393,7 +393,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get thankCount
+   * 感谢数量
    * @return thankCount
    */
   @javax.annotation.Nullable
@@ -417,7 +417,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get user
+   * 评论账号展示资料
    * @return user
    */
   @javax.annotation.Nullable
@@ -441,7 +441,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get replyUser
+   * 被回复账号展示资料
    * @return replyUser
    */
   @javax.annotation.Nullable
@@ -465,7 +465,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get viewerActionState
+   * 当前查看账号的评论行为状态
    * @return viewerActionState
    */
   @javax.annotation.Nullable
@@ -489,7 +489,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get restriction
+   * 管理限制
    * @return restriction
    */
   @javax.annotation.Nullable
@@ -513,7 +513,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get createdBy
+   * 创建账号 ID
    * @return createdBy
    */
   @javax.annotation.Nullable
@@ -537,7 +537,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get updatedBy
+   * 更新账号 ID
    * @return updatedBy
    */
   @javax.annotation.Nullable
@@ -561,7 +561,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -585,7 +585,7 @@ public class CommentListItem {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

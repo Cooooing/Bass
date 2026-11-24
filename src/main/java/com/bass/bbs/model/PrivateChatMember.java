@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PrivateChatMember
+ * 协议消息。
  */
 @JsonPropertyOrder({
   PrivateChatMember.JSON_PROPERTY_USER_ID,
@@ -70,7 +70,7 @@ public class PrivateChatMember {
   }
 
   /**
-   * Get userId
+   * 账号 ID。
    * @return userId
    */
   @javax.annotation.Nullable
@@ -94,7 +94,7 @@ public class PrivateChatMember {
   }
 
   /**
-   * Get name
+   * 用户名。
    * @return name
    */
   @javax.annotation.Nullable
@@ -118,7 +118,7 @@ public class PrivateChatMember {
   }
 
   /**
-   * Get nickname
+   * 昵称。
    * @return nickname
    */
   @javax.annotation.Nullable
@@ -142,7 +142,7 @@ public class PrivateChatMember {
   }
 
   /**
-   * Get avatarUrl
+   * 头像地址。
    * @return avatarUrl
    */
   @javax.annotation.Nullable
@@ -166,7 +166,7 @@ public class PrivateChatMember {
   }
 
   /**
-   * Get online
+   * 是否存在有效实时连接。
    * @return online
    */
   @javax.annotation.Nullable

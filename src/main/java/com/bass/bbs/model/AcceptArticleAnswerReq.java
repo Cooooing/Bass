@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * AcceptArticleAnswerReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   AcceptArticleAnswerReq.JSON_PROPERTY_ARTICLE_ID,
@@ -55,7 +55,7 @@ public class AcceptArticleAnswerReq {
   }
 
   /**
-   * Get articleId
+   * 问答文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class AcceptArticleAnswerReq {
   }
 
   /**
-   * Get commentId
+   * 采纳的一级回答 ID
    * @return commentId
    */
   @javax.annotation.Nonnull

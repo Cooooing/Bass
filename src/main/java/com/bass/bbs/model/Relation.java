@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * Relation
+ * 协议消息。
  */
 @JsonPropertyOrder({
   Relation.JSON_PROPERTY_ID,
@@ -48,7 +48,7 @@ public class Relation {
   private String id;
 
   /**
-   * Gets or Sets type
+   * 关系类型
    */
   public enum TypeEnum {
     RELATION_TYPE_UNSPECIFIED(String.valueOf("RELATION_TYPE_UNSPECIFIED")),
@@ -113,7 +113,7 @@ public class Relation {
   }
 
   /**
-   * Get id
+   * 关系 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -137,7 +137,7 @@ public class Relation {
   }
 
   /**
-   * Get type
+   * 关系类型
    * @return type
    */
   @javax.annotation.Nullable
@@ -161,7 +161,7 @@ public class Relation {
   }
 
   /**
-   * Get actorId
+   * 发起账号 ID
    * @return actorId
    */
   @javax.annotation.Nullable
@@ -185,7 +185,7 @@ public class Relation {
   }
 
   /**
-   * Get targetId
+   * 目标账号 ID
    * @return targetId
    */
   @javax.annotation.Nullable
@@ -209,7 +209,7 @@ public class Relation {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -233,7 +233,7 @@ public class Relation {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

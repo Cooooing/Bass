@@ -4,22 +4,22 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**deleteDraft**](BadgeService.md#deleteDraft) | **POST** /v1/badge/draft/delete |  |
-| [**deleteDraftWithHttpInfo**](BadgeService.md#deleteDraftWithHttpInfo) | **POST** /v1/badge/draft/delete |  |
-| [**listDrafts**](BadgeService.md#listDrafts) | **POST** /v1/badge/draft/list |  |
-| [**listDraftsWithHttpInfo**](BadgeService.md#listDraftsWithHttpInfo) | **POST** /v1/badge/draft/list |  |
-| [**renderMaker**](BadgeService.md#renderMaker) | **GET** /v1/badge/maker/render |  |
-| [**renderMakerWithHttpInfo**](BadgeService.md#renderMakerWithHttpInfo) | **GET** /v1/badge/maker/render |  |
-| [**renderPublished**](BadgeService.md#renderPublished) | **GET** /v1/badge/render |  |
-| [**renderPublishedWithHttpInfo**](BadgeService.md#renderPublishedWithHttpInfo) | **GET** /v1/badge/render |  |
-| [**upsertDraft**](BadgeService.md#upsertDraft) | **POST** /v1/badge/draft/upsert |  |
-| [**upsertDraftWithHttpInfo**](BadgeService.md#upsertDraftWithHttpInfo) | **POST** /v1/badge/draft/upsert |  |
+| [**deleteBadgeDraft**](BadgeService.md#deleteBadgeDraft) | **POST** /v1/badge/draft/delete |  |
+| [**deleteBadgeDraftWithHttpInfo**](BadgeService.md#deleteBadgeDraftWithHttpInfo) | **POST** /v1/badge/draft/delete |  |
+| [**listBadgeDrafts**](BadgeService.md#listBadgeDrafts) | **POST** /v1/badge/draft/list |  |
+| [**listBadgeDraftsWithHttpInfo**](BadgeService.md#listBadgeDraftsWithHttpInfo) | **POST** /v1/badge/draft/list |  |
+| [**renderMakerBadge**](BadgeService.md#renderMakerBadge) | **GET** /v1/badge/maker/render |  |
+| [**renderMakerBadgeWithHttpInfo**](BadgeService.md#renderMakerBadgeWithHttpInfo) | **GET** /v1/badge/maker/render |  |
+| [**renderPublishedBadge**](BadgeService.md#renderPublishedBadge) | **GET** /v1/badge/render |  |
+| [**renderPublishedBadgeWithHttpInfo**](BadgeService.md#renderPublishedBadgeWithHttpInfo) | **GET** /v1/badge/render |  |
+| [**upsertBadgeDraft**](BadgeService.md#upsertBadgeDraft) | **POST** /v1/badge/draft/upsert |  |
+| [**upsertBadgeDraftWithHttpInfo**](BadgeService.md#upsertBadgeDraftWithHttpInfo) | **POST** /v1/badge/draft/upsert |  |
 
 
 
-## deleteDraft
+## deleteBadgeDraft
 
-> Object deleteDraft(deleteDraftRequest)
+> Object deleteBadgeDraft(deleteBadgeDraftRequest)
 
 
 
@@ -44,13 +44,13 @@ public class Example {
         BadgeService apiInstance = new BadgeService(defaultClient);
         DeleteBadgeDraftReq deleteBadgeDraftReq = new DeleteBadgeDraftReq(); // DeleteBadgeDraftReq | 
         try {
-            APIdeleteDraftRequest request = APIdeleteDraftRequest.newBuilder()
+            APIdeleteBadgeDraftRequest request = APIdeleteBadgeDraftRequest.newBuilder()
                 .deleteBadgeDraftReq(deleteBadgeDraftReq)
                 .build();
-            Object result = apiInstance.deleteDraft(request);
+            Object result = apiInstance.deleteBadgeDraft(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#deleteDraft");
+            System.err.println("Exception when calling BadgeService#deleteBadgeDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -64,7 +64,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteDraftRequest | [**APIdeleteDraftRequest**](BadgeService.md#APIdeleteDraftRequest)|-|-|
+| deleteBadgeDraftRequest | [**APIdeleteBadgeDraftRequest**](BadgeService.md#APIdeleteBadgeDraftRequest)|-|-|
 
 ### Return type
 
@@ -85,9 +85,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## deleteDraftWithHttpInfo
+## deleteBadgeDraftWithHttpInfo
 
-> ApiResponse<Object> deleteDraftWithHttpInfo(deleteDraftRequest)
+> ApiResponse<Object> deleteBadgeDraftWithHttpInfo(deleteBadgeDraftRequest)
 
 
 
@@ -113,15 +113,15 @@ public class Example {
         BadgeService apiInstance = new BadgeService(defaultClient);
         DeleteBadgeDraftReq deleteBadgeDraftReq = new DeleteBadgeDraftReq(); // DeleteBadgeDraftReq | 
         try {
-            APIdeleteDraftRequest request = APIdeleteDraftRequest.newBuilder()
+            APIdeleteBadgeDraftRequest request = APIdeleteBadgeDraftRequest.newBuilder()
                 .deleteBadgeDraftReq(deleteBadgeDraftReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.deleteDraftWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.deleteBadgeDraftWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#deleteDraft");
+            System.err.println("Exception when calling BadgeService#deleteBadgeDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -135,7 +135,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| deleteDraftRequest | [**APIdeleteDraftRequest**](BadgeService.md#APIdeleteDraftRequest)|-|-|
+| deleteBadgeDraftRequest | [**APIdeleteBadgeDraftRequest**](BadgeService.md#APIdeleteBadgeDraftRequest)|-|-|
 
 ### Return type
 
@@ -157,8 +157,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIdeleteDraftRequest"></a>
-## APIdeleteDraftRequest
+<a id="APIdeleteBadgeDraftRequest"></a>
+## APIdeleteBadgeDraftRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -167,9 +167,9 @@ No authorization required
 
 
 
-## listDrafts
+## listBadgeDrafts
 
-> ListBadgeDraftsResp listDrafts(listDraftsRequest)
+> ListBadgeDraftsResp listBadgeDrafts(listBadgeDraftsRequest)
 
 
 
@@ -194,13 +194,13 @@ public class Example {
         BadgeService apiInstance = new BadgeService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIlistDraftsRequest request = APIlistDraftsRequest.newBuilder()
+            APIlistBadgeDraftsRequest request = APIlistBadgeDraftsRequest.newBuilder()
                 .body(body)
                 .build();
-            ListBadgeDraftsResp result = apiInstance.listDrafts(request);
+            ListBadgeDraftsResp result = apiInstance.listBadgeDrafts(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#listDrafts");
+            System.err.println("Exception when calling BadgeService#listBadgeDrafts");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -214,7 +214,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listDraftsRequest | [**APIlistDraftsRequest**](BadgeService.md#APIlistDraftsRequest)|-|-|
+| listBadgeDraftsRequest | [**APIlistBadgeDraftsRequest**](BadgeService.md#APIlistBadgeDraftsRequest)|-|-|
 
 ### Return type
 
@@ -235,9 +235,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listDraftsWithHttpInfo
+## listBadgeDraftsWithHttpInfo
 
-> ApiResponse<ListBadgeDraftsResp> listDraftsWithHttpInfo(listDraftsRequest)
+> ApiResponse<ListBadgeDraftsResp> listBadgeDraftsWithHttpInfo(listBadgeDraftsRequest)
 
 
 
@@ -263,15 +263,15 @@ public class Example {
         BadgeService apiInstance = new BadgeService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIlistDraftsRequest request = APIlistDraftsRequest.newBuilder()
+            APIlistBadgeDraftsRequest request = APIlistBadgeDraftsRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<ListBadgeDraftsResp> response = apiInstance.listDraftsWithHttpInfo(request);
+            ApiResponse<ListBadgeDraftsResp> response = apiInstance.listBadgeDraftsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#listDrafts");
+            System.err.println("Exception when calling BadgeService#listBadgeDrafts");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -285,7 +285,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listDraftsRequest | [**APIlistDraftsRequest**](BadgeService.md#APIlistDraftsRequest)|-|-|
+| listBadgeDraftsRequest | [**APIlistBadgeDraftsRequest**](BadgeService.md#APIlistBadgeDraftsRequest)|-|-|
 
 ### Return type
 
@@ -307,8 +307,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistDraftsRequest"></a>
-## APIlistDraftsRequest
+<a id="APIlistBadgeDraftsRequest"></a>
+## APIlistBadgeDraftsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -317,9 +317,9 @@ No authorization required
 
 
 
-## renderMaker
+## renderMakerBadge
 
-> ImageResp renderMaker(renderMakerRequest)
+> RenderMakerBadgeResp renderMakerBadge(renderMakerBadgeRequest)
 
 
 
@@ -342,23 +342,23 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         BadgeService apiInstance = new BadgeService(defaultClient);
-        String renderSpecImageAssetId = "renderSpecImageAssetId_example"; // String | 
-        String renderSpecText = "renderSpecText_example"; // String | 
-        List<String> renderSpecBackgroundColors = Arrays.asList(); // List<String> | 
-        List<String> renderSpecTextColors = Arrays.asList(); // List<String> | 
-        String renderSpecBackgroundDirection = "renderSpecBackgroundDirection_example"; // String | 
-        String renderSpecTextDirection = "renderSpecTextDirection_example"; // String | 
-        Integer renderSpecSize = 56; // Integer | 
-        Integer renderSpecBorder = 56; // Integer | 
-        Integer renderSpecTextBarLength = 56; // Integer | 
-        Integer renderSpecTextSize = 56; // Integer | 
-        Integer renderSpecTextBarRadius = 56; // Integer | 
-        Double renderSpecScale = 3.4D; // Double | 
-        Double renderSpecShadow = 3.4D; // Double | 
-        Double renderSpecAnimationSeconds = 3.4D; // Double | 
-        String renderSpecFontAssetId = "renderSpecFontAssetId_example"; // String | 
+        String renderSpecImageAssetId = "renderSpecImageAssetId_example"; // String | Platform 已确认可用的徽章图标资源 ID。
+        String renderSpecText = "renderSpecText_example"; // String | 文字条内容。
+        List<String> renderSpecBackgroundColors = Arrays.asList(); // List<String> | 背景颜色列表。
+        List<String> renderSpecTextColors = Arrays.asList(); // List<String> | 文字颜色列表。
+        String renderSpecBackgroundDirection = "renderSpecBackgroundDirection_example"; // String | 背景渐变方向或角度。
+        String renderSpecTextDirection = "renderSpecTextDirection_example"; // String | 文字渐变方向或角度。
+        Integer renderSpecSize = 56; // Integer | 图标边长。
+        Integer renderSpecBorder = 56; // Integer | 图标边距。
+        Integer renderSpecTextBarLength = 56; // Integer | 文字条长度。
+        Integer renderSpecTextSize = 56; // Integer | 文字字号。
+        Integer renderSpecTextBarRadius = 56; // Integer | 文字条圆角。
+        Double renderSpecScale = 3.4D; // Double | 整体缩放比例。
+        Double renderSpecShadow = 3.4D; // Double | 阴影强度。
+        Double renderSpecAnimationSeconds = 3.4D; // Double | 动画时长。
+        String renderSpecFontAssetId = "renderSpecFontAssetId_example"; // String | Platform 已确认可用的自定义字体资源 ID。
         try {
-            APIrenderMakerRequest request = APIrenderMakerRequest.newBuilder()
+            APIrenderMakerBadgeRequest request = APIrenderMakerBadgeRequest.newBuilder()
                 .renderSpecImageAssetId(renderSpecImageAssetId)
                 .renderSpecText(renderSpecText)
                 .renderSpecBackgroundColors(renderSpecBackgroundColors)
@@ -375,10 +375,10 @@ public class Example {
                 .renderSpecAnimationSeconds(renderSpecAnimationSeconds)
                 .renderSpecFontAssetId(renderSpecFontAssetId)
                 .build();
-            ImageResp result = apiInstance.renderMaker(request);
+            RenderMakerBadgeResp result = apiInstance.renderMakerBadge(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#renderMaker");
+            System.err.println("Exception when calling BadgeService#renderMakerBadge");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -392,11 +392,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renderMakerRequest | [**APIrenderMakerRequest**](BadgeService.md#APIrenderMakerRequest)|-|-|
+| renderMakerBadgeRequest | [**APIrenderMakerBadgeRequest**](BadgeService.md#APIrenderMakerBadgeRequest)|-|-|
 
 ### Return type
 
-[**ImageResp**](ImageResp.md)
+[**RenderMakerBadgeResp**](RenderMakerBadgeResp.md)
 
 
 ### Authorization
@@ -413,9 +413,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## renderMakerWithHttpInfo
+## renderMakerBadgeWithHttpInfo
 
-> ApiResponse<ImageResp> renderMakerWithHttpInfo(renderMakerRequest)
+> ApiResponse<RenderMakerBadgeResp> renderMakerBadgeWithHttpInfo(renderMakerBadgeRequest)
 
 
 
@@ -439,23 +439,23 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         BadgeService apiInstance = new BadgeService(defaultClient);
-        String renderSpecImageAssetId = "renderSpecImageAssetId_example"; // String | 
-        String renderSpecText = "renderSpecText_example"; // String | 
-        List<String> renderSpecBackgroundColors = Arrays.asList(); // List<String> | 
-        List<String> renderSpecTextColors = Arrays.asList(); // List<String> | 
-        String renderSpecBackgroundDirection = "renderSpecBackgroundDirection_example"; // String | 
-        String renderSpecTextDirection = "renderSpecTextDirection_example"; // String | 
-        Integer renderSpecSize = 56; // Integer | 
-        Integer renderSpecBorder = 56; // Integer | 
-        Integer renderSpecTextBarLength = 56; // Integer | 
-        Integer renderSpecTextSize = 56; // Integer | 
-        Integer renderSpecTextBarRadius = 56; // Integer | 
-        Double renderSpecScale = 3.4D; // Double | 
-        Double renderSpecShadow = 3.4D; // Double | 
-        Double renderSpecAnimationSeconds = 3.4D; // Double | 
-        String renderSpecFontAssetId = "renderSpecFontAssetId_example"; // String | 
+        String renderSpecImageAssetId = "renderSpecImageAssetId_example"; // String | Platform 已确认可用的徽章图标资源 ID。
+        String renderSpecText = "renderSpecText_example"; // String | 文字条内容。
+        List<String> renderSpecBackgroundColors = Arrays.asList(); // List<String> | 背景颜色列表。
+        List<String> renderSpecTextColors = Arrays.asList(); // List<String> | 文字颜色列表。
+        String renderSpecBackgroundDirection = "renderSpecBackgroundDirection_example"; // String | 背景渐变方向或角度。
+        String renderSpecTextDirection = "renderSpecTextDirection_example"; // String | 文字渐变方向或角度。
+        Integer renderSpecSize = 56; // Integer | 图标边长。
+        Integer renderSpecBorder = 56; // Integer | 图标边距。
+        Integer renderSpecTextBarLength = 56; // Integer | 文字条长度。
+        Integer renderSpecTextSize = 56; // Integer | 文字字号。
+        Integer renderSpecTextBarRadius = 56; // Integer | 文字条圆角。
+        Double renderSpecScale = 3.4D; // Double | 整体缩放比例。
+        Double renderSpecShadow = 3.4D; // Double | 阴影强度。
+        Double renderSpecAnimationSeconds = 3.4D; // Double | 动画时长。
+        String renderSpecFontAssetId = "renderSpecFontAssetId_example"; // String | Platform 已确认可用的自定义字体资源 ID。
         try {
-            APIrenderMakerRequest request = APIrenderMakerRequest.newBuilder()
+            APIrenderMakerBadgeRequest request = APIrenderMakerBadgeRequest.newBuilder()
                 .renderSpecImageAssetId(renderSpecImageAssetId)
                 .renderSpecText(renderSpecText)
                 .renderSpecBackgroundColors(renderSpecBackgroundColors)
@@ -472,12 +472,12 @@ public class Example {
                 .renderSpecAnimationSeconds(renderSpecAnimationSeconds)
                 .renderSpecFontAssetId(renderSpecFontAssetId)
                 .build();
-            ApiResponse<ImageResp> response = apiInstance.renderMakerWithHttpInfo(request);
+            ApiResponse<RenderMakerBadgeResp> response = apiInstance.renderMakerBadgeWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#renderMaker");
+            System.err.println("Exception when calling BadgeService#renderMakerBadge");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -491,11 +491,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renderMakerRequest | [**APIrenderMakerRequest**](BadgeService.md#APIrenderMakerRequest)|-|-|
+| renderMakerBadgeRequest | [**APIrenderMakerBadgeRequest**](BadgeService.md#APIrenderMakerBadgeRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**ImageResp**](ImageResp.md)>
+ApiResponse<[**RenderMakerBadgeResp**](RenderMakerBadgeResp.md)>
 
 
 ### Authorization
@@ -513,33 +513,33 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIrenderMakerRequest"></a>
-## APIrenderMakerRequest
+<a id="APIrenderMakerBadgeRequest"></a>
+## APIrenderMakerBadgeRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **renderSpecImageAssetId** | **String** |  | [optional] |
-| **renderSpecText** | **String** |  | [optional] |
-| **renderSpecBackgroundColors** | [**List&lt;String&gt;**](String.md) |  | [optional] |
-| **renderSpecTextColors** | [**List&lt;String&gt;**](String.md) |  | [optional] |
-| **renderSpecBackgroundDirection** | **String** |  | [optional] |
-| **renderSpecTextDirection** | **String** |  | [optional] |
-| **renderSpecSize** | **Integer** |  | [optional] |
-| **renderSpecBorder** | **Integer** |  | [optional] |
-| **renderSpecTextBarLength** | **Integer** |  | [optional] |
-| **renderSpecTextSize** | **Integer** |  | [optional] |
-| **renderSpecTextBarRadius** | **Integer** |  | [optional] |
-| **renderSpecScale** | **Double** |  | [optional] |
-| **renderSpecShadow** | **Double** |  | [optional] |
-| **renderSpecAnimationSeconds** | **Double** |  | [optional] |
-| **renderSpecFontAssetId** | **String** |  | [optional] |
+| **renderSpecImageAssetId** | **String** | Platform 已确认可用的徽章图标资源 ID。 | [optional] |
+| **renderSpecText** | **String** | 文字条内容。 | [optional] |
+| **renderSpecBackgroundColors** | [**List&lt;String&gt;**](String.md) | 背景颜色列表。 | [optional] |
+| **renderSpecTextColors** | [**List&lt;String&gt;**](String.md) | 文字颜色列表。 | [optional] |
+| **renderSpecBackgroundDirection** | **String** | 背景渐变方向或角度。 | [optional] |
+| **renderSpecTextDirection** | **String** | 文字渐变方向或角度。 | [optional] |
+| **renderSpecSize** | **Integer** | 图标边长。 | [optional] |
+| **renderSpecBorder** | **Integer** | 图标边距。 | [optional] |
+| **renderSpecTextBarLength** | **Integer** | 文字条长度。 | [optional] |
+| **renderSpecTextSize** | **Integer** | 文字字号。 | [optional] |
+| **renderSpecTextBarRadius** | **Integer** | 文字条圆角。 | [optional] |
+| **renderSpecScale** | **Double** | 整体缩放比例。 | [optional] |
+| **renderSpecShadow** | **Double** | 阴影强度。 | [optional] |
+| **renderSpecAnimationSeconds** | **Double** | 动画时长。 | [optional] |
+| **renderSpecFontAssetId** | **String** | Platform 已确认可用的自定义字体资源 ID。 | [optional] |
 
 
 
-## renderPublished
+## renderPublishedBadge
 
-> ImageResp renderPublished(renderPublishedRequest)
+> RenderPublishedBadgeResp renderPublishedBadge(renderPublishedBadgeRequest)
 
 
 
@@ -562,15 +562,15 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         BadgeService apiInstance = new BadgeService(defaultClient);
-        String code = "code_example"; // String | 
+        String code = "code_example"; // String | 已发布徽章稳定编码。
         try {
-            APIrenderPublishedRequest request = APIrenderPublishedRequest.newBuilder()
+            APIrenderPublishedBadgeRequest request = APIrenderPublishedBadgeRequest.newBuilder()
                 .code(code)
                 .build();
-            ImageResp result = apiInstance.renderPublished(request);
+            RenderPublishedBadgeResp result = apiInstance.renderPublishedBadge(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#renderPublished");
+            System.err.println("Exception when calling BadgeService#renderPublishedBadge");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -584,11 +584,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renderPublishedRequest | [**APIrenderPublishedRequest**](BadgeService.md#APIrenderPublishedRequest)|-|-|
+| renderPublishedBadgeRequest | [**APIrenderPublishedBadgeRequest**](BadgeService.md#APIrenderPublishedBadgeRequest)|-|-|
 
 ### Return type
 
-[**ImageResp**](ImageResp.md)
+[**RenderPublishedBadgeResp**](RenderPublishedBadgeResp.md)
 
 
 ### Authorization
@@ -605,9 +605,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## renderPublishedWithHttpInfo
+## renderPublishedBadgeWithHttpInfo
 
-> ApiResponse<ImageResp> renderPublishedWithHttpInfo(renderPublishedRequest)
+> ApiResponse<RenderPublishedBadgeResp> renderPublishedBadgeWithHttpInfo(renderPublishedBadgeRequest)
 
 
 
@@ -631,17 +631,17 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         BadgeService apiInstance = new BadgeService(defaultClient);
-        String code = "code_example"; // String | 
+        String code = "code_example"; // String | 已发布徽章稳定编码。
         try {
-            APIrenderPublishedRequest request = APIrenderPublishedRequest.newBuilder()
+            APIrenderPublishedBadgeRequest request = APIrenderPublishedBadgeRequest.newBuilder()
                 .code(code)
                 .build();
-            ApiResponse<ImageResp> response = apiInstance.renderPublishedWithHttpInfo(request);
+            ApiResponse<RenderPublishedBadgeResp> response = apiInstance.renderPublishedBadgeWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#renderPublished");
+            System.err.println("Exception when calling BadgeService#renderPublishedBadge");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -655,11 +655,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| renderPublishedRequest | [**APIrenderPublishedRequest**](BadgeService.md#APIrenderPublishedRequest)|-|-|
+| renderPublishedBadgeRequest | [**APIrenderPublishedBadgeRequest**](BadgeService.md#APIrenderPublishedBadgeRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**ImageResp**](ImageResp.md)>
+ApiResponse<[**RenderPublishedBadgeResp**](RenderPublishedBadgeResp.md)>
 
 
 ### Authorization
@@ -677,19 +677,19 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIrenderPublishedRequest"></a>
-## APIrenderPublishedRequest
+<a id="APIrenderPublishedBadgeRequest"></a>
+## APIrenderPublishedBadgeRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **code** | **String** |  | [optional] |
+| **code** | **String** | 已发布徽章稳定编码。 | [optional] |
 
 
 
-## upsertDraft
+## upsertBadgeDraft
 
-> UpsertBadgeDraftResp upsertDraft(upsertDraftRequest)
+> UpsertBadgeDraftResp upsertBadgeDraft(upsertBadgeDraftRequest)
 
 
 
@@ -714,13 +714,13 @@ public class Example {
         BadgeService apiInstance = new BadgeService(defaultClient);
         UpsertBadgeDraftReq upsertBadgeDraftReq = new UpsertBadgeDraftReq(); // UpsertBadgeDraftReq | 
         try {
-            APIupsertDraftRequest request = APIupsertDraftRequest.newBuilder()
+            APIupsertBadgeDraftRequest request = APIupsertBadgeDraftRequest.newBuilder()
                 .upsertBadgeDraftReq(upsertBadgeDraftReq)
                 .build();
-            UpsertBadgeDraftResp result = apiInstance.upsertDraft(request);
+            UpsertBadgeDraftResp result = apiInstance.upsertBadgeDraft(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#upsertDraft");
+            System.err.println("Exception when calling BadgeService#upsertBadgeDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -734,7 +734,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| upsertDraftRequest | [**APIupsertDraftRequest**](BadgeService.md#APIupsertDraftRequest)|-|-|
+| upsertBadgeDraftRequest | [**APIupsertBadgeDraftRequest**](BadgeService.md#APIupsertBadgeDraftRequest)|-|-|
 
 ### Return type
 
@@ -755,9 +755,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## upsertDraftWithHttpInfo
+## upsertBadgeDraftWithHttpInfo
 
-> ApiResponse<UpsertBadgeDraftResp> upsertDraftWithHttpInfo(upsertDraftRequest)
+> ApiResponse<UpsertBadgeDraftResp> upsertBadgeDraftWithHttpInfo(upsertBadgeDraftRequest)
 
 
 
@@ -783,15 +783,15 @@ public class Example {
         BadgeService apiInstance = new BadgeService(defaultClient);
         UpsertBadgeDraftReq upsertBadgeDraftReq = new UpsertBadgeDraftReq(); // UpsertBadgeDraftReq | 
         try {
-            APIupsertDraftRequest request = APIupsertDraftRequest.newBuilder()
+            APIupsertBadgeDraftRequest request = APIupsertBadgeDraftRequest.newBuilder()
                 .upsertBadgeDraftReq(upsertBadgeDraftReq)
                 .build();
-            ApiResponse<UpsertBadgeDraftResp> response = apiInstance.upsertDraftWithHttpInfo(request);
+            ApiResponse<UpsertBadgeDraftResp> response = apiInstance.upsertBadgeDraftWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling BadgeService#upsertDraft");
+            System.err.println("Exception when calling BadgeService#upsertBadgeDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -805,7 +805,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| upsertDraftRequest | [**APIupsertDraftRequest**](BadgeService.md#APIupsertDraftRequest)|-|-|
+| upsertBadgeDraftRequest | [**APIupsertBadgeDraftRequest**](BadgeService.md#APIupsertBadgeDraftRequest)|-|-|
 
 ### Return type
 
@@ -827,8 +827,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupsertDraftRequest"></a>
-## APIupsertDraftRequest
+<a id="APIupsertBadgeDraftRequest"></a>
+## APIupsertBadgeDraftRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

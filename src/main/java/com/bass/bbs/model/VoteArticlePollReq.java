@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * VoteArticlePollReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   VoteArticlePollReq.JSON_PROPERTY_ARTICLE_ID,
@@ -57,7 +57,7 @@ public class VoteArticlePollReq {
   }
 
   /**
-   * Get articleId
+   * 必填，文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -89,7 +89,7 @@ public class VoteArticlePollReq {
   }
 
   /**
-   * Get optionIds
+   * 必填，所选选项 ID
    * @return optionIds
    */
   @javax.annotation.Nonnull

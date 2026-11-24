@@ -4,22 +4,24 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**create**](MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create |  |
-| [**createWithHttpInfo**](MoonbreezeService.md#createWithHttpInfo) | **POST** /v1/content/moonbreeze/create |  |
-| [**pageMember**](MoonbreezeService.md#pageMember) | **POST** /v1/content/moonbreeze/page-member |  |
-| [**pageMemberWithHttpInfo**](MoonbreezeService.md#pageMemberWithHttpInfo) | **POST** /v1/content/moonbreeze/page-member |  |
-| [**pagePublic**](MoonbreezeService.md#pagePublic) | **POST** /v1/content/moonbreeze/page-public |  |
-| [**pagePublicWithHttpInfo**](MoonbreezeService.md#pagePublicWithHttpInfo) | **POST** /v1/content/moonbreeze/page-public |  |
-| [**pageWatching**](MoonbreezeService.md#pageWatching) | **POST** /v1/content/moonbreeze/page-watching |  |
-| [**pageWatchingWithHttpInfo**](MoonbreezeService.md#pageWatchingWithHttpInfo) | **POST** /v1/content/moonbreeze/page-watching |  |
+| [**createMoonbreeze**](MoonbreezeService.md#createMoonbreeze) | **POST** /v1/content/moonbreeze/create |  |
+| [**createMoonbreezeWithHttpInfo**](MoonbreezeService.md#createMoonbreezeWithHttpInfo) | **POST** /v1/content/moonbreeze/create |  |
+| [**pageMemberMoonbreezes**](MoonbreezeService.md#pageMemberMoonbreezes) | **POST** /v1/content/moonbreeze/page-member |  |
+| [**pageMemberMoonbreezesWithHttpInfo**](MoonbreezeService.md#pageMemberMoonbreezesWithHttpInfo) | **POST** /v1/content/moonbreeze/page-member |  |
+| [**pagePublicMoonbreezes**](MoonbreezeService.md#pagePublicMoonbreezes) | **POST** /v1/content/moonbreeze/page-public |  |
+| [**pagePublicMoonbreezesWithHttpInfo**](MoonbreezeService.md#pagePublicMoonbreezesWithHttpInfo) | **POST** /v1/content/moonbreeze/page-public |  |
+| [**pageWatchingMoonbreezes**](MoonbreezeService.md#pageWatchingMoonbreezes) | **POST** /v1/content/moonbreeze/page-watching |  |
+| [**pageWatchingMoonbreezesWithHttpInfo**](MoonbreezeService.md#pageWatchingMoonbreezesWithHttpInfo) | **POST** /v1/content/moonbreeze/page-watching |  |
 
 
 
-## create
+## createMoonbreeze
 
-> CreateMoonbreezeResp create(createRequest)
+> CreateMoonbreezeResp createMoonbreeze(createMoonbreezeRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -40,13 +42,13 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         CreateMoonbreezeReq createMoonbreezeReq = new CreateMoonbreezeReq(); // CreateMoonbreezeReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
+            APIcreateMoonbreezeRequest request = APIcreateMoonbreezeRequest.newBuilder()
                 .createMoonbreezeReq(createMoonbreezeReq)
                 .build();
-            CreateMoonbreezeResp result = apiInstance.create(request);
+            CreateMoonbreezeResp result = apiInstance.createMoonbreeze(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#create");
+            System.err.println("Exception when calling MoonbreezeService#createMoonbreeze");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -60,7 +62,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](MoonbreezeService.md#APIcreateRequest)|-|-|
+| createMoonbreezeRequest | [**APIcreateMoonbreezeRequest**](MoonbreezeService.md#APIcreateMoonbreezeRequest)|-|-|
 
 ### Return type
 
@@ -81,11 +83,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createWithHttpInfo
+## createMoonbreezeWithHttpInfo
 
-> ApiResponse<CreateMoonbreezeResp> createWithHttpInfo(createRequest)
+> ApiResponse<CreateMoonbreezeResp> createMoonbreezeWithHttpInfo(createMoonbreezeRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -107,15 +111,15 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         CreateMoonbreezeReq createMoonbreezeReq = new CreateMoonbreezeReq(); // CreateMoonbreezeReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
+            APIcreateMoonbreezeRequest request = APIcreateMoonbreezeRequest.newBuilder()
                 .createMoonbreezeReq(createMoonbreezeReq)
                 .build();
-            ApiResponse<CreateMoonbreezeResp> response = apiInstance.createWithHttpInfo(request);
+            ApiResponse<CreateMoonbreezeResp> response = apiInstance.createMoonbreezeWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#create");
+            System.err.println("Exception when calling MoonbreezeService#createMoonbreeze");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -129,7 +133,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](MoonbreezeService.md#APIcreateRequest)|-|-|
+| createMoonbreezeRequest | [**APIcreateMoonbreezeRequest**](MoonbreezeService.md#APIcreateMoonbreezeRequest)|-|-|
 
 ### Return type
 
@@ -151,8 +155,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateRequest"></a>
-## APIcreateRequest
+<a id="APIcreateMoonbreezeRequest"></a>
+## APIcreateMoonbreezeRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -161,11 +165,13 @@ No authorization required
 
 
 
-## pageMember
+## pageMemberMoonbreezes
 
-> PageMoonbreezesResp pageMember(pageMemberRequest)
+> PageMemberMoonbreezesResp pageMemberMoonbreezes(pageMemberMoonbreezesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -186,13 +192,13 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         PageMemberMoonbreezesReq pageMemberMoonbreezesReq = new PageMemberMoonbreezesReq(); // PageMemberMoonbreezesReq | 
         try {
-            APIpageMemberRequest request = APIpageMemberRequest.newBuilder()
+            APIpageMemberMoonbreezesRequest request = APIpageMemberMoonbreezesRequest.newBuilder()
                 .pageMemberMoonbreezesReq(pageMemberMoonbreezesReq)
                 .build();
-            PageMoonbreezesResp result = apiInstance.pageMember(request);
+            PageMemberMoonbreezesResp result = apiInstance.pageMemberMoonbreezes(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#pageMember");
+            System.err.println("Exception when calling MoonbreezeService#pageMemberMoonbreezes");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -206,11 +212,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageMemberRequest | [**APIpageMemberRequest**](MoonbreezeService.md#APIpageMemberRequest)|-|-|
+| pageMemberMoonbreezesRequest | [**APIpageMemberMoonbreezesRequest**](MoonbreezeService.md#APIpageMemberMoonbreezesRequest)|-|-|
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PageMemberMoonbreezesResp**](PageMemberMoonbreezesResp.md)
 
 
 ### Authorization
@@ -227,11 +233,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## pageMemberWithHttpInfo
+## pageMemberMoonbreezesWithHttpInfo
 
-> ApiResponse<PageMoonbreezesResp> pageMemberWithHttpInfo(pageMemberRequest)
+> ApiResponse<PageMemberMoonbreezesResp> pageMemberMoonbreezesWithHttpInfo(pageMemberMoonbreezesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -253,15 +261,15 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         PageMemberMoonbreezesReq pageMemberMoonbreezesReq = new PageMemberMoonbreezesReq(); // PageMemberMoonbreezesReq | 
         try {
-            APIpageMemberRequest request = APIpageMemberRequest.newBuilder()
+            APIpageMemberMoonbreezesRequest request = APIpageMemberMoonbreezesRequest.newBuilder()
                 .pageMemberMoonbreezesReq(pageMemberMoonbreezesReq)
                 .build();
-            ApiResponse<PageMoonbreezesResp> response = apiInstance.pageMemberWithHttpInfo(request);
+            ApiResponse<PageMemberMoonbreezesResp> response = apiInstance.pageMemberMoonbreezesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#pageMember");
+            System.err.println("Exception when calling MoonbreezeService#pageMemberMoonbreezes");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -275,11 +283,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageMemberRequest | [**APIpageMemberRequest**](MoonbreezeService.md#APIpageMemberRequest)|-|-|
+| pageMemberMoonbreezesRequest | [**APIpageMemberMoonbreezesRequest**](MoonbreezeService.md#APIpageMemberMoonbreezesRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**PageMoonbreezesResp**](PageMoonbreezesResp.md)>
+ApiResponse<[**PageMemberMoonbreezesResp**](PageMemberMoonbreezesResp.md)>
 
 
 ### Authorization
@@ -297,8 +305,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIpageMemberRequest"></a>
-## APIpageMemberRequest
+<a id="APIpageMemberMoonbreezesRequest"></a>
+## APIpageMemberMoonbreezesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -307,11 +315,13 @@ No authorization required
 
 
 
-## pagePublic
+## pagePublicMoonbreezes
 
-> PageMoonbreezesResp pagePublic(pagePublicRequest)
+> PagePublicMoonbreezesResp pagePublicMoonbreezes(pagePublicMoonbreezesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -332,13 +342,13 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         PagePublicMoonbreezesReq pagePublicMoonbreezesReq = new PagePublicMoonbreezesReq(); // PagePublicMoonbreezesReq | 
         try {
-            APIpagePublicRequest request = APIpagePublicRequest.newBuilder()
+            APIpagePublicMoonbreezesRequest request = APIpagePublicMoonbreezesRequest.newBuilder()
                 .pagePublicMoonbreezesReq(pagePublicMoonbreezesReq)
                 .build();
-            PageMoonbreezesResp result = apiInstance.pagePublic(request);
+            PagePublicMoonbreezesResp result = apiInstance.pagePublicMoonbreezes(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#pagePublic");
+            System.err.println("Exception when calling MoonbreezeService#pagePublicMoonbreezes");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -352,11 +362,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pagePublicRequest | [**APIpagePublicRequest**](MoonbreezeService.md#APIpagePublicRequest)|-|-|
+| pagePublicMoonbreezesRequest | [**APIpagePublicMoonbreezesRequest**](MoonbreezeService.md#APIpagePublicMoonbreezesRequest)|-|-|
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PagePublicMoonbreezesResp**](PagePublicMoonbreezesResp.md)
 
 
 ### Authorization
@@ -373,11 +383,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## pagePublicWithHttpInfo
+## pagePublicMoonbreezesWithHttpInfo
 
-> ApiResponse<PageMoonbreezesResp> pagePublicWithHttpInfo(pagePublicRequest)
+> ApiResponse<PagePublicMoonbreezesResp> pagePublicMoonbreezesWithHttpInfo(pagePublicMoonbreezesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -399,15 +411,15 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         PagePublicMoonbreezesReq pagePublicMoonbreezesReq = new PagePublicMoonbreezesReq(); // PagePublicMoonbreezesReq | 
         try {
-            APIpagePublicRequest request = APIpagePublicRequest.newBuilder()
+            APIpagePublicMoonbreezesRequest request = APIpagePublicMoonbreezesRequest.newBuilder()
                 .pagePublicMoonbreezesReq(pagePublicMoonbreezesReq)
                 .build();
-            ApiResponse<PageMoonbreezesResp> response = apiInstance.pagePublicWithHttpInfo(request);
+            ApiResponse<PagePublicMoonbreezesResp> response = apiInstance.pagePublicMoonbreezesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#pagePublic");
+            System.err.println("Exception when calling MoonbreezeService#pagePublicMoonbreezes");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -421,11 +433,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pagePublicRequest | [**APIpagePublicRequest**](MoonbreezeService.md#APIpagePublicRequest)|-|-|
+| pagePublicMoonbreezesRequest | [**APIpagePublicMoonbreezesRequest**](MoonbreezeService.md#APIpagePublicMoonbreezesRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**PageMoonbreezesResp**](PageMoonbreezesResp.md)>
+ApiResponse<[**PagePublicMoonbreezesResp**](PagePublicMoonbreezesResp.md)>
 
 
 ### Authorization
@@ -443,8 +455,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIpagePublicRequest"></a>
-## APIpagePublicRequest
+<a id="APIpagePublicMoonbreezesRequest"></a>
+## APIpagePublicMoonbreezesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -453,11 +465,13 @@ No authorization required
 
 
 
-## pageWatching
+## pageWatchingMoonbreezes
 
-> PageMoonbreezesResp pageWatching(pageWatchingRequest)
+> PageWatchingMoonbreezesResp pageWatchingMoonbreezes(pageWatchingMoonbreezesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -478,13 +492,13 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq = new PageWatchingMoonbreezesReq(); // PageWatchingMoonbreezesReq | 
         try {
-            APIpageWatchingRequest request = APIpageWatchingRequest.newBuilder()
+            APIpageWatchingMoonbreezesRequest request = APIpageWatchingMoonbreezesRequest.newBuilder()
                 .pageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq)
                 .build();
-            PageMoonbreezesResp result = apiInstance.pageWatching(request);
+            PageWatchingMoonbreezesResp result = apiInstance.pageWatchingMoonbreezes(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#pageWatching");
+            System.err.println("Exception when calling MoonbreezeService#pageWatchingMoonbreezes");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -498,11 +512,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageWatchingRequest | [**APIpageWatchingRequest**](MoonbreezeService.md#APIpageWatchingRequest)|-|-|
+| pageWatchingMoonbreezesRequest | [**APIpageWatchingMoonbreezesRequest**](MoonbreezeService.md#APIpageWatchingMoonbreezesRequest)|-|-|
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PageWatchingMoonbreezesResp**](PageWatchingMoonbreezesResp.md)
 
 
 ### Authorization
@@ -519,11 +533,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## pageWatchingWithHttpInfo
+## pageWatchingMoonbreezesWithHttpInfo
 
-> ApiResponse<PageMoonbreezesResp> pageWatchingWithHttpInfo(pageWatchingRequest)
+> ApiResponse<PageWatchingMoonbreezesResp> pageWatchingMoonbreezesWithHttpInfo(pageWatchingMoonbreezesRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -545,15 +561,15 @@ public class Example {
         MoonbreezeService apiInstance = new MoonbreezeService(defaultClient);
         PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq = new PageWatchingMoonbreezesReq(); // PageWatchingMoonbreezesReq | 
         try {
-            APIpageWatchingRequest request = APIpageWatchingRequest.newBuilder()
+            APIpageWatchingMoonbreezesRequest request = APIpageWatchingMoonbreezesRequest.newBuilder()
                 .pageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq)
                 .build();
-            ApiResponse<PageMoonbreezesResp> response = apiInstance.pageWatchingWithHttpInfo(request);
+            ApiResponse<PageWatchingMoonbreezesResp> response = apiInstance.pageWatchingMoonbreezesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling MoonbreezeService#pageWatching");
+            System.err.println("Exception when calling MoonbreezeService#pageWatchingMoonbreezes");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -567,11 +583,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageWatchingRequest | [**APIpageWatchingRequest**](MoonbreezeService.md#APIpageWatchingRequest)|-|-|
+| pageWatchingMoonbreezesRequest | [**APIpageWatchingMoonbreezesRequest**](MoonbreezeService.md#APIpageWatchingMoonbreezesRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**PageMoonbreezesResp**](PageMoonbreezesResp.md)>
+ApiResponse<[**PageWatchingMoonbreezesResp**](PageWatchingMoonbreezesResp.md)>
 
 
 ### Authorization
@@ -589,8 +605,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIpageWatchingRequest"></a>
-## APIpageWatchingRequest
+<a id="APIpageWatchingMoonbreezesRequest"></a>
+## APIpageWatchingMoonbreezesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

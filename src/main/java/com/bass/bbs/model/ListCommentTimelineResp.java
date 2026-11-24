@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListCommentTimelineResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListCommentTimelineResp.JSON_PROPERTY_PAGE,
@@ -59,7 +59,7 @@ public class ListCommentTimelineResp {
   }
 
   /**
-   * Get page
+   * 分页结果
    * @return page
    */
   @javax.annotation.Nullable
@@ -91,7 +91,7 @@ public class ListCommentTimelineResp {
   }
 
   /**
-   * Get rows
+   * 评论列表
    * @return rows
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CompleteMarkdownImageUploadResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CompleteMarkdownImageUploadResp.JSON_PROPERTY_ASSET_ID,
@@ -55,7 +55,7 @@ public class CompleteMarkdownImageUploadResp {
   }
 
   /**
-   * Get assetId
+   * 已确认资源的 ID。
    * @return assetId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class CompleteMarkdownImageUploadResp {
   }
 
   /**
-   * Get imageUrl
+   * 前端本地预览使用的公开图片地址。
    * @return imageUrl
    */
   @javax.annotation.Nullable

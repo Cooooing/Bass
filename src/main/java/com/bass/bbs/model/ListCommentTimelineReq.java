@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListCommentTimelineReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListCommentTimelineReq.JSON_PROPERTY_PAGE,
@@ -49,7 +49,7 @@ public class ListCommentTimelineReq {
   private String articleId;
 
   /**
-   * Gets or Sets order
+   * 排序方式
    */
   public enum OrderEnum {
     COMMENT_ORDER_UNSPECIFIED(String.valueOf("COMMENT_ORDER_UNSPECIFIED")),
@@ -100,7 +100,7 @@ public class ListCommentTimelineReq {
   }
 
   /**
-   * Get page
+   * 分页参数
    * @return page
    */
   @javax.annotation.Nullable
@@ -124,7 +124,7 @@ public class ListCommentTimelineReq {
   }
 
   /**
-   * Get articleId
+   * 文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -148,7 +148,7 @@ public class ListCommentTimelineReq {
   }
 
   /**
-   * Get order
+   * 排序方式
    * @return order
    */
   @javax.annotation.Nullable

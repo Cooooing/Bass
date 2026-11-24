@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateEmojiGroupReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateEmojiGroupReq.JSON_PROPERTY_NAME
@@ -50,7 +50,7 @@ public class CreateEmojiGroupReq {
   }
 
   /**
-   * Get name
+   * 新分组名称。
    * @return name
    */
   @javax.annotation.Nullable

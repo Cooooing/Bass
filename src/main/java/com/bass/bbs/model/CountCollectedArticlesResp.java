@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CountCollectedArticlesResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CountCollectedArticlesResp.JSON_PROPERTY_COUNT
@@ -50,7 +50,7 @@ public class CountCollectedArticlesResp {
   }
 
   /**
-   * Get count
+   * 当前收藏文章数量。
    * @return count
    */
   @javax.annotation.Nullable

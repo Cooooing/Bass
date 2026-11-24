@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListFollowersResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListFollowersResp.JSON_PROPERTY_PAGE,
@@ -59,7 +59,7 @@ public class ListFollowersResp {
   }
 
   /**
-   * Get page
+   * 协议字段。
    * @return page
    */
   @javax.annotation.Nullable
@@ -91,7 +91,7 @@ public class ListFollowersResp {
   }
 
   /**
-   * Get rows
+   * 协议字段。
    * @return rows
    */
   @javax.annotation.Nullable

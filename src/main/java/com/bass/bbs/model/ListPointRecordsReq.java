@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListPointRecordsReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListPointRecordsReq.JSON_PROPERTY_NAME,
@@ -56,7 +56,7 @@ public class ListPointRecordsReq {
   }
 
   /**
-   * Get name
+   * 账号名，必填
    * @return name
    */
   @javax.annotation.Nonnull
@@ -80,7 +80,7 @@ public class ListPointRecordsReq {
   }
 
   /**
-   * Get page
+   * 分页参数
    * @return page
    */
   @javax.annotation.Nullable

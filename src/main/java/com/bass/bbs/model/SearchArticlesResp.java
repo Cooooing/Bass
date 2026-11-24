@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SearchArticlesResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   SearchArticlesResp.JSON_PROPERTY_ROWS,
@@ -66,7 +66,7 @@ public class SearchArticlesResp {
   }
 
   /**
-   * Get rows
+   * 文章列表
    * @return rows
    */
   @javax.annotation.Nullable
@@ -90,7 +90,7 @@ public class SearchArticlesResp {
   }
 
   /**
-   * Get nextCursor
+   * 下一页游标
    * @return nextCursor
    */
   @javax.annotation.Nullable

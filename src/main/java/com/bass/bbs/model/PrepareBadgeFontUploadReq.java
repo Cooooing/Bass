@@ -60,7 +60,7 @@ public class PrepareBadgeFontUploadReq {
   }
 
   /**
-   * Get hash
+   * 文件 SHA-256，小写十六进制。
    * @return hash
    */
   @javax.annotation.Nonnull
@@ -84,7 +84,7 @@ public class PrepareBadgeFontUploadReq {
   }
 
   /**
-   * Get mimeType
+   * 上传字体 MIME 类型。
    * @return mimeType
    */
   @javax.annotation.Nonnull
@@ -108,7 +108,7 @@ public class PrepareBadgeFontUploadReq {
   }
 
   /**
-   * Get size
+   * 文件大小，最大 5 MiB。
    * @return size
    */
   @javax.annotation.Nonnull

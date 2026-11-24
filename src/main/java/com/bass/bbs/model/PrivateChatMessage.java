@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PrivateChatMessage
+ * 协议消息。
  */
 @JsonPropertyOrder({
   PrivateChatMessage.JSON_PROPERTY_ID,
@@ -62,7 +62,7 @@ public class PrivateChatMessage {
   private String content;
 
   /**
-   * Gets or Sets messageType
+   * 消息类型。
    */
   public enum MessageTypeEnum {
     IM_MESSAGE_TYPE_UNSPECIFIED(String.valueOf("IM_MESSAGE_TYPE_UNSPECIFIED")),
@@ -123,7 +123,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get id
+   * 消息 ID。
    * @return id
    */
   @javax.annotation.Nullable
@@ -147,7 +147,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get senderId
+   * 发送账号 ID。
    * @return senderId
    */
   @javax.annotation.Nullable
@@ -171,7 +171,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get receiverId
+   * 接收账号 ID。
    * @return receiverId
    */
   @javax.annotation.Nullable
@@ -195,7 +195,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get content
+   * 原始 Markdown 内容。
    * @return content
    */
   @javax.annotation.Nullable
@@ -219,7 +219,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get messageType
+   * 消息类型。
    * @return messageType
    */
   @javax.annotation.Nullable
@@ -243,7 +243,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get revoked
+   * 是否已撤回。
    * @return revoked
    */
   @javax.annotation.Nullable
@@ -267,7 +267,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get createdAt
+   * 创建时间。
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -291,7 +291,7 @@ public class PrivateChatMessage {
   }
 
   /**
-   * Get revokedAt
+   * 撤回时间。
    * @return revokedAt
    */
   @javax.annotation.Nullable

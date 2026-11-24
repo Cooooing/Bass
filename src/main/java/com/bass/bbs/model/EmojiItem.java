@@ -65,7 +65,7 @@ public class EmojiItem {
   }
 
   /**
-   * Get id
+   * 表情项 ID。
    * @return id
    */
   @javax.annotation.Nullable
@@ -89,7 +89,7 @@ public class EmojiItem {
   }
 
   /**
-   * Get assetId
+   * 平台图片资产 ID。
    * @return assetId
    */
   @javax.annotation.Nullable
@@ -113,7 +113,7 @@ public class EmojiItem {
   }
 
   /**
-   * Get name
+   * 可选表情别名。
    * @return name
    */
   @javax.annotation.Nullable
@@ -137,7 +137,7 @@ public class EmojiItem {
   }
 
   /**
-   * Get imageUrl
+   * 可插入 Markdown 的公开图片地址。
    * @return imageUrl
    */
   @javax.annotation.Nullable

@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListArticleTagsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListArticleTagsResp.JSON_PROPERTY_ROWS
@@ -61,7 +61,7 @@ public class ListArticleTagsResp {
   }
 
   /**
-   * Get rows
+   * 标签列表
    * @return rows
    */
   @javax.annotation.Nullable

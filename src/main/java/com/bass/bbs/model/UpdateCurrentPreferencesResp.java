@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateCurrentPreferencesResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   UpdateCurrentPreferencesResp.JSON_PROPERTY_PREFERENCE
@@ -51,7 +51,7 @@ public class UpdateCurrentPreferencesResp {
   }
 
   /**
-   * Get preference
+   * 更新后的账号偏好设置
    * @return preference
    */
   @javax.annotation.Nullable

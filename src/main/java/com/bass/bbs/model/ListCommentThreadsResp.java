@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListCommentThreadsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListCommentThreadsResp.JSON_PROPERTY_PAGE,
@@ -70,7 +70,7 @@ public class ListCommentThreadsResp {
   }
 
   /**
-   * Get page
+   * 分页结果
    * @return page
    */
   @javax.annotation.Nullable
@@ -102,7 +102,7 @@ public class ListCommentThreadsResp {
   }
 
   /**
-   * Get rows
+   * 评论楼层列表
    * @return rows
    */
   @javax.annotation.Nullable
@@ -126,7 +126,7 @@ public class ListCommentThreadsResp {
   }
 
   /**
-   * Get acceptedAnswer
+   * 问答已采纳回答；不可见时不返回
    * @return acceptedAnswer
    */
   @javax.annotation.Nullable
@@ -150,7 +150,7 @@ public class ListCommentThreadsResp {
   }
 
   /**
-   * Get pinnedComment
+   * 作者手动置顶评论；不可见时不返回
    * @return pinnedComment
    */
   @javax.annotation.Nullable

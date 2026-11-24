@@ -2,23 +2,24 @@
 
 # RespArticleBrief
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**id** | **String** |  |  [optional] |
-|**title** | **String** |  |  [optional] |
-|**type** | [**TypeEnum**](#TypeEnum) |  |  [optional] |
-|**authorUser** | [**RespAccountProfile**](RespAccountProfile.md) |  |  [optional] |
-|**coverImageUrl** | **String** |  |  [optional] |
-|**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) |  |  [optional] |
-|**visibility** | [**VisibilityEnum**](#VisibilityEnum) |  |  [optional] |
-|**restriction** | [**RestrictionEnum**](#RestrictionEnum) |  |  [optional] |
-|**createdBy** | **String** |  |  [optional] |
-|**updatedBy** | **String** |  |  [optional] |
-|**createdAt** | **OffsetDateTime** |  |  [optional] |
-|**updatedAt** | **OffsetDateTime** |  |  [optional] |
+|**id** | **String** | 文章 ID |  [optional] |
+|**title** | **String** | 标题 |  [optional] |
+|**type** | [**TypeEnum**](#TypeEnum) | 文章类型 |  [optional] |
+|**authorUser** | [**RespAccountProfile**](RespAccountProfile.md) | 作者展示资料 |  [optional] |
+|**coverImageUrl** | **String** | 封面图片 URL |  [optional] |
+|**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) | 发布状态 |  [optional] |
+|**visibility** | [**VisibilityEnum**](#VisibilityEnum) | 可见范围 |  [optional] |
+|**restriction** | [**RestrictionEnum**](#RestrictionEnum) | 管理限制 |  [optional] |
+|**createdBy** | **String** | 创建账号 ID |  [optional] |
+|**updatedBy** | **String** | 更新账号 ID |  [optional] |
+|**createdAt** | **OffsetDateTime** | 创建时间 |  [optional] |
+|**updatedAt** | **OffsetDateTime** | 更新时间 |  [optional] |
 
 
 

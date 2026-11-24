@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * AddPostscriptResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   AddPostscriptResp.JSON_PROPERTY_POSTSCRIPT
@@ -51,7 +51,7 @@ public class AddPostscriptResp {
   }
 
   /**
-   * Get postscript
+   * 创建后的文章附言。
    * @return postscript
    */
   @javax.annotation.Nullable

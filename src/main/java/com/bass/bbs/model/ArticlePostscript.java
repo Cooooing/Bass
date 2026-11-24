@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticlePostscript
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticlePostscript.JSON_PROPERTY_ID,
@@ -63,7 +63,7 @@ public class ArticlePostscript {
   private String contentRender;
 
   /**
-   * Gets or Sets restriction
+   * 治理限制
    */
   public enum RestrictionEnum {
     CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
@@ -130,7 +130,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get id
+   * 附言 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -154,7 +154,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get articleId
+   * 文章 ID
    * @return articleId
    */
   @javax.annotation.Nullable
@@ -178,7 +178,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get content
+   * 原始内容
    * @return content
    */
   @javax.annotation.Nullable
@@ -202,7 +202,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get contentRender
+   * 渲染内容
    * @return contentRender
    */
   @javax.annotation.Nullable
@@ -226,7 +226,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get restriction
+   * 治理限制
    * @return restriction
    */
   @javax.annotation.Nullable
@@ -250,7 +250,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get createdBy
+   * 创建账号 ID
    * @return createdBy
    */
   @javax.annotation.Nullable
@@ -274,7 +274,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get updatedBy
+   * 更新账号 ID
    * @return updatedBy
    */
   @javax.annotation.Nullable
@@ -298,7 +298,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -322,7 +322,7 @@ public class ArticlePostscript {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

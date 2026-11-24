@@ -184,50 +184,50 @@ public class EmojiService {
   /**
    * 
    * 向分组加入已上传图片。
-   * @param apiRequest {@link APIAddItemRequest}
+   * @param apiRequest {@link APIAddEmojiItemRequest}
    * @return AddEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public AddEmojiItemResp addItem(APIAddItemRequest apiRequest) throws ApiException {
-    return addItem(apiRequest, null);
+  public AddEmojiItemResp addEmojiItem(APIAddEmojiItemRequest apiRequest) throws ApiException {
+    return addEmojiItem(apiRequest, null);
   }
 
   /**
    * 
    * 向分组加入已上传图片。
-   * @param apiRequest {@link APIAddItemRequest}
+   * @param apiRequest {@link APIAddEmojiItemRequest}
    * @param headers Optional headers to include in the request
    * @return AddEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public AddEmojiItemResp addItem(APIAddItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public AddEmojiItemResp addEmojiItem(APIAddEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     AddEmojiItemReq addEmojiItemReq = apiRequest.addEmojiItemReq();
-    return addItem(addEmojiItemReq, headers);
+    return addEmojiItem(addEmojiItemReq, headers);
   }
 
   /**
    * 
    * 向分组加入已上传图片。
-   * @param apiRequest {@link APIAddItemRequest}
+   * @param apiRequest {@link APIAddEmojiItemRequest}
    * @return ApiResponse&lt;AddEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddEmojiItemResp> addItemWithHttpInfo(APIAddItemRequest apiRequest) throws ApiException {
-    return addItemWithHttpInfo(apiRequest, null);
+  public ApiResponse<AddEmojiItemResp> addEmojiItemWithHttpInfo(APIAddEmojiItemRequest apiRequest) throws ApiException {
+    return addEmojiItemWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 向分组加入已上传图片。
-   * @param apiRequest {@link APIAddItemRequest}
+   * @param apiRequest {@link APIAddEmojiItemRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;AddEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddEmojiItemResp> addItemWithHttpInfo(APIAddItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<AddEmojiItemResp> addEmojiItemWithHttpInfo(APIAddEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
     AddEmojiItemReq addEmojiItemReq = apiRequest.addEmojiItemReq();
-    return addItemWithHttpInfo(addEmojiItemReq, headers);
+    return addEmojiItemWithHttpInfo(addEmojiItemReq, headers);
   }
 
   /**
@@ -237,8 +237,8 @@ public class EmojiService {
    * @return AddEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public AddEmojiItemResp addItem(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq) throws ApiException {
-    return addItem(addEmojiItemReq, null);
+  public AddEmojiItemResp addEmojiItem(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq) throws ApiException {
+    return addEmojiItem(addEmojiItemReq, null);
   }
 
   /**
@@ -249,8 +249,8 @@ public class EmojiService {
    * @return AddEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public AddEmojiItemResp addItem(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<AddEmojiItemResp> localVarResponse = addItemWithHttpInfo(addEmojiItemReq, headers);
+  public AddEmojiItemResp addEmojiItem(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<AddEmojiItemResp> localVarResponse = addEmojiItemWithHttpInfo(addEmojiItemReq, headers);
     return localVarResponse.getData();
   }
 
@@ -261,8 +261,8 @@ public class EmojiService {
    * @return ApiResponse&lt;AddEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddEmojiItemResp> addItemWithHttpInfo(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq) throws ApiException {
-    return addItemWithHttpInfo(addEmojiItemReq, null);
+  public ApiResponse<AddEmojiItemResp> addEmojiItemWithHttpInfo(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq) throws ApiException {
+    return addEmojiItemWithHttpInfo(addEmojiItemReq, null);
   }
 
   /**
@@ -273,8 +273,8 @@ public class EmojiService {
    * @return ApiResponse&lt;AddEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddEmojiItemResp> addItemWithHttpInfo(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = addItemRequestBuilder(addEmojiItemReq, headers);
+  public ApiResponse<AddEmojiItemResp> addEmojiItemWithHttpInfo(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = addEmojiItemRequestBuilder(addEmojiItemReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -285,7 +285,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("addItem", localVarResponse);
+          throw getApiException("addEmojiItem", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -321,10 +321,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder addItemRequestBuilder(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder addEmojiItemRequestBuilder(@javax.annotation.Nonnull AddEmojiItemReq addEmojiItemReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'addEmojiItemReq' is set
     if (addEmojiItemReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'addEmojiItemReq' when calling addItem");
+      throw new ApiException(400, "Missing the required parameter 'addEmojiItemReq' when calling addEmojiItem");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -354,11 +354,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIAddItemRequest {
+  public static final class APIAddEmojiItemRequest {
     @javax.annotation.Nonnull
     private AddEmojiItemReq addEmojiItemReq; //  (required)
 
-    private APIAddItemRequest(Builder builder) {
+    private APIAddEmojiItemRequest(Builder builder) {
       this.addEmojiItemReq = builder.addEmojiItemReq;
     }
     @javax.annotation.Nonnull
@@ -376,209 +376,8 @@ public class EmojiService {
         this.addEmojiItemReq = addEmojiItemReq;
         return this;
       }
-      public APIAddItemRequest build() {
-        return new APIAddItemRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param apiRequest {@link APICallListRequest}
-   * @return ListEmojiGroupsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListEmojiGroupsResp callList(APICallListRequest apiRequest) throws ApiException {
-    return callList(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ListEmojiGroupsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListEmojiGroupsResp callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    ListEmojiGroupsReq listEmojiGroupsReq = apiRequest.listEmojiGroupsReq();
-    return callList(listEmojiGroupsReq, headers);
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param apiRequest {@link APICallListRequest}
-   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListEmojiGroupsResp> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
-    return callListWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListEmojiGroupsResp> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListEmojiGroupsReq listEmojiGroupsReq = apiRequest.listEmojiGroupsReq();
-    return callListWithHttpInfo(listEmojiGroupsReq, headers);
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param listEmojiGroupsReq  (required)
-   * @return ListEmojiGroupsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListEmojiGroupsResp callList(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq) throws ApiException {
-    return callList(listEmojiGroupsReq, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param listEmojiGroupsReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ListEmojiGroupsResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListEmojiGroupsResp callList(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListEmojiGroupsResp> localVarResponse = callListWithHttpInfo(listEmojiGroupsReq, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param listEmojiGroupsReq  (required)
-   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListEmojiGroupsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq) throws ApiException {
-    return callListWithHttpInfo(listEmojiGroupsReq, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号的表情分组。
-   * @param listEmojiGroupsReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListEmojiGroupsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listEmojiGroupsReq, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("callList", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<ListEmojiGroupsResp>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListEmojiGroupsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListEmojiGroupsResp>() {});
-        
-
-        return new ApiResponse<ListEmojiGroupsResp>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listEmojiGroupsReq' is set
-    if (listEmojiGroupsReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'listEmojiGroupsReq' when calling callList");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/im/emoji/groups/list";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listEmojiGroupsReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APICallListRequest {
-    @javax.annotation.Nonnull
-    private ListEmojiGroupsReq listEmojiGroupsReq; //  (required)
-
-    private APICallListRequest(Builder builder) {
-      this.listEmojiGroupsReq = builder.listEmojiGroupsReq;
-    }
-    @javax.annotation.Nonnull
-    public ListEmojiGroupsReq listEmojiGroupsReq() {
-      return listEmojiGroupsReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private ListEmojiGroupsReq listEmojiGroupsReq;
-
-      public Builder listEmojiGroupsReq(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq) {
-        this.listEmojiGroupsReq = listEmojiGroupsReq;
-        return this;
-      }
-      public APICallListRequest build() {
-        return new APICallListRequest(this);
+      public APIAddEmojiItemRequest build() {
+        return new APIAddEmojiItemRequest(this);
       }
     }
   }
@@ -586,50 +385,50 @@ public class EmojiService {
   /**
    * 
    * 创建一个表情分组。
-   * @param apiRequest {@link APICreateGroupRequest}
+   * @param apiRequest {@link APICreateEmojiGroupRequest}
    * @return CreateEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiGroupResp createGroup(APICreateGroupRequest apiRequest) throws ApiException {
-    return createGroup(apiRequest, null);
+  public CreateEmojiGroupResp createEmojiGroup(APICreateEmojiGroupRequest apiRequest) throws ApiException {
+    return createEmojiGroup(apiRequest, null);
   }
 
   /**
    * 
    * 创建一个表情分组。
-   * @param apiRequest {@link APICreateGroupRequest}
+   * @param apiRequest {@link APICreateEmojiGroupRequest}
    * @param headers Optional headers to include in the request
    * @return CreateEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiGroupResp createGroup(APICreateGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateEmojiGroupResp createEmojiGroup(APICreateEmojiGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CreateEmojiGroupReq createEmojiGroupReq = apiRequest.createEmojiGroupReq();
-    return createGroup(createEmojiGroupReq, headers);
+    return createEmojiGroup(createEmojiGroupReq, headers);
   }
 
   /**
    * 
    * 创建一个表情分组。
-   * @param apiRequest {@link APICreateGroupRequest}
+   * @param apiRequest {@link APICreateEmojiGroupRequest}
    * @return ApiResponse&lt;CreateEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiGroupResp> createGroupWithHttpInfo(APICreateGroupRequest apiRequest) throws ApiException {
-    return createGroupWithHttpInfo(apiRequest, null);
+  public ApiResponse<CreateEmojiGroupResp> createEmojiGroupWithHttpInfo(APICreateEmojiGroupRequest apiRequest) throws ApiException {
+    return createEmojiGroupWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 创建一个表情分组。
-   * @param apiRequest {@link APICreateGroupRequest}
+   * @param apiRequest {@link APICreateEmojiGroupRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiGroupResp> createGroupWithHttpInfo(APICreateGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CreateEmojiGroupResp> createEmojiGroupWithHttpInfo(APICreateEmojiGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
     CreateEmojiGroupReq createEmojiGroupReq = apiRequest.createEmojiGroupReq();
-    return createGroupWithHttpInfo(createEmojiGroupReq, headers);
+    return createEmojiGroupWithHttpInfo(createEmojiGroupReq, headers);
   }
 
   /**
@@ -639,8 +438,8 @@ public class EmojiService {
    * @return CreateEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiGroupResp createGroup(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq) throws ApiException {
-    return createGroup(createEmojiGroupReq, null);
+  public CreateEmojiGroupResp createEmojiGroup(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq) throws ApiException {
+    return createEmojiGroup(createEmojiGroupReq, null);
   }
 
   /**
@@ -651,8 +450,8 @@ public class EmojiService {
    * @return CreateEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiGroupResp createGroup(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateEmojiGroupResp> localVarResponse = createGroupWithHttpInfo(createEmojiGroupReq, headers);
+  public CreateEmojiGroupResp createEmojiGroup(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateEmojiGroupResp> localVarResponse = createEmojiGroupWithHttpInfo(createEmojiGroupReq, headers);
     return localVarResponse.getData();
   }
 
@@ -663,8 +462,8 @@ public class EmojiService {
    * @return ApiResponse&lt;CreateEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiGroupResp> createGroupWithHttpInfo(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq) throws ApiException {
-    return createGroupWithHttpInfo(createEmojiGroupReq, null);
+  public ApiResponse<CreateEmojiGroupResp> createEmojiGroupWithHttpInfo(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq) throws ApiException {
+    return createEmojiGroupWithHttpInfo(createEmojiGroupReq, null);
   }
 
   /**
@@ -675,8 +474,8 @@ public class EmojiService {
    * @return ApiResponse&lt;CreateEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiGroupResp> createGroupWithHttpInfo(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createGroupRequestBuilder(createEmojiGroupReq, headers);
+  public ApiResponse<CreateEmojiGroupResp> createEmojiGroupWithHttpInfo(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createEmojiGroupRequestBuilder(createEmojiGroupReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -687,7 +486,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("createGroup", localVarResponse);
+          throw getApiException("createEmojiGroup", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -723,10 +522,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder createGroupRequestBuilder(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder createEmojiGroupRequestBuilder(@javax.annotation.Nonnull CreateEmojiGroupReq createEmojiGroupReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'createEmojiGroupReq' is set
     if (createEmojiGroupReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'createEmojiGroupReq' when calling createGroup");
+      throw new ApiException(400, "Missing the required parameter 'createEmojiGroupReq' when calling createEmojiGroup");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -756,11 +555,11 @@ public class EmojiService {
   }
 
 
-  public static final class APICreateGroupRequest {
+  public static final class APICreateEmojiGroupRequest {
     @javax.annotation.Nonnull
     private CreateEmojiGroupReq createEmojiGroupReq; //  (required)
 
-    private APICreateGroupRequest(Builder builder) {
+    private APICreateEmojiGroupRequest(Builder builder) {
       this.createEmojiGroupReq = builder.createEmojiGroupReq;
     }
     @javax.annotation.Nonnull
@@ -778,8 +577,8 @@ public class EmojiService {
         this.createEmojiGroupReq = createEmojiGroupReq;
         return this;
       }
-      public APICreateGroupRequest build() {
-        return new APICreateGroupRequest(this);
+      public APICreateEmojiGroupRequest build() {
+        return new APICreateEmojiGroupRequest(this);
       }
     }
   }
@@ -787,50 +586,50 @@ public class EmojiService {
   /**
    * 
    * 生成七天有效的分组分享码。
-   * @param apiRequest {@link APICreateShareRequest}
+   * @param apiRequest {@link APICreateEmojiShareRequest}
    * @return CreateEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiShareResp createShare(APICreateShareRequest apiRequest) throws ApiException {
-    return createShare(apiRequest, null);
+  public CreateEmojiShareResp createEmojiShare(APICreateEmojiShareRequest apiRequest) throws ApiException {
+    return createEmojiShare(apiRequest, null);
   }
 
   /**
    * 
    * 生成七天有效的分组分享码。
-   * @param apiRequest {@link APICreateShareRequest}
+   * @param apiRequest {@link APICreateEmojiShareRequest}
    * @param headers Optional headers to include in the request
    * @return CreateEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiShareResp createShare(APICreateShareRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateEmojiShareResp createEmojiShare(APICreateEmojiShareRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CreateEmojiShareReq createEmojiShareReq = apiRequest.createEmojiShareReq();
-    return createShare(createEmojiShareReq, headers);
+    return createEmojiShare(createEmojiShareReq, headers);
   }
 
   /**
    * 
    * 生成七天有效的分组分享码。
-   * @param apiRequest {@link APICreateShareRequest}
+   * @param apiRequest {@link APICreateEmojiShareRequest}
    * @return ApiResponse&lt;CreateEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiShareResp> createShareWithHttpInfo(APICreateShareRequest apiRequest) throws ApiException {
-    return createShareWithHttpInfo(apiRequest, null);
+  public ApiResponse<CreateEmojiShareResp> createEmojiShareWithHttpInfo(APICreateEmojiShareRequest apiRequest) throws ApiException {
+    return createEmojiShareWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 生成七天有效的分组分享码。
-   * @param apiRequest {@link APICreateShareRequest}
+   * @param apiRequest {@link APICreateEmojiShareRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiShareResp> createShareWithHttpInfo(APICreateShareRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CreateEmojiShareResp> createEmojiShareWithHttpInfo(APICreateEmojiShareRequest apiRequest, Map<String, String> headers) throws ApiException {
     CreateEmojiShareReq createEmojiShareReq = apiRequest.createEmojiShareReq();
-    return createShareWithHttpInfo(createEmojiShareReq, headers);
+    return createEmojiShareWithHttpInfo(createEmojiShareReq, headers);
   }
 
   /**
@@ -840,8 +639,8 @@ public class EmojiService {
    * @return CreateEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiShareResp createShare(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq) throws ApiException {
-    return createShare(createEmojiShareReq, null);
+  public CreateEmojiShareResp createEmojiShare(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq) throws ApiException {
+    return createEmojiShare(createEmojiShareReq, null);
   }
 
   /**
@@ -852,8 +651,8 @@ public class EmojiService {
    * @return CreateEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public CreateEmojiShareResp createShare(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateEmojiShareResp> localVarResponse = createShareWithHttpInfo(createEmojiShareReq, headers);
+  public CreateEmojiShareResp createEmojiShare(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateEmojiShareResp> localVarResponse = createEmojiShareWithHttpInfo(createEmojiShareReq, headers);
     return localVarResponse.getData();
   }
 
@@ -864,8 +663,8 @@ public class EmojiService {
    * @return ApiResponse&lt;CreateEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiShareResp> createShareWithHttpInfo(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq) throws ApiException {
-    return createShareWithHttpInfo(createEmojiShareReq, null);
+  public ApiResponse<CreateEmojiShareResp> createEmojiShareWithHttpInfo(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq) throws ApiException {
+    return createEmojiShareWithHttpInfo(createEmojiShareReq, null);
   }
 
   /**
@@ -876,8 +675,8 @@ public class EmojiService {
    * @return ApiResponse&lt;CreateEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateEmojiShareResp> createShareWithHttpInfo(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createShareRequestBuilder(createEmojiShareReq, headers);
+  public ApiResponse<CreateEmojiShareResp> createEmojiShareWithHttpInfo(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createEmojiShareRequestBuilder(createEmojiShareReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -888,7 +687,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("createShare", localVarResponse);
+          throw getApiException("createEmojiShare", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -924,10 +723,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder createShareRequestBuilder(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder createEmojiShareRequestBuilder(@javax.annotation.Nonnull CreateEmojiShareReq createEmojiShareReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'createEmojiShareReq' is set
     if (createEmojiShareReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'createEmojiShareReq' when calling createShare");
+      throw new ApiException(400, "Missing the required parameter 'createEmojiShareReq' when calling createEmojiShare");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -957,11 +756,11 @@ public class EmojiService {
   }
 
 
-  public static final class APICreateShareRequest {
+  public static final class APICreateEmojiShareRequest {
     @javax.annotation.Nonnull
     private CreateEmojiShareReq createEmojiShareReq; //  (required)
 
-    private APICreateShareRequest(Builder builder) {
+    private APICreateEmojiShareRequest(Builder builder) {
       this.createEmojiShareReq = builder.createEmojiShareReq;
     }
     @javax.annotation.Nonnull
@@ -979,8 +778,8 @@ public class EmojiService {
         this.createEmojiShareReq = createEmojiShareReq;
         return this;
       }
-      public APICreateShareRequest build() {
-        return new APICreateShareRequest(this);
+      public APICreateEmojiShareRequest build() {
+        return new APICreateEmojiShareRequest(this);
       }
     }
   }
@@ -988,50 +787,50 @@ public class EmojiService {
   /**
    * 
    * 删除一个表情分组。
-   * @param apiRequest {@link APIDeleteGroupRequest}
+   * @param apiRequest {@link APIDeleteEmojiGroupRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteGroup(APIDeleteGroupRequest apiRequest) throws ApiException {
-    return deleteGroup(apiRequest, null);
+  public Object deleteEmojiGroup(APIDeleteEmojiGroupRequest apiRequest) throws ApiException {
+    return deleteEmojiGroup(apiRequest, null);
   }
 
   /**
    * 
    * 删除一个表情分组。
-   * @param apiRequest {@link APIDeleteGroupRequest}
+   * @param apiRequest {@link APIDeleteEmojiGroupRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteGroup(APIDeleteGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object deleteEmojiGroup(APIDeleteEmojiGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     DeleteEmojiGroupReq deleteEmojiGroupReq = apiRequest.deleteEmojiGroupReq();
-    return deleteGroup(deleteEmojiGroupReq, headers);
+    return deleteEmojiGroup(deleteEmojiGroupReq, headers);
   }
 
   /**
    * 
    * 删除一个表情分组。
-   * @param apiRequest {@link APIDeleteGroupRequest}
+   * @param apiRequest {@link APIDeleteEmojiGroupRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteGroupWithHttpInfo(APIDeleteGroupRequest apiRequest) throws ApiException {
-    return deleteGroupWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> deleteEmojiGroupWithHttpInfo(APIDeleteEmojiGroupRequest apiRequest) throws ApiException {
+    return deleteEmojiGroupWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 删除一个表情分组。
-   * @param apiRequest {@link APIDeleteGroupRequest}
+   * @param apiRequest {@link APIDeleteEmojiGroupRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteGroupWithHttpInfo(APIDeleteGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> deleteEmojiGroupWithHttpInfo(APIDeleteEmojiGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
     DeleteEmojiGroupReq deleteEmojiGroupReq = apiRequest.deleteEmojiGroupReq();
-    return deleteGroupWithHttpInfo(deleteEmojiGroupReq, headers);
+    return deleteEmojiGroupWithHttpInfo(deleteEmojiGroupReq, headers);
   }
 
   /**
@@ -1041,8 +840,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteGroup(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq) throws ApiException {
-    return deleteGroup(deleteEmojiGroupReq, null);
+  public Object deleteEmojiGroup(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq) throws ApiException {
+    return deleteEmojiGroup(deleteEmojiGroupReq, null);
   }
 
   /**
@@ -1053,8 +852,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteGroup(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = deleteGroupWithHttpInfo(deleteEmojiGroupReq, headers);
+  public Object deleteEmojiGroup(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = deleteEmojiGroupWithHttpInfo(deleteEmojiGroupReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1065,8 +864,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteGroupWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq) throws ApiException {
-    return deleteGroupWithHttpInfo(deleteEmojiGroupReq, null);
+  public ApiResponse<Object> deleteEmojiGroupWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq) throws ApiException {
+    return deleteEmojiGroupWithHttpInfo(deleteEmojiGroupReq, null);
   }
 
   /**
@@ -1077,8 +876,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteGroupWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = deleteGroupRequestBuilder(deleteEmojiGroupReq, headers);
+  public ApiResponse<Object> deleteEmojiGroupWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = deleteEmojiGroupRequestBuilder(deleteEmojiGroupReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1089,7 +888,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("deleteGroup", localVarResponse);
+          throw getApiException("deleteEmojiGroup", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1125,10 +924,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder deleteGroupRequestBuilder(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder deleteEmojiGroupRequestBuilder(@javax.annotation.Nonnull DeleteEmojiGroupReq deleteEmojiGroupReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'deleteEmojiGroupReq' is set
     if (deleteEmojiGroupReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'deleteEmojiGroupReq' when calling deleteGroup");
+      throw new ApiException(400, "Missing the required parameter 'deleteEmojiGroupReq' when calling deleteEmojiGroup");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1158,11 +957,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIDeleteGroupRequest {
+  public static final class APIDeleteEmojiGroupRequest {
     @javax.annotation.Nonnull
     private DeleteEmojiGroupReq deleteEmojiGroupReq; //  (required)
 
-    private APIDeleteGroupRequest(Builder builder) {
+    private APIDeleteEmojiGroupRequest(Builder builder) {
       this.deleteEmojiGroupReq = builder.deleteEmojiGroupReq;
     }
     @javax.annotation.Nonnull
@@ -1180,8 +979,8 @@ public class EmojiService {
         this.deleteEmojiGroupReq = deleteEmojiGroupReq;
         return this;
       }
-      public APIDeleteGroupRequest build() {
-        return new APIDeleteGroupRequest(this);
+      public APIDeleteEmojiGroupRequest build() {
+        return new APIDeleteEmojiGroupRequest(this);
       }
     }
   }
@@ -1189,50 +988,50 @@ public class EmojiService {
   /**
    * 
    * 从分组移除表情。
-   * @param apiRequest {@link APIDeleteItemRequest}
+   * @param apiRequest {@link APIDeleteEmojiItemRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteItem(APIDeleteItemRequest apiRequest) throws ApiException {
-    return deleteItem(apiRequest, null);
+  public Object deleteEmojiItem(APIDeleteEmojiItemRequest apiRequest) throws ApiException {
+    return deleteEmojiItem(apiRequest, null);
   }
 
   /**
    * 
    * 从分组移除表情。
-   * @param apiRequest {@link APIDeleteItemRequest}
+   * @param apiRequest {@link APIDeleteEmojiItemRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteItem(APIDeleteItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object deleteEmojiItem(APIDeleteEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     DeleteEmojiItemReq deleteEmojiItemReq = apiRequest.deleteEmojiItemReq();
-    return deleteItem(deleteEmojiItemReq, headers);
+    return deleteEmojiItem(deleteEmojiItemReq, headers);
   }
 
   /**
    * 
    * 从分组移除表情。
-   * @param apiRequest {@link APIDeleteItemRequest}
+   * @param apiRequest {@link APIDeleteEmojiItemRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteItemWithHttpInfo(APIDeleteItemRequest apiRequest) throws ApiException {
-    return deleteItemWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> deleteEmojiItemWithHttpInfo(APIDeleteEmojiItemRequest apiRequest) throws ApiException {
+    return deleteEmojiItemWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 从分组移除表情。
-   * @param apiRequest {@link APIDeleteItemRequest}
+   * @param apiRequest {@link APIDeleteEmojiItemRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteItemWithHttpInfo(APIDeleteItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> deleteEmojiItemWithHttpInfo(APIDeleteEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
     DeleteEmojiItemReq deleteEmojiItemReq = apiRequest.deleteEmojiItemReq();
-    return deleteItemWithHttpInfo(deleteEmojiItemReq, headers);
+    return deleteEmojiItemWithHttpInfo(deleteEmojiItemReq, headers);
   }
 
   /**
@@ -1242,8 +1041,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteItem(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq) throws ApiException {
-    return deleteItem(deleteEmojiItemReq, null);
+  public Object deleteEmojiItem(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq) throws ApiException {
+    return deleteEmojiItem(deleteEmojiItemReq, null);
   }
 
   /**
@@ -1254,8 +1053,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteItem(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = deleteItemWithHttpInfo(deleteEmojiItemReq, headers);
+  public Object deleteEmojiItem(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = deleteEmojiItemWithHttpInfo(deleteEmojiItemReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1266,8 +1065,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteItemWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq) throws ApiException {
-    return deleteItemWithHttpInfo(deleteEmojiItemReq, null);
+  public ApiResponse<Object> deleteEmojiItemWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq) throws ApiException {
+    return deleteEmojiItemWithHttpInfo(deleteEmojiItemReq, null);
   }
 
   /**
@@ -1278,8 +1077,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteItemWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = deleteItemRequestBuilder(deleteEmojiItemReq, headers);
+  public ApiResponse<Object> deleteEmojiItemWithHttpInfo(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = deleteEmojiItemRequestBuilder(deleteEmojiItemReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1290,7 +1089,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("deleteItem", localVarResponse);
+          throw getApiException("deleteEmojiItem", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1326,10 +1125,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder deleteItemRequestBuilder(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder deleteEmojiItemRequestBuilder(@javax.annotation.Nonnull DeleteEmojiItemReq deleteEmojiItemReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'deleteEmojiItemReq' is set
     if (deleteEmojiItemReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'deleteEmojiItemReq' when calling deleteItem");
+      throw new ApiException(400, "Missing the required parameter 'deleteEmojiItemReq' when calling deleteEmojiItem");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1359,11 +1158,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIDeleteItemRequest {
+  public static final class APIDeleteEmojiItemRequest {
     @javax.annotation.Nonnull
     private DeleteEmojiItemReq deleteEmojiItemReq; //  (required)
 
-    private APIDeleteItemRequest(Builder builder) {
+    private APIDeleteEmojiItemRequest(Builder builder) {
       this.deleteEmojiItemReq = builder.deleteEmojiItemReq;
     }
     @javax.annotation.Nonnull
@@ -1381,8 +1180,8 @@ public class EmojiService {
         this.deleteEmojiItemReq = deleteEmojiItemReq;
         return this;
       }
-      public APIDeleteItemRequest build() {
-        return new APIDeleteItemRequest(this);
+      public APIDeleteEmojiItemRequest build() {
+        return new APIDeleteEmojiItemRequest(this);
       }
     }
   }
@@ -1390,50 +1189,50 @@ public class EmojiService {
   /**
    * 
    * 把分享码导入为一个新分组。
-   * @param apiRequest {@link APIImportShareRequest}
+   * @param apiRequest {@link APIImportEmojiShareRequest}
    * @return ImportEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public ImportEmojiShareResp importShare(APIImportShareRequest apiRequest) throws ApiException {
-    return importShare(apiRequest, null);
+  public ImportEmojiShareResp importEmojiShare(APIImportEmojiShareRequest apiRequest) throws ApiException {
+    return importEmojiShare(apiRequest, null);
   }
 
   /**
    * 
    * 把分享码导入为一个新分组。
-   * @param apiRequest {@link APIImportShareRequest}
+   * @param apiRequest {@link APIImportEmojiShareRequest}
    * @param headers Optional headers to include in the request
    * @return ImportEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public ImportEmojiShareResp importShare(APIImportShareRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ImportEmojiShareResp importEmojiShare(APIImportEmojiShareRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     ImportEmojiShareReq importEmojiShareReq = apiRequest.importEmojiShareReq();
-    return importShare(importEmojiShareReq, headers);
+    return importEmojiShare(importEmojiShareReq, headers);
   }
 
   /**
    * 
    * 把分享码导入为一个新分组。
-   * @param apiRequest {@link APIImportShareRequest}
+   * @param apiRequest {@link APIImportEmojiShareRequest}
    * @return ApiResponse&lt;ImportEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImportEmojiShareResp> importShareWithHttpInfo(APIImportShareRequest apiRequest) throws ApiException {
-    return importShareWithHttpInfo(apiRequest, null);
+  public ApiResponse<ImportEmojiShareResp> importEmojiShareWithHttpInfo(APIImportEmojiShareRequest apiRequest) throws ApiException {
+    return importEmojiShareWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 把分享码导入为一个新分组。
-   * @param apiRequest {@link APIImportShareRequest}
+   * @param apiRequest {@link APIImportEmojiShareRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ImportEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImportEmojiShareResp> importShareWithHttpInfo(APIImportShareRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ImportEmojiShareResp> importEmojiShareWithHttpInfo(APIImportEmojiShareRequest apiRequest, Map<String, String> headers) throws ApiException {
     ImportEmojiShareReq importEmojiShareReq = apiRequest.importEmojiShareReq();
-    return importShareWithHttpInfo(importEmojiShareReq, headers);
+    return importEmojiShareWithHttpInfo(importEmojiShareReq, headers);
   }
 
   /**
@@ -1443,8 +1242,8 @@ public class EmojiService {
    * @return ImportEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public ImportEmojiShareResp importShare(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq) throws ApiException {
-    return importShare(importEmojiShareReq, null);
+  public ImportEmojiShareResp importEmojiShare(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq) throws ApiException {
+    return importEmojiShare(importEmojiShareReq, null);
   }
 
   /**
@@ -1455,8 +1254,8 @@ public class EmojiService {
    * @return ImportEmojiShareResp
    * @throws ApiException if fails to make API call
    */
-  public ImportEmojiShareResp importShare(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<ImportEmojiShareResp> localVarResponse = importShareWithHttpInfo(importEmojiShareReq, headers);
+  public ImportEmojiShareResp importEmojiShare(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ImportEmojiShareResp> localVarResponse = importEmojiShareWithHttpInfo(importEmojiShareReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1467,8 +1266,8 @@ public class EmojiService {
    * @return ApiResponse&lt;ImportEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImportEmojiShareResp> importShareWithHttpInfo(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq) throws ApiException {
-    return importShareWithHttpInfo(importEmojiShareReq, null);
+  public ApiResponse<ImportEmojiShareResp> importEmojiShareWithHttpInfo(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq) throws ApiException {
+    return importEmojiShareWithHttpInfo(importEmojiShareReq, null);
   }
 
   /**
@@ -1479,8 +1278,8 @@ public class EmojiService {
    * @return ApiResponse&lt;ImportEmojiShareResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImportEmojiShareResp> importShareWithHttpInfo(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = importShareRequestBuilder(importEmojiShareReq, headers);
+  public ApiResponse<ImportEmojiShareResp> importEmojiShareWithHttpInfo(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = importEmojiShareRequestBuilder(importEmojiShareReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1491,7 +1290,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("importShare", localVarResponse);
+          throw getApiException("importEmojiShare", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1527,10 +1326,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder importShareRequestBuilder(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder importEmojiShareRequestBuilder(@javax.annotation.Nonnull ImportEmojiShareReq importEmojiShareReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'importEmojiShareReq' is set
     if (importEmojiShareReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'importEmojiShareReq' when calling importShare");
+      throw new ApiException(400, "Missing the required parameter 'importEmojiShareReq' when calling importEmojiShare");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1560,11 +1359,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIImportShareRequest {
+  public static final class APIImportEmojiShareRequest {
     @javax.annotation.Nonnull
     private ImportEmojiShareReq importEmojiShareReq; //  (required)
 
-    private APIImportShareRequest(Builder builder) {
+    private APIImportEmojiShareRequest(Builder builder) {
       this.importEmojiShareReq = builder.importEmojiShareReq;
     }
     @javax.annotation.Nonnull
@@ -1582,106 +1381,106 @@ public class EmojiService {
         this.importEmojiShareReq = importEmojiShareReq;
         return this;
       }
-      public APIImportShareRequest build() {
-        return new APIImportShareRequest(this);
+      public APIImportEmojiShareRequest build() {
+        return new APIImportEmojiShareRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param apiRequest {@link APIMoveItemRequest}
-   * @return MoveEmojiItemResp
+   * 查询当前账号的表情分组。
+   * @param apiRequest {@link APIListEmojiGroupsRequest}
+   * @return ListEmojiGroupsResp
    * @throws ApiException if fails to make API call
    */
-  public MoveEmojiItemResp moveItem(APIMoveItemRequest apiRequest) throws ApiException {
-    return moveItem(apiRequest, null);
+  public ListEmojiGroupsResp listEmojiGroups(APIListEmojiGroupsRequest apiRequest) throws ApiException {
+    return listEmojiGroups(apiRequest, null);
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param apiRequest {@link APIMoveItemRequest}
+   * 查询当前账号的表情分组。
+   * @param apiRequest {@link APIListEmojiGroupsRequest}
    * @param headers Optional headers to include in the request
-   * @return MoveEmojiItemResp
+   * @return ListEmojiGroupsResp
    * @throws ApiException if fails to make API call
    */
-  public MoveEmojiItemResp moveItem(APIMoveItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListEmojiGroupsResp listEmojiGroups(APIListEmojiGroupsRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    MoveEmojiItemReq moveEmojiItemReq = apiRequest.moveEmojiItemReq();
-    return moveItem(moveEmojiItemReq, headers);
+    ListEmojiGroupsReq listEmojiGroupsReq = apiRequest.listEmojiGroupsReq();
+    return listEmojiGroups(listEmojiGroupsReq, headers);
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param apiRequest {@link APIMoveItemRequest}
-   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * 查询当前账号的表情分组。
+   * @param apiRequest {@link APIListEmojiGroupsRequest}
+   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MoveEmojiItemResp> moveItemWithHttpInfo(APIMoveItemRequest apiRequest) throws ApiException {
-    return moveItemWithHttpInfo(apiRequest, null);
+  public ApiResponse<ListEmojiGroupsResp> listEmojiGroupsWithHttpInfo(APIListEmojiGroupsRequest apiRequest) throws ApiException {
+    return listEmojiGroupsWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param apiRequest {@link APIMoveItemRequest}
+   * 查询当前账号的表情分组。
+   * @param apiRequest {@link APIListEmojiGroupsRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MoveEmojiItemResp> moveItemWithHttpInfo(APIMoveItemRequest apiRequest, Map<String, String> headers) throws ApiException {
-    MoveEmojiItemReq moveEmojiItemReq = apiRequest.moveEmojiItemReq();
-    return moveItemWithHttpInfo(moveEmojiItemReq, headers);
+  public ApiResponse<ListEmojiGroupsResp> listEmojiGroupsWithHttpInfo(APIListEmojiGroupsRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListEmojiGroupsReq listEmojiGroupsReq = apiRequest.listEmojiGroupsReq();
+    return listEmojiGroupsWithHttpInfo(listEmojiGroupsReq, headers);
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param moveEmojiItemReq  (required)
-   * @return MoveEmojiItemResp
+   * 查询当前账号的表情分组。
+   * @param listEmojiGroupsReq  (required)
+   * @return ListEmojiGroupsResp
    * @throws ApiException if fails to make API call
    */
-  public MoveEmojiItemResp moveItem(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq) throws ApiException {
-    return moveItem(moveEmojiItemReq, null);
+  public ListEmojiGroupsResp listEmojiGroups(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq) throws ApiException {
+    return listEmojiGroups(listEmojiGroupsReq, null);
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param moveEmojiItemReq  (required)
+   * 查询当前账号的表情分组。
+   * @param listEmojiGroupsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return MoveEmojiItemResp
+   * @return ListEmojiGroupsResp
    * @throws ApiException if fails to make API call
    */
-  public MoveEmojiItemResp moveItem(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<MoveEmojiItemResp> localVarResponse = moveItemWithHttpInfo(moveEmojiItemReq, headers);
+  public ListEmojiGroupsResp listEmojiGroups(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListEmojiGroupsResp> localVarResponse = listEmojiGroupsWithHttpInfo(listEmojiGroupsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param moveEmojiItemReq  (required)
-   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * 查询当前账号的表情分组。
+   * @param listEmojiGroupsReq  (required)
+   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MoveEmojiItemResp> moveItemWithHttpInfo(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq) throws ApiException {
-    return moveItemWithHttpInfo(moveEmojiItemReq, null);
+  public ApiResponse<ListEmojiGroupsResp> listEmojiGroupsWithHttpInfo(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq) throws ApiException {
+    return listEmojiGroupsWithHttpInfo(listEmojiGroupsReq, null);
   }
 
   /**
    * 
-   * 将表情移动到另一个当前账号分组。
-   * @param moveEmojiItemReq  (required)
+   * 查询当前账号的表情分组。
+   * @param listEmojiGroupsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * @return ApiResponse&lt;ListEmojiGroupsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<MoveEmojiItemResp> moveItemWithHttpInfo(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = moveItemRequestBuilder(moveEmojiItemReq, headers);
+  public ApiResponse<ListEmojiGroupsResp> listEmojiGroupsWithHttpInfo(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listEmojiGroupsRequestBuilder(listEmojiGroupsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1692,7 +1491,208 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("moveItem", localVarResponse);
+          throw getApiException("listEmojiGroups", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListEmojiGroupsResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListEmojiGroupsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListEmojiGroupsResp>() {});
+        
+
+        return new ApiResponse<ListEmojiGroupsResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder listEmojiGroupsRequestBuilder(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listEmojiGroupsReq' is set
+    if (listEmojiGroupsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listEmojiGroupsReq' when calling listEmojiGroups");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/im/emoji/groups/list";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listEmojiGroupsReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIListEmojiGroupsRequest {
+    @javax.annotation.Nonnull
+    private ListEmojiGroupsReq listEmojiGroupsReq; //  (required)
+
+    private APIListEmojiGroupsRequest(Builder builder) {
+      this.listEmojiGroupsReq = builder.listEmojiGroupsReq;
+    }
+    @javax.annotation.Nonnull
+    public ListEmojiGroupsReq listEmojiGroupsReq() {
+      return listEmojiGroupsReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private ListEmojiGroupsReq listEmojiGroupsReq;
+
+      public Builder listEmojiGroupsReq(@javax.annotation.Nonnull ListEmojiGroupsReq listEmojiGroupsReq) {
+        this.listEmojiGroupsReq = listEmojiGroupsReq;
+        return this;
+      }
+      public APIListEmojiGroupsRequest build() {
+        return new APIListEmojiGroupsRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param apiRequest {@link APIMoveEmojiItemRequest}
+   * @return MoveEmojiItemResp
+   * @throws ApiException if fails to make API call
+   */
+  public MoveEmojiItemResp moveEmojiItem(APIMoveEmojiItemRequest apiRequest) throws ApiException {
+    return moveEmojiItem(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param apiRequest {@link APIMoveEmojiItemRequest}
+   * @param headers Optional headers to include in the request
+   * @return MoveEmojiItemResp
+   * @throws ApiException if fails to make API call
+   */
+  public MoveEmojiItemResp moveEmojiItem(APIMoveEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    MoveEmojiItemReq moveEmojiItemReq = apiRequest.moveEmojiItemReq();
+    return moveEmojiItem(moveEmojiItemReq, headers);
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param apiRequest {@link APIMoveEmojiItemRequest}
+   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MoveEmojiItemResp> moveEmojiItemWithHttpInfo(APIMoveEmojiItemRequest apiRequest) throws ApiException {
+    return moveEmojiItemWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param apiRequest {@link APIMoveEmojiItemRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MoveEmojiItemResp> moveEmojiItemWithHttpInfo(APIMoveEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+    MoveEmojiItemReq moveEmojiItemReq = apiRequest.moveEmojiItemReq();
+    return moveEmojiItemWithHttpInfo(moveEmojiItemReq, headers);
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param moveEmojiItemReq  (required)
+   * @return MoveEmojiItemResp
+   * @throws ApiException if fails to make API call
+   */
+  public MoveEmojiItemResp moveEmojiItem(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq) throws ApiException {
+    return moveEmojiItem(moveEmojiItemReq, null);
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param moveEmojiItemReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return MoveEmojiItemResp
+   * @throws ApiException if fails to make API call
+   */
+  public MoveEmojiItemResp moveEmojiItem(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<MoveEmojiItemResp> localVarResponse = moveEmojiItemWithHttpInfo(moveEmojiItemReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param moveEmojiItemReq  (required)
+   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MoveEmojiItemResp> moveEmojiItemWithHttpInfo(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq) throws ApiException {
+    return moveEmojiItemWithHttpInfo(moveEmojiItemReq, null);
+  }
+
+  /**
+   * 
+   * 将表情移动到另一个当前账号分组。
+   * @param moveEmojiItemReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;MoveEmojiItemResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<MoveEmojiItemResp> moveEmojiItemWithHttpInfo(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = moveEmojiItemRequestBuilder(moveEmojiItemReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("moveEmojiItem", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1728,10 +1728,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder moveItemRequestBuilder(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder moveEmojiItemRequestBuilder(@javax.annotation.Nonnull MoveEmojiItemReq moveEmojiItemReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'moveEmojiItemReq' is set
     if (moveEmojiItemReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'moveEmojiItemReq' when calling moveItem");
+      throw new ApiException(400, "Missing the required parameter 'moveEmojiItemReq' when calling moveEmojiItem");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1761,11 +1761,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIMoveItemRequest {
+  public static final class APIMoveEmojiItemRequest {
     @javax.annotation.Nonnull
     private MoveEmojiItemReq moveEmojiItemReq; //  (required)
 
-    private APIMoveItemRequest(Builder builder) {
+    private APIMoveEmojiItemRequest(Builder builder) {
       this.moveEmojiItemReq = builder.moveEmojiItemReq;
     }
     @javax.annotation.Nonnull
@@ -1783,8 +1783,8 @@ public class EmojiService {
         this.moveEmojiItemReq = moveEmojiItemReq;
         return this;
       }
-      public APIMoveItemRequest build() {
-        return new APIMoveItemRequest(this);
+      public APIMoveEmojiItemRequest build() {
+        return new APIMoveEmojiItemRequest(this);
       }
     }
   }
@@ -1792,50 +1792,50 @@ public class EmojiService {
   /**
    * 
    * 重命名一个表情分组。
-   * @param apiRequest {@link APIRenameGroupRequest}
+   * @param apiRequest {@link APIRenameEmojiGroupRequest}
    * @return RenameEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiGroupResp renameGroup(APIRenameGroupRequest apiRequest) throws ApiException {
-    return renameGroup(apiRequest, null);
+  public RenameEmojiGroupResp renameEmojiGroup(APIRenameEmojiGroupRequest apiRequest) throws ApiException {
+    return renameEmojiGroup(apiRequest, null);
   }
 
   /**
    * 
    * 重命名一个表情分组。
-   * @param apiRequest {@link APIRenameGroupRequest}
+   * @param apiRequest {@link APIRenameEmojiGroupRequest}
    * @param headers Optional headers to include in the request
    * @return RenameEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiGroupResp renameGroup(APIRenameGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public RenameEmojiGroupResp renameEmojiGroup(APIRenameEmojiGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     RenameEmojiGroupReq renameEmojiGroupReq = apiRequest.renameEmojiGroupReq();
-    return renameGroup(renameEmojiGroupReq, headers);
+    return renameEmojiGroup(renameEmojiGroupReq, headers);
   }
 
   /**
    * 
    * 重命名一个表情分组。
-   * @param apiRequest {@link APIRenameGroupRequest}
+   * @param apiRequest {@link APIRenameEmojiGroupRequest}
    * @return ApiResponse&lt;RenameEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiGroupResp> renameGroupWithHttpInfo(APIRenameGroupRequest apiRequest) throws ApiException {
-    return renameGroupWithHttpInfo(apiRequest, null);
+  public ApiResponse<RenameEmojiGroupResp> renameEmojiGroupWithHttpInfo(APIRenameEmojiGroupRequest apiRequest) throws ApiException {
+    return renameEmojiGroupWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 重命名一个表情分组。
-   * @param apiRequest {@link APIRenameGroupRequest}
+   * @param apiRequest {@link APIRenameEmojiGroupRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;RenameEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiGroupResp> renameGroupWithHttpInfo(APIRenameGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<RenameEmojiGroupResp> renameEmojiGroupWithHttpInfo(APIRenameEmojiGroupRequest apiRequest, Map<String, String> headers) throws ApiException {
     RenameEmojiGroupReq renameEmojiGroupReq = apiRequest.renameEmojiGroupReq();
-    return renameGroupWithHttpInfo(renameEmojiGroupReq, headers);
+    return renameEmojiGroupWithHttpInfo(renameEmojiGroupReq, headers);
   }
 
   /**
@@ -1845,8 +1845,8 @@ public class EmojiService {
    * @return RenameEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiGroupResp renameGroup(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq) throws ApiException {
-    return renameGroup(renameEmojiGroupReq, null);
+  public RenameEmojiGroupResp renameEmojiGroup(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq) throws ApiException {
+    return renameEmojiGroup(renameEmojiGroupReq, null);
   }
 
   /**
@@ -1857,8 +1857,8 @@ public class EmojiService {
    * @return RenameEmojiGroupResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiGroupResp renameGroup(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<RenameEmojiGroupResp> localVarResponse = renameGroupWithHttpInfo(renameEmojiGroupReq, headers);
+  public RenameEmojiGroupResp renameEmojiGroup(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<RenameEmojiGroupResp> localVarResponse = renameEmojiGroupWithHttpInfo(renameEmojiGroupReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1869,8 +1869,8 @@ public class EmojiService {
    * @return ApiResponse&lt;RenameEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiGroupResp> renameGroupWithHttpInfo(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq) throws ApiException {
-    return renameGroupWithHttpInfo(renameEmojiGroupReq, null);
+  public ApiResponse<RenameEmojiGroupResp> renameEmojiGroupWithHttpInfo(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq) throws ApiException {
+    return renameEmojiGroupWithHttpInfo(renameEmojiGroupReq, null);
   }
 
   /**
@@ -1881,8 +1881,8 @@ public class EmojiService {
    * @return ApiResponse&lt;RenameEmojiGroupResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiGroupResp> renameGroupWithHttpInfo(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = renameGroupRequestBuilder(renameEmojiGroupReq, headers);
+  public ApiResponse<RenameEmojiGroupResp> renameEmojiGroupWithHttpInfo(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = renameEmojiGroupRequestBuilder(renameEmojiGroupReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1893,7 +1893,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("renameGroup", localVarResponse);
+          throw getApiException("renameEmojiGroup", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1929,10 +1929,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder renameGroupRequestBuilder(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder renameEmojiGroupRequestBuilder(@javax.annotation.Nonnull RenameEmojiGroupReq renameEmojiGroupReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'renameEmojiGroupReq' is set
     if (renameEmojiGroupReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'renameEmojiGroupReq' when calling renameGroup");
+      throw new ApiException(400, "Missing the required parameter 'renameEmojiGroupReq' when calling renameEmojiGroup");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1962,11 +1962,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIRenameGroupRequest {
+  public static final class APIRenameEmojiGroupRequest {
     @javax.annotation.Nonnull
     private RenameEmojiGroupReq renameEmojiGroupReq; //  (required)
 
-    private APIRenameGroupRequest(Builder builder) {
+    private APIRenameEmojiGroupRequest(Builder builder) {
       this.renameEmojiGroupReq = builder.renameEmojiGroupReq;
     }
     @javax.annotation.Nonnull
@@ -1984,8 +1984,8 @@ public class EmojiService {
         this.renameEmojiGroupReq = renameEmojiGroupReq;
         return this;
       }
-      public APIRenameGroupRequest build() {
-        return new APIRenameGroupRequest(this);
+      public APIRenameEmojiGroupRequest build() {
+        return new APIRenameEmojiGroupRequest(this);
       }
     }
   }
@@ -1993,50 +1993,50 @@ public class EmojiService {
   /**
    * 
    * 重命名一个表情别名。
-   * @param apiRequest {@link APIRenameItemRequest}
+   * @param apiRequest {@link APIRenameEmojiItemRequest}
    * @return RenameEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiItemResp renameItem(APIRenameItemRequest apiRequest) throws ApiException {
-    return renameItem(apiRequest, null);
+  public RenameEmojiItemResp renameEmojiItem(APIRenameEmojiItemRequest apiRequest) throws ApiException {
+    return renameEmojiItem(apiRequest, null);
   }
 
   /**
    * 
    * 重命名一个表情别名。
-   * @param apiRequest {@link APIRenameItemRequest}
+   * @param apiRequest {@link APIRenameEmojiItemRequest}
    * @param headers Optional headers to include in the request
    * @return RenameEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiItemResp renameItem(APIRenameItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public RenameEmojiItemResp renameEmojiItem(APIRenameEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     RenameEmojiItemReq renameEmojiItemReq = apiRequest.renameEmojiItemReq();
-    return renameItem(renameEmojiItemReq, headers);
+    return renameEmojiItem(renameEmojiItemReq, headers);
   }
 
   /**
    * 
    * 重命名一个表情别名。
-   * @param apiRequest {@link APIRenameItemRequest}
+   * @param apiRequest {@link APIRenameEmojiItemRequest}
    * @return ApiResponse&lt;RenameEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiItemResp> renameItemWithHttpInfo(APIRenameItemRequest apiRequest) throws ApiException {
-    return renameItemWithHttpInfo(apiRequest, null);
+  public ApiResponse<RenameEmojiItemResp> renameEmojiItemWithHttpInfo(APIRenameEmojiItemRequest apiRequest) throws ApiException {
+    return renameEmojiItemWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 重命名一个表情别名。
-   * @param apiRequest {@link APIRenameItemRequest}
+   * @param apiRequest {@link APIRenameEmojiItemRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;RenameEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiItemResp> renameItemWithHttpInfo(APIRenameItemRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<RenameEmojiItemResp> renameEmojiItemWithHttpInfo(APIRenameEmojiItemRequest apiRequest, Map<String, String> headers) throws ApiException {
     RenameEmojiItemReq renameEmojiItemReq = apiRequest.renameEmojiItemReq();
-    return renameItemWithHttpInfo(renameEmojiItemReq, headers);
+    return renameEmojiItemWithHttpInfo(renameEmojiItemReq, headers);
   }
 
   /**
@@ -2046,8 +2046,8 @@ public class EmojiService {
    * @return RenameEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiItemResp renameItem(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq) throws ApiException {
-    return renameItem(renameEmojiItemReq, null);
+  public RenameEmojiItemResp renameEmojiItem(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq) throws ApiException {
+    return renameEmojiItem(renameEmojiItemReq, null);
   }
 
   /**
@@ -2058,8 +2058,8 @@ public class EmojiService {
    * @return RenameEmojiItemResp
    * @throws ApiException if fails to make API call
    */
-  public RenameEmojiItemResp renameItem(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<RenameEmojiItemResp> localVarResponse = renameItemWithHttpInfo(renameEmojiItemReq, headers);
+  public RenameEmojiItemResp renameEmojiItem(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<RenameEmojiItemResp> localVarResponse = renameEmojiItemWithHttpInfo(renameEmojiItemReq, headers);
     return localVarResponse.getData();
   }
 
@@ -2070,8 +2070,8 @@ public class EmojiService {
    * @return ApiResponse&lt;RenameEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiItemResp> renameItemWithHttpInfo(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq) throws ApiException {
-    return renameItemWithHttpInfo(renameEmojiItemReq, null);
+  public ApiResponse<RenameEmojiItemResp> renameEmojiItemWithHttpInfo(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq) throws ApiException {
+    return renameEmojiItemWithHttpInfo(renameEmojiItemReq, null);
   }
 
   /**
@@ -2082,8 +2082,8 @@ public class EmojiService {
    * @return ApiResponse&lt;RenameEmojiItemResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RenameEmojiItemResp> renameItemWithHttpInfo(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = renameItemRequestBuilder(renameEmojiItemReq, headers);
+  public ApiResponse<RenameEmojiItemResp> renameEmojiItemWithHttpInfo(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = renameEmojiItemRequestBuilder(renameEmojiItemReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -2094,7 +2094,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("renameItem", localVarResponse);
+          throw getApiException("renameEmojiItem", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -2130,10 +2130,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder renameItemRequestBuilder(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder renameEmojiItemRequestBuilder(@javax.annotation.Nonnull RenameEmojiItemReq renameEmojiItemReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'renameEmojiItemReq' is set
     if (renameEmojiItemReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'renameEmojiItemReq' when calling renameItem");
+      throw new ApiException(400, "Missing the required parameter 'renameEmojiItemReq' when calling renameEmojiItem");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -2163,11 +2163,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIRenameItemRequest {
+  public static final class APIRenameEmojiItemRequest {
     @javax.annotation.Nonnull
     private RenameEmojiItemReq renameEmojiItemReq; //  (required)
 
-    private APIRenameItemRequest(Builder builder) {
+    private APIRenameEmojiItemRequest(Builder builder) {
       this.renameEmojiItemReq = builder.renameEmojiItemReq;
     }
     @javax.annotation.Nonnull
@@ -2185,8 +2185,8 @@ public class EmojiService {
         this.renameEmojiItemReq = renameEmojiItemReq;
         return this;
       }
-      public APIRenameItemRequest build() {
-        return new APIRenameItemRequest(this);
+      public APIRenameEmojiItemRequest build() {
+        return new APIRenameEmojiItemRequest(this);
       }
     }
   }
@@ -2194,50 +2194,50 @@ public class EmojiService {
   /**
    * 
    * 重排表情分组。
-   * @param apiRequest {@link APIReorderGroupsRequest}
+   * @param apiRequest {@link APIReorderEmojiGroupsRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderGroups(APIReorderGroupsRequest apiRequest) throws ApiException {
-    return reorderGroups(apiRequest, null);
+  public Object reorderEmojiGroups(APIReorderEmojiGroupsRequest apiRequest) throws ApiException {
+    return reorderEmojiGroups(apiRequest, null);
   }
 
   /**
    * 
    * 重排表情分组。
-   * @param apiRequest {@link APIReorderGroupsRequest}
+   * @param apiRequest {@link APIReorderEmojiGroupsRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderGroups(APIReorderGroupsRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object reorderEmojiGroups(APIReorderEmojiGroupsRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     ReorderEmojiGroupsReq reorderEmojiGroupsReq = apiRequest.reorderEmojiGroupsReq();
-    return reorderGroups(reorderEmojiGroupsReq, headers);
+    return reorderEmojiGroups(reorderEmojiGroupsReq, headers);
   }
 
   /**
    * 
    * 重排表情分组。
-   * @param apiRequest {@link APIReorderGroupsRequest}
+   * @param apiRequest {@link APIReorderEmojiGroupsRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderGroupsWithHttpInfo(APIReorderGroupsRequest apiRequest) throws ApiException {
-    return reorderGroupsWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> reorderEmojiGroupsWithHttpInfo(APIReorderEmojiGroupsRequest apiRequest) throws ApiException {
+    return reorderEmojiGroupsWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 重排表情分组。
-   * @param apiRequest {@link APIReorderGroupsRequest}
+   * @param apiRequest {@link APIReorderEmojiGroupsRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderGroupsWithHttpInfo(APIReorderGroupsRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> reorderEmojiGroupsWithHttpInfo(APIReorderEmojiGroupsRequest apiRequest, Map<String, String> headers) throws ApiException {
     ReorderEmojiGroupsReq reorderEmojiGroupsReq = apiRequest.reorderEmojiGroupsReq();
-    return reorderGroupsWithHttpInfo(reorderEmojiGroupsReq, headers);
+    return reorderEmojiGroupsWithHttpInfo(reorderEmojiGroupsReq, headers);
   }
 
   /**
@@ -2247,8 +2247,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderGroups(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq) throws ApiException {
-    return reorderGroups(reorderEmojiGroupsReq, null);
+  public Object reorderEmojiGroups(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq) throws ApiException {
+    return reorderEmojiGroups(reorderEmojiGroupsReq, null);
   }
 
   /**
@@ -2259,8 +2259,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderGroups(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = reorderGroupsWithHttpInfo(reorderEmojiGroupsReq, headers);
+  public Object reorderEmojiGroups(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = reorderEmojiGroupsWithHttpInfo(reorderEmojiGroupsReq, headers);
     return localVarResponse.getData();
   }
 
@@ -2271,8 +2271,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderGroupsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq) throws ApiException {
-    return reorderGroupsWithHttpInfo(reorderEmojiGroupsReq, null);
+  public ApiResponse<Object> reorderEmojiGroupsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq) throws ApiException {
+    return reorderEmojiGroupsWithHttpInfo(reorderEmojiGroupsReq, null);
   }
 
   /**
@@ -2283,8 +2283,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderGroupsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = reorderGroupsRequestBuilder(reorderEmojiGroupsReq, headers);
+  public ApiResponse<Object> reorderEmojiGroupsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = reorderEmojiGroupsRequestBuilder(reorderEmojiGroupsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -2295,7 +2295,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("reorderGroups", localVarResponse);
+          throw getApiException("reorderEmojiGroups", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -2331,10 +2331,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder reorderGroupsRequestBuilder(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder reorderEmojiGroupsRequestBuilder(@javax.annotation.Nonnull ReorderEmojiGroupsReq reorderEmojiGroupsReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'reorderEmojiGroupsReq' is set
     if (reorderEmojiGroupsReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'reorderEmojiGroupsReq' when calling reorderGroups");
+      throw new ApiException(400, "Missing the required parameter 'reorderEmojiGroupsReq' when calling reorderEmojiGroups");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -2364,11 +2364,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIReorderGroupsRequest {
+  public static final class APIReorderEmojiGroupsRequest {
     @javax.annotation.Nonnull
     private ReorderEmojiGroupsReq reorderEmojiGroupsReq; //  (required)
 
-    private APIReorderGroupsRequest(Builder builder) {
+    private APIReorderEmojiGroupsRequest(Builder builder) {
       this.reorderEmojiGroupsReq = builder.reorderEmojiGroupsReq;
     }
     @javax.annotation.Nonnull
@@ -2386,8 +2386,8 @@ public class EmojiService {
         this.reorderEmojiGroupsReq = reorderEmojiGroupsReq;
         return this;
       }
-      public APIReorderGroupsRequest build() {
-        return new APIReorderGroupsRequest(this);
+      public APIReorderEmojiGroupsRequest build() {
+        return new APIReorderEmojiGroupsRequest(this);
       }
     }
   }
@@ -2395,50 +2395,50 @@ public class EmojiService {
   /**
    * 
    * 重排同一分组内的表情。
-   * @param apiRequest {@link APIReorderItemsRequest}
+   * @param apiRequest {@link APIReorderEmojiItemsRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderItems(APIReorderItemsRequest apiRequest) throws ApiException {
-    return reorderItems(apiRequest, null);
+  public Object reorderEmojiItems(APIReorderEmojiItemsRequest apiRequest) throws ApiException {
+    return reorderEmojiItems(apiRequest, null);
   }
 
   /**
    * 
    * 重排同一分组内的表情。
-   * @param apiRequest {@link APIReorderItemsRequest}
+   * @param apiRequest {@link APIReorderEmojiItemsRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderItems(APIReorderItemsRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object reorderEmojiItems(APIReorderEmojiItemsRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     ReorderEmojiItemsReq reorderEmojiItemsReq = apiRequest.reorderEmojiItemsReq();
-    return reorderItems(reorderEmojiItemsReq, headers);
+    return reorderEmojiItems(reorderEmojiItemsReq, headers);
   }
 
   /**
    * 
    * 重排同一分组内的表情。
-   * @param apiRequest {@link APIReorderItemsRequest}
+   * @param apiRequest {@link APIReorderEmojiItemsRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderItemsWithHttpInfo(APIReorderItemsRequest apiRequest) throws ApiException {
-    return reorderItemsWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> reorderEmojiItemsWithHttpInfo(APIReorderEmojiItemsRequest apiRequest) throws ApiException {
+    return reorderEmojiItemsWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 重排同一分组内的表情。
-   * @param apiRequest {@link APIReorderItemsRequest}
+   * @param apiRequest {@link APIReorderEmojiItemsRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderItemsWithHttpInfo(APIReorderItemsRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> reorderEmojiItemsWithHttpInfo(APIReorderEmojiItemsRequest apiRequest, Map<String, String> headers) throws ApiException {
     ReorderEmojiItemsReq reorderEmojiItemsReq = apiRequest.reorderEmojiItemsReq();
-    return reorderItemsWithHttpInfo(reorderEmojiItemsReq, headers);
+    return reorderEmojiItemsWithHttpInfo(reorderEmojiItemsReq, headers);
   }
 
   /**
@@ -2448,8 +2448,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderItems(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq) throws ApiException {
-    return reorderItems(reorderEmojiItemsReq, null);
+  public Object reorderEmojiItems(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq) throws ApiException {
+    return reorderEmojiItems(reorderEmojiItemsReq, null);
   }
 
   /**
@@ -2460,8 +2460,8 @@ public class EmojiService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object reorderItems(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = reorderItemsWithHttpInfo(reorderEmojiItemsReq, headers);
+  public Object reorderEmojiItems(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = reorderEmojiItemsWithHttpInfo(reorderEmojiItemsReq, headers);
     return localVarResponse.getData();
   }
 
@@ -2472,8 +2472,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderItemsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq) throws ApiException {
-    return reorderItemsWithHttpInfo(reorderEmojiItemsReq, null);
+  public ApiResponse<Object> reorderEmojiItemsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq) throws ApiException {
+    return reorderEmojiItemsWithHttpInfo(reorderEmojiItemsReq, null);
   }
 
   /**
@@ -2484,8 +2484,8 @@ public class EmojiService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> reorderItemsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = reorderItemsRequestBuilder(reorderEmojiItemsReq, headers);
+  public ApiResponse<Object> reorderEmojiItemsWithHttpInfo(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = reorderEmojiItemsRequestBuilder(reorderEmojiItemsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -2496,7 +2496,7 @@ public class EmojiService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("reorderItems", localVarResponse);
+          throw getApiException("reorderEmojiItems", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -2532,10 +2532,10 @@ public class EmojiService {
     }
   }
 
-  private HttpRequest.Builder reorderItemsRequestBuilder(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder reorderEmojiItemsRequestBuilder(@javax.annotation.Nonnull ReorderEmojiItemsReq reorderEmojiItemsReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'reorderEmojiItemsReq' is set
     if (reorderEmojiItemsReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'reorderEmojiItemsReq' when calling reorderItems");
+      throw new ApiException(400, "Missing the required parameter 'reorderEmojiItemsReq' when calling reorderEmojiItems");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -2565,11 +2565,11 @@ public class EmojiService {
   }
 
 
-  public static final class APIReorderItemsRequest {
+  public static final class APIReorderEmojiItemsRequest {
     @javax.annotation.Nonnull
     private ReorderEmojiItemsReq reorderEmojiItemsReq; //  (required)
 
-    private APIReorderItemsRequest(Builder builder) {
+    private APIReorderEmojiItemsRequest(Builder builder) {
       this.reorderEmojiItemsReq = builder.reorderEmojiItemsReq;
     }
     @javax.annotation.Nonnull
@@ -2587,8 +2587,8 @@ public class EmojiService {
         this.reorderEmojiItemsReq = reorderEmojiItemsReq;
         return this;
       }
-      public APIReorderItemsRequest build() {
-        return new APIReorderItemsRequest(this);
+      public APIReorderEmojiItemsRequest build() {
+        return new APIReorderEmojiItemsRequest(this);
       }
     }
   }

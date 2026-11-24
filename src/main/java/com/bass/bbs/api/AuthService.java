@@ -427,9 +427,9 @@ public class AuthService {
   /**
    * 
    * 检查注册字段是否可用。
-   * @param name  (optional)
-   * @param email  (optional)
-   * @param phone  (optional)
+   * @param name 待检查的账号名 (optional)
+   * @param email 待检查的邮箱 (optional)
+   * @param phone 待检查的手机号 (optional)
    * @return CheckRegistrationAvailabilityResp
    * @throws ApiException if fails to make API call
    */
@@ -440,9 +440,9 @@ public class AuthService {
   /**
    * 
    * 检查注册字段是否可用。
-   * @param name  (optional)
-   * @param email  (optional)
-   * @param phone  (optional)
+   * @param name 待检查的账号名 (optional)
+   * @param email 待检查的邮箱 (optional)
+   * @param phone 待检查的手机号 (optional)
    * @param headers Optional headers to include in the request
    * @return CheckRegistrationAvailabilityResp
    * @throws ApiException if fails to make API call
@@ -455,9 +455,9 @@ public class AuthService {
   /**
    * 
    * 检查注册字段是否可用。
-   * @param name  (optional)
-   * @param email  (optional)
-   * @param phone  (optional)
+   * @param name 待检查的账号名 (optional)
+   * @param email 待检查的邮箱 (optional)
+   * @param phone 待检查的手机号 (optional)
    * @return ApiResponse&lt;CheckRegistrationAvailabilityResp&gt;
    * @throws ApiException if fails to make API call
    */
@@ -468,9 +468,9 @@ public class AuthService {
   /**
    * 
    * 检查注册字段是否可用。
-   * @param name  (optional)
-   * @param email  (optional)
-   * @param phone  (optional)
+   * @param name 待检查的账号名 (optional)
+   * @param email 待检查的邮箱 (optional)
+   * @param phone 待检查的手机号 (optional)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CheckRegistrationAvailabilityResp&gt;
    * @throws ApiException if fails to make API call
@@ -567,11 +567,11 @@ public class AuthService {
 
   public static final class APICheckRegistrationAvailabilityRequest {
     @javax.annotation.Nullable
-    private String name; //  (optional)
+    private String name; // 待检查的账号名 (optional)
     @javax.annotation.Nullable
-    private String email; //  (optional)
+    private String email; // 待检查的邮箱 (optional)
     @javax.annotation.Nullable
-    private String phone; //  (optional)
+    private String phone; // 待检查的手机号 (optional)
 
     private APICheckRegistrationAvailabilityRequest(Builder builder) {
       this.name = builder.name;

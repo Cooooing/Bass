@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CountUnreadNotificationsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CountUnreadNotificationsResp.JSON_PROPERTY_COUNT
@@ -50,7 +50,7 @@ public class CountUnreadNotificationsResp {
   }
 
   /**
-   * Get count
+   * 未读通知数量
    * @return count
    */
   @javax.annotation.Nullable

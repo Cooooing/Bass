@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateRealtimeTicketResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CreateRealtimeTicketResp.JSON_PROPERTY_TICKET,
@@ -60,7 +60,7 @@ public class CreateRealtimeTicketResp {
   }
 
   /**
-   * Get ticket
+   * 一次性 SSE 建连凭证。
    * @return ticket
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class CreateRealtimeTicketResp {
   }
 
   /**
-   * Get expiresInSeconds
+   * 有效期秒数。
    * @return expiresInSeconds
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class CreateRealtimeTicketResp {
   }
 
   /**
-   * Get path
+   * realtime node SSE 路径。
    * @return path
    */
   @javax.annotation.Nullable

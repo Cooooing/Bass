@@ -194,9 +194,9 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        String name = "name_example"; // String | 
-        String email = "email_example"; // String | 
-        String phone = "phone_example"; // String | 
+        String name = "name_example"; // String | 待检查的账号名
+        String email = "email_example"; // String | 待检查的邮箱
+        String phone = "phone_example"; // String | 待检查的手机号
         try {
             APIcheckRegistrationAvailabilityRequest request = APIcheckRegistrationAvailabilityRequest.newBuilder()
                 .name(name)
@@ -267,9 +267,9 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        String name = "name_example"; // String | 
-        String email = "email_example"; // String | 
-        String phone = "phone_example"; // String | 
+        String name = "name_example"; // String | 待检查的账号名
+        String email = "email_example"; // String | 待检查的邮箱
+        String phone = "phone_example"; // String | 待检查的手机号
         try {
             APIcheckRegistrationAvailabilityRequest request = APIcheckRegistrationAvailabilityRequest.newBuilder()
                 .name(name)
@@ -323,9 +323,9 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **name** | **String** |  | [optional] |
-| **email** | **String** |  | [optional] |
-| **phone** | **String** |  | [optional] |
+| **name** | **String** | 待检查的账号名 | [optional] |
+| **email** | **String** | 待检查的邮箱 | [optional] |
+| **phone** | **String** | 待检查的手机号 | [optional] |
 
 
 

@@ -62,35 +62,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void addItemTest() throws ApiException {
+    public void addEmojiItemTest() throws ApiException {
         AddEmojiItemReq addEmojiItemReq = null;
         
-        EmojiService.APIaddItemRequest request = EmojiService.APIaddItemRequest.newBuilder()
+        EmojiService.APIaddEmojiItemRequest request = EmojiService.APIaddEmojiItemRequest.newBuilder()
           .addEmojiItemReq(addEmojiItemReq)
           .build();
         AddEmojiItemResp response = 
-        api.addItem(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 查询当前账号的表情分组。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void callListTest() throws ApiException {
-        ListEmojiGroupsReq listEmojiGroupsReq = null;
-        
-        EmojiService.APIcallListRequest request = EmojiService.APIcallListRequest.newBuilder()
-          .listEmojiGroupsReq(listEmojiGroupsReq)
-          .build();
-        ListEmojiGroupsResp response = 
-        api.callList(request);
+        api.addEmojiItem(request);
 
         // TODO: test validations
     }
@@ -104,14 +83,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void createGroupTest() throws ApiException {
+    public void createEmojiGroupTest() throws ApiException {
         CreateEmojiGroupReq createEmojiGroupReq = null;
         
-        EmojiService.APIcreateGroupRequest request = EmojiService.APIcreateGroupRequest.newBuilder()
+        EmojiService.APIcreateEmojiGroupRequest request = EmojiService.APIcreateEmojiGroupRequest.newBuilder()
           .createEmojiGroupReq(createEmojiGroupReq)
           .build();
         CreateEmojiGroupResp response = 
-        api.createGroup(request);
+        api.createEmojiGroup(request);
 
         // TODO: test validations
     }
@@ -125,14 +104,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void createShareTest() throws ApiException {
+    public void createEmojiShareTest() throws ApiException {
         CreateEmojiShareReq createEmojiShareReq = null;
         
-        EmojiService.APIcreateShareRequest request = EmojiService.APIcreateShareRequest.newBuilder()
+        EmojiService.APIcreateEmojiShareRequest request = EmojiService.APIcreateEmojiShareRequest.newBuilder()
           .createEmojiShareReq(createEmojiShareReq)
           .build();
         CreateEmojiShareResp response = 
-        api.createShare(request);
+        api.createEmojiShare(request);
 
         // TODO: test validations
     }
@@ -146,14 +125,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteGroupTest() throws ApiException {
+    public void deleteEmojiGroupTest() throws ApiException {
         DeleteEmojiGroupReq deleteEmojiGroupReq = null;
         
-        EmojiService.APIdeleteGroupRequest request = EmojiService.APIdeleteGroupRequest.newBuilder()
+        EmojiService.APIdeleteEmojiGroupRequest request = EmojiService.APIdeleteEmojiGroupRequest.newBuilder()
           .deleteEmojiGroupReq(deleteEmojiGroupReq)
           .build();
         Object response = 
-        api.deleteGroup(request);
+        api.deleteEmojiGroup(request);
 
         // TODO: test validations
     }
@@ -167,14 +146,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteItemTest() throws ApiException {
+    public void deleteEmojiItemTest() throws ApiException {
         DeleteEmojiItemReq deleteEmojiItemReq = null;
         
-        EmojiService.APIdeleteItemRequest request = EmojiService.APIdeleteItemRequest.newBuilder()
+        EmojiService.APIdeleteEmojiItemRequest request = EmojiService.APIdeleteEmojiItemRequest.newBuilder()
           .deleteEmojiItemReq(deleteEmojiItemReq)
           .build();
         Object response = 
-        api.deleteItem(request);
+        api.deleteEmojiItem(request);
 
         // TODO: test validations
     }
@@ -188,14 +167,35 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void importShareTest() throws ApiException {
+    public void importEmojiShareTest() throws ApiException {
         ImportEmojiShareReq importEmojiShareReq = null;
         
-        EmojiService.APIimportShareRequest request = EmojiService.APIimportShareRequest.newBuilder()
+        EmojiService.APIimportEmojiShareRequest request = EmojiService.APIimportEmojiShareRequest.newBuilder()
           .importEmojiShareReq(importEmojiShareReq)
           .build();
         ImportEmojiShareResp response = 
-        api.importShare(request);
+        api.importEmojiShare(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询当前账号的表情分组。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listEmojiGroupsTest() throws ApiException {
+        ListEmojiGroupsReq listEmojiGroupsReq = null;
+        
+        EmojiService.APIlistEmojiGroupsRequest request = EmojiService.APIlistEmojiGroupsRequest.newBuilder()
+          .listEmojiGroupsReq(listEmojiGroupsReq)
+          .build();
+        ListEmojiGroupsResp response = 
+        api.listEmojiGroups(request);
 
         // TODO: test validations
     }
@@ -209,14 +209,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void moveItemTest() throws ApiException {
+    public void moveEmojiItemTest() throws ApiException {
         MoveEmojiItemReq moveEmojiItemReq = null;
         
-        EmojiService.APImoveItemRequest request = EmojiService.APImoveItemRequest.newBuilder()
+        EmojiService.APImoveEmojiItemRequest request = EmojiService.APImoveEmojiItemRequest.newBuilder()
           .moveEmojiItemReq(moveEmojiItemReq)
           .build();
         MoveEmojiItemResp response = 
-        api.moveItem(request);
+        api.moveEmojiItem(request);
 
         // TODO: test validations
     }
@@ -230,14 +230,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void renameGroupTest() throws ApiException {
+    public void renameEmojiGroupTest() throws ApiException {
         RenameEmojiGroupReq renameEmojiGroupReq = null;
         
-        EmojiService.APIrenameGroupRequest request = EmojiService.APIrenameGroupRequest.newBuilder()
+        EmojiService.APIrenameEmojiGroupRequest request = EmojiService.APIrenameEmojiGroupRequest.newBuilder()
           .renameEmojiGroupReq(renameEmojiGroupReq)
           .build();
         RenameEmojiGroupResp response = 
-        api.renameGroup(request);
+        api.renameEmojiGroup(request);
 
         // TODO: test validations
     }
@@ -251,14 +251,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void renameItemTest() throws ApiException {
+    public void renameEmojiItemTest() throws ApiException {
         RenameEmojiItemReq renameEmojiItemReq = null;
         
-        EmojiService.APIrenameItemRequest request = EmojiService.APIrenameItemRequest.newBuilder()
+        EmojiService.APIrenameEmojiItemRequest request = EmojiService.APIrenameEmojiItemRequest.newBuilder()
           .renameEmojiItemReq(renameEmojiItemReq)
           .build();
         RenameEmojiItemResp response = 
-        api.renameItem(request);
+        api.renameEmojiItem(request);
 
         // TODO: test validations
     }
@@ -272,14 +272,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void reorderGroupsTest() throws ApiException {
+    public void reorderEmojiGroupsTest() throws ApiException {
         ReorderEmojiGroupsReq reorderEmojiGroupsReq = null;
         
-        EmojiService.APIreorderGroupsRequest request = EmojiService.APIreorderGroupsRequest.newBuilder()
+        EmojiService.APIreorderEmojiGroupsRequest request = EmojiService.APIreorderEmojiGroupsRequest.newBuilder()
           .reorderEmojiGroupsReq(reorderEmojiGroupsReq)
           .build();
         Object response = 
-        api.reorderGroups(request);
+        api.reorderEmojiGroups(request);
 
         // TODO: test validations
     }
@@ -293,14 +293,14 @@ public class EmojiServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void reorderItemsTest() throws ApiException {
+    public void reorderEmojiItemsTest() throws ApiException {
         ReorderEmojiItemsReq reorderEmojiItemsReq = null;
         
-        EmojiService.APIreorderItemsRequest request = EmojiService.APIreorderItemsRequest.newBuilder()
+        EmojiService.APIreorderEmojiItemsRequest request = EmojiService.APIreorderEmojiItemsRequest.newBuilder()
           .reorderEmojiItemsReq(reorderEmojiItemsReq)
           .build();
         Object response = 
-        api.reorderItems(request);
+        api.reorderEmojiItems(request);
 
         // TODO: test validations
     }

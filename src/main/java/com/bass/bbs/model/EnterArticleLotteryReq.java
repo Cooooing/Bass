@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * EnterArticleLotteryReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   EnterArticleLotteryReq.JSON_PROPERTY_ARTICLE_ID,
@@ -55,7 +55,7 @@ public class EnterArticleLotteryReq {
   }
 
   /**
-   * Get articleId
+   * 必填，文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class EnterArticleLotteryReq {
   }
 
   /**
-   * Get entered
+   * true 报名，false 撤销报名
    * @return entered
    */
   @javax.annotation.Nullable

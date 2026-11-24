@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ThankCommentResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ThankCommentResp.JSON_PROPERTY_THANKED
@@ -50,7 +50,7 @@ public class ThankCommentResp {
   }
 
   /**
-   * Get thanked
+   * 是否已感谢
    * @return thanked
    */
   @javax.annotation.Nullable

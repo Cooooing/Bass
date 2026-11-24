@@ -2,14 +2,15 @@
 
 # ListCommentTimelineReq
 
+请求参数。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**page** | [**PageReq**](PageReq.md) |  |  [optional] |
-|**articleId** | **String** |  |  |
-|**order** | [**OrderEnum**](#OrderEnum) |  |  [optional] |
+|**page** | [**PageReq**](PageReq.md) | 分页参数 |  [optional] |
+|**articleId** | **String** | 文章 ID |  |
+|**order** | [**OrderEnum**](#OrderEnum) | 排序方式 |  [optional] |
 
 
 

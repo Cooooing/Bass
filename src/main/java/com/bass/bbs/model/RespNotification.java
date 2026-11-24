@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespNotification
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespNotification.JSON_PROPERTY_ID,
@@ -59,7 +59,7 @@ public class RespNotification {
   private String receiverId;
 
   /**
-   * Gets or Sets notificationType
+   * 通知类型
    */
   public enum NotificationTypeEnum {
     NOTIFICATION_TYPE_UNSPECIFIED(String.valueOf("NOTIFICATION_TYPE_UNSPECIFIED")),
@@ -172,7 +172,7 @@ public class RespNotification {
   }
 
   /**
-   * Get id
+   * 通知 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -196,7 +196,7 @@ public class RespNotification {
   }
 
   /**
-   * Get eventId
+   * 来源事件 ID
    * @return eventId
    */
   @javax.annotation.Nullable
@@ -220,7 +220,7 @@ public class RespNotification {
   }
 
   /**
-   * Get receiverId
+   * 接收账号 ID
    * @return receiverId
    */
   @javax.annotation.Nullable
@@ -244,7 +244,7 @@ public class RespNotification {
   }
 
   /**
-   * Get notificationType
+   * 通知类型
    * @return notificationType
    */
   @javax.annotation.Nullable
@@ -268,7 +268,7 @@ public class RespNotification {
   }
 
   /**
-   * Get title
+   * 通知标题
    * @return title
    */
   @javax.annotation.Nullable
@@ -292,7 +292,7 @@ public class RespNotification {
   }
 
   /**
-   * Get content
+   * 通知内容
    * @return content
    */
   @javax.annotation.Nullable
@@ -316,7 +316,7 @@ public class RespNotification {
   }
 
   /**
-   * Get readAt
+   * 已读时间
    * @return readAt
    */
   @javax.annotation.Nullable
@@ -340,7 +340,7 @@ public class RespNotification {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -364,7 +364,7 @@ public class RespNotification {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

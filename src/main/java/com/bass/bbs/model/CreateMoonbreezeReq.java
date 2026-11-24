@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateMoonbreezeReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateMoonbreezeReq.JSON_PROPERTY_CONTENT
@@ -50,7 +50,7 @@ public class CreateMoonbreezeReq {
   }
 
   /**
-   * Get content
+   * 协议字段。
    * @return content
    */
   @javax.annotation.Nullable

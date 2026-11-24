@@ -2,18 +2,19 @@
 
 # ReqTag
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**code** | **String** |  |  |
-|**name** | **String** |  |  |
-|**description** | **String** |  |  [optional] |
-|**domainId** | **String** |  |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
-|**icon** | **String** |  |  [optional] |
-|**sort** | **Integer** |  |  [optional] |
+|**code** | **String** | 稳定编码 |  |
+|**name** | **String** | 标签名称 |  |
+|**description** | **String** | 描述 |  [optional] |
+|**domainId** | **String** | 领域 ID |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) | 启停状态 |  [optional] |
+|**icon** | **String** | 图标 |  [optional] |
+|**sort** | **Integer** | 排序值，越小越靠前 |  [optional] |
 
 
 

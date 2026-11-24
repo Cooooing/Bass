@@ -4,16 +4,18 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**createTicket**](RealtimeService.md#createTicket) | **POST** /v1/realtime/ticket |  |
-| [**createTicketWithHttpInfo**](RealtimeService.md#createTicketWithHttpInfo) | **POST** /v1/realtime/ticket |  |
+| [**createRealtimeTicket**](RealtimeService.md#createRealtimeTicket) | **POST** /v1/realtime/ticket |  |
+| [**createRealtimeTicketWithHttpInfo**](RealtimeService.md#createRealtimeTicketWithHttpInfo) | **POST** /v1/realtime/ticket |  |
 
 
 
-## createTicket
+## createRealtimeTicket
 
-> CreateRealtimeTicketResp createTicket(createTicketRequest)
+> CreateRealtimeTicketResp createRealtimeTicket(createRealtimeTicketRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -34,13 +36,13 @@ public class Example {
         RealtimeService apiInstance = new RealtimeService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcreateTicketRequest request = APIcreateTicketRequest.newBuilder()
+            APIcreateRealtimeTicketRequest request = APIcreateRealtimeTicketRequest.newBuilder()
                 .body(body)
                 .build();
-            CreateRealtimeTicketResp result = apiInstance.createTicket(request);
+            CreateRealtimeTicketResp result = apiInstance.createRealtimeTicket(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling RealtimeService#createTicket");
+            System.err.println("Exception when calling RealtimeService#createRealtimeTicket");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -54,7 +56,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createTicketRequest | [**APIcreateTicketRequest**](RealtimeService.md#APIcreateTicketRequest)|-|-|
+| createRealtimeTicketRequest | [**APIcreateRealtimeTicketRequest**](RealtimeService.md#APIcreateRealtimeTicketRequest)|-|-|
 
 ### Return type
 
@@ -75,11 +77,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createTicketWithHttpInfo
+## createRealtimeTicketWithHttpInfo
 
-> ApiResponse<CreateRealtimeTicketResp> createTicketWithHttpInfo(createTicketRequest)
+> ApiResponse<CreateRealtimeTicketResp> createRealtimeTicketWithHttpInfo(createRealtimeTicketRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -101,15 +105,15 @@ public class Example {
         RealtimeService apiInstance = new RealtimeService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcreateTicketRequest request = APIcreateTicketRequest.newBuilder()
+            APIcreateRealtimeTicketRequest request = APIcreateRealtimeTicketRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<CreateRealtimeTicketResp> response = apiInstance.createTicketWithHttpInfo(request);
+            ApiResponse<CreateRealtimeTicketResp> response = apiInstance.createRealtimeTicketWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling RealtimeService#createTicket");
+            System.err.println("Exception when calling RealtimeService#createRealtimeTicket");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -123,7 +127,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createTicketRequest | [**APIcreateTicketRequest**](RealtimeService.md#APIcreateTicketRequest)|-|-|
+| createRealtimeTicketRequest | [**APIcreateRealtimeTicketRequest**](RealtimeService.md#APIcreateRealtimeTicketRequest)|-|-|
 
 ### Return type
 
@@ -145,8 +149,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateTicketRequest"></a>
-## APIcreateTicketRequest
+<a id="APIcreateRealtimeTicketRequest"></a>
+## APIcreateRealtimeTicketRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

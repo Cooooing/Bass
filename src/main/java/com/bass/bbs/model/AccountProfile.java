@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * AccountProfile
+ * 协议消息。
  */
 @JsonPropertyOrder({
   AccountProfile.JSON_PROPERTY_ID,
@@ -39,13 +39,11 @@ import com.bass.bbs.ApiClient;
   AccountProfile.JSON_PROPERTY_NICKNAME,
   AccountProfile.JSON_PROPERTY_URL,
   AccountProfile.JSON_PROPERTY_AVATAR_URL,
-  AccountProfile.JSON_PROPERTY_BACKGROUND_ASSET_ID,
   AccountProfile.JSON_PROPERTY_INTRODUCTION,
   AccountProfile.JSON_PROPERTY_MBTI,
   AccountProfile.JSON_PROPERTY_STATUS,
   AccountProfile.JSON_PROPERTY_FOLLOW_COUNT,
   AccountProfile.JSON_PROPERTY_FOLLOWER_COUNT,
-  AccountProfile.JSON_PROPERTY_PROFILE_URL,
   AccountProfile.JSON_PROPERTY_CREATED_AT,
   AccountProfile.JSON_PROPERTY_UPDATED_AT
 })
@@ -71,10 +69,6 @@ public class AccountProfile {
   @javax.annotation.Nullable
   private String avatarUrl;
 
-  public static final String JSON_PROPERTY_BACKGROUND_ASSET_ID = "background_asset_id";
-  @javax.annotation.Nullable
-  private String backgroundAssetId;
-
   public static final String JSON_PROPERTY_INTRODUCTION = "introduction";
   @javax.annotation.Nullable
   private String introduction;
@@ -84,7 +78,7 @@ public class AccountProfile {
   private String mbti;
 
   /**
-   * Gets or Sets status
+   * 账号状态
    */
   public enum StatusEnum {
     ACCOUNT_STATUS_UNSPECIFIED(String.valueOf("ACCOUNT_STATUS_UNSPECIFIED")),
@@ -134,10 +128,6 @@ public class AccountProfile {
   @javax.annotation.Nullable
   private Integer followerCount;
 
-  public static final String JSON_PROPERTY_PROFILE_URL = "profile_url";
-  @javax.annotation.Nullable
-  private String profileUrl;
-
   public static final String JSON_PROPERTY_CREATED_AT = "created_at";
   @javax.annotation.Nullable
   private OffsetDateTime createdAt;
@@ -155,7 +145,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get id
+   * 账号 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -179,7 +169,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get name
+   * 账号名
    * @return name
    */
   @javax.annotation.Nullable
@@ -203,7 +193,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get nickname
+   * 昵称
    * @return nickname
    */
   @javax.annotation.Nullable
@@ -227,7 +217,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get url
+   * 个人主页
    * @return url
    */
   @javax.annotation.Nullable
@@ -251,7 +241,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get avatarUrl
+   * 头像 URL
    * @return avatarUrl
    */
   @javax.annotation.Nullable
@@ -269,37 +259,13 @@ public class AccountProfile {
   }
 
 
-  public AccountProfile backgroundAssetId(@javax.annotation.Nullable String backgroundAssetId) {
-    this.backgroundAssetId = backgroundAssetId;
-    return this;
-  }
-
-  /**
-   * Get backgroundAssetId
-   * @return backgroundAssetId
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_BACKGROUND_ASSET_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getBackgroundAssetId() {
-    return backgroundAssetId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_BACKGROUND_ASSET_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBackgroundAssetId(@javax.annotation.Nullable String backgroundAssetId) {
-    this.backgroundAssetId = backgroundAssetId;
-  }
-
-
   public AccountProfile introduction(@javax.annotation.Nullable String introduction) {
     this.introduction = introduction;
     return this;
   }
 
   /**
-   * Get introduction
+   * 个人简介
    * @return introduction
    */
   @javax.annotation.Nullable
@@ -323,7 +289,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get mbti
+   * MBTI 类型，规范化为大写
    * @return mbti
    */
   @javax.annotation.Nullable
@@ -347,7 +313,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get status
+   * 账号状态
    * @return status
    */
   @javax.annotation.Nullable
@@ -371,7 +337,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get followCount
+   * 关注数
    * @return followCount
    */
   @javax.annotation.Nullable
@@ -395,7 +361,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get followerCount
+   * 粉丝数
    * @return followerCount
    */
   @javax.annotation.Nullable
@@ -413,37 +379,13 @@ public class AccountProfile {
   }
 
 
-  public AccountProfile profileUrl(@javax.annotation.Nullable String profileUrl) {
-    this.profileUrl = profileUrl;
-    return this;
-  }
-
-  /**
-   * Get profileUrl
-   * @return profileUrl
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PROFILE_URL, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getProfileUrl() {
-    return profileUrl;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_PROFILE_URL, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setProfileUrl(@javax.annotation.Nullable String profileUrl) {
-    this.profileUrl = profileUrl;
-  }
-
-
   public AccountProfile createdAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -467,7 +409,7 @@ public class AccountProfile {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable
@@ -502,20 +444,18 @@ public class AccountProfile {
         Objects.equals(this.nickname, accountProfile.nickname) &&
         Objects.equals(this.url, accountProfile.url) &&
         Objects.equals(this.avatarUrl, accountProfile.avatarUrl) &&
-        Objects.equals(this.backgroundAssetId, accountProfile.backgroundAssetId) &&
         Objects.equals(this.introduction, accountProfile.introduction) &&
         Objects.equals(this.mbti, accountProfile.mbti) &&
         Objects.equals(this.status, accountProfile.status) &&
         Objects.equals(this.followCount, accountProfile.followCount) &&
         Objects.equals(this.followerCount, accountProfile.followerCount) &&
-        Objects.equals(this.profileUrl, accountProfile.profileUrl) &&
         Objects.equals(this.createdAt, accountProfile.createdAt) &&
         Objects.equals(this.updatedAt, accountProfile.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, nickname, url, avatarUrl, backgroundAssetId, introduction, mbti, status, followCount, followerCount, profileUrl, createdAt, updatedAt);
+    return Objects.hash(id, name, nickname, url, avatarUrl, introduction, mbti, status, followCount, followerCount, createdAt, updatedAt);
   }
 
   @Override
@@ -527,13 +467,11 @@ public class AccountProfile {
     sb.append("    nickname: ").append(toIndentedString(nickname)).append("\n");
     sb.append("    url: ").append(toIndentedString(url)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
-    sb.append("    backgroundAssetId: ").append(toIndentedString(backgroundAssetId)).append("\n");
     sb.append("    introduction: ").append(toIndentedString(introduction)).append("\n");
     sb.append("    mbti: ").append(toIndentedString(mbti)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    followCount: ").append(toIndentedString(followCount)).append("\n");
     sb.append("    followerCount: ").append(toIndentedString(followerCount)).append("\n");
-    sb.append("    profileUrl: ").append(toIndentedString(profileUrl)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
@@ -605,11 +543,6 @@ public class AccountProfile {
       joiner.add(String.format(java.util.Locale.ROOT, "%savatar_url%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAvatarUrl()))));
     }
 
-    // add `background_asset_id` to the URL query string
-    if (getBackgroundAssetId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sbackground_asset_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getBackgroundAssetId()))));
-    }
-
     // add `introduction` to the URL query string
     if (getIntroduction() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sintroduction%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getIntroduction()))));
@@ -633,11 +566,6 @@ public class AccountProfile {
     // add `follower_count` to the URL query string
     if (getFollowerCount() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sfollower_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getFollowerCount()))));
-    }
-
-    // add `profile_url` to the URL query string
-    if (getProfileUrl() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sprofile_url%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getProfileUrl()))));
     }
 
     // add `created_at` to the URL query string

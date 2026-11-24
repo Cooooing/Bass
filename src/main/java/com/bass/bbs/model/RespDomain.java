@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespDomain
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespDomain.JSON_PROPERTY_ID,
@@ -67,7 +67,7 @@ public class RespDomain {
   private String description;
 
   /**
-   * Gets or Sets status
+   * 启停状态
    */
   public enum StatusEnum {
     DOMAIN_STATUS_UNSPECIFIED(String.valueOf("DOMAIN_STATUS_UNSPECIFIED")),
@@ -148,7 +148,7 @@ public class RespDomain {
   }
 
   /**
-   * Get id
+   * 领域 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -172,7 +172,7 @@ public class RespDomain {
   }
 
   /**
-   * Get code
+   * 稳定编码
    * @return code
    */
   @javax.annotation.Nullable
@@ -196,7 +196,7 @@ public class RespDomain {
   }
 
   /**
-   * Get name
+   * 领域名称
    * @return name
    */
   @javax.annotation.Nullable
@@ -220,7 +220,7 @@ public class RespDomain {
   }
 
   /**
-   * Get description
+   * 描述
    * @return description
    */
   @javax.annotation.Nullable
@@ -244,7 +244,7 @@ public class RespDomain {
   }
 
   /**
-   * Get status
+   * 启停状态
    * @return status
    */
   @javax.annotation.Nullable
@@ -268,7 +268,7 @@ public class RespDomain {
   }
 
   /**
-   * Get url
+   * 链接
    * @return url
    */
   @javax.annotation.Nullable
@@ -292,7 +292,7 @@ public class RespDomain {
   }
 
   /**
-   * Get icon
+   * 图标
    * @return icon
    */
   @javax.annotation.Nullable
@@ -316,7 +316,7 @@ public class RespDomain {
   }
 
   /**
-   * Get isNav
+   * 是否在导航中展示
    * @return isNav
    */
   @javax.annotation.Nullable
@@ -340,7 +340,7 @@ public class RespDomain {
   }
 
   /**
-   * Get sort
+   * 排序值，越小越靠前
    * @return sort
    */
   @javax.annotation.Nullable
@@ -364,7 +364,7 @@ public class RespDomain {
   }
 
   /**
-   * Get createdBy
+   * 创建用户 ID
    * @return createdBy
    */
   @javax.annotation.Nullable
@@ -388,7 +388,7 @@ public class RespDomain {
   }
 
   /**
-   * Get updatedBy
+   * 更新用户 ID
    * @return updatedBy
    */
   @javax.annotation.Nullable
@@ -412,7 +412,7 @@ public class RespDomain {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -436,7 +436,7 @@ public class RespDomain {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

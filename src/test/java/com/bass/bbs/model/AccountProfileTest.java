@@ -79,14 +79,6 @@ class AccountProfileTest {
     }
 
     /**
-     * Test the property 'backgroundAssetId'
-     */
-    @Test
-    void backgroundAssetIdTest() {
-        // TODO: test backgroundAssetId
-    }
-
-    /**
      * Test the property 'introduction'
      */
     @Test
@@ -124,14 +116,6 @@ class AccountProfileTest {
     @Test
     void followerCountTest() {
         // TODO: test followerCount
-    }
-
-    /**
-     * Test the property 'profileUrl'
-     */
-    @Test
-    void profileUrlTest() {
-        // TODO: test profileUrl
     }
 
     /**

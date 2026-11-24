@@ -52,35 +52,14 @@ public class TagServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void bindArticleTest() throws ApiException {
+    public void bindArticleTagsTest() throws ApiException {
         BindArticleTagsReq bindArticleTagsReq = null;
         
-        TagService.APIbindArticleRequest request = TagService.APIbindArticleRequest.newBuilder()
+        TagService.APIbindArticleTagsRequest request = TagService.APIbindArticleTagsRequest.newBuilder()
           .bindArticleTagsReq(bindArticleTagsReq)
           .build();
         Object response = 
-        api.bindArticle(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 查询标签列表。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void callListTest() throws ApiException {
-        ListTagsReq listTagsReq = null;
-        
-        TagService.APIcallListRequest request = TagService.APIcallListRequest.newBuilder()
-          .listTagsReq(listTagsReq)
-          .build();
-        ListTagsResp response = 
-        api.callList(request);
+        api.bindArticleTags(request);
 
         // TODO: test validations
     }
@@ -94,14 +73,14 @@ public class TagServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void createTest() throws ApiException {
+    public void createTagTest() throws ApiException {
         CreateTagReq createTagReq = null;
         
-        TagService.APIcreateRequest request = TagService.APIcreateRequest.newBuilder()
+        TagService.APIcreateTagRequest request = TagService.APIcreateTagRequest.newBuilder()
           .createTagReq(createTagReq)
           .build();
         CreateTagResp response = 
-        api.create(request);
+        api.createTag(request);
 
         // TODO: test validations
     }
@@ -130,20 +109,41 @@ public class TagServiceTest {
     /**
      * 
      *
+     * 查询标签列表。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listTagsTest() throws ApiException {
+        ListTagsReq listTagsReq = null;
+        
+        TagService.APIlistTagsRequest request = TagService.APIlistTagsRequest.newBuilder()
+          .listTagsReq(listTagsReq)
+          .build();
+        ListTagsResp response = 
+        api.listTags(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * 解绑文章标签。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void unbindArticleTest() throws ApiException {
+    public void unbindArticleTagsTest() throws ApiException {
         UnbindArticleTagsReq unbindArticleTagsReq = null;
         
-        TagService.APIunbindArticleRequest request = TagService.APIunbindArticleRequest.newBuilder()
+        TagService.APIunbindArticleTagsRequest request = TagService.APIunbindArticleTagsRequest.newBuilder()
           .unbindArticleTagsReq(unbindArticleTagsReq)
           .build();
         Object response = 
-        api.unbindArticle(request);
+        api.unbindArticleTags(request);
 
         // TODO: test validations
     }
@@ -157,14 +157,14 @@ public class TagServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updateTest() throws ApiException {
+    public void updateTagTest() throws ApiException {
         UpdateTagReq updateTagReq = null;
         
-        TagService.APIupdateRequest request = TagService.APIupdateRequest.newBuilder()
+        TagService.APIupdateTagRequest request = TagService.APIupdateTagRequest.newBuilder()
           .updateTagReq(updateTagReq)
           .build();
         UpdateTagResp response = 
-        api.update(request);
+        api.updateTag(request);
 
         // TODO: test validations
     }

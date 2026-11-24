@@ -164,98 +164,98 @@ public class RealtimeService {
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateTicketRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateRealtimeTicketRequest}
    * @return CreateRealtimeTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateRealtimeTicketResp createTicket(APICreateTicketRequest apiRequest) throws ApiException {
-    return createTicket(apiRequest, null);
+  public CreateRealtimeTicketResp createRealtimeTicket(APICreateRealtimeTicketRequest apiRequest) throws ApiException {
+    return createRealtimeTicket(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateTicketRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateRealtimeTicketRequest}
    * @param headers Optional headers to include in the request
    * @return CreateRealtimeTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateRealtimeTicketResp createTicket(APICreateTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateRealtimeTicketResp createRealtimeTicket(APICreateRealtimeTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return createTicket(body, headers);
+    return createRealtimeTicket(body, headers);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateTicketRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateRealtimeTicketRequest}
    * @return ApiResponse&lt;CreateRealtimeTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateRealtimeTicketResp> createTicketWithHttpInfo(APICreateTicketRequest apiRequest) throws ApiException {
-    return createTicketWithHttpInfo(apiRequest, null);
+  public ApiResponse<CreateRealtimeTicketResp> createRealtimeTicketWithHttpInfo(APICreateRealtimeTicketRequest apiRequest) throws ApiException {
+    return createRealtimeTicketWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APICreateTicketRequest}
+   * 服务方法。
+   * @param apiRequest {@link APICreateRealtimeTicketRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateRealtimeTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateRealtimeTicketResp> createTicketWithHttpInfo(APICreateTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CreateRealtimeTicketResp> createRealtimeTicketWithHttpInfo(APICreateRealtimeTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return createTicketWithHttpInfo(body, headers);
+    return createRealtimeTicketWithHttpInfo(body, headers);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @return CreateRealtimeTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateRealtimeTicketResp createTicket(@javax.annotation.Nonnull Object body) throws ApiException {
-    return createTicket(body, null);
+  public CreateRealtimeTicketResp createRealtimeTicket(@javax.annotation.Nonnull Object body) throws ApiException {
+    return createRealtimeTicket(body, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return CreateRealtimeTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateRealtimeTicketResp createTicket(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateRealtimeTicketResp> localVarResponse = createTicketWithHttpInfo(body, headers);
+  public CreateRealtimeTicketResp createRealtimeTicket(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateRealtimeTicketResp> localVarResponse = createRealtimeTicketWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @return ApiResponse&lt;CreateRealtimeTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateRealtimeTicketResp> createTicketWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return createTicketWithHttpInfo(body, null);
+  public ApiResponse<CreateRealtimeTicketResp> createRealtimeTicketWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return createRealtimeTicketWithHttpInfo(body, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateRealtimeTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateRealtimeTicketResp> createTicketWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createTicketRequestBuilder(body, headers);
+  public ApiResponse<CreateRealtimeTicketResp> createRealtimeTicketWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createRealtimeTicketRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -266,7 +266,7 @@ public class RealtimeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("createTicket", localVarResponse);
+          throw getApiException("createRealtimeTicket", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -302,10 +302,10 @@ public class RealtimeService {
     }
   }
 
-  private HttpRequest.Builder createTicketRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder createRealtimeTicketRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling createTicket");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling createRealtimeTicket");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -335,11 +335,11 @@ public class RealtimeService {
   }
 
 
-  public static final class APICreateTicketRequest {
+  public static final class APICreateRealtimeTicketRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APICreateTicketRequest(Builder builder) {
+    private APICreateRealtimeTicketRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -357,8 +357,8 @@ public class RealtimeService {
         this.body = body;
         return this;
       }
-      public APICreateTicketRequest build() {
-        return new APICreateTicketRequest(this);
+      public APICreateRealtimeTicketRequest build() {
+        return new APICreateRealtimeTicketRequest(this);
       }
     }
   }

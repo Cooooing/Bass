@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * LoginResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   LoginResp.JSON_PROPERTY_ACCESS_TOKEN,
@@ -77,7 +77,7 @@ public class LoginResp {
   }
 
   /**
-   * Get accessToken
+   * 访问令牌
    * @return accessToken
    */
   @javax.annotation.Nullable
@@ -101,7 +101,7 @@ public class LoginResp {
   }
 
   /**
-   * Get refreshToken
+   * 刷新令牌
    * @return refreshToken
    */
   @javax.annotation.Nullable
@@ -125,7 +125,7 @@ public class LoginResp {
   }
 
   /**
-   * Get accessTokenExpiresAt
+   * 访问令牌过期时间
    * @return accessTokenExpiresAt
    */
   @javax.annotation.Nullable
@@ -149,7 +149,7 @@ public class LoginResp {
   }
 
   /**
-   * Get refreshTokenExpiresAt
+   * 刷新令牌空闲过期时间
    * @return refreshTokenExpiresAt
    */
   @javax.annotation.Nullable
@@ -173,7 +173,7 @@ public class LoginResp {
   }
 
   /**
-   * Get sessionExpiresAt
+   * session 绝对过期时间
    * @return sessionExpiresAt
    */
   @javax.annotation.Nullable
@@ -197,7 +197,7 @@ public class LoginResp {
   }
 
   /**
-   * Get account
+   * 当前账号完整资料
    * @return account
    */
   @javax.annotation.Nullable

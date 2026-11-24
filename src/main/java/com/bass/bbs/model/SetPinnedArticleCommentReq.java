@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SetPinnedArticleCommentReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SetPinnedArticleCommentReq.JSON_PROPERTY_ARTICLE_ID,
@@ -55,7 +55,7 @@ public class SetPinnedArticleCommentReq {
   }
 
   /**
-   * Get articleId
+   * 文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class SetPinnedArticleCommentReq {
   }
 
   /**
-   * Get commentId
+   * 置顶的一级评论，未传表示取消
    * @return commentId
    */
   @javax.annotation.Nullable

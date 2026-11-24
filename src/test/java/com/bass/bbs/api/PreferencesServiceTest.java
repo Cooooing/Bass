@@ -45,14 +45,14 @@ public class PreferencesServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getCurrentTest() throws ApiException {
+    public void getCurrentPreferencesTest() throws ApiException {
         Object body = null;
         
-        PreferencesService.APIgetCurrentRequest request = PreferencesService.APIgetCurrentRequest.newBuilder()
+        PreferencesService.APIgetCurrentPreferencesRequest request = PreferencesService.APIgetCurrentPreferencesRequest.newBuilder()
           .body(body)
           .build();
         GetCurrentPreferencesResp response = 
-        api.getCurrent(request);
+        api.getCurrentPreferences(request);
 
         // TODO: test validations
     }
@@ -66,14 +66,14 @@ public class PreferencesServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updateCurrentTest() throws ApiException {
+    public void updateCurrentPreferencesTest() throws ApiException {
         UpdateCurrentPreferencesReq updateCurrentPreferencesReq = null;
         
-        PreferencesService.APIupdateCurrentRequest request = PreferencesService.APIupdateCurrentRequest.newBuilder()
+        PreferencesService.APIupdateCurrentPreferencesRequest request = PreferencesService.APIupdateCurrentPreferencesRequest.newBuilder()
           .updateCurrentPreferencesReq(updateCurrentPreferencesReq)
           .build();
         UpdateCurrentPreferencesResp response = 
-        api.updateCurrent(request);
+        api.updateCurrentPreferences(request);
 
         // TODO: test validations
     }

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SendGlobalChatBarrageReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SendGlobalChatBarrageReq.JSON_PROPERTY_CONTENT
@@ -50,7 +50,7 @@ public class SendGlobalChatBarrageReq {
   }
 
   /**
-   * Get content
+   * 原始弹幕内容。
    * @return content
    */
   @javax.annotation.Nullable

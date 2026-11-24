@@ -2,20 +2,21 @@
 
 # RespNotification
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**id** | **String** |  |  [optional] |
-|**eventId** | **String** |  |  [optional] |
-|**receiverId** | **String** |  |  [optional] |
-|**notificationType** | [**NotificationTypeEnum**](#NotificationTypeEnum) |  |  [optional] |
-|**title** | **String** |  |  [optional] |
-|**content** | **String** |  |  [optional] |
-|**readAt** | **OffsetDateTime** |  |  [optional] |
-|**createdAt** | **OffsetDateTime** |  |  [optional] |
-|**updatedAt** | **OffsetDateTime** |  |  [optional] |
+|**id** | **String** | 通知 ID |  [optional] |
+|**eventId** | **String** | 来源事件 ID |  [optional] |
+|**receiverId** | **String** | 接收账号 ID |  [optional] |
+|**notificationType** | [**NotificationTypeEnum**](#NotificationTypeEnum) | 通知类型 |  [optional] |
+|**title** | **String** | 通知标题 |  [optional] |
+|**content** | **String** | 通知内容 |  [optional] |
+|**readAt** | **OffsetDateTime** | 已读时间 |  [optional] |
+|**createdAt** | **OffsetDateTime** | 创建时间 |  [optional] |
+|**updatedAt** | **OffsetDateTime** | 更新时间 |  [optional] |
 
 
 

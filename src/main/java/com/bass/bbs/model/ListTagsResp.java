@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListTagsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListTagsResp.JSON_PROPERTY_PAGE,
@@ -59,7 +59,7 @@ public class ListTagsResp {
   }
 
   /**
-   * Get page
+   * 分页结果
    * @return page
    */
   @javax.annotation.Nullable
@@ -91,7 +91,7 @@ public class ListTagsResp {
   }
 
   /**
-   * Get rows
+   * 标签列表
    * @return rows
    */
   @javax.annotation.Nullable

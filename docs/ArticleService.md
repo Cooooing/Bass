@@ -4,58 +4,58 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**acceptAnswer**](ArticleService.md#acceptAnswer) | **POST** /v1/content/article/answer/accept |  |
-| [**acceptAnswerWithHttpInfo**](ArticleService.md#acceptAnswerWithHttpInfo) | **POST** /v1/content/article/answer/accept |  |
-| [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive |  |
-| [**archiveWithHttpInfo**](ArticleService.md#archiveWithHttpInfo) | **POST** /v1/content/article/archive |  |
-| [**callList**](ArticleService.md#callList) | **POST** /v1/content/article/list |  |
-| [**callListWithHttpInfo**](ArticleService.md#callListWithHttpInfo) | **POST** /v1/content/article/list |  |
-| [**cancelPublish**](ArticleService.md#cancelPublish) | **POST** /v1/content/article/publish/cancel |  |
-| [**cancelPublishWithHttpInfo**](ArticleService.md#cancelPublishWithHttpInfo) | **POST** /v1/content/article/publish/cancel |  |
-| [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect |  |
-| [**collectWithHttpInfo**](ArticleService.md#collectWithHttpInfo) | **POST** /v1/content/article/collect |  |
-| [**countCollected**](ArticleService.md#countCollected) | **POST** /v1/content/article/collect/count |  |
-| [**countCollectedWithHttpInfo**](ArticleService.md#countCollectedWithHttpInfo) | **POST** /v1/content/article/collect/count |  |
-| [**createDraft**](ArticleService.md#createDraft) | **POST** /v1/content/article/draft/create |  |
-| [**createDraftWithHttpInfo**](ArticleService.md#createDraftWithHttpInfo) | **POST** /v1/content/article/draft/create |  |
-| [**discardDraft**](ArticleService.md#discardDraft) | **POST** /v1/content/article/draft/discard |  |
-| [**discardDraftWithHttpInfo**](ArticleService.md#discardDraftWithHttpInfo) | **POST** /v1/content/article/draft/discard |  |
-| [**enterLottery**](ArticleService.md#enterLottery) | **POST** /v1/content/article/lottery/entry |  |
-| [**enterLotteryWithHttpInfo**](ArticleService.md#enterLotteryWithHttpInfo) | **POST** /v1/content/article/lottery/entry |  |
-| [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
-| [**getWithHttpInfo**](ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get |  |
-| [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
-| [**likeWithHttpInfo**](ArticleService.md#likeWithHttpInfo) | **POST** /v1/content/article/like |  |
-| [**listFollowing**](ArticleService.md#listFollowing) | **POST** /v1/content/article/following/list |  |
-| [**listFollowingWithHttpInfo**](ArticleService.md#listFollowingWithHttpInfo) | **POST** /v1/content/article/following/list |  |
-| [**listNearby**](ArticleService.md#listNearby) | **POST** /v1/content/article/nearby/list |  |
-| [**listNearbyWithHttpInfo**](ArticleService.md#listNearbyWithHttpInfo) | **POST** /v1/content/article/nearby/list |  |
-| [**pageCollected**](ArticleService.md#pageCollected) | **POST** /v1/content/article/collected/page |  |
-| [**pageCollectedWithHttpInfo**](ArticleService.md#pageCollectedWithHttpInfo) | **POST** /v1/content/article/collected/page |  |
-| [**pageViewHistory**](ArticleService.md#pageViewHistory) | **POST** /v1/content/article/view-history/page |  |
-| [**pageViewHistoryWithHttpInfo**](ArticleService.md#pageViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page |  |
-| [**pageWatched**](ArticleService.md#pageWatched) | **POST** /v1/content/article/watched/page |  |
-| [**pageWatchedWithHttpInfo**](ArticleService.md#pageWatchedWithHttpInfo) | **POST** /v1/content/article/watched/page |  |
-| [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
-| [**publishWithHttpInfo**](ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish |  |
-| [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
-| [**rewardWithHttpInfo**](ArticleService.md#rewardWithHttpInfo) | **POST** /v1/content/article/reward |  |
-| [**setPinnedComment**](ArticleService.md#setPinnedComment) | **POST** /v1/content/article/comment/pin |  |
-| [**setPinnedCommentWithHttpInfo**](ArticleService.md#setPinnedCommentWithHttpInfo) | **POST** /v1/content/article/comment/pin |  |
-| [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
-| [**thankWithHttpInfo**](ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank |  |
-| [**updateDraft**](ArticleService.md#updateDraft) | **POST** /v1/content/article/draft/update |  |
-| [**updateDraftWithHttpInfo**](ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/draft/update |  |
-| [**votePoll**](ArticleService.md#votePoll) | **POST** /v1/content/article/poll/vote |  |
-| [**votePollWithHttpInfo**](ArticleService.md#votePollWithHttpInfo) | **POST** /v1/content/article/poll/vote |  |
-| [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch |  |
-| [**watchWithHttpInfo**](ArticleService.md#watchWithHttpInfo) | **POST** /v1/content/article/watch |  |
+| [**acceptArticleAnswer**](ArticleService.md#acceptArticleAnswer) | **POST** /v1/content/article/answer/accept |  |
+| [**acceptArticleAnswerWithHttpInfo**](ArticleService.md#acceptArticleAnswerWithHttpInfo) | **POST** /v1/content/article/answer/accept |  |
+| [**archiveArticle**](ArticleService.md#archiveArticle) | **POST** /v1/content/article/archive |  |
+| [**archiveArticleWithHttpInfo**](ArticleService.md#archiveArticleWithHttpInfo) | **POST** /v1/content/article/archive |  |
+| [**cancelPublishArticle**](ArticleService.md#cancelPublishArticle) | **POST** /v1/content/article/publish/cancel |  |
+| [**cancelPublishArticleWithHttpInfo**](ArticleService.md#cancelPublishArticleWithHttpInfo) | **POST** /v1/content/article/publish/cancel |  |
+| [**collectArticle**](ArticleService.md#collectArticle) | **POST** /v1/content/article/collect |  |
+| [**collectArticleWithHttpInfo**](ArticleService.md#collectArticleWithHttpInfo) | **POST** /v1/content/article/collect |  |
+| [**countCollectedArticles**](ArticleService.md#countCollectedArticles) | **POST** /v1/content/article/collect/count |  |
+| [**countCollectedArticlesWithHttpInfo**](ArticleService.md#countCollectedArticlesWithHttpInfo) | **POST** /v1/content/article/collect/count |  |
+| [**createDraftArticle**](ArticleService.md#createDraftArticle) | **POST** /v1/content/article/draft/create |  |
+| [**createDraftArticleWithHttpInfo**](ArticleService.md#createDraftArticleWithHttpInfo) | **POST** /v1/content/article/draft/create |  |
+| [**discardDraftArticle**](ArticleService.md#discardDraftArticle) | **POST** /v1/content/article/draft/discard |  |
+| [**discardDraftArticleWithHttpInfo**](ArticleService.md#discardDraftArticleWithHttpInfo) | **POST** /v1/content/article/draft/discard |  |
+| [**enterArticleLottery**](ArticleService.md#enterArticleLottery) | **POST** /v1/content/article/lottery/entry |  |
+| [**enterArticleLotteryWithHttpInfo**](ArticleService.md#enterArticleLotteryWithHttpInfo) | **POST** /v1/content/article/lottery/entry |  |
+| [**getArticle**](ArticleService.md#getArticle) | **POST** /v1/content/article/get |  |
+| [**getArticleWithHttpInfo**](ArticleService.md#getArticleWithHttpInfo) | **POST** /v1/content/article/get |  |
+| [**likeArticle**](ArticleService.md#likeArticle) | **POST** /v1/content/article/like |  |
+| [**likeArticleWithHttpInfo**](ArticleService.md#likeArticleWithHttpInfo) | **POST** /v1/content/article/like |  |
+| [**listArticles**](ArticleService.md#listArticles) | **POST** /v1/content/article/list |  |
+| [**listArticlesWithHttpInfo**](ArticleService.md#listArticlesWithHttpInfo) | **POST** /v1/content/article/list |  |
+| [**listFollowingArticles**](ArticleService.md#listFollowingArticles) | **POST** /v1/content/article/following/list |  |
+| [**listFollowingArticlesWithHttpInfo**](ArticleService.md#listFollowingArticlesWithHttpInfo) | **POST** /v1/content/article/following/list |  |
+| [**listNearbyArticles**](ArticleService.md#listNearbyArticles) | **POST** /v1/content/article/nearby/list |  |
+| [**listNearbyArticlesWithHttpInfo**](ArticleService.md#listNearbyArticlesWithHttpInfo) | **POST** /v1/content/article/nearby/list |  |
+| [**pageArticleViewHistory**](ArticleService.md#pageArticleViewHistory) | **POST** /v1/content/article/view-history/page |  |
+| [**pageArticleViewHistoryWithHttpInfo**](ArticleService.md#pageArticleViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page |  |
+| [**pageCollectedArticles**](ArticleService.md#pageCollectedArticles) | **POST** /v1/content/article/collected/page |  |
+| [**pageCollectedArticlesWithHttpInfo**](ArticleService.md#pageCollectedArticlesWithHttpInfo) | **POST** /v1/content/article/collected/page |  |
+| [**pageWatchedArticles**](ArticleService.md#pageWatchedArticles) | **POST** /v1/content/article/watched/page |  |
+| [**pageWatchedArticlesWithHttpInfo**](ArticleService.md#pageWatchedArticlesWithHttpInfo) | **POST** /v1/content/article/watched/page |  |
+| [**publishArticle**](ArticleService.md#publishArticle) | **POST** /v1/content/article/publish |  |
+| [**publishArticleWithHttpInfo**](ArticleService.md#publishArticleWithHttpInfo) | **POST** /v1/content/article/publish |  |
+| [**rewardArticle**](ArticleService.md#rewardArticle) | **POST** /v1/content/article/reward |  |
+| [**rewardArticleWithHttpInfo**](ArticleService.md#rewardArticleWithHttpInfo) | **POST** /v1/content/article/reward |  |
+| [**setPinnedArticleComment**](ArticleService.md#setPinnedArticleComment) | **POST** /v1/content/article/comment/pin |  |
+| [**setPinnedArticleCommentWithHttpInfo**](ArticleService.md#setPinnedArticleCommentWithHttpInfo) | **POST** /v1/content/article/comment/pin |  |
+| [**thankArticle**](ArticleService.md#thankArticle) | **POST** /v1/content/article/thank |  |
+| [**thankArticleWithHttpInfo**](ArticleService.md#thankArticleWithHttpInfo) | **POST** /v1/content/article/thank |  |
+| [**updateDraftArticle**](ArticleService.md#updateDraftArticle) | **POST** /v1/content/article/draft/update |  |
+| [**updateDraftArticleWithHttpInfo**](ArticleService.md#updateDraftArticleWithHttpInfo) | **POST** /v1/content/article/draft/update |  |
+| [**voteArticlePoll**](ArticleService.md#voteArticlePoll) | **POST** /v1/content/article/poll/vote |  |
+| [**voteArticlePollWithHttpInfo**](ArticleService.md#voteArticlePollWithHttpInfo) | **POST** /v1/content/article/poll/vote |  |
+| [**watchArticle**](ArticleService.md#watchArticle) | **POST** /v1/content/article/watch |  |
+| [**watchArticleWithHttpInfo**](ArticleService.md#watchArticleWithHttpInfo) | **POST** /v1/content/article/watch |  |
 
 
 
-## acceptAnswer
+## acceptArticleAnswer
 
-> Object acceptAnswer(acceptAnswerRequest)
+> Object acceptArticleAnswer(acceptArticleAnswerRequest)
 
 
 
@@ -80,13 +80,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         AcceptArticleAnswerReq acceptArticleAnswerReq = new AcceptArticleAnswerReq(); // AcceptArticleAnswerReq | 
         try {
-            APIacceptAnswerRequest request = APIacceptAnswerRequest.newBuilder()
+            APIacceptArticleAnswerRequest request = APIacceptArticleAnswerRequest.newBuilder()
                 .acceptArticleAnswerReq(acceptArticleAnswerReq)
                 .build();
-            Object result = apiInstance.acceptAnswer(request);
+            Object result = apiInstance.acceptArticleAnswer(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#acceptAnswer");
+            System.err.println("Exception when calling ArticleService#acceptArticleAnswer");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -100,7 +100,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| acceptAnswerRequest | [**APIacceptAnswerRequest**](ArticleService.md#APIacceptAnswerRequest)|-|-|
+| acceptArticleAnswerRequest | [**APIacceptArticleAnswerRequest**](ArticleService.md#APIacceptArticleAnswerRequest)|-|-|
 
 ### Return type
 
@@ -121,9 +121,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## acceptAnswerWithHttpInfo
+## acceptArticleAnswerWithHttpInfo
 
-> ApiResponse<Object> acceptAnswerWithHttpInfo(acceptAnswerRequest)
+> ApiResponse<Object> acceptArticleAnswerWithHttpInfo(acceptArticleAnswerRequest)
 
 
 
@@ -149,15 +149,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         AcceptArticleAnswerReq acceptArticleAnswerReq = new AcceptArticleAnswerReq(); // AcceptArticleAnswerReq | 
         try {
-            APIacceptAnswerRequest request = APIacceptAnswerRequest.newBuilder()
+            APIacceptArticleAnswerRequest request = APIacceptArticleAnswerRequest.newBuilder()
                 .acceptArticleAnswerReq(acceptArticleAnswerReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.acceptAnswerWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.acceptArticleAnswerWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#acceptAnswer");
+            System.err.println("Exception when calling ArticleService#acceptArticleAnswer");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -171,7 +171,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| acceptAnswerRequest | [**APIacceptAnswerRequest**](ArticleService.md#APIacceptAnswerRequest)|-|-|
+| acceptArticleAnswerRequest | [**APIacceptArticleAnswerRequest**](ArticleService.md#APIacceptArticleAnswerRequest)|-|-|
 
 ### Return type
 
@@ -193,8 +193,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIacceptAnswerRequest"></a>
-## APIacceptAnswerRequest
+<a id="APIacceptArticleAnswerRequest"></a>
+## APIacceptArticleAnswerRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -203,9 +203,9 @@ No authorization required
 
 
 
-## archive
+## archiveArticle
 
-> Object archive(archiveRequest)
+> Object archiveArticle(archiveArticleRequest)
 
 
 
@@ -230,13 +230,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ArchiveArticleReq archiveArticleReq = new ArchiveArticleReq(); // ArchiveArticleReq | 
         try {
-            APIarchiveRequest request = APIarchiveRequest.newBuilder()
+            APIarchiveArticleRequest request = APIarchiveArticleRequest.newBuilder()
                 .archiveArticleReq(archiveArticleReq)
                 .build();
-            Object result = apiInstance.archive(request);
+            Object result = apiInstance.archiveArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#archive");
+            System.err.println("Exception when calling ArticleService#archiveArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -250,7 +250,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| archiveRequest | [**APIarchiveRequest**](ArticleService.md#APIarchiveRequest)|-|-|
+| archiveArticleRequest | [**APIarchiveArticleRequest**](ArticleService.md#APIarchiveArticleRequest)|-|-|
 
 ### Return type
 
@@ -271,9 +271,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## archiveWithHttpInfo
+## archiveArticleWithHttpInfo
 
-> ApiResponse<Object> archiveWithHttpInfo(archiveRequest)
+> ApiResponse<Object> archiveArticleWithHttpInfo(archiveArticleRequest)
 
 
 
@@ -299,15 +299,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ArchiveArticleReq archiveArticleReq = new ArchiveArticleReq(); // ArchiveArticleReq | 
         try {
-            APIarchiveRequest request = APIarchiveRequest.newBuilder()
+            APIarchiveArticleRequest request = APIarchiveArticleRequest.newBuilder()
                 .archiveArticleReq(archiveArticleReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.archiveWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.archiveArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#archive");
+            System.err.println("Exception when calling ArticleService#archiveArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -321,7 +321,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| archiveRequest | [**APIarchiveRequest**](ArticleService.md#APIarchiveRequest)|-|-|
+| archiveArticleRequest | [**APIarchiveArticleRequest**](ArticleService.md#APIarchiveArticleRequest)|-|-|
 
 ### Return type
 
@@ -343,8 +343,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIarchiveRequest"></a>
-## APIarchiveRequest
+<a id="APIarchiveArticleRequest"></a>
+## APIarchiveArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -353,159 +353,9 @@ No authorization required
 
 
 
-## callList
+## cancelPublishArticle
 
-> ListArticlesResp callList(callListRequest)
-
-
-
-查询文章列表
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        ListArticlesReq listArticlesReq = new ListArticlesReq(); // ListArticlesReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listArticlesReq(listArticlesReq)
-                .build();
-            ListArticlesResp result = apiInstance.callList(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](ArticleService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-[**ListArticlesResp**](ListArticlesResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## callListWithHttpInfo
-
-> ApiResponse<ListArticlesResp> callListWithHttpInfo(callListRequest)
-
-
-
-查询文章列表
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        ListArticlesReq listArticlesReq = new ListArticlesReq(); // ListArticlesReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listArticlesReq(listArticlesReq)
-                .build();
-            ApiResponse<ListArticlesResp> response = apiInstance.callListWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](ArticleService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**ListArticlesResp**](ListArticlesResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIcallListRequest"></a>
-## APIcallListRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **listArticlesReq** | [**ListArticlesReq**](ListArticlesReq.md) |  | |
-
-
-
-## cancelPublish
-
-> Object cancelPublish(cancelPublishRequest)
+> Object cancelPublishArticle(cancelPublishArticleRequest)
 
 
 
@@ -530,13 +380,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         CancelPublishArticleReq cancelPublishArticleReq = new CancelPublishArticleReq(); // CancelPublishArticleReq | 
         try {
-            APIcancelPublishRequest request = APIcancelPublishRequest.newBuilder()
+            APIcancelPublishArticleRequest request = APIcancelPublishArticleRequest.newBuilder()
                 .cancelPublishArticleReq(cancelPublishArticleReq)
                 .build();
-            Object result = apiInstance.cancelPublish(request);
+            Object result = apiInstance.cancelPublishArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#cancelPublish");
+            System.err.println("Exception when calling ArticleService#cancelPublishArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -550,7 +400,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| cancelPublishRequest | [**APIcancelPublishRequest**](ArticleService.md#APIcancelPublishRequest)|-|-|
+| cancelPublishArticleRequest | [**APIcancelPublishArticleRequest**](ArticleService.md#APIcancelPublishArticleRequest)|-|-|
 
 ### Return type
 
@@ -571,9 +421,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## cancelPublishWithHttpInfo
+## cancelPublishArticleWithHttpInfo
 
-> ApiResponse<Object> cancelPublishWithHttpInfo(cancelPublishRequest)
+> ApiResponse<Object> cancelPublishArticleWithHttpInfo(cancelPublishArticleRequest)
 
 
 
@@ -599,15 +449,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         CancelPublishArticleReq cancelPublishArticleReq = new CancelPublishArticleReq(); // CancelPublishArticleReq | 
         try {
-            APIcancelPublishRequest request = APIcancelPublishRequest.newBuilder()
+            APIcancelPublishArticleRequest request = APIcancelPublishArticleRequest.newBuilder()
                 .cancelPublishArticleReq(cancelPublishArticleReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.cancelPublishWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.cancelPublishArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#cancelPublish");
+            System.err.println("Exception when calling ArticleService#cancelPublishArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -621,7 +471,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| cancelPublishRequest | [**APIcancelPublishRequest**](ArticleService.md#APIcancelPublishRequest)|-|-|
+| cancelPublishArticleRequest | [**APIcancelPublishArticleRequest**](ArticleService.md#APIcancelPublishArticleRequest)|-|-|
 
 ### Return type
 
@@ -643,8 +493,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcancelPublishRequest"></a>
-## APIcancelPublishRequest
+<a id="APIcancelPublishArticleRequest"></a>
+## APIcancelPublishArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -653,9 +503,9 @@ No authorization required
 
 
 
-## collect
+## collectArticle
 
-> CollectArticleResp collect(collectRequest)
+> CollectArticleResp collectArticle(collectArticleRequest)
 
 
 
@@ -680,13 +530,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         CollectArticleReq collectArticleReq = new CollectArticleReq(); // CollectArticleReq | 
         try {
-            APIcollectRequest request = APIcollectRequest.newBuilder()
+            APIcollectArticleRequest request = APIcollectArticleRequest.newBuilder()
                 .collectArticleReq(collectArticleReq)
                 .build();
-            CollectArticleResp result = apiInstance.collect(request);
+            CollectArticleResp result = apiInstance.collectArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#collect");
+            System.err.println("Exception when calling ArticleService#collectArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -700,7 +550,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| collectRequest | [**APIcollectRequest**](ArticleService.md#APIcollectRequest)|-|-|
+| collectArticleRequest | [**APIcollectArticleRequest**](ArticleService.md#APIcollectArticleRequest)|-|-|
 
 ### Return type
 
@@ -721,9 +571,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## collectWithHttpInfo
+## collectArticleWithHttpInfo
 
-> ApiResponse<CollectArticleResp> collectWithHttpInfo(collectRequest)
+> ApiResponse<CollectArticleResp> collectArticleWithHttpInfo(collectArticleRequest)
 
 
 
@@ -749,15 +599,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         CollectArticleReq collectArticleReq = new CollectArticleReq(); // CollectArticleReq | 
         try {
-            APIcollectRequest request = APIcollectRequest.newBuilder()
+            APIcollectArticleRequest request = APIcollectArticleRequest.newBuilder()
                 .collectArticleReq(collectArticleReq)
                 .build();
-            ApiResponse<CollectArticleResp> response = apiInstance.collectWithHttpInfo(request);
+            ApiResponse<CollectArticleResp> response = apiInstance.collectArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#collect");
+            System.err.println("Exception when calling ArticleService#collectArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -771,7 +621,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| collectRequest | [**APIcollectRequest**](ArticleService.md#APIcollectRequest)|-|-|
+| collectArticleRequest | [**APIcollectArticleRequest**](ArticleService.md#APIcollectArticleRequest)|-|-|
 
 ### Return type
 
@@ -793,8 +643,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcollectRequest"></a>
-## APIcollectRequest
+<a id="APIcollectArticleRequest"></a>
+## APIcollectArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -803,9 +653,9 @@ No authorization required
 
 
 
-## countCollected
+## countCollectedArticles
 
-> CountCollectedArticlesResp countCollected(countCollectedRequest)
+> CountCollectedArticlesResp countCollectedArticles(countCollectedArticlesRequest)
 
 
 
@@ -830,13 +680,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcountCollectedRequest request = APIcountCollectedRequest.newBuilder()
+            APIcountCollectedArticlesRequest request = APIcountCollectedArticlesRequest.newBuilder()
                 .body(body)
                 .build();
-            CountCollectedArticlesResp result = apiInstance.countCollected(request);
+            CountCollectedArticlesResp result = apiInstance.countCollectedArticles(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#countCollected");
+            System.err.println("Exception when calling ArticleService#countCollectedArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -850,7 +700,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| countCollectedRequest | [**APIcountCollectedRequest**](ArticleService.md#APIcountCollectedRequest)|-|-|
+| countCollectedArticlesRequest | [**APIcountCollectedArticlesRequest**](ArticleService.md#APIcountCollectedArticlesRequest)|-|-|
 
 ### Return type
 
@@ -871,9 +721,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## countCollectedWithHttpInfo
+## countCollectedArticlesWithHttpInfo
 
-> ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(countCollectedRequest)
+> ApiResponse<CountCollectedArticlesResp> countCollectedArticlesWithHttpInfo(countCollectedArticlesRequest)
 
 
 
@@ -899,15 +749,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcountCollectedRequest request = APIcountCollectedRequest.newBuilder()
+            APIcountCollectedArticlesRequest request = APIcountCollectedArticlesRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<CountCollectedArticlesResp> response = apiInstance.countCollectedWithHttpInfo(request);
+            ApiResponse<CountCollectedArticlesResp> response = apiInstance.countCollectedArticlesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#countCollected");
+            System.err.println("Exception when calling ArticleService#countCollectedArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -921,7 +771,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| countCollectedRequest | [**APIcountCollectedRequest**](ArticleService.md#APIcountCollectedRequest)|-|-|
+| countCollectedArticlesRequest | [**APIcountCollectedArticlesRequest**](ArticleService.md#APIcountCollectedArticlesRequest)|-|-|
 
 ### Return type
 
@@ -943,8 +793,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcountCollectedRequest"></a>
-## APIcountCollectedRequest
+<a id="APIcountCollectedArticlesRequest"></a>
+## APIcountCollectedArticlesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -953,9 +803,9 @@ No authorization required
 
 
 
-## createDraft
+## createDraftArticle
 
-> CreateDraftArticleResp createDraft(createDraftRequest)
+> CreateDraftArticleResp createDraftArticle(createDraftArticleRequest)
 
 
 
@@ -980,13 +830,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         CreateDraftArticleReq createDraftArticleReq = new CreateDraftArticleReq(); // CreateDraftArticleReq | 
         try {
-            APIcreateDraftRequest request = APIcreateDraftRequest.newBuilder()
+            APIcreateDraftArticleRequest request = APIcreateDraftArticleRequest.newBuilder()
                 .createDraftArticleReq(createDraftArticleReq)
                 .build();
-            CreateDraftArticleResp result = apiInstance.createDraft(request);
+            CreateDraftArticleResp result = apiInstance.createDraftArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#createDraft");
+            System.err.println("Exception when calling ArticleService#createDraftArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1000,7 +850,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createDraftRequest | [**APIcreateDraftRequest**](ArticleService.md#APIcreateDraftRequest)|-|-|
+| createDraftArticleRequest | [**APIcreateDraftArticleRequest**](ArticleService.md#APIcreateDraftArticleRequest)|-|-|
 
 ### Return type
 
@@ -1021,9 +871,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createDraftWithHttpInfo
+## createDraftArticleWithHttpInfo
 
-> ApiResponse<CreateDraftArticleResp> createDraftWithHttpInfo(createDraftRequest)
+> ApiResponse<CreateDraftArticleResp> createDraftArticleWithHttpInfo(createDraftArticleRequest)
 
 
 
@@ -1049,15 +899,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         CreateDraftArticleReq createDraftArticleReq = new CreateDraftArticleReq(); // CreateDraftArticleReq | 
         try {
-            APIcreateDraftRequest request = APIcreateDraftRequest.newBuilder()
+            APIcreateDraftArticleRequest request = APIcreateDraftArticleRequest.newBuilder()
                 .createDraftArticleReq(createDraftArticleReq)
                 .build();
-            ApiResponse<CreateDraftArticleResp> response = apiInstance.createDraftWithHttpInfo(request);
+            ApiResponse<CreateDraftArticleResp> response = apiInstance.createDraftArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#createDraft");
+            System.err.println("Exception when calling ArticleService#createDraftArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1071,7 +921,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createDraftRequest | [**APIcreateDraftRequest**](ArticleService.md#APIcreateDraftRequest)|-|-|
+| createDraftArticleRequest | [**APIcreateDraftArticleRequest**](ArticleService.md#APIcreateDraftArticleRequest)|-|-|
 
 ### Return type
 
@@ -1093,8 +943,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateDraftRequest"></a>
-## APIcreateDraftRequest
+<a id="APIcreateDraftArticleRequest"></a>
+## APIcreateDraftArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1103,9 +953,9 @@ No authorization required
 
 
 
-## discardDraft
+## discardDraftArticle
 
-> Object discardDraft(discardDraftRequest)
+> Object discardDraftArticle(discardDraftArticleRequest)
 
 
 
@@ -1130,13 +980,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         DiscardDraftArticleReq discardDraftArticleReq = new DiscardDraftArticleReq(); // DiscardDraftArticleReq | 
         try {
-            APIdiscardDraftRequest request = APIdiscardDraftRequest.newBuilder()
+            APIdiscardDraftArticleRequest request = APIdiscardDraftArticleRequest.newBuilder()
                 .discardDraftArticleReq(discardDraftArticleReq)
                 .build();
-            Object result = apiInstance.discardDraft(request);
+            Object result = apiInstance.discardDraftArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#discardDraft");
+            System.err.println("Exception when calling ArticleService#discardDraftArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1150,7 +1000,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| discardDraftRequest | [**APIdiscardDraftRequest**](ArticleService.md#APIdiscardDraftRequest)|-|-|
+| discardDraftArticleRequest | [**APIdiscardDraftArticleRequest**](ArticleService.md#APIdiscardDraftArticleRequest)|-|-|
 
 ### Return type
 
@@ -1171,9 +1021,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## discardDraftWithHttpInfo
+## discardDraftArticleWithHttpInfo
 
-> ApiResponse<Object> discardDraftWithHttpInfo(discardDraftRequest)
+> ApiResponse<Object> discardDraftArticleWithHttpInfo(discardDraftArticleRequest)
 
 
 
@@ -1199,15 +1049,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         DiscardDraftArticleReq discardDraftArticleReq = new DiscardDraftArticleReq(); // DiscardDraftArticleReq | 
         try {
-            APIdiscardDraftRequest request = APIdiscardDraftRequest.newBuilder()
+            APIdiscardDraftArticleRequest request = APIdiscardDraftArticleRequest.newBuilder()
                 .discardDraftArticleReq(discardDraftArticleReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.discardDraftWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.discardDraftArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#discardDraft");
+            System.err.println("Exception when calling ArticleService#discardDraftArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1221,7 +1071,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| discardDraftRequest | [**APIdiscardDraftRequest**](ArticleService.md#APIdiscardDraftRequest)|-|-|
+| discardDraftArticleRequest | [**APIdiscardDraftArticleRequest**](ArticleService.md#APIdiscardDraftArticleRequest)|-|-|
 
 ### Return type
 
@@ -1243,8 +1093,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIdiscardDraftRequest"></a>
-## APIdiscardDraftRequest
+<a id="APIdiscardDraftArticleRequest"></a>
+## APIdiscardDraftArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1253,9 +1103,9 @@ No authorization required
 
 
 
-## enterLottery
+## enterArticleLottery
 
-> Object enterLottery(enterLotteryRequest)
+> Object enterArticleLottery(enterArticleLotteryRequest)
 
 
 
@@ -1280,13 +1130,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         EnterArticleLotteryReq enterArticleLotteryReq = new EnterArticleLotteryReq(); // EnterArticleLotteryReq | 
         try {
-            APIenterLotteryRequest request = APIenterLotteryRequest.newBuilder()
+            APIenterArticleLotteryRequest request = APIenterArticleLotteryRequest.newBuilder()
                 .enterArticleLotteryReq(enterArticleLotteryReq)
                 .build();
-            Object result = apiInstance.enterLottery(request);
+            Object result = apiInstance.enterArticleLottery(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#enterLottery");
+            System.err.println("Exception when calling ArticleService#enterArticleLottery");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1300,7 +1150,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| enterLotteryRequest | [**APIenterLotteryRequest**](ArticleService.md#APIenterLotteryRequest)|-|-|
+| enterArticleLotteryRequest | [**APIenterArticleLotteryRequest**](ArticleService.md#APIenterArticleLotteryRequest)|-|-|
 
 ### Return type
 
@@ -1321,9 +1171,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## enterLotteryWithHttpInfo
+## enterArticleLotteryWithHttpInfo
 
-> ApiResponse<Object> enterLotteryWithHttpInfo(enterLotteryRequest)
+> ApiResponse<Object> enterArticleLotteryWithHttpInfo(enterArticleLotteryRequest)
 
 
 
@@ -1349,15 +1199,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         EnterArticleLotteryReq enterArticleLotteryReq = new EnterArticleLotteryReq(); // EnterArticleLotteryReq | 
         try {
-            APIenterLotteryRequest request = APIenterLotteryRequest.newBuilder()
+            APIenterArticleLotteryRequest request = APIenterArticleLotteryRequest.newBuilder()
                 .enterArticleLotteryReq(enterArticleLotteryReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.enterLotteryWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.enterArticleLotteryWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#enterLottery");
+            System.err.println("Exception when calling ArticleService#enterArticleLottery");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1371,7 +1221,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| enterLotteryRequest | [**APIenterLotteryRequest**](ArticleService.md#APIenterLotteryRequest)|-|-|
+| enterArticleLotteryRequest | [**APIenterArticleLotteryRequest**](ArticleService.md#APIenterArticleLotteryRequest)|-|-|
 
 ### Return type
 
@@ -1393,8 +1243,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIenterLotteryRequest"></a>
-## APIenterLotteryRequest
+<a id="APIenterArticleLotteryRequest"></a>
+## APIenterArticleLotteryRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1403,9 +1253,9 @@ No authorization required
 
 
 
-## get
+## getArticle
 
-> GetArticleResp get(getRequest)
+> GetArticleResp getArticle(getArticleRequest)
 
 
 
@@ -1430,13 +1280,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         GetArticleReq getArticleReq = new GetArticleReq(); // GetArticleReq | 
         try {
-            APIgetRequest request = APIgetRequest.newBuilder()
+            APIgetArticleRequest request = APIgetArticleRequest.newBuilder()
                 .getArticleReq(getArticleReq)
                 .build();
-            GetArticleResp result = apiInstance.get(request);
+            GetArticleResp result = apiInstance.getArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#get");
+            System.err.println("Exception when calling ArticleService#getArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1450,7 +1300,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getRequest | [**APIgetRequest**](ArticleService.md#APIgetRequest)|-|-|
+| getArticleRequest | [**APIgetArticleRequest**](ArticleService.md#APIgetArticleRequest)|-|-|
 
 ### Return type
 
@@ -1471,9 +1321,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getWithHttpInfo
+## getArticleWithHttpInfo
 
-> ApiResponse<GetArticleResp> getWithHttpInfo(getRequest)
+> ApiResponse<GetArticleResp> getArticleWithHttpInfo(getArticleRequest)
 
 
 
@@ -1499,15 +1349,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         GetArticleReq getArticleReq = new GetArticleReq(); // GetArticleReq | 
         try {
-            APIgetRequest request = APIgetRequest.newBuilder()
+            APIgetArticleRequest request = APIgetArticleRequest.newBuilder()
                 .getArticleReq(getArticleReq)
                 .build();
-            ApiResponse<GetArticleResp> response = apiInstance.getWithHttpInfo(request);
+            ApiResponse<GetArticleResp> response = apiInstance.getArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#get");
+            System.err.println("Exception when calling ArticleService#getArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1521,7 +1371,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getRequest | [**APIgetRequest**](ArticleService.md#APIgetRequest)|-|-|
+| getArticleRequest | [**APIgetArticleRequest**](ArticleService.md#APIgetArticleRequest)|-|-|
 
 ### Return type
 
@@ -1543,8 +1393,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIgetRequest"></a>
-## APIgetRequest
+<a id="APIgetArticleRequest"></a>
+## APIgetArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1553,9 +1403,9 @@ No authorization required
 
 
 
-## like
+## likeArticle
 
-> LikeArticleResp like(likeRequest)
+> LikeArticleResp likeArticle(likeArticleRequest)
 
 
 
@@ -1580,13 +1430,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         LikeArticleReq likeArticleReq = new LikeArticleReq(); // LikeArticleReq | 
         try {
-            APIlikeRequest request = APIlikeRequest.newBuilder()
+            APIlikeArticleRequest request = APIlikeArticleRequest.newBuilder()
                 .likeArticleReq(likeArticleReq)
                 .build();
-            LikeArticleResp result = apiInstance.like(request);
+            LikeArticleResp result = apiInstance.likeArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#like");
+            System.err.println("Exception when calling ArticleService#likeArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1600,7 +1450,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| likeRequest | [**APIlikeRequest**](ArticleService.md#APIlikeRequest)|-|-|
+| likeArticleRequest | [**APIlikeArticleRequest**](ArticleService.md#APIlikeArticleRequest)|-|-|
 
 ### Return type
 
@@ -1621,9 +1471,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## likeWithHttpInfo
+## likeArticleWithHttpInfo
 
-> ApiResponse<LikeArticleResp> likeWithHttpInfo(likeRequest)
+> ApiResponse<LikeArticleResp> likeArticleWithHttpInfo(likeArticleRequest)
 
 
 
@@ -1649,15 +1499,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         LikeArticleReq likeArticleReq = new LikeArticleReq(); // LikeArticleReq | 
         try {
-            APIlikeRequest request = APIlikeRequest.newBuilder()
+            APIlikeArticleRequest request = APIlikeArticleRequest.newBuilder()
                 .likeArticleReq(likeArticleReq)
                 .build();
-            ApiResponse<LikeArticleResp> response = apiInstance.likeWithHttpInfo(request);
+            ApiResponse<LikeArticleResp> response = apiInstance.likeArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#like");
+            System.err.println("Exception when calling ArticleService#likeArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1671,7 +1521,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| likeRequest | [**APIlikeRequest**](ArticleService.md#APIlikeRequest)|-|-|
+| likeArticleRequest | [**APIlikeArticleRequest**](ArticleService.md#APIlikeArticleRequest)|-|-|
 
 ### Return type
 
@@ -1693,8 +1543,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlikeRequest"></a>
-## APIlikeRequest
+<a id="APIlikeArticleRequest"></a>
+## APIlikeArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1703,9 +1553,159 @@ No authorization required
 
 
 
-## listFollowing
+## listArticles
 
-> ListFollowingArticlesResp listFollowing(listFollowingRequest)
+> ListArticlesResp listArticles(listArticlesRequest)
+
+
+
+查询文章列表
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        ListArticlesReq listArticlesReq = new ListArticlesReq(); // ListArticlesReq | 
+        try {
+            APIlistArticlesRequest request = APIlistArticlesRequest.newBuilder()
+                .listArticlesReq(listArticlesReq)
+                .build();
+            ListArticlesResp result = apiInstance.listArticles(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#listArticles");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listArticlesRequest | [**APIlistArticlesRequest**](ArticleService.md#APIlistArticlesRequest)|-|-|
+
+### Return type
+
+[**ListArticlesResp**](ListArticlesResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listArticlesWithHttpInfo
+
+> ApiResponse<ListArticlesResp> listArticlesWithHttpInfo(listArticlesRequest)
+
+
+
+查询文章列表
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        ListArticlesReq listArticlesReq = new ListArticlesReq(); // ListArticlesReq | 
+        try {
+            APIlistArticlesRequest request = APIlistArticlesRequest.newBuilder()
+                .listArticlesReq(listArticlesReq)
+                .build();
+            ApiResponse<ListArticlesResp> response = apiInstance.listArticlesWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#listArticles");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listArticlesRequest | [**APIlistArticlesRequest**](ArticleService.md#APIlistArticlesRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListArticlesResp**](ListArticlesResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistArticlesRequest"></a>
+## APIlistArticlesRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listArticlesReq** | [**ListArticlesReq**](ListArticlesReq.md) |  | |
+
+
+
+## listFollowingArticles
+
+> ListFollowingArticlesResp listFollowingArticles(listFollowingArticlesRequest)
 
 
 
@@ -1730,13 +1730,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ListFollowingArticlesReq listFollowingArticlesReq = new ListFollowingArticlesReq(); // ListFollowingArticlesReq | 
         try {
-            APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
+            APIlistFollowingArticlesRequest request = APIlistFollowingArticlesRequest.newBuilder()
                 .listFollowingArticlesReq(listFollowingArticlesReq)
                 .build();
-            ListFollowingArticlesResp result = apiInstance.listFollowing(request);
+            ListFollowingArticlesResp result = apiInstance.listFollowingArticles(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#listFollowing");
+            System.err.println("Exception when calling ArticleService#listFollowingArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1750,7 +1750,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listFollowingRequest | [**APIlistFollowingRequest**](ArticleService.md#APIlistFollowingRequest)|-|-|
+| listFollowingArticlesRequest | [**APIlistFollowingArticlesRequest**](ArticleService.md#APIlistFollowingArticlesRequest)|-|-|
 
 ### Return type
 
@@ -1771,9 +1771,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listFollowingWithHttpInfo
+## listFollowingArticlesWithHttpInfo
 
-> ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(listFollowingRequest)
+> ApiResponse<ListFollowingArticlesResp> listFollowingArticlesWithHttpInfo(listFollowingArticlesRequest)
 
 
 
@@ -1799,15 +1799,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ListFollowingArticlesReq listFollowingArticlesReq = new ListFollowingArticlesReq(); // ListFollowingArticlesReq | 
         try {
-            APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
+            APIlistFollowingArticlesRequest request = APIlistFollowingArticlesRequest.newBuilder()
                 .listFollowingArticlesReq(listFollowingArticlesReq)
                 .build();
-            ApiResponse<ListFollowingArticlesResp> response = apiInstance.listFollowingWithHttpInfo(request);
+            ApiResponse<ListFollowingArticlesResp> response = apiInstance.listFollowingArticlesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#listFollowing");
+            System.err.println("Exception when calling ArticleService#listFollowingArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1821,7 +1821,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listFollowingRequest | [**APIlistFollowingRequest**](ArticleService.md#APIlistFollowingRequest)|-|-|
+| listFollowingArticlesRequest | [**APIlistFollowingArticlesRequest**](ArticleService.md#APIlistFollowingArticlesRequest)|-|-|
 
 ### Return type
 
@@ -1843,8 +1843,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistFollowingRequest"></a>
-## APIlistFollowingRequest
+<a id="APIlistFollowingArticlesRequest"></a>
+## APIlistFollowingArticlesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -1853,9 +1853,9 @@ No authorization required
 
 
 
-## listNearby
+## listNearbyArticles
 
-> ListNearbyArticlesResp listNearby(listNearbyRequest)
+> ListNearbyArticlesResp listNearbyArticles(listNearbyArticlesRequest)
 
 
 
@@ -1880,13 +1880,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ListNearbyArticlesReq listNearbyArticlesReq = new ListNearbyArticlesReq(); // ListNearbyArticlesReq | 
         try {
-            APIlistNearbyRequest request = APIlistNearbyRequest.newBuilder()
+            APIlistNearbyArticlesRequest request = APIlistNearbyArticlesRequest.newBuilder()
                 .listNearbyArticlesReq(listNearbyArticlesReq)
                 .build();
-            ListNearbyArticlesResp result = apiInstance.listNearby(request);
+            ListNearbyArticlesResp result = apiInstance.listNearbyArticles(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#listNearby");
+            System.err.println("Exception when calling ArticleService#listNearbyArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1900,7 +1900,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listNearbyRequest | [**APIlistNearbyRequest**](ArticleService.md#APIlistNearbyRequest)|-|-|
+| listNearbyArticlesRequest | [**APIlistNearbyArticlesRequest**](ArticleService.md#APIlistNearbyArticlesRequest)|-|-|
 
 ### Return type
 
@@ -1921,9 +1921,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listNearbyWithHttpInfo
+## listNearbyArticlesWithHttpInfo
 
-> ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(listNearbyRequest)
+> ApiResponse<ListNearbyArticlesResp> listNearbyArticlesWithHttpInfo(listNearbyArticlesRequest)
 
 
 
@@ -1949,15 +1949,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ListNearbyArticlesReq listNearbyArticlesReq = new ListNearbyArticlesReq(); // ListNearbyArticlesReq | 
         try {
-            APIlistNearbyRequest request = APIlistNearbyRequest.newBuilder()
+            APIlistNearbyArticlesRequest request = APIlistNearbyArticlesRequest.newBuilder()
                 .listNearbyArticlesReq(listNearbyArticlesReq)
                 .build();
-            ApiResponse<ListNearbyArticlesResp> response = apiInstance.listNearbyWithHttpInfo(request);
+            ApiResponse<ListNearbyArticlesResp> response = apiInstance.listNearbyArticlesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#listNearby");
+            System.err.println("Exception when calling ArticleService#listNearbyArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1971,7 +1971,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listNearbyRequest | [**APIlistNearbyRequest**](ArticleService.md#APIlistNearbyRequest)|-|-|
+| listNearbyArticlesRequest | [**APIlistNearbyArticlesRequest**](ArticleService.md#APIlistNearbyArticlesRequest)|-|-|
 
 ### Return type
 
@@ -1993,8 +1993,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistNearbyRequest"></a>
-## APIlistNearbyRequest
+<a id="APIlistNearbyArticlesRequest"></a>
+## APIlistNearbyArticlesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -2003,159 +2003,9 @@ No authorization required
 
 
 
-## pageCollected
+## pageArticleViewHistory
 
-> PageCollectedArticlesResp pageCollected(pageCollectedRequest)
-
-
-
-查询当前账号收藏的文章。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        PageCollectedArticlesReq pageCollectedArticlesReq = new PageCollectedArticlesReq(); // PageCollectedArticlesReq | 
-        try {
-            APIpageCollectedRequest request = APIpageCollectedRequest.newBuilder()
-                .pageCollectedArticlesReq(pageCollectedArticlesReq)
-                .build();
-            PageCollectedArticlesResp result = apiInstance.pageCollected(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#pageCollected");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| pageCollectedRequest | [**APIpageCollectedRequest**](ArticleService.md#APIpageCollectedRequest)|-|-|
-
-### Return type
-
-[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## pageCollectedWithHttpInfo
-
-> ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(pageCollectedRequest)
-
-
-
-查询当前账号收藏的文章。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        PageCollectedArticlesReq pageCollectedArticlesReq = new PageCollectedArticlesReq(); // PageCollectedArticlesReq | 
-        try {
-            APIpageCollectedRequest request = APIpageCollectedRequest.newBuilder()
-                .pageCollectedArticlesReq(pageCollectedArticlesReq)
-                .build();
-            ApiResponse<PageCollectedArticlesResp> response = apiInstance.pageCollectedWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#pageCollected");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| pageCollectedRequest | [**APIpageCollectedRequest**](ArticleService.md#APIpageCollectedRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIpageCollectedRequest"></a>
-## APIpageCollectedRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **pageCollectedArticlesReq** | [**PageCollectedArticlesReq**](PageCollectedArticlesReq.md) |  | |
-
-
-
-## pageViewHistory
-
-> PageArticleViewHistoryResp pageViewHistory(pageViewHistoryRequest)
+> PageArticleViewHistoryResp pageArticleViewHistory(pageArticleViewHistoryRequest)
 
 
 
@@ -2180,13 +2030,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         PageArticleViewHistoryReq pageArticleViewHistoryReq = new PageArticleViewHistoryReq(); // PageArticleViewHistoryReq | 
         try {
-            APIpageViewHistoryRequest request = APIpageViewHistoryRequest.newBuilder()
+            APIpageArticleViewHistoryRequest request = APIpageArticleViewHistoryRequest.newBuilder()
                 .pageArticleViewHistoryReq(pageArticleViewHistoryReq)
                 .build();
-            PageArticleViewHistoryResp result = apiInstance.pageViewHistory(request);
+            PageArticleViewHistoryResp result = apiInstance.pageArticleViewHistory(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#pageViewHistory");
+            System.err.println("Exception when calling ArticleService#pageArticleViewHistory");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2200,7 +2050,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageViewHistoryRequest | [**APIpageViewHistoryRequest**](ArticleService.md#APIpageViewHistoryRequest)|-|-|
+| pageArticleViewHistoryRequest | [**APIpageArticleViewHistoryRequest**](ArticleService.md#APIpageArticleViewHistoryRequest)|-|-|
 
 ### Return type
 
@@ -2221,9 +2071,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## pageViewHistoryWithHttpInfo
+## pageArticleViewHistoryWithHttpInfo
 
-> ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(pageViewHistoryRequest)
+> ApiResponse<PageArticleViewHistoryResp> pageArticleViewHistoryWithHttpInfo(pageArticleViewHistoryRequest)
 
 
 
@@ -2249,15 +2099,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         PageArticleViewHistoryReq pageArticleViewHistoryReq = new PageArticleViewHistoryReq(); // PageArticleViewHistoryReq | 
         try {
-            APIpageViewHistoryRequest request = APIpageViewHistoryRequest.newBuilder()
+            APIpageArticleViewHistoryRequest request = APIpageArticleViewHistoryRequest.newBuilder()
                 .pageArticleViewHistoryReq(pageArticleViewHistoryReq)
                 .build();
-            ApiResponse<PageArticleViewHistoryResp> response = apiInstance.pageViewHistoryWithHttpInfo(request);
+            ApiResponse<PageArticleViewHistoryResp> response = apiInstance.pageArticleViewHistoryWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#pageViewHistory");
+            System.err.println("Exception when calling ArticleService#pageArticleViewHistory");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -2271,7 +2121,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageViewHistoryRequest | [**APIpageViewHistoryRequest**](ArticleService.md#APIpageViewHistoryRequest)|-|-|
+| pageArticleViewHistoryRequest | [**APIpageArticleViewHistoryRequest**](ArticleService.md#APIpageArticleViewHistoryRequest)|-|-|
 
 ### Return type
 
@@ -2293,8 +2143,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIpageViewHistoryRequest"></a>
-## APIpageViewHistoryRequest
+<a id="APIpageArticleViewHistoryRequest"></a>
+## APIpageArticleViewHistoryRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -2303,9 +2153,159 @@ No authorization required
 
 
 
-## pageWatched
+## pageCollectedArticles
 
-> PageWatchedArticlesResp pageWatched(pageWatchedRequest)
+> PageCollectedArticlesResp pageCollectedArticles(pageCollectedArticlesRequest)
+
+
+
+查询当前账号收藏的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageCollectedArticlesReq pageCollectedArticlesReq = new PageCollectedArticlesReq(); // PageCollectedArticlesReq | 
+        try {
+            APIpageCollectedArticlesRequest request = APIpageCollectedArticlesRequest.newBuilder()
+                .pageCollectedArticlesReq(pageCollectedArticlesReq)
+                .build();
+            PageCollectedArticlesResp result = apiInstance.pageCollectedArticles(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageCollectedArticles");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageCollectedArticlesRequest | [**APIpageCollectedArticlesRequest**](ArticleService.md#APIpageCollectedArticlesRequest)|-|-|
+
+### Return type
+
+[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## pageCollectedArticlesWithHttpInfo
+
+> ApiResponse<PageCollectedArticlesResp> pageCollectedArticlesWithHttpInfo(pageCollectedArticlesRequest)
+
+
+
+查询当前账号收藏的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageCollectedArticlesReq pageCollectedArticlesReq = new PageCollectedArticlesReq(); // PageCollectedArticlesReq | 
+        try {
+            APIpageCollectedArticlesRequest request = APIpageCollectedArticlesRequest.newBuilder()
+                .pageCollectedArticlesReq(pageCollectedArticlesReq)
+                .build();
+            ApiResponse<PageCollectedArticlesResp> response = apiInstance.pageCollectedArticlesWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageCollectedArticles");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageCollectedArticlesRequest | [**APIpageCollectedArticlesRequest**](ArticleService.md#APIpageCollectedArticlesRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**PageCollectedArticlesResp**](PageCollectedArticlesResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIpageCollectedArticlesRequest"></a>
+## APIpageCollectedArticlesRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **pageCollectedArticlesReq** | [**PageCollectedArticlesReq**](PageCollectedArticlesReq.md) |  | |
+
+
+
+## pageWatchedArticles
+
+> PageWatchedArticlesResp pageWatchedArticles(pageWatchedArticlesRequest)
 
 
 
@@ -2330,13 +2330,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         PageWatchedArticlesReq pageWatchedArticlesReq = new PageWatchedArticlesReq(); // PageWatchedArticlesReq | 
         try {
-            APIpageWatchedRequest request = APIpageWatchedRequest.newBuilder()
+            APIpageWatchedArticlesRequest request = APIpageWatchedArticlesRequest.newBuilder()
                 .pageWatchedArticlesReq(pageWatchedArticlesReq)
                 .build();
-            PageWatchedArticlesResp result = apiInstance.pageWatched(request);
+            PageWatchedArticlesResp result = apiInstance.pageWatchedArticles(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#pageWatched");
+            System.err.println("Exception when calling ArticleService#pageWatchedArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2350,7 +2350,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageWatchedRequest | [**APIpageWatchedRequest**](ArticleService.md#APIpageWatchedRequest)|-|-|
+| pageWatchedArticlesRequest | [**APIpageWatchedArticlesRequest**](ArticleService.md#APIpageWatchedArticlesRequest)|-|-|
 
 ### Return type
 
@@ -2371,9 +2371,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## pageWatchedWithHttpInfo
+## pageWatchedArticlesWithHttpInfo
 
-> ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(pageWatchedRequest)
+> ApiResponse<PageWatchedArticlesResp> pageWatchedArticlesWithHttpInfo(pageWatchedArticlesRequest)
 
 
 
@@ -2399,15 +2399,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         PageWatchedArticlesReq pageWatchedArticlesReq = new PageWatchedArticlesReq(); // PageWatchedArticlesReq | 
         try {
-            APIpageWatchedRequest request = APIpageWatchedRequest.newBuilder()
+            APIpageWatchedArticlesRequest request = APIpageWatchedArticlesRequest.newBuilder()
                 .pageWatchedArticlesReq(pageWatchedArticlesReq)
                 .build();
-            ApiResponse<PageWatchedArticlesResp> response = apiInstance.pageWatchedWithHttpInfo(request);
+            ApiResponse<PageWatchedArticlesResp> response = apiInstance.pageWatchedArticlesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#pageWatched");
+            System.err.println("Exception when calling ArticleService#pageWatchedArticles");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -2421,7 +2421,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| pageWatchedRequest | [**APIpageWatchedRequest**](ArticleService.md#APIpageWatchedRequest)|-|-|
+| pageWatchedArticlesRequest | [**APIpageWatchedArticlesRequest**](ArticleService.md#APIpageWatchedArticlesRequest)|-|-|
 
 ### Return type
 
@@ -2443,8 +2443,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIpageWatchedRequest"></a>
-## APIpageWatchedRequest
+<a id="APIpageWatchedArticlesRequest"></a>
+## APIpageWatchedArticlesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -2453,9 +2453,9 @@ No authorization required
 
 
 
-## publish
+## publishArticle
 
-> Object publish(publishRequest)
+> Object publishArticle(publishArticleRequest)
 
 
 
@@ -2480,13 +2480,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         PublishArticleReq publishArticleReq = new PublishArticleReq(); // PublishArticleReq | 
         try {
-            APIpublishRequest request = APIpublishRequest.newBuilder()
+            APIpublishArticleRequest request = APIpublishArticleRequest.newBuilder()
                 .publishArticleReq(publishArticleReq)
                 .build();
-            Object result = apiInstance.publish(request);
+            Object result = apiInstance.publishArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#publish");
+            System.err.println("Exception when calling ArticleService#publishArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2500,7 +2500,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| publishRequest | [**APIpublishRequest**](ArticleService.md#APIpublishRequest)|-|-|
+| publishArticleRequest | [**APIpublishArticleRequest**](ArticleService.md#APIpublishArticleRequest)|-|-|
 
 ### Return type
 
@@ -2521,9 +2521,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## publishWithHttpInfo
+## publishArticleWithHttpInfo
 
-> ApiResponse<Object> publishWithHttpInfo(publishRequest)
+> ApiResponse<Object> publishArticleWithHttpInfo(publishArticleRequest)
 
 
 
@@ -2549,15 +2549,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         PublishArticleReq publishArticleReq = new PublishArticleReq(); // PublishArticleReq | 
         try {
-            APIpublishRequest request = APIpublishRequest.newBuilder()
+            APIpublishArticleRequest request = APIpublishArticleRequest.newBuilder()
                 .publishArticleReq(publishArticleReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.publishWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.publishArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#publish");
+            System.err.println("Exception when calling ArticleService#publishArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -2571,7 +2571,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| publishRequest | [**APIpublishRequest**](ArticleService.md#APIpublishRequest)|-|-|
+| publishArticleRequest | [**APIpublishArticleRequest**](ArticleService.md#APIpublishArticleRequest)|-|-|
 
 ### Return type
 
@@ -2593,8 +2593,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIpublishRequest"></a>
-## APIpublishRequest
+<a id="APIpublishArticleRequest"></a>
+## APIpublishArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -2603,9 +2603,9 @@ No authorization required
 
 
 
-## reward
+## rewardArticle
 
-> RewardArticleResp reward(rewardRequest)
+> RewardArticleResp rewardArticle(rewardArticleRequest)
 
 
 
@@ -2630,13 +2630,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         RewardArticleReq rewardArticleReq = new RewardArticleReq(); // RewardArticleReq | 
         try {
-            APIrewardRequest request = APIrewardRequest.newBuilder()
+            APIrewardArticleRequest request = APIrewardArticleRequest.newBuilder()
                 .rewardArticleReq(rewardArticleReq)
                 .build();
-            RewardArticleResp result = apiInstance.reward(request);
+            RewardArticleResp result = apiInstance.rewardArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#reward");
+            System.err.println("Exception when calling ArticleService#rewardArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2650,7 +2650,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| rewardRequest | [**APIrewardRequest**](ArticleService.md#APIrewardRequest)|-|-|
+| rewardArticleRequest | [**APIrewardArticleRequest**](ArticleService.md#APIrewardArticleRequest)|-|-|
 
 ### Return type
 
@@ -2671,9 +2671,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## rewardWithHttpInfo
+## rewardArticleWithHttpInfo
 
-> ApiResponse<RewardArticleResp> rewardWithHttpInfo(rewardRequest)
+> ApiResponse<RewardArticleResp> rewardArticleWithHttpInfo(rewardArticleRequest)
 
 
 
@@ -2699,15 +2699,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         RewardArticleReq rewardArticleReq = new RewardArticleReq(); // RewardArticleReq | 
         try {
-            APIrewardRequest request = APIrewardRequest.newBuilder()
+            APIrewardArticleRequest request = APIrewardArticleRequest.newBuilder()
                 .rewardArticleReq(rewardArticleReq)
                 .build();
-            ApiResponse<RewardArticleResp> response = apiInstance.rewardWithHttpInfo(request);
+            ApiResponse<RewardArticleResp> response = apiInstance.rewardArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#reward");
+            System.err.println("Exception when calling ArticleService#rewardArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -2721,7 +2721,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| rewardRequest | [**APIrewardRequest**](ArticleService.md#APIrewardRequest)|-|-|
+| rewardArticleRequest | [**APIrewardArticleRequest**](ArticleService.md#APIrewardArticleRequest)|-|-|
 
 ### Return type
 
@@ -2743,8 +2743,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIrewardRequest"></a>
-## APIrewardRequest
+<a id="APIrewardArticleRequest"></a>
+## APIrewardArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -2753,9 +2753,9 @@ No authorization required
 
 
 
-## setPinnedComment
+## setPinnedArticleComment
 
-> Object setPinnedComment(setPinnedCommentRequest)
+> Object setPinnedArticleComment(setPinnedArticleCommentRequest)
 
 
 
@@ -2780,13 +2780,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         SetPinnedArticleCommentReq setPinnedArticleCommentReq = new SetPinnedArticleCommentReq(); // SetPinnedArticleCommentReq | 
         try {
-            APIsetPinnedCommentRequest request = APIsetPinnedCommentRequest.newBuilder()
+            APIsetPinnedArticleCommentRequest request = APIsetPinnedArticleCommentRequest.newBuilder()
                 .setPinnedArticleCommentReq(setPinnedArticleCommentReq)
                 .build();
-            Object result = apiInstance.setPinnedComment(request);
+            Object result = apiInstance.setPinnedArticleComment(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#setPinnedComment");
+            System.err.println("Exception when calling ArticleService#setPinnedArticleComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2800,7 +2800,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| setPinnedCommentRequest | [**APIsetPinnedCommentRequest**](ArticleService.md#APIsetPinnedCommentRequest)|-|-|
+| setPinnedArticleCommentRequest | [**APIsetPinnedArticleCommentRequest**](ArticleService.md#APIsetPinnedArticleCommentRequest)|-|-|
 
 ### Return type
 
@@ -2821,9 +2821,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## setPinnedCommentWithHttpInfo
+## setPinnedArticleCommentWithHttpInfo
 
-> ApiResponse<Object> setPinnedCommentWithHttpInfo(setPinnedCommentRequest)
+> ApiResponse<Object> setPinnedArticleCommentWithHttpInfo(setPinnedArticleCommentRequest)
 
 
 
@@ -2849,15 +2849,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         SetPinnedArticleCommentReq setPinnedArticleCommentReq = new SetPinnedArticleCommentReq(); // SetPinnedArticleCommentReq | 
         try {
-            APIsetPinnedCommentRequest request = APIsetPinnedCommentRequest.newBuilder()
+            APIsetPinnedArticleCommentRequest request = APIsetPinnedArticleCommentRequest.newBuilder()
                 .setPinnedArticleCommentReq(setPinnedArticleCommentReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.setPinnedCommentWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.setPinnedArticleCommentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#setPinnedComment");
+            System.err.println("Exception when calling ArticleService#setPinnedArticleComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -2871,7 +2871,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| setPinnedCommentRequest | [**APIsetPinnedCommentRequest**](ArticleService.md#APIsetPinnedCommentRequest)|-|-|
+| setPinnedArticleCommentRequest | [**APIsetPinnedArticleCommentRequest**](ArticleService.md#APIsetPinnedArticleCommentRequest)|-|-|
 
 ### Return type
 
@@ -2893,8 +2893,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIsetPinnedCommentRequest"></a>
-## APIsetPinnedCommentRequest
+<a id="APIsetPinnedArticleCommentRequest"></a>
+## APIsetPinnedArticleCommentRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -2903,9 +2903,9 @@ No authorization required
 
 
 
-## thank
+## thankArticle
 
-> ThankArticleResp thank(thankRequest)
+> ThankArticleResp thankArticle(thankArticleRequest)
 
 
 
@@ -2930,13 +2930,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ThankArticleReq thankArticleReq = new ThankArticleReq(); // ThankArticleReq | 
         try {
-            APIthankRequest request = APIthankRequest.newBuilder()
+            APIthankArticleRequest request = APIthankArticleRequest.newBuilder()
                 .thankArticleReq(thankArticleReq)
                 .build();
-            ThankArticleResp result = apiInstance.thank(request);
+            ThankArticleResp result = apiInstance.thankArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#thank");
+            System.err.println("Exception when calling ArticleService#thankArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -2950,7 +2950,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| thankRequest | [**APIthankRequest**](ArticleService.md#APIthankRequest)|-|-|
+| thankArticleRequest | [**APIthankArticleRequest**](ArticleService.md#APIthankArticleRequest)|-|-|
 
 ### Return type
 
@@ -2971,9 +2971,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## thankWithHttpInfo
+## thankArticleWithHttpInfo
 
-> ApiResponse<ThankArticleResp> thankWithHttpInfo(thankRequest)
+> ApiResponse<ThankArticleResp> thankArticleWithHttpInfo(thankArticleRequest)
 
 
 
@@ -2999,15 +2999,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         ThankArticleReq thankArticleReq = new ThankArticleReq(); // ThankArticleReq | 
         try {
-            APIthankRequest request = APIthankRequest.newBuilder()
+            APIthankArticleRequest request = APIthankArticleRequest.newBuilder()
                 .thankArticleReq(thankArticleReq)
                 .build();
-            ApiResponse<ThankArticleResp> response = apiInstance.thankWithHttpInfo(request);
+            ApiResponse<ThankArticleResp> response = apiInstance.thankArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#thank");
+            System.err.println("Exception when calling ArticleService#thankArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -3021,7 +3021,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| thankRequest | [**APIthankRequest**](ArticleService.md#APIthankRequest)|-|-|
+| thankArticleRequest | [**APIthankArticleRequest**](ArticleService.md#APIthankArticleRequest)|-|-|
 
 ### Return type
 
@@ -3043,8 +3043,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIthankRequest"></a>
-## APIthankRequest
+<a id="APIthankArticleRequest"></a>
+## APIthankArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -3053,9 +3053,9 @@ No authorization required
 
 
 
-## updateDraft
+## updateDraftArticle
 
-> UpdateDraftArticleResp updateDraft(updateDraftRequest)
+> UpdateDraftArticleResp updateDraftArticle(updateDraftArticleRequest)
 
 
 
@@ -3080,13 +3080,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         UpdateDraftArticleReq updateDraftArticleReq = new UpdateDraftArticleReq(); // UpdateDraftArticleReq | 
         try {
-            APIupdateDraftRequest request = APIupdateDraftRequest.newBuilder()
+            APIupdateDraftArticleRequest request = APIupdateDraftArticleRequest.newBuilder()
                 .updateDraftArticleReq(updateDraftArticleReq)
                 .build();
-            UpdateDraftArticleResp result = apiInstance.updateDraft(request);
+            UpdateDraftArticleResp result = apiInstance.updateDraftArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#updateDraft");
+            System.err.println("Exception when calling ArticleService#updateDraftArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -3100,7 +3100,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateDraftRequest | [**APIupdateDraftRequest**](ArticleService.md#APIupdateDraftRequest)|-|-|
+| updateDraftArticleRequest | [**APIupdateDraftArticleRequest**](ArticleService.md#APIupdateDraftArticleRequest)|-|-|
 
 ### Return type
 
@@ -3121,9 +3121,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updateDraftWithHttpInfo
+## updateDraftArticleWithHttpInfo
 
-> ApiResponse<UpdateDraftArticleResp> updateDraftWithHttpInfo(updateDraftRequest)
+> ApiResponse<UpdateDraftArticleResp> updateDraftArticleWithHttpInfo(updateDraftArticleRequest)
 
 
 
@@ -3149,15 +3149,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         UpdateDraftArticleReq updateDraftArticleReq = new UpdateDraftArticleReq(); // UpdateDraftArticleReq | 
         try {
-            APIupdateDraftRequest request = APIupdateDraftRequest.newBuilder()
+            APIupdateDraftArticleRequest request = APIupdateDraftArticleRequest.newBuilder()
                 .updateDraftArticleReq(updateDraftArticleReq)
                 .build();
-            ApiResponse<UpdateDraftArticleResp> response = apiInstance.updateDraftWithHttpInfo(request);
+            ApiResponse<UpdateDraftArticleResp> response = apiInstance.updateDraftArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#updateDraft");
+            System.err.println("Exception when calling ArticleService#updateDraftArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -3171,7 +3171,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateDraftRequest | [**APIupdateDraftRequest**](ArticleService.md#APIupdateDraftRequest)|-|-|
+| updateDraftArticleRequest | [**APIupdateDraftArticleRequest**](ArticleService.md#APIupdateDraftArticleRequest)|-|-|
 
 ### Return type
 
@@ -3193,8 +3193,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdateDraftRequest"></a>
-## APIupdateDraftRequest
+<a id="APIupdateDraftArticleRequest"></a>
+## APIupdateDraftArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -3203,9 +3203,9 @@ No authorization required
 
 
 
-## votePoll
+## voteArticlePoll
 
-> Object votePoll(votePollRequest)
+> Object voteArticlePoll(voteArticlePollRequest)
 
 
 
@@ -3230,13 +3230,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         VoteArticlePollReq voteArticlePollReq = new VoteArticlePollReq(); // VoteArticlePollReq | 
         try {
-            APIvotePollRequest request = APIvotePollRequest.newBuilder()
+            APIvoteArticlePollRequest request = APIvoteArticlePollRequest.newBuilder()
                 .voteArticlePollReq(voteArticlePollReq)
                 .build();
-            Object result = apiInstance.votePoll(request);
+            Object result = apiInstance.voteArticlePoll(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#votePoll");
+            System.err.println("Exception when calling ArticleService#voteArticlePoll");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -3250,7 +3250,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| votePollRequest | [**APIvotePollRequest**](ArticleService.md#APIvotePollRequest)|-|-|
+| voteArticlePollRequest | [**APIvoteArticlePollRequest**](ArticleService.md#APIvoteArticlePollRequest)|-|-|
 
 ### Return type
 
@@ -3271,9 +3271,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## votePollWithHttpInfo
+## voteArticlePollWithHttpInfo
 
-> ApiResponse<Object> votePollWithHttpInfo(votePollRequest)
+> ApiResponse<Object> voteArticlePollWithHttpInfo(voteArticlePollRequest)
 
 
 
@@ -3299,15 +3299,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         VoteArticlePollReq voteArticlePollReq = new VoteArticlePollReq(); // VoteArticlePollReq | 
         try {
-            APIvotePollRequest request = APIvotePollRequest.newBuilder()
+            APIvoteArticlePollRequest request = APIvoteArticlePollRequest.newBuilder()
                 .voteArticlePollReq(voteArticlePollReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.votePollWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.voteArticlePollWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#votePoll");
+            System.err.println("Exception when calling ArticleService#voteArticlePoll");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -3321,7 +3321,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| votePollRequest | [**APIvotePollRequest**](ArticleService.md#APIvotePollRequest)|-|-|
+| voteArticlePollRequest | [**APIvoteArticlePollRequest**](ArticleService.md#APIvoteArticlePollRequest)|-|-|
 
 ### Return type
 
@@ -3343,8 +3343,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIvotePollRequest"></a>
-## APIvotePollRequest
+<a id="APIvoteArticlePollRequest"></a>
+## APIvoteArticlePollRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -3353,9 +3353,9 @@ No authorization required
 
 
 
-## watch
+## watchArticle
 
-> WatchArticleResp watch(watchRequest)
+> WatchArticleResp watchArticle(watchArticleRequest)
 
 
 
@@ -3380,13 +3380,13 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         WatchArticleReq watchArticleReq = new WatchArticleReq(); // WatchArticleReq | 
         try {
-            APIwatchRequest request = APIwatchRequest.newBuilder()
+            APIwatchArticleRequest request = APIwatchArticleRequest.newBuilder()
                 .watchArticleReq(watchArticleReq)
                 .build();
-            WatchArticleResp result = apiInstance.watch(request);
+            WatchArticleResp result = apiInstance.watchArticle(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#watch");
+            System.err.println("Exception when calling ArticleService#watchArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -3400,7 +3400,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| watchRequest | [**APIwatchRequest**](ArticleService.md#APIwatchRequest)|-|-|
+| watchArticleRequest | [**APIwatchArticleRequest**](ArticleService.md#APIwatchArticleRequest)|-|-|
 
 ### Return type
 
@@ -3421,9 +3421,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## watchWithHttpInfo
+## watchArticleWithHttpInfo
 
-> ApiResponse<WatchArticleResp> watchWithHttpInfo(watchRequest)
+> ApiResponse<WatchArticleResp> watchArticleWithHttpInfo(watchArticleRequest)
 
 
 
@@ -3449,15 +3449,15 @@ public class Example {
         ArticleService apiInstance = new ArticleService(defaultClient);
         WatchArticleReq watchArticleReq = new WatchArticleReq(); // WatchArticleReq | 
         try {
-            APIwatchRequest request = APIwatchRequest.newBuilder()
+            APIwatchArticleRequest request = APIwatchArticleRequest.newBuilder()
                 .watchArticleReq(watchArticleReq)
                 .build();
-            ApiResponse<WatchArticleResp> response = apiInstance.watchWithHttpInfo(request);
+            ApiResponse<WatchArticleResp> response = apiInstance.watchArticleWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#watch");
+            System.err.println("Exception when calling ArticleService#watchArticle");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -3471,7 +3471,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| watchRequest | [**APIwatchRequest**](ArticleService.md#APIwatchRequest)|-|-|
+| watchArticleRequest | [**APIwatchArticleRequest**](ArticleService.md#APIwatchArticleRequest)|-|-|
 
 ### Return type
 
@@ -3493,8 +3493,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIwatchRequest"></a>
-## APIwatchRequest
+<a id="APIwatchArticleRequest"></a>
+## APIwatchArticleRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

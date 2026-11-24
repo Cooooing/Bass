@@ -13,47 +13,37 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.Moonbreeze;
+import com.bass.bbs.model.ImageResp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for PageMoonbreezesResp
+ * Model tests for RenderMakerBadgeResp
  */
-class PageMoonbreezesRespTest {
-    private final PageMoonbreezesResp model = new PageMoonbreezesResp();
+class RenderMakerBadgeRespTest {
+    private final RenderMakerBadgeResp model = new RenderMakerBadgeResp();
 
     /**
-     * Model tests for PageMoonbreezesResp
+     * Model tests for RenderMakerBadgeResp
      */
     @Test
-    void testPageMoonbreezesResp() {
-        // TODO: test PageMoonbreezesResp
+    void testRenderMakerBadgeResp() {
+        // TODO: test RenderMakerBadgeResp
     }
 
     /**
-     * Test the property 'rows'
+     * Test the property 'rawBody'
      */
     @Test
-    void rowsTest() {
-        // TODO: test rows
-    }
-
-    /**
-     * Test the property 'nextCursor'
-     */
-    @Test
-    void nextCursorTest() {
-        // TODO: test nextCursor
+    void rawBodyTest() {
+        // TODO: test rawBody
     }
 
 }

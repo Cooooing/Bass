@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleLotteryDraft
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleLotteryDraft.JSON_PROPERTY_PRIZES,
@@ -67,7 +67,7 @@ public class ArticleLotteryDraft {
   }
 
   /**
-   * Get prizes
+   * 奖项配置
    * @return prizes
    */
   @javax.annotation.Nullable
@@ -91,7 +91,7 @@ public class ArticleLotteryDraft {
   }
 
   /**
-   * Get drawAt
+   * 开奖时间
    * @return drawAt
    */
   @javax.annotation.Nullable

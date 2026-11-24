@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SetGlobalChatTopicResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   SetGlobalChatTopicResp.JSON_PROPERTY_TOPIC
@@ -51,7 +51,7 @@ public class SetGlobalChatTopicResp {
   }
 
   /**
-   * Get topic
+   * 话题记录。
    * @return topic
    */
   @javax.annotation.Nullable

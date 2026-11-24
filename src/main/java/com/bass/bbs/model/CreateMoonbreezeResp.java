@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateMoonbreezeResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CreateMoonbreezeResp.JSON_PROPERTY_MOONBREEZE
@@ -51,7 +51,7 @@ public class CreateMoonbreezeResp {
   }
 
   /**
-   * Get moonbreeze
+   * 协议字段。
    * @return moonbreeze
    */
   @javax.annotation.Nullable

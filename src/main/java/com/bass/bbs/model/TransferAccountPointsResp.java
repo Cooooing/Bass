@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * TransferAccountPointsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   TransferAccountPointsResp.JSON_PROPERTY_BALANCE
@@ -50,7 +50,7 @@ public class TransferAccountPointsResp {
   }
 
   /**
-   * Get balance
+   * 转账后的当前积分
    * @return balance
    */
   @javax.annotation.Nullable

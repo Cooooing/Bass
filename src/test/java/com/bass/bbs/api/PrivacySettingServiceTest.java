@@ -45,14 +45,14 @@ public class PrivacySettingServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getCurrentTest() throws ApiException {
+    public void getCurrentPrivacySettingTest() throws ApiException {
         Object body = null;
         
-        PrivacySettingService.APIgetCurrentRequest request = PrivacySettingService.APIgetCurrentRequest.newBuilder()
+        PrivacySettingService.APIgetCurrentPrivacySettingRequest request = PrivacySettingService.APIgetCurrentPrivacySettingRequest.newBuilder()
           .body(body)
           .build();
         GetCurrentPrivacySettingResp response = 
-        api.getCurrent(request);
+        api.getCurrentPrivacySetting(request);
 
         // TODO: test validations
     }
@@ -66,14 +66,14 @@ public class PrivacySettingServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updateCurrentTest() throws ApiException {
+    public void updateCurrentPrivacySettingTest() throws ApiException {
         UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = null;
         
-        PrivacySettingService.APIupdateCurrentRequest request = PrivacySettingService.APIupdateCurrentRequest.newBuilder()
+        PrivacySettingService.APIupdateCurrentPrivacySettingRequest request = PrivacySettingService.APIupdateCurrentPrivacySettingRequest.newBuilder()
           .updateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq)
           .build();
         UpdateCurrentPrivacySettingResp response = 
-        api.updateCurrent(request);
+        api.updateCurrentPrivacySetting(request);
 
         // TODO: test validations
     }

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateProfileAccountResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   UpdateProfileAccountResp.JSON_PROPERTY_PROFILE
@@ -51,7 +51,7 @@ public class UpdateProfileAccountResp {
   }
 
   /**
-   * Get profile
+   * 更新后的账号资料
    * @return profile
    */
   @javax.annotation.Nullable

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * AddEmojiItemResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   AddEmojiItemResp.JSON_PROPERTY_ITEM
@@ -51,7 +51,7 @@ public class AddEmojiItemResp {
   }
 
   /**
-   * Get item
+   * 已添加表情项。
    * @return item
    */
   @javax.annotation.Nullable

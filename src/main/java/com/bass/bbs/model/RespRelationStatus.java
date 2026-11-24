@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespRelationStatus
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespRelationStatus.JSON_PROPERTY_TARGET_ID,
@@ -70,7 +70,7 @@ public class RespRelationStatus {
   }
 
   /**
-   * Get targetId
+   * 目标账号 ID
    * @return targetId
    */
   @javax.annotation.Nullable
@@ -94,7 +94,7 @@ public class RespRelationStatus {
   }
 
   /**
-   * Get following
+   * 当前账号是否关注目标账号
    * @return following
    */
   @javax.annotation.Nullable
@@ -118,7 +118,7 @@ public class RespRelationStatus {
   }
 
   /**
-   * Get followedBy
+   * 目标账号是否关注当前账号
    * @return followedBy
    */
   @javax.annotation.Nullable
@@ -142,7 +142,7 @@ public class RespRelationStatus {
   }
 
   /**
-   * Get blocking
+   * 当前账号是否拉黑目标账号
    * @return blocking
    */
   @javax.annotation.Nullable
@@ -166,7 +166,7 @@ public class RespRelationStatus {
   }
 
   /**
-   * Get blockedBy
+   * 目标账号是否拉黑当前账号
    * @return blockedBy
    */
   @javax.annotation.Nullable

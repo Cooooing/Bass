@@ -4,176 +4,26 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**callList**](CommentService.md#callList) | **POST** /v1/content/comment/list |  |
-| [**callListWithHttpInfo**](CommentService.md#callListWithHttpInfo) | **POST** /v1/content/comment/list |  |
-| [**create**](CommentService.md#create) | **POST** /v1/content/comment/create |  |
-| [**createWithHttpInfo**](CommentService.md#createWithHttpInfo) | **POST** /v1/content/comment/create |  |
-| [**like**](CommentService.md#like) | **POST** /v1/content/comment/like |  |
-| [**likeWithHttpInfo**](CommentService.md#likeWithHttpInfo) | **POST** /v1/content/comment/like |  |
-| [**listReplies**](CommentService.md#listReplies) | **POST** /v1/content/comment/list-replies |  |
-| [**listRepliesWithHttpInfo**](CommentService.md#listRepliesWithHttpInfo) | **POST** /v1/content/comment/list-replies |  |
-| [**listThreads**](CommentService.md#listThreads) | **POST** /v1/content/comment/list-threads |  |
-| [**listThreadsWithHttpInfo**](CommentService.md#listThreadsWithHttpInfo) | **POST** /v1/content/comment/list-threads |  |
-| [**listTimeline**](CommentService.md#listTimeline) | **POST** /v1/content/comment/list-timeline |  |
-| [**listTimelineWithHttpInfo**](CommentService.md#listTimelineWithHttpInfo) | **POST** /v1/content/comment/list-timeline |  |
-| [**thank**](CommentService.md#thank) | **POST** /v1/content/comment/thank |  |
-| [**thankWithHttpInfo**](CommentService.md#thankWithHttpInfo) | **POST** /v1/content/comment/thank |  |
+| [**createComment**](CommentService.md#createComment) | **POST** /v1/content/comment/create |  |
+| [**createCommentWithHttpInfo**](CommentService.md#createCommentWithHttpInfo) | **POST** /v1/content/comment/create |  |
+| [**likeComment**](CommentService.md#likeComment) | **POST** /v1/content/comment/like |  |
+| [**likeCommentWithHttpInfo**](CommentService.md#likeCommentWithHttpInfo) | **POST** /v1/content/comment/like |  |
+| [**listCommentReplies**](CommentService.md#listCommentReplies) | **POST** /v1/content/comment/list-replies |  |
+| [**listCommentRepliesWithHttpInfo**](CommentService.md#listCommentRepliesWithHttpInfo) | **POST** /v1/content/comment/list-replies |  |
+| [**listCommentThreads**](CommentService.md#listCommentThreads) | **POST** /v1/content/comment/list-threads |  |
+| [**listCommentThreadsWithHttpInfo**](CommentService.md#listCommentThreadsWithHttpInfo) | **POST** /v1/content/comment/list-threads |  |
+| [**listCommentTimeline**](CommentService.md#listCommentTimeline) | **POST** /v1/content/comment/list-timeline |  |
+| [**listCommentTimelineWithHttpInfo**](CommentService.md#listCommentTimelineWithHttpInfo) | **POST** /v1/content/comment/list-timeline |  |
+| [**listComments**](CommentService.md#listComments) | **POST** /v1/content/comment/list |  |
+| [**listCommentsWithHttpInfo**](CommentService.md#listCommentsWithHttpInfo) | **POST** /v1/content/comment/list |  |
+| [**thankComment**](CommentService.md#thankComment) | **POST** /v1/content/comment/thank |  |
+| [**thankCommentWithHttpInfo**](CommentService.md#thankCommentWithHttpInfo) | **POST** /v1/content/comment/thank |  |
 
 
 
-## callList
+## createComment
 
-> ListCommentsResp callList(callListRequest)
-
-
-
-分页查询评论列表。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.CommentService;
-import com.bass.bbs.api.CommentService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        CommentService apiInstance = new CommentService(defaultClient);
-        ListCommentsReq listCommentsReq = new ListCommentsReq(); // ListCommentsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listCommentsReq(listCommentsReq)
-                .build();
-            ListCommentsResp result = apiInstance.callList(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](CommentService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-[**ListCommentsResp**](ListCommentsResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## callListWithHttpInfo
-
-> ApiResponse<ListCommentsResp> callListWithHttpInfo(callListRequest)
-
-
-
-分页查询评论列表。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.CommentService;
-import com.bass.bbs.api.CommentService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        CommentService apiInstance = new CommentService(defaultClient);
-        ListCommentsReq listCommentsReq = new ListCommentsReq(); // ListCommentsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listCommentsReq(listCommentsReq)
-                .build();
-            ApiResponse<ListCommentsResp> response = apiInstance.callListWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](CommentService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**ListCommentsResp**](ListCommentsResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIcallListRequest"></a>
-## APIcallListRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **listCommentsReq** | [**ListCommentsReq**](ListCommentsReq.md) |  | |
-
-
-
-## create
-
-> CreateCommentResp create(createRequest)
+> CreateCommentResp createComment(createCommentRequest)
 
 
 
@@ -198,13 +48,13 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         CreateCommentReq createCommentReq = new CreateCommentReq(); // CreateCommentReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
+            APIcreateCommentRequest request = APIcreateCommentRequest.newBuilder()
                 .createCommentReq(createCommentReq)
                 .build();
-            CreateCommentResp result = apiInstance.create(request);
+            CreateCommentResp result = apiInstance.createComment(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#create");
+            System.err.println("Exception when calling CommentService#createComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -218,7 +68,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](CommentService.md#APIcreateRequest)|-|-|
+| createCommentRequest | [**APIcreateCommentRequest**](CommentService.md#APIcreateCommentRequest)|-|-|
 
 ### Return type
 
@@ -239,9 +89,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createWithHttpInfo
+## createCommentWithHttpInfo
 
-> ApiResponse<CreateCommentResp> createWithHttpInfo(createRequest)
+> ApiResponse<CreateCommentResp> createCommentWithHttpInfo(createCommentRequest)
 
 
 
@@ -267,15 +117,15 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         CreateCommentReq createCommentReq = new CreateCommentReq(); // CreateCommentReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
+            APIcreateCommentRequest request = APIcreateCommentRequest.newBuilder()
                 .createCommentReq(createCommentReq)
                 .build();
-            ApiResponse<CreateCommentResp> response = apiInstance.createWithHttpInfo(request);
+            ApiResponse<CreateCommentResp> response = apiInstance.createCommentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#create");
+            System.err.println("Exception when calling CommentService#createComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -289,7 +139,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](CommentService.md#APIcreateRequest)|-|-|
+| createCommentRequest | [**APIcreateCommentRequest**](CommentService.md#APIcreateCommentRequest)|-|-|
 
 ### Return type
 
@@ -311,8 +161,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateRequest"></a>
-## APIcreateRequest
+<a id="APIcreateCommentRequest"></a>
+## APIcreateCommentRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -321,9 +171,9 @@ No authorization required
 
 
 
-## like
+## likeComment
 
-> LikeCommentResp like(likeRequest)
+> LikeCommentResp likeComment(likeCommentRequest)
 
 
 
@@ -348,13 +198,13 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         LikeCommentReq likeCommentReq = new LikeCommentReq(); // LikeCommentReq | 
         try {
-            APIlikeRequest request = APIlikeRequest.newBuilder()
+            APIlikeCommentRequest request = APIlikeCommentRequest.newBuilder()
                 .likeCommentReq(likeCommentReq)
                 .build();
-            LikeCommentResp result = apiInstance.like(request);
+            LikeCommentResp result = apiInstance.likeComment(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#like");
+            System.err.println("Exception when calling CommentService#likeComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -368,7 +218,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| likeRequest | [**APIlikeRequest**](CommentService.md#APIlikeRequest)|-|-|
+| likeCommentRequest | [**APIlikeCommentRequest**](CommentService.md#APIlikeCommentRequest)|-|-|
 
 ### Return type
 
@@ -389,9 +239,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## likeWithHttpInfo
+## likeCommentWithHttpInfo
 
-> ApiResponse<LikeCommentResp> likeWithHttpInfo(likeRequest)
+> ApiResponse<LikeCommentResp> likeCommentWithHttpInfo(likeCommentRequest)
 
 
 
@@ -417,15 +267,15 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         LikeCommentReq likeCommentReq = new LikeCommentReq(); // LikeCommentReq | 
         try {
-            APIlikeRequest request = APIlikeRequest.newBuilder()
+            APIlikeCommentRequest request = APIlikeCommentRequest.newBuilder()
                 .likeCommentReq(likeCommentReq)
                 .build();
-            ApiResponse<LikeCommentResp> response = apiInstance.likeWithHttpInfo(request);
+            ApiResponse<LikeCommentResp> response = apiInstance.likeCommentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#like");
+            System.err.println("Exception when calling CommentService#likeComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -439,7 +289,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| likeRequest | [**APIlikeRequest**](CommentService.md#APIlikeRequest)|-|-|
+| likeCommentRequest | [**APIlikeCommentRequest**](CommentService.md#APIlikeCommentRequest)|-|-|
 
 ### Return type
 
@@ -461,8 +311,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlikeRequest"></a>
-## APIlikeRequest
+<a id="APIlikeCommentRequest"></a>
+## APIlikeCommentRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -471,9 +321,9 @@ No authorization required
 
 
 
-## listReplies
+## listCommentReplies
 
-> ListCommentRepliesResp listReplies(listRepliesRequest)
+> ListCommentRepliesResp listCommentReplies(listCommentRepliesRequest)
 
 
 
@@ -498,13 +348,13 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ListCommentRepliesReq listCommentRepliesReq = new ListCommentRepliesReq(); // ListCommentRepliesReq | 
         try {
-            APIlistRepliesRequest request = APIlistRepliesRequest.newBuilder()
+            APIlistCommentRepliesRequest request = APIlistCommentRepliesRequest.newBuilder()
                 .listCommentRepliesReq(listCommentRepliesReq)
                 .build();
-            ListCommentRepliesResp result = apiInstance.listReplies(request);
+            ListCommentRepliesResp result = apiInstance.listCommentReplies(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#listReplies");
+            System.err.println("Exception when calling CommentService#listCommentReplies");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -518,7 +368,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listRepliesRequest | [**APIlistRepliesRequest**](CommentService.md#APIlistRepliesRequest)|-|-|
+| listCommentRepliesRequest | [**APIlistCommentRepliesRequest**](CommentService.md#APIlistCommentRepliesRequest)|-|-|
 
 ### Return type
 
@@ -539,9 +389,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listRepliesWithHttpInfo
+## listCommentRepliesWithHttpInfo
 
-> ApiResponse<ListCommentRepliesResp> listRepliesWithHttpInfo(listRepliesRequest)
+> ApiResponse<ListCommentRepliesResp> listCommentRepliesWithHttpInfo(listCommentRepliesRequest)
 
 
 
@@ -567,15 +417,15 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ListCommentRepliesReq listCommentRepliesReq = new ListCommentRepliesReq(); // ListCommentRepliesReq | 
         try {
-            APIlistRepliesRequest request = APIlistRepliesRequest.newBuilder()
+            APIlistCommentRepliesRequest request = APIlistCommentRepliesRequest.newBuilder()
                 .listCommentRepliesReq(listCommentRepliesReq)
                 .build();
-            ApiResponse<ListCommentRepliesResp> response = apiInstance.listRepliesWithHttpInfo(request);
+            ApiResponse<ListCommentRepliesResp> response = apiInstance.listCommentRepliesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#listReplies");
+            System.err.println("Exception when calling CommentService#listCommentReplies");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -589,7 +439,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listRepliesRequest | [**APIlistRepliesRequest**](CommentService.md#APIlistRepliesRequest)|-|-|
+| listCommentRepliesRequest | [**APIlistCommentRepliesRequest**](CommentService.md#APIlistCommentRepliesRequest)|-|-|
 
 ### Return type
 
@@ -611,8 +461,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistRepliesRequest"></a>
-## APIlistRepliesRequest
+<a id="APIlistCommentRepliesRequest"></a>
+## APIlistCommentRepliesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -621,9 +471,9 @@ No authorization required
 
 
 
-## listThreads
+## listCommentThreads
 
-> ListCommentThreadsResp listThreads(listThreadsRequest)
+> ListCommentThreadsResp listCommentThreads(listCommentThreadsRequest)
 
 
 
@@ -648,13 +498,13 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ListCommentThreadsReq listCommentThreadsReq = new ListCommentThreadsReq(); // ListCommentThreadsReq | 
         try {
-            APIlistThreadsRequest request = APIlistThreadsRequest.newBuilder()
+            APIlistCommentThreadsRequest request = APIlistCommentThreadsRequest.newBuilder()
                 .listCommentThreadsReq(listCommentThreadsReq)
                 .build();
-            ListCommentThreadsResp result = apiInstance.listThreads(request);
+            ListCommentThreadsResp result = apiInstance.listCommentThreads(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#listThreads");
+            System.err.println("Exception when calling CommentService#listCommentThreads");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -668,7 +518,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listThreadsRequest | [**APIlistThreadsRequest**](CommentService.md#APIlistThreadsRequest)|-|-|
+| listCommentThreadsRequest | [**APIlistCommentThreadsRequest**](CommentService.md#APIlistCommentThreadsRequest)|-|-|
 
 ### Return type
 
@@ -689,9 +539,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listThreadsWithHttpInfo
+## listCommentThreadsWithHttpInfo
 
-> ApiResponse<ListCommentThreadsResp> listThreadsWithHttpInfo(listThreadsRequest)
+> ApiResponse<ListCommentThreadsResp> listCommentThreadsWithHttpInfo(listCommentThreadsRequest)
 
 
 
@@ -717,15 +567,15 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ListCommentThreadsReq listCommentThreadsReq = new ListCommentThreadsReq(); // ListCommentThreadsReq | 
         try {
-            APIlistThreadsRequest request = APIlistThreadsRequest.newBuilder()
+            APIlistCommentThreadsRequest request = APIlistCommentThreadsRequest.newBuilder()
                 .listCommentThreadsReq(listCommentThreadsReq)
                 .build();
-            ApiResponse<ListCommentThreadsResp> response = apiInstance.listThreadsWithHttpInfo(request);
+            ApiResponse<ListCommentThreadsResp> response = apiInstance.listCommentThreadsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#listThreads");
+            System.err.println("Exception when calling CommentService#listCommentThreads");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -739,7 +589,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listThreadsRequest | [**APIlistThreadsRequest**](CommentService.md#APIlistThreadsRequest)|-|-|
+| listCommentThreadsRequest | [**APIlistCommentThreadsRequest**](CommentService.md#APIlistCommentThreadsRequest)|-|-|
 
 ### Return type
 
@@ -761,8 +611,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistThreadsRequest"></a>
-## APIlistThreadsRequest
+<a id="APIlistCommentThreadsRequest"></a>
+## APIlistCommentThreadsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -771,9 +621,9 @@ No authorization required
 
 
 
-## listTimeline
+## listCommentTimeline
 
-> ListCommentTimelineResp listTimeline(listTimelineRequest)
+> ListCommentTimelineResp listCommentTimeline(listCommentTimelineRequest)
 
 
 
@@ -798,13 +648,13 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ListCommentTimelineReq listCommentTimelineReq = new ListCommentTimelineReq(); // ListCommentTimelineReq | 
         try {
-            APIlistTimelineRequest request = APIlistTimelineRequest.newBuilder()
+            APIlistCommentTimelineRequest request = APIlistCommentTimelineRequest.newBuilder()
                 .listCommentTimelineReq(listCommentTimelineReq)
                 .build();
-            ListCommentTimelineResp result = apiInstance.listTimeline(request);
+            ListCommentTimelineResp result = apiInstance.listCommentTimeline(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#listTimeline");
+            System.err.println("Exception when calling CommentService#listCommentTimeline");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -818,7 +668,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listTimelineRequest | [**APIlistTimelineRequest**](CommentService.md#APIlistTimelineRequest)|-|-|
+| listCommentTimelineRequest | [**APIlistCommentTimelineRequest**](CommentService.md#APIlistCommentTimelineRequest)|-|-|
 
 ### Return type
 
@@ -839,9 +689,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listTimelineWithHttpInfo
+## listCommentTimelineWithHttpInfo
 
-> ApiResponse<ListCommentTimelineResp> listTimelineWithHttpInfo(listTimelineRequest)
+> ApiResponse<ListCommentTimelineResp> listCommentTimelineWithHttpInfo(listCommentTimelineRequest)
 
 
 
@@ -867,15 +717,15 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ListCommentTimelineReq listCommentTimelineReq = new ListCommentTimelineReq(); // ListCommentTimelineReq | 
         try {
-            APIlistTimelineRequest request = APIlistTimelineRequest.newBuilder()
+            APIlistCommentTimelineRequest request = APIlistCommentTimelineRequest.newBuilder()
                 .listCommentTimelineReq(listCommentTimelineReq)
                 .build();
-            ApiResponse<ListCommentTimelineResp> response = apiInstance.listTimelineWithHttpInfo(request);
+            ApiResponse<ListCommentTimelineResp> response = apiInstance.listCommentTimelineWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#listTimeline");
+            System.err.println("Exception when calling CommentService#listCommentTimeline");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -889,7 +739,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listTimelineRequest | [**APIlistTimelineRequest**](CommentService.md#APIlistTimelineRequest)|-|-|
+| listCommentTimelineRequest | [**APIlistCommentTimelineRequest**](CommentService.md#APIlistCommentTimelineRequest)|-|-|
 
 ### Return type
 
@@ -911,8 +761,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistTimelineRequest"></a>
-## APIlistTimelineRequest
+<a id="APIlistCommentTimelineRequest"></a>
+## APIlistCommentTimelineRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -921,9 +771,159 @@ No authorization required
 
 
 
-## thank
+## listComments
 
-> ThankCommentResp thank(thankRequest)
+> ListCommentsResp listComments(listCommentsRequest)
+
+
+
+分页查询评论列表。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.CommentService;
+import com.bass.bbs.api.CommentService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        CommentService apiInstance = new CommentService(defaultClient);
+        ListCommentsReq listCommentsReq = new ListCommentsReq(); // ListCommentsReq | 
+        try {
+            APIlistCommentsRequest request = APIlistCommentsRequest.newBuilder()
+                .listCommentsReq(listCommentsReq)
+                .build();
+            ListCommentsResp result = apiInstance.listComments(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CommentService#listComments");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listCommentsRequest | [**APIlistCommentsRequest**](CommentService.md#APIlistCommentsRequest)|-|-|
+
+### Return type
+
+[**ListCommentsResp**](ListCommentsResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listCommentsWithHttpInfo
+
+> ApiResponse<ListCommentsResp> listCommentsWithHttpInfo(listCommentsRequest)
+
+
+
+分页查询评论列表。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.CommentService;
+import com.bass.bbs.api.CommentService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        CommentService apiInstance = new CommentService(defaultClient);
+        ListCommentsReq listCommentsReq = new ListCommentsReq(); // ListCommentsReq | 
+        try {
+            APIlistCommentsRequest request = APIlistCommentsRequest.newBuilder()
+                .listCommentsReq(listCommentsReq)
+                .build();
+            ApiResponse<ListCommentsResp> response = apiInstance.listCommentsWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CommentService#listComments");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listCommentsRequest | [**APIlistCommentsRequest**](CommentService.md#APIlistCommentsRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListCommentsResp**](ListCommentsResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistCommentsRequest"></a>
+## APIlistCommentsRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listCommentsReq** | [**ListCommentsReq**](ListCommentsReq.md) |  | |
+
+
+
+## thankComment
+
+> ThankCommentResp thankComment(thankCommentRequest)
 
 
 
@@ -948,13 +948,13 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ThankCommentReq thankCommentReq = new ThankCommentReq(); // ThankCommentReq | 
         try {
-            APIthankRequest request = APIthankRequest.newBuilder()
+            APIthankCommentRequest request = APIthankCommentRequest.newBuilder()
                 .thankCommentReq(thankCommentReq)
                 .build();
-            ThankCommentResp result = apiInstance.thank(request);
+            ThankCommentResp result = apiInstance.thankComment(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#thank");
+            System.err.println("Exception when calling CommentService#thankComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -968,7 +968,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| thankRequest | [**APIthankRequest**](CommentService.md#APIthankRequest)|-|-|
+| thankCommentRequest | [**APIthankCommentRequest**](CommentService.md#APIthankCommentRequest)|-|-|
 
 ### Return type
 
@@ -989,9 +989,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## thankWithHttpInfo
+## thankCommentWithHttpInfo
 
-> ApiResponse<ThankCommentResp> thankWithHttpInfo(thankRequest)
+> ApiResponse<ThankCommentResp> thankCommentWithHttpInfo(thankCommentRequest)
 
 
 
@@ -1017,15 +1017,15 @@ public class Example {
         CommentService apiInstance = new CommentService(defaultClient);
         ThankCommentReq thankCommentReq = new ThankCommentReq(); // ThankCommentReq | 
         try {
-            APIthankRequest request = APIthankRequest.newBuilder()
+            APIthankCommentRequest request = APIthankCommentRequest.newBuilder()
                 .thankCommentReq(thankCommentReq)
                 .build();
-            ApiResponse<ThankCommentResp> response = apiInstance.thankWithHttpInfo(request);
+            ApiResponse<ThankCommentResp> response = apiInstance.thankCommentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling CommentService#thank");
+            System.err.println("Exception when calling CommentService#thankComment");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1039,7 +1039,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| thankRequest | [**APIthankRequest**](CommentService.md#APIthankRequest)|-|-|
+| thankCommentRequest | [**APIthankCommentRequest**](CommentService.md#APIthankCommentRequest)|-|-|
 
 ### Return type
 
@@ -1061,8 +1061,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIthankRequest"></a>
-## APIthankRequest
+<a id="APIthankCommentRequest"></a>
+## APIthankCommentRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

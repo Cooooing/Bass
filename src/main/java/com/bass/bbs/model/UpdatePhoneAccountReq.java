@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdatePhoneAccountReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   UpdatePhoneAccountReq.JSON_PROPERTY_PHONE,
@@ -55,7 +55,7 @@ public class UpdatePhoneAccountReq {
   }
 
   /**
-   * Get phone
+   * 新手机号，必填
    * @return phone
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class UpdatePhoneAccountReq {
   }
 
   /**
-   * Get code
+   * 手机 OTP，必填
    * @return code
    */
   @javax.annotation.Nonnull

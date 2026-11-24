@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PrepareBadgeImageUploadResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   PrepareBadgeImageUploadResp.JSON_PROPERTY_ASSET_ID,
@@ -62,7 +62,7 @@ public class PrepareBadgeImageUploadResp {
   }
 
   /**
-   * Get assetId
+   * 已存在资源的 ID。
    * @return assetId
    */
   @javax.annotation.Nullable
@@ -86,7 +86,7 @@ public class PrepareBadgeImageUploadResp {
   }
 
   /**
-   * Get uploadUrl
+   * 新资源的 MinIO multipart POST 地址。
    * @return uploadUrl
    */
   @javax.annotation.Nullable
@@ -118,7 +118,7 @@ public class PrepareBadgeImageUploadResp {
   }
 
   /**
-   * Get formFields
+   * MinIO multipart POST 表单字段。
    * @return formFields
    */
   @javax.annotation.Nullable

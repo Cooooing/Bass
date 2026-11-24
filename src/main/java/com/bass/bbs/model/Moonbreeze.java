@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * Moonbreeze
+ * 协议消息。
  */
 @JsonPropertyOrder({
   Moonbreeze.JSON_PROPERTY_ID,
@@ -72,7 +72,7 @@ public class Moonbreeze {
   }
 
   /**
-   * Get id
+   * 协议字段。
    * @return id
    */
   @javax.annotation.Nullable
@@ -96,7 +96,7 @@ public class Moonbreeze {
   }
 
   /**
-   * Get content
+   * 协议字段。
    * @return content
    */
   @javax.annotation.Nullable
@@ -120,7 +120,7 @@ public class Moonbreeze {
   }
 
   /**
-   * Get author
+   * 协议字段。
    * @return author
    */
   @javax.annotation.Nullable
@@ -144,7 +144,7 @@ public class Moonbreeze {
   }
 
   /**
-   * Get city
+   * 协议字段。
    * @return city
    */
   @javax.annotation.Nullable
@@ -168,7 +168,7 @@ public class Moonbreeze {
   }
 
   /**
-   * Get createdAt
+   * 协议字段。
    * @return createdAt
    */
   @javax.annotation.Nullable

@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GlobalChatBarrage
+ * 协议消息。
  */
 @JsonPropertyOrder({
   GlobalChatBarrage.JSON_PROPERTY_ID,
@@ -77,7 +77,7 @@ public class GlobalChatBarrage {
   }
 
   /**
-   * Get id
+   * 弹幕 ID。
    * @return id
    */
   @javax.annotation.Nullable
@@ -101,7 +101,7 @@ public class GlobalChatBarrage {
   }
 
   /**
-   * Get userId
+   * 发送账号 ID。
    * @return userId
    */
   @javax.annotation.Nullable
@@ -125,7 +125,7 @@ public class GlobalChatBarrage {
   }
 
   /**
-   * Get content
+   * 纯文本弹幕内容。
    * @return content
    */
   @javax.annotation.Nullable
@@ -149,7 +149,7 @@ public class GlobalChatBarrage {
   }
 
   /**
-   * Get pointsCost
+   * 本次实际消耗的积分。
    * @return pointsCost
    */
   @javax.annotation.Nullable
@@ -173,7 +173,7 @@ public class GlobalChatBarrage {
   }
 
   /**
-   * Get sender
+   * 发送者展示资料。
    * @return sender
    */
   @javax.annotation.Nullable
@@ -197,7 +197,7 @@ public class GlobalChatBarrage {
   }
 
   /**
-   * Get createdAt
+   * 创建时间。
    * @return createdAt
    */
   @javax.annotation.Nullable

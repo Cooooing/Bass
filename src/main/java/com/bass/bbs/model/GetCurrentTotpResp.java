@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetCurrentTotpResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetCurrentTotpResp.JSON_PROPERTY_TOTP
@@ -51,7 +51,7 @@ public class GetCurrentTotpResp {
   }
 
   /**
-   * Get totp
+   * TOTP 状态
    * @return totp
    */
   @javax.annotation.Nullable

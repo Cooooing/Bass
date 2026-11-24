@@ -201,50 +201,50 @@ public class ArticleService {
   /**
    * 
    * 采纳文章回答
-   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @param apiRequest {@link APIAcceptArticleAnswerRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object acceptAnswer(APIAcceptAnswerRequest apiRequest) throws ApiException {
-    return acceptAnswer(apiRequest, null);
+  public Object acceptArticleAnswer(APIAcceptArticleAnswerRequest apiRequest) throws ApiException {
+    return acceptArticleAnswer(apiRequest, null);
   }
 
   /**
    * 
    * 采纳文章回答
-   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @param apiRequest {@link APIAcceptArticleAnswerRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object acceptAnswer(APIAcceptAnswerRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object acceptArticleAnswer(APIAcceptArticleAnswerRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     AcceptArticleAnswerReq acceptArticleAnswerReq = apiRequest.acceptArticleAnswerReq();
-    return acceptAnswer(acceptArticleAnswerReq, headers);
+    return acceptArticleAnswer(acceptArticleAnswerReq, headers);
   }
 
   /**
    * 
    * 采纳文章回答
-   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @param apiRequest {@link APIAcceptArticleAnswerRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> acceptAnswerWithHttpInfo(APIAcceptAnswerRequest apiRequest) throws ApiException {
-    return acceptAnswerWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> acceptArticleAnswerWithHttpInfo(APIAcceptArticleAnswerRequest apiRequest) throws ApiException {
+    return acceptArticleAnswerWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 采纳文章回答
-   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @param apiRequest {@link APIAcceptArticleAnswerRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> acceptAnswerWithHttpInfo(APIAcceptAnswerRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> acceptArticleAnswerWithHttpInfo(APIAcceptArticleAnswerRequest apiRequest, Map<String, String> headers) throws ApiException {
     AcceptArticleAnswerReq acceptArticleAnswerReq = apiRequest.acceptArticleAnswerReq();
-    return acceptAnswerWithHttpInfo(acceptArticleAnswerReq, headers);
+    return acceptArticleAnswerWithHttpInfo(acceptArticleAnswerReq, headers);
   }
 
   /**
@@ -254,8 +254,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object acceptAnswer(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq) throws ApiException {
-    return acceptAnswer(acceptArticleAnswerReq, null);
+  public Object acceptArticleAnswer(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq) throws ApiException {
+    return acceptArticleAnswer(acceptArticleAnswerReq, null);
   }
 
   /**
@@ -266,8 +266,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object acceptAnswer(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = acceptAnswerWithHttpInfo(acceptArticleAnswerReq, headers);
+  public Object acceptArticleAnswer(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = acceptArticleAnswerWithHttpInfo(acceptArticleAnswerReq, headers);
     return localVarResponse.getData();
   }
 
@@ -278,8 +278,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> acceptAnswerWithHttpInfo(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq) throws ApiException {
-    return acceptAnswerWithHttpInfo(acceptArticleAnswerReq, null);
+  public ApiResponse<Object> acceptArticleAnswerWithHttpInfo(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq) throws ApiException {
+    return acceptArticleAnswerWithHttpInfo(acceptArticleAnswerReq, null);
   }
 
   /**
@@ -290,8 +290,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> acceptAnswerWithHttpInfo(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = acceptAnswerRequestBuilder(acceptArticleAnswerReq, headers);
+  public ApiResponse<Object> acceptArticleAnswerWithHttpInfo(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = acceptArticleAnswerRequestBuilder(acceptArticleAnswerReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -302,7 +302,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("acceptAnswer", localVarResponse);
+          throw getApiException("acceptArticleAnswer", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -338,10 +338,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder acceptAnswerRequestBuilder(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder acceptArticleAnswerRequestBuilder(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'acceptArticleAnswerReq' is set
     if (acceptArticleAnswerReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'acceptArticleAnswerReq' when calling acceptAnswer");
+      throw new ApiException(400, "Missing the required parameter 'acceptArticleAnswerReq' when calling acceptArticleAnswer");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -371,11 +371,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIAcceptAnswerRequest {
+  public static final class APIAcceptArticleAnswerRequest {
     @javax.annotation.Nonnull
     private AcceptArticleAnswerReq acceptArticleAnswerReq; //  (required)
 
-    private APIAcceptAnswerRequest(Builder builder) {
+    private APIAcceptArticleAnswerRequest(Builder builder) {
       this.acceptArticleAnswerReq = builder.acceptArticleAnswerReq;
     }
     @javax.annotation.Nonnull
@@ -393,8 +393,8 @@ public class ArticleService {
         this.acceptArticleAnswerReq = acceptArticleAnswerReq;
         return this;
       }
-      public APIAcceptAnswerRequest build() {
-        return new APIAcceptAnswerRequest(this);
+      public APIAcceptArticleAnswerRequest build() {
+        return new APIAcceptArticleAnswerRequest(this);
       }
     }
   }
@@ -402,50 +402,50 @@ public class ArticleService {
   /**
    * 
    * 归档文章
-   * @param apiRequest {@link APIArchiveRequest}
+   * @param apiRequest {@link APIArchiveArticleRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object archive(APIArchiveRequest apiRequest) throws ApiException {
-    return archive(apiRequest, null);
+  public Object archiveArticle(APIArchiveArticleRequest apiRequest) throws ApiException {
+    return archiveArticle(apiRequest, null);
   }
 
   /**
    * 
    * 归档文章
-   * @param apiRequest {@link APIArchiveRequest}
+   * @param apiRequest {@link APIArchiveArticleRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object archive(APIArchiveRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object archiveArticle(APIArchiveArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     ArchiveArticleReq archiveArticleReq = apiRequest.archiveArticleReq();
-    return archive(archiveArticleReq, headers);
+    return archiveArticle(archiveArticleReq, headers);
   }
 
   /**
    * 
    * 归档文章
-   * @param apiRequest {@link APIArchiveRequest}
+   * @param apiRequest {@link APIArchiveArticleRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> archiveWithHttpInfo(APIArchiveRequest apiRequest) throws ApiException {
-    return archiveWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> archiveArticleWithHttpInfo(APIArchiveArticleRequest apiRequest) throws ApiException {
+    return archiveArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 归档文章
-   * @param apiRequest {@link APIArchiveRequest}
+   * @param apiRequest {@link APIArchiveArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> archiveWithHttpInfo(APIArchiveRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> archiveArticleWithHttpInfo(APIArchiveArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     ArchiveArticleReq archiveArticleReq = apiRequest.archiveArticleReq();
-    return archiveWithHttpInfo(archiveArticleReq, headers);
+    return archiveArticleWithHttpInfo(archiveArticleReq, headers);
   }
 
   /**
@@ -455,8 +455,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object archive(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq) throws ApiException {
-    return archive(archiveArticleReq, null);
+  public Object archiveArticle(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq) throws ApiException {
+    return archiveArticle(archiveArticleReq, null);
   }
 
   /**
@@ -467,8 +467,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object archive(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = archiveWithHttpInfo(archiveArticleReq, headers);
+  public Object archiveArticle(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = archiveArticleWithHttpInfo(archiveArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -479,8 +479,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> archiveWithHttpInfo(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq) throws ApiException {
-    return archiveWithHttpInfo(archiveArticleReq, null);
+  public ApiResponse<Object> archiveArticleWithHttpInfo(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq) throws ApiException {
+    return archiveArticleWithHttpInfo(archiveArticleReq, null);
   }
 
   /**
@@ -491,8 +491,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> archiveWithHttpInfo(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = archiveRequestBuilder(archiveArticleReq, headers);
+  public ApiResponse<Object> archiveArticleWithHttpInfo(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = archiveArticleRequestBuilder(archiveArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -503,7 +503,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("archive", localVarResponse);
+          throw getApiException("archiveArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -539,10 +539,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder archiveRequestBuilder(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder archiveArticleRequestBuilder(@javax.annotation.Nonnull ArchiveArticleReq archiveArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'archiveArticleReq' is set
     if (archiveArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'archiveArticleReq' when calling archive");
+      throw new ApiException(400, "Missing the required parameter 'archiveArticleReq' when calling archiveArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -572,11 +572,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIArchiveRequest {
+  public static final class APIArchiveArticleRequest {
     @javax.annotation.Nonnull
     private ArchiveArticleReq archiveArticleReq; //  (required)
 
-    private APIArchiveRequest(Builder builder) {
+    private APIArchiveArticleRequest(Builder builder) {
       this.archiveArticleReq = builder.archiveArticleReq;
     }
     @javax.annotation.Nonnull
@@ -594,209 +594,8 @@ public class ArticleService {
         this.archiveArticleReq = archiveArticleReq;
         return this;
       }
-      public APIArchiveRequest build() {
-        return new APIArchiveRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param apiRequest {@link APICallListRequest}
-   * @return ListArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListArticlesResp callList(APICallListRequest apiRequest) throws ApiException {
-    return callList(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ListArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListArticlesResp callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    ListArticlesReq listArticlesReq = apiRequest.listArticlesReq();
-    return callList(listArticlesReq, headers);
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param apiRequest {@link APICallListRequest}
-   * @return ApiResponse&lt;ListArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListArticlesResp> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
-    return callListWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListArticlesResp> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListArticlesReq listArticlesReq = apiRequest.listArticlesReq();
-    return callListWithHttpInfo(listArticlesReq, headers);
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param listArticlesReq  (required)
-   * @return ListArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListArticlesResp callList(@javax.annotation.Nonnull ListArticlesReq listArticlesReq) throws ApiException {
-    return callList(listArticlesReq, null);
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param listArticlesReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ListArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListArticlesResp callList(@javax.annotation.Nonnull ListArticlesReq listArticlesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListArticlesResp> localVarResponse = callListWithHttpInfo(listArticlesReq, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param listArticlesReq  (required)
-   * @return ApiResponse&lt;ListArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListArticlesResp> callListWithHttpInfo(@javax.annotation.Nonnull ListArticlesReq listArticlesReq) throws ApiException {
-    return callListWithHttpInfo(listArticlesReq, null);
-  }
-
-  /**
-   * 
-   * 查询文章列表
-   * @param listArticlesReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListArticlesResp> callListWithHttpInfo(@javax.annotation.Nonnull ListArticlesReq listArticlesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listArticlesReq, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("callList", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<ListArticlesResp>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListArticlesResp>() {});
-        
-
-        return new ApiResponse<ListArticlesResp>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListArticlesReq listArticlesReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listArticlesReq' is set
-    if (listArticlesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'listArticlesReq' when calling callList");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/content/article/list";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listArticlesReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APICallListRequest {
-    @javax.annotation.Nonnull
-    private ListArticlesReq listArticlesReq; //  (required)
-
-    private APICallListRequest(Builder builder) {
-      this.listArticlesReq = builder.listArticlesReq;
-    }
-    @javax.annotation.Nonnull
-    public ListArticlesReq listArticlesReq() {
-      return listArticlesReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private ListArticlesReq listArticlesReq;
-
-      public Builder listArticlesReq(@javax.annotation.Nonnull ListArticlesReq listArticlesReq) {
-        this.listArticlesReq = listArticlesReq;
-        return this;
-      }
-      public APICallListRequest build() {
-        return new APICallListRequest(this);
+      public APIArchiveArticleRequest build() {
+        return new APIArchiveArticleRequest(this);
       }
     }
   }
@@ -804,50 +603,50 @@ public class ArticleService {
   /**
    * 
    * 取消定时发布
-   * @param apiRequest {@link APICancelPublishRequest}
+   * @param apiRequest {@link APICancelPublishArticleRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object cancelPublish(APICancelPublishRequest apiRequest) throws ApiException {
-    return cancelPublish(apiRequest, null);
+  public Object cancelPublishArticle(APICancelPublishArticleRequest apiRequest) throws ApiException {
+    return cancelPublishArticle(apiRequest, null);
   }
 
   /**
    * 
    * 取消定时发布
-   * @param apiRequest {@link APICancelPublishRequest}
+   * @param apiRequest {@link APICancelPublishArticleRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object cancelPublish(APICancelPublishRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object cancelPublishArticle(APICancelPublishArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CancelPublishArticleReq cancelPublishArticleReq = apiRequest.cancelPublishArticleReq();
-    return cancelPublish(cancelPublishArticleReq, headers);
+    return cancelPublishArticle(cancelPublishArticleReq, headers);
   }
 
   /**
    * 
    * 取消定时发布
-   * @param apiRequest {@link APICancelPublishRequest}
+   * @param apiRequest {@link APICancelPublishArticleRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> cancelPublishWithHttpInfo(APICancelPublishRequest apiRequest) throws ApiException {
-    return cancelPublishWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> cancelPublishArticleWithHttpInfo(APICancelPublishArticleRequest apiRequest) throws ApiException {
+    return cancelPublishArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 取消定时发布
-   * @param apiRequest {@link APICancelPublishRequest}
+   * @param apiRequest {@link APICancelPublishArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> cancelPublishWithHttpInfo(APICancelPublishRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> cancelPublishArticleWithHttpInfo(APICancelPublishArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     CancelPublishArticleReq cancelPublishArticleReq = apiRequest.cancelPublishArticleReq();
-    return cancelPublishWithHttpInfo(cancelPublishArticleReq, headers);
+    return cancelPublishArticleWithHttpInfo(cancelPublishArticleReq, headers);
   }
 
   /**
@@ -857,8 +656,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object cancelPublish(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq) throws ApiException {
-    return cancelPublish(cancelPublishArticleReq, null);
+  public Object cancelPublishArticle(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq) throws ApiException {
+    return cancelPublishArticle(cancelPublishArticleReq, null);
   }
 
   /**
@@ -869,8 +668,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object cancelPublish(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = cancelPublishWithHttpInfo(cancelPublishArticleReq, headers);
+  public Object cancelPublishArticle(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = cancelPublishArticleWithHttpInfo(cancelPublishArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -881,8 +680,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> cancelPublishWithHttpInfo(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq) throws ApiException {
-    return cancelPublishWithHttpInfo(cancelPublishArticleReq, null);
+  public ApiResponse<Object> cancelPublishArticleWithHttpInfo(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq) throws ApiException {
+    return cancelPublishArticleWithHttpInfo(cancelPublishArticleReq, null);
   }
 
   /**
@@ -893,8 +692,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> cancelPublishWithHttpInfo(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = cancelPublishRequestBuilder(cancelPublishArticleReq, headers);
+  public ApiResponse<Object> cancelPublishArticleWithHttpInfo(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = cancelPublishArticleRequestBuilder(cancelPublishArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -905,7 +704,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("cancelPublish", localVarResponse);
+          throw getApiException("cancelPublishArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -941,10 +740,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder cancelPublishRequestBuilder(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder cancelPublishArticleRequestBuilder(@javax.annotation.Nonnull CancelPublishArticleReq cancelPublishArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'cancelPublishArticleReq' is set
     if (cancelPublishArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'cancelPublishArticleReq' when calling cancelPublish");
+      throw new ApiException(400, "Missing the required parameter 'cancelPublishArticleReq' when calling cancelPublishArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -974,11 +773,11 @@ public class ArticleService {
   }
 
 
-  public static final class APICancelPublishRequest {
+  public static final class APICancelPublishArticleRequest {
     @javax.annotation.Nonnull
     private CancelPublishArticleReq cancelPublishArticleReq; //  (required)
 
-    private APICancelPublishRequest(Builder builder) {
+    private APICancelPublishArticleRequest(Builder builder) {
       this.cancelPublishArticleReq = builder.cancelPublishArticleReq;
     }
     @javax.annotation.Nonnull
@@ -996,8 +795,8 @@ public class ArticleService {
         this.cancelPublishArticleReq = cancelPublishArticleReq;
         return this;
       }
-      public APICancelPublishRequest build() {
-        return new APICancelPublishRequest(this);
+      public APICancelPublishArticleRequest build() {
+        return new APICancelPublishArticleRequest(this);
       }
     }
   }
@@ -1005,50 +804,50 @@ public class ArticleService {
   /**
    * 
    * 收藏文章
-   * @param apiRequest {@link APICollectRequest}
+   * @param apiRequest {@link APICollectArticleRequest}
    * @return CollectArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CollectArticleResp collect(APICollectRequest apiRequest) throws ApiException {
-    return collect(apiRequest, null);
+  public CollectArticleResp collectArticle(APICollectArticleRequest apiRequest) throws ApiException {
+    return collectArticle(apiRequest, null);
   }
 
   /**
    * 
    * 收藏文章
-   * @param apiRequest {@link APICollectRequest}
+   * @param apiRequest {@link APICollectArticleRequest}
    * @param headers Optional headers to include in the request
    * @return CollectArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CollectArticleResp collect(APICollectRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CollectArticleResp collectArticle(APICollectArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CollectArticleReq collectArticleReq = apiRequest.collectArticleReq();
-    return collect(collectArticleReq, headers);
+    return collectArticle(collectArticleReq, headers);
   }
 
   /**
    * 
    * 收藏文章
-   * @param apiRequest {@link APICollectRequest}
+   * @param apiRequest {@link APICollectArticleRequest}
    * @return ApiResponse&lt;CollectArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CollectArticleResp> collectWithHttpInfo(APICollectRequest apiRequest) throws ApiException {
-    return collectWithHttpInfo(apiRequest, null);
+  public ApiResponse<CollectArticleResp> collectArticleWithHttpInfo(APICollectArticleRequest apiRequest) throws ApiException {
+    return collectArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 收藏文章
-   * @param apiRequest {@link APICollectRequest}
+   * @param apiRequest {@link APICollectArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CollectArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CollectArticleResp> collectWithHttpInfo(APICollectRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CollectArticleResp> collectArticleWithHttpInfo(APICollectArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     CollectArticleReq collectArticleReq = apiRequest.collectArticleReq();
-    return collectWithHttpInfo(collectArticleReq, headers);
+    return collectArticleWithHttpInfo(collectArticleReq, headers);
   }
 
   /**
@@ -1058,8 +857,8 @@ public class ArticleService {
    * @return CollectArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CollectArticleResp collect(@javax.annotation.Nonnull CollectArticleReq collectArticleReq) throws ApiException {
-    return collect(collectArticleReq, null);
+  public CollectArticleResp collectArticle(@javax.annotation.Nonnull CollectArticleReq collectArticleReq) throws ApiException {
+    return collectArticle(collectArticleReq, null);
   }
 
   /**
@@ -1070,8 +869,8 @@ public class ArticleService {
    * @return CollectArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CollectArticleResp collect(@javax.annotation.Nonnull CollectArticleReq collectArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<CollectArticleResp> localVarResponse = collectWithHttpInfo(collectArticleReq, headers);
+  public CollectArticleResp collectArticle(@javax.annotation.Nonnull CollectArticleReq collectArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CollectArticleResp> localVarResponse = collectArticleWithHttpInfo(collectArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1082,8 +881,8 @@ public class ArticleService {
    * @return ApiResponse&lt;CollectArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CollectArticleResp> collectWithHttpInfo(@javax.annotation.Nonnull CollectArticleReq collectArticleReq) throws ApiException {
-    return collectWithHttpInfo(collectArticleReq, null);
+  public ApiResponse<CollectArticleResp> collectArticleWithHttpInfo(@javax.annotation.Nonnull CollectArticleReq collectArticleReq) throws ApiException {
+    return collectArticleWithHttpInfo(collectArticleReq, null);
   }
 
   /**
@@ -1094,8 +893,8 @@ public class ArticleService {
    * @return ApiResponse&lt;CollectArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CollectArticleResp> collectWithHttpInfo(@javax.annotation.Nonnull CollectArticleReq collectArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = collectRequestBuilder(collectArticleReq, headers);
+  public ApiResponse<CollectArticleResp> collectArticleWithHttpInfo(@javax.annotation.Nonnull CollectArticleReq collectArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = collectArticleRequestBuilder(collectArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1106,7 +905,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("collect", localVarResponse);
+          throw getApiException("collectArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1142,10 +941,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder collectRequestBuilder(@javax.annotation.Nonnull CollectArticleReq collectArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder collectArticleRequestBuilder(@javax.annotation.Nonnull CollectArticleReq collectArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'collectArticleReq' is set
     if (collectArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'collectArticleReq' when calling collect");
+      throw new ApiException(400, "Missing the required parameter 'collectArticleReq' when calling collectArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1175,11 +974,11 @@ public class ArticleService {
   }
 
 
-  public static final class APICollectRequest {
+  public static final class APICollectArticleRequest {
     @javax.annotation.Nonnull
     private CollectArticleReq collectArticleReq; //  (required)
 
-    private APICollectRequest(Builder builder) {
+    private APICollectArticleRequest(Builder builder) {
       this.collectArticleReq = builder.collectArticleReq;
     }
     @javax.annotation.Nonnull
@@ -1197,8 +996,8 @@ public class ArticleService {
         this.collectArticleReq = collectArticleReq;
         return this;
       }
-      public APICollectRequest build() {
-        return new APICollectRequest(this);
+      public APICollectArticleRequest build() {
+        return new APICollectArticleRequest(this);
       }
     }
   }
@@ -1206,50 +1005,50 @@ public class ArticleService {
   /**
    * 
    * 统计当前账号收藏的文章数量。
-   * @param apiRequest {@link APICountCollectedRequest}
+   * @param apiRequest {@link APICountCollectedArticlesRequest}
    * @return CountCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public CountCollectedArticlesResp countCollected(APICountCollectedRequest apiRequest) throws ApiException {
-    return countCollected(apiRequest, null);
+  public CountCollectedArticlesResp countCollectedArticles(APICountCollectedArticlesRequest apiRequest) throws ApiException {
+    return countCollectedArticles(apiRequest, null);
   }
 
   /**
    * 
    * 统计当前账号收藏的文章数量。
-   * @param apiRequest {@link APICountCollectedRequest}
+   * @param apiRequest {@link APICountCollectedArticlesRequest}
    * @param headers Optional headers to include in the request
    * @return CountCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public CountCollectedArticlesResp countCollected(APICountCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CountCollectedArticlesResp countCollectedArticles(APICountCollectedArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return countCollected(body, headers);
+    return countCollectedArticles(body, headers);
   }
 
   /**
    * 
    * 统计当前账号收藏的文章数量。
-   * @param apiRequest {@link APICountCollectedRequest}
+   * @param apiRequest {@link APICountCollectedArticlesRequest}
    * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(APICountCollectedRequest apiRequest) throws ApiException {
-    return countCollectedWithHttpInfo(apiRequest, null);
+  public ApiResponse<CountCollectedArticlesResp> countCollectedArticlesWithHttpInfo(APICountCollectedArticlesRequest apiRequest) throws ApiException {
+    return countCollectedArticlesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 统计当前账号收藏的文章数量。
-   * @param apiRequest {@link APICountCollectedRequest}
+   * @param apiRequest {@link APICountCollectedArticlesRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(APICountCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CountCollectedArticlesResp> countCollectedArticlesWithHttpInfo(APICountCollectedArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return countCollectedWithHttpInfo(body, headers);
+    return countCollectedArticlesWithHttpInfo(body, headers);
   }
 
   /**
@@ -1259,8 +1058,8 @@ public class ArticleService {
    * @return CountCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public CountCollectedArticlesResp countCollected(@javax.annotation.Nonnull Object body) throws ApiException {
-    return countCollected(body, null);
+  public CountCollectedArticlesResp countCollectedArticles(@javax.annotation.Nonnull Object body) throws ApiException {
+    return countCollectedArticles(body, null);
   }
 
   /**
@@ -1271,8 +1070,8 @@ public class ArticleService {
    * @return CountCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public CountCollectedArticlesResp countCollected(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<CountCollectedArticlesResp> localVarResponse = countCollectedWithHttpInfo(body, headers);
+  public CountCollectedArticlesResp countCollectedArticles(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<CountCollectedArticlesResp> localVarResponse = countCollectedArticlesWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -1283,8 +1082,8 @@ public class ArticleService {
    * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return countCollectedWithHttpInfo(body, null);
+  public ApiResponse<CountCollectedArticlesResp> countCollectedArticlesWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return countCollectedArticlesWithHttpInfo(body, null);
   }
 
   /**
@@ -1295,8 +1094,8 @@ public class ArticleService {
    * @return ApiResponse&lt;CountCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CountCollectedArticlesResp> countCollectedWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = countCollectedRequestBuilder(body, headers);
+  public ApiResponse<CountCollectedArticlesResp> countCollectedArticlesWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = countCollectedArticlesRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1307,7 +1106,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("countCollected", localVarResponse);
+          throw getApiException("countCollectedArticles", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1343,10 +1142,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder countCollectedRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder countCollectedArticlesRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling countCollected");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling countCollectedArticles");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1376,11 +1175,11 @@ public class ArticleService {
   }
 
 
-  public static final class APICountCollectedRequest {
+  public static final class APICountCollectedArticlesRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APICountCollectedRequest(Builder builder) {
+    private APICountCollectedArticlesRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -1398,8 +1197,8 @@ public class ArticleService {
         this.body = body;
         return this;
       }
-      public APICountCollectedRequest build() {
-        return new APICountCollectedRequest(this);
+      public APICountCollectedArticlesRequest build() {
+        return new APICountCollectedArticlesRequest(this);
       }
     }
   }
@@ -1407,50 +1206,50 @@ public class ArticleService {
   /**
    * 
    * 创建文章草稿
-   * @param apiRequest {@link APICreateDraftRequest}
+   * @param apiRequest {@link APICreateDraftArticleRequest}
    * @return CreateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CreateDraftArticleResp createDraft(APICreateDraftRequest apiRequest) throws ApiException {
-    return createDraft(apiRequest, null);
+  public CreateDraftArticleResp createDraftArticle(APICreateDraftArticleRequest apiRequest) throws ApiException {
+    return createDraftArticle(apiRequest, null);
   }
 
   /**
    * 
    * 创建文章草稿
-   * @param apiRequest {@link APICreateDraftRequest}
+   * @param apiRequest {@link APICreateDraftArticleRequest}
    * @param headers Optional headers to include in the request
    * @return CreateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CreateDraftArticleResp createDraft(APICreateDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateDraftArticleResp createDraftArticle(APICreateDraftArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CreateDraftArticleReq createDraftArticleReq = apiRequest.createDraftArticleReq();
-    return createDraft(createDraftArticleReq, headers);
+    return createDraftArticle(createDraftArticleReq, headers);
   }
 
   /**
    * 
    * 创建文章草稿
-   * @param apiRequest {@link APICreateDraftRequest}
+   * @param apiRequest {@link APICreateDraftArticleRequest}
    * @return ApiResponse&lt;CreateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateDraftArticleResp> createDraftWithHttpInfo(APICreateDraftRequest apiRequest) throws ApiException {
-    return createDraftWithHttpInfo(apiRequest, null);
+  public ApiResponse<CreateDraftArticleResp> createDraftArticleWithHttpInfo(APICreateDraftArticleRequest apiRequest) throws ApiException {
+    return createDraftArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 创建文章草稿
-   * @param apiRequest {@link APICreateDraftRequest}
+   * @param apiRequest {@link APICreateDraftArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateDraftArticleResp> createDraftWithHttpInfo(APICreateDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CreateDraftArticleResp> createDraftArticleWithHttpInfo(APICreateDraftArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     CreateDraftArticleReq createDraftArticleReq = apiRequest.createDraftArticleReq();
-    return createDraftWithHttpInfo(createDraftArticleReq, headers);
+    return createDraftArticleWithHttpInfo(createDraftArticleReq, headers);
   }
 
   /**
@@ -1460,8 +1259,8 @@ public class ArticleService {
    * @return CreateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CreateDraftArticleResp createDraft(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq) throws ApiException {
-    return createDraft(createDraftArticleReq, null);
+  public CreateDraftArticleResp createDraftArticle(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq) throws ApiException {
+    return createDraftArticle(createDraftArticleReq, null);
   }
 
   /**
@@ -1472,8 +1271,8 @@ public class ArticleService {
    * @return CreateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public CreateDraftArticleResp createDraft(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateDraftArticleResp> localVarResponse = createDraftWithHttpInfo(createDraftArticleReq, headers);
+  public CreateDraftArticleResp createDraftArticle(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateDraftArticleResp> localVarResponse = createDraftArticleWithHttpInfo(createDraftArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1484,8 +1283,8 @@ public class ArticleService {
    * @return ApiResponse&lt;CreateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateDraftArticleResp> createDraftWithHttpInfo(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq) throws ApiException {
-    return createDraftWithHttpInfo(createDraftArticleReq, null);
+  public ApiResponse<CreateDraftArticleResp> createDraftArticleWithHttpInfo(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq) throws ApiException {
+    return createDraftArticleWithHttpInfo(createDraftArticleReq, null);
   }
 
   /**
@@ -1496,8 +1295,8 @@ public class ArticleService {
    * @return ApiResponse&lt;CreateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateDraftArticleResp> createDraftWithHttpInfo(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createDraftRequestBuilder(createDraftArticleReq, headers);
+  public ApiResponse<CreateDraftArticleResp> createDraftArticleWithHttpInfo(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createDraftArticleRequestBuilder(createDraftArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1508,7 +1307,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("createDraft", localVarResponse);
+          throw getApiException("createDraftArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1544,10 +1343,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder createDraftRequestBuilder(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder createDraftArticleRequestBuilder(@javax.annotation.Nonnull CreateDraftArticleReq createDraftArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'createDraftArticleReq' is set
     if (createDraftArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'createDraftArticleReq' when calling createDraft");
+      throw new ApiException(400, "Missing the required parameter 'createDraftArticleReq' when calling createDraftArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1577,11 +1376,11 @@ public class ArticleService {
   }
 
 
-  public static final class APICreateDraftRequest {
+  public static final class APICreateDraftArticleRequest {
     @javax.annotation.Nonnull
     private CreateDraftArticleReq createDraftArticleReq; //  (required)
 
-    private APICreateDraftRequest(Builder builder) {
+    private APICreateDraftArticleRequest(Builder builder) {
       this.createDraftArticleReq = builder.createDraftArticleReq;
     }
     @javax.annotation.Nonnull
@@ -1599,8 +1398,8 @@ public class ArticleService {
         this.createDraftArticleReq = createDraftArticleReq;
         return this;
       }
-      public APICreateDraftRequest build() {
-        return new APICreateDraftRequest(this);
+      public APICreateDraftArticleRequest build() {
+        return new APICreateDraftArticleRequest(this);
       }
     }
   }
@@ -1608,50 +1407,50 @@ public class ArticleService {
   /**
    * 
    * 丢弃文章草稿
-   * @param apiRequest {@link APIDiscardDraftRequest}
+   * @param apiRequest {@link APIDiscardDraftArticleRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object discardDraft(APIDiscardDraftRequest apiRequest) throws ApiException {
-    return discardDraft(apiRequest, null);
+  public Object discardDraftArticle(APIDiscardDraftArticleRequest apiRequest) throws ApiException {
+    return discardDraftArticle(apiRequest, null);
   }
 
   /**
    * 
    * 丢弃文章草稿
-   * @param apiRequest {@link APIDiscardDraftRequest}
+   * @param apiRequest {@link APIDiscardDraftArticleRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object discardDraft(APIDiscardDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object discardDraftArticle(APIDiscardDraftArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     DiscardDraftArticleReq discardDraftArticleReq = apiRequest.discardDraftArticleReq();
-    return discardDraft(discardDraftArticleReq, headers);
+    return discardDraftArticle(discardDraftArticleReq, headers);
   }
 
   /**
    * 
    * 丢弃文章草稿
-   * @param apiRequest {@link APIDiscardDraftRequest}
+   * @param apiRequest {@link APIDiscardDraftArticleRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> discardDraftWithHttpInfo(APIDiscardDraftRequest apiRequest) throws ApiException {
-    return discardDraftWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> discardDraftArticleWithHttpInfo(APIDiscardDraftArticleRequest apiRequest) throws ApiException {
+    return discardDraftArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 丢弃文章草稿
-   * @param apiRequest {@link APIDiscardDraftRequest}
+   * @param apiRequest {@link APIDiscardDraftArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> discardDraftWithHttpInfo(APIDiscardDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> discardDraftArticleWithHttpInfo(APIDiscardDraftArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     DiscardDraftArticleReq discardDraftArticleReq = apiRequest.discardDraftArticleReq();
-    return discardDraftWithHttpInfo(discardDraftArticleReq, headers);
+    return discardDraftArticleWithHttpInfo(discardDraftArticleReq, headers);
   }
 
   /**
@@ -1661,8 +1460,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object discardDraft(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq) throws ApiException {
-    return discardDraft(discardDraftArticleReq, null);
+  public Object discardDraftArticle(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq) throws ApiException {
+    return discardDraftArticle(discardDraftArticleReq, null);
   }
 
   /**
@@ -1673,8 +1472,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object discardDraft(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = discardDraftWithHttpInfo(discardDraftArticleReq, headers);
+  public Object discardDraftArticle(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = discardDraftArticleWithHttpInfo(discardDraftArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1685,8 +1484,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> discardDraftWithHttpInfo(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq) throws ApiException {
-    return discardDraftWithHttpInfo(discardDraftArticleReq, null);
+  public ApiResponse<Object> discardDraftArticleWithHttpInfo(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq) throws ApiException {
+    return discardDraftArticleWithHttpInfo(discardDraftArticleReq, null);
   }
 
   /**
@@ -1697,8 +1496,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> discardDraftWithHttpInfo(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = discardDraftRequestBuilder(discardDraftArticleReq, headers);
+  public ApiResponse<Object> discardDraftArticleWithHttpInfo(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = discardDraftArticleRequestBuilder(discardDraftArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1709,7 +1508,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("discardDraft", localVarResponse);
+          throw getApiException("discardDraftArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1745,10 +1544,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder discardDraftRequestBuilder(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder discardDraftArticleRequestBuilder(@javax.annotation.Nonnull DiscardDraftArticleReq discardDraftArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'discardDraftArticleReq' is set
     if (discardDraftArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'discardDraftArticleReq' when calling discardDraft");
+      throw new ApiException(400, "Missing the required parameter 'discardDraftArticleReq' when calling discardDraftArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1778,11 +1577,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIDiscardDraftRequest {
+  public static final class APIDiscardDraftArticleRequest {
     @javax.annotation.Nonnull
     private DiscardDraftArticleReq discardDraftArticleReq; //  (required)
 
-    private APIDiscardDraftRequest(Builder builder) {
+    private APIDiscardDraftArticleRequest(Builder builder) {
       this.discardDraftArticleReq = builder.discardDraftArticleReq;
     }
     @javax.annotation.Nonnull
@@ -1800,8 +1599,8 @@ public class ArticleService {
         this.discardDraftArticleReq = discardDraftArticleReq;
         return this;
       }
-      public APIDiscardDraftRequest build() {
-        return new APIDiscardDraftRequest(this);
+      public APIDiscardDraftArticleRequest build() {
+        return new APIDiscardDraftArticleRequest(this);
       }
     }
   }
@@ -1809,50 +1608,50 @@ public class ArticleService {
   /**
    * 
    * 报名或撤销抽奖报名。
-   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @param apiRequest {@link APIEnterArticleLotteryRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object enterLottery(APIEnterLotteryRequest apiRequest) throws ApiException {
-    return enterLottery(apiRequest, null);
+  public Object enterArticleLottery(APIEnterArticleLotteryRequest apiRequest) throws ApiException {
+    return enterArticleLottery(apiRequest, null);
   }
 
   /**
    * 
    * 报名或撤销抽奖报名。
-   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @param apiRequest {@link APIEnterArticleLotteryRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object enterLottery(APIEnterLotteryRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object enterArticleLottery(APIEnterArticleLotteryRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     EnterArticleLotteryReq enterArticleLotteryReq = apiRequest.enterArticleLotteryReq();
-    return enterLottery(enterArticleLotteryReq, headers);
+    return enterArticleLottery(enterArticleLotteryReq, headers);
   }
 
   /**
    * 
    * 报名或撤销抽奖报名。
-   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @param apiRequest {@link APIEnterArticleLotteryRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> enterLotteryWithHttpInfo(APIEnterLotteryRequest apiRequest) throws ApiException {
-    return enterLotteryWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> enterArticleLotteryWithHttpInfo(APIEnterArticleLotteryRequest apiRequest) throws ApiException {
+    return enterArticleLotteryWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 报名或撤销抽奖报名。
-   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @param apiRequest {@link APIEnterArticleLotteryRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> enterLotteryWithHttpInfo(APIEnterLotteryRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> enterArticleLotteryWithHttpInfo(APIEnterArticleLotteryRequest apiRequest, Map<String, String> headers) throws ApiException {
     EnterArticleLotteryReq enterArticleLotteryReq = apiRequest.enterArticleLotteryReq();
-    return enterLotteryWithHttpInfo(enterArticleLotteryReq, headers);
+    return enterArticleLotteryWithHttpInfo(enterArticleLotteryReq, headers);
   }
 
   /**
@@ -1862,8 +1661,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object enterLottery(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq) throws ApiException {
-    return enterLottery(enterArticleLotteryReq, null);
+  public Object enterArticleLottery(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq) throws ApiException {
+    return enterArticleLottery(enterArticleLotteryReq, null);
   }
 
   /**
@@ -1874,8 +1673,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object enterLottery(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = enterLotteryWithHttpInfo(enterArticleLotteryReq, headers);
+  public Object enterArticleLottery(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = enterArticleLotteryWithHttpInfo(enterArticleLotteryReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1886,8 +1685,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> enterLotteryWithHttpInfo(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq) throws ApiException {
-    return enterLotteryWithHttpInfo(enterArticleLotteryReq, null);
+  public ApiResponse<Object> enterArticleLotteryWithHttpInfo(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq) throws ApiException {
+    return enterArticleLotteryWithHttpInfo(enterArticleLotteryReq, null);
   }
 
   /**
@@ -1898,8 +1697,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> enterLotteryWithHttpInfo(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = enterLotteryRequestBuilder(enterArticleLotteryReq, headers);
+  public ApiResponse<Object> enterArticleLotteryWithHttpInfo(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = enterArticleLotteryRequestBuilder(enterArticleLotteryReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1910,7 +1709,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("enterLottery", localVarResponse);
+          throw getApiException("enterArticleLottery", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1946,10 +1745,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder enterLotteryRequestBuilder(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder enterArticleLotteryRequestBuilder(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'enterArticleLotteryReq' is set
     if (enterArticleLotteryReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'enterArticleLotteryReq' when calling enterLottery");
+      throw new ApiException(400, "Missing the required parameter 'enterArticleLotteryReq' when calling enterArticleLottery");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1979,11 +1778,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIEnterLotteryRequest {
+  public static final class APIEnterArticleLotteryRequest {
     @javax.annotation.Nonnull
     private EnterArticleLotteryReq enterArticleLotteryReq; //  (required)
 
-    private APIEnterLotteryRequest(Builder builder) {
+    private APIEnterArticleLotteryRequest(Builder builder) {
       this.enterArticleLotteryReq = builder.enterArticleLotteryReq;
     }
     @javax.annotation.Nonnull
@@ -2001,8 +1800,8 @@ public class ArticleService {
         this.enterArticleLotteryReq = enterArticleLotteryReq;
         return this;
       }
-      public APIEnterLotteryRequest build() {
-        return new APIEnterLotteryRequest(this);
+      public APIEnterArticleLotteryRequest build() {
+        return new APIEnterArticleLotteryRequest(this);
       }
     }
   }
@@ -2010,50 +1809,50 @@ public class ArticleService {
   /**
    * 
    * 查询文章详情
-   * @param apiRequest {@link APIGetRequest}
+   * @param apiRequest {@link APIGetArticleRequest}
    * @return GetArticleResp
    * @throws ApiException if fails to make API call
    */
-  public GetArticleResp get(APIGetRequest apiRequest) throws ApiException {
-    return get(apiRequest, null);
+  public GetArticleResp getArticle(APIGetArticleRequest apiRequest) throws ApiException {
+    return getArticle(apiRequest, null);
   }
 
   /**
    * 
    * 查询文章详情
-   * @param apiRequest {@link APIGetRequest}
+   * @param apiRequest {@link APIGetArticleRequest}
    * @param headers Optional headers to include in the request
    * @return GetArticleResp
    * @throws ApiException if fails to make API call
    */
-  public GetArticleResp get(APIGetRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetArticleResp getArticle(APIGetArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     GetArticleReq getArticleReq = apiRequest.getArticleReq();
-    return get(getArticleReq, headers);
+    return getArticle(getArticleReq, headers);
   }
 
   /**
    * 
    * 查询文章详情
-   * @param apiRequest {@link APIGetRequest}
+   * @param apiRequest {@link APIGetArticleRequest}
    * @return ApiResponse&lt;GetArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetArticleResp> getWithHttpInfo(APIGetRequest apiRequest) throws ApiException {
-    return getWithHttpInfo(apiRequest, null);
+  public ApiResponse<GetArticleResp> getArticleWithHttpInfo(APIGetArticleRequest apiRequest) throws ApiException {
+    return getArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 查询文章详情
-   * @param apiRequest {@link APIGetRequest}
+   * @param apiRequest {@link APIGetArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetArticleResp> getWithHttpInfo(APIGetRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetArticleResp> getArticleWithHttpInfo(APIGetArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     GetArticleReq getArticleReq = apiRequest.getArticleReq();
-    return getWithHttpInfo(getArticleReq, headers);
+    return getArticleWithHttpInfo(getArticleReq, headers);
   }
 
   /**
@@ -2063,8 +1862,8 @@ public class ArticleService {
    * @return GetArticleResp
    * @throws ApiException if fails to make API call
    */
-  public GetArticleResp get(@javax.annotation.Nonnull GetArticleReq getArticleReq) throws ApiException {
-    return get(getArticleReq, null);
+  public GetArticleResp getArticle(@javax.annotation.Nonnull GetArticleReq getArticleReq) throws ApiException {
+    return getArticle(getArticleReq, null);
   }
 
   /**
@@ -2075,8 +1874,8 @@ public class ArticleService {
    * @return GetArticleResp
    * @throws ApiException if fails to make API call
    */
-  public GetArticleResp get(@javax.annotation.Nonnull GetArticleReq getArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetArticleResp> localVarResponse = getWithHttpInfo(getArticleReq, headers);
+  public GetArticleResp getArticle(@javax.annotation.Nonnull GetArticleReq getArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetArticleResp> localVarResponse = getArticleWithHttpInfo(getArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -2087,8 +1886,8 @@ public class ArticleService {
    * @return ApiResponse&lt;GetArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetArticleResp> getWithHttpInfo(@javax.annotation.Nonnull GetArticleReq getArticleReq) throws ApiException {
-    return getWithHttpInfo(getArticleReq, null);
+  public ApiResponse<GetArticleResp> getArticleWithHttpInfo(@javax.annotation.Nonnull GetArticleReq getArticleReq) throws ApiException {
+    return getArticleWithHttpInfo(getArticleReq, null);
   }
 
   /**
@@ -2099,8 +1898,8 @@ public class ArticleService {
    * @return ApiResponse&lt;GetArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetArticleResp> getWithHttpInfo(@javax.annotation.Nonnull GetArticleReq getArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = getRequestBuilder(getArticleReq, headers);
+  public ApiResponse<GetArticleResp> getArticleWithHttpInfo(@javax.annotation.Nonnull GetArticleReq getArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getArticleRequestBuilder(getArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -2111,7 +1910,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("get", localVarResponse);
+          throw getApiException("getArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -2147,10 +1946,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder getRequestBuilder(@javax.annotation.Nonnull GetArticleReq getArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder getArticleRequestBuilder(@javax.annotation.Nonnull GetArticleReq getArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'getArticleReq' is set
     if (getArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'getArticleReq' when calling get");
+      throw new ApiException(400, "Missing the required parameter 'getArticleReq' when calling getArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -2180,11 +1979,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIGetRequest {
+  public static final class APIGetArticleRequest {
     @javax.annotation.Nonnull
     private GetArticleReq getArticleReq; //  (required)
 
-    private APIGetRequest(Builder builder) {
+    private APIGetArticleRequest(Builder builder) {
       this.getArticleReq = builder.getArticleReq;
     }
     @javax.annotation.Nonnull
@@ -2202,8 +2001,8 @@ public class ArticleService {
         this.getArticleReq = getArticleReq;
         return this;
       }
-      public APIGetRequest build() {
-        return new APIGetRequest(this);
+      public APIGetArticleRequest build() {
+        return new APIGetArticleRequest(this);
       }
     }
   }
@@ -2211,50 +2010,50 @@ public class ArticleService {
   /**
    * 
    * 点赞文章
-   * @param apiRequest {@link APILikeRequest}
+   * @param apiRequest {@link APILikeArticleRequest}
    * @return LikeArticleResp
    * @throws ApiException if fails to make API call
    */
-  public LikeArticleResp like(APILikeRequest apiRequest) throws ApiException {
-    return like(apiRequest, null);
+  public LikeArticleResp likeArticle(APILikeArticleRequest apiRequest) throws ApiException {
+    return likeArticle(apiRequest, null);
   }
 
   /**
    * 
    * 点赞文章
-   * @param apiRequest {@link APILikeRequest}
+   * @param apiRequest {@link APILikeArticleRequest}
    * @param headers Optional headers to include in the request
    * @return LikeArticleResp
    * @throws ApiException if fails to make API call
    */
-  public LikeArticleResp like(APILikeRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public LikeArticleResp likeArticle(APILikeArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     LikeArticleReq likeArticleReq = apiRequest.likeArticleReq();
-    return like(likeArticleReq, headers);
+    return likeArticle(likeArticleReq, headers);
   }
 
   /**
    * 
    * 点赞文章
-   * @param apiRequest {@link APILikeRequest}
+   * @param apiRequest {@link APILikeArticleRequest}
    * @return ApiResponse&lt;LikeArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeArticleResp> likeWithHttpInfo(APILikeRequest apiRequest) throws ApiException {
-    return likeWithHttpInfo(apiRequest, null);
+  public ApiResponse<LikeArticleResp> likeArticleWithHttpInfo(APILikeArticleRequest apiRequest) throws ApiException {
+    return likeArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 点赞文章
-   * @param apiRequest {@link APILikeRequest}
+   * @param apiRequest {@link APILikeArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;LikeArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeArticleResp> likeWithHttpInfo(APILikeRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<LikeArticleResp> likeArticleWithHttpInfo(APILikeArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     LikeArticleReq likeArticleReq = apiRequest.likeArticleReq();
-    return likeWithHttpInfo(likeArticleReq, headers);
+    return likeArticleWithHttpInfo(likeArticleReq, headers);
   }
 
   /**
@@ -2264,8 +2063,8 @@ public class ArticleService {
    * @return LikeArticleResp
    * @throws ApiException if fails to make API call
    */
-  public LikeArticleResp like(@javax.annotation.Nonnull LikeArticleReq likeArticleReq) throws ApiException {
-    return like(likeArticleReq, null);
+  public LikeArticleResp likeArticle(@javax.annotation.Nonnull LikeArticleReq likeArticleReq) throws ApiException {
+    return likeArticle(likeArticleReq, null);
   }
 
   /**
@@ -2276,8 +2075,8 @@ public class ArticleService {
    * @return LikeArticleResp
    * @throws ApiException if fails to make API call
    */
-  public LikeArticleResp like(@javax.annotation.Nonnull LikeArticleReq likeArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<LikeArticleResp> localVarResponse = likeWithHttpInfo(likeArticleReq, headers);
+  public LikeArticleResp likeArticle(@javax.annotation.Nonnull LikeArticleReq likeArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<LikeArticleResp> localVarResponse = likeArticleWithHttpInfo(likeArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -2288,8 +2087,8 @@ public class ArticleService {
    * @return ApiResponse&lt;LikeArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeArticleResp> likeWithHttpInfo(@javax.annotation.Nonnull LikeArticleReq likeArticleReq) throws ApiException {
-    return likeWithHttpInfo(likeArticleReq, null);
+  public ApiResponse<LikeArticleResp> likeArticleWithHttpInfo(@javax.annotation.Nonnull LikeArticleReq likeArticleReq) throws ApiException {
+    return likeArticleWithHttpInfo(likeArticleReq, null);
   }
 
   /**
@@ -2300,8 +2099,8 @@ public class ArticleService {
    * @return ApiResponse&lt;LikeArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeArticleResp> likeWithHttpInfo(@javax.annotation.Nonnull LikeArticleReq likeArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = likeRequestBuilder(likeArticleReq, headers);
+  public ApiResponse<LikeArticleResp> likeArticleWithHttpInfo(@javax.annotation.Nonnull LikeArticleReq likeArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = likeArticleRequestBuilder(likeArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -2312,7 +2111,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("like", localVarResponse);
+          throw getApiException("likeArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -2348,10 +2147,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder likeRequestBuilder(@javax.annotation.Nonnull LikeArticleReq likeArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder likeArticleRequestBuilder(@javax.annotation.Nonnull LikeArticleReq likeArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'likeArticleReq' is set
     if (likeArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'likeArticleReq' when calling like");
+      throw new ApiException(400, "Missing the required parameter 'likeArticleReq' when calling likeArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -2381,11 +2180,11 @@ public class ArticleService {
   }
 
 
-  public static final class APILikeRequest {
+  public static final class APILikeArticleRequest {
     @javax.annotation.Nonnull
     private LikeArticleReq likeArticleReq; //  (required)
 
-    private APILikeRequest(Builder builder) {
+    private APILikeArticleRequest(Builder builder) {
       this.likeArticleReq = builder.likeArticleReq;
     }
     @javax.annotation.Nonnull
@@ -2403,106 +2202,106 @@ public class ArticleService {
         this.likeArticleReq = likeArticleReq;
         return this;
       }
-      public APILikeRequest build() {
-        return new APILikeRequest(this);
+      public APILikeArticleRequest build() {
+        return new APILikeArticleRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param apiRequest {@link APIListFollowingRequest}
-   * @return ListFollowingArticlesResp
+   * 查询文章列表
+   * @param apiRequest {@link APIListArticlesRequest}
+   * @return ListArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingArticlesResp listFollowing(APIListFollowingRequest apiRequest) throws ApiException {
-    return listFollowing(apiRequest, null);
+  public ListArticlesResp listArticles(APIListArticlesRequest apiRequest) throws ApiException {
+    return listArticles(apiRequest, null);
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param apiRequest {@link APIListFollowingRequest}
+   * 查询文章列表
+   * @param apiRequest {@link APIListArticlesRequest}
    * @param headers Optional headers to include in the request
-   * @return ListFollowingArticlesResp
+   * @return ListArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingArticlesResp listFollowing(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListArticlesResp listArticles(APIListArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListFollowingArticlesReq listFollowingArticlesReq = apiRequest.listFollowingArticlesReq();
-    return listFollowing(listFollowingArticlesReq, headers);
+    ListArticlesReq listArticlesReq = apiRequest.listArticlesReq();
+    return listArticles(listArticlesReq, headers);
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param apiRequest {@link APIListFollowingRequest}
-   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * 查询文章列表
+   * @param apiRequest {@link APIListArticlesRequest}
+   * @return ApiResponse&lt;ListArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest) throws ApiException {
-    return listFollowingWithHttpInfo(apiRequest, null);
+  public ApiResponse<ListArticlesResp> listArticlesWithHttpInfo(APIListArticlesRequest apiRequest) throws ApiException {
+    return listArticlesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param apiRequest {@link APIListFollowingRequest}
+   * 查询文章列表
+   * @param apiRequest {@link APIListArticlesRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @return ApiResponse&lt;ListArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListFollowingArticlesReq listFollowingArticlesReq = apiRequest.listFollowingArticlesReq();
-    return listFollowingWithHttpInfo(listFollowingArticlesReq, headers);
+  public ApiResponse<ListArticlesResp> listArticlesWithHttpInfo(APIListArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListArticlesReq listArticlesReq = apiRequest.listArticlesReq();
+    return listArticlesWithHttpInfo(listArticlesReq, headers);
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param listFollowingArticlesReq  (required)
-   * @return ListFollowingArticlesResp
+   * 查询文章列表
+   * @param listArticlesReq  (required)
+   * @return ListArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingArticlesResp listFollowing(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq) throws ApiException {
-    return listFollowing(listFollowingArticlesReq, null);
+  public ListArticlesResp listArticles(@javax.annotation.Nonnull ListArticlesReq listArticlesReq) throws ApiException {
+    return listArticles(listArticlesReq, null);
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param listFollowingArticlesReq  (required)
+   * 查询文章列表
+   * @param listArticlesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListFollowingArticlesResp
+   * @return ListArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingArticlesResp listFollowing(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListFollowingArticlesResp> localVarResponse = listFollowingWithHttpInfo(listFollowingArticlesReq, headers);
+  public ListArticlesResp listArticles(@javax.annotation.Nonnull ListArticlesReq listArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListArticlesResp> localVarResponse = listArticlesWithHttpInfo(listArticlesReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param listFollowingArticlesReq  (required)
-   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * 查询文章列表
+   * @param listArticlesReq  (required)
+   * @return ApiResponse&lt;ListArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq) throws ApiException {
-    return listFollowingWithHttpInfo(listFollowingArticlesReq, null);
+  public ApiResponse<ListArticlesResp> listArticlesWithHttpInfo(@javax.annotation.Nonnull ListArticlesReq listArticlesReq) throws ApiException {
+    return listArticlesWithHttpInfo(listArticlesReq, null);
   }
 
   /**
    * 
-   * 查询当前账号关注作者发布的文章。
-   * @param listFollowingArticlesReq  (required)
+   * 查询文章列表
+   * @param listArticlesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @return ApiResponse&lt;ListArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listFollowingRequestBuilder(listFollowingArticlesReq, headers);
+  public ApiResponse<ListArticlesResp> listArticlesWithHttpInfo(@javax.annotation.Nonnull ListArticlesReq listArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listArticlesRequestBuilder(listArticlesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -2513,7 +2312,208 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("listFollowing", localVarResponse);
+          throw getApiException("listArticles", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListArticlesResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListArticlesResp>() {});
+        
+
+        return new ApiResponse<ListArticlesResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder listArticlesRequestBuilder(@javax.annotation.Nonnull ListArticlesReq listArticlesReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listArticlesReq' is set
+    if (listArticlesReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listArticlesReq' when calling listArticles");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/list";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listArticlesReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIListArticlesRequest {
+    @javax.annotation.Nonnull
+    private ListArticlesReq listArticlesReq; //  (required)
+
+    private APIListArticlesRequest(Builder builder) {
+      this.listArticlesReq = builder.listArticlesReq;
+    }
+    @javax.annotation.Nonnull
+    public ListArticlesReq listArticlesReq() {
+      return listArticlesReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private ListArticlesReq listArticlesReq;
+
+      public Builder listArticlesReq(@javax.annotation.Nonnull ListArticlesReq listArticlesReq) {
+        this.listArticlesReq = listArticlesReq;
+        return this;
+      }
+      public APIListArticlesRequest build() {
+        return new APIListArticlesRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingArticlesRequest}
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowingArticles(APIListFollowingArticlesRequest apiRequest) throws ApiException {
+    return listFollowingArticles(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingArticlesRequest}
+   * @param headers Optional headers to include in the request
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowingArticles(APIListFollowingArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    ListFollowingArticlesReq listFollowingArticlesReq = apiRequest.listFollowingArticlesReq();
+    return listFollowingArticles(listFollowingArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingArticlesRequest}
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingArticlesWithHttpInfo(APIListFollowingArticlesRequest apiRequest) throws ApiException {
+    return listFollowingArticlesWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingArticlesRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingArticlesWithHttpInfo(APIListFollowingArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListFollowingArticlesReq listFollowingArticlesReq = apiRequest.listFollowingArticlesReq();
+    return listFollowingArticlesWithHttpInfo(listFollowingArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowingArticles(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq) throws ApiException {
+    return listFollowingArticles(listFollowingArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowingArticles(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListFollowingArticlesResp> localVarResponse = listFollowingArticlesWithHttpInfo(listFollowingArticlesReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingArticlesWithHttpInfo(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq) throws ApiException {
+    return listFollowingArticlesWithHttpInfo(listFollowingArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingArticlesWithHttpInfo(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listFollowingArticlesRequestBuilder(listFollowingArticlesReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("listFollowingArticles", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -2549,10 +2549,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder listFollowingRequestBuilder(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder listFollowingArticlesRequestBuilder(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'listFollowingArticlesReq' is set
     if (listFollowingArticlesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'listFollowingArticlesReq' when calling listFollowing");
+      throw new ApiException(400, "Missing the required parameter 'listFollowingArticlesReq' when calling listFollowingArticles");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -2582,11 +2582,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIListFollowingRequest {
+  public static final class APIListFollowingArticlesRequest {
     @javax.annotation.Nonnull
     private ListFollowingArticlesReq listFollowingArticlesReq; //  (required)
 
-    private APIListFollowingRequest(Builder builder) {
+    private APIListFollowingArticlesRequest(Builder builder) {
       this.listFollowingArticlesReq = builder.listFollowingArticlesReq;
     }
     @javax.annotation.Nonnull
@@ -2604,8 +2604,8 @@ public class ArticleService {
         this.listFollowingArticlesReq = listFollowingArticlesReq;
         return this;
       }
-      public APIListFollowingRequest build() {
-        return new APIListFollowingRequest(this);
+      public APIListFollowingArticlesRequest build() {
+        return new APIListFollowingArticlesRequest(this);
       }
     }
   }
@@ -2613,50 +2613,50 @@ public class ArticleService {
   /**
    * 
    * 查询当前账号所在城市发布的文章。
-   * @param apiRequest {@link APIListNearbyRequest}
+   * @param apiRequest {@link APIListNearbyArticlesRequest}
    * @return ListNearbyArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListNearbyArticlesResp listNearby(APIListNearbyRequest apiRequest) throws ApiException {
-    return listNearby(apiRequest, null);
+  public ListNearbyArticlesResp listNearbyArticles(APIListNearbyArticlesRequest apiRequest) throws ApiException {
+    return listNearbyArticles(apiRequest, null);
   }
 
   /**
    * 
    * 查询当前账号所在城市发布的文章。
-   * @param apiRequest {@link APIListNearbyRequest}
+   * @param apiRequest {@link APIListNearbyArticlesRequest}
    * @param headers Optional headers to include in the request
    * @return ListNearbyArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListNearbyArticlesResp listNearby(APIListNearbyRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListNearbyArticlesResp listNearbyArticles(APIListNearbyArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     ListNearbyArticlesReq listNearbyArticlesReq = apiRequest.listNearbyArticlesReq();
-    return listNearby(listNearbyArticlesReq, headers);
+    return listNearbyArticles(listNearbyArticlesReq, headers);
   }
 
   /**
    * 
    * 查询当前账号所在城市发布的文章。
-   * @param apiRequest {@link APIListNearbyRequest}
+   * @param apiRequest {@link APIListNearbyArticlesRequest}
    * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(APIListNearbyRequest apiRequest) throws ApiException {
-    return listNearbyWithHttpInfo(apiRequest, null);
+  public ApiResponse<ListNearbyArticlesResp> listNearbyArticlesWithHttpInfo(APIListNearbyArticlesRequest apiRequest) throws ApiException {
+    return listNearbyArticlesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 查询当前账号所在城市发布的文章。
-   * @param apiRequest {@link APIListNearbyRequest}
+   * @param apiRequest {@link APIListNearbyArticlesRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(APIListNearbyRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ListNearbyArticlesResp> listNearbyArticlesWithHttpInfo(APIListNearbyArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     ListNearbyArticlesReq listNearbyArticlesReq = apiRequest.listNearbyArticlesReq();
-    return listNearbyWithHttpInfo(listNearbyArticlesReq, headers);
+    return listNearbyArticlesWithHttpInfo(listNearbyArticlesReq, headers);
   }
 
   /**
@@ -2666,8 +2666,8 @@ public class ArticleService {
    * @return ListNearbyArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListNearbyArticlesResp listNearby(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq) throws ApiException {
-    return listNearby(listNearbyArticlesReq, null);
+  public ListNearbyArticlesResp listNearbyArticles(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq) throws ApiException {
+    return listNearbyArticles(listNearbyArticlesReq, null);
   }
 
   /**
@@ -2678,8 +2678,8 @@ public class ArticleService {
    * @return ListNearbyArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public ListNearbyArticlesResp listNearby(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListNearbyArticlesResp> localVarResponse = listNearbyWithHttpInfo(listNearbyArticlesReq, headers);
+  public ListNearbyArticlesResp listNearbyArticles(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListNearbyArticlesResp> localVarResponse = listNearbyArticlesWithHttpInfo(listNearbyArticlesReq, headers);
     return localVarResponse.getData();
   }
 
@@ -2690,8 +2690,8 @@ public class ArticleService {
    * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq) throws ApiException {
-    return listNearbyWithHttpInfo(listNearbyArticlesReq, null);
+  public ApiResponse<ListNearbyArticlesResp> listNearbyArticlesWithHttpInfo(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq) throws ApiException {
+    return listNearbyArticlesWithHttpInfo(listNearbyArticlesReq, null);
   }
 
   /**
@@ -2702,8 +2702,8 @@ public class ArticleService {
    * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listNearbyRequestBuilder(listNearbyArticlesReq, headers);
+  public ApiResponse<ListNearbyArticlesResp> listNearbyArticlesWithHttpInfo(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listNearbyArticlesRequestBuilder(listNearbyArticlesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -2714,7 +2714,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("listNearby", localVarResponse);
+          throw getApiException("listNearbyArticles", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -2750,10 +2750,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder listNearbyRequestBuilder(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder listNearbyArticlesRequestBuilder(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'listNearbyArticlesReq' is set
     if (listNearbyArticlesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'listNearbyArticlesReq' when calling listNearby");
+      throw new ApiException(400, "Missing the required parameter 'listNearbyArticlesReq' when calling listNearbyArticles");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -2783,11 +2783,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIListNearbyRequest {
+  public static final class APIListNearbyArticlesRequest {
     @javax.annotation.Nonnull
     private ListNearbyArticlesReq listNearbyArticlesReq; //  (required)
 
-    private APIListNearbyRequest(Builder builder) {
+    private APIListNearbyArticlesRequest(Builder builder) {
       this.listNearbyArticlesReq = builder.listNearbyArticlesReq;
     }
     @javax.annotation.Nonnull
@@ -2805,209 +2805,8 @@ public class ArticleService {
         this.listNearbyArticlesReq = listNearbyArticlesReq;
         return this;
       }
-      public APIListNearbyRequest build() {
-        return new APIListNearbyRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param apiRequest {@link APIPageCollectedRequest}
-   * @return PageCollectedArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public PageCollectedArticlesResp pageCollected(APIPageCollectedRequest apiRequest) throws ApiException {
-    return pageCollected(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param apiRequest {@link APIPageCollectedRequest}
-   * @param headers Optional headers to include in the request
-   * @return PageCollectedArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public PageCollectedArticlesResp pageCollected(APIPageCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    PageCollectedArticlesReq pageCollectedArticlesReq = apiRequest.pageCollectedArticlesReq();
-    return pageCollected(pageCollectedArticlesReq, headers);
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param apiRequest {@link APIPageCollectedRequest}
-   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(APIPageCollectedRequest apiRequest) throws ApiException {
-    return pageCollectedWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param apiRequest {@link APIPageCollectedRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(APIPageCollectedRequest apiRequest, Map<String, String> headers) throws ApiException {
-    PageCollectedArticlesReq pageCollectedArticlesReq = apiRequest.pageCollectedArticlesReq();
-    return pageCollectedWithHttpInfo(pageCollectedArticlesReq, headers);
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param pageCollectedArticlesReq  (required)
-   * @return PageCollectedArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public PageCollectedArticlesResp pageCollected(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) throws ApiException {
-    return pageCollected(pageCollectedArticlesReq, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param pageCollectedArticlesReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return PageCollectedArticlesResp
-   * @throws ApiException if fails to make API call
-   */
-  public PageCollectedArticlesResp pageCollected(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<PageCollectedArticlesResp> localVarResponse = pageCollectedWithHttpInfo(pageCollectedArticlesReq, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param pageCollectedArticlesReq  (required)
-   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) throws ApiException {
-    return pageCollectedWithHttpInfo(pageCollectedArticlesReq, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号收藏的文章。
-   * @param pageCollectedArticlesReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<PageCollectedArticlesResp> pageCollectedWithHttpInfo(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = pageCollectedRequestBuilder(pageCollectedArticlesReq, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("pageCollected", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<PageCollectedArticlesResp>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        PageCollectedArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageCollectedArticlesResp>() {});
-        
-
-        return new ApiResponse<PageCollectedArticlesResp>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder pageCollectedRequestBuilder(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'pageCollectedArticlesReq' is set
-    if (pageCollectedArticlesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'pageCollectedArticlesReq' when calling pageCollected");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/content/article/collected/page";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(pageCollectedArticlesReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APIPageCollectedRequest {
-    @javax.annotation.Nonnull
-    private PageCollectedArticlesReq pageCollectedArticlesReq; //  (required)
-
-    private APIPageCollectedRequest(Builder builder) {
-      this.pageCollectedArticlesReq = builder.pageCollectedArticlesReq;
-    }
-    @javax.annotation.Nonnull
-    public PageCollectedArticlesReq pageCollectedArticlesReq() {
-      return pageCollectedArticlesReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private PageCollectedArticlesReq pageCollectedArticlesReq;
-
-      public Builder pageCollectedArticlesReq(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) {
-        this.pageCollectedArticlesReq = pageCollectedArticlesReq;
-        return this;
-      }
-      public APIPageCollectedRequest build() {
-        return new APIPageCollectedRequest(this);
+      public APIListNearbyArticlesRequest build() {
+        return new APIListNearbyArticlesRequest(this);
       }
     }
   }
@@ -3015,50 +2814,50 @@ public class ArticleService {
   /**
    * 
    * 查询当前账号的浏览历史。
-   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @param apiRequest {@link APIPageArticleViewHistoryRequest}
    * @return PageArticleViewHistoryResp
    * @throws ApiException if fails to make API call
    */
-  public PageArticleViewHistoryResp pageViewHistory(APIPageViewHistoryRequest apiRequest) throws ApiException {
-    return pageViewHistory(apiRequest, null);
+  public PageArticleViewHistoryResp pageArticleViewHistory(APIPageArticleViewHistoryRequest apiRequest) throws ApiException {
+    return pageArticleViewHistory(apiRequest, null);
   }
 
   /**
    * 
    * 查询当前账号的浏览历史。
-   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @param apiRequest {@link APIPageArticleViewHistoryRequest}
    * @param headers Optional headers to include in the request
    * @return PageArticleViewHistoryResp
    * @throws ApiException if fails to make API call
    */
-  public PageArticleViewHistoryResp pageViewHistory(APIPageViewHistoryRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public PageArticleViewHistoryResp pageArticleViewHistory(APIPageArticleViewHistoryRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     PageArticleViewHistoryReq pageArticleViewHistoryReq = apiRequest.pageArticleViewHistoryReq();
-    return pageViewHistory(pageArticleViewHistoryReq, headers);
+    return pageArticleViewHistory(pageArticleViewHistoryReq, headers);
   }
 
   /**
    * 
    * 查询当前账号的浏览历史。
-   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @param apiRequest {@link APIPageArticleViewHistoryRequest}
    * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(APIPageViewHistoryRequest apiRequest) throws ApiException {
-    return pageViewHistoryWithHttpInfo(apiRequest, null);
+  public ApiResponse<PageArticleViewHistoryResp> pageArticleViewHistoryWithHttpInfo(APIPageArticleViewHistoryRequest apiRequest) throws ApiException {
+    return pageArticleViewHistoryWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 查询当前账号的浏览历史。
-   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @param apiRequest {@link APIPageArticleViewHistoryRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(APIPageViewHistoryRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<PageArticleViewHistoryResp> pageArticleViewHistoryWithHttpInfo(APIPageArticleViewHistoryRequest apiRequest, Map<String, String> headers) throws ApiException {
     PageArticleViewHistoryReq pageArticleViewHistoryReq = apiRequest.pageArticleViewHistoryReq();
-    return pageViewHistoryWithHttpInfo(pageArticleViewHistoryReq, headers);
+    return pageArticleViewHistoryWithHttpInfo(pageArticleViewHistoryReq, headers);
   }
 
   /**
@@ -3068,8 +2867,8 @@ public class ArticleService {
    * @return PageArticleViewHistoryResp
    * @throws ApiException if fails to make API call
    */
-  public PageArticleViewHistoryResp pageViewHistory(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq) throws ApiException {
-    return pageViewHistory(pageArticleViewHistoryReq, null);
+  public PageArticleViewHistoryResp pageArticleViewHistory(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq) throws ApiException {
+    return pageArticleViewHistory(pageArticleViewHistoryReq, null);
   }
 
   /**
@@ -3080,8 +2879,8 @@ public class ArticleService {
    * @return PageArticleViewHistoryResp
    * @throws ApiException if fails to make API call
    */
-  public PageArticleViewHistoryResp pageViewHistory(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<PageArticleViewHistoryResp> localVarResponse = pageViewHistoryWithHttpInfo(pageArticleViewHistoryReq, headers);
+  public PageArticleViewHistoryResp pageArticleViewHistory(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageArticleViewHistoryResp> localVarResponse = pageArticleViewHistoryWithHttpInfo(pageArticleViewHistoryReq, headers);
     return localVarResponse.getData();
   }
 
@@ -3092,8 +2891,8 @@ public class ArticleService {
    * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq) throws ApiException {
-    return pageViewHistoryWithHttpInfo(pageArticleViewHistoryReq, null);
+  public ApiResponse<PageArticleViewHistoryResp> pageArticleViewHistoryWithHttpInfo(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq) throws ApiException {
+    return pageArticleViewHistoryWithHttpInfo(pageArticleViewHistoryReq, null);
   }
 
   /**
@@ -3104,8 +2903,8 @@ public class ArticleService {
    * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = pageViewHistoryRequestBuilder(pageArticleViewHistoryReq, headers);
+  public ApiResponse<PageArticleViewHistoryResp> pageArticleViewHistoryWithHttpInfo(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageArticleViewHistoryRequestBuilder(pageArticleViewHistoryReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -3116,7 +2915,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("pageViewHistory", localVarResponse);
+          throw getApiException("pageArticleViewHistory", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -3152,10 +2951,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder pageViewHistoryRequestBuilder(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder pageArticleViewHistoryRequestBuilder(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'pageArticleViewHistoryReq' is set
     if (pageArticleViewHistoryReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'pageArticleViewHistoryReq' when calling pageViewHistory");
+      throw new ApiException(400, "Missing the required parameter 'pageArticleViewHistoryReq' when calling pageArticleViewHistory");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -3185,11 +2984,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIPageViewHistoryRequest {
+  public static final class APIPageArticleViewHistoryRequest {
     @javax.annotation.Nonnull
     private PageArticleViewHistoryReq pageArticleViewHistoryReq; //  (required)
 
-    private APIPageViewHistoryRequest(Builder builder) {
+    private APIPageArticleViewHistoryRequest(Builder builder) {
       this.pageArticleViewHistoryReq = builder.pageArticleViewHistoryReq;
     }
     @javax.annotation.Nonnull
@@ -3207,106 +3006,106 @@ public class ArticleService {
         this.pageArticleViewHistoryReq = pageArticleViewHistoryReq;
         return this;
       }
-      public APIPageViewHistoryRequest build() {
-        return new APIPageViewHistoryRequest(this);
+      public APIPageArticleViewHistoryRequest build() {
+        return new APIPageArticleViewHistoryRequest(this);
       }
     }
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param apiRequest {@link APIPageWatchedRequest}
-   * @return PageWatchedArticlesResp
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedArticlesRequest}
+   * @return PageCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public PageWatchedArticlesResp pageWatched(APIPageWatchedRequest apiRequest) throws ApiException {
-    return pageWatched(apiRequest, null);
+  public PageCollectedArticlesResp pageCollectedArticles(APIPageCollectedArticlesRequest apiRequest) throws ApiException {
+    return pageCollectedArticles(apiRequest, null);
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param apiRequest {@link APIPageWatchedRequest}
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedArticlesRequest}
    * @param headers Optional headers to include in the request
-   * @return PageWatchedArticlesResp
+   * @return PageCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public PageWatchedArticlesResp pageWatched(APIPageWatchedRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public PageCollectedArticlesResp pageCollectedArticles(APIPageCollectedArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    PageWatchedArticlesReq pageWatchedArticlesReq = apiRequest.pageWatchedArticlesReq();
-    return pageWatched(pageWatchedArticlesReq, headers);
+    PageCollectedArticlesReq pageCollectedArticlesReq = apiRequest.pageCollectedArticlesReq();
+    return pageCollectedArticles(pageCollectedArticlesReq, headers);
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param apiRequest {@link APIPageWatchedRequest}
-   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedArticlesRequest}
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(APIPageWatchedRequest apiRequest) throws ApiException {
-    return pageWatchedWithHttpInfo(apiRequest, null);
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedArticlesWithHttpInfo(APIPageCollectedArticlesRequest apiRequest) throws ApiException {
+    return pageCollectedArticlesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param apiRequest {@link APIPageWatchedRequest}
+   * 查询当前账号收藏的文章。
+   * @param apiRequest {@link APIPageCollectedArticlesRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(APIPageWatchedRequest apiRequest, Map<String, String> headers) throws ApiException {
-    PageWatchedArticlesReq pageWatchedArticlesReq = apiRequest.pageWatchedArticlesReq();
-    return pageWatchedWithHttpInfo(pageWatchedArticlesReq, headers);
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedArticlesWithHttpInfo(APIPageCollectedArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PageCollectedArticlesReq pageCollectedArticlesReq = apiRequest.pageCollectedArticlesReq();
+    return pageCollectedArticlesWithHttpInfo(pageCollectedArticlesReq, headers);
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param pageWatchedArticlesReq  (required)
-   * @return PageWatchedArticlesResp
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
+   * @return PageCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public PageWatchedArticlesResp pageWatched(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq) throws ApiException {
-    return pageWatched(pageWatchedArticlesReq, null);
+  public PageCollectedArticlesResp pageCollectedArticles(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) throws ApiException {
+    return pageCollectedArticles(pageCollectedArticlesReq, null);
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param pageWatchedArticlesReq  (required)
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return PageWatchedArticlesResp
+   * @return PageCollectedArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public PageWatchedArticlesResp pageWatched(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<PageWatchedArticlesResp> localVarResponse = pageWatchedWithHttpInfo(pageWatchedArticlesReq, headers);
+  public PageCollectedArticlesResp pageCollectedArticles(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageCollectedArticlesResp> localVarResponse = pageCollectedArticlesWithHttpInfo(pageCollectedArticlesReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param pageWatchedArticlesReq  (required)
-   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq) throws ApiException {
-    return pageWatchedWithHttpInfo(pageWatchedArticlesReq, null);
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedArticlesWithHttpInfo(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) throws ApiException {
+    return pageCollectedArticlesWithHttpInfo(pageCollectedArticlesReq, null);
   }
 
   /**
    * 
-   * 查询当前账号关注的文章。
-   * @param pageWatchedArticlesReq  (required)
+   * 查询当前账号收藏的文章。
+   * @param pageCollectedArticlesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @return ApiResponse&lt;PageCollectedArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<PageWatchedArticlesResp> pageWatchedWithHttpInfo(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = pageWatchedRequestBuilder(pageWatchedArticlesReq, headers);
+  public ApiResponse<PageCollectedArticlesResp> pageCollectedArticlesWithHttpInfo(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageCollectedArticlesRequestBuilder(pageCollectedArticlesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -3317,7 +3116,208 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("pageWatched", localVarResponse);
+          throw getApiException("pageCollectedArticles", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<PageCollectedArticlesResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        PageCollectedArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageCollectedArticlesResp>() {});
+        
+
+        return new ApiResponse<PageCollectedArticlesResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder pageCollectedArticlesRequestBuilder(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'pageCollectedArticlesReq' is set
+    if (pageCollectedArticlesReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'pageCollectedArticlesReq' when calling pageCollectedArticles");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/collected/page";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(pageCollectedArticlesReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIPageCollectedArticlesRequest {
+    @javax.annotation.Nonnull
+    private PageCollectedArticlesReq pageCollectedArticlesReq; //  (required)
+
+    private APIPageCollectedArticlesRequest(Builder builder) {
+      this.pageCollectedArticlesReq = builder.pageCollectedArticlesReq;
+    }
+    @javax.annotation.Nonnull
+    public PageCollectedArticlesReq pageCollectedArticlesReq() {
+      return pageCollectedArticlesReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private PageCollectedArticlesReq pageCollectedArticlesReq;
+
+      public Builder pageCollectedArticlesReq(@javax.annotation.Nonnull PageCollectedArticlesReq pageCollectedArticlesReq) {
+        this.pageCollectedArticlesReq = pageCollectedArticlesReq;
+        return this;
+      }
+      public APIPageCollectedArticlesRequest build() {
+        return new APIPageCollectedArticlesRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedArticlesRequest}
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatchedArticles(APIPageWatchedArticlesRequest apiRequest) throws ApiException {
+    return pageWatchedArticles(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedArticlesRequest}
+   * @param headers Optional headers to include in the request
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatchedArticles(APIPageWatchedArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    PageWatchedArticlesReq pageWatchedArticlesReq = apiRequest.pageWatchedArticlesReq();
+    return pageWatchedArticles(pageWatchedArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedArticlesRequest}
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedArticlesWithHttpInfo(APIPageWatchedArticlesRequest apiRequest) throws ApiException {
+    return pageWatchedArticlesWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param apiRequest {@link APIPageWatchedArticlesRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedArticlesWithHttpInfo(APIPageWatchedArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PageWatchedArticlesReq pageWatchedArticlesReq = apiRequest.pageWatchedArticlesReq();
+    return pageWatchedArticlesWithHttpInfo(pageWatchedArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatchedArticles(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq) throws ApiException {
+    return pageWatchedArticles(pageWatchedArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return PageWatchedArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageWatchedArticlesResp pageWatchedArticles(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageWatchedArticlesResp> localVarResponse = pageWatchedArticlesWithHttpInfo(pageWatchedArticlesReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedArticlesWithHttpInfo(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq) throws ApiException {
+    return pageWatchedArticlesWithHttpInfo(pageWatchedArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注的文章。
+   * @param pageWatchedArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageWatchedArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageWatchedArticlesResp> pageWatchedArticlesWithHttpInfo(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageWatchedArticlesRequestBuilder(pageWatchedArticlesReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("pageWatchedArticles", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -3353,10 +3353,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder pageWatchedRequestBuilder(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder pageWatchedArticlesRequestBuilder(@javax.annotation.Nonnull PageWatchedArticlesReq pageWatchedArticlesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'pageWatchedArticlesReq' is set
     if (pageWatchedArticlesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'pageWatchedArticlesReq' when calling pageWatched");
+      throw new ApiException(400, "Missing the required parameter 'pageWatchedArticlesReq' when calling pageWatchedArticles");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -3386,11 +3386,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIPageWatchedRequest {
+  public static final class APIPageWatchedArticlesRequest {
     @javax.annotation.Nonnull
     private PageWatchedArticlesReq pageWatchedArticlesReq; //  (required)
 
-    private APIPageWatchedRequest(Builder builder) {
+    private APIPageWatchedArticlesRequest(Builder builder) {
       this.pageWatchedArticlesReq = builder.pageWatchedArticlesReq;
     }
     @javax.annotation.Nonnull
@@ -3408,8 +3408,8 @@ public class ArticleService {
         this.pageWatchedArticlesReq = pageWatchedArticlesReq;
         return this;
       }
-      public APIPageWatchedRequest build() {
-        return new APIPageWatchedRequest(this);
+      public APIPageWatchedArticlesRequest build() {
+        return new APIPageWatchedArticlesRequest(this);
       }
     }
   }
@@ -3417,50 +3417,50 @@ public class ArticleService {
   /**
    * 
    * 发布文章
-   * @param apiRequest {@link APIPublishRequest}
+   * @param apiRequest {@link APIPublishArticleRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object publish(APIPublishRequest apiRequest) throws ApiException {
-    return publish(apiRequest, null);
+  public Object publishArticle(APIPublishArticleRequest apiRequest) throws ApiException {
+    return publishArticle(apiRequest, null);
   }
 
   /**
    * 
    * 发布文章
-   * @param apiRequest {@link APIPublishRequest}
+   * @param apiRequest {@link APIPublishArticleRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object publish(APIPublishRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object publishArticle(APIPublishArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     PublishArticleReq publishArticleReq = apiRequest.publishArticleReq();
-    return publish(publishArticleReq, headers);
+    return publishArticle(publishArticleReq, headers);
   }
 
   /**
    * 
    * 发布文章
-   * @param apiRequest {@link APIPublishRequest}
+   * @param apiRequest {@link APIPublishArticleRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> publishWithHttpInfo(APIPublishRequest apiRequest) throws ApiException {
-    return publishWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> publishArticleWithHttpInfo(APIPublishArticleRequest apiRequest) throws ApiException {
+    return publishArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 发布文章
-   * @param apiRequest {@link APIPublishRequest}
+   * @param apiRequest {@link APIPublishArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> publishWithHttpInfo(APIPublishRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> publishArticleWithHttpInfo(APIPublishArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     PublishArticleReq publishArticleReq = apiRequest.publishArticleReq();
-    return publishWithHttpInfo(publishArticleReq, headers);
+    return publishArticleWithHttpInfo(publishArticleReq, headers);
   }
 
   /**
@@ -3470,8 +3470,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object publish(@javax.annotation.Nonnull PublishArticleReq publishArticleReq) throws ApiException {
-    return publish(publishArticleReq, null);
+  public Object publishArticle(@javax.annotation.Nonnull PublishArticleReq publishArticleReq) throws ApiException {
+    return publishArticle(publishArticleReq, null);
   }
 
   /**
@@ -3482,8 +3482,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object publish(@javax.annotation.Nonnull PublishArticleReq publishArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = publishWithHttpInfo(publishArticleReq, headers);
+  public Object publishArticle(@javax.annotation.Nonnull PublishArticleReq publishArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = publishArticleWithHttpInfo(publishArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -3494,8 +3494,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> publishWithHttpInfo(@javax.annotation.Nonnull PublishArticleReq publishArticleReq) throws ApiException {
-    return publishWithHttpInfo(publishArticleReq, null);
+  public ApiResponse<Object> publishArticleWithHttpInfo(@javax.annotation.Nonnull PublishArticleReq publishArticleReq) throws ApiException {
+    return publishArticleWithHttpInfo(publishArticleReq, null);
   }
 
   /**
@@ -3506,8 +3506,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> publishWithHttpInfo(@javax.annotation.Nonnull PublishArticleReq publishArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = publishRequestBuilder(publishArticleReq, headers);
+  public ApiResponse<Object> publishArticleWithHttpInfo(@javax.annotation.Nonnull PublishArticleReq publishArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = publishArticleRequestBuilder(publishArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -3518,7 +3518,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("publish", localVarResponse);
+          throw getApiException("publishArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -3554,10 +3554,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder publishRequestBuilder(@javax.annotation.Nonnull PublishArticleReq publishArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder publishArticleRequestBuilder(@javax.annotation.Nonnull PublishArticleReq publishArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'publishArticleReq' is set
     if (publishArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'publishArticleReq' when calling publish");
+      throw new ApiException(400, "Missing the required parameter 'publishArticleReq' when calling publishArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -3587,11 +3587,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIPublishRequest {
+  public static final class APIPublishArticleRequest {
     @javax.annotation.Nonnull
     private PublishArticleReq publishArticleReq; //  (required)
 
-    private APIPublishRequest(Builder builder) {
+    private APIPublishArticleRequest(Builder builder) {
       this.publishArticleReq = builder.publishArticleReq;
     }
     @javax.annotation.Nonnull
@@ -3609,8 +3609,8 @@ public class ArticleService {
         this.publishArticleReq = publishArticleReq;
         return this;
       }
-      public APIPublishRequest build() {
-        return new APIPublishRequest(this);
+      public APIPublishArticleRequest build() {
+        return new APIPublishArticleRequest(this);
       }
     }
   }
@@ -3618,50 +3618,50 @@ public class ArticleService {
   /**
    * 
    * 打赏文章
-   * @param apiRequest {@link APIRewardRequest}
+   * @param apiRequest {@link APIRewardArticleRequest}
    * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public RewardArticleResp reward(APIRewardRequest apiRequest) throws ApiException {
-    return reward(apiRequest, null);
+  public RewardArticleResp rewardArticle(APIRewardArticleRequest apiRequest) throws ApiException {
+    return rewardArticle(apiRequest, null);
   }
 
   /**
    * 
    * 打赏文章
-   * @param apiRequest {@link APIRewardRequest}
+   * @param apiRequest {@link APIRewardArticleRequest}
    * @param headers Optional headers to include in the request
    * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public RewardArticleResp reward(APIRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public RewardArticleResp rewardArticle(APIRewardArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     RewardArticleReq rewardArticleReq = apiRequest.rewardArticleReq();
-    return reward(rewardArticleReq, headers);
+    return rewardArticle(rewardArticleReq, headers);
   }
 
   /**
    * 
    * 打赏文章
-   * @param apiRequest {@link APIRewardRequest}
+   * @param apiRequest {@link APIRewardArticleRequest}
    * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(APIRewardRequest apiRequest) throws ApiException {
-    return rewardWithHttpInfo(apiRequest, null);
+  public ApiResponse<RewardArticleResp> rewardArticleWithHttpInfo(APIRewardArticleRequest apiRequest) throws ApiException {
+    return rewardArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 打赏文章
-   * @param apiRequest {@link APIRewardRequest}
+   * @param apiRequest {@link APIRewardArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(APIRewardRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<RewardArticleResp> rewardArticleWithHttpInfo(APIRewardArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     RewardArticleReq rewardArticleReq = apiRequest.rewardArticleReq();
-    return rewardWithHttpInfo(rewardArticleReq, headers);
+    return rewardArticleWithHttpInfo(rewardArticleReq, headers);
   }
 
   /**
@@ -3671,8 +3671,8 @@ public class ArticleService {
    * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public RewardArticleResp reward(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
-    return reward(rewardArticleReq, null);
+  public RewardArticleResp rewardArticle(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
+    return rewardArticle(rewardArticleReq, null);
   }
 
   /**
@@ -3683,8 +3683,8 @@ public class ArticleService {
    * @return RewardArticleResp
    * @throws ApiException if fails to make API call
    */
-  public RewardArticleResp reward(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<RewardArticleResp> localVarResponse = rewardWithHttpInfo(rewardArticleReq, headers);
+  public RewardArticleResp rewardArticle(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<RewardArticleResp> localVarResponse = rewardArticleWithHttpInfo(rewardArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -3695,8 +3695,8 @@ public class ArticleService {
    * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
-    return rewardWithHttpInfo(rewardArticleReq, null);
+  public ApiResponse<RewardArticleResp> rewardArticleWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq) throws ApiException {
+    return rewardArticleWithHttpInfo(rewardArticleReq, null);
   }
 
   /**
@@ -3707,8 +3707,8 @@ public class ArticleService {
    * @return ApiResponse&lt;RewardArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<RewardArticleResp> rewardWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = rewardRequestBuilder(rewardArticleReq, headers);
+  public ApiResponse<RewardArticleResp> rewardArticleWithHttpInfo(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = rewardArticleRequestBuilder(rewardArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -3719,7 +3719,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("reward", localVarResponse);
+          throw getApiException("rewardArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -3755,10 +3755,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder rewardRequestBuilder(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder rewardArticleRequestBuilder(@javax.annotation.Nonnull RewardArticleReq rewardArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'rewardArticleReq' is set
     if (rewardArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'rewardArticleReq' when calling reward");
+      throw new ApiException(400, "Missing the required parameter 'rewardArticleReq' when calling rewardArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -3788,11 +3788,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIRewardRequest {
+  public static final class APIRewardArticleRequest {
     @javax.annotation.Nonnull
     private RewardArticleReq rewardArticleReq; //  (required)
 
-    private APIRewardRequest(Builder builder) {
+    private APIRewardArticleRequest(Builder builder) {
       this.rewardArticleReq = builder.rewardArticleReq;
     }
     @javax.annotation.Nonnull
@@ -3810,8 +3810,8 @@ public class ArticleService {
         this.rewardArticleReq = rewardArticleReq;
         return this;
       }
-      public APIRewardRequest build() {
-        return new APIRewardRequest(this);
+      public APIRewardArticleRequest build() {
+        return new APIRewardArticleRequest(this);
       }
     }
   }
@@ -3819,50 +3819,50 @@ public class ArticleService {
   /**
    * 
    * 设置或取消当前账号文章的置顶评论。
-   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @param apiRequest {@link APISetPinnedArticleCommentRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object setPinnedComment(APISetPinnedCommentRequest apiRequest) throws ApiException {
-    return setPinnedComment(apiRequest, null);
+  public Object setPinnedArticleComment(APISetPinnedArticleCommentRequest apiRequest) throws ApiException {
+    return setPinnedArticleComment(apiRequest, null);
   }
 
   /**
    * 
    * 设置或取消当前账号文章的置顶评论。
-   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @param apiRequest {@link APISetPinnedArticleCommentRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object setPinnedComment(APISetPinnedCommentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object setPinnedArticleComment(APISetPinnedArticleCommentRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     SetPinnedArticleCommentReq setPinnedArticleCommentReq = apiRequest.setPinnedArticleCommentReq();
-    return setPinnedComment(setPinnedArticleCommentReq, headers);
+    return setPinnedArticleComment(setPinnedArticleCommentReq, headers);
   }
 
   /**
    * 
    * 设置或取消当前账号文章的置顶评论。
-   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @param apiRequest {@link APISetPinnedArticleCommentRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> setPinnedCommentWithHttpInfo(APISetPinnedCommentRequest apiRequest) throws ApiException {
-    return setPinnedCommentWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> setPinnedArticleCommentWithHttpInfo(APISetPinnedArticleCommentRequest apiRequest) throws ApiException {
+    return setPinnedArticleCommentWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 设置或取消当前账号文章的置顶评论。
-   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @param apiRequest {@link APISetPinnedArticleCommentRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> setPinnedCommentWithHttpInfo(APISetPinnedCommentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> setPinnedArticleCommentWithHttpInfo(APISetPinnedArticleCommentRequest apiRequest, Map<String, String> headers) throws ApiException {
     SetPinnedArticleCommentReq setPinnedArticleCommentReq = apiRequest.setPinnedArticleCommentReq();
-    return setPinnedCommentWithHttpInfo(setPinnedArticleCommentReq, headers);
+    return setPinnedArticleCommentWithHttpInfo(setPinnedArticleCommentReq, headers);
   }
 
   /**
@@ -3872,8 +3872,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object setPinnedComment(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq) throws ApiException {
-    return setPinnedComment(setPinnedArticleCommentReq, null);
+  public Object setPinnedArticleComment(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq) throws ApiException {
+    return setPinnedArticleComment(setPinnedArticleCommentReq, null);
   }
 
   /**
@@ -3884,8 +3884,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object setPinnedComment(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = setPinnedCommentWithHttpInfo(setPinnedArticleCommentReq, headers);
+  public Object setPinnedArticleComment(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = setPinnedArticleCommentWithHttpInfo(setPinnedArticleCommentReq, headers);
     return localVarResponse.getData();
   }
 
@@ -3896,8 +3896,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> setPinnedCommentWithHttpInfo(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq) throws ApiException {
-    return setPinnedCommentWithHttpInfo(setPinnedArticleCommentReq, null);
+  public ApiResponse<Object> setPinnedArticleCommentWithHttpInfo(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq) throws ApiException {
+    return setPinnedArticleCommentWithHttpInfo(setPinnedArticleCommentReq, null);
   }
 
   /**
@@ -3908,8 +3908,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> setPinnedCommentWithHttpInfo(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = setPinnedCommentRequestBuilder(setPinnedArticleCommentReq, headers);
+  public ApiResponse<Object> setPinnedArticleCommentWithHttpInfo(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = setPinnedArticleCommentRequestBuilder(setPinnedArticleCommentReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -3920,7 +3920,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("setPinnedComment", localVarResponse);
+          throw getApiException("setPinnedArticleComment", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -3956,10 +3956,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder setPinnedCommentRequestBuilder(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder setPinnedArticleCommentRequestBuilder(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'setPinnedArticleCommentReq' is set
     if (setPinnedArticleCommentReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'setPinnedArticleCommentReq' when calling setPinnedComment");
+      throw new ApiException(400, "Missing the required parameter 'setPinnedArticleCommentReq' when calling setPinnedArticleComment");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -3989,11 +3989,11 @@ public class ArticleService {
   }
 
 
-  public static final class APISetPinnedCommentRequest {
+  public static final class APISetPinnedArticleCommentRequest {
     @javax.annotation.Nonnull
     private SetPinnedArticleCommentReq setPinnedArticleCommentReq; //  (required)
 
-    private APISetPinnedCommentRequest(Builder builder) {
+    private APISetPinnedArticleCommentRequest(Builder builder) {
       this.setPinnedArticleCommentReq = builder.setPinnedArticleCommentReq;
     }
     @javax.annotation.Nonnull
@@ -4011,8 +4011,8 @@ public class ArticleService {
         this.setPinnedArticleCommentReq = setPinnedArticleCommentReq;
         return this;
       }
-      public APISetPinnedCommentRequest build() {
-        return new APISetPinnedCommentRequest(this);
+      public APISetPinnedArticleCommentRequest build() {
+        return new APISetPinnedArticleCommentRequest(this);
       }
     }
   }
@@ -4020,50 +4020,50 @@ public class ArticleService {
   /**
    * 
    * 感谢文章，确认后不可撤销。
-   * @param apiRequest {@link APIThankRequest}
+   * @param apiRequest {@link APIThankArticleRequest}
    * @return ThankArticleResp
    * @throws ApiException if fails to make API call
    */
-  public ThankArticleResp thank(APIThankRequest apiRequest) throws ApiException {
-    return thank(apiRequest, null);
+  public ThankArticleResp thankArticle(APIThankArticleRequest apiRequest) throws ApiException {
+    return thankArticle(apiRequest, null);
   }
 
   /**
    * 
    * 感谢文章，确认后不可撤销。
-   * @param apiRequest {@link APIThankRequest}
+   * @param apiRequest {@link APIThankArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ThankArticleResp
    * @throws ApiException if fails to make API call
    */
-  public ThankArticleResp thank(APIThankRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ThankArticleResp thankArticle(APIThankArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     ThankArticleReq thankArticleReq = apiRequest.thankArticleReq();
-    return thank(thankArticleReq, headers);
+    return thankArticle(thankArticleReq, headers);
   }
 
   /**
    * 
    * 感谢文章，确认后不可撤销。
-   * @param apiRequest {@link APIThankRequest}
+   * @param apiRequest {@link APIThankArticleRequest}
    * @return ApiResponse&lt;ThankArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankArticleResp> thankWithHttpInfo(APIThankRequest apiRequest) throws ApiException {
-    return thankWithHttpInfo(apiRequest, null);
+  public ApiResponse<ThankArticleResp> thankArticleWithHttpInfo(APIThankArticleRequest apiRequest) throws ApiException {
+    return thankArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 感谢文章，确认后不可撤销。
-   * @param apiRequest {@link APIThankRequest}
+   * @param apiRequest {@link APIThankArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ThankArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankArticleResp> thankWithHttpInfo(APIThankRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ThankArticleResp> thankArticleWithHttpInfo(APIThankArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     ThankArticleReq thankArticleReq = apiRequest.thankArticleReq();
-    return thankWithHttpInfo(thankArticleReq, headers);
+    return thankArticleWithHttpInfo(thankArticleReq, headers);
   }
 
   /**
@@ -4073,8 +4073,8 @@ public class ArticleService {
    * @return ThankArticleResp
    * @throws ApiException if fails to make API call
    */
-  public ThankArticleResp thank(@javax.annotation.Nonnull ThankArticleReq thankArticleReq) throws ApiException {
-    return thank(thankArticleReq, null);
+  public ThankArticleResp thankArticle(@javax.annotation.Nonnull ThankArticleReq thankArticleReq) throws ApiException {
+    return thankArticle(thankArticleReq, null);
   }
 
   /**
@@ -4085,8 +4085,8 @@ public class ArticleService {
    * @return ThankArticleResp
    * @throws ApiException if fails to make API call
    */
-  public ThankArticleResp thank(@javax.annotation.Nonnull ThankArticleReq thankArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<ThankArticleResp> localVarResponse = thankWithHttpInfo(thankArticleReq, headers);
+  public ThankArticleResp thankArticle(@javax.annotation.Nonnull ThankArticleReq thankArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ThankArticleResp> localVarResponse = thankArticleWithHttpInfo(thankArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -4097,8 +4097,8 @@ public class ArticleService {
    * @return ApiResponse&lt;ThankArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankArticleResp> thankWithHttpInfo(@javax.annotation.Nonnull ThankArticleReq thankArticleReq) throws ApiException {
-    return thankWithHttpInfo(thankArticleReq, null);
+  public ApiResponse<ThankArticleResp> thankArticleWithHttpInfo(@javax.annotation.Nonnull ThankArticleReq thankArticleReq) throws ApiException {
+    return thankArticleWithHttpInfo(thankArticleReq, null);
   }
 
   /**
@@ -4109,8 +4109,8 @@ public class ArticleService {
    * @return ApiResponse&lt;ThankArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankArticleResp> thankWithHttpInfo(@javax.annotation.Nonnull ThankArticleReq thankArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = thankRequestBuilder(thankArticleReq, headers);
+  public ApiResponse<ThankArticleResp> thankArticleWithHttpInfo(@javax.annotation.Nonnull ThankArticleReq thankArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = thankArticleRequestBuilder(thankArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -4121,7 +4121,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("thank", localVarResponse);
+          throw getApiException("thankArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -4157,10 +4157,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder thankRequestBuilder(@javax.annotation.Nonnull ThankArticleReq thankArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder thankArticleRequestBuilder(@javax.annotation.Nonnull ThankArticleReq thankArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'thankArticleReq' is set
     if (thankArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'thankArticleReq' when calling thank");
+      throw new ApiException(400, "Missing the required parameter 'thankArticleReq' when calling thankArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -4190,11 +4190,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIThankRequest {
+  public static final class APIThankArticleRequest {
     @javax.annotation.Nonnull
     private ThankArticleReq thankArticleReq; //  (required)
 
-    private APIThankRequest(Builder builder) {
+    private APIThankArticleRequest(Builder builder) {
       this.thankArticleReq = builder.thankArticleReq;
     }
     @javax.annotation.Nonnull
@@ -4212,8 +4212,8 @@ public class ArticleService {
         this.thankArticleReq = thankArticleReq;
         return this;
       }
-      public APIThankRequest build() {
-        return new APIThankRequest(this);
+      public APIThankArticleRequest build() {
+        return new APIThankArticleRequest(this);
       }
     }
   }
@@ -4221,50 +4221,50 @@ public class ArticleService {
   /**
    * 
    * 编辑文章草稿
-   * @param apiRequest {@link APIUpdateDraftRequest}
+   * @param apiRequest {@link APIUpdateDraftArticleRequest}
    * @return UpdateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateDraftArticleResp updateDraft(APIUpdateDraftRequest apiRequest) throws ApiException {
-    return updateDraft(apiRequest, null);
+  public UpdateDraftArticleResp updateDraftArticle(APIUpdateDraftArticleRequest apiRequest) throws ApiException {
+    return updateDraftArticle(apiRequest, null);
   }
 
   /**
    * 
    * 编辑文章草稿
-   * @param apiRequest {@link APIUpdateDraftRequest}
+   * @param apiRequest {@link APIUpdateDraftArticleRequest}
    * @param headers Optional headers to include in the request
    * @return UpdateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateDraftArticleResp updateDraft(APIUpdateDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public UpdateDraftArticleResp updateDraftArticle(APIUpdateDraftArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     UpdateDraftArticleReq updateDraftArticleReq = apiRequest.updateDraftArticleReq();
-    return updateDraft(updateDraftArticleReq, headers);
+    return updateDraftArticle(updateDraftArticleReq, headers);
   }
 
   /**
    * 
    * 编辑文章草稿
-   * @param apiRequest {@link APIUpdateDraftRequest}
+   * @param apiRequest {@link APIUpdateDraftArticleRequest}
    * @return ApiResponse&lt;UpdateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateDraftArticleResp> updateDraftWithHttpInfo(APIUpdateDraftRequest apiRequest) throws ApiException {
-    return updateDraftWithHttpInfo(apiRequest, null);
+  public ApiResponse<UpdateDraftArticleResp> updateDraftArticleWithHttpInfo(APIUpdateDraftArticleRequest apiRequest) throws ApiException {
+    return updateDraftArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 编辑文章草稿
-   * @param apiRequest {@link APIUpdateDraftRequest}
+   * @param apiRequest {@link APIUpdateDraftArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;UpdateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateDraftArticleResp> updateDraftWithHttpInfo(APIUpdateDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<UpdateDraftArticleResp> updateDraftArticleWithHttpInfo(APIUpdateDraftArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     UpdateDraftArticleReq updateDraftArticleReq = apiRequest.updateDraftArticleReq();
-    return updateDraftWithHttpInfo(updateDraftArticleReq, headers);
+    return updateDraftArticleWithHttpInfo(updateDraftArticleReq, headers);
   }
 
   /**
@@ -4274,8 +4274,8 @@ public class ArticleService {
    * @return UpdateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateDraftArticleResp updateDraft(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq) throws ApiException {
-    return updateDraft(updateDraftArticleReq, null);
+  public UpdateDraftArticleResp updateDraftArticle(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq) throws ApiException {
+    return updateDraftArticle(updateDraftArticleReq, null);
   }
 
   /**
@@ -4286,8 +4286,8 @@ public class ArticleService {
    * @return UpdateDraftArticleResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateDraftArticleResp updateDraft(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<UpdateDraftArticleResp> localVarResponse = updateDraftWithHttpInfo(updateDraftArticleReq, headers);
+  public UpdateDraftArticleResp updateDraftArticle(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpdateDraftArticleResp> localVarResponse = updateDraftArticleWithHttpInfo(updateDraftArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -4298,8 +4298,8 @@ public class ArticleService {
    * @return ApiResponse&lt;UpdateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateDraftArticleResp> updateDraftWithHttpInfo(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq) throws ApiException {
-    return updateDraftWithHttpInfo(updateDraftArticleReq, null);
+  public ApiResponse<UpdateDraftArticleResp> updateDraftArticleWithHttpInfo(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq) throws ApiException {
+    return updateDraftArticleWithHttpInfo(updateDraftArticleReq, null);
   }
 
   /**
@@ -4310,8 +4310,8 @@ public class ArticleService {
    * @return ApiResponse&lt;UpdateDraftArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateDraftArticleResp> updateDraftWithHttpInfo(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = updateDraftRequestBuilder(updateDraftArticleReq, headers);
+  public ApiResponse<UpdateDraftArticleResp> updateDraftArticleWithHttpInfo(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updateDraftArticleRequestBuilder(updateDraftArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -4322,7 +4322,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("updateDraft", localVarResponse);
+          throw getApiException("updateDraftArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -4358,10 +4358,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder updateDraftRequestBuilder(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder updateDraftArticleRequestBuilder(@javax.annotation.Nonnull UpdateDraftArticleReq updateDraftArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'updateDraftArticleReq' is set
     if (updateDraftArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'updateDraftArticleReq' when calling updateDraft");
+      throw new ApiException(400, "Missing the required parameter 'updateDraftArticleReq' when calling updateDraftArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -4391,11 +4391,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIUpdateDraftRequest {
+  public static final class APIUpdateDraftArticleRequest {
     @javax.annotation.Nonnull
     private UpdateDraftArticleReq updateDraftArticleReq; //  (required)
 
-    private APIUpdateDraftRequest(Builder builder) {
+    private APIUpdateDraftArticleRequest(Builder builder) {
       this.updateDraftArticleReq = builder.updateDraftArticleReq;
     }
     @javax.annotation.Nonnull
@@ -4413,8 +4413,8 @@ public class ArticleService {
         this.updateDraftArticleReq = updateDraftArticleReq;
         return this;
       }
-      public APIUpdateDraftRequest build() {
-        return new APIUpdateDraftRequest(this);
+      public APIUpdateDraftArticleRequest build() {
+        return new APIUpdateDraftArticleRequest(this);
       }
     }
   }
@@ -4422,50 +4422,50 @@ public class ArticleService {
   /**
    * 
    * 提交一次不可修改的文章投票。
-   * @param apiRequest {@link APIVotePollRequest}
+   * @param apiRequest {@link APIVoteArticlePollRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object votePoll(APIVotePollRequest apiRequest) throws ApiException {
-    return votePoll(apiRequest, null);
+  public Object voteArticlePoll(APIVoteArticlePollRequest apiRequest) throws ApiException {
+    return voteArticlePoll(apiRequest, null);
   }
 
   /**
    * 
    * 提交一次不可修改的文章投票。
-   * @param apiRequest {@link APIVotePollRequest}
+   * @param apiRequest {@link APIVoteArticlePollRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object votePoll(APIVotePollRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object voteArticlePoll(APIVoteArticlePollRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     VoteArticlePollReq voteArticlePollReq = apiRequest.voteArticlePollReq();
-    return votePoll(voteArticlePollReq, headers);
+    return voteArticlePoll(voteArticlePollReq, headers);
   }
 
   /**
    * 
    * 提交一次不可修改的文章投票。
-   * @param apiRequest {@link APIVotePollRequest}
+   * @param apiRequest {@link APIVoteArticlePollRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> votePollWithHttpInfo(APIVotePollRequest apiRequest) throws ApiException {
-    return votePollWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> voteArticlePollWithHttpInfo(APIVoteArticlePollRequest apiRequest) throws ApiException {
+    return voteArticlePollWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 提交一次不可修改的文章投票。
-   * @param apiRequest {@link APIVotePollRequest}
+   * @param apiRequest {@link APIVoteArticlePollRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> votePollWithHttpInfo(APIVotePollRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> voteArticlePollWithHttpInfo(APIVoteArticlePollRequest apiRequest, Map<String, String> headers) throws ApiException {
     VoteArticlePollReq voteArticlePollReq = apiRequest.voteArticlePollReq();
-    return votePollWithHttpInfo(voteArticlePollReq, headers);
+    return voteArticlePollWithHttpInfo(voteArticlePollReq, headers);
   }
 
   /**
@@ -4475,8 +4475,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object votePoll(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq) throws ApiException {
-    return votePoll(voteArticlePollReq, null);
+  public Object voteArticlePoll(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq) throws ApiException {
+    return voteArticlePoll(voteArticlePollReq, null);
   }
 
   /**
@@ -4487,8 +4487,8 @@ public class ArticleService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object votePoll(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = votePollWithHttpInfo(voteArticlePollReq, headers);
+  public Object voteArticlePoll(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = voteArticlePollWithHttpInfo(voteArticlePollReq, headers);
     return localVarResponse.getData();
   }
 
@@ -4499,8 +4499,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> votePollWithHttpInfo(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq) throws ApiException {
-    return votePollWithHttpInfo(voteArticlePollReq, null);
+  public ApiResponse<Object> voteArticlePollWithHttpInfo(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq) throws ApiException {
+    return voteArticlePollWithHttpInfo(voteArticlePollReq, null);
   }
 
   /**
@@ -4511,8 +4511,8 @@ public class ArticleService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> votePollWithHttpInfo(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = votePollRequestBuilder(voteArticlePollReq, headers);
+  public ApiResponse<Object> voteArticlePollWithHttpInfo(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = voteArticlePollRequestBuilder(voteArticlePollReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -4523,7 +4523,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("votePoll", localVarResponse);
+          throw getApiException("voteArticlePoll", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -4559,10 +4559,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder votePollRequestBuilder(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder voteArticlePollRequestBuilder(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'voteArticlePollReq' is set
     if (voteArticlePollReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'voteArticlePollReq' when calling votePoll");
+      throw new ApiException(400, "Missing the required parameter 'voteArticlePollReq' when calling voteArticlePoll");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -4592,11 +4592,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIVotePollRequest {
+  public static final class APIVoteArticlePollRequest {
     @javax.annotation.Nonnull
     private VoteArticlePollReq voteArticlePollReq; //  (required)
 
-    private APIVotePollRequest(Builder builder) {
+    private APIVoteArticlePollRequest(Builder builder) {
       this.voteArticlePollReq = builder.voteArticlePollReq;
     }
     @javax.annotation.Nonnull
@@ -4614,8 +4614,8 @@ public class ArticleService {
         this.voteArticlePollReq = voteArticlePollReq;
         return this;
       }
-      public APIVotePollRequest build() {
-        return new APIVotePollRequest(this);
+      public APIVoteArticlePollRequest build() {
+        return new APIVoteArticlePollRequest(this);
       }
     }
   }
@@ -4623,50 +4623,50 @@ public class ArticleService {
   /**
    * 
    * 关注文章
-   * @param apiRequest {@link APIWatchRequest}
+   * @param apiRequest {@link APIWatchArticleRequest}
    * @return WatchArticleResp
    * @throws ApiException if fails to make API call
    */
-  public WatchArticleResp watch(APIWatchRequest apiRequest) throws ApiException {
-    return watch(apiRequest, null);
+  public WatchArticleResp watchArticle(APIWatchArticleRequest apiRequest) throws ApiException {
+    return watchArticle(apiRequest, null);
   }
 
   /**
    * 
    * 关注文章
-   * @param apiRequest {@link APIWatchRequest}
+   * @param apiRequest {@link APIWatchArticleRequest}
    * @param headers Optional headers to include in the request
    * @return WatchArticleResp
    * @throws ApiException if fails to make API call
    */
-  public WatchArticleResp watch(APIWatchRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public WatchArticleResp watchArticle(APIWatchArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     WatchArticleReq watchArticleReq = apiRequest.watchArticleReq();
-    return watch(watchArticleReq, headers);
+    return watchArticle(watchArticleReq, headers);
   }
 
   /**
    * 
    * 关注文章
-   * @param apiRequest {@link APIWatchRequest}
+   * @param apiRequest {@link APIWatchArticleRequest}
    * @return ApiResponse&lt;WatchArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<WatchArticleResp> watchWithHttpInfo(APIWatchRequest apiRequest) throws ApiException {
-    return watchWithHttpInfo(apiRequest, null);
+  public ApiResponse<WatchArticleResp> watchArticleWithHttpInfo(APIWatchArticleRequest apiRequest) throws ApiException {
+    return watchArticleWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 关注文章
-   * @param apiRequest {@link APIWatchRequest}
+   * @param apiRequest {@link APIWatchArticleRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;WatchArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<WatchArticleResp> watchWithHttpInfo(APIWatchRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<WatchArticleResp> watchArticleWithHttpInfo(APIWatchArticleRequest apiRequest, Map<String, String> headers) throws ApiException {
     WatchArticleReq watchArticleReq = apiRequest.watchArticleReq();
-    return watchWithHttpInfo(watchArticleReq, headers);
+    return watchArticleWithHttpInfo(watchArticleReq, headers);
   }
 
   /**
@@ -4676,8 +4676,8 @@ public class ArticleService {
    * @return WatchArticleResp
    * @throws ApiException if fails to make API call
    */
-  public WatchArticleResp watch(@javax.annotation.Nonnull WatchArticleReq watchArticleReq) throws ApiException {
-    return watch(watchArticleReq, null);
+  public WatchArticleResp watchArticle(@javax.annotation.Nonnull WatchArticleReq watchArticleReq) throws ApiException {
+    return watchArticle(watchArticleReq, null);
   }
 
   /**
@@ -4688,8 +4688,8 @@ public class ArticleService {
    * @return WatchArticleResp
    * @throws ApiException if fails to make API call
    */
-  public WatchArticleResp watch(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<WatchArticleResp> localVarResponse = watchWithHttpInfo(watchArticleReq, headers);
+  public WatchArticleResp watchArticle(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<WatchArticleResp> localVarResponse = watchArticleWithHttpInfo(watchArticleReq, headers);
     return localVarResponse.getData();
   }
 
@@ -4700,8 +4700,8 @@ public class ArticleService {
    * @return ApiResponse&lt;WatchArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<WatchArticleResp> watchWithHttpInfo(@javax.annotation.Nonnull WatchArticleReq watchArticleReq) throws ApiException {
-    return watchWithHttpInfo(watchArticleReq, null);
+  public ApiResponse<WatchArticleResp> watchArticleWithHttpInfo(@javax.annotation.Nonnull WatchArticleReq watchArticleReq) throws ApiException {
+    return watchArticleWithHttpInfo(watchArticleReq, null);
   }
 
   /**
@@ -4712,8 +4712,8 @@ public class ArticleService {
    * @return ApiResponse&lt;WatchArticleResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<WatchArticleResp> watchWithHttpInfo(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = watchRequestBuilder(watchArticleReq, headers);
+  public ApiResponse<WatchArticleResp> watchArticleWithHttpInfo(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = watchArticleRequestBuilder(watchArticleReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -4724,7 +4724,7 @@ public class ArticleService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("watch", localVarResponse);
+          throw getApiException("watchArticle", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -4760,10 +4760,10 @@ public class ArticleService {
     }
   }
 
-  private HttpRequest.Builder watchRequestBuilder(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder watchArticleRequestBuilder(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'watchArticleReq' is set
     if (watchArticleReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'watchArticleReq' when calling watch");
+      throw new ApiException(400, "Missing the required parameter 'watchArticleReq' when calling watchArticle");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -4793,11 +4793,11 @@ public class ArticleService {
   }
 
 
-  public static final class APIWatchRequest {
+  public static final class APIWatchArticleRequest {
     @javax.annotation.Nonnull
     private WatchArticleReq watchArticleReq; //  (required)
 
-    private APIWatchRequest(Builder builder) {
+    private APIWatchArticleRequest(Builder builder) {
       this.watchArticleReq = builder.watchArticleReq;
     }
     @javax.annotation.Nonnull
@@ -4815,8 +4815,8 @@ public class ArticleService {
         this.watchArticleReq = watchArticleReq;
         return this;
       }
-      public APIWatchRequest build() {
-        return new APIWatchRequest(this);
+      public APIWatchArticleRequest build() {
+        return new APIWatchArticleRequest(this);
       }
     }
   }

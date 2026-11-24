@@ -15,8 +15,9 @@ package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
 import com.bass.bbs.model.DeleteBadgeDraftReq;
-import com.bass.bbs.model.ImageResp;
 import com.bass.bbs.model.ListBadgeDraftsResp;
+import com.bass.bbs.model.RenderMakerBadgeResp;
+import com.bass.bbs.model.RenderPublishedBadgeResp;
 import com.bass.bbs.model.UpsertBadgeDraftReq;
 import com.bass.bbs.model.UpsertBadgeDraftResp;
 import org.junit.jupiter.api.Disabled;
@@ -47,14 +48,14 @@ public class BadgeServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void deleteDraftTest() throws ApiException {
+    public void deleteBadgeDraftTest() throws ApiException {
         DeleteBadgeDraftReq deleteBadgeDraftReq = null;
         
-        BadgeService.APIdeleteDraftRequest request = BadgeService.APIdeleteDraftRequest.newBuilder()
+        BadgeService.APIdeleteBadgeDraftRequest request = BadgeService.APIdeleteBadgeDraftRequest.newBuilder()
           .deleteBadgeDraftReq(deleteBadgeDraftReq)
           .build();
         Object response = 
-        api.deleteDraft(request);
+        api.deleteBadgeDraft(request);
 
         // TODO: test validations
     }
@@ -68,14 +69,14 @@ public class BadgeServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listDraftsTest() throws ApiException {
+    public void listBadgeDraftsTest() throws ApiException {
         Object body = null;
         
-        BadgeService.APIlistDraftsRequest request = BadgeService.APIlistDraftsRequest.newBuilder()
+        BadgeService.APIlistBadgeDraftsRequest request = BadgeService.APIlistBadgeDraftsRequest.newBuilder()
           .body(body)
           .build();
         ListBadgeDraftsResp response = 
-        api.listDrafts(request);
+        api.listBadgeDrafts(request);
 
         // TODO: test validations
     }
@@ -89,7 +90,7 @@ public class BadgeServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void renderMakerTest() throws ApiException {
+    public void renderMakerBadgeTest() throws ApiException {
         String renderSpecImageAssetId = null;
         String renderSpecText = null;
         List<String> renderSpecBackgroundColors = null;
@@ -106,7 +107,7 @@ public class BadgeServiceTest {
         Double renderSpecAnimationSeconds = null;
         String renderSpecFontAssetId = null;
         
-        BadgeService.APIrenderMakerRequest request = BadgeService.APIrenderMakerRequest.newBuilder()
+        BadgeService.APIrenderMakerBadgeRequest request = BadgeService.APIrenderMakerBadgeRequest.newBuilder()
           .renderSpecImageAssetId(renderSpecImageAssetId)
           .renderSpecText(renderSpecText)
           .renderSpecBackgroundColors(renderSpecBackgroundColors)
@@ -123,8 +124,8 @@ public class BadgeServiceTest {
           .renderSpecAnimationSeconds(renderSpecAnimationSeconds)
           .renderSpecFontAssetId(renderSpecFontAssetId)
           .build();
-        ImageResp response = 
-        api.renderMaker(request);
+        RenderMakerBadgeResp response = 
+        api.renderMakerBadge(request);
 
         // TODO: test validations
     }
@@ -138,14 +139,14 @@ public class BadgeServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void renderPublishedTest() throws ApiException {
+    public void renderPublishedBadgeTest() throws ApiException {
         String code = null;
         
-        BadgeService.APIrenderPublishedRequest request = BadgeService.APIrenderPublishedRequest.newBuilder()
+        BadgeService.APIrenderPublishedBadgeRequest request = BadgeService.APIrenderPublishedBadgeRequest.newBuilder()
           .code(code)
           .build();
-        ImageResp response = 
-        api.renderPublished(request);
+        RenderPublishedBadgeResp response = 
+        api.renderPublishedBadge(request);
 
         // TODO: test validations
     }
@@ -159,14 +160,14 @@ public class BadgeServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void upsertDraftTest() throws ApiException {
+    public void upsertBadgeDraftTest() throws ApiException {
         UpsertBadgeDraftReq upsertBadgeDraftReq = null;
         
-        BadgeService.APIupsertDraftRequest request = BadgeService.APIupsertDraftRequest.newBuilder()
+        BadgeService.APIupsertBadgeDraftRequest request = BadgeService.APIupsertBadgeDraftRequest.newBuilder()
           .upsertBadgeDraftReq(upsertBadgeDraftReq)
           .build();
         UpsertBadgeDraftResp response = 
-        api.upsertDraft(request);
+        api.upsertBadgeDraft(request);
 
         // TODO: test validations
     }

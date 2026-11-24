@@ -2,13 +2,14 @@
 
 # ListGlobalChatMessagesReq
 
+请求参数。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**beforeId** | **String** |  |  [optional] |
-|**page** | [**PageReq**](PageReq.md) |  |  [optional] |
+|**beforeId** | **String** | 向前分页游标。 |  [optional] |
+|**page** | [**PageReq**](PageReq.md) | 分页参数。 |  [optional] |
 
 
 

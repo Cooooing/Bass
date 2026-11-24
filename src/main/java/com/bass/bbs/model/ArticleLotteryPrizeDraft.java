@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleLotteryPrizeDraft
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleLotteryPrizeDraft.JSON_PROPERTY_NAME,
@@ -60,7 +60,7 @@ public class ArticleLotteryPrizeDraft {
   }
 
   /**
-   * Get name
+   * 奖项名称
    * @return name
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class ArticleLotteryPrizeDraft {
   }
 
   /**
-   * Get description
+   * 奖项说明
    * @return description
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class ArticleLotteryPrizeDraft {
   }
 
   /**
-   * Get winnerLimit
+   * 中奖名额
    * @return winnerLimit
    */
   @javax.annotation.Nullable

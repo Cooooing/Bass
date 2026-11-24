@@ -50,41 +50,20 @@ public class CommentServiceTest {
     /**
      * 
      *
-     * 分页查询评论列表。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void callListTest() throws ApiException {
-        ListCommentsReq listCommentsReq = null;
-        
-        CommentService.APIcallListRequest request = CommentService.APIcallListRequest.newBuilder()
-          .listCommentsReq(listCommentsReq)
-          .build();
-        ListCommentsResp response = 
-        api.callList(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
      * 创建评论。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void createTest() throws ApiException {
+    public void createCommentTest() throws ApiException {
         CreateCommentReq createCommentReq = null;
         
-        CommentService.APIcreateRequest request = CommentService.APIcreateRequest.newBuilder()
+        CommentService.APIcreateCommentRequest request = CommentService.APIcreateCommentRequest.newBuilder()
           .createCommentReq(createCommentReq)
           .build();
         CreateCommentResp response = 
-        api.create(request);
+        api.createComment(request);
 
         // TODO: test validations
     }
@@ -98,14 +77,14 @@ public class CommentServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void likeTest() throws ApiException {
+    public void likeCommentTest() throws ApiException {
         LikeCommentReq likeCommentReq = null;
         
-        CommentService.APIlikeRequest request = CommentService.APIlikeRequest.newBuilder()
+        CommentService.APIlikeCommentRequest request = CommentService.APIlikeCommentRequest.newBuilder()
           .likeCommentReq(likeCommentReq)
           .build();
         LikeCommentResp response = 
-        api.like(request);
+        api.likeComment(request);
 
         // TODO: test validations
     }
@@ -119,14 +98,14 @@ public class CommentServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listRepliesTest() throws ApiException {
+    public void listCommentRepliesTest() throws ApiException {
         ListCommentRepliesReq listCommentRepliesReq = null;
         
-        CommentService.APIlistRepliesRequest request = CommentService.APIlistRepliesRequest.newBuilder()
+        CommentService.APIlistCommentRepliesRequest request = CommentService.APIlistCommentRepliesRequest.newBuilder()
           .listCommentRepliesReq(listCommentRepliesReq)
           .build();
         ListCommentRepliesResp response = 
-        api.listReplies(request);
+        api.listCommentReplies(request);
 
         // TODO: test validations
     }
@@ -140,14 +119,14 @@ public class CommentServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listThreadsTest() throws ApiException {
+    public void listCommentThreadsTest() throws ApiException {
         ListCommentThreadsReq listCommentThreadsReq = null;
         
-        CommentService.APIlistThreadsRequest request = CommentService.APIlistThreadsRequest.newBuilder()
+        CommentService.APIlistCommentThreadsRequest request = CommentService.APIlistCommentThreadsRequest.newBuilder()
           .listCommentThreadsReq(listCommentThreadsReq)
           .build();
         ListCommentThreadsResp response = 
-        api.listThreads(request);
+        api.listCommentThreads(request);
 
         // TODO: test validations
     }
@@ -161,14 +140,35 @@ public class CommentServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listTimelineTest() throws ApiException {
+    public void listCommentTimelineTest() throws ApiException {
         ListCommentTimelineReq listCommentTimelineReq = null;
         
-        CommentService.APIlistTimelineRequest request = CommentService.APIlistTimelineRequest.newBuilder()
+        CommentService.APIlistCommentTimelineRequest request = CommentService.APIlistCommentTimelineRequest.newBuilder()
           .listCommentTimelineReq(listCommentTimelineReq)
           .build();
         ListCommentTimelineResp response = 
-        api.listTimeline(request);
+        api.listCommentTimeline(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 分页查询评论列表。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listCommentsTest() throws ApiException {
+        ListCommentsReq listCommentsReq = null;
+        
+        CommentService.APIlistCommentsRequest request = CommentService.APIlistCommentsRequest.newBuilder()
+          .listCommentsReq(listCommentsReq)
+          .build();
+        ListCommentsResp response = 
+        api.listComments(request);
 
         // TODO: test validations
     }
@@ -182,14 +182,14 @@ public class CommentServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void thankTest() throws ApiException {
+    public void thankCommentTest() throws ApiException {
         ThankCommentReq thankCommentReq = null;
         
-        CommentService.APIthankRequest request = CommentService.APIthankRequest.newBuilder()
+        CommentService.APIthankCommentRequest request = CommentService.APIthankCommentRequest.newBuilder()
           .thankCommentReq(thankCommentReq)
           .build();
         ThankCommentResp response = 
-        api.thank(request);
+        api.thankComment(request);
 
         // TODO: test validations
     }

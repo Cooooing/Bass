@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespLocation
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespLocation.JSON_PROPERTY_COUNTRY,
@@ -60,7 +60,7 @@ public class RespLocation {
   }
 
   /**
-   * Get country
+   * 国家或地区
    * @return country
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class RespLocation {
   }
 
   /**
-   * Get province
+   * 省份或州
    * @return province
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class RespLocation {
   }
 
   /**
-   * Get city
+   * 城市
    * @return city
    */
   @javax.annotation.Nullable

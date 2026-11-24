@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * AccountProfileListItem
+ * 协议消息。
  */
 @JsonPropertyOrder({
   AccountProfileListItem.JSON_PROPERTY_ACCOUNT,
@@ -57,7 +57,7 @@ public class AccountProfileListItem {
   }
 
   /**
-   * Get account
+   * 协议字段。
    * @return account
    */
   @javax.annotation.Nullable
@@ -81,7 +81,7 @@ public class AccountProfileListItem {
   }
 
   /**
-   * Get viewerRelation
+   * 协议字段。
    * @return viewerRelation
    */
   @javax.annotation.Nullable

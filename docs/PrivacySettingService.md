@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](PrivacySettingService.md#getCurrent) | **POST** /v1/user/privacy-setting/get-current |  |
-| [**getCurrentWithHttpInfo**](PrivacySettingService.md#getCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/get-current |  |
-| [**updateCurrent**](PrivacySettingService.md#updateCurrent) | **POST** /v1/user/privacy-setting/update-current |  |
-| [**updateCurrentWithHttpInfo**](PrivacySettingService.md#updateCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/update-current |  |
+| [**getCurrentPrivacySetting**](PrivacySettingService.md#getCurrentPrivacySetting) | **POST** /v1/user/privacy-setting/get-current |  |
+| [**getCurrentPrivacySettingWithHttpInfo**](PrivacySettingService.md#getCurrentPrivacySettingWithHttpInfo) | **POST** /v1/user/privacy-setting/get-current |  |
+| [**updateCurrentPrivacySetting**](PrivacySettingService.md#updateCurrentPrivacySetting) | **POST** /v1/user/privacy-setting/update-current |  |
+| [**updateCurrentPrivacySettingWithHttpInfo**](PrivacySettingService.md#updateCurrentPrivacySettingWithHttpInfo) | **POST** /v1/user/privacy-setting/update-current |  |
 
 
 
-## getCurrent
+## getCurrentPrivacySetting
 
-> GetCurrentPrivacySettingResp getCurrent(getCurrentRequest)
+> GetCurrentPrivacySettingResp getCurrentPrivacySetting(getCurrentPrivacySettingRequest)
 
 
 
@@ -38,13 +38,13 @@ public class Example {
         PrivacySettingService apiInstance = new PrivacySettingService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentPrivacySettingRequest request = APIgetCurrentPrivacySettingRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentPrivacySettingResp result = apiInstance.getCurrent(request);
+            GetCurrentPrivacySettingResp result = apiInstance.getCurrentPrivacySetting(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling PrivacySettingService#getCurrent");
+            System.err.println("Exception when calling PrivacySettingService#getCurrentPrivacySetting");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -58,7 +58,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](PrivacySettingService.md#APIgetCurrentRequest)|-|-|
+| getCurrentPrivacySettingRequest | [**APIgetCurrentPrivacySettingRequest**](PrivacySettingService.md#APIgetCurrentPrivacySettingRequest)|-|-|
 
 ### Return type
 
@@ -79,9 +79,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getCurrentWithHttpInfo
+## getCurrentPrivacySettingWithHttpInfo
 
-> ApiResponse<GetCurrentPrivacySettingResp> getCurrentWithHttpInfo(getCurrentRequest)
+> ApiResponse<GetCurrentPrivacySettingResp> getCurrentPrivacySettingWithHttpInfo(getCurrentPrivacySettingRequest)
 
 
 
@@ -107,15 +107,15 @@ public class Example {
         PrivacySettingService apiInstance = new PrivacySettingService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentPrivacySettingRequest request = APIgetCurrentPrivacySettingRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetCurrentPrivacySettingResp> response = apiInstance.getCurrentWithHttpInfo(request);
+            ApiResponse<GetCurrentPrivacySettingResp> response = apiInstance.getCurrentPrivacySettingWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling PrivacySettingService#getCurrent");
+            System.err.println("Exception when calling PrivacySettingService#getCurrentPrivacySetting");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -129,7 +129,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](PrivacySettingService.md#APIgetCurrentRequest)|-|-|
+| getCurrentPrivacySettingRequest | [**APIgetCurrentPrivacySettingRequest**](PrivacySettingService.md#APIgetCurrentPrivacySettingRequest)|-|-|
 
 ### Return type
 
@@ -151,8 +151,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIgetCurrentRequest"></a>
-## APIgetCurrentRequest
+<a id="APIgetCurrentPrivacySettingRequest"></a>
+## APIgetCurrentPrivacySettingRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -161,9 +161,9 @@ No authorization required
 
 
 
-## updateCurrent
+## updateCurrentPrivacySetting
 
-> UpdateCurrentPrivacySettingResp updateCurrent(updateCurrentRequest)
+> UpdateCurrentPrivacySettingResp updateCurrentPrivacySetting(updateCurrentPrivacySettingRequest)
 
 
 
@@ -188,13 +188,13 @@ public class Example {
         PrivacySettingService apiInstance = new PrivacySettingService(defaultClient);
         UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = new UpdateCurrentPrivacySettingReq(); // UpdateCurrentPrivacySettingReq | 
         try {
-            APIupdateCurrentRequest request = APIupdateCurrentRequest.newBuilder()
+            APIupdateCurrentPrivacySettingRequest request = APIupdateCurrentPrivacySettingRequest.newBuilder()
                 .updateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq)
                 .build();
-            UpdateCurrentPrivacySettingResp result = apiInstance.updateCurrent(request);
+            UpdateCurrentPrivacySettingResp result = apiInstance.updateCurrentPrivacySetting(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling PrivacySettingService#updateCurrent");
+            System.err.println("Exception when calling PrivacySettingService#updateCurrentPrivacySetting");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -208,7 +208,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateCurrentRequest | [**APIupdateCurrentRequest**](PrivacySettingService.md#APIupdateCurrentRequest)|-|-|
+| updateCurrentPrivacySettingRequest | [**APIupdateCurrentPrivacySettingRequest**](PrivacySettingService.md#APIupdateCurrentPrivacySettingRequest)|-|-|
 
 ### Return type
 
@@ -229,9 +229,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updateCurrentWithHttpInfo
+## updateCurrentPrivacySettingWithHttpInfo
 
-> ApiResponse<UpdateCurrentPrivacySettingResp> updateCurrentWithHttpInfo(updateCurrentRequest)
+> ApiResponse<UpdateCurrentPrivacySettingResp> updateCurrentPrivacySettingWithHttpInfo(updateCurrentPrivacySettingRequest)
 
 
 
@@ -257,15 +257,15 @@ public class Example {
         PrivacySettingService apiInstance = new PrivacySettingService(defaultClient);
         UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = new UpdateCurrentPrivacySettingReq(); // UpdateCurrentPrivacySettingReq | 
         try {
-            APIupdateCurrentRequest request = APIupdateCurrentRequest.newBuilder()
+            APIupdateCurrentPrivacySettingRequest request = APIupdateCurrentPrivacySettingRequest.newBuilder()
                 .updateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq)
                 .build();
-            ApiResponse<UpdateCurrentPrivacySettingResp> response = apiInstance.updateCurrentWithHttpInfo(request);
+            ApiResponse<UpdateCurrentPrivacySettingResp> response = apiInstance.updateCurrentPrivacySettingWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling PrivacySettingService#updateCurrent");
+            System.err.println("Exception when calling PrivacySettingService#updateCurrentPrivacySetting");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -279,7 +279,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateCurrentRequest | [**APIupdateCurrentRequest**](PrivacySettingService.md#APIupdateCurrentRequest)|-|-|
+| updateCurrentPrivacySettingRequest | [**APIupdateCurrentPrivacySettingRequest**](PrivacySettingService.md#APIupdateCurrentPrivacySettingRequest)|-|-|
 
 ### Return type
 
@@ -301,8 +301,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdateCurrentRequest"></a>
-## APIupdateCurrentRequest
+<a id="APIupdateCurrentPrivacySettingRequest"></a>
+## APIupdateCurrentPrivacySettingRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

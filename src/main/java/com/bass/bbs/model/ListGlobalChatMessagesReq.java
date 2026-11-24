@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListGlobalChatMessagesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListGlobalChatMessagesReq.JSON_PROPERTY_BEFORE_ID,
@@ -56,7 +56,7 @@ public class ListGlobalChatMessagesReq {
   }
 
   /**
-   * Get beforeId
+   * 向前分页游标。
    * @return beforeId
    */
   @javax.annotation.Nullable
@@ -80,7 +80,7 @@ public class ListGlobalChatMessagesReq {
   }
 
   /**
-   * Get page
+   * 分页参数。
    * @return page
    */
   @javax.annotation.Nullable

@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticlePoll
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticlePoll.JSON_PROPERTY_ENDS_AT,
@@ -84,7 +84,7 @@ public class ArticlePoll {
   }
 
   /**
-   * Get endsAt
+   * 截止时间
    * @return endsAt
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class ArticlePoll {
   }
 
   /**
-   * Get maxChoices
+   * 每人最多选择数
    * @return maxChoices
    */
   @javax.annotation.Nullable
@@ -140,7 +140,7 @@ public class ArticlePoll {
   }
 
   /**
-   * Get options
+   * 投票选项
    * @return options
    */
   @javax.annotation.Nullable
@@ -172,7 +172,7 @@ public class ArticlePoll {
   }
 
   /**
-   * Get selectedOptionIds
+   * 当前账号已选选项 ID
    * @return selectedOptionIds
    */
   @javax.annotation.Nullable
@@ -196,7 +196,7 @@ public class ArticlePoll {
   }
 
   /**
-   * Get resultVisible
+   * 当前账号是否可查看实时结果
    * @return resultVisible
    */
   @javax.annotation.Nullable
@@ -220,7 +220,7 @@ public class ArticlePoll {
   }
 
   /**
-   * Get participantCount
+   * 已投票账号数
    * @return participantCount
    */
   @javax.annotation.Nullable
@@ -244,7 +244,7 @@ public class ArticlePoll {
   }
 
   /**
-   * Get totalVoteCount
+   * 所有选项累计票数
    * @return totalVoteCount
    */
   @javax.annotation.Nullable

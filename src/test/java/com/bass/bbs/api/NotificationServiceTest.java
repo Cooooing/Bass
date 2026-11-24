@@ -41,20 +41,20 @@ public class NotificationServiceTest {
     /**
      * 
      *
-     * 分页查询通知列表。
+     * 统计未读通知数量。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void callListTest() throws ApiException {
-        ListNotificationsReq listNotificationsReq = null;
+    public void countUnreadNotificationsTest() throws ApiException {
+        Object body = null;
         
-        NotificationService.APIcallListRequest request = NotificationService.APIcallListRequest.newBuilder()
-          .listNotificationsReq(listNotificationsReq)
+        NotificationService.APIcountUnreadNotificationsRequest request = NotificationService.APIcountUnreadNotificationsRequest.newBuilder()
+          .body(body)
           .build();
-        ListNotificationsResp response = 
-        api.callList(request);
+        CountUnreadNotificationsResp response = 
+        api.countUnreadNotifications(request);
 
         // TODO: test validations
     }
@@ -62,20 +62,20 @@ public class NotificationServiceTest {
     /**
      * 
      *
-     * 统计未读通知数量。
+     * 分页查询通知列表。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void countUnreadTest() throws ApiException {
-        Object body = null;
+    public void listNotificationsTest() throws ApiException {
+        ListNotificationsReq listNotificationsReq = null;
         
-        NotificationService.APIcountUnreadRequest request = NotificationService.APIcountUnreadRequest.newBuilder()
-          .body(body)
+        NotificationService.APIlistNotificationsRequest request = NotificationService.APIlistNotificationsRequest.newBuilder()
+          .listNotificationsReq(listNotificationsReq)
           .build();
-        CountUnreadNotificationsResp response = 
-        api.countUnread(request);
+        ListNotificationsResp response = 
+        api.listNotifications(request);
 
         // TODO: test validations
     }
@@ -89,14 +89,14 @@ public class NotificationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void markReadTest() throws ApiException {
+    public void markReadNotificationTest() throws ApiException {
         MarkReadNotificationReq markReadNotificationReq = null;
         
-        NotificationService.APImarkReadRequest request = NotificationService.APImarkReadRequest.newBuilder()
+        NotificationService.APImarkReadNotificationRequest request = NotificationService.APImarkReadNotificationRequest.newBuilder()
           .markReadNotificationReq(markReadNotificationReq)
           .build();
         MarkReadNotificationResp response = 
-        api.markRead(request);
+        api.markReadNotification(request);
 
         // TODO: test validations
     }

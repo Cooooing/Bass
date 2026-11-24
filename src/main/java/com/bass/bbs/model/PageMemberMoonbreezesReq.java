@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PageMemberMoonbreezesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   PageMemberMoonbreezesReq.JSON_PROPERTY_NAME,
@@ -60,7 +60,7 @@ public class PageMemberMoonbreezesReq {
   }
 
   /**
-   * Get name
+   * 协议字段。
    * @return name
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class PageMemberMoonbreezesReq {
   }
 
   /**
-   * Get cursor
+   * 协议字段。
    * @return cursor
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class PageMemberMoonbreezesReq {
   }
 
   /**
-   * Get size
+   * 协议字段。
    * @return size
    */
   @javax.annotation.Nullable

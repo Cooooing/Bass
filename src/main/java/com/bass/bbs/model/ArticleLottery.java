@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleLottery
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleLottery.JSON_PROPERTY_DRAW_AT,
@@ -74,7 +74,7 @@ public class ArticleLottery {
   }
 
   /**
-   * Get drawAt
+   * 开奖时间
    * @return drawAt
    */
   @javax.annotation.Nullable
@@ -98,7 +98,7 @@ public class ArticleLottery {
   }
 
   /**
-   * Get drawnAt
+   * 实际开奖时间
    * @return drawnAt
    */
   @javax.annotation.Nullable
@@ -122,7 +122,7 @@ public class ArticleLottery {
   }
 
   /**
-   * Get entryCount
+   * 有效报名人数
    * @return entryCount
    */
   @javax.annotation.Nullable
@@ -146,7 +146,7 @@ public class ArticleLottery {
   }
 
   /**
-   * Get entered
+   * 当前账号是否已报名
    * @return entered
    */
   @javax.annotation.Nullable
@@ -178,7 +178,7 @@ public class ArticleLottery {
   }
 
   /**
-   * Get prizes
+   * 奖项和中奖结果
    * @return prizes
    */
   @javax.annotation.Nullable

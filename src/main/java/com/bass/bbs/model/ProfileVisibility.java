@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ProfileVisibility
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ProfileVisibility.JSON_PROPERTY_ARTICLE_LIST,
@@ -70,7 +70,7 @@ public class ProfileVisibility {
   }
 
   /**
-   * Get articleList
+   * 协议字段。
    * @return articleList
    */
   @javax.annotation.Nullable
@@ -94,7 +94,7 @@ public class ProfileVisibility {
   }
 
   /**
-   * Get commentList
+   * 协议字段。
    * @return commentList
    */
   @javax.annotation.Nullable
@@ -118,7 +118,7 @@ public class ProfileVisibility {
   }
 
   /**
-   * Get followerList
+   * 协议字段。
    * @return followerList
    */
   @javax.annotation.Nullable
@@ -142,7 +142,7 @@ public class ProfileVisibility {
   }
 
   /**
-   * Get followingList
+   * 协议字段。
    * @return followingList
    */
   @javax.annotation.Nullable
@@ -166,7 +166,7 @@ public class ProfileVisibility {
   }
 
   /**
-   * Get moonbreezeList
+   * 协议字段。
    * @return moonbreezeList
    */
   @javax.annotation.Nullable

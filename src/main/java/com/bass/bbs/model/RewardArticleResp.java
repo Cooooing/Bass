@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RewardArticleResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   RewardArticleResp.JSON_PROPERTY_REWARDED
@@ -50,7 +50,7 @@ public class RewardArticleResp {
   }
 
   /**
-   * Get rewarded
+   * 是否已完成打赏
    * @return rewarded
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqTag
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqTag.JSON_PROPERTY_CODE,
@@ -60,7 +60,7 @@ public class ReqTag {
   private String domainId;
 
   /**
-   * Gets or Sets status
+   * 启停状态
    */
   public enum StatusEnum {
     TAG_STATUS_UNSPECIFIED(String.valueOf("TAG_STATUS_UNSPECIFIED")),
@@ -117,7 +117,7 @@ public class ReqTag {
   }
 
   /**
-   * Get code
+   * 稳定编码
    * @return code
    */
   @javax.annotation.Nonnull
@@ -141,7 +141,7 @@ public class ReqTag {
   }
 
   /**
-   * Get name
+   * 标签名称
    * @return name
    */
   @javax.annotation.Nonnull
@@ -165,7 +165,7 @@ public class ReqTag {
   }
 
   /**
-   * Get description
+   * 描述
    * @return description
    */
   @javax.annotation.Nullable
@@ -189,7 +189,7 @@ public class ReqTag {
   }
 
   /**
-   * Get domainId
+   * 领域 ID
    * @return domainId
    */
   @javax.annotation.Nullable
@@ -213,7 +213,7 @@ public class ReqTag {
   }
 
   /**
-   * Get status
+   * 启停状态
    * @return status
    */
   @javax.annotation.Nullable
@@ -237,7 +237,7 @@ public class ReqTag {
   }
 
   /**
-   * Get icon
+   * 图标
    * @return icon
    */
   @javax.annotation.Nullable
@@ -261,7 +261,7 @@ public class ReqTag {
   }
 
   /**
-   * Get sort
+   * 排序值，越小越靠前
    * @return sort
    */
   @javax.annotation.Nullable

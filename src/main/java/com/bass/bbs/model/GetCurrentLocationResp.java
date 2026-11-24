@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetCurrentLocationResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetCurrentLocationResp.JSON_PROPERTY_LOCATION
@@ -51,7 +51,7 @@ public class GetCurrentLocationResp {
   }
 
   /**
-   * Get location
+   * 当前请求来源地理数据
    * @return location
    */
   @javax.annotation.Nullable

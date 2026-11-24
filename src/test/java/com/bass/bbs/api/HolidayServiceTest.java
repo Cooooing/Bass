@@ -43,14 +43,14 @@ public class HolidayServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getCurrentTest() throws ApiException {
+    public void getCurrentHolidayTest() throws ApiException {
         Object body = null;
         
-        HolidayService.APIgetCurrentRequest request = HolidayService.APIgetCurrentRequest.newBuilder()
+        HolidayService.APIgetCurrentHolidayRequest request = HolidayService.APIgetCurrentHolidayRequest.newBuilder()
           .body(body)
           .build();
         GetCurrentHolidayResp response = 
-        api.getCurrent(request);
+        api.getCurrentHoliday(request);
 
         // TODO: test validations
     }

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdatePasswordAccountReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   UpdatePasswordAccountReq.JSON_PROPERTY_OLD_PASSWORD,
@@ -55,7 +55,7 @@ public class UpdatePasswordAccountReq {
   }
 
   /**
-   * Get oldPassword
+   * 旧密码，必填
    * @return oldPassword
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class UpdatePasswordAccountReq {
   }
 
   /**
-   * Get newPassword
+   * 新密码，必填
    * @return newPassword
    */
   @javax.annotation.Nonnull

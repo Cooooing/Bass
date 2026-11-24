@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CompleteBadgeImageUploadResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CompleteBadgeImageUploadResp.JSON_PROPERTY_ASSET_ID,
@@ -55,7 +55,7 @@ public class CompleteBadgeImageUploadResp {
   }
 
   /**
-   * Get assetId
+   * 已确认资源的 ID。
    * @return assetId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class CompleteBadgeImageUploadResp {
   }
 
   /**
-   * Get imageUrl
+   * 可公开访问的图片地址。
    * @return imageUrl
    */
   @javax.annotation.Nullable

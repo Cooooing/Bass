@@ -19,8 +19,9 @@ import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
 import com.bass.bbs.model.DeleteBadgeDraftReq;
-import com.bass.bbs.model.ImageResp;
 import com.bass.bbs.model.ListBadgeDraftsResp;
+import com.bass.bbs.model.RenderMakerBadgeResp;
+import com.bass.bbs.model.RenderPublishedBadgeResp;
 import com.bass.bbs.model.UpsertBadgeDraftReq;
 import com.bass.bbs.model.UpsertBadgeDraftResp;
 
@@ -169,50 +170,50 @@ public class BadgeService {
   /**
    * 
    * DeleteDraft 删除一个未发布草稿。
-   * @param apiRequest {@link APIDeleteDraftRequest}
+   * @param apiRequest {@link APIDeleteBadgeDraftRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteDraft(APIDeleteDraftRequest apiRequest) throws ApiException {
-    return deleteDraft(apiRequest, null);
+  public Object deleteBadgeDraft(APIDeleteBadgeDraftRequest apiRequest) throws ApiException {
+    return deleteBadgeDraft(apiRequest, null);
   }
 
   /**
    * 
    * DeleteDraft 删除一个未发布草稿。
-   * @param apiRequest {@link APIDeleteDraftRequest}
+   * @param apiRequest {@link APIDeleteBadgeDraftRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteDraft(APIDeleteDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object deleteBadgeDraft(APIDeleteBadgeDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     DeleteBadgeDraftReq deleteBadgeDraftReq = apiRequest.deleteBadgeDraftReq();
-    return deleteDraft(deleteBadgeDraftReq, headers);
+    return deleteBadgeDraft(deleteBadgeDraftReq, headers);
   }
 
   /**
    * 
    * DeleteDraft 删除一个未发布草稿。
-   * @param apiRequest {@link APIDeleteDraftRequest}
+   * @param apiRequest {@link APIDeleteBadgeDraftRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteDraftWithHttpInfo(APIDeleteDraftRequest apiRequest) throws ApiException {
-    return deleteDraftWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> deleteBadgeDraftWithHttpInfo(APIDeleteBadgeDraftRequest apiRequest) throws ApiException {
+    return deleteBadgeDraftWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * DeleteDraft 删除一个未发布草稿。
-   * @param apiRequest {@link APIDeleteDraftRequest}
+   * @param apiRequest {@link APIDeleteBadgeDraftRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteDraftWithHttpInfo(APIDeleteDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> deleteBadgeDraftWithHttpInfo(APIDeleteBadgeDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
     DeleteBadgeDraftReq deleteBadgeDraftReq = apiRequest.deleteBadgeDraftReq();
-    return deleteDraftWithHttpInfo(deleteBadgeDraftReq, headers);
+    return deleteBadgeDraftWithHttpInfo(deleteBadgeDraftReq, headers);
   }
 
   /**
@@ -222,8 +223,8 @@ public class BadgeService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteDraft(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq) throws ApiException {
-    return deleteDraft(deleteBadgeDraftReq, null);
+  public Object deleteBadgeDraft(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq) throws ApiException {
+    return deleteBadgeDraft(deleteBadgeDraftReq, null);
   }
 
   /**
@@ -234,8 +235,8 @@ public class BadgeService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object deleteDraft(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = deleteDraftWithHttpInfo(deleteBadgeDraftReq, headers);
+  public Object deleteBadgeDraft(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = deleteBadgeDraftWithHttpInfo(deleteBadgeDraftReq, headers);
     return localVarResponse.getData();
   }
 
@@ -246,8 +247,8 @@ public class BadgeService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteDraftWithHttpInfo(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq) throws ApiException {
-    return deleteDraftWithHttpInfo(deleteBadgeDraftReq, null);
+  public ApiResponse<Object> deleteBadgeDraftWithHttpInfo(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq) throws ApiException {
+    return deleteBadgeDraftWithHttpInfo(deleteBadgeDraftReq, null);
   }
 
   /**
@@ -258,8 +259,8 @@ public class BadgeService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> deleteDraftWithHttpInfo(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = deleteDraftRequestBuilder(deleteBadgeDraftReq, headers);
+  public ApiResponse<Object> deleteBadgeDraftWithHttpInfo(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = deleteBadgeDraftRequestBuilder(deleteBadgeDraftReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -270,7 +271,7 @@ public class BadgeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("deleteDraft", localVarResponse);
+          throw getApiException("deleteBadgeDraft", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -306,10 +307,10 @@ public class BadgeService {
     }
   }
 
-  private HttpRequest.Builder deleteDraftRequestBuilder(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder deleteBadgeDraftRequestBuilder(@javax.annotation.Nonnull DeleteBadgeDraftReq deleteBadgeDraftReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'deleteBadgeDraftReq' is set
     if (deleteBadgeDraftReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'deleteBadgeDraftReq' when calling deleteDraft");
+      throw new ApiException(400, "Missing the required parameter 'deleteBadgeDraftReq' when calling deleteBadgeDraft");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -339,11 +340,11 @@ public class BadgeService {
   }
 
 
-  public static final class APIDeleteDraftRequest {
+  public static final class APIDeleteBadgeDraftRequest {
     @javax.annotation.Nonnull
     private DeleteBadgeDraftReq deleteBadgeDraftReq; //  (required)
 
-    private APIDeleteDraftRequest(Builder builder) {
+    private APIDeleteBadgeDraftRequest(Builder builder) {
       this.deleteBadgeDraftReq = builder.deleteBadgeDraftReq;
     }
     @javax.annotation.Nonnull
@@ -361,8 +362,8 @@ public class BadgeService {
         this.deleteBadgeDraftReq = deleteBadgeDraftReq;
         return this;
       }
-      public APIDeleteDraftRequest build() {
-        return new APIDeleteDraftRequest(this);
+      public APIDeleteBadgeDraftRequest build() {
+        return new APIDeleteBadgeDraftRequest(this);
       }
     }
   }
@@ -370,50 +371,50 @@ public class BadgeService {
   /**
    * 
    * ListDrafts 返回当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIListDraftsRequest}
+   * @param apiRequest {@link APIListBadgeDraftsRequest}
    * @return ListBadgeDraftsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBadgeDraftsResp listDrafts(APIListDraftsRequest apiRequest) throws ApiException {
-    return listDrafts(apiRequest, null);
+  public ListBadgeDraftsResp listBadgeDrafts(APIListBadgeDraftsRequest apiRequest) throws ApiException {
+    return listBadgeDrafts(apiRequest, null);
   }
 
   /**
    * 
    * ListDrafts 返回当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIListDraftsRequest}
+   * @param apiRequest {@link APIListBadgeDraftsRequest}
    * @param headers Optional headers to include in the request
    * @return ListBadgeDraftsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBadgeDraftsResp listDrafts(APIListDraftsRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListBadgeDraftsResp listBadgeDrafts(APIListBadgeDraftsRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return listDrafts(body, headers);
+    return listBadgeDrafts(body, headers);
   }
 
   /**
    * 
    * ListDrafts 返回当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIListDraftsRequest}
+   * @param apiRequest {@link APIListBadgeDraftsRequest}
    * @return ApiResponse&lt;ListBadgeDraftsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBadgeDraftsResp> listDraftsWithHttpInfo(APIListDraftsRequest apiRequest) throws ApiException {
-    return listDraftsWithHttpInfo(apiRequest, null);
+  public ApiResponse<ListBadgeDraftsResp> listBadgeDraftsWithHttpInfo(APIListBadgeDraftsRequest apiRequest) throws ApiException {
+    return listBadgeDraftsWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * ListDrafts 返回当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIListDraftsRequest}
+   * @param apiRequest {@link APIListBadgeDraftsRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ListBadgeDraftsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBadgeDraftsResp> listDraftsWithHttpInfo(APIListDraftsRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ListBadgeDraftsResp> listBadgeDraftsWithHttpInfo(APIListBadgeDraftsRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return listDraftsWithHttpInfo(body, headers);
+    return listBadgeDraftsWithHttpInfo(body, headers);
   }
 
   /**
@@ -423,8 +424,8 @@ public class BadgeService {
    * @return ListBadgeDraftsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBadgeDraftsResp listDrafts(@javax.annotation.Nonnull Object body) throws ApiException {
-    return listDrafts(body, null);
+  public ListBadgeDraftsResp listBadgeDrafts(@javax.annotation.Nonnull Object body) throws ApiException {
+    return listBadgeDrafts(body, null);
   }
 
   /**
@@ -435,8 +436,8 @@ public class BadgeService {
    * @return ListBadgeDraftsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBadgeDraftsResp listDrafts(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListBadgeDraftsResp> localVarResponse = listDraftsWithHttpInfo(body, headers);
+  public ListBadgeDraftsResp listBadgeDrafts(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListBadgeDraftsResp> localVarResponse = listBadgeDraftsWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -447,8 +448,8 @@ public class BadgeService {
    * @return ApiResponse&lt;ListBadgeDraftsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBadgeDraftsResp> listDraftsWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return listDraftsWithHttpInfo(body, null);
+  public ApiResponse<ListBadgeDraftsResp> listBadgeDraftsWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return listBadgeDraftsWithHttpInfo(body, null);
   }
 
   /**
@@ -459,8 +460,8 @@ public class BadgeService {
    * @return ApiResponse&lt;ListBadgeDraftsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBadgeDraftsResp> listDraftsWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listDraftsRequestBuilder(body, headers);
+  public ApiResponse<ListBadgeDraftsResp> listBadgeDraftsWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listBadgeDraftsRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -471,7 +472,7 @@ public class BadgeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("listDrafts", localVarResponse);
+          throw getApiException("listBadgeDrafts", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -507,10 +508,10 @@ public class BadgeService {
     }
   }
 
-  private HttpRequest.Builder listDraftsRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder listBadgeDraftsRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling listDrafts");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling listBadgeDrafts");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -540,11 +541,11 @@ public class BadgeService {
   }
 
 
-  public static final class APIListDraftsRequest {
+  public static final class APIListBadgeDraftsRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APIListDraftsRequest(Builder builder) {
+    private APIListBadgeDraftsRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -562,8 +563,8 @@ public class BadgeService {
         this.body = body;
         return this;
       }
-      public APIListDraftsRequest build() {
-        return new APIListDraftsRequest(this);
+      public APIListBadgeDraftsRequest build() {
+        return new APIListBadgeDraftsRequest(this);
       }
     }
   }
@@ -571,23 +572,23 @@ public class BadgeService {
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param apiRequest {@link APIRenderMakerRequest}
-   * @return ImageResp
+   * @param apiRequest {@link APIRenderMakerBadgeRequest}
+   * @return RenderMakerBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderMaker(APIRenderMakerRequest apiRequest) throws ApiException {
-    return renderMaker(apiRequest, null);
+  public RenderMakerBadgeResp renderMakerBadge(APIRenderMakerBadgeRequest apiRequest) throws ApiException {
+    return renderMakerBadge(apiRequest, null);
   }
 
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param apiRequest {@link APIRenderMakerRequest}
+   * @param apiRequest {@link APIRenderMakerBadgeRequest}
    * @param headers Optional headers to include in the request
-   * @return ImageResp
+   * @return RenderMakerBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderMaker(APIRenderMakerRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public RenderMakerBadgeResp renderMakerBadge(APIRenderMakerBadgeRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nullable
     String renderSpecImageAssetId = apiRequest.renderSpecImageAssetId();
     @javax.annotation.Nullable
@@ -618,29 +619,29 @@ public class BadgeService {
     Double renderSpecAnimationSeconds = apiRequest.renderSpecAnimationSeconds();
     @javax.annotation.Nullable
     String renderSpecFontAssetId = apiRequest.renderSpecFontAssetId();
-    return renderMaker(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
+    return renderMakerBadge(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
   }
 
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param apiRequest {@link APIRenderMakerRequest}
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @param apiRequest {@link APIRenderMakerBadgeRequest}
+   * @return ApiResponse&lt;RenderMakerBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderMakerWithHttpInfo(APIRenderMakerRequest apiRequest) throws ApiException {
-    return renderMakerWithHttpInfo(apiRequest, null);
+  public ApiResponse<RenderMakerBadgeResp> renderMakerBadgeWithHttpInfo(APIRenderMakerBadgeRequest apiRequest) throws ApiException {
+    return renderMakerBadgeWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param apiRequest {@link APIRenderMakerRequest}
+   * @param apiRequest {@link APIRenderMakerBadgeRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @return ApiResponse&lt;RenderMakerBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderMakerWithHttpInfo(APIRenderMakerRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<RenderMakerBadgeResp> renderMakerBadgeWithHttpInfo(APIRenderMakerBadgeRequest apiRequest, Map<String, String> headers) throws ApiException {
     String renderSpecImageAssetId = apiRequest.renderSpecImageAssetId();
     String renderSpecText = apiRequest.renderSpecText();
     List<String> renderSpecBackgroundColors = apiRequest.renderSpecBackgroundColors();
@@ -656,110 +657,110 @@ public class BadgeService {
     Double renderSpecShadow = apiRequest.renderSpecShadow();
     Double renderSpecAnimationSeconds = apiRequest.renderSpecAnimationSeconds();
     String renderSpecFontAssetId = apiRequest.renderSpecFontAssetId();
-    return renderMakerWithHttpInfo(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
+    return renderMakerBadgeWithHttpInfo(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
   }
 
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param renderSpecImageAssetId  (optional)
-   * @param renderSpecText  (optional)
-   * @param renderSpecBackgroundColors  (optional)
-   * @param renderSpecTextColors  (optional)
-   * @param renderSpecBackgroundDirection  (optional)
-   * @param renderSpecTextDirection  (optional)
-   * @param renderSpecSize  (optional)
-   * @param renderSpecBorder  (optional)
-   * @param renderSpecTextBarLength  (optional)
-   * @param renderSpecTextSize  (optional)
-   * @param renderSpecTextBarRadius  (optional)
-   * @param renderSpecScale  (optional)
-   * @param renderSpecShadow  (optional)
-   * @param renderSpecAnimationSeconds  (optional)
-   * @param renderSpecFontAssetId  (optional)
-   * @return ImageResp
+   * @param renderSpecImageAssetId Platform 已确认可用的徽章图标资源 ID。 (optional)
+   * @param renderSpecText 文字条内容。 (optional)
+   * @param renderSpecBackgroundColors 背景颜色列表。 (optional)
+   * @param renderSpecTextColors 文字颜色列表。 (optional)
+   * @param renderSpecBackgroundDirection 背景渐变方向或角度。 (optional)
+   * @param renderSpecTextDirection 文字渐变方向或角度。 (optional)
+   * @param renderSpecSize 图标边长。 (optional)
+   * @param renderSpecBorder 图标边距。 (optional)
+   * @param renderSpecTextBarLength 文字条长度。 (optional)
+   * @param renderSpecTextSize 文字字号。 (optional)
+   * @param renderSpecTextBarRadius 文字条圆角。 (optional)
+   * @param renderSpecScale 整体缩放比例。 (optional)
+   * @param renderSpecShadow 阴影强度。 (optional)
+   * @param renderSpecAnimationSeconds 动画时长。 (optional)
+   * @param renderSpecFontAssetId Platform 已确认可用的自定义字体资源 ID。 (optional)
+   * @return RenderMakerBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderMaker(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId) throws ApiException {
-    return renderMaker(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, null);
+  public RenderMakerBadgeResp renderMakerBadge(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId) throws ApiException {
+    return renderMakerBadge(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, null);
   }
 
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param renderSpecImageAssetId  (optional)
-   * @param renderSpecText  (optional)
-   * @param renderSpecBackgroundColors  (optional)
-   * @param renderSpecTextColors  (optional)
-   * @param renderSpecBackgroundDirection  (optional)
-   * @param renderSpecTextDirection  (optional)
-   * @param renderSpecSize  (optional)
-   * @param renderSpecBorder  (optional)
-   * @param renderSpecTextBarLength  (optional)
-   * @param renderSpecTextSize  (optional)
-   * @param renderSpecTextBarRadius  (optional)
-   * @param renderSpecScale  (optional)
-   * @param renderSpecShadow  (optional)
-   * @param renderSpecAnimationSeconds  (optional)
-   * @param renderSpecFontAssetId  (optional)
+   * @param renderSpecImageAssetId Platform 已确认可用的徽章图标资源 ID。 (optional)
+   * @param renderSpecText 文字条内容。 (optional)
+   * @param renderSpecBackgroundColors 背景颜色列表。 (optional)
+   * @param renderSpecTextColors 文字颜色列表。 (optional)
+   * @param renderSpecBackgroundDirection 背景渐变方向或角度。 (optional)
+   * @param renderSpecTextDirection 文字渐变方向或角度。 (optional)
+   * @param renderSpecSize 图标边长。 (optional)
+   * @param renderSpecBorder 图标边距。 (optional)
+   * @param renderSpecTextBarLength 文字条长度。 (optional)
+   * @param renderSpecTextSize 文字字号。 (optional)
+   * @param renderSpecTextBarRadius 文字条圆角。 (optional)
+   * @param renderSpecScale 整体缩放比例。 (optional)
+   * @param renderSpecShadow 阴影强度。 (optional)
+   * @param renderSpecAnimationSeconds 动画时长。 (optional)
+   * @param renderSpecFontAssetId Platform 已确认可用的自定义字体资源 ID。 (optional)
    * @param headers Optional headers to include in the request
-   * @return ImageResp
+   * @return RenderMakerBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderMaker(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId, Map<String, String> headers) throws ApiException {
-    ApiResponse<ImageResp> localVarResponse = renderMakerWithHttpInfo(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
+  public RenderMakerBadgeResp renderMakerBadge(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId, Map<String, String> headers) throws ApiException {
+    ApiResponse<RenderMakerBadgeResp> localVarResponse = renderMakerBadgeWithHttpInfo(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param renderSpecImageAssetId  (optional)
-   * @param renderSpecText  (optional)
-   * @param renderSpecBackgroundColors  (optional)
-   * @param renderSpecTextColors  (optional)
-   * @param renderSpecBackgroundDirection  (optional)
-   * @param renderSpecTextDirection  (optional)
-   * @param renderSpecSize  (optional)
-   * @param renderSpecBorder  (optional)
-   * @param renderSpecTextBarLength  (optional)
-   * @param renderSpecTextSize  (optional)
-   * @param renderSpecTextBarRadius  (optional)
-   * @param renderSpecScale  (optional)
-   * @param renderSpecShadow  (optional)
-   * @param renderSpecAnimationSeconds  (optional)
-   * @param renderSpecFontAssetId  (optional)
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @param renderSpecImageAssetId Platform 已确认可用的徽章图标资源 ID。 (optional)
+   * @param renderSpecText 文字条内容。 (optional)
+   * @param renderSpecBackgroundColors 背景颜色列表。 (optional)
+   * @param renderSpecTextColors 文字颜色列表。 (optional)
+   * @param renderSpecBackgroundDirection 背景渐变方向或角度。 (optional)
+   * @param renderSpecTextDirection 文字渐变方向或角度。 (optional)
+   * @param renderSpecSize 图标边长。 (optional)
+   * @param renderSpecBorder 图标边距。 (optional)
+   * @param renderSpecTextBarLength 文字条长度。 (optional)
+   * @param renderSpecTextSize 文字字号。 (optional)
+   * @param renderSpecTextBarRadius 文字条圆角。 (optional)
+   * @param renderSpecScale 整体缩放比例。 (optional)
+   * @param renderSpecShadow 阴影强度。 (optional)
+   * @param renderSpecAnimationSeconds 动画时长。 (optional)
+   * @param renderSpecFontAssetId Platform 已确认可用的自定义字体资源 ID。 (optional)
+   * @return ApiResponse&lt;RenderMakerBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderMakerWithHttpInfo(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId) throws ApiException {
-    return renderMakerWithHttpInfo(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, null);
+  public ApiResponse<RenderMakerBadgeResp> renderMakerBadgeWithHttpInfo(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId) throws ApiException {
+    return renderMakerBadgeWithHttpInfo(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, null);
   }
 
   /**
    * 
    * RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-   * @param renderSpecImageAssetId  (optional)
-   * @param renderSpecText  (optional)
-   * @param renderSpecBackgroundColors  (optional)
-   * @param renderSpecTextColors  (optional)
-   * @param renderSpecBackgroundDirection  (optional)
-   * @param renderSpecTextDirection  (optional)
-   * @param renderSpecSize  (optional)
-   * @param renderSpecBorder  (optional)
-   * @param renderSpecTextBarLength  (optional)
-   * @param renderSpecTextSize  (optional)
-   * @param renderSpecTextBarRadius  (optional)
-   * @param renderSpecScale  (optional)
-   * @param renderSpecShadow  (optional)
-   * @param renderSpecAnimationSeconds  (optional)
-   * @param renderSpecFontAssetId  (optional)
+   * @param renderSpecImageAssetId Platform 已确认可用的徽章图标资源 ID。 (optional)
+   * @param renderSpecText 文字条内容。 (optional)
+   * @param renderSpecBackgroundColors 背景颜色列表。 (optional)
+   * @param renderSpecTextColors 文字颜色列表。 (optional)
+   * @param renderSpecBackgroundDirection 背景渐变方向或角度。 (optional)
+   * @param renderSpecTextDirection 文字渐变方向或角度。 (optional)
+   * @param renderSpecSize 图标边长。 (optional)
+   * @param renderSpecBorder 图标边距。 (optional)
+   * @param renderSpecTextBarLength 文字条长度。 (optional)
+   * @param renderSpecTextSize 文字字号。 (optional)
+   * @param renderSpecTextBarRadius 文字条圆角。 (optional)
+   * @param renderSpecScale 整体缩放比例。 (optional)
+   * @param renderSpecShadow 阴影强度。 (optional)
+   * @param renderSpecAnimationSeconds 动画时长。 (optional)
+   * @param renderSpecFontAssetId Platform 已确认可用的自定义字体资源 ID。 (optional)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @return ApiResponse&lt;RenderMakerBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderMakerWithHttpInfo(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = renderMakerRequestBuilder(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
+  public ApiResponse<RenderMakerBadgeResp> renderMakerBadgeWithHttpInfo(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = renderMakerBadgeRequestBuilder(renderSpecImageAssetId, renderSpecText, renderSpecBackgroundColors, renderSpecTextColors, renderSpecBackgroundDirection, renderSpecTextDirection, renderSpecSize, renderSpecBorder, renderSpecTextBarLength, renderSpecTextSize, renderSpecTextBarRadius, renderSpecScale, renderSpecShadow, renderSpecAnimationSeconds, renderSpecFontAssetId, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -770,11 +771,11 @@ public class BadgeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("renderMaker", localVarResponse);
+          throw getApiException("renderMakerBadge", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ImageResp>(
+          return new ApiResponse<RenderMakerBadgeResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -784,10 +785,10 @@ public class BadgeService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ImageResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ImageResp>() {});
+        RenderMakerBadgeResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<RenderMakerBadgeResp>() {});
         
 
-        return new ApiResponse<ImageResp>(
+        return new ApiResponse<RenderMakerBadgeResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -806,7 +807,7 @@ public class BadgeService {
     }
   }
 
-  private HttpRequest.Builder renderMakerRequestBuilder(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder renderMakerBadgeRequestBuilder(@javax.annotation.Nullable String renderSpecImageAssetId, @javax.annotation.Nullable String renderSpecText, @javax.annotation.Nullable List<String> renderSpecBackgroundColors, @javax.annotation.Nullable List<String> renderSpecTextColors, @javax.annotation.Nullable String renderSpecBackgroundDirection, @javax.annotation.Nullable String renderSpecTextDirection, @javax.annotation.Nullable Integer renderSpecSize, @javax.annotation.Nullable Integer renderSpecBorder, @javax.annotation.Nullable Integer renderSpecTextBarLength, @javax.annotation.Nullable Integer renderSpecTextSize, @javax.annotation.Nullable Integer renderSpecTextBarRadius, @javax.annotation.Nullable Double renderSpecScale, @javax.annotation.Nullable Double renderSpecShadow, @javax.annotation.Nullable Double renderSpecAnimationSeconds, @javax.annotation.Nullable String renderSpecFontAssetId, Map<String, String> headers) throws ApiException {
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
@@ -872,39 +873,39 @@ public class BadgeService {
   }
 
 
-  public static final class APIRenderMakerRequest {
+  public static final class APIRenderMakerBadgeRequest {
     @javax.annotation.Nullable
-    private String renderSpecImageAssetId; //  (optional)
+    private String renderSpecImageAssetId; // Platform 已确认可用的徽章图标资源 ID。 (optional)
     @javax.annotation.Nullable
-    private String renderSpecText; //  (optional)
+    private String renderSpecText; // 文字条内容。 (optional)
     @javax.annotation.Nullable
-    private List<String> renderSpecBackgroundColors; //  (optional)
+    private List<String> renderSpecBackgroundColors; // 背景颜色列表。 (optional)
     @javax.annotation.Nullable
-    private List<String> renderSpecTextColors; //  (optional)
+    private List<String> renderSpecTextColors; // 文字颜色列表。 (optional)
     @javax.annotation.Nullable
-    private String renderSpecBackgroundDirection; //  (optional)
+    private String renderSpecBackgroundDirection; // 背景渐变方向或角度。 (optional)
     @javax.annotation.Nullable
-    private String renderSpecTextDirection; //  (optional)
+    private String renderSpecTextDirection; // 文字渐变方向或角度。 (optional)
     @javax.annotation.Nullable
-    private Integer renderSpecSize; //  (optional)
+    private Integer renderSpecSize; // 图标边长。 (optional)
     @javax.annotation.Nullable
-    private Integer renderSpecBorder; //  (optional)
+    private Integer renderSpecBorder; // 图标边距。 (optional)
     @javax.annotation.Nullable
-    private Integer renderSpecTextBarLength; //  (optional)
+    private Integer renderSpecTextBarLength; // 文字条长度。 (optional)
     @javax.annotation.Nullable
-    private Integer renderSpecTextSize; //  (optional)
+    private Integer renderSpecTextSize; // 文字字号。 (optional)
     @javax.annotation.Nullable
-    private Integer renderSpecTextBarRadius; //  (optional)
+    private Integer renderSpecTextBarRadius; // 文字条圆角。 (optional)
     @javax.annotation.Nullable
-    private Double renderSpecScale; //  (optional)
+    private Double renderSpecScale; // 整体缩放比例。 (optional)
     @javax.annotation.Nullable
-    private Double renderSpecShadow; //  (optional)
+    private Double renderSpecShadow; // 阴影强度。 (optional)
     @javax.annotation.Nullable
-    private Double renderSpecAnimationSeconds; //  (optional)
+    private Double renderSpecAnimationSeconds; // 动画时长。 (optional)
     @javax.annotation.Nullable
-    private String renderSpecFontAssetId; //  (optional)
+    private String renderSpecFontAssetId; // Platform 已确认可用的自定义字体资源 ID。 (optional)
 
-    private APIRenderMakerRequest(Builder builder) {
+    private APIRenderMakerBadgeRequest(Builder builder) {
       this.renderSpecImageAssetId = builder.renderSpecImageAssetId;
       this.renderSpecText = builder.renderSpecText;
       this.renderSpecBackgroundColors = builder.renderSpecBackgroundColors;
@@ -1062,8 +1063,8 @@ public class BadgeService {
         this.renderSpecFontAssetId = renderSpecFontAssetId;
         return this;
       }
-      public APIRenderMakerRequest build() {
-        return new APIRenderMakerRequest(this);
+      public APIRenderMakerBadgeRequest build() {
+        return new APIRenderMakerBadgeRequest(this);
       }
     }
   }
@@ -1071,97 +1072,97 @@ public class BadgeService {
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param apiRequest {@link APIRenderPublishedRequest}
-   * @return ImageResp
+   * @param apiRequest {@link APIRenderPublishedBadgeRequest}
+   * @return RenderPublishedBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderPublished(APIRenderPublishedRequest apiRequest) throws ApiException {
-    return renderPublished(apiRequest, null);
+  public RenderPublishedBadgeResp renderPublishedBadge(APIRenderPublishedBadgeRequest apiRequest) throws ApiException {
+    return renderPublishedBadge(apiRequest, null);
   }
 
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param apiRequest {@link APIRenderPublishedRequest}
+   * @param apiRequest {@link APIRenderPublishedBadgeRequest}
    * @param headers Optional headers to include in the request
-   * @return ImageResp
+   * @return RenderPublishedBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderPublished(APIRenderPublishedRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public RenderPublishedBadgeResp renderPublishedBadge(APIRenderPublishedBadgeRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nullable
     String code = apiRequest.code();
-    return renderPublished(code, headers);
+    return renderPublishedBadge(code, headers);
   }
 
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param apiRequest {@link APIRenderPublishedRequest}
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @param apiRequest {@link APIRenderPublishedBadgeRequest}
+   * @return ApiResponse&lt;RenderPublishedBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderPublishedWithHttpInfo(APIRenderPublishedRequest apiRequest) throws ApiException {
-    return renderPublishedWithHttpInfo(apiRequest, null);
+  public ApiResponse<RenderPublishedBadgeResp> renderPublishedBadgeWithHttpInfo(APIRenderPublishedBadgeRequest apiRequest) throws ApiException {
+    return renderPublishedBadgeWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param apiRequest {@link APIRenderPublishedRequest}
+   * @param apiRequest {@link APIRenderPublishedBadgeRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @return ApiResponse&lt;RenderPublishedBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderPublishedWithHttpInfo(APIRenderPublishedRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<RenderPublishedBadgeResp> renderPublishedBadgeWithHttpInfo(APIRenderPublishedBadgeRequest apiRequest, Map<String, String> headers) throws ApiException {
     String code = apiRequest.code();
-    return renderPublishedWithHttpInfo(code, headers);
+    return renderPublishedBadgeWithHttpInfo(code, headers);
   }
 
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param code  (optional)
-   * @return ImageResp
+   * @param code 已发布徽章稳定编码。 (optional)
+   * @return RenderPublishedBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderPublished(@javax.annotation.Nullable String code) throws ApiException {
-    return renderPublished(code, null);
+  public RenderPublishedBadgeResp renderPublishedBadge(@javax.annotation.Nullable String code) throws ApiException {
+    return renderPublishedBadge(code, null);
   }
 
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param code  (optional)
+   * @param code 已发布徽章稳定编码。 (optional)
    * @param headers Optional headers to include in the request
-   * @return ImageResp
+   * @return RenderPublishedBadgeResp
    * @throws ApiException if fails to make API call
    */
-  public ImageResp renderPublished(@javax.annotation.Nullable String code, Map<String, String> headers) throws ApiException {
-    ApiResponse<ImageResp> localVarResponse = renderPublishedWithHttpInfo(code, headers);
+  public RenderPublishedBadgeResp renderPublishedBadge(@javax.annotation.Nullable String code, Map<String, String> headers) throws ApiException {
+    ApiResponse<RenderPublishedBadgeResp> localVarResponse = renderPublishedBadgeWithHttpInfo(code, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param code  (optional)
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @param code 已发布徽章稳定编码。 (optional)
+   * @return ApiResponse&lt;RenderPublishedBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderPublishedWithHttpInfo(@javax.annotation.Nullable String code) throws ApiException {
-    return renderPublishedWithHttpInfo(code, null);
+  public ApiResponse<RenderPublishedBadgeResp> renderPublishedBadgeWithHttpInfo(@javax.annotation.Nullable String code) throws ApiException {
+    return renderPublishedBadgeWithHttpInfo(code, null);
   }
 
   /**
    * 
    * RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-   * @param code  (optional)
+   * @param code 已发布徽章稳定编码。 (optional)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ImageResp&gt;
+   * @return ApiResponse&lt;RenderPublishedBadgeResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageResp> renderPublishedWithHttpInfo(@javax.annotation.Nullable String code, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = renderPublishedRequestBuilder(code, headers);
+  public ApiResponse<RenderPublishedBadgeResp> renderPublishedBadgeWithHttpInfo(@javax.annotation.Nullable String code, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = renderPublishedBadgeRequestBuilder(code, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1172,11 +1173,11 @@ public class BadgeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("renderPublished", localVarResponse);
+          throw getApiException("renderPublishedBadge", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ImageResp>(
+          return new ApiResponse<RenderPublishedBadgeResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -1186,10 +1187,10 @@ public class BadgeService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ImageResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ImageResp>() {});
+        RenderPublishedBadgeResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<RenderPublishedBadgeResp>() {});
         
 
-        return new ApiResponse<ImageResp>(
+        return new ApiResponse<RenderPublishedBadgeResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -1208,7 +1209,7 @@ public class BadgeService {
     }
   }
 
-  private HttpRequest.Builder renderPublishedRequestBuilder(@javax.annotation.Nullable String code, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder renderPublishedBadgeRequestBuilder(@javax.annotation.Nullable String code, Map<String, String> headers) throws ApiException {
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
@@ -1246,11 +1247,11 @@ public class BadgeService {
   }
 
 
-  public static final class APIRenderPublishedRequest {
+  public static final class APIRenderPublishedBadgeRequest {
     @javax.annotation.Nullable
-    private String code; //  (optional)
+    private String code; // 已发布徽章稳定编码。 (optional)
 
-    private APIRenderPublishedRequest(Builder builder) {
+    private APIRenderPublishedBadgeRequest(Builder builder) {
       this.code = builder.code;
     }
     @javax.annotation.Nullable
@@ -1268,8 +1269,8 @@ public class BadgeService {
         this.code = code;
         return this;
       }
-      public APIRenderPublishedRequest build() {
-        return new APIRenderPublishedRequest(this);
+      public APIRenderPublishedBadgeRequest build() {
+        return new APIRenderPublishedBadgeRequest(this);
       }
     }
   }
@@ -1277,50 +1278,50 @@ public class BadgeService {
   /**
    * 
    * UpsertDraft 保存当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIUpsertDraftRequest}
+   * @param apiRequest {@link APIUpsertBadgeDraftRequest}
    * @return UpsertBadgeDraftResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertBadgeDraftResp upsertDraft(APIUpsertDraftRequest apiRequest) throws ApiException {
-    return upsertDraft(apiRequest, null);
+  public UpsertBadgeDraftResp upsertBadgeDraft(APIUpsertBadgeDraftRequest apiRequest) throws ApiException {
+    return upsertBadgeDraft(apiRequest, null);
   }
 
   /**
    * 
    * UpsertDraft 保存当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIUpsertDraftRequest}
+   * @param apiRequest {@link APIUpsertBadgeDraftRequest}
    * @param headers Optional headers to include in the request
    * @return UpsertBadgeDraftResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertBadgeDraftResp upsertDraft(APIUpsertDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public UpsertBadgeDraftResp upsertBadgeDraft(APIUpsertBadgeDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     UpsertBadgeDraftReq upsertBadgeDraftReq = apiRequest.upsertBadgeDraftReq();
-    return upsertDraft(upsertBadgeDraftReq, headers);
+    return upsertBadgeDraft(upsertBadgeDraftReq, headers);
   }
 
   /**
    * 
    * UpsertDraft 保存当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIUpsertDraftRequest}
+   * @param apiRequest {@link APIUpsertBadgeDraftRequest}
    * @return ApiResponse&lt;UpsertBadgeDraftResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertBadgeDraftResp> upsertDraftWithHttpInfo(APIUpsertDraftRequest apiRequest) throws ApiException {
-    return upsertDraftWithHttpInfo(apiRequest, null);
+  public ApiResponse<UpsertBadgeDraftResp> upsertBadgeDraftWithHttpInfo(APIUpsertBadgeDraftRequest apiRequest) throws ApiException {
+    return upsertBadgeDraftWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * UpsertDraft 保存当前登录用户的徽章草稿。
-   * @param apiRequest {@link APIUpsertDraftRequest}
+   * @param apiRequest {@link APIUpsertBadgeDraftRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;UpsertBadgeDraftResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertBadgeDraftResp> upsertDraftWithHttpInfo(APIUpsertDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<UpsertBadgeDraftResp> upsertBadgeDraftWithHttpInfo(APIUpsertBadgeDraftRequest apiRequest, Map<String, String> headers) throws ApiException {
     UpsertBadgeDraftReq upsertBadgeDraftReq = apiRequest.upsertBadgeDraftReq();
-    return upsertDraftWithHttpInfo(upsertBadgeDraftReq, headers);
+    return upsertBadgeDraftWithHttpInfo(upsertBadgeDraftReq, headers);
   }
 
   /**
@@ -1330,8 +1331,8 @@ public class BadgeService {
    * @return UpsertBadgeDraftResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertBadgeDraftResp upsertDraft(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq) throws ApiException {
-    return upsertDraft(upsertBadgeDraftReq, null);
+  public UpsertBadgeDraftResp upsertBadgeDraft(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq) throws ApiException {
+    return upsertBadgeDraft(upsertBadgeDraftReq, null);
   }
 
   /**
@@ -1342,8 +1343,8 @@ public class BadgeService {
    * @return UpsertBadgeDraftResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertBadgeDraftResp upsertDraft(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<UpsertBadgeDraftResp> localVarResponse = upsertDraftWithHttpInfo(upsertBadgeDraftReq, headers);
+  public UpsertBadgeDraftResp upsertBadgeDraft(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpsertBadgeDraftResp> localVarResponse = upsertBadgeDraftWithHttpInfo(upsertBadgeDraftReq, headers);
     return localVarResponse.getData();
   }
 
@@ -1354,8 +1355,8 @@ public class BadgeService {
    * @return ApiResponse&lt;UpsertBadgeDraftResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertBadgeDraftResp> upsertDraftWithHttpInfo(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq) throws ApiException {
-    return upsertDraftWithHttpInfo(upsertBadgeDraftReq, null);
+  public ApiResponse<UpsertBadgeDraftResp> upsertBadgeDraftWithHttpInfo(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq) throws ApiException {
+    return upsertBadgeDraftWithHttpInfo(upsertBadgeDraftReq, null);
   }
 
   /**
@@ -1366,8 +1367,8 @@ public class BadgeService {
    * @return ApiResponse&lt;UpsertBadgeDraftResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertBadgeDraftResp> upsertDraftWithHttpInfo(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = upsertDraftRequestBuilder(upsertBadgeDraftReq, headers);
+  public ApiResponse<UpsertBadgeDraftResp> upsertBadgeDraftWithHttpInfo(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = upsertBadgeDraftRequestBuilder(upsertBadgeDraftReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1378,7 +1379,7 @@ public class BadgeService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("upsertDraft", localVarResponse);
+          throw getApiException("upsertBadgeDraft", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1414,10 +1415,10 @@ public class BadgeService {
     }
   }
 
-  private HttpRequest.Builder upsertDraftRequestBuilder(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder upsertBadgeDraftRequestBuilder(@javax.annotation.Nonnull UpsertBadgeDraftReq upsertBadgeDraftReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'upsertBadgeDraftReq' is set
     if (upsertBadgeDraftReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'upsertBadgeDraftReq' when calling upsertDraft");
+      throw new ApiException(400, "Missing the required parameter 'upsertBadgeDraftReq' when calling upsertBadgeDraft");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1447,11 +1448,11 @@ public class BadgeService {
   }
 
 
-  public static final class APIUpsertDraftRequest {
+  public static final class APIUpsertBadgeDraftRequest {
     @javax.annotation.Nonnull
     private UpsertBadgeDraftReq upsertBadgeDraftReq; //  (required)
 
-    private APIUpsertDraftRequest(Builder builder) {
+    private APIUpsertBadgeDraftRequest(Builder builder) {
       this.upsertBadgeDraftReq = builder.upsertBadgeDraftReq;
     }
     @javax.annotation.Nonnull
@@ -1469,8 +1470,8 @@ public class BadgeService {
         this.upsertBadgeDraftReq = upsertBadgeDraftReq;
         return this;
       }
-      public APIUpsertDraftRequest build() {
-        return new APIUpsertDraftRequest(this);
+      public APIUpsertBadgeDraftRequest build() {
+        return new APIUpsertBadgeDraftRequest(this);
       }
     }
   }

@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespAccount
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespAccount.JSON_PROPERTY_BASIC,
@@ -57,7 +57,7 @@ public class RespAccount {
   }
 
   /**
-   * Get basic
+   * 基础信息
    * @return basic
    */
   @javax.annotation.Nullable
@@ -81,7 +81,7 @@ public class RespAccount {
   }
 
   /**
-   * Get contact
+   * 联系方式
    * @return contact
    */
   @javax.annotation.Nullable

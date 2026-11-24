@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetCurrentAccountResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetCurrentAccountResp.JSON_PROPERTY_ACCOUNT
@@ -51,7 +51,7 @@ public class GetCurrentAccountResp {
   }
 
   /**
-   * Get account
+   * 当前账号完整资料
    * @return account
    */
   @javax.annotation.Nullable

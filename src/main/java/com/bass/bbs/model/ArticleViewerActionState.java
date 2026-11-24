@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleViewerActionState
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleViewerActionState.JSON_PROPERTY_LIKED,
@@ -70,7 +70,7 @@ public class ArticleViewerActionState {
   }
 
   /**
-   * Get liked
+   * 是否已点赞
    * @return liked
    */
   @javax.annotation.Nullable
@@ -94,7 +94,7 @@ public class ArticleViewerActionState {
   }
 
   /**
-   * Get thanked
+   * 是否已感谢
    * @return thanked
    */
   @javax.annotation.Nullable
@@ -118,7 +118,7 @@ public class ArticleViewerActionState {
   }
 
   /**
-   * Get collected
+   * 是否已收藏
    * @return collected
    */
   @javax.annotation.Nullable
@@ -142,7 +142,7 @@ public class ArticleViewerActionState {
   }
 
   /**
-   * Get rewarded
+   * 是否已打赏
    * @return rewarded
    */
   @javax.annotation.Nullable
@@ -166,7 +166,7 @@ public class ArticleViewerActionState {
   }
 
   /**
-   * Get watched
+   * 是否已关注
    * @return watched
    */
   @javax.annotation.Nullable

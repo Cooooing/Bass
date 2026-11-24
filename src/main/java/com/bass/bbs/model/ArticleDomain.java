@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleDomain
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleDomain.JSON_PROPERTY_ID,
@@ -70,7 +70,7 @@ public class ArticleDomain {
   }
 
   /**
-   * Get id
+   * 领域 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -94,7 +94,7 @@ public class ArticleDomain {
   }
 
   /**
-   * Get code
+   * 稳定编码
    * @return code
    */
   @javax.annotation.Nullable
@@ -118,7 +118,7 @@ public class ArticleDomain {
   }
 
   /**
-   * Get name
+   * 领域名称
    * @return name
    */
   @javax.annotation.Nullable
@@ -142,7 +142,7 @@ public class ArticleDomain {
   }
 
   /**
-   * Get icon
+   * 图标
    * @return icon
    */
   @javax.annotation.Nullable
@@ -166,7 +166,7 @@ public class ArticleDomain {
   }
 
   /**
-   * Get url
+   * 链接
    * @return url
    */
   @javax.annotation.Nullable

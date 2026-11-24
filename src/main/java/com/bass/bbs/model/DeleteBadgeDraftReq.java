@@ -50,7 +50,7 @@ public class DeleteBadgeDraftReq {
   }
 
   /**
-   * Get draftId
+   * 草稿 ID。
    * @return draftId
    */
   @javax.annotation.Nullable

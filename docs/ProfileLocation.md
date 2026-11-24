@@ -2,14 +2,15 @@
 
 # ProfileLocation
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**country** | **String** |  |  [optional] |
-|**province** | **String** |  |  [optional] |
-|**city** | **String** |  |  [optional] |
+|**country** | **String** | 协议字段。 |  [optional] |
+|**province** | **String** | 协议字段。 |  [optional] |
+|**city** | **String** | 协议字段。 |  [optional] |
 
 
 

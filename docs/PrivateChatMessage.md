@@ -2,19 +2,20 @@
 
 # PrivateChatMessage
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**id** | **String** |  |  [optional] |
-|**senderId** | **String** |  |  [optional] |
-|**receiverId** | **String** |  |  [optional] |
-|**content** | **String** |  |  [optional] |
-|**messageType** | [**MessageTypeEnum**](#MessageTypeEnum) |  |  [optional] |
-|**revoked** | **Boolean** |  |  [optional] |
-|**createdAt** | **OffsetDateTime** |  |  [optional] |
-|**revokedAt** | **OffsetDateTime** |  |  [optional] |
+|**id** | **String** | 消息 ID。 |  [optional] |
+|**senderId** | **String** | 发送账号 ID。 |  [optional] |
+|**receiverId** | **String** | 接收账号 ID。 |  [optional] |
+|**content** | **String** | 原始 Markdown 内容。 |  [optional] |
+|**messageType** | [**MessageTypeEnum**](#MessageTypeEnum) | 消息类型。 |  [optional] |
+|**revoked** | **Boolean** | 是否已撤回。 |  [optional] |
+|**createdAt** | **OffsetDateTime** | 创建时间。 |  [optional] |
+|**revokedAt** | **OffsetDateTime** | 撤回时间。 |  [optional] |
 
 
 

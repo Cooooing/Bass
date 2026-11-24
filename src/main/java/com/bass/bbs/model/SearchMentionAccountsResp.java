@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SearchMentionAccountsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   SearchMentionAccountsResp.JSON_PROPERTY_ROWS,
@@ -67,7 +67,7 @@ public class SearchMentionAccountsResp {
   }
 
   /**
-   * Get rows
+   * 最多五个可提及账号候选。
    * @return rows
    */
   @javax.annotation.Nullable
@@ -91,7 +91,7 @@ public class SearchMentionAccountsResp {
   }
 
   /**
-   * Get page
+   * 分页结果。
    * @return page
    */
   @javax.annotation.Nullable

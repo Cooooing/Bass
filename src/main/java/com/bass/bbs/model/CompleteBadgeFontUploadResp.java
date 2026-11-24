@@ -55,7 +55,7 @@ public class CompleteBadgeFontUploadResp {
   }
 
   /**
-   * Get assetId
+   * 已确认资源的 ID。
    * @return assetId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class CompleteBadgeFontUploadResp {
   }
 
   /**
-   * Get fontUrl
+   * 前端本地预览可用的字体公开地址。
    * @return fontUrl
    */
   @javax.annotation.Nullable

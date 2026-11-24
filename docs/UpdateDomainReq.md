@@ -2,13 +2,14 @@
 
 # UpdateDomainReq
 
+请求参数。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**domainId** | **String** |  |  |
-|**domain** | [**ReqDomain**](ReqDomain.md) |  |  |
+|**domainId** | **String** | 领域 ID |  |
+|**domain** | [**ReqDomain**](ReqDomain.md) | 领域信息 |  |
 
 
 

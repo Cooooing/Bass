@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](PreferencesService.md#getCurrent) | **POST** /v1/user/preference/get-current |  |
-| [**getCurrentWithHttpInfo**](PreferencesService.md#getCurrentWithHttpInfo) | **POST** /v1/user/preference/get-current |  |
-| [**updateCurrent**](PreferencesService.md#updateCurrent) | **POST** /v1/user/preference/update-current |  |
-| [**updateCurrentWithHttpInfo**](PreferencesService.md#updateCurrentWithHttpInfo) | **POST** /v1/user/preference/update-current |  |
+| [**getCurrentPreferences**](PreferencesService.md#getCurrentPreferences) | **POST** /v1/user/preference/get-current |  |
+| [**getCurrentPreferencesWithHttpInfo**](PreferencesService.md#getCurrentPreferencesWithHttpInfo) | **POST** /v1/user/preference/get-current |  |
+| [**updateCurrentPreferences**](PreferencesService.md#updateCurrentPreferences) | **POST** /v1/user/preference/update-current |  |
+| [**updateCurrentPreferencesWithHttpInfo**](PreferencesService.md#updateCurrentPreferencesWithHttpInfo) | **POST** /v1/user/preference/update-current |  |
 
 
 
-## getCurrent
+## getCurrentPreferences
 
-> GetCurrentPreferencesResp getCurrent(getCurrentRequest)
+> GetCurrentPreferencesResp getCurrentPreferences(getCurrentPreferencesRequest)
 
 
 
@@ -38,13 +38,13 @@ public class Example {
         PreferencesService apiInstance = new PreferencesService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentPreferencesRequest request = APIgetCurrentPreferencesRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentPreferencesResp result = apiInstance.getCurrent(request);
+            GetCurrentPreferencesResp result = apiInstance.getCurrentPreferences(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling PreferencesService#getCurrent");
+            System.err.println("Exception when calling PreferencesService#getCurrentPreferences");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -58,7 +58,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](PreferencesService.md#APIgetCurrentRequest)|-|-|
+| getCurrentPreferencesRequest | [**APIgetCurrentPreferencesRequest**](PreferencesService.md#APIgetCurrentPreferencesRequest)|-|-|
 
 ### Return type
 
@@ -79,9 +79,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getCurrentWithHttpInfo
+## getCurrentPreferencesWithHttpInfo
 
-> ApiResponse<GetCurrentPreferencesResp> getCurrentWithHttpInfo(getCurrentRequest)
+> ApiResponse<GetCurrentPreferencesResp> getCurrentPreferencesWithHttpInfo(getCurrentPreferencesRequest)
 
 
 
@@ -107,15 +107,15 @@ public class Example {
         PreferencesService apiInstance = new PreferencesService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentPreferencesRequest request = APIgetCurrentPreferencesRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetCurrentPreferencesResp> response = apiInstance.getCurrentWithHttpInfo(request);
+            ApiResponse<GetCurrentPreferencesResp> response = apiInstance.getCurrentPreferencesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling PreferencesService#getCurrent");
+            System.err.println("Exception when calling PreferencesService#getCurrentPreferences");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -129,7 +129,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](PreferencesService.md#APIgetCurrentRequest)|-|-|
+| getCurrentPreferencesRequest | [**APIgetCurrentPreferencesRequest**](PreferencesService.md#APIgetCurrentPreferencesRequest)|-|-|
 
 ### Return type
 
@@ -151,8 +151,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIgetCurrentRequest"></a>
-## APIgetCurrentRequest
+<a id="APIgetCurrentPreferencesRequest"></a>
+## APIgetCurrentPreferencesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -161,9 +161,9 @@ No authorization required
 
 
 
-## updateCurrent
+## updateCurrentPreferences
 
-> UpdateCurrentPreferencesResp updateCurrent(updateCurrentRequest)
+> UpdateCurrentPreferencesResp updateCurrentPreferences(updateCurrentPreferencesRequest)
 
 
 
@@ -188,13 +188,13 @@ public class Example {
         PreferencesService apiInstance = new PreferencesService(defaultClient);
         UpdateCurrentPreferencesReq updateCurrentPreferencesReq = new UpdateCurrentPreferencesReq(); // UpdateCurrentPreferencesReq | 
         try {
-            APIupdateCurrentRequest request = APIupdateCurrentRequest.newBuilder()
+            APIupdateCurrentPreferencesRequest request = APIupdateCurrentPreferencesRequest.newBuilder()
                 .updateCurrentPreferencesReq(updateCurrentPreferencesReq)
                 .build();
-            UpdateCurrentPreferencesResp result = apiInstance.updateCurrent(request);
+            UpdateCurrentPreferencesResp result = apiInstance.updateCurrentPreferences(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling PreferencesService#updateCurrent");
+            System.err.println("Exception when calling PreferencesService#updateCurrentPreferences");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -208,7 +208,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateCurrentRequest | [**APIupdateCurrentRequest**](PreferencesService.md#APIupdateCurrentRequest)|-|-|
+| updateCurrentPreferencesRequest | [**APIupdateCurrentPreferencesRequest**](PreferencesService.md#APIupdateCurrentPreferencesRequest)|-|-|
 
 ### Return type
 
@@ -229,9 +229,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## updateCurrentWithHttpInfo
+## updateCurrentPreferencesWithHttpInfo
 
-> ApiResponse<UpdateCurrentPreferencesResp> updateCurrentWithHttpInfo(updateCurrentRequest)
+> ApiResponse<UpdateCurrentPreferencesResp> updateCurrentPreferencesWithHttpInfo(updateCurrentPreferencesRequest)
 
 
 
@@ -257,15 +257,15 @@ public class Example {
         PreferencesService apiInstance = new PreferencesService(defaultClient);
         UpdateCurrentPreferencesReq updateCurrentPreferencesReq = new UpdateCurrentPreferencesReq(); // UpdateCurrentPreferencesReq | 
         try {
-            APIupdateCurrentRequest request = APIupdateCurrentRequest.newBuilder()
+            APIupdateCurrentPreferencesRequest request = APIupdateCurrentPreferencesRequest.newBuilder()
                 .updateCurrentPreferencesReq(updateCurrentPreferencesReq)
                 .build();
-            ApiResponse<UpdateCurrentPreferencesResp> response = apiInstance.updateCurrentWithHttpInfo(request);
+            ApiResponse<UpdateCurrentPreferencesResp> response = apiInstance.updateCurrentPreferencesWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling PreferencesService#updateCurrent");
+            System.err.println("Exception when calling PreferencesService#updateCurrentPreferences");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -279,7 +279,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| updateCurrentRequest | [**APIupdateCurrentRequest**](PreferencesService.md#APIupdateCurrentRequest)|-|-|
+| updateCurrentPreferencesRequest | [**APIupdateCurrentPreferencesRequest**](PreferencesService.md#APIupdateCurrentPreferencesRequest)|-|-|
 
 ### Return type
 
@@ -301,8 +301,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIupdateCurrentRequest"></a>
-## APIupdateCurrentRequest
+<a id="APIupdateCurrentPreferencesRequest"></a>
+## APIupdateCurrentPreferencesRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](LocationService.md#getCurrent) | **POST** /v1/platform/location/get-current |  |
-| [**getCurrentWithHttpInfo**](LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/location/get-current |  |
+| [**getCurrentLocation**](LocationService.md#getCurrentLocation) | **POST** /v1/platform/location/get-current |  |
+| [**getCurrentLocationWithHttpInfo**](LocationService.md#getCurrentLocationWithHttpInfo) | **POST** /v1/platform/location/get-current |  |
 
 
 
-## getCurrent
+## getCurrentLocation
 
-> GetCurrentLocationResp getCurrent(getCurrentRequest)
+> GetCurrentLocationResp getCurrentLocation(getCurrentLocationRequest)
 
 
 
@@ -36,13 +36,13 @@ public class Example {
         LocationService apiInstance = new LocationService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentLocationRequest request = APIgetCurrentLocationRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentLocationResp result = apiInstance.getCurrent(request);
+            GetCurrentLocationResp result = apiInstance.getCurrentLocation(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling LocationService#getCurrent");
+            System.err.println("Exception when calling LocationService#getCurrentLocation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -56,7 +56,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](LocationService.md#APIgetCurrentRequest)|-|-|
+| getCurrentLocationRequest | [**APIgetCurrentLocationRequest**](LocationService.md#APIgetCurrentLocationRequest)|-|-|
 
 ### Return type
 
@@ -77,9 +77,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getCurrentWithHttpInfo
+## getCurrentLocationWithHttpInfo
 
-> ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(getCurrentRequest)
+> ApiResponse<GetCurrentLocationResp> getCurrentLocationWithHttpInfo(getCurrentLocationRequest)
 
 
 
@@ -105,15 +105,15 @@ public class Example {
         LocationService apiInstance = new LocationService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentLocationRequest request = APIgetCurrentLocationRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetCurrentLocationResp> response = apiInstance.getCurrentWithHttpInfo(request);
+            ApiResponse<GetCurrentLocationResp> response = apiInstance.getCurrentLocationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling LocationService#getCurrent");
+            System.err.println("Exception when calling LocationService#getCurrentLocation");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -127,7 +127,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](LocationService.md#APIgetCurrentRequest)|-|-|
+| getCurrentLocationRequest | [**APIgetCurrentLocationRequest**](LocationService.md#APIgetCurrentLocationRequest)|-|-|
 
 ### Return type
 
@@ -149,8 +149,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIgetCurrentRequest"></a>
-## APIgetCurrentRequest
+<a id="APIgetCurrentLocationRequest"></a>
+## APIgetCurrentLocationRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

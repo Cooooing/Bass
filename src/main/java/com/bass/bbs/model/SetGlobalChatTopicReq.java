@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SetGlobalChatTopicReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SetGlobalChatTopicReq.JSON_PROPERTY_CONTENT
@@ -50,7 +50,7 @@ public class SetGlobalChatTopicReq {
   }
 
   /**
-   * Get content
+   * 话题内容。
    * @return content
    */
   @javax.annotation.Nullable

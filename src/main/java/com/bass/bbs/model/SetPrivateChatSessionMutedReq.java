@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SetPrivateChatSessionMutedReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SetPrivateChatSessionMutedReq.JSON_PROPERTY_PEER_USER_ID,
@@ -55,7 +55,7 @@ public class SetPrivateChatSessionMutedReq {
   }
 
   /**
-   * Get peerUserId
+   * 对端账号 ID。
    * @return peerUserId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class SetPrivateChatSessionMutedReq {
   }
 
   /**
-   * Get muted
+   * 是否免打扰。
    * @return muted
    */
   @javax.annotation.Nullable

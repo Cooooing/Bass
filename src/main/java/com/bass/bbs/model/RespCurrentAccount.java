@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespCurrentAccount
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespCurrentAccount.JSON_PROPERTY_PROFILE,
@@ -63,7 +63,7 @@ public class RespCurrentAccount {
   }
 
   /**
-   * Get profile
+   * 账号展示资料
    * @return profile
    */
   @javax.annotation.Nullable
@@ -87,7 +87,7 @@ public class RespCurrentAccount {
   }
 
   /**
-   * Get contact
+   * 账号联系方式
    * @return contact
    */
   @javax.annotation.Nullable
@@ -111,7 +111,7 @@ public class RespCurrentAccount {
   }
 
   /**
-   * Get location
+   * 当前账号地理资料
    * @return location
    */
   @javax.annotation.Nullable

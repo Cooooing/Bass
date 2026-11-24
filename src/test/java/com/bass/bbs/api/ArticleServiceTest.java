@@ -79,14 +79,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void acceptAnswerTest() throws ApiException {
+    public void acceptArticleAnswerTest() throws ApiException {
         AcceptArticleAnswerReq acceptArticleAnswerReq = null;
         
-        ArticleService.APIacceptAnswerRequest request = ArticleService.APIacceptAnswerRequest.newBuilder()
+        ArticleService.APIacceptArticleAnswerRequest request = ArticleService.APIacceptArticleAnswerRequest.newBuilder()
           .acceptArticleAnswerReq(acceptArticleAnswerReq)
           .build();
         Object response = 
-        api.acceptAnswer(request);
+        api.acceptArticleAnswer(request);
 
         // TODO: test validations
     }
@@ -100,35 +100,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void archiveTest() throws ApiException {
+    public void archiveArticleTest() throws ApiException {
         ArchiveArticleReq archiveArticleReq = null;
         
-        ArticleService.APIarchiveRequest request = ArticleService.APIarchiveRequest.newBuilder()
+        ArticleService.APIarchiveArticleRequest request = ArticleService.APIarchiveArticleRequest.newBuilder()
           .archiveArticleReq(archiveArticleReq)
           .build();
         Object response = 
-        api.archive(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 查询文章列表
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void callListTest() throws ApiException {
-        ListArticlesReq listArticlesReq = null;
-        
-        ArticleService.APIcallListRequest request = ArticleService.APIcallListRequest.newBuilder()
-          .listArticlesReq(listArticlesReq)
-          .build();
-        ListArticlesResp response = 
-        api.callList(request);
+        api.archiveArticle(request);
 
         // TODO: test validations
     }
@@ -142,14 +121,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void cancelPublishTest() throws ApiException {
+    public void cancelPublishArticleTest() throws ApiException {
         CancelPublishArticleReq cancelPublishArticleReq = null;
         
-        ArticleService.APIcancelPublishRequest request = ArticleService.APIcancelPublishRequest.newBuilder()
+        ArticleService.APIcancelPublishArticleRequest request = ArticleService.APIcancelPublishArticleRequest.newBuilder()
           .cancelPublishArticleReq(cancelPublishArticleReq)
           .build();
         Object response = 
-        api.cancelPublish(request);
+        api.cancelPublishArticle(request);
 
         // TODO: test validations
     }
@@ -163,14 +142,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void collectTest() throws ApiException {
+    public void collectArticleTest() throws ApiException {
         CollectArticleReq collectArticleReq = null;
         
-        ArticleService.APIcollectRequest request = ArticleService.APIcollectRequest.newBuilder()
+        ArticleService.APIcollectArticleRequest request = ArticleService.APIcollectArticleRequest.newBuilder()
           .collectArticleReq(collectArticleReq)
           .build();
         CollectArticleResp response = 
-        api.collect(request);
+        api.collectArticle(request);
 
         // TODO: test validations
     }
@@ -184,14 +163,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void countCollectedTest() throws ApiException {
+    public void countCollectedArticlesTest() throws ApiException {
         Object body = null;
         
-        ArticleService.APIcountCollectedRequest request = ArticleService.APIcountCollectedRequest.newBuilder()
+        ArticleService.APIcountCollectedArticlesRequest request = ArticleService.APIcountCollectedArticlesRequest.newBuilder()
           .body(body)
           .build();
         CountCollectedArticlesResp response = 
-        api.countCollected(request);
+        api.countCollectedArticles(request);
 
         // TODO: test validations
     }
@@ -205,14 +184,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void createDraftTest() throws ApiException {
+    public void createDraftArticleTest() throws ApiException {
         CreateDraftArticleReq createDraftArticleReq = null;
         
-        ArticleService.APIcreateDraftRequest request = ArticleService.APIcreateDraftRequest.newBuilder()
+        ArticleService.APIcreateDraftArticleRequest request = ArticleService.APIcreateDraftArticleRequest.newBuilder()
           .createDraftArticleReq(createDraftArticleReq)
           .build();
         CreateDraftArticleResp response = 
-        api.createDraft(request);
+        api.createDraftArticle(request);
 
         // TODO: test validations
     }
@@ -226,14 +205,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void discardDraftTest() throws ApiException {
+    public void discardDraftArticleTest() throws ApiException {
         DiscardDraftArticleReq discardDraftArticleReq = null;
         
-        ArticleService.APIdiscardDraftRequest request = ArticleService.APIdiscardDraftRequest.newBuilder()
+        ArticleService.APIdiscardDraftArticleRequest request = ArticleService.APIdiscardDraftArticleRequest.newBuilder()
           .discardDraftArticleReq(discardDraftArticleReq)
           .build();
         Object response = 
-        api.discardDraft(request);
+        api.discardDraftArticle(request);
 
         // TODO: test validations
     }
@@ -247,14 +226,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void enterLotteryTest() throws ApiException {
+    public void enterArticleLotteryTest() throws ApiException {
         EnterArticleLotteryReq enterArticleLotteryReq = null;
         
-        ArticleService.APIenterLotteryRequest request = ArticleService.APIenterLotteryRequest.newBuilder()
+        ArticleService.APIenterArticleLotteryRequest request = ArticleService.APIenterArticleLotteryRequest.newBuilder()
           .enterArticleLotteryReq(enterArticleLotteryReq)
           .build();
         Object response = 
-        api.enterLottery(request);
+        api.enterArticleLottery(request);
 
         // TODO: test validations
     }
@@ -268,14 +247,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getTest() throws ApiException {
+    public void getArticleTest() throws ApiException {
         GetArticleReq getArticleReq = null;
         
-        ArticleService.APIgetRequest request = ArticleService.APIgetRequest.newBuilder()
+        ArticleService.APIgetArticleRequest request = ArticleService.APIgetArticleRequest.newBuilder()
           .getArticleReq(getArticleReq)
           .build();
         GetArticleResp response = 
-        api.get(request);
+        api.getArticle(request);
 
         // TODO: test validations
     }
@@ -289,14 +268,35 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void likeTest() throws ApiException {
+    public void likeArticleTest() throws ApiException {
         LikeArticleReq likeArticleReq = null;
         
-        ArticleService.APIlikeRequest request = ArticleService.APIlikeRequest.newBuilder()
+        ArticleService.APIlikeArticleRequest request = ArticleService.APIlikeArticleRequest.newBuilder()
           .likeArticleReq(likeArticleReq)
           .build();
         LikeArticleResp response = 
-        api.like(request);
+        api.likeArticle(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询文章列表
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listArticlesTest() throws ApiException {
+        ListArticlesReq listArticlesReq = null;
+        
+        ArticleService.APIlistArticlesRequest request = ArticleService.APIlistArticlesRequest.newBuilder()
+          .listArticlesReq(listArticlesReq)
+          .build();
+        ListArticlesResp response = 
+        api.listArticles(request);
 
         // TODO: test validations
     }
@@ -310,14 +310,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listFollowingTest() throws ApiException {
+    public void listFollowingArticlesTest() throws ApiException {
         ListFollowingArticlesReq listFollowingArticlesReq = null;
         
-        ArticleService.APIlistFollowingRequest request = ArticleService.APIlistFollowingRequest.newBuilder()
+        ArticleService.APIlistFollowingArticlesRequest request = ArticleService.APIlistFollowingArticlesRequest.newBuilder()
           .listFollowingArticlesReq(listFollowingArticlesReq)
           .build();
         ListFollowingArticlesResp response = 
-        api.listFollowing(request);
+        api.listFollowingArticles(request);
 
         // TODO: test validations
     }
@@ -331,35 +331,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listNearbyTest() throws ApiException {
+    public void listNearbyArticlesTest() throws ApiException {
         ListNearbyArticlesReq listNearbyArticlesReq = null;
         
-        ArticleService.APIlistNearbyRequest request = ArticleService.APIlistNearbyRequest.newBuilder()
+        ArticleService.APIlistNearbyArticlesRequest request = ArticleService.APIlistNearbyArticlesRequest.newBuilder()
           .listNearbyArticlesReq(listNearbyArticlesReq)
           .build();
         ListNearbyArticlesResp response = 
-        api.listNearby(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 查询当前账号收藏的文章。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void pageCollectedTest() throws ApiException {
-        PageCollectedArticlesReq pageCollectedArticlesReq = null;
-        
-        ArticleService.APIpageCollectedRequest request = ArticleService.APIpageCollectedRequest.newBuilder()
-          .pageCollectedArticlesReq(pageCollectedArticlesReq)
-          .build();
-        PageCollectedArticlesResp response = 
-        api.pageCollected(request);
+        api.listNearbyArticles(request);
 
         // TODO: test validations
     }
@@ -373,14 +352,35 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void pageViewHistoryTest() throws ApiException {
+    public void pageArticleViewHistoryTest() throws ApiException {
         PageArticleViewHistoryReq pageArticleViewHistoryReq = null;
         
-        ArticleService.APIpageViewHistoryRequest request = ArticleService.APIpageViewHistoryRequest.newBuilder()
+        ArticleService.APIpageArticleViewHistoryRequest request = ArticleService.APIpageArticleViewHistoryRequest.newBuilder()
           .pageArticleViewHistoryReq(pageArticleViewHistoryReq)
           .build();
         PageArticleViewHistoryResp response = 
-        api.pageViewHistory(request);
+        api.pageArticleViewHistory(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询当前账号收藏的文章。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void pageCollectedArticlesTest() throws ApiException {
+        PageCollectedArticlesReq pageCollectedArticlesReq = null;
+        
+        ArticleService.APIpageCollectedArticlesRequest request = ArticleService.APIpageCollectedArticlesRequest.newBuilder()
+          .pageCollectedArticlesReq(pageCollectedArticlesReq)
+          .build();
+        PageCollectedArticlesResp response = 
+        api.pageCollectedArticles(request);
 
         // TODO: test validations
     }
@@ -394,14 +394,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void pageWatchedTest() throws ApiException {
+    public void pageWatchedArticlesTest() throws ApiException {
         PageWatchedArticlesReq pageWatchedArticlesReq = null;
         
-        ArticleService.APIpageWatchedRequest request = ArticleService.APIpageWatchedRequest.newBuilder()
+        ArticleService.APIpageWatchedArticlesRequest request = ArticleService.APIpageWatchedArticlesRequest.newBuilder()
           .pageWatchedArticlesReq(pageWatchedArticlesReq)
           .build();
         PageWatchedArticlesResp response = 
-        api.pageWatched(request);
+        api.pageWatchedArticles(request);
 
         // TODO: test validations
     }
@@ -415,14 +415,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void publishTest() throws ApiException {
+    public void publishArticleTest() throws ApiException {
         PublishArticleReq publishArticleReq = null;
         
-        ArticleService.APIpublishRequest request = ArticleService.APIpublishRequest.newBuilder()
+        ArticleService.APIpublishArticleRequest request = ArticleService.APIpublishArticleRequest.newBuilder()
           .publishArticleReq(publishArticleReq)
           .build();
         Object response = 
-        api.publish(request);
+        api.publishArticle(request);
 
         // TODO: test validations
     }
@@ -436,14 +436,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void rewardTest() throws ApiException {
+    public void rewardArticleTest() throws ApiException {
         RewardArticleReq rewardArticleReq = null;
         
-        ArticleService.APIrewardRequest request = ArticleService.APIrewardRequest.newBuilder()
+        ArticleService.APIrewardArticleRequest request = ArticleService.APIrewardArticleRequest.newBuilder()
           .rewardArticleReq(rewardArticleReq)
           .build();
         RewardArticleResp response = 
-        api.reward(request);
+        api.rewardArticle(request);
 
         // TODO: test validations
     }
@@ -457,14 +457,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void setPinnedCommentTest() throws ApiException {
+    public void setPinnedArticleCommentTest() throws ApiException {
         SetPinnedArticleCommentReq setPinnedArticleCommentReq = null;
         
-        ArticleService.APIsetPinnedCommentRequest request = ArticleService.APIsetPinnedCommentRequest.newBuilder()
+        ArticleService.APIsetPinnedArticleCommentRequest request = ArticleService.APIsetPinnedArticleCommentRequest.newBuilder()
           .setPinnedArticleCommentReq(setPinnedArticleCommentReq)
           .build();
         Object response = 
-        api.setPinnedComment(request);
+        api.setPinnedArticleComment(request);
 
         // TODO: test validations
     }
@@ -478,14 +478,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void thankTest() throws ApiException {
+    public void thankArticleTest() throws ApiException {
         ThankArticleReq thankArticleReq = null;
         
-        ArticleService.APIthankRequest request = ArticleService.APIthankRequest.newBuilder()
+        ArticleService.APIthankArticleRequest request = ArticleService.APIthankArticleRequest.newBuilder()
           .thankArticleReq(thankArticleReq)
           .build();
         ThankArticleResp response = 
-        api.thank(request);
+        api.thankArticle(request);
 
         // TODO: test validations
     }
@@ -499,14 +499,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updateDraftTest() throws ApiException {
+    public void updateDraftArticleTest() throws ApiException {
         UpdateDraftArticleReq updateDraftArticleReq = null;
         
-        ArticleService.APIupdateDraftRequest request = ArticleService.APIupdateDraftRequest.newBuilder()
+        ArticleService.APIupdateDraftArticleRequest request = ArticleService.APIupdateDraftArticleRequest.newBuilder()
           .updateDraftArticleReq(updateDraftArticleReq)
           .build();
         UpdateDraftArticleResp response = 
-        api.updateDraft(request);
+        api.updateDraftArticle(request);
 
         // TODO: test validations
     }
@@ -520,14 +520,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void votePollTest() throws ApiException {
+    public void voteArticlePollTest() throws ApiException {
         VoteArticlePollReq voteArticlePollReq = null;
         
-        ArticleService.APIvotePollRequest request = ArticleService.APIvotePollRequest.newBuilder()
+        ArticleService.APIvoteArticlePollRequest request = ArticleService.APIvoteArticlePollRequest.newBuilder()
           .voteArticlePollReq(voteArticlePollReq)
           .build();
         Object response = 
-        api.votePoll(request);
+        api.voteArticlePoll(request);
 
         // TODO: test validations
     }
@@ -541,14 +541,14 @@ public class ArticleServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void watchTest() throws ApiException {
+    public void watchArticleTest() throws ApiException {
         WatchArticleReq watchArticleReq = null;
         
-        ArticleService.APIwatchRequest request = ArticleService.APIwatchRequest.newBuilder()
+        ArticleService.APIwatchArticleRequest request = ArticleService.APIwatchArticleRequest.newBuilder()
           .watchArticleReq(watchArticleReq)
           .build();
         WatchArticleResp response = 
-        api.watch(request);
+        api.watchArticle(request);
 
         // TODO: test validations
     }

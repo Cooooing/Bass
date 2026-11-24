@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RevokePrivateChatMessageResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   RevokePrivateChatMessageResp.JSON_PROPERTY_MESSAGE
@@ -51,7 +51,7 @@ public class RevokePrivateChatMessageResp {
   }
 
   /**
-   * Get message
+   * 已撤回消息。
    * @return message
    */
   @javax.annotation.Nullable

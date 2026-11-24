@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateDraftArticleReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateDraftArticleReq.JSON_PROPERTY_ARTICLE
@@ -51,7 +51,7 @@ public class CreateDraftArticleReq {
   }
 
   /**
-   * Get article
+   * 必填，草稿内容
    * @return article
    */
   @javax.annotation.Nonnull

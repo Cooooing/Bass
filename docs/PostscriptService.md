@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**add**](PostscriptService.md#add) | **POST** /v1/content/postscript/add |  |
-| [**addWithHttpInfo**](PostscriptService.md#addWithHttpInfo) | **POST** /v1/content/postscript/add |  |
-| [**callList**](PostscriptService.md#callList) | **POST** /v1/content/postscript/list |  |
-| [**callListWithHttpInfo**](PostscriptService.md#callListWithHttpInfo) | **POST** /v1/content/postscript/list |  |
+| [**addPostscript**](PostscriptService.md#addPostscript) | **POST** /v1/content/postscript/add |  |
+| [**addPostscriptWithHttpInfo**](PostscriptService.md#addPostscriptWithHttpInfo) | **POST** /v1/content/postscript/add |  |
+| [**listPostscripts**](PostscriptService.md#listPostscripts) | **POST** /v1/content/postscript/list |  |
+| [**listPostscriptsWithHttpInfo**](PostscriptService.md#listPostscriptsWithHttpInfo) | **POST** /v1/content/postscript/list |  |
 
 
 
-## add
+## addPostscript
 
-> AddPostscriptResp add(addRequest)
+> AddPostscriptResp addPostscript(addPostscriptRequest)
 
 
 
@@ -38,13 +38,13 @@ public class Example {
         PostscriptService apiInstance = new PostscriptService(defaultClient);
         AddPostscriptReq addPostscriptReq = new AddPostscriptReq(); // AddPostscriptReq | 
         try {
-            APIaddRequest request = APIaddRequest.newBuilder()
+            APIaddPostscriptRequest request = APIaddPostscriptRequest.newBuilder()
                 .addPostscriptReq(addPostscriptReq)
                 .build();
-            AddPostscriptResp result = apiInstance.add(request);
+            AddPostscriptResp result = apiInstance.addPostscript(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling PostscriptService#add");
+            System.err.println("Exception when calling PostscriptService#addPostscript");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -58,7 +58,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| addRequest | [**APIaddRequest**](PostscriptService.md#APIaddRequest)|-|-|
+| addPostscriptRequest | [**APIaddPostscriptRequest**](PostscriptService.md#APIaddPostscriptRequest)|-|-|
 
 ### Return type
 
@@ -79,9 +79,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## addWithHttpInfo
+## addPostscriptWithHttpInfo
 
-> ApiResponse<AddPostscriptResp> addWithHttpInfo(addRequest)
+> ApiResponse<AddPostscriptResp> addPostscriptWithHttpInfo(addPostscriptRequest)
 
 
 
@@ -107,15 +107,15 @@ public class Example {
         PostscriptService apiInstance = new PostscriptService(defaultClient);
         AddPostscriptReq addPostscriptReq = new AddPostscriptReq(); // AddPostscriptReq | 
         try {
-            APIaddRequest request = APIaddRequest.newBuilder()
+            APIaddPostscriptRequest request = APIaddPostscriptRequest.newBuilder()
                 .addPostscriptReq(addPostscriptReq)
                 .build();
-            ApiResponse<AddPostscriptResp> response = apiInstance.addWithHttpInfo(request);
+            ApiResponse<AddPostscriptResp> response = apiInstance.addPostscriptWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling PostscriptService#add");
+            System.err.println("Exception when calling PostscriptService#addPostscript");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -129,7 +129,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| addRequest | [**APIaddRequest**](PostscriptService.md#APIaddRequest)|-|-|
+| addPostscriptRequest | [**APIaddPostscriptRequest**](PostscriptService.md#APIaddPostscriptRequest)|-|-|
 
 ### Return type
 
@@ -151,8 +151,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIaddRequest"></a>
-## APIaddRequest
+<a id="APIaddPostscriptRequest"></a>
+## APIaddPostscriptRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -161,9 +161,9 @@ No authorization required
 
 
 
-## callList
+## listPostscripts
 
-> ListPostscriptsResp callList(callListRequest)
+> ListPostscriptsResp listPostscripts(listPostscriptsRequest)
 
 
 
@@ -188,13 +188,13 @@ public class Example {
         PostscriptService apiInstance = new PostscriptService(defaultClient);
         ListPostscriptsReq listPostscriptsReq = new ListPostscriptsReq(); // ListPostscriptsReq | 
         try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
+            APIlistPostscriptsRequest request = APIlistPostscriptsRequest.newBuilder()
                 .listPostscriptsReq(listPostscriptsReq)
                 .build();
-            ListPostscriptsResp result = apiInstance.callList(request);
+            ListPostscriptsResp result = apiInstance.listPostscripts(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling PostscriptService#callList");
+            System.err.println("Exception when calling PostscriptService#listPostscripts");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -208,7 +208,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](PostscriptService.md#APIcallListRequest)|-|-|
+| listPostscriptsRequest | [**APIlistPostscriptsRequest**](PostscriptService.md#APIlistPostscriptsRequest)|-|-|
 
 ### Return type
 
@@ -229,9 +229,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## callListWithHttpInfo
+## listPostscriptsWithHttpInfo
 
-> ApiResponse<ListPostscriptsResp> callListWithHttpInfo(callListRequest)
+> ApiResponse<ListPostscriptsResp> listPostscriptsWithHttpInfo(listPostscriptsRequest)
 
 
 
@@ -257,15 +257,15 @@ public class Example {
         PostscriptService apiInstance = new PostscriptService(defaultClient);
         ListPostscriptsReq listPostscriptsReq = new ListPostscriptsReq(); // ListPostscriptsReq | 
         try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
+            APIlistPostscriptsRequest request = APIlistPostscriptsRequest.newBuilder()
                 .listPostscriptsReq(listPostscriptsReq)
                 .build();
-            ApiResponse<ListPostscriptsResp> response = apiInstance.callListWithHttpInfo(request);
+            ApiResponse<ListPostscriptsResp> response = apiInstance.listPostscriptsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling PostscriptService#callList");
+            System.err.println("Exception when calling PostscriptService#listPostscripts");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -279,7 +279,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](PostscriptService.md#APIcallListRequest)|-|-|
+| listPostscriptsRequest | [**APIlistPostscriptsRequest**](PostscriptService.md#APIlistPostscriptsRequest)|-|-|
 
 ### Return type
 
@@ -301,8 +301,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcallListRequest"></a>
-## APIcallListRequest
+<a id="APIlistPostscriptsRequest"></a>
+## APIlistPostscriptsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

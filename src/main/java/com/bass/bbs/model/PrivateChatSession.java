@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PrivateChatSession
+ * 协议消息。
  */
 @JsonPropertyOrder({
   PrivateChatSession.JSON_PROPERTY_PEER_USER_ID,
@@ -88,7 +88,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get peerUserId
+   * 对端账号 ID。
    * @return peerUserId
    */
   @javax.annotation.Nullable
@@ -112,7 +112,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get lastReadMessageId
+   * 最后已读消息 ID。
    * @return lastReadMessageId
    */
   @javax.annotation.Nullable
@@ -136,7 +136,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get unreadCount
+   * 未读消息数。
    * @return unreadCount
    */
   @javax.annotation.Nullable
@@ -160,7 +160,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get muted
+   * 是否免打扰。
    * @return muted
    */
   @javax.annotation.Nullable
@@ -184,7 +184,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get pinned
+   * 是否置顶。
    * @return pinned
    */
   @javax.annotation.Nullable
@@ -208,7 +208,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get lastMessage
+   * 最后一条消息。
    * @return lastMessage
    */
   @javax.annotation.Nullable
@@ -232,7 +232,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get lastMessageAt
+   * 最后消息时间。
    * @return lastMessageAt
    */
   @javax.annotation.Nullable
@@ -256,7 +256,7 @@ public class PrivateChatSession {
   }
 
   /**
-   * Get peer
+   * 对端展示资料。
    * @return peer
    */
   @javax.annotation.Nullable

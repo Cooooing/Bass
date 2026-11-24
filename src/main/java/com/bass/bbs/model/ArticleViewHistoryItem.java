@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ArticleViewHistoryItem
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ArticleViewHistoryItem.JSON_PROPERTY_ARTICLE,
@@ -57,7 +57,7 @@ public class ArticleViewHistoryItem {
   }
 
   /**
-   * Get article
+   * 当前仍可展示的文章
    * @return article
    */
   @javax.annotation.Nullable
@@ -81,7 +81,7 @@ public class ArticleViewHistoryItem {
   }
 
   /**
-   * Get viewedAt
+   * 最近浏览时间
    * @return viewedAt
    */
   @javax.annotation.Nullable

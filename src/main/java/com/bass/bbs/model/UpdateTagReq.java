@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateTagReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   UpdateTagReq.JSON_PROPERTY_TAG_ID,
@@ -56,7 +56,7 @@ public class UpdateTagReq {
   }
 
   /**
-   * Get tagId
+   * 标签 ID
    * @return tagId
    */
   @javax.annotation.Nonnull
@@ -80,7 +80,7 @@ public class UpdateTagReq {
   }
 
   /**
-   * Get tag
+   * 标签信息
    * @return tag
    */
   @javax.annotation.Nonnull

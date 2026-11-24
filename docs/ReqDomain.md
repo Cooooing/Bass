@@ -2,19 +2,20 @@
 
 # ReqDomain
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**code** | **String** |  |  |
-|**name** | **String** |  |  |
-|**description** | **String** |  |  [optional] |
-|**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
-|**url** | **String** |  |  [optional] |
-|**icon** | **String** |  |  [optional] |
-|**isNav** | **Boolean** |  |  [optional] |
-|**sort** | **Integer** |  |  [optional] |
+|**code** | **String** | 稳定编码 |  |
+|**name** | **String** | 领域名称 |  |
+|**description** | **String** | 描述 |  [optional] |
+|**status** | [**StatusEnum**](#StatusEnum) | 启停状态 |  [optional] |
+|**url** | **String** | 链接 |  [optional] |
+|**icon** | **String** | 图标 |  [optional] |
+|**isNav** | **Boolean** | 是否在导航中展示 |  [optional] |
+|**sort** | **Integer** | 排序值，越小越靠前 |  [optional] |
 
 
 

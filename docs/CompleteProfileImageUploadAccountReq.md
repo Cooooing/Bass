@@ -2,13 +2,14 @@
 
 # CompleteProfileImageUploadAccountReq
 
+请求参数。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**purpose** | [**PurposeEnum**](#PurposeEnum) |  |  |
-|**hash** | **String** |  |  |
+|**purpose** | [**PurposeEnum**](#PurposeEnum) | 协议字段。 |  |
+|**hash** | **String** | 文件 SHA-256；回调尚未入库时返回可重试错误 |  |
 
 
 

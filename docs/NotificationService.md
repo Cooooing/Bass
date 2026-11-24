@@ -4,168 +4,18 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**callList**](NotificationService.md#callList) | **POST** /v1/notify/notification/list |  |
-| [**callListWithHttpInfo**](NotificationService.md#callListWithHttpInfo) | **POST** /v1/notify/notification/list |  |
-| [**countUnread**](NotificationService.md#countUnread) | **POST** /v1/notify/notification/count-unread |  |
-| [**countUnreadWithHttpInfo**](NotificationService.md#countUnreadWithHttpInfo) | **POST** /v1/notify/notification/count-unread |  |
-| [**markRead**](NotificationService.md#markRead) | **POST** /v1/notify/notification/mark-read |  |
-| [**markReadWithHttpInfo**](NotificationService.md#markReadWithHttpInfo) | **POST** /v1/notify/notification/mark-read |  |
+| [**countUnreadNotifications**](NotificationService.md#countUnreadNotifications) | **POST** /v1/notify/notification/count-unread |  |
+| [**countUnreadNotificationsWithHttpInfo**](NotificationService.md#countUnreadNotificationsWithHttpInfo) | **POST** /v1/notify/notification/count-unread |  |
+| [**listNotifications**](NotificationService.md#listNotifications) | **POST** /v1/notify/notification/list |  |
+| [**listNotificationsWithHttpInfo**](NotificationService.md#listNotificationsWithHttpInfo) | **POST** /v1/notify/notification/list |  |
+| [**markReadNotification**](NotificationService.md#markReadNotification) | **POST** /v1/notify/notification/mark-read |  |
+| [**markReadNotificationWithHttpInfo**](NotificationService.md#markReadNotificationWithHttpInfo) | **POST** /v1/notify/notification/mark-read |  |
 
 
 
-## callList
+## countUnreadNotifications
 
-> ListNotificationsResp callList(callListRequest)
-
-
-
-分页查询通知列表。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.NotificationService;
-import com.bass.bbs.api.NotificationService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        NotificationService apiInstance = new NotificationService(defaultClient);
-        ListNotificationsReq listNotificationsReq = new ListNotificationsReq(); // ListNotificationsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listNotificationsReq(listNotificationsReq)
-                .build();
-            ListNotificationsResp result = apiInstance.callList(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling NotificationService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](NotificationService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-[**ListNotificationsResp**](ListNotificationsResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## callListWithHttpInfo
-
-> ApiResponse<ListNotificationsResp> callListWithHttpInfo(callListRequest)
-
-
-
-分页查询通知列表。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.NotificationService;
-import com.bass.bbs.api.NotificationService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        NotificationService apiInstance = new NotificationService(defaultClient);
-        ListNotificationsReq listNotificationsReq = new ListNotificationsReq(); // ListNotificationsReq | 
-        try {
-            APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listNotificationsReq(listNotificationsReq)
-                .build();
-            ApiResponse<ListNotificationsResp> response = apiInstance.callListWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling NotificationService#callList");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| callListRequest | [**APIcallListRequest**](NotificationService.md#APIcallListRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**ListNotificationsResp**](ListNotificationsResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIcallListRequest"></a>
-## APIcallListRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **listNotificationsReq** | [**ListNotificationsReq**](ListNotificationsReq.md) |  | |
-
-
-
-## countUnread
-
-> CountUnreadNotificationsResp countUnread(countUnreadRequest)
+> CountUnreadNotificationsResp countUnreadNotifications(countUnreadNotificationsRequest)
 
 
 
@@ -190,13 +40,13 @@ public class Example {
         NotificationService apiInstance = new NotificationService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcountUnreadRequest request = APIcountUnreadRequest.newBuilder()
+            APIcountUnreadNotificationsRequest request = APIcountUnreadNotificationsRequest.newBuilder()
                 .body(body)
                 .build();
-            CountUnreadNotificationsResp result = apiInstance.countUnread(request);
+            CountUnreadNotificationsResp result = apiInstance.countUnreadNotifications(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling NotificationService#countUnread");
+            System.err.println("Exception when calling NotificationService#countUnreadNotifications");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -210,7 +60,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| countUnreadRequest | [**APIcountUnreadRequest**](NotificationService.md#APIcountUnreadRequest)|-|-|
+| countUnreadNotificationsRequest | [**APIcountUnreadNotificationsRequest**](NotificationService.md#APIcountUnreadNotificationsRequest)|-|-|
 
 ### Return type
 
@@ -231,9 +81,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## countUnreadWithHttpInfo
+## countUnreadNotificationsWithHttpInfo
 
-> ApiResponse<CountUnreadNotificationsResp> countUnreadWithHttpInfo(countUnreadRequest)
+> ApiResponse<CountUnreadNotificationsResp> countUnreadNotificationsWithHttpInfo(countUnreadNotificationsRequest)
 
 
 
@@ -259,15 +109,15 @@ public class Example {
         NotificationService apiInstance = new NotificationService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIcountUnreadRequest request = APIcountUnreadRequest.newBuilder()
+            APIcountUnreadNotificationsRequest request = APIcountUnreadNotificationsRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<CountUnreadNotificationsResp> response = apiInstance.countUnreadWithHttpInfo(request);
+            ApiResponse<CountUnreadNotificationsResp> response = apiInstance.countUnreadNotificationsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling NotificationService#countUnread");
+            System.err.println("Exception when calling NotificationService#countUnreadNotifications");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -281,7 +131,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| countUnreadRequest | [**APIcountUnreadRequest**](NotificationService.md#APIcountUnreadRequest)|-|-|
+| countUnreadNotificationsRequest | [**APIcountUnreadNotificationsRequest**](NotificationService.md#APIcountUnreadNotificationsRequest)|-|-|
 
 ### Return type
 
@@ -303,8 +153,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcountUnreadRequest"></a>
-## APIcountUnreadRequest
+<a id="APIcountUnreadNotificationsRequest"></a>
+## APIcountUnreadNotificationsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -313,9 +163,159 @@ No authorization required
 
 
 
-## markRead
+## listNotifications
 
-> MarkReadNotificationResp markRead(markReadRequest)
+> ListNotificationsResp listNotifications(listNotificationsRequest)
+
+
+
+分页查询通知列表。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.NotificationService;
+import com.bass.bbs.api.NotificationService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        NotificationService apiInstance = new NotificationService(defaultClient);
+        ListNotificationsReq listNotificationsReq = new ListNotificationsReq(); // ListNotificationsReq | 
+        try {
+            APIlistNotificationsRequest request = APIlistNotificationsRequest.newBuilder()
+                .listNotificationsReq(listNotificationsReq)
+                .build();
+            ListNotificationsResp result = apiInstance.listNotifications(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling NotificationService#listNotifications");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listNotificationsRequest | [**APIlistNotificationsRequest**](NotificationService.md#APIlistNotificationsRequest)|-|-|
+
+### Return type
+
+[**ListNotificationsResp**](ListNotificationsResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listNotificationsWithHttpInfo
+
+> ApiResponse<ListNotificationsResp> listNotificationsWithHttpInfo(listNotificationsRequest)
+
+
+
+分页查询通知列表。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.NotificationService;
+import com.bass.bbs.api.NotificationService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        NotificationService apiInstance = new NotificationService(defaultClient);
+        ListNotificationsReq listNotificationsReq = new ListNotificationsReq(); // ListNotificationsReq | 
+        try {
+            APIlistNotificationsRequest request = APIlistNotificationsRequest.newBuilder()
+                .listNotificationsReq(listNotificationsReq)
+                .build();
+            ApiResponse<ListNotificationsResp> response = apiInstance.listNotificationsWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling NotificationService#listNotifications");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listNotificationsRequest | [**APIlistNotificationsRequest**](NotificationService.md#APIlistNotificationsRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListNotificationsResp**](ListNotificationsResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistNotificationsRequest"></a>
+## APIlistNotificationsRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listNotificationsReq** | [**ListNotificationsReq**](ListNotificationsReq.md) |  | |
+
+
+
+## markReadNotification
+
+> MarkReadNotificationResp markReadNotification(markReadNotificationRequest)
 
 
 
@@ -340,13 +340,13 @@ public class Example {
         NotificationService apiInstance = new NotificationService(defaultClient);
         MarkReadNotificationReq markReadNotificationReq = new MarkReadNotificationReq(); // MarkReadNotificationReq | 
         try {
-            APImarkReadRequest request = APImarkReadRequest.newBuilder()
+            APImarkReadNotificationRequest request = APImarkReadNotificationRequest.newBuilder()
                 .markReadNotificationReq(markReadNotificationReq)
                 .build();
-            MarkReadNotificationResp result = apiInstance.markRead(request);
+            MarkReadNotificationResp result = apiInstance.markReadNotification(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling NotificationService#markRead");
+            System.err.println("Exception when calling NotificationService#markReadNotification");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -360,7 +360,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| markReadRequest | [**APImarkReadRequest**](NotificationService.md#APImarkReadRequest)|-|-|
+| markReadNotificationRequest | [**APImarkReadNotificationRequest**](NotificationService.md#APImarkReadNotificationRequest)|-|-|
 
 ### Return type
 
@@ -381,9 +381,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## markReadWithHttpInfo
+## markReadNotificationWithHttpInfo
 
-> ApiResponse<MarkReadNotificationResp> markReadWithHttpInfo(markReadRequest)
+> ApiResponse<MarkReadNotificationResp> markReadNotificationWithHttpInfo(markReadNotificationRequest)
 
 
 
@@ -409,15 +409,15 @@ public class Example {
         NotificationService apiInstance = new NotificationService(defaultClient);
         MarkReadNotificationReq markReadNotificationReq = new MarkReadNotificationReq(); // MarkReadNotificationReq | 
         try {
-            APImarkReadRequest request = APImarkReadRequest.newBuilder()
+            APImarkReadNotificationRequest request = APImarkReadNotificationRequest.newBuilder()
                 .markReadNotificationReq(markReadNotificationReq)
                 .build();
-            ApiResponse<MarkReadNotificationResp> response = apiInstance.markReadWithHttpInfo(request);
+            ApiResponse<MarkReadNotificationResp> response = apiInstance.markReadNotificationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling NotificationService#markRead");
+            System.err.println("Exception when calling NotificationService#markReadNotification");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -431,7 +431,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| markReadRequest | [**APImarkReadRequest**](NotificationService.md#APImarkReadRequest)|-|-|
+| markReadNotificationRequest | [**APImarkReadNotificationRequest**](NotificationService.md#APImarkReadNotificationRequest)|-|-|
 
 ### Return type
 
@@ -453,8 +453,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APImarkReadRequest"></a>
-## APImarkReadRequest
+<a id="APImarkReadNotificationRequest"></a>
+## APImarkReadNotificationRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

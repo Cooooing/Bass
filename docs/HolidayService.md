@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](HolidayService.md#getCurrent) | **POST** /v1/platform/holiday/get-current |  |
-| [**getCurrentWithHttpInfo**](HolidayService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/holiday/get-current |  |
+| [**getCurrentHoliday**](HolidayService.md#getCurrentHoliday) | **POST** /v1/platform/holiday/get-current |  |
+| [**getCurrentHolidayWithHttpInfo**](HolidayService.md#getCurrentHolidayWithHttpInfo) | **POST** /v1/platform/holiday/get-current |  |
 
 
 
-## getCurrent
+## getCurrentHoliday
 
-> GetCurrentHolidayResp getCurrent(getCurrentRequest)
+> GetCurrentHolidayResp getCurrentHoliday(getCurrentHolidayRequest)
 
 
 
@@ -36,13 +36,13 @@ public class Example {
         HolidayService apiInstance = new HolidayService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentHolidayRequest request = APIgetCurrentHolidayRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentHolidayResp result = apiInstance.getCurrent(request);
+            GetCurrentHolidayResp result = apiInstance.getCurrentHoliday(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling HolidayService#getCurrent");
+            System.err.println("Exception when calling HolidayService#getCurrentHoliday");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -56,7 +56,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](HolidayService.md#APIgetCurrentRequest)|-|-|
+| getCurrentHolidayRequest | [**APIgetCurrentHolidayRequest**](HolidayService.md#APIgetCurrentHolidayRequest)|-|-|
 
 ### Return type
 
@@ -77,9 +77,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## getCurrentWithHttpInfo
+## getCurrentHolidayWithHttpInfo
 
-> ApiResponse<GetCurrentHolidayResp> getCurrentWithHttpInfo(getCurrentRequest)
+> ApiResponse<GetCurrentHolidayResp> getCurrentHolidayWithHttpInfo(getCurrentHolidayRequest)
 
 
 
@@ -105,15 +105,15 @@ public class Example {
         HolidayService apiInstance = new HolidayService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
+            APIgetCurrentHolidayRequest request = APIgetCurrentHolidayRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetCurrentHolidayResp> response = apiInstance.getCurrentWithHttpInfo(request);
+            ApiResponse<GetCurrentHolidayResp> response = apiInstance.getCurrentHolidayWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling HolidayService#getCurrent");
+            System.err.println("Exception when calling HolidayService#getCurrentHoliday");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -127,7 +127,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| getCurrentRequest | [**APIgetCurrentRequest**](HolidayService.md#APIgetCurrentRequest)|-|-|
+| getCurrentHolidayRequest | [**APIgetCurrentHolidayRequest**](HolidayService.md#APIgetCurrentHolidayRequest)|-|-|
 
 ### Return type
 
@@ -149,8 +149,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIgetCurrentRequest"></a>
-## APIgetCurrentRequest
+<a id="APIgetCurrentHolidayRequest"></a>
+## APIgetCurrentHolidayRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

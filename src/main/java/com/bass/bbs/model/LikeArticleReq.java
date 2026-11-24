@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * LikeArticleReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   LikeArticleReq.JSON_PROPERTY_ARTICLE_ID,
@@ -55,7 +55,7 @@ public class LikeArticleReq {
   }
 
   /**
-   * Get articleId
+   * 必填，文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class LikeArticleReq {
   }
 
   /**
-   * Get active
+   * 必填，是否点赞
    * @return active
    */
   @javax.annotation.Nonnull

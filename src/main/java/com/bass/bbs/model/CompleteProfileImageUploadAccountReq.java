@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CompleteProfileImageUploadAccountReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CompleteProfileImageUploadAccountReq.JSON_PROPERTY_PURPOSE,
@@ -39,7 +39,7 @@ import com.bass.bbs.ApiClient;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class CompleteProfileImageUploadAccountReq {
   /**
-   * Gets or Sets purpose
+   * 协议字段。
    */
   public enum PurposeEnum {
     PROFILE_IMAGE_PURPOSE_UNSPECIFIED(String.valueOf("PROFILE_IMAGE_PURPOSE_UNSPECIFIED")),
@@ -92,7 +92,7 @@ public class CompleteProfileImageUploadAccountReq {
   }
 
   /**
-   * Get purpose
+   * 协议字段。
    * @return purpose
    */
   @javax.annotation.Nonnull
@@ -116,7 +116,7 @@ public class CompleteProfileImageUploadAccountReq {
   }
 
   /**
-   * Get hash
+   * 文件 SHA-256；回调尚未入库时返回可重试错误
    * @return hash
    */
   @javax.annotation.Nonnull

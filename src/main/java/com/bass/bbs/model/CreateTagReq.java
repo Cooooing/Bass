@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateTagReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateTagReq.JSON_PROPERTY_TAG
@@ -51,7 +51,7 @@ public class CreateTagReq {
   }
 
   /**
-   * Get tag
+   * 标签信息
    * @return tag
    */
   @javax.annotation.Nonnull

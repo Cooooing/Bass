@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateCommentReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateCommentReq.JSON_PROPERTY_ARTICLE_ID,
@@ -60,7 +60,7 @@ public class CreateCommentReq {
   }
 
   /**
-   * Get articleId
+   * 文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -84,7 +84,7 @@ public class CreateCommentReq {
   }
 
   /**
-   * Get content
+   * 评论内容
    * @return content
    */
   @javax.annotation.Nonnull
@@ -108,7 +108,7 @@ public class CreateCommentReq {
   }
 
   /**
-   * Get replyId
+   * 回复的评论 ID
    * @return replyId
    */
   @javax.annotation.Nullable

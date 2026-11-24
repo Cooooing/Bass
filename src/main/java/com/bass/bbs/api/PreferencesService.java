@@ -167,50 +167,50 @@ public class PreferencesService {
   /**
    * 
    * 获取当前账号的偏好设置。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentPreferencesRequest}
    * @return GetCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPreferencesResp getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
-    return getCurrent(apiRequest, null);
+  public GetCurrentPreferencesResp getCurrentPreferences(APIGetCurrentPreferencesRequest apiRequest) throws ApiException {
+    return getCurrentPreferences(apiRequest, null);
   }
 
   /**
    * 
    * 获取当前账号的偏好设置。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentPreferencesRequest}
    * @param headers Optional headers to include in the request
    * @return GetCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPreferencesResp getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetCurrentPreferencesResp getCurrentPreferences(APIGetCurrentPreferencesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return getCurrent(body, headers);
+    return getCurrentPreferences(body, headers);
   }
 
   /**
    * 
    * 获取当前账号的偏好设置。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentPreferencesRequest}
    * @return ApiResponse&lt;GetCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPreferencesResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
-    return getCurrentWithHttpInfo(apiRequest, null);
+  public ApiResponse<GetCurrentPreferencesResp> getCurrentPreferencesWithHttpInfo(APIGetCurrentPreferencesRequest apiRequest) throws ApiException {
+    return getCurrentPreferencesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 获取当前账号的偏好设置。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentPreferencesRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPreferencesResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentPreferencesResp> getCurrentPreferencesWithHttpInfo(APIGetCurrentPreferencesRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return getCurrentWithHttpInfo(body, headers);
+    return getCurrentPreferencesWithHttpInfo(body, headers);
   }
 
   /**
@@ -220,8 +220,8 @@ public class PreferencesService {
    * @return GetCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPreferencesResp getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
-    return getCurrent(body, null);
+  public GetCurrentPreferencesResp getCurrentPreferences(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getCurrentPreferences(body, null);
   }
 
   /**
@@ -232,8 +232,8 @@ public class PreferencesService {
    * @return GetCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPreferencesResp getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetCurrentPreferencesResp> localVarResponse = getCurrentWithHttpInfo(body, headers);
+  public GetCurrentPreferencesResp getCurrentPreferences(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetCurrentPreferencesResp> localVarResponse = getCurrentPreferencesWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -244,8 +244,8 @@ public class PreferencesService {
    * @return ApiResponse&lt;GetCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPreferencesResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return getCurrentWithHttpInfo(body, null);
+  public ApiResponse<GetCurrentPreferencesResp> getCurrentPreferencesWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getCurrentPreferencesWithHttpInfo(body, null);
   }
 
   /**
@@ -256,8 +256,8 @@ public class PreferencesService {
    * @return ApiResponse&lt;GetCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPreferencesResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = getCurrentRequestBuilder(body, headers);
+  public ApiResponse<GetCurrentPreferencesResp> getCurrentPreferencesWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getCurrentPreferencesRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -268,7 +268,7 @@ public class PreferencesService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("getCurrent", localVarResponse);
+          throw getApiException("getCurrentPreferences", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -304,10 +304,10 @@ public class PreferencesService {
     }
   }
 
-  private HttpRequest.Builder getCurrentRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder getCurrentPreferencesRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling getCurrent");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling getCurrentPreferences");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -337,11 +337,11 @@ public class PreferencesService {
   }
 
 
-  public static final class APIGetCurrentRequest {
+  public static final class APIGetCurrentPreferencesRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APIGetCurrentRequest(Builder builder) {
+    private APIGetCurrentPreferencesRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -359,8 +359,8 @@ public class PreferencesService {
         this.body = body;
         return this;
       }
-      public APIGetCurrentRequest build() {
-        return new APIGetCurrentRequest(this);
+      public APIGetCurrentPreferencesRequest build() {
+        return new APIGetCurrentPreferencesRequest(this);
       }
     }
   }
@@ -368,50 +368,50 @@ public class PreferencesService {
   /**
    * 
    * 更新当前账号的偏好设置。
-   * @param apiRequest {@link APIUpdateCurrentRequest}
+   * @param apiRequest {@link APIUpdateCurrentPreferencesRequest}
    * @return UpdateCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPreferencesResp updateCurrent(APIUpdateCurrentRequest apiRequest) throws ApiException {
-    return updateCurrent(apiRequest, null);
+  public UpdateCurrentPreferencesResp updateCurrentPreferences(APIUpdateCurrentPreferencesRequest apiRequest) throws ApiException {
+    return updateCurrentPreferences(apiRequest, null);
   }
 
   /**
    * 
    * 更新当前账号的偏好设置。
-   * @param apiRequest {@link APIUpdateCurrentRequest}
+   * @param apiRequest {@link APIUpdateCurrentPreferencesRequest}
    * @param headers Optional headers to include in the request
    * @return UpdateCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPreferencesResp updateCurrent(APIUpdateCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public UpdateCurrentPreferencesResp updateCurrentPreferences(APIUpdateCurrentPreferencesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     UpdateCurrentPreferencesReq updateCurrentPreferencesReq = apiRequest.updateCurrentPreferencesReq();
-    return updateCurrent(updateCurrentPreferencesReq, headers);
+    return updateCurrentPreferences(updateCurrentPreferencesReq, headers);
   }
 
   /**
    * 
    * 更新当前账号的偏好设置。
-   * @param apiRequest {@link APIUpdateCurrentRequest}
+   * @param apiRequest {@link APIUpdateCurrentPreferencesRequest}
    * @return ApiResponse&lt;UpdateCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentWithHttpInfo(APIUpdateCurrentRequest apiRequest) throws ApiException {
-    return updateCurrentWithHttpInfo(apiRequest, null);
+  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentPreferencesWithHttpInfo(APIUpdateCurrentPreferencesRequest apiRequest) throws ApiException {
+    return updateCurrentPreferencesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 更新当前账号的偏好设置。
-   * @param apiRequest {@link APIUpdateCurrentRequest}
+   * @param apiRequest {@link APIUpdateCurrentPreferencesRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;UpdateCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentWithHttpInfo(APIUpdateCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentPreferencesWithHttpInfo(APIUpdateCurrentPreferencesRequest apiRequest, Map<String, String> headers) throws ApiException {
     UpdateCurrentPreferencesReq updateCurrentPreferencesReq = apiRequest.updateCurrentPreferencesReq();
-    return updateCurrentWithHttpInfo(updateCurrentPreferencesReq, headers);
+    return updateCurrentPreferencesWithHttpInfo(updateCurrentPreferencesReq, headers);
   }
 
   /**
@@ -421,8 +421,8 @@ public class PreferencesService {
    * @return UpdateCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPreferencesResp updateCurrent(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq) throws ApiException {
-    return updateCurrent(updateCurrentPreferencesReq, null);
+  public UpdateCurrentPreferencesResp updateCurrentPreferences(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq) throws ApiException {
+    return updateCurrentPreferences(updateCurrentPreferencesReq, null);
   }
 
   /**
@@ -433,8 +433,8 @@ public class PreferencesService {
    * @return UpdateCurrentPreferencesResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPreferencesResp updateCurrent(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<UpdateCurrentPreferencesResp> localVarResponse = updateCurrentWithHttpInfo(updateCurrentPreferencesReq, headers);
+  public UpdateCurrentPreferencesResp updateCurrentPreferences(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpdateCurrentPreferencesResp> localVarResponse = updateCurrentPreferencesWithHttpInfo(updateCurrentPreferencesReq, headers);
     return localVarResponse.getData();
   }
 
@@ -445,8 +445,8 @@ public class PreferencesService {
    * @return ApiResponse&lt;UpdateCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq) throws ApiException {
-    return updateCurrentWithHttpInfo(updateCurrentPreferencesReq, null);
+  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentPreferencesWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq) throws ApiException {
+    return updateCurrentPreferencesWithHttpInfo(updateCurrentPreferencesReq, null);
   }
 
   /**
@@ -457,8 +457,8 @@ public class PreferencesService {
    * @return ApiResponse&lt;UpdateCurrentPreferencesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = updateCurrentRequestBuilder(updateCurrentPreferencesReq, headers);
+  public ApiResponse<UpdateCurrentPreferencesResp> updateCurrentPreferencesWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updateCurrentPreferencesRequestBuilder(updateCurrentPreferencesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -469,7 +469,7 @@ public class PreferencesService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("updateCurrent", localVarResponse);
+          throw getApiException("updateCurrentPreferences", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -505,10 +505,10 @@ public class PreferencesService {
     }
   }
 
-  private HttpRequest.Builder updateCurrentRequestBuilder(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder updateCurrentPreferencesRequestBuilder(@javax.annotation.Nonnull UpdateCurrentPreferencesReq updateCurrentPreferencesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'updateCurrentPreferencesReq' is set
     if (updateCurrentPreferencesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'updateCurrentPreferencesReq' when calling updateCurrent");
+      throw new ApiException(400, "Missing the required parameter 'updateCurrentPreferencesReq' when calling updateCurrentPreferences");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -538,11 +538,11 @@ public class PreferencesService {
   }
 
 
-  public static final class APIUpdateCurrentRequest {
+  public static final class APIUpdateCurrentPreferencesRequest {
     @javax.annotation.Nonnull
     private UpdateCurrentPreferencesReq updateCurrentPreferencesReq; //  (required)
 
-    private APIUpdateCurrentRequest(Builder builder) {
+    private APIUpdateCurrentPreferencesRequest(Builder builder) {
       this.updateCurrentPreferencesReq = builder.updateCurrentPreferencesReq;
     }
     @javax.annotation.Nonnull
@@ -560,8 +560,8 @@ public class PreferencesService {
         this.updateCurrentPreferencesReq = updateCurrentPreferencesReq;
         return this;
       }
-      public APIUpdateCurrentRequest build() {
-        return new APIUpdateCurrentRequest(this);
+      public APIUpdateCurrentPreferencesRequest build() {
+        return new APIUpdateCurrentPreferencesRequest(this);
       }
     }
   }

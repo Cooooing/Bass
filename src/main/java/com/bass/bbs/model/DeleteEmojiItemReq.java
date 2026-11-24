@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * DeleteEmojiItemReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   DeleteEmojiItemReq.JSON_PROPERTY_ITEM_ID
@@ -50,7 +50,7 @@ public class DeleteEmojiItemReq {
   }
 
   /**
-   * Get itemId
+   * 待删除表情项 ID。
    * @return itemId
    */
   @javax.annotation.Nullable

@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CompleteProfileImageUploadAccountResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CompleteProfileImageUploadAccountResp.JSON_PROPERTY_PROFILE,
@@ -56,7 +56,7 @@ public class CompleteProfileImageUploadAccountResp {
   }
 
   /**
-   * Get profile
+   * 协议字段。
    * @return profile
    */
   @javax.annotation.Nullable
@@ -80,7 +80,7 @@ public class CompleteProfileImageUploadAccountResp {
   }
 
   /**
-   * Get imageUrl
+   * 协议字段。
    * @return imageUrl
    */
   @javax.annotation.Nullable

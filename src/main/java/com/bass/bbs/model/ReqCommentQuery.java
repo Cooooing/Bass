@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ReqCommentQuery
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ReqCommentQuery.JSON_PROPERTY_COMMENT_ID,
@@ -64,7 +64,7 @@ public class ReqCommentQuery {
   private String replyId;
 
   /**
-   * Gets or Sets order
+   * 排序方式
    */
   public enum OrderEnum {
     COMMENT_ORDER_UNSPECIFIED(String.valueOf("COMMENT_ORDER_UNSPECIFIED")),
@@ -115,7 +115,7 @@ public class ReqCommentQuery {
   private Integer level;
 
   /**
-   * Gets or Sets restriction
+   * 管理限制
    */
   public enum RestrictionEnum {
     CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
@@ -209,7 +209,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get commentId
+   * 评论 ID
    * @return commentId
    */
   @javax.annotation.Nullable
@@ -233,7 +233,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get articleId
+   * 文章 ID
    * @return articleId
    */
   @javax.annotation.Nullable
@@ -257,7 +257,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get parentId
+   * 父评论 ID
    * @return parentId
    */
   @javax.annotation.Nullable
@@ -281,7 +281,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get replyId
+   * 回复的评论 ID
    * @return replyId
    */
   @javax.annotation.Nullable
@@ -305,7 +305,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get order
+   * 排序方式
    * @return order
    */
   @javax.annotation.Nullable
@@ -329,7 +329,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get userId
+   * 评论账号 ID
    * @return userId
    */
   @javax.annotation.Nullable
@@ -353,7 +353,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get level
+   * 评论层级
    * @return level
    */
   @javax.annotation.Nullable
@@ -377,7 +377,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get restriction
+   * 管理限制
    * @return restriction
    */
   @javax.annotation.Nullable
@@ -409,7 +409,7 @@ public class ReqCommentQuery {
   }
 
   /**
-   * Get restrictions
+   * 管理限制列表
    * @return restrictions
    */
   @javax.annotation.Nullable

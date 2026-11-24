@@ -2,20 +2,21 @@
 
 # ReqCommentQuery
 
+协议消息。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**commentId** | **String** |  |  [optional] |
-|**articleId** | **String** |  |  [optional] |
-|**parentId** | **String** |  |  [optional] |
-|**replyId** | **String** |  |  [optional] |
-|**order** | [**OrderEnum**](#OrderEnum) |  |  [optional] |
-|**userId** | **String** |  |  [optional] |
-|**level** | **Integer** |  |  [optional] |
-|**restriction** | [**RestrictionEnum**](#RestrictionEnum) |  |  [optional] |
-|**restrictions** | [**List&lt;RestrictionsEnum&gt;**](#List&lt;RestrictionsEnum&gt;) |  |  [optional] |
+|**commentId** | **String** | 评论 ID |  [optional] |
+|**articleId** | **String** | 文章 ID |  [optional] |
+|**parentId** | **String** | 父评论 ID |  [optional] |
+|**replyId** | **String** | 回复的评论 ID |  [optional] |
+|**order** | [**OrderEnum**](#OrderEnum) | 排序方式 |  [optional] |
+|**userId** | **String** | 评论账号 ID |  [optional] |
+|**level** | **Integer** | 评论层级 |  [optional] |
+|**restriction** | [**RestrictionEnum**](#RestrictionEnum) | 管理限制 |  [optional] |
+|**restrictions** | [**List&lt;RestrictionsEnum&gt;**](#List&lt;RestrictionsEnum&gt;) | 管理限制列表 |  [optional] |
 
 
 

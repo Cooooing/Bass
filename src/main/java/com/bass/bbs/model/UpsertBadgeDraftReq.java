@@ -66,7 +66,7 @@ public class UpsertBadgeDraftReq {
   }
 
   /**
-   * Get draftId
+   * 待保存草稿 ID。
    * @return draftId
    */
   @javax.annotation.Nullable
@@ -90,7 +90,7 @@ public class UpsertBadgeDraftReq {
   }
 
   /**
-   * Get name
+   * 草稿名称。
    * @return name
    */
   @javax.annotation.Nullable
@@ -114,7 +114,7 @@ public class UpsertBadgeDraftReq {
   }
 
   /**
-   * Get description
+   * 草稿说明。
    * @return description
    */
   @javax.annotation.Nullable
@@ -138,7 +138,7 @@ public class UpsertBadgeDraftReq {
   }
 
   /**
-   * Get renderSpec
+   * 草稿渲染参数。
    * @return renderSpec
    */
   @javax.annotation.Nullable

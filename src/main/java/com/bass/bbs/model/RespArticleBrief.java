@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespArticleBrief
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespArticleBrief.JSON_PROPERTY_ID,
@@ -59,7 +59,7 @@ public class RespArticleBrief {
   private String title;
 
   /**
-   * Gets or Sets type
+   * 文章类型
    */
   public enum TypeEnum {
     ARTICLE_TYPE_UNSPECIFIED(String.valueOf("ARTICLE_TYPE_UNSPECIFIED")),
@@ -114,7 +114,7 @@ public class RespArticleBrief {
   private String coverImageUrl;
 
   /**
-   * Gets or Sets publishStatus
+   * 发布状态
    */
   public enum PublishStatusEnum {
     ARTICLE_PUBLISH_STATUS_UNSPECIFIED(String.valueOf("ARTICLE_PUBLISH_STATUS_UNSPECIFIED")),
@@ -157,7 +157,7 @@ public class RespArticleBrief {
   private PublishStatusEnum publishStatus;
 
   /**
-   * Gets or Sets visibility
+   * 可见范围
    */
   public enum VisibilityEnum {
     ARTICLE_VISIBILITY_UNSPECIFIED(String.valueOf("ARTICLE_VISIBILITY_UNSPECIFIED")),
@@ -198,7 +198,7 @@ public class RespArticleBrief {
   private VisibilityEnum visibility;
 
   /**
-   * Gets or Sets restriction
+   * 管理限制
    */
   public enum RestrictionEnum {
     CONTENT_RESTRICTION_UNSPECIFIED(String.valueOf("CONTENT_RESTRICTION_UNSPECIFIED")),
@@ -265,7 +265,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get id
+   * 文章 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -289,7 +289,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get title
+   * 标题
    * @return title
    */
   @javax.annotation.Nullable
@@ -313,7 +313,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get type
+   * 文章类型
    * @return type
    */
   @javax.annotation.Nullable
@@ -337,7 +337,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get authorUser
+   * 作者展示资料
    * @return authorUser
    */
   @javax.annotation.Nullable
@@ -361,7 +361,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get coverImageUrl
+   * 封面图片 URL
    * @return coverImageUrl
    */
   @javax.annotation.Nullable
@@ -385,7 +385,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get publishStatus
+   * 发布状态
    * @return publishStatus
    */
   @javax.annotation.Nullable
@@ -409,7 +409,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get visibility
+   * 可见范围
    * @return visibility
    */
   @javax.annotation.Nullable
@@ -433,7 +433,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get restriction
+   * 管理限制
    * @return restriction
    */
   @javax.annotation.Nullable
@@ -457,7 +457,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get createdBy
+   * 创建账号 ID
    * @return createdBy
    */
   @javax.annotation.Nullable
@@ -481,7 +481,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get updatedBy
+   * 更新账号 ID
    * @return updatedBy
    */
   @javax.annotation.Nullable
@@ -505,7 +505,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -529,7 +529,7 @@ public class RespArticleBrief {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable

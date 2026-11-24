@@ -34,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListPrivateChatSessionsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListPrivateChatSessionsResp.JSON_PROPERTY_PAGE,
@@ -59,7 +59,7 @@ public class ListPrivateChatSessionsResp {
   }
 
   /**
-   * Get page
+   * 分页信息。
    * @return page
    */
   @javax.annotation.Nullable
@@ -91,7 +91,7 @@ public class ListPrivateChatSessionsResp {
   }
 
   /**
-   * Get rows
+   * 会话列表。
    * @return rows
    */
   @javax.annotation.Nullable

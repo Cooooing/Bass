@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespPrivacySetting
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespPrivacySetting.JSON_PROPERTY_USER_ID,
@@ -90,7 +90,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get userId
+   * 账号 ID
    * @return userId
    */
   @javax.annotation.Nullable
@@ -114,7 +114,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicPoints
+   * 是否公开积分
    * @return publicPoints
    */
   @javax.annotation.Nullable
@@ -138,7 +138,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicFollowerList
+   * 是否公开粉丝列表
    * @return publicFollowerList
    */
   @javax.annotation.Nullable
@@ -162,7 +162,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicFollowingList
+   * 是否公开关注列表
    * @return publicFollowingList
    */
   @javax.annotation.Nullable
@@ -186,7 +186,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicArticleList
+   * 是否公开帖子列表
    * @return publicArticleList
    */
   @javax.annotation.Nullable
@@ -210,7 +210,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicCommentList
+   * 是否公开回复列表
    * @return publicCommentList
    */
   @javax.annotation.Nullable
@@ -234,7 +234,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicOnlineStatus
+   * 是否公开在线状态
    * @return publicOnlineStatus
    */
   @javax.annotation.Nullable
@@ -258,7 +258,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicLocation
+   * 是否公开地理资料
    * @return publicLocation
    */
   @javax.annotation.Nullable
@@ -282,7 +282,7 @@ public class RespPrivacySetting {
   }
 
   /**
-   * Get publicMoonbreezeList
+   * 是否公开清风明月列表
    * @return publicMoonbreezeList
    */
   @javax.annotation.Nullable

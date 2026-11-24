@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateDomainReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateDomainReq.JSON_PROPERTY_DOMAIN
@@ -51,7 +51,7 @@ public class CreateDomainReq {
   }
 
   /**
-   * Get domain
+   * 领域信息
    * @return domain
    */
   @javax.annotation.Nonnull

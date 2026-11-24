@@ -37,20 +37,20 @@ public class RealtimeServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void createTicketTest() throws ApiException {
+    public void createRealtimeTicketTest() throws ApiException {
         Object body = null;
         
-        RealtimeService.APIcreateTicketRequest request = RealtimeService.APIcreateTicketRequest.newBuilder()
+        RealtimeService.APIcreateRealtimeTicketRequest request = RealtimeService.APIcreateRealtimeTicketRequest.newBuilder()
           .body(body)
           .build();
         CreateRealtimeTicketResp response = 
-        api.createTicket(request);
+        api.createRealtimeTicket(request);
 
         // TODO: test validations
     }

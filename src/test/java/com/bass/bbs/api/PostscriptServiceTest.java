@@ -46,14 +46,14 @@ public class PostscriptServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void addTest() throws ApiException {
+    public void addPostscriptTest() throws ApiException {
         AddPostscriptReq addPostscriptReq = null;
         
-        PostscriptService.APIaddRequest request = PostscriptService.APIaddRequest.newBuilder()
+        PostscriptService.APIaddPostscriptRequest request = PostscriptService.APIaddPostscriptRequest.newBuilder()
           .addPostscriptReq(addPostscriptReq)
           .build();
         AddPostscriptResp response = 
-        api.add(request);
+        api.addPostscript(request);
 
         // TODO: test validations
     }
@@ -67,14 +67,14 @@ public class PostscriptServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void callListTest() throws ApiException {
+    public void listPostscriptsTest() throws ApiException {
         ListPostscriptsReq listPostscriptsReq = null;
         
-        PostscriptService.APIcallListRequest request = PostscriptService.APIcallListRequest.newBuilder()
+        PostscriptService.APIlistPostscriptsRequest request = PostscriptService.APIlistPostscriptsRequest.newBuilder()
           .listPostscriptsReq(listPostscriptsReq)
           .build();
         ListPostscriptsResp response = 
-        api.callList(request);
+        api.listPostscripts(request);
 
         // TODO: test validations
     }

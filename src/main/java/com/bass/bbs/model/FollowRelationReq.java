@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * FollowRelationReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   FollowRelationReq.JSON_PROPERTY_TARGET_ID
@@ -50,7 +50,7 @@ public class FollowRelationReq {
   }
 
   /**
-   * Get targetId
+   * 目标账号 ID
    * @return targetId
    */
   @javax.annotation.Nonnull

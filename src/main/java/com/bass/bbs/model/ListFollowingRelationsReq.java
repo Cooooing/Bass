@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListFollowingRelationsReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListFollowingRelationsReq.JSON_PROPERTY_PAGE
@@ -51,7 +51,7 @@ public class ListFollowingRelationsReq {
   }
 
   /**
-   * Get page
+   * 分页参数
    * @return page
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * MoveEmojiItemReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   MoveEmojiItemReq.JSON_PROPERTY_ITEM_ID,
@@ -55,7 +55,7 @@ public class MoveEmojiItemReq {
   }
 
   /**
-   * Get itemId
+   * 待移动表情项 ID。
    * @return itemId
    */
   @javax.annotation.Nullable
@@ -79,7 +79,7 @@ public class MoveEmojiItemReq {
   }
 
   /**
-   * Get groupId
+   * 目标分组 ID。
    * @return groupId
    */
   @javax.annotation.Nullable

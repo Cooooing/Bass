@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * MarkReadNotificationReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   MarkReadNotificationReq.JSON_PROPERTY_IDS
@@ -60,7 +60,7 @@ public class MarkReadNotificationReq {
   }
 
   /**
-   * Get ids
+   * 通知 ID 列表
    * @return ids
    */
   @javax.annotation.Nonnull

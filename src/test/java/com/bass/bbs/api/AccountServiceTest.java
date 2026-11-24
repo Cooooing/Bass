@@ -14,13 +14,13 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
+import com.bass.bbs.model.AvatarAccountResp;
 import com.bass.bbs.model.CompleteProfileImageUploadAccountReq;
 import com.bass.bbs.model.CompleteProfileImageUploadAccountResp;
 import com.bass.bbs.model.GetAccountEconomyResp;
 import com.bass.bbs.model.GetCurrentAccountResp;
 import com.bass.bbs.model.GetProfileReq;
 import com.bass.bbs.model.GetProfileResp;
-import com.bass.bbs.model.ImageResp;
 import com.bass.bbs.model.ListFollowersReq;
 import com.bass.bbs.model.ListFollowersResp;
 import com.bass.bbs.model.ListFollowingReq;
@@ -66,14 +66,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void avatarTest() throws ApiException {
+    public void avatarAccountTest() throws ApiException {
         String name = null;
         
-        AccountService.APIavatarRequest request = AccountService.APIavatarRequest.newBuilder()
+        AccountService.APIavatarAccountRequest request = AccountService.APIavatarAccountRequest.newBuilder()
           .name(name)
           .build();
-        ImageResp response = 
-        api.avatar(request);
+        AvatarAccountResp response = 
+        api.avatarAccount(request);
 
         // TODO: test validations
     }
@@ -87,35 +87,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void completeProfileImageUploadTest() throws ApiException {
+    public void completeProfileImageUploadAccountTest() throws ApiException {
         CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = null;
         
-        AccountService.APIcompleteProfileImageUploadRequest request = AccountService.APIcompleteProfileImageUploadRequest.newBuilder()
+        AccountService.APIcompleteProfileImageUploadAccountRequest request = AccountService.APIcompleteProfileImageUploadAccountRequest.newBuilder()
           .completeProfileImageUploadAccountReq(completeProfileImageUploadAccountReq)
           .build();
         CompleteProfileImageUploadAccountResp response = 
-        api.completeProfileImageUpload(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 获取当前账号完整资料
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getCurrentTest() throws ApiException {
-        Object body = null;
-        
-        AccountService.APIgetCurrentRequest request = AccountService.APIgetCurrentRequest.newBuilder()
-          .body(body)
-          .build();
-        GetCurrentAccountResp response = 
-        api.getCurrent(request);
+        api.completeProfileImageUploadAccount(request);
 
         // TODO: test validations
     }
@@ -129,14 +108,35 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getEconomyAccountTest() throws ApiException {
+    public void getAccountEconomyTest() throws ApiException {
         Object body = null;
         
-        AccountService.APIgetEconomyAccountRequest request = AccountService.APIgetEconomyAccountRequest.newBuilder()
+        AccountService.APIgetAccountEconomyRequest request = AccountService.APIgetAccountEconomyRequest.newBuilder()
           .body(body)
           .build();
         GetAccountEconomyResp response = 
-        api.getEconomyAccount(request);
+        api.getAccountEconomy(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 获取当前账号完整资料
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getCurrentAccountTest() throws ApiException {
+        Object body = null;
+        
+        AccountService.APIgetCurrentAccountRequest request = AccountService.APIgetCurrentAccountRequest.newBuilder()
+          .body(body)
+          .build();
+        GetCurrentAccountResp response = 
+        api.getCurrentAccount(request);
 
         // TODO: test validations
     }
@@ -234,14 +234,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void prepareProfileImageUploadTest() throws ApiException {
+    public void prepareProfileImageUploadAccountTest() throws ApiException {
         PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = null;
         
-        AccountService.APIprepareProfileImageUploadRequest request = AccountService.APIprepareProfileImageUploadRequest.newBuilder()
+        AccountService.APIprepareProfileImageUploadAccountRequest request = AccountService.APIprepareProfileImageUploadAccountRequest.newBuilder()
           .prepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq)
           .build();
         PrepareProfileImageUploadAccountResp response = 
-        api.prepareProfileImageUpload(request);
+        api.prepareProfileImageUploadAccount(request);
 
         // TODO: test validations
     }
@@ -255,14 +255,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void searchMentionTest() throws ApiException {
+    public void searchMentionAccountsTest() throws ApiException {
         SearchMentionAccountsReq searchMentionAccountsReq = null;
         
-        AccountService.APIsearchMentionRequest request = AccountService.APIsearchMentionRequest.newBuilder()
+        AccountService.APIsearchMentionAccountsRequest request = AccountService.APIsearchMentionAccountsRequest.newBuilder()
           .searchMentionAccountsReq(searchMentionAccountsReq)
           .build();
         SearchMentionAccountsResp response = 
-        api.searchMention(request);
+        api.searchMentionAccounts(request);
 
         // TODO: test validations
     }
@@ -276,14 +276,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void transferPointsTest() throws ApiException {
+    public void transferAccountPointsTest() throws ApiException {
         TransferAccountPointsReq transferAccountPointsReq = null;
         
-        AccountService.APItransferPointsRequest request = AccountService.APItransferPointsRequest.newBuilder()
+        AccountService.APItransferAccountPointsRequest request = AccountService.APItransferAccountPointsRequest.newBuilder()
           .transferAccountPointsReq(transferAccountPointsReq)
           .build();
         TransferAccountPointsResp response = 
-        api.transferPoints(request);
+        api.transferAccountPoints(request);
 
         // TODO: test validations
     }
@@ -297,14 +297,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updateEmailTest() throws ApiException {
+    public void updateEmailAccountTest() throws ApiException {
         UpdateEmailAccountReq updateEmailAccountReq = null;
         
-        AccountService.APIupdateEmailRequest request = AccountService.APIupdateEmailRequest.newBuilder()
+        AccountService.APIupdateEmailAccountRequest request = AccountService.APIupdateEmailAccountRequest.newBuilder()
           .updateEmailAccountReq(updateEmailAccountReq)
           .build();
         Object response = 
-        api.updateEmail(request);
+        api.updateEmailAccount(request);
 
         // TODO: test validations
     }
@@ -318,14 +318,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updatePasswordTest() throws ApiException {
+    public void updatePasswordAccountTest() throws ApiException {
         UpdatePasswordAccountReq updatePasswordAccountReq = null;
         
-        AccountService.APIupdatePasswordRequest request = AccountService.APIupdatePasswordRequest.newBuilder()
+        AccountService.APIupdatePasswordAccountRequest request = AccountService.APIupdatePasswordAccountRequest.newBuilder()
           .updatePasswordAccountReq(updatePasswordAccountReq)
           .build();
         Object response = 
-        api.updatePassword(request);
+        api.updatePasswordAccount(request);
 
         // TODO: test validations
     }
@@ -339,14 +339,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updatePhoneTest() throws ApiException {
+    public void updatePhoneAccountTest() throws ApiException {
         UpdatePhoneAccountReq updatePhoneAccountReq = null;
         
-        AccountService.APIupdatePhoneRequest request = AccountService.APIupdatePhoneRequest.newBuilder()
+        AccountService.APIupdatePhoneAccountRequest request = AccountService.APIupdatePhoneAccountRequest.newBuilder()
           .updatePhoneAccountReq(updatePhoneAccountReq)
           .build();
         Object response = 
-        api.updatePhone(request);
+        api.updatePhoneAccount(request);
 
         // TODO: test validations
     }
@@ -360,14 +360,14 @@ public class AccountServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updateProfileTest() throws ApiException {
+    public void updateProfileAccountTest() throws ApiException {
         UpdateProfileAccountReq updateProfileAccountReq = null;
         
-        AccountService.APIupdateProfileRequest request = AccountService.APIupdateProfileRequest.newBuilder()
+        AccountService.APIupdateProfileAccountRequest request = AccountService.APIupdateProfileAccountRequest.newBuilder()
           .updateProfileAccountReq(updateProfileAccountReq)
           .build();
         UpdateProfileAccountResp response = 
-        api.updateProfile(request);
+        api.updateProfileAccount(request);
 
         // TODO: test validations
     }

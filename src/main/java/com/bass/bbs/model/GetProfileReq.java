@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetProfileReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   GetProfileReq.JSON_PROPERTY_NAME
@@ -50,7 +50,7 @@ public class GetProfileReq {
   }
 
   /**
-   * Get name
+   * 账号名，必填
    * @return name
    */
   @javax.annotation.Nonnull

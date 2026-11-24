@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateCommentResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CreateCommentResp.JSON_PROPERTY_COMMENT
@@ -51,7 +51,7 @@ public class CreateCommentResp {
   }
 
   /**
-   * Get comment
+   * 创建后的评论
    * @return comment
    */
   @javax.annotation.Nullable

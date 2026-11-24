@@ -4,18 +4,20 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**claimYesterdayReward**](LivenessService.md#claimYesterdayReward) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
-| [**claimYesterdayRewardWithHttpInfo**](LivenessService.md#claimYesterdayRewardWithHttpInfo) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
+| [**claimYesterdayLivenessReward**](LivenessService.md#claimYesterdayLivenessReward) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
+| [**claimYesterdayLivenessRewardWithHttpInfo**](LivenessService.md#claimYesterdayLivenessRewardWithHttpInfo) | **POST** /v1/user/liveness/yesterday-reward/claim |  |
 | [**getLiveness**](LivenessService.md#getLiveness) | **GET** /v1/user/liveness |  |
 | [**getLivenessWithHttpInfo**](LivenessService.md#getLivenessWithHttpInfo) | **GET** /v1/user/liveness |  |
 
 
 
-## claimYesterdayReward
+## claimYesterdayLivenessReward
 
-> ClaimYesterdayLivenessRewardResp claimYesterdayReward(claimYesterdayRewardRequest)
+> ClaimYesterdayLivenessRewardResp claimYesterdayLivenessReward(claimYesterdayLivenessRewardRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -36,13 +38,13 @@ public class Example {
         LivenessService apiInstance = new LivenessService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIclaimYesterdayRewardRequest request = APIclaimYesterdayRewardRequest.newBuilder()
+            APIclaimYesterdayLivenessRewardRequest request = APIclaimYesterdayLivenessRewardRequest.newBuilder()
                 .body(body)
                 .build();
-            ClaimYesterdayLivenessRewardResp result = apiInstance.claimYesterdayReward(request);
+            ClaimYesterdayLivenessRewardResp result = apiInstance.claimYesterdayLivenessReward(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling LivenessService#claimYesterdayReward");
+            System.err.println("Exception when calling LivenessService#claimYesterdayLivenessReward");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -56,7 +58,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| claimYesterdayRewardRequest | [**APIclaimYesterdayRewardRequest**](LivenessService.md#APIclaimYesterdayRewardRequest)|-|-|
+| claimYesterdayLivenessRewardRequest | [**APIclaimYesterdayLivenessRewardRequest**](LivenessService.md#APIclaimYesterdayLivenessRewardRequest)|-|-|
 
 ### Return type
 
@@ -77,11 +79,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## claimYesterdayRewardWithHttpInfo
+## claimYesterdayLivenessRewardWithHttpInfo
 
-> ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayRewardWithHttpInfo(claimYesterdayRewardRequest)
+> ApiResponse<ClaimYesterdayLivenessRewardResp> claimYesterdayLivenessRewardWithHttpInfo(claimYesterdayLivenessRewardRequest)
 
 
+
+服务方法。
 
 ### Example
 
@@ -103,15 +107,15 @@ public class Example {
         LivenessService apiInstance = new LivenessService(defaultClient);
         Object body = null; // Object | 
         try {
-            APIclaimYesterdayRewardRequest request = APIclaimYesterdayRewardRequest.newBuilder()
+            APIclaimYesterdayLivenessRewardRequest request = APIclaimYesterdayLivenessRewardRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<ClaimYesterdayLivenessRewardResp> response = apiInstance.claimYesterdayRewardWithHttpInfo(request);
+            ApiResponse<ClaimYesterdayLivenessRewardResp> response = apiInstance.claimYesterdayLivenessRewardWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling LivenessService#claimYesterdayReward");
+            System.err.println("Exception when calling LivenessService#claimYesterdayLivenessReward");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -125,7 +129,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| claimYesterdayRewardRequest | [**APIclaimYesterdayRewardRequest**](LivenessService.md#APIclaimYesterdayRewardRequest)|-|-|
+| claimYesterdayLivenessRewardRequest | [**APIclaimYesterdayLivenessRewardRequest**](LivenessService.md#APIclaimYesterdayLivenessRewardRequest)|-|-|
 
 ### Return type
 
@@ -147,8 +151,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIclaimYesterdayRewardRequest"></a>
-## APIclaimYesterdayRewardRequest
+<a id="APIclaimYesterdayLivenessRewardRequest"></a>
+## APIclaimYesterdayLivenessRewardRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -162,6 +166,8 @@ No authorization required
 > GetLivenessResp getLiveness()
 
 
+
+服务方法。
 
 ### Example
 
@@ -222,6 +228,8 @@ No authorization required
 > ApiResponse<GetLivenessResp> getLivenessWithHttpInfo()
 
 
+
+服务方法。
 
 ### Example
 

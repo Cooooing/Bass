@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespPointRecord
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespPointRecord.JSON_PROPERTY_CREATED_AT,
@@ -51,7 +51,7 @@ public class RespPointRecord {
   private String typeLabel;
 
   /**
-   * Gets or Sets direction
+   * 收入或支出方向
    */
   public enum DirectionEnum {
     ECONOMY_RECORD_DIRECTION_UNSPECIFIED(String.valueOf("ECONOMY_RECORD_DIRECTION_UNSPECIFIED")),
@@ -108,7 +108,7 @@ public class RespPointRecord {
   }
 
   /**
-   * Get createdAt
+   * 记录创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -132,7 +132,7 @@ public class RespPointRecord {
   }
 
   /**
-   * Get typeLabel
+   * 流水类型展示文案
    * @return typeLabel
    */
   @javax.annotation.Nullable
@@ -156,7 +156,7 @@ public class RespPointRecord {
   }
 
   /**
-   * Get direction
+   * 收入或支出方向
    * @return direction
    */
   @javax.annotation.Nullable
@@ -180,7 +180,7 @@ public class RespPointRecord {
   }
 
   /**
-   * Get amount
+   * 绝对变动积分
    * @return amount
    */
   @javax.annotation.Nullable
@@ -204,7 +204,7 @@ public class RespPointRecord {
   }
 
   /**
-   * Get balanceAfter
+   * 变动后的积分余额
    * @return balanceAfter
    */
   @javax.annotation.Nullable

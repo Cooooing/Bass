@@ -8,7 +8,7 @@ Req 指定待删除草稿。
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**draftId** | **String** |  |  [optional] |
+|**draftId** | **String** | 草稿 ID。 |  [optional] |
 
 
 

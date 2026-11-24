@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RevokeGlobalChatMessageReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   RevokeGlobalChatMessageReq.JSON_PROPERTY_MESSAGE_ID
@@ -50,7 +50,7 @@ public class RevokeGlobalChatMessageReq {
   }
 
   /**
-   * Get messageId
+   * 消息 ID。
    * @return messageId
    */
   @javax.annotation.Nullable

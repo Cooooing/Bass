@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SendGlobalChatMessageResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   SendGlobalChatMessageResp.JSON_PROPERTY_MESSAGE
@@ -51,7 +51,7 @@ public class SendGlobalChatMessageResp {
   }
 
   /**
-   * Get message
+   * 消息。
    * @return message
    */
   @javax.annotation.Nullable

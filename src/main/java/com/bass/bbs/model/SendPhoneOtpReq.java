@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SendPhoneOtpReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SendPhoneOtpReq.JSON_PROPERTY_PHONE
@@ -50,7 +50,7 @@ public class SendPhoneOtpReq {
   }
 
   /**
-   * Get phone
+   * 手机号
    * @return phone
    */
   @javax.annotation.Nonnull

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PageResp
+ * 协议消息。
  */
 @JsonPropertyOrder({
   PageResp.JSON_PROPERTY_TOTAL,

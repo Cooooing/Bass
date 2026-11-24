@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetProfileResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetProfileResp.JSON_PROPERTY_PROFILE
@@ -51,7 +51,7 @@ public class GetProfileResp {
   }
 
   /**
-   * Get profile
+   * 协议字段。
    * @return profile
    */
   @javax.annotation.Nullable

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetArticleReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   GetArticleReq.JSON_PROPERTY_ARTICLE_ID,
@@ -43,7 +43,7 @@ public class GetArticleReq {
   private String articleId;
 
   /**
-   * Gets or Sets publishStatus
+   * 可选，预期发布状态；未传按已发布查询
    */
   public enum PublishStatusEnum {
     ARTICLE_PUBLISH_STATUS_UNSPECIFIED(String.valueOf("ARTICLE_PUBLISH_STATUS_UNSPECIFIED")),
@@ -94,7 +94,7 @@ public class GetArticleReq {
   }
 
   /**
-   * Get articleId
+   * 必填，文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -118,7 +118,7 @@ public class GetArticleReq {
   }
 
   /**
-   * Get publishStatus
+   * 可选，预期发布状态；未传按已发布查询
    * @return publishStatus
    */
   @javax.annotation.Nullable

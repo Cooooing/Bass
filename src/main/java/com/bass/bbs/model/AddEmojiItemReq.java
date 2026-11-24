@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * AddEmojiItemReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   AddEmojiItemReq.JSON_PROPERTY_GROUP_ID,
@@ -60,7 +60,7 @@ public class AddEmojiItemReq {
   }
 
   /**
-   * Get groupId
+   * 可选目标分组 ID；缺省时加入默认分组。
    * @return groupId
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class AddEmojiItemReq {
   }
 
   /**
-   * Get assetId
+   * 已确认可用的平台图片资产 ID。
    * @return assetId
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class AddEmojiItemReq {
   }
 
   /**
-   * Get name
+   * 可选表情别名。
    * @return name
    */
   @javax.annotation.Nullable

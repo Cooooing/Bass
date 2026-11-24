@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespPinnedComment
+ * 协议消息。
  */
 @JsonPropertyOrder({
   RespPinnedComment.JSON_PROPERTY_THREAD
@@ -51,7 +51,7 @@ public class RespPinnedComment {
   }
 
   /**
-   * Get thread
+   * 独立置顶评论线程
    * @return thread
    */
   @javax.annotation.Nullable

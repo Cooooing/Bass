@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ImportEmojiShareResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ImportEmojiShareResp.JSON_PROPERTY_GROUP,
@@ -56,7 +56,7 @@ public class ImportEmojiShareResp {
   }
 
   /**
-   * Get group
+   * 新建的导入分组。
    * @return group
    */
   @javax.annotation.Nullable
@@ -80,7 +80,7 @@ public class ImportEmojiShareResp {
   }
 
   /**
-   * Get skippedCount
+   * 因资源不可用而跳过的表情数。
    * @return skippedCount
    */
   @javax.annotation.Nullable

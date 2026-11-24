@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * LoginReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   LoginReq.JSON_PROPERTY_TYPE,
@@ -44,7 +44,7 @@ import com.bass.bbs.ApiClient;
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class LoginReq {
   /**
-   * Gets or Sets type
+   * 登录方式
    */
   public enum TypeEnum {
     LOGIN_TYPE_UNSPECIFIED(String.valueOf("LOGIN_TYPE_UNSPECIFIED")),
@@ -107,7 +107,7 @@ public class LoginReq {
   }
 
   /**
-   * Get type
+   * 登录方式
    * @return type
    */
   @javax.annotation.Nonnull
@@ -131,7 +131,7 @@ public class LoginReq {
   }
 
   /**
-   * Get passwordCredential
+   * 密码登录凭证
    * @return passwordCredential
    */
   @javax.annotation.Nullable
@@ -155,7 +155,7 @@ public class LoginReq {
   }
 
   /**
-   * Get emailCredential
+   * 邮箱登录凭证
    * @return emailCredential
    */
   @javax.annotation.Nullable
@@ -179,7 +179,7 @@ public class LoginReq {
   }
 
   /**
-   * Get phoneCredential
+   * 手机登录凭证
    * @return phoneCredential
    */
   @javax.annotation.Nullable

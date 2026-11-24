@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SendGlobalChatBarrageResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   SendGlobalChatBarrageResp.JSON_PROPERTY_BARRAGE
@@ -51,7 +51,7 @@ public class SendGlobalChatBarrageResp {
   }
 
   /**
-   * Get barrage
+   * 已发布的弹幕。
    * @return barrage
    */
   @javax.annotation.Nullable

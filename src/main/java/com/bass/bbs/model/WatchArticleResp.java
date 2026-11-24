@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * WatchArticleResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   WatchArticleResp.JSON_PROPERTY_WATCHED
@@ -50,7 +50,7 @@ public class WatchArticleResp {
   }
 
   /**
-   * Get watched
+   * 是否已关注
    * @return watched
    */
   @javax.annotation.Nullable

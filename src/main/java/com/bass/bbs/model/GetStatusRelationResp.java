@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetStatusRelationResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetStatusRelationResp.JSON_PROPERTY_STATUS
@@ -51,7 +51,7 @@ public class GetStatusRelationResp {
   }
 
   /**
-   * Get status
+   * 关系状态
    * @return status
    */
   @javax.annotation.Nullable

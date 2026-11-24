@@ -42,20 +42,20 @@ public class DomainServiceTest {
     /**
      * 
      *
-     * 查询领域列表。
+     * 创建领域。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void callListTest() throws ApiException {
-        ListDomainsReq listDomainsReq = null;
+    public void createDomainTest() throws ApiException {
+        CreateDomainReq createDomainReq = null;
         
-        DomainService.APIcallListRequest request = DomainService.APIcallListRequest.newBuilder()
-          .listDomainsReq(listDomainsReq)
+        DomainService.APIcreateDomainRequest request = DomainService.APIcreateDomainRequest.newBuilder()
+          .createDomainReq(createDomainReq)
           .build();
-        ListDomainsResp response = 
-        api.callList(request);
+        CreateDomainResp response = 
+        api.createDomain(request);
 
         // TODO: test validations
     }
@@ -63,20 +63,20 @@ public class DomainServiceTest {
     /**
      * 
      *
-     * 创建领域。
+     * 查询领域列表。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void createTest() throws ApiException {
-        CreateDomainReq createDomainReq = null;
+    public void listDomainsTest() throws ApiException {
+        ListDomainsReq listDomainsReq = null;
         
-        DomainService.APIcreateRequest request = DomainService.APIcreateRequest.newBuilder()
-          .createDomainReq(createDomainReq)
+        DomainService.APIlistDomainsRequest request = DomainService.APIlistDomainsRequest.newBuilder()
+          .listDomainsReq(listDomainsReq)
           .build();
-        CreateDomainResp response = 
-        api.create(request);
+        ListDomainsResp response = 
+        api.listDomains(request);
 
         // TODO: test validations
     }
@@ -90,14 +90,14 @@ public class DomainServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void updateTest() throws ApiException {
+    public void updateDomainTest() throws ApiException {
         UpdateDomainReq updateDomainReq = null;
         
-        DomainService.APIupdateRequest request = DomainService.APIupdateRequest.newBuilder()
+        DomainService.APIupdateDomainRequest request = DomainService.APIupdateDomainRequest.newBuilder()
           .updateDomainReq(updateDomainReq)
           .build();
         UpdateDomainResp response = 
-        api.update(request);
+        api.updateDomain(request);
 
         // TODO: test validations
     }

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * SendPrivateChatMessageReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   SendPrivateChatMessageReq.JSON_PROPERTY_RECEIVER_ID,
@@ -60,7 +60,7 @@ public class SendPrivateChatMessageReq {
   }
 
   /**
-   * Get receiverId
+   * 接收账号 ID。
    * @return receiverId
    */
   @javax.annotation.Nullable
@@ -84,7 +84,7 @@ public class SendPrivateChatMessageReq {
   }
 
   /**
-   * Get clientMessageId
+   * 客户端幂等消息 ID。
    * @return clientMessageId
    */
   @javax.annotation.Nullable
@@ -108,7 +108,7 @@ public class SendPrivateChatMessageReq {
   }
 
   /**
-   * Get content
+   * 原始 Markdown 内容。
    * @return content
    */
   @javax.annotation.Nullable

@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListArticlesReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   ListArticlesReq.JSON_PROPERTY_PAGE,
@@ -57,7 +57,7 @@ public class ListArticlesReq {
   }
 
   /**
-   * Get page
+   * 可选，分页参数
    * @return page
    */
   @javax.annotation.Nullable
@@ -81,7 +81,7 @@ public class ListArticlesReq {
   }
 
   /**
-   * Get query
+   * 可选，查询条件
    * @return query
    */
   @javax.annotation.Nullable

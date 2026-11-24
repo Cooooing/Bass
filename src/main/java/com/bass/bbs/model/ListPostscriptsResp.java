@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListPostscriptsResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListPostscriptsResp.JSON_PROPERTY_ROWS
@@ -61,7 +61,7 @@ public class ListPostscriptsResp {
   }
 
   /**
-   * Get rows
+   * 文章附言列表。
    * @return rows
    */
   @javax.annotation.Nullable

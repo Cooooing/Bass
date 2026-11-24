@@ -54,14 +54,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void blockTest() throws ApiException {
+    public void blockRelationTest() throws ApiException {
         BlockRelationReq blockRelationReq = null;
         
-        RelationService.APIblockRequest request = RelationService.APIblockRequest.newBuilder()
+        RelationService.APIblockRelationRequest request = RelationService.APIblockRelationRequest.newBuilder()
           .blockRelationReq(blockRelationReq)
           .build();
         Object response = 
-        api.block(request);
+        api.blockRelation(request);
 
         // TODO: test validations
     }
@@ -75,14 +75,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void followTest() throws ApiException {
+    public void followRelationTest() throws ApiException {
         FollowRelationReq followRelationReq = null;
         
-        RelationService.APIfollowRequest request = RelationService.APIfollowRequest.newBuilder()
+        RelationService.APIfollowRelationRequest request = RelationService.APIfollowRelationRequest.newBuilder()
           .followRelationReq(followRelationReq)
           .build();
         Object response = 
-        api.follow(request);
+        api.followRelation(request);
 
         // TODO: test validations
     }
@@ -96,14 +96,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void getStatusTest() throws ApiException {
+    public void getStatusRelationTest() throws ApiException {
         GetStatusRelationReq getStatusRelationReq = null;
         
-        RelationService.APIgetStatusRequest request = RelationService.APIgetStatusRequest.newBuilder()
+        RelationService.APIgetStatusRelationRequest request = RelationService.APIgetStatusRelationRequest.newBuilder()
           .getStatusRelationReq(getStatusRelationReq)
           .build();
         GetStatusRelationResp response = 
-        api.getStatus(request);
+        api.getStatusRelation(request);
 
         // TODO: test validations
     }
@@ -117,14 +117,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listBlockedTest() throws ApiException {
+    public void listBlockedRelationsTest() throws ApiException {
         ListBlockedRelationsReq listBlockedRelationsReq = null;
         
-        RelationService.APIlistBlockedRequest request = RelationService.APIlistBlockedRequest.newBuilder()
+        RelationService.APIlistBlockedRelationsRequest request = RelationService.APIlistBlockedRelationsRequest.newBuilder()
           .listBlockedRelationsReq(listBlockedRelationsReq)
           .build();
         ListBlockedRelationsResp response = 
-        api.listBlocked(request);
+        api.listBlockedRelations(request);
 
         // TODO: test validations
     }
@@ -138,14 +138,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listFollowersTest() throws ApiException {
+    public void listFollowersRelationsTest() throws ApiException {
         ListFollowersRelationsReq listFollowersRelationsReq = null;
         
-        RelationService.APIlistFollowersRequest request = RelationService.APIlistFollowersRequest.newBuilder()
+        RelationService.APIlistFollowersRelationsRequest request = RelationService.APIlistFollowersRelationsRequest.newBuilder()
           .listFollowersRelationsReq(listFollowersRelationsReq)
           .build();
         ListFollowersRelationsResp response = 
-        api.listFollowers(request);
+        api.listFollowersRelations(request);
 
         // TODO: test validations
     }
@@ -159,14 +159,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void listFollowingTest() throws ApiException {
+    public void listFollowingRelationsTest() throws ApiException {
         ListFollowingRelationsReq listFollowingRelationsReq = null;
         
-        RelationService.APIlistFollowingRequest request = RelationService.APIlistFollowingRequest.newBuilder()
+        RelationService.APIlistFollowingRelationsRequest request = RelationService.APIlistFollowingRelationsRequest.newBuilder()
           .listFollowingRelationsReq(listFollowingRelationsReq)
           .build();
         ListFollowingRelationsResp response = 
-        api.listFollowing(request);
+        api.listFollowingRelations(request);
 
         // TODO: test validations
     }
@@ -180,14 +180,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void unblockTest() throws ApiException {
+    public void unblockRelationTest() throws ApiException {
         UnblockRelationReq unblockRelationReq = null;
         
-        RelationService.APIunblockRequest request = RelationService.APIunblockRequest.newBuilder()
+        RelationService.APIunblockRelationRequest request = RelationService.APIunblockRelationRequest.newBuilder()
           .unblockRelationReq(unblockRelationReq)
           .build();
         Object response = 
-        api.unblock(request);
+        api.unblockRelation(request);
 
         // TODO: test validations
     }
@@ -201,14 +201,14 @@ public class RelationServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void unfollowTest() throws ApiException {
+    public void unfollowRelationTest() throws ApiException {
         UnfollowRelationReq unfollowRelationReq = null;
         
-        RelationService.APIunfollowRequest request = RelationService.APIunfollowRequest.newBuilder()
+        RelationService.APIunfollowRelationRequest request = RelationService.APIunfollowRelationRequest.newBuilder()
           .unfollowRelationReq(unfollowRelationReq)
           .build();
         Object response = 
-        api.unfollow(request);
+        api.unfollowRelation(request);
 
         // TODO: test validations
     }

@@ -165,98 +165,98 @@ public class ArticleSearchService {
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APISearchRequest}
+   * 服务方法。
+   * @param apiRequest {@link APISearchArticlesRequest}
    * @return SearchArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public SearchArticlesResp search(APISearchRequest apiRequest) throws ApiException {
-    return search(apiRequest, null);
+  public SearchArticlesResp searchArticles(APISearchArticlesRequest apiRequest) throws ApiException {
+    return searchArticles(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APISearchRequest}
+   * 服务方法。
+   * @param apiRequest {@link APISearchArticlesRequest}
    * @param headers Optional headers to include in the request
    * @return SearchArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public SearchArticlesResp search(APISearchRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public SearchArticlesResp searchArticles(APISearchArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     SearchArticlesReq searchArticlesReq = apiRequest.searchArticlesReq();
-    return search(searchArticlesReq, headers);
+    return searchArticles(searchArticlesReq, headers);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APISearchRequest}
+   * 服务方法。
+   * @param apiRequest {@link APISearchArticlesRequest}
    * @return ApiResponse&lt;SearchArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<SearchArticlesResp> searchWithHttpInfo(APISearchRequest apiRequest) throws ApiException {
-    return searchWithHttpInfo(apiRequest, null);
+  public ApiResponse<SearchArticlesResp> searchArticlesWithHttpInfo(APISearchArticlesRequest apiRequest) throws ApiException {
+    return searchArticlesWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 
-   * @param apiRequest {@link APISearchRequest}
+   * 服务方法。
+   * @param apiRequest {@link APISearchArticlesRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;SearchArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<SearchArticlesResp> searchWithHttpInfo(APISearchRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<SearchArticlesResp> searchArticlesWithHttpInfo(APISearchArticlesRequest apiRequest, Map<String, String> headers) throws ApiException {
     SearchArticlesReq searchArticlesReq = apiRequest.searchArticlesReq();
-    return searchWithHttpInfo(searchArticlesReq, headers);
+    return searchArticlesWithHttpInfo(searchArticlesReq, headers);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param searchArticlesReq  (required)
    * @return SearchArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public SearchArticlesResp search(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq) throws ApiException {
-    return search(searchArticlesReq, null);
+  public SearchArticlesResp searchArticles(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq) throws ApiException {
+    return searchArticles(searchArticlesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param searchArticlesReq  (required)
    * @param headers Optional headers to include in the request
    * @return SearchArticlesResp
    * @throws ApiException if fails to make API call
    */
-  public SearchArticlesResp search(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<SearchArticlesResp> localVarResponse = searchWithHttpInfo(searchArticlesReq, headers);
+  public SearchArticlesResp searchArticles(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<SearchArticlesResp> localVarResponse = searchArticlesWithHttpInfo(searchArticlesReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param searchArticlesReq  (required)
    * @return ApiResponse&lt;SearchArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<SearchArticlesResp> searchWithHttpInfo(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq) throws ApiException {
-    return searchWithHttpInfo(searchArticlesReq, null);
+  public ApiResponse<SearchArticlesResp> searchArticlesWithHttpInfo(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq) throws ApiException {
+    return searchArticlesWithHttpInfo(searchArticlesReq, null);
   }
 
   /**
    * 
-   * 
+   * 服务方法。
    * @param searchArticlesReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;SearchArticlesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<SearchArticlesResp> searchWithHttpInfo(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = searchRequestBuilder(searchArticlesReq, headers);
+  public ApiResponse<SearchArticlesResp> searchArticlesWithHttpInfo(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = searchArticlesRequestBuilder(searchArticlesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -267,7 +267,7 @@ public class ArticleSearchService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("search", localVarResponse);
+          throw getApiException("searchArticles", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -303,10 +303,10 @@ public class ArticleSearchService {
     }
   }
 
-  private HttpRequest.Builder searchRequestBuilder(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder searchArticlesRequestBuilder(@javax.annotation.Nonnull SearchArticlesReq searchArticlesReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'searchArticlesReq' is set
     if (searchArticlesReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'searchArticlesReq' when calling search");
+      throw new ApiException(400, "Missing the required parameter 'searchArticlesReq' when calling searchArticles");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -336,11 +336,11 @@ public class ArticleSearchService {
   }
 
 
-  public static final class APISearchRequest {
+  public static final class APISearchArticlesRequest {
     @javax.annotation.Nonnull
     private SearchArticlesReq searchArticlesReq; //  (required)
 
-    private APISearchRequest(Builder builder) {
+    private APISearchArticlesRequest(Builder builder) {
       this.searchArticlesReq = builder.searchArticlesReq;
     }
     @javax.annotation.Nonnull
@@ -358,8 +358,8 @@ public class ArticleSearchService {
         this.searchArticlesReq = searchArticlesReq;
         return this;
       }
-      public APISearchRequest build() {
-        return new APISearchRequest(this);
+      public APISearchArticlesRequest build() {
+        return new APISearchArticlesRequest(this);
       }
     }
   }

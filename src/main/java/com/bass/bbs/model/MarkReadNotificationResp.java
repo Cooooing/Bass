@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * MarkReadNotificationResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   MarkReadNotificationResp.JSON_PROPERTY_COUNT
@@ -50,7 +50,7 @@ public class MarkReadNotificationResp {
   }
 
   /**
-   * Get count
+   * 成功标记的通知数量
    * @return count
    */
   @javax.annotation.Nullable

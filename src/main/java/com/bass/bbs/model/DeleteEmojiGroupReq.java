@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * DeleteEmojiGroupReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   DeleteEmojiGroupReq.JSON_PROPERTY_GROUP_ID
@@ -50,7 +50,7 @@ public class DeleteEmojiGroupReq {
   }
 
   /**
-   * Get groupId
+   * 待删除分组 ID。
    * @return groupId
    */
   @javax.annotation.Nullable

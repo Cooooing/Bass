@@ -17,9 +17,11 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.model.CreateMoonbreezeReq;
 import com.bass.bbs.model.CreateMoonbreezeResp;
 import com.bass.bbs.model.PageMemberMoonbreezesReq;
-import com.bass.bbs.model.PageMoonbreezesResp;
+import com.bass.bbs.model.PageMemberMoonbreezesResp;
 import com.bass.bbs.model.PagePublicMoonbreezesReq;
+import com.bass.bbs.model.PagePublicMoonbreezesResp;
 import com.bass.bbs.model.PageWatchingMoonbreezesReq;
+import com.bass.bbs.model.PageWatchingMoonbreezesResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -42,20 +44,20 @@ public class MoonbreezeServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void createTest() throws ApiException {
+    public void createMoonbreezeTest() throws ApiException {
         CreateMoonbreezeReq createMoonbreezeReq = null;
         
-        MoonbreezeService.APIcreateRequest request = MoonbreezeService.APIcreateRequest.newBuilder()
+        MoonbreezeService.APIcreateMoonbreezeRequest request = MoonbreezeService.APIcreateMoonbreezeRequest.newBuilder()
           .createMoonbreezeReq(createMoonbreezeReq)
           .build();
         CreateMoonbreezeResp response = 
-        api.create(request);
+        api.createMoonbreeze(request);
 
         // TODO: test validations
     }
@@ -63,20 +65,20 @@ public class MoonbreezeServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void pageMemberTest() throws ApiException {
+    public void pageMemberMoonbreezesTest() throws ApiException {
         PageMemberMoonbreezesReq pageMemberMoonbreezesReq = null;
         
-        MoonbreezeService.APIpageMemberRequest request = MoonbreezeService.APIpageMemberRequest.newBuilder()
+        MoonbreezeService.APIpageMemberMoonbreezesRequest request = MoonbreezeService.APIpageMemberMoonbreezesRequest.newBuilder()
           .pageMemberMoonbreezesReq(pageMemberMoonbreezesReq)
           .build();
-        PageMoonbreezesResp response = 
-        api.pageMember(request);
+        PageMemberMoonbreezesResp response = 
+        api.pageMemberMoonbreezes(request);
 
         // TODO: test validations
     }
@@ -84,20 +86,20 @@ public class MoonbreezeServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void pagePublicTest() throws ApiException {
+    public void pagePublicMoonbreezesTest() throws ApiException {
         PagePublicMoonbreezesReq pagePublicMoonbreezesReq = null;
         
-        MoonbreezeService.APIpagePublicRequest request = MoonbreezeService.APIpagePublicRequest.newBuilder()
+        MoonbreezeService.APIpagePublicMoonbreezesRequest request = MoonbreezeService.APIpagePublicMoonbreezesRequest.newBuilder()
           .pagePublicMoonbreezesReq(pagePublicMoonbreezesReq)
           .build();
-        PageMoonbreezesResp response = 
-        api.pagePublic(request);
+        PagePublicMoonbreezesResp response = 
+        api.pagePublicMoonbreezes(request);
 
         // TODO: test validations
     }
@@ -105,20 +107,20 @@ public class MoonbreezeServiceTest {
     /**
      * 
      *
-     * 
+     * 服务方法。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void pageWatchingTest() throws ApiException {
+    public void pageWatchingMoonbreezesTest() throws ApiException {
         PageWatchingMoonbreezesReq pageWatchingMoonbreezesReq = null;
         
-        MoonbreezeService.APIpageWatchingRequest request = MoonbreezeService.APIpageWatchingRequest.newBuilder()
+        MoonbreezeService.APIpageWatchingMoonbreezesRequest request = MoonbreezeService.APIpageWatchingMoonbreezesRequest.newBuilder()
           .pageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq)
           .build();
-        PageMoonbreezesResp response = 
-        api.pageWatching(request);
+        PageWatchingMoonbreezesResp response = 
+        api.pageWatchingMoonbreezes(request);
 
         // TODO: test validations
     }

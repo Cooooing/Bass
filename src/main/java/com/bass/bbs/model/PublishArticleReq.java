@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PublishArticleReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   PublishArticleReq.JSON_PROPERTY_ARTICLE_ID,
@@ -56,7 +56,7 @@ public class PublishArticleReq {
   }
 
   /**
-   * Get articleId
+   * 必填，文章 ID
    * @return articleId
    */
   @javax.annotation.Nonnull
@@ -80,7 +80,7 @@ public class PublishArticleReq {
   }
 
   /**
-   * Get scheduledAt
+   * 可选，定时发布时间
    * @return scheduledAt
    */
   @javax.annotation.Nullable

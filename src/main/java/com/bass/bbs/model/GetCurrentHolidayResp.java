@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GetCurrentHolidayResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   GetCurrentHolidayResp.JSON_PROPERTY_DATE,

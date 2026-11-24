@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpdateProfileAccountReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   UpdateProfileAccountReq.JSON_PROPERTY_NICKNAME,
@@ -65,7 +65,7 @@ public class UpdateProfileAccountReq {
   }
 
   /**
-   * Get nickname
+   * 昵称，选填
    * @return nickname
    */
   @javax.annotation.Nullable
@@ -89,7 +89,7 @@ public class UpdateProfileAccountReq {
   }
 
   /**
-   * Get url
+   * 个人主页 URL，选填
    * @return url
    */
   @javax.annotation.Nullable
@@ -113,7 +113,7 @@ public class UpdateProfileAccountReq {
   }
 
   /**
-   * Get introduction
+   * 个人简介，选填
    * @return introduction
    */
   @javax.annotation.Nullable
@@ -137,7 +137,7 @@ public class UpdateProfileAccountReq {
   }
 
   /**
-   * Get mbti
+   * MBTI 类型，选填；空字符串表示清除
    * @return mbti
    */
   @javax.annotation.Nullable

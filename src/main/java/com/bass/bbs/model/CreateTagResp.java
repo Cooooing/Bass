@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateTagResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CreateTagResp.JSON_PROPERTY_TAG
@@ -51,7 +51,7 @@ public class CreateTagResp {
   }
 
   /**
-   * Get tag
+   * 标签信息
    * @return tag
    */
   @javax.annotation.Nullable

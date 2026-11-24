@@ -165,50 +165,50 @@ public class HolidayService {
   /**
    * 
    * 获取当前节假日状态。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentHolidayRequest}
    * @return GetCurrentHolidayResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentHolidayResp getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
-    return getCurrent(apiRequest, null);
+  public GetCurrentHolidayResp getCurrentHoliday(APIGetCurrentHolidayRequest apiRequest) throws ApiException {
+    return getCurrentHoliday(apiRequest, null);
   }
 
   /**
    * 
    * 获取当前节假日状态。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentHolidayRequest}
    * @param headers Optional headers to include in the request
    * @return GetCurrentHolidayResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentHolidayResp getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetCurrentHolidayResp getCurrentHoliday(APIGetCurrentHolidayRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
-    return getCurrent(body, headers);
+    return getCurrentHoliday(body, headers);
   }
 
   /**
    * 
    * 获取当前节假日状态。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentHolidayRequest}
    * @return ApiResponse&lt;GetCurrentHolidayResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentHolidayResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
-    return getCurrentWithHttpInfo(apiRequest, null);
+  public ApiResponse<GetCurrentHolidayResp> getCurrentHolidayWithHttpInfo(APIGetCurrentHolidayRequest apiRequest) throws ApiException {
+    return getCurrentHolidayWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 获取当前节假日状态。
-   * @param apiRequest {@link APIGetCurrentRequest}
+   * @param apiRequest {@link APIGetCurrentHolidayRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetCurrentHolidayResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentHolidayResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentHolidayResp> getCurrentHolidayWithHttpInfo(APIGetCurrentHolidayRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
-    return getCurrentWithHttpInfo(body, headers);
+    return getCurrentHolidayWithHttpInfo(body, headers);
   }
 
   /**
@@ -218,8 +218,8 @@ public class HolidayService {
    * @return GetCurrentHolidayResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentHolidayResp getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
-    return getCurrent(body, null);
+  public GetCurrentHolidayResp getCurrentHoliday(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getCurrentHoliday(body, null);
   }
 
   /**
@@ -230,8 +230,8 @@ public class HolidayService {
    * @return GetCurrentHolidayResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentHolidayResp getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetCurrentHolidayResp> localVarResponse = getCurrentWithHttpInfo(body, headers);
+  public GetCurrentHolidayResp getCurrentHoliday(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetCurrentHolidayResp> localVarResponse = getCurrentHolidayWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -242,8 +242,8 @@ public class HolidayService {
    * @return ApiResponse&lt;GetCurrentHolidayResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentHolidayResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return getCurrentWithHttpInfo(body, null);
+  public ApiResponse<GetCurrentHolidayResp> getCurrentHolidayWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return getCurrentHolidayWithHttpInfo(body, null);
   }
 
   /**
@@ -254,8 +254,8 @@ public class HolidayService {
    * @return ApiResponse&lt;GetCurrentHolidayResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentHolidayResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = getCurrentRequestBuilder(body, headers);
+  public ApiResponse<GetCurrentHolidayResp> getCurrentHolidayWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getCurrentHolidayRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -266,7 +266,7 @@ public class HolidayService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("getCurrent", localVarResponse);
+          throw getApiException("getCurrentHoliday", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -302,10 +302,10 @@ public class HolidayService {
     }
   }
 
-  private HttpRequest.Builder getCurrentRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder getCurrentHolidayRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'body' is set
     if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling getCurrent");
+      throw new ApiException(400, "Missing the required parameter 'body' when calling getCurrentHoliday");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -335,11 +335,11 @@ public class HolidayService {
   }
 
 
-  public static final class APIGetCurrentRequest {
+  public static final class APIGetCurrentHolidayRequest {
     @javax.annotation.Nonnull
     private Object body; //  (required)
 
-    private APIGetCurrentRequest(Builder builder) {
+    private APIGetCurrentHolidayRequest(Builder builder) {
       this.body = builder.body;
     }
     @javax.annotation.Nonnull
@@ -357,8 +357,8 @@ public class HolidayService {
         this.body = body;
         return this;
       }
-      public APIGetCurrentRequest build() {
-        return new APIGetCurrentRequest(this);
+      public APIGetCurrentHolidayRequest build() {
+        return new APIGetCurrentHolidayRequest(this);
       }
     }
   }

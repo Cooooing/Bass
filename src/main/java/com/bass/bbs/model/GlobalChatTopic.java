@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * GlobalChatTopic
+ * 协议消息。
  */
 @JsonPropertyOrder({
   GlobalChatTopic.JSON_PROPERTY_ID,
@@ -71,7 +71,7 @@ public class GlobalChatTopic {
   }
 
   /**
-   * Get id
+   * 话题记录 ID。
    * @return id
    */
   @javax.annotation.Nullable
@@ -95,7 +95,7 @@ public class GlobalChatTopic {
   }
 
   /**
-   * Get userId
+   * 设置话题的账号 ID。
    * @return userId
    */
   @javax.annotation.Nullable
@@ -119,7 +119,7 @@ public class GlobalChatTopic {
   }
 
   /**
-   * Get content
+   * 话题内容。
    * @return content
    */
   @javax.annotation.Nullable
@@ -143,7 +143,7 @@ public class GlobalChatTopic {
   }
 
   /**
-   * Get pointsCost
+   * 本次设置实际消耗的积分。
    * @return pointsCost
    */
   @javax.annotation.Nullable
@@ -167,7 +167,7 @@ public class GlobalChatTopic {
   }
 
   /**
-   * Get createdAt
+   * 话题设置时间。
    * @return createdAt
    */
   @javax.annotation.Nullable

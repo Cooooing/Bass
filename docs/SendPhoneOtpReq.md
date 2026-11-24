@@ -2,12 +2,13 @@
 
 # SendPhoneOtpReq
 
+请求参数。
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**phone** | **String** |  |  |
+|**phone** | **String** | 手机号 |  |
 
 
 

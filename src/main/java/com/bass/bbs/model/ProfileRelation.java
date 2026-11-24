@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ProfileRelation
+ * 协议消息。
  */
 @JsonPropertyOrder({
   ProfileRelation.JSON_PROPERTY_FOLLOWING,
@@ -65,7 +65,7 @@ public class ProfileRelation {
   }
 
   /**
-   * Get following
+   * 协议字段。
    * @return following
    */
   @javax.annotation.Nullable
@@ -89,7 +89,7 @@ public class ProfileRelation {
   }
 
   /**
-   * Get followedBy
+   * 协议字段。
    * @return followedBy
    */
   @javax.annotation.Nullable
@@ -113,7 +113,7 @@ public class ProfileRelation {
   }
 
   /**
-   * Get blocking
+   * 协议字段。
    * @return blocking
    */
   @javax.annotation.Nullable
@@ -137,7 +137,7 @@ public class ProfileRelation {
   }
 
   /**
-   * Get blockedBy
+   * 协议字段。
    * @return blockedBy
    */
   @javax.annotation.Nullable

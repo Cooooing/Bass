@@ -14,34 +14,36 @@ import (
 	"encoding/json"
 )
 
-// checks if the PageMoonbreezesResp type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &PageMoonbreezesResp{}
+// checks if the PageMemberMoonbreezesResp type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &PageMemberMoonbreezesResp{}
 
-// PageMoonbreezesResp struct for PageMoonbreezesResp
-type PageMoonbreezesResp struct {
+// PageMemberMoonbreezesResp 响应结果。
+type PageMemberMoonbreezesResp struct {
+	// 协议字段。
 	Rows []Moonbreeze `json:"rows,omitempty"`
+	// 协议字段。
 	NextCursor *string `json:"next_cursor,omitempty"`
 }
 
-// NewPageMoonbreezesResp instantiates a new PageMoonbreezesResp object
+// NewPageMemberMoonbreezesResp instantiates a new PageMemberMoonbreezesResp object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPageMoonbreezesResp() *PageMoonbreezesResp {
-	this := PageMoonbreezesResp{}
+func NewPageMemberMoonbreezesResp() *PageMemberMoonbreezesResp {
+	this := PageMemberMoonbreezesResp{}
 	return &this
 }
 
-// NewPageMoonbreezesRespWithDefaults instantiates a new PageMoonbreezesResp object
+// NewPageMemberMoonbreezesRespWithDefaults instantiates a new PageMemberMoonbreezesResp object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewPageMoonbreezesRespWithDefaults() *PageMoonbreezesResp {
-	this := PageMoonbreezesResp{}
+func NewPageMemberMoonbreezesRespWithDefaults() *PageMemberMoonbreezesResp {
+	this := PageMemberMoonbreezesResp{}
 	return &this
 }
 
 // GetRows returns the Rows field value if set, zero value otherwise.
-func (o *PageMoonbreezesResp) GetRows() []Moonbreeze {
+func (o *PageMemberMoonbreezesResp) GetRows() []Moonbreeze {
 	if o == nil || IsNil(o.Rows) {
 		var ret []Moonbreeze
 		return ret
@@ -51,7 +53,7 @@ func (o *PageMoonbreezesResp) GetRows() []Moonbreeze {
 
 // GetRowsOk returns a tuple with the Rows field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PageMoonbreezesResp) GetRowsOk() ([]Moonbreeze, bool) {
+func (o *PageMemberMoonbreezesResp) GetRowsOk() ([]Moonbreeze, bool) {
 	if o == nil || IsNil(o.Rows) {
 		return nil, false
 	}
@@ -59,7 +61,7 @@ func (o *PageMoonbreezesResp) GetRowsOk() ([]Moonbreeze, bool) {
 }
 
 // HasRows returns a boolean if a field has been set.
-func (o *PageMoonbreezesResp) HasRows() bool {
+func (o *PageMemberMoonbreezesResp) HasRows() bool {
 	if o != nil && !IsNil(o.Rows) {
 		return true
 	}
@@ -68,12 +70,12 @@ func (o *PageMoonbreezesResp) HasRows() bool {
 }
 
 // SetRows gets a reference to the given []Moonbreeze and assigns it to the Rows field.
-func (o *PageMoonbreezesResp) SetRows(v []Moonbreeze) {
+func (o *PageMemberMoonbreezesResp) SetRows(v []Moonbreeze) {
 	o.Rows = v
 }
 
 // GetNextCursor returns the NextCursor field value if set, zero value otherwise.
-func (o *PageMoonbreezesResp) GetNextCursor() string {
+func (o *PageMemberMoonbreezesResp) GetNextCursor() string {
 	if o == nil || IsNil(o.NextCursor) {
 		var ret string
 		return ret
@@ -83,7 +85,7 @@ func (o *PageMoonbreezesResp) GetNextCursor() string {
 
 // GetNextCursorOk returns a tuple with the NextCursor field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PageMoonbreezesResp) GetNextCursorOk() (*string, bool) {
+func (o *PageMemberMoonbreezesResp) GetNextCursorOk() (*string, bool) {
 	if o == nil || IsNil(o.NextCursor) {
 		return nil, false
 	}
@@ -91,7 +93,7 @@ func (o *PageMoonbreezesResp) GetNextCursorOk() (*string, bool) {
 }
 
 // HasNextCursor returns a boolean if a field has been set.
-func (o *PageMoonbreezesResp) HasNextCursor() bool {
+func (o *PageMemberMoonbreezesResp) HasNextCursor() bool {
 	if o != nil && !IsNil(o.NextCursor) {
 		return true
 	}
@@ -100,11 +102,11 @@ func (o *PageMoonbreezesResp) HasNextCursor() bool {
 }
 
 // SetNextCursor gets a reference to the given string and assigns it to the NextCursor field.
-func (o *PageMoonbreezesResp) SetNextCursor(v string) {
+func (o *PageMemberMoonbreezesResp) SetNextCursor(v string) {
 	o.NextCursor = &v
 }
 
-func (o PageMoonbreezesResp) MarshalJSON() ([]byte, error) {
+func (o PageMemberMoonbreezesResp) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -112,7 +114,7 @@ func (o PageMoonbreezesResp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o PageMoonbreezesResp) ToMap() (map[string]interface{}, error) {
+func (o PageMemberMoonbreezesResp) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Rows) {
 		toSerialize["rows"] = o.Rows
@@ -123,38 +125,38 @@ func (o PageMoonbreezesResp) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-type NullablePageMoonbreezesResp struct {
-	value *PageMoonbreezesResp
+type NullablePageMemberMoonbreezesResp struct {
+	value *PageMemberMoonbreezesResp
 	isSet bool
 }
 
-func (v NullablePageMoonbreezesResp) Get() *PageMoonbreezesResp {
+func (v NullablePageMemberMoonbreezesResp) Get() *PageMemberMoonbreezesResp {
 	return v.value
 }
 
-func (v *NullablePageMoonbreezesResp) Set(val *PageMoonbreezesResp) {
+func (v *NullablePageMemberMoonbreezesResp) Set(val *PageMemberMoonbreezesResp) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullablePageMoonbreezesResp) IsSet() bool {
+func (v NullablePageMemberMoonbreezesResp) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullablePageMoonbreezesResp) Unset() {
+func (v *NullablePageMemberMoonbreezesResp) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullablePageMoonbreezesResp(val *PageMoonbreezesResp) *NullablePageMoonbreezesResp {
-	return &NullablePageMoonbreezesResp{value: val, isSet: true}
+func NewNullablePageMemberMoonbreezesResp(val *PageMemberMoonbreezesResp) *NullablePageMemberMoonbreezesResp {
+	return &NullablePageMemberMoonbreezesResp{value: val, isSet: true}
 }
 
-func (v NullablePageMoonbreezesResp) MarshalJSON() ([]byte, error) {
+func (v NullablePageMemberMoonbreezesResp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullablePageMoonbreezesResp) UnmarshalJSON(src []byte) error {
+func (v *NullablePageMemberMoonbreezesResp) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

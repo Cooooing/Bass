@@ -17,9 +17,11 @@ import (
 // checks if the BeginEnableTotpResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &BeginEnableTotpResp{}
 
-// BeginEnableTotpResp struct for BeginEnableTotpResp
+// BeginEnableTotpResp 响应结果。
 type BeginEnableTotpResp struct {
+	// TOTP 绑定 URL
 	Url *string `json:"url,omitempty"`
+	// TOTP 二维码图片数据
 	QrCode *string `json:"qr_code,omitempty"`
 }
 

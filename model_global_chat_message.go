@@ -18,15 +18,23 @@ import (
 // checks if the GlobalChatMessage type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GlobalChatMessage{}
 
-// GlobalChatMessage struct for GlobalChatMessage
+// GlobalChatMessage 协议消息。
 type GlobalChatMessage struct {
+	// 消息 ID。
 	Id *string `json:"id,omitempty"`
+	// 发送账号 ID。
 	SenderId *string `json:"sender_id,omitempty"`
+	// 原始 Markdown 内容。
 	Content *string `json:"content,omitempty"`
+	// 消息类型。
 	MessageType *string `json:"message_type,omitempty"`
+	// 是否已撤回。
 	Revoked *bool `json:"revoked,omitempty"`
+	// 发送者展示资料。
 	Sender *GlobalChatMember `json:"sender,omitempty"`
+	// 创建时间。
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 撤回时间。
 	RevokedAt *time.Time `json:"revoked_at,omitempty"`
 }
 

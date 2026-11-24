@@ -22,11 +22,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test AccountServiceService Avatar", func(t *testing.T) {
+	t.Run("Test AccountServiceService AvatarAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.Avatar(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.AvatarAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService CompleteProfileImageUpload", func(t *testing.T) {
+	t.Run("Test AccountServiceService CompleteProfileImageUploadAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.CompleteProfileImageUpload(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.CompleteProfileImageUploadAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService GetCurrent", func(t *testing.T) {
+	t.Run("Test AccountServiceService GetAccountEconomy", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.GetCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.GetAccountEconomy(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService GetEconomyAccount", func(t *testing.T) {
+	t.Run("Test AccountServiceService GetCurrentAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.GetEconomyAccount(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.GetCurrentAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -118,11 +118,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService PrepareProfileImageUpload", func(t *testing.T) {
+	t.Run("Test AccountServiceService PrepareProfileImageUploadAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.PrepareProfileImageUpload(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.PrepareProfileImageUploadAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -130,11 +130,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService SearchMention", func(t *testing.T) {
+	t.Run("Test AccountServiceService SearchMentionAccounts", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.SearchMention(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.SearchMentionAccounts(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -142,11 +142,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService TransferPoints", func(t *testing.T) {
+	t.Run("Test AccountServiceService TransferAccountPoints", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.TransferPoints(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.TransferAccountPoints(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -154,11 +154,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService UpdateEmail", func(t *testing.T) {
+	t.Run("Test AccountServiceService UpdateEmailAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.UpdateEmail(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.UpdateEmailAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -166,11 +166,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService UpdatePassword", func(t *testing.T) {
+	t.Run("Test AccountServiceService UpdatePasswordAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.UpdatePassword(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.UpdatePasswordAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -178,11 +178,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService UpdatePhone", func(t *testing.T) {
+	t.Run("Test AccountServiceService UpdatePhoneAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.UpdatePhone(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.UpdatePhoneAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -190,11 +190,11 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AccountServiceService UpdateProfile", func(t *testing.T) {
+	t.Run("Test AccountServiceService UpdateProfileAccount", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AccountService.UpdateProfile(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AccountService.UpdateProfileAccount(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

@@ -17,9 +17,11 @@ import (
 // checks if the ListGlobalChatBarragesResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListGlobalChatBarragesResp{}
 
-// ListGlobalChatBarragesResp struct for ListGlobalChatBarragesResp
+// ListGlobalChatBarragesResp 响应结果。
 type ListGlobalChatBarragesResp struct {
+	// 分页信息。
 	Page *PageResp `json:"page,omitempty"`
+	// 已发布弹幕。
 	Rows []GlobalChatBarrage `json:"rows,omitempty"`
 }
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DomainId** | **string** |  | 
-**Domain** | [**ReqDomain**](ReqDomain.md) |  | 
+**DomainId** | **string** | 领域 ID | 
+**Domain** | [**ReqDomain**](ReqDomain.md) | 领域信息 | 
 
 ## Methods
 

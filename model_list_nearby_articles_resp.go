@@ -17,9 +17,11 @@ import (
 // checks if the ListNearbyArticlesResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListNearbyArticlesResp{}
 
-// ListNearbyArticlesResp struct for ListNearbyArticlesResp
+// ListNearbyArticlesResp 响应结果。
 type ListNearbyArticlesResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 文章列表
 	Rows []ArticleListItem `json:"rows,omitempty"`
 }
 

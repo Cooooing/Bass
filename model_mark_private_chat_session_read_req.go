@@ -17,9 +17,11 @@ import (
 // checks if the MarkPrivateChatSessionReadReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &MarkPrivateChatSessionReadReq{}
 
-// MarkPrivateChatSessionReadReq struct for MarkPrivateChatSessionReadReq
+// MarkPrivateChatSessionReadReq 请求参数。
 type MarkPrivateChatSessionReadReq struct {
+	// 对端账号 ID。
 	PeerUserId *string `json:"peer_user_id,omitempty"`
+	// 最后已读消息 ID。
 	MessageId *string `json:"message_id,omitempty"`
 }
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PeerUserId** | Pointer to **string** |  | [optional] 
-**MessageId** | Pointer to **string** |  | [optional] 
+**PeerUserId** | Pointer to **string** | 对端账号 ID。 | [optional] 
+**MessageId** | Pointer to **string** | 最后已读消息 ID。 | [optional] 
 
 ## Methods
 

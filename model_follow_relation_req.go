@@ -19,8 +19,9 @@ import (
 // checks if the FollowRelationReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &FollowRelationReq{}
 
-// FollowRelationReq struct for FollowRelationReq
+// FollowRelationReq 请求参数。
 type FollowRelationReq struct {
+	// 目标账号 ID
 	TargetId string `json:"target_id"`
 }
 

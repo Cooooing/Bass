@@ -18,7 +18,7 @@ import (
 // checks if the GetCurrentHolidayResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetCurrentHolidayResp{}
 
-// GetCurrentHolidayResp struct for GetCurrentHolidayResp
+// GetCurrentHolidayResp 响应结果。
 type GetCurrentHolidayResp struct {
 	// 当前日期。
 	Date *time.Time `json:"date,omitempty"`

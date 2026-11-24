@@ -22,11 +22,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test EmojiServiceService AddItem", func(t *testing.T) {
+	t.Run("Test EmojiServiceService AddEmojiItem", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.AddItem(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.AddEmojiItem(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService CreateGroup", func(t *testing.T) {
+	t.Run("Test EmojiServiceService CreateEmojiGroup", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.CreateGroup(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.CreateEmojiGroup(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService CreateShare", func(t *testing.T) {
+	t.Run("Test EmojiServiceService CreateEmojiShare", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.CreateShare(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.CreateEmojiShare(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService DeleteGroup", func(t *testing.T) {
+	t.Run("Test EmojiServiceService DeleteEmojiGroup", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.DeleteGroup(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.DeleteEmojiGroup(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +70,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService DeleteItem", func(t *testing.T) {
+	t.Run("Test EmojiServiceService DeleteEmojiItem", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.DeleteItem(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.DeleteEmojiItem(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -82,11 +82,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService ImportShare", func(t *testing.T) {
+	t.Run("Test EmojiServiceService ImportEmojiShare", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.ImportShare(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.ImportEmojiShare(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -94,11 +94,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService List", func(t *testing.T) {
+	t.Run("Test EmojiServiceService ListEmojiGroups", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.ListEmojiGroups(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -106,11 +106,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService MoveItem", func(t *testing.T) {
+	t.Run("Test EmojiServiceService MoveEmojiItem", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.MoveItem(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.MoveEmojiItem(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -118,11 +118,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService RenameGroup", func(t *testing.T) {
+	t.Run("Test EmojiServiceService RenameEmojiGroup", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.RenameGroup(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.RenameEmojiGroup(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -130,11 +130,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService RenameItem", func(t *testing.T) {
+	t.Run("Test EmojiServiceService RenameEmojiItem", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.RenameItem(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.RenameEmojiItem(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -142,11 +142,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService ReorderGroups", func(t *testing.T) {
+	t.Run("Test EmojiServiceService ReorderEmojiGroups", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.ReorderGroups(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.ReorderEmojiGroups(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -154,11 +154,11 @@ func Test_bbs_EmojiServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test EmojiServiceService ReorderItems", func(t *testing.T) {
+	t.Run("Test EmojiServiceService ReorderEmojiItems", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.EmojiService.ReorderItems(context.Background()).Execute()
+		resp, httpRes, err := apiClient.EmojiService.ReorderEmojiItems(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

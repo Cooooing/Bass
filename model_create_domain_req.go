@@ -19,8 +19,9 @@ import (
 // checks if the CreateDomainReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateDomainReq{}
 
-// CreateDomainReq struct for CreateDomainReq
+// CreateDomainReq 请求参数。
 type CreateDomainReq struct {
+	// 领域信息
 	Domain ReqDomain `json:"domain"`
 }
 

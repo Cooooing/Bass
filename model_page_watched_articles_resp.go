@@ -17,9 +17,11 @@ import (
 // checks if the PageWatchedArticlesResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PageWatchedArticlesResp{}
 
-// PageWatchedArticlesResp struct for PageWatchedArticlesResp
+// PageWatchedArticlesResp 响应结果。
 type PageWatchedArticlesResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 关注文章列表
 	Rows []ArticleListItem `json:"rows,omitempty"`
 }
 

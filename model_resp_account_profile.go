@@ -18,19 +18,31 @@ import (
 // checks if the RespAccountProfile type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespAccountProfile{}
 
-// RespAccountProfile struct for RespAccountProfile
+// RespAccountProfile 协议消息。
 type RespAccountProfile struct {
+	// 账号 ID
 	Id *string `json:"id,omitempty"`
+	// 账号名
 	Name *string `json:"name,omitempty"`
+	// 昵称
 	Nickname *string `json:"nickname,omitempty"`
+	// 个人主页 URL
 	Url *string `json:"url,omitempty"`
+	// 头像 URL
 	AvatarUrl *string `json:"avatar_url,omitempty"`
+	// 个人简介
 	Introduction *string `json:"introduction,omitempty"`
+	// MBTI 类型，规范化为大写
 	Mbti *string `json:"mbti,omitempty"`
+	// 账号状态
 	Status *string `json:"status,omitempty"`
+	// 关注数量
 	FollowCount *int32 `json:"follow_count,omitempty"`
+	// 粉丝数量
 	FollowerCount *int32 `json:"follower_count,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

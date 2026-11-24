@@ -19,8 +19,9 @@ import (
 // checks if the SendPhoneOtpReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendPhoneOtpReq{}
 
-// SendPhoneOtpReq struct for SendPhoneOtpReq
+// SendPhoneOtpReq 请求参数。
 type SendPhoneOtpReq struct {
+	// 手机号
 	Phone string `json:"phone"`
 }
 

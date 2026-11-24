@@ -19,11 +19,15 @@ import (
 // checks if the PrepareProfileImageUploadAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PrepareProfileImageUploadAccountReq{}
 
-// PrepareProfileImageUploadAccountReq struct for PrepareProfileImageUploadAccountReq
+// PrepareProfileImageUploadAccountReq 请求参数。
 type PrepareProfileImageUploadAccountReq struct {
+	// 图片用途，必填；仅用于 BFF 业务校验
 	Purpose string `json:"purpose"`
+	// 文件 SHA-256，小写十六进制
 	Hash string `json:"hash"`
+	// 上传 MIME 类型
 	MimeType string `json:"mime_type"`
+	// 文件大小，最大 2 MiB
 	Size string `json:"size"`
 }
 

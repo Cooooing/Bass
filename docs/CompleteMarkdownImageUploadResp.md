@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AssetId** | Pointer to **string** |  | [optional] 
-**ImageUrl** | Pointer to **string** |  | [optional] 
+**AssetId** | Pointer to **string** | 已确认资源的 ID。 | [optional] 
+**ImageUrl** | Pointer to **string** | 前端本地预览使用的公开图片地址。 | [optional] 
 
 ## Methods
 

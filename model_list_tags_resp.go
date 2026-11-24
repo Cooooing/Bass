@@ -17,9 +17,11 @@ import (
 // checks if the ListTagsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListTagsResp{}
 
-// ListTagsResp struct for ListTagsResp
+// ListTagsResp 响应结果。
 type ListTagsResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 标签列表
 	Rows []RespTag `json:"rows,omitempty"`
 }
 

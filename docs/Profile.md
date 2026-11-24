@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Account** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
-**BackgroundUrl** | Pointer to **string** |  | [optional] 
-**Location** | Pointer to [**ProfileLocation**](ProfileLocation.md) |  | [optional] 
-**LastSuccessLoginAt** | Pointer to **time.Time** |  | [optional] 
-**Visibility** | Pointer to [**ProfileVisibility**](ProfileVisibility.md) |  | [optional] 
-**ViewerRelation** | Pointer to [**ProfileRelation**](ProfileRelation.md) |  | [optional] 
-**Online** | Pointer to **bool** |  | [optional] 
-**Points** | Pointer to **string** |  | [optional] 
+**Account** | Pointer to [**AccountProfile**](AccountProfile.md) | 协议字段。 | [optional] 
+**BackgroundUrl** | Pointer to **string** | 协议字段。 | [optional] 
+**Location** | Pointer to [**ProfileLocation**](ProfileLocation.md) | 协议字段。 | [optional] 
+**LastSuccessLoginAt** | Pointer to **time.Time** | 协议字段。 | [optional] 
+**Visibility** | Pointer to [**ProfileVisibility**](ProfileVisibility.md) | 协议字段。 | [optional] 
+**ViewerRelation** | Pointer to [**ProfileRelation**](ProfileRelation.md) | 协议字段。 | [optional] 
+**Online** | Pointer to **bool** | 仅本人或允许公开在线状态的账号返回。 | [optional] 
+**Points** | Pointer to **string** | 仅本人或允许公开积分的账号返回。 | [optional] 
 
 ## Methods
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**OldPassword** | **string** |  | 
-**NewPassword** | **string** |  | 
+**OldPassword** | **string** | 旧密码，必填 | 
+**NewPassword** | **string** | 新密码，必填 | 
 
 ## Methods
 

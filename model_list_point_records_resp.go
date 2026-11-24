@@ -17,9 +17,11 @@ import (
 // checks if the ListPointRecordsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListPointRecordsResp{}
 
-// ListPointRecordsResp struct for ListPointRecordsResp
+// ListPointRecordsResp 响应结果。
 type ListPointRecordsResp struct {
+	// 积分流水列表
 	Rows []RespPointRecord `json:"rows,omitempty"`
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
 }
 

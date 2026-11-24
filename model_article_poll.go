@@ -18,14 +18,21 @@ import (
 // checks if the ArticlePoll type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticlePoll{}
 
-// ArticlePoll struct for ArticlePoll
+// ArticlePoll 协议消息。
 type ArticlePoll struct {
+	// 截止时间
 	EndsAt *time.Time `json:"ends_at,omitempty"`
+	// 每人最多选择数
 	MaxChoices *int32 `json:"max_choices,omitempty"`
+	// 投票选项
 	Options []ArticlePollOption `json:"options,omitempty"`
+	// 当前账号已选选项 ID
 	SelectedOptionIds []string `json:"selected_option_ids,omitempty"`
+	// 当前账号是否可查看实时结果
 	ResultVisible *bool `json:"result_visible,omitempty"`
+	// 已投票账号数
 	ParticipantCount *string `json:"participant_count,omitempty"`
+	// 所有选项累计票数
 	TotalVoteCount *string `json:"total_vote_count,omitempty"`
 }
 

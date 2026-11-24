@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | **string** |  | 
-**Code** | **string** |  | 
+**Email** | **string** | 新邮箱地址，必填 | 
+**Code** | **string** | 邮箱 OTP，必填 | 
 
 ## Methods
 

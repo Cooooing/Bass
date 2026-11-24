@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
-**WinnerLimit** | Pointer to **int32** |  | [optional] 
+**Name** | Pointer to **string** | 奖项名称 | [optional] 
+**Description** | Pointer to **string** | 奖项说明 | [optional] 
+**WinnerLimit** | Pointer to **int32** | 中奖名额 | [optional] 
 
 ## Methods
 

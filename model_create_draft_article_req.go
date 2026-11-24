@@ -19,8 +19,9 @@ import (
 // checks if the CreateDraftArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateDraftArticleReq{}
 
-// CreateDraftArticleReq struct for CreateDraftArticleReq
+// CreateDraftArticleReq 请求参数。
 type CreateDraftArticleReq struct {
+	// 必填，草稿内容
 	Article ReqArticle `json:"article"`
 }
 

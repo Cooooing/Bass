@@ -17,8 +17,9 @@ import (
 // checks if the AddPostscriptResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AddPostscriptResp{}
 
-// AddPostscriptResp struct for AddPostscriptResp
+// AddPostscriptResp 响应结果。
 type AddPostscriptResp struct {
+	// 创建后的文章附言。
 	Postscript *ArticlePostscript `json:"postscript,omitempty"`
 }
 

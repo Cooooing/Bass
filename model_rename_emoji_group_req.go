@@ -17,9 +17,11 @@ import (
 // checks if the RenameEmojiGroupReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RenameEmojiGroupReq{}
 
-// RenameEmojiGroupReq struct for RenameEmojiGroupReq
+// RenameEmojiGroupReq 请求参数。
 type RenameEmojiGroupReq struct {
+	// 待修改分组 ID。
 	GroupId *string `json:"group_id,omitempty"`
+	// 新分组名称。
 	Name *string `json:"name,omitempty"`
 }
 

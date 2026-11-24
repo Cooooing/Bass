@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Profile** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
-**ImageUrl** | Pointer to **string** |  | [optional] 
+**Profile** | Pointer to [**AccountProfile**](AccountProfile.md) | 协议字段。 | [optional] 
+**ImageUrl** | Pointer to **string** | 协议字段。 | [optional] 
 
 ## Methods
 

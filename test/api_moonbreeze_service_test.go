@@ -22,11 +22,11 @@ func Test_bbs_MoonbreezeServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test MoonbreezeServiceService Create", func(t *testing.T) {
+	t.Run("Test MoonbreezeServiceService CreateMoonbreeze", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.MoonbreezeService.Create(context.Background()).Execute()
+		resp, httpRes, err := apiClient.MoonbreezeService.CreateMoonbreeze(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_MoonbreezeServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test MoonbreezeServiceService PageMember", func(t *testing.T) {
+	t.Run("Test MoonbreezeServiceService PageMemberMoonbreezes", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.MoonbreezeService.PageMember(context.Background()).Execute()
+		resp, httpRes, err := apiClient.MoonbreezeService.PageMemberMoonbreezes(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_MoonbreezeServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test MoonbreezeServiceService PagePublic", func(t *testing.T) {
+	t.Run("Test MoonbreezeServiceService PagePublicMoonbreezes", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.MoonbreezeService.PagePublic(context.Background()).Execute()
+		resp, httpRes, err := apiClient.MoonbreezeService.PagePublicMoonbreezes(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_MoonbreezeServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test MoonbreezeServiceService PageWatching", func(t *testing.T) {
+	t.Run("Test MoonbreezeServiceService PageWatchingMoonbreezes", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.MoonbreezeService.PageWatching(context.Background()).Execute()
+		resp, httpRes, err := apiClient.MoonbreezeService.PageWatchingMoonbreezes(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

@@ -19,10 +19,15 @@ var _ MappedNullable = &BadgeDraft{}
 
 // BadgeDraft BadgeDraft 是 Maker 可编辑的徽章草稿。
 type BadgeDraft struct {
+	// 草稿主键。
 	Id *string `json:"id,omitempty"`
+	// 草稿名称。
 	Name *string `json:"name,omitempty"`
+	// 草稿说明。
 	Description *string `json:"description,omitempty"`
+	// 草稿渲染参数。
 	RenderSpec *RenderSpec `json:"render_spec,omitempty"`
+	// 设计者用户 ID。
 	DesignerUserId *string `json:"designer_user_id,omitempty"`
 }
 

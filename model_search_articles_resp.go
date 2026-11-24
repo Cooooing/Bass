@@ -17,9 +17,11 @@ import (
 // checks if the SearchArticlesResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SearchArticlesResp{}
 
-// SearchArticlesResp struct for SearchArticlesResp
+// SearchArticlesResp 响应结果。
 type SearchArticlesResp struct {
+	// 文章列表
 	Rows []ArticleListItem `json:"rows,omitempty"`
+	// 下一页游标
 	NextCursor *string `json:"next_cursor,omitempty"`
 }
 

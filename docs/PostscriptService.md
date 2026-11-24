@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Add**](PostscriptService.md#Add) | **Post** /v1/content/postscript/add | 
-[**List**](PostscriptService.md#List) | **Post** /v1/content/postscript/list | 
+[**AddPostscript**](PostscriptService.md#AddPostscript) | **Post** /v1/content/postscript/add | 
+[**ListPostscripts**](PostscriptService.md#ListPostscripts) | **Post** /v1/content/postscript/list | 
 
 
 
-## Add
+## AddPostscript
 
-> AddPostscriptResp Add(ctx).AddPostscriptReq(addPostscriptReq).Execute()
+> AddPostscriptResp AddPostscript(ctx).AddPostscriptReq(addPostscriptReq).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PostscriptService.Add(context.Background()).AddPostscriptReq(addPostscriptReq).Execute()
+	resp, r, err := apiClient.PostscriptService.AddPostscript(context.Background()).AddPostscriptReq(addPostscriptReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PostscriptService.Add``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PostscriptService.AddPostscript``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Add`: AddPostscriptResp
-	fmt.Fprintf(os.Stdout, "Response from `PostscriptService.Add`: %v\n", resp)
+	// response from `AddPostscript`: AddPostscriptResp
+	fmt.Fprintf(os.Stdout, "Response from `PostscriptService.AddPostscript`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAddRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAddPostscriptRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## List
+## ListPostscripts
 
-> ListPostscriptsResp List(ctx).ListPostscriptsReq(listPostscriptsReq).Execute()
+> ListPostscriptsResp ListPostscripts(ctx).ListPostscriptsReq(listPostscriptsReq).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PostscriptService.List(context.Background()).ListPostscriptsReq(listPostscriptsReq).Execute()
+	resp, r, err := apiClient.PostscriptService.ListPostscripts(context.Background()).ListPostscriptsReq(listPostscriptsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PostscriptService.List``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PostscriptService.ListPostscripts``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListPostscriptsResp
-	fmt.Fprintf(os.Stdout, "Response from `PostscriptService.List`: %v\n", resp)
+	// response from `ListPostscripts`: ListPostscriptsResp
+	fmt.Fprintf(os.Stdout, "Response from `PostscriptService.ListPostscripts`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListPostscriptsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**Author** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
-**City** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 协议字段。 | [optional] 
+**Content** | Pointer to **string** | 协议字段。 | [optional] 
+**Author** | Pointer to [**AccountProfile**](AccountProfile.md) | 协议字段。 | [optional] 
+**City** | Pointer to **string** | 协议字段。 | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 协议字段。 | [optional] 
 
 ## Methods
 

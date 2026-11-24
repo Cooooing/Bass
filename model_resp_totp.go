@@ -18,10 +18,13 @@ import (
 // checks if the RespTotp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespTotp{}
 
-// RespTotp struct for RespTotp
+// RespTotp 协议消息。
 type RespTotp struct {
+	// 账号 ID
 	UserId *string `json:"user_id,omitempty"`
+	// 是否启用 TOTP
 	Enable *bool `json:"enable,omitempty"`
+	// 启用时间
 	EnableTime *time.Time `json:"enable_time,omitempty"`
 }
 

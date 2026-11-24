@@ -17,10 +17,13 @@ import (
 // checks if the ArticleLotteryPrizeDraft type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleLotteryPrizeDraft{}
 
-// ArticleLotteryPrizeDraft struct for ArticleLotteryPrizeDraft
+// ArticleLotteryPrizeDraft 协议消息。
 type ArticleLotteryPrizeDraft struct {
+	// 奖项名称
 	Name *string `json:"name,omitempty"`
+	// 奖项说明
 	Description *string `json:"description,omitempty"`
+	// 中奖名额
 	WinnerLimit *int32 `json:"winner_limit,omitempty"`
 }
 

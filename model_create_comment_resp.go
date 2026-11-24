@@ -17,8 +17,9 @@ import (
 // checks if the CreateCommentResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateCommentResp{}
 
-// CreateCommentResp struct for CreateCommentResp
+// CreateCommentResp 响应结果。
 type CreateCommentResp struct {
+	// 创建后的评论
 	Comment *RespCommentDetail `json:"comment,omitempty"`
 }
 

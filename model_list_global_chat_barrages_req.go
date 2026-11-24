@@ -17,9 +17,11 @@ import (
 // checks if the ListGlobalChatBarragesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListGlobalChatBarragesReq{}
 
-// ListGlobalChatBarragesReq struct for ListGlobalChatBarragesReq
+// ListGlobalChatBarragesReq 请求参数。
 type ListGlobalChatBarragesReq struct {
+	// 按发送账号筛选；仅管理端可用。
 	UserId *string `json:"user_id,omitempty"`
+	// 分页参数。
 	Page *PageReq `json:"page,omitempty"`
 }
 

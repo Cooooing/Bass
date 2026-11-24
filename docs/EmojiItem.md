@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**AssetId** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**ImageUrl** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | 表情项 ID。 | [optional] 
+**AssetId** | Pointer to **string** | 平台图片资产 ID。 | [optional] 
+**Name** | Pointer to **string** | 可选表情别名。 | [optional] 
+**ImageUrl** | Pointer to **string** | 可插入 Markdown 的公开图片地址。 | [optional] 
 
 ## Methods
 

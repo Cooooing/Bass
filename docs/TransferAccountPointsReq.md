@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TargetName** | **string** |  | 
-**Amount** | **string** |  | 
-**Remark** | Pointer to **string** |  | [optional] 
-**IdempotencyKey** | **string** |  | 
+**TargetName** | **string** | 收款账号名，必填 | 
+**Amount** | **string** | 转账积分数量，必填 | 
+**Remark** | Pointer to **string** | 转账备注 | [optional] 
+**IdempotencyKey** | **string** | 本次转账的技术幂等键，必填 | 
 
 ## Methods
 

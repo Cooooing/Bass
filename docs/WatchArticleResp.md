@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Watched** | Pointer to **bool** |  | [optional] 
+**Watched** | Pointer to **bool** | 是否已关注 | [optional] 
 
 ## Methods
 

@@ -17,9 +17,11 @@ import (
 // checks if the ListCommentTimelineResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCommentTimelineResp{}
 
-// ListCommentTimelineResp struct for ListCommentTimelineResp
+// ListCommentTimelineResp 响应结果。
 type ListCommentTimelineResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 评论列表
 	Rows []CommentListItem `json:"rows,omitempty"`
 }
 

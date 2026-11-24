@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]AccountProfileListItem**](AccountProfileListItem.md) |  | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 协议字段。 | [optional] 
+**Rows** | Pointer to [**[]AccountProfileListItem**](AccountProfileListItem.md) | 协议字段。 | [optional] 
 
 ## Methods
 

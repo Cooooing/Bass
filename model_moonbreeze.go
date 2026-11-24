@@ -18,12 +18,17 @@ import (
 // checks if the Moonbreeze type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Moonbreeze{}
 
-// Moonbreeze struct for Moonbreeze
+// Moonbreeze 协议消息。
 type Moonbreeze struct {
+	// 协议字段。
 	Id *string `json:"id,omitempty"`
+	// 协议字段。
 	Content *string `json:"content,omitempty"`
+	// 协议字段。
 	Author *AccountProfile `json:"author,omitempty"`
+	// 协议字段。
 	City *string `json:"city,omitempty"`
+	// 协议字段。
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 }
 

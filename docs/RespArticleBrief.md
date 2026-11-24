@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Title** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**AuthorUser** | Pointer to [**RespAccountProfile**](RespAccountProfile.md) |  | [optional] 
-**CoverImageUrl** | Pointer to **string** |  | [optional] 
-**PublishStatus** | Pointer to **string** |  | [optional] 
-**Visibility** | Pointer to **string** |  | [optional] 
-**Restriction** | Pointer to **string** |  | [optional] 
-**CreatedBy** | Pointer to **string** |  | [optional] 
-**UpdatedBy** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 文章 ID | [optional] 
+**Title** | Pointer to **string** | 标题 | [optional] 
+**Type** | Pointer to **string** | 文章类型 | [optional] 
+**AuthorUser** | Pointer to [**RespAccountProfile**](RespAccountProfile.md) | 作者展示资料 | [optional] 
+**CoverImageUrl** | Pointer to **string** | 封面图片 URL | [optional] 
+**PublishStatus** | Pointer to **string** | 发布状态 | [optional] 
+**Visibility** | Pointer to **string** | 可见范围 | [optional] 
+**Restriction** | Pointer to **string** | 管理限制 | [optional] 
+**CreatedBy** | Pointer to **string** | 创建账号 ID | [optional] 
+**UpdatedBy** | Pointer to **string** | 更新账号 ID | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间 | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | 更新时间 | [optional] 
 
 ## Methods
 

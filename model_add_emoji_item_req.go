@@ -17,10 +17,13 @@ import (
 // checks if the AddEmojiItemReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AddEmojiItemReq{}
 
-// AddEmojiItemReq struct for AddEmojiItemReq
+// AddEmojiItemReq 请求参数。
 type AddEmojiItemReq struct {
+	// 可选目标分组 ID；缺省时加入默认分组。
 	GroupId *string `json:"group_id,omitempty"`
+	// 已确认可用的平台图片资产 ID。
 	AssetId *string `json:"asset_id,omitempty"`
+	// 可选表情别名。
 	Name *string `json:"name,omitempty"`
 }
 

@@ -19,9 +19,11 @@ import (
 // checks if the UpdateEmailAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateEmailAccountReq{}
 
-// UpdateEmailAccountReq struct for UpdateEmailAccountReq
+// UpdateEmailAccountReq 请求参数。
 type UpdateEmailAccountReq struct {
+	// 新邮箱地址，必填
 	Email string `json:"email"`
+	// 邮箱 OTP，必填
 	Code string `json:"code"`
 }
 

@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TagId** | Pointer to **string** |  | [optional] 
-**DomainId** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **string** |  | [optional] 
-**Order** | Pointer to **string** |  | [optional] 
-**AuthorId** | Pointer to **string** |  | [optional] 
-**PublishStatus** | Pointer to **string** |  | [optional] 
-**PublishStatuses** | Pointer to **[]string** |  | [optional] 
-**Visibility** | Pointer to **string** |  | [optional] 
-**Visibilities** | Pointer to **[]string** |  | [optional] 
-**Restriction** | Pointer to **string** |  | [optional] 
-**Restrictions** | Pointer to **[]string** |  | [optional] 
-**Scheduled** | Pointer to **bool** |  | [optional] 
+**TagId** | Pointer to **string** | 可选，标签 ID | [optional] 
+**DomainId** | Pointer to **string** | 可选，领域 ID | [optional] 
+**Type** | Pointer to **string** | 可选，文章类型 | [optional] 
+**Order** | Pointer to **string** | 可选，排序方式 | [optional] 
+**AuthorId** | Pointer to **string** | 可选，作者账号 ID | [optional] 
+**PublishStatus** | Pointer to **string** | 可选，发布状态 | [optional] 
+**PublishStatuses** | Pointer to **[]string** | 可选，发布状态列表 | [optional] 
+**Visibility** | Pointer to **string** | 可选，可见范围 | [optional] 
+**Visibilities** | Pointer to **[]string** | 可选，可见范围列表 | [optional] 
+**Restriction** | Pointer to **string** | 可选，治理限制 | [optional] 
+**Restrictions** | Pointer to **[]string** | 可选，治理限制列表 | [optional] 
+**Scheduled** | Pointer to **bool** | 可选，仅本人草稿：是否已设置发布时间 | [optional] 
 
 ## Methods
 

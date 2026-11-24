@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | **string** |  | 
-**Name** | **string** |  | 
-**Password** | **string** |  | 
-**Nickname** | Pointer to **string** |  | [optional] 
-**EmailCredential** | Pointer to [**ReqEmailCredential**](ReqEmailCredential.md) |  | [optional] 
-**PhoneCredential** | Pointer to [**ReqPhoneCredential**](ReqPhoneCredential.md) |  | [optional] 
+**Type** | **string** | 注册方式 | 
+**Name** | **string** | 账号名 | 
+**Password** | **string** | 账号密码 | 
+**Nickname** | Pointer to **string** | 昵称 | [optional] 
+**EmailCredential** | Pointer to [**ReqEmailCredential**](ReqEmailCredential.md) | 邮箱注册凭证 | [optional] 
+**PhoneCredential** | Pointer to [**ReqPhoneCredential**](ReqPhoneCredential.md) | 手机注册凭证 | [optional] 
 
 ## Methods
 

@@ -18,39 +18,71 @@ import (
 // checks if the ArticleListItem type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleListItem{}
 
-// ArticleListItem struct for ArticleListItem
+// ArticleListItem 协议消息。
 type ArticleListItem struct {
+	// 文章 ID
 	Id *string `json:"id,omitempty"`
+	// 标题
 	Title *string `json:"title,omitempty"`
+	// 摘要原文
 	Content *string `json:"content,omitempty"`
+	// 摘要渲染内容
 	ContentRender *string `json:"content_render,omitempty"`
+	// 是否有附言
 	HasPostscript *bool `json:"has_postscript,omitempty"`
+	// 是否有打赏区
 	HasReward *bool `json:"has_reward,omitempty"`
+	// 文章类型
 	Type *string `json:"type,omitempty"`
+	// 创作声明
 	Statement *string `json:"statement,omitempty"`
+	// 是否允许评论
 	Commentable *bool `json:"commentable,omitempty"`
+	// 浏览数
 	ViewCount *int32 `json:"view_count,omitempty"`
+	// 感谢数
 	ThankCount *int32 `json:"thank_count,omitempty"`
+	// 点赞数
 	LikeCount *int32 `json:"like_count,omitempty"`
+	// 收藏数
 	CollectCount *int32 `json:"collect_count,omitempty"`
+	// 关注数
 	WatchCount *int32 `json:"watch_count,omitempty"`
+	// 打赏数
 	RewardCount *int32 `json:"reward_count,omitempty"`
+	// 回复数
 	ReplyCount *int32 `json:"reply_count,omitempty"`
+	// 作者资料
 	AuthorUser *AccountProfile `json:"author_user,omitempty"`
+	// 最后回复用户
 	LastReplyUser *AccountProfile `json:"last_reply_user,omitempty"`
+	// 最后回复时间
 	LastReplyAt *time.Time `json:"last_reply_at,omitempty"`
+	// 封面图片 URL
 	CoverImageUrl *string `json:"cover_image_url,omitempty"`
+	// 当前用户互动状态
 	ViewerActionState *ArticleViewerActionState `json:"viewer_action_state,omitempty"`
+	// 发布时间
 	PublishedAt *time.Time `json:"published_at,omitempty"`
+	// 发布状态
 	PublishStatus *string `json:"publish_status,omitempty"`
+	// 可见范围
 	Visibility *string `json:"visibility,omitempty"`
+	// 治理限制
 	Restriction *string `json:"restriction,omitempty"`
+	// 编辑时间
 	EditedAt *time.Time `json:"edited_at,omitempty"`
+	// 文章标签
 	Tags []ArticleTag `json:"tags,omitempty"`
+	// 文章所属领域
 	Domains []ArticleDomain `json:"domains,omitempty"`
+	// 创建账号 ID
 	CreatedBy *string `json:"created_by,omitempty"`
+	// 更新账号 ID
 	UpdatedBy *string `json:"updated_by,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

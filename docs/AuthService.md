@@ -100,9 +100,9 @@ import (
 )
 
 func main() {
-	name := "name_example" // string |  (optional)
-	email := "email_example" // string |  (optional)
-	phone := "phone_example" // string |  (optional)
+	name := "name_example" // string | 待检查的账号名 (optional)
+	email := "email_example" // string | 待检查的邮箱 (optional)
+	phone := "phone_example" // string | 待检查的手机号 (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -127,9 +127,9 @@ Other parameters are passed through a pointer to a apiCheckRegistrationAvailabil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **name** | **string** |  | 
- **email** | **string** |  | 
- **phone** | **string** |  | 
+ **name** | **string** | 待检查的账号名 | 
+ **email** | **string** | 待检查的邮箱 | 
+ **phone** | **string** | 待检查的手机号 | 
 
 ### Return type
 

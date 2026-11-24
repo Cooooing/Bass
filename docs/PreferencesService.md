@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetCurrent**](PreferencesService.md#GetCurrent) | **Post** /v1/user/preference/get-current | 
-[**UpdateCurrent**](PreferencesService.md#UpdateCurrent) | **Post** /v1/user/preference/update-current | 
+[**GetCurrentPreferences**](PreferencesService.md#GetCurrentPreferences) | **Post** /v1/user/preference/get-current | 
+[**UpdateCurrentPreferences**](PreferencesService.md#UpdateCurrentPreferences) | **Post** /v1/user/preference/update-current | 
 
 
 
-## GetCurrent
+## GetCurrentPreferences
 
-> GetCurrentPreferencesResp GetCurrent(ctx).Body(body).Execute()
+> GetCurrentPreferencesResp GetCurrentPreferences(ctx).Body(body).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PreferencesService.GetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.PreferencesService.GetCurrentPreferences(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.GetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.GetCurrentPreferences``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentPreferencesResp
-	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.GetCurrent`: %v\n", resp)
+	// response from `GetCurrentPreferences`: GetCurrentPreferencesResp
+	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.GetCurrentPreferences`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentPreferencesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## UpdateCurrent
+## UpdateCurrentPreferences
 
-> UpdateCurrentPreferencesResp UpdateCurrent(ctx).UpdateCurrentPreferencesReq(updateCurrentPreferencesReq).Execute()
+> UpdateCurrentPreferencesResp UpdateCurrentPreferences(ctx).UpdateCurrentPreferencesReq(updateCurrentPreferencesReq).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PreferencesService.UpdateCurrent(context.Background()).UpdateCurrentPreferencesReq(updateCurrentPreferencesReq).Execute()
+	resp, r, err := apiClient.PreferencesService.UpdateCurrentPreferences(context.Background()).UpdateCurrentPreferencesReq(updateCurrentPreferencesReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.UpdateCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.UpdateCurrentPreferences``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpdateCurrent`: UpdateCurrentPreferencesResp
-	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.UpdateCurrent`: %v\n", resp)
+	// response from `UpdateCurrentPreferences`: UpdateCurrentPreferencesResp
+	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.UpdateCurrentPreferences`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiUpdateCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateCurrentPreferencesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

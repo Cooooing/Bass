@@ -19,16 +19,25 @@ import (
 // checks if the ReqArticle type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqArticle{}
 
-// ReqArticle struct for ReqArticle
+// ReqArticle 协议消息。
 type ReqArticle struct {
+	// 必填，标题
 	Title string `json:"title"`
+	// 必填，正文
 	Content string `json:"content"`
+	// 可选，打赏区内容
 	RewardContent *string `json:"reward_content,omitempty"`
+	// 可选，打赏积分
 	RewardPoints *int32 `json:"reward_points,omitempty"`
+	// 必填，文章类型
 	Type string `json:"type"`
+	// 可选，创作声明
 	Statement *string `json:"statement,omitempty"`
+	// 可选，是否允许评论
 	Commentable *bool `json:"commentable,omitempty"`
+	// 可选，投票文章的草稿配置
 	Poll *ArticlePollDraft `json:"poll,omitempty"`
+	// 可选，抽奖文章的草稿配置
 	Lottery *ArticleLotteryDraft `json:"lottery,omitempty"`
 }
 

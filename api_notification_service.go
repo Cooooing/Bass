@@ -22,76 +22,76 @@ import (
 type NotificationService interface {
 
 	/*
-	CountUnread Method for CountUnread
+	CountUnreadNotifications Method for CountUnreadNotifications
 
 	统计未读通知数量。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCountUnreadRequest
+	@return ApiCountUnreadNotificationsRequest
 	*/
-	CountUnread(ctx context.Context) ApiCountUnreadRequest
+	CountUnreadNotifications(ctx context.Context) ApiCountUnreadNotificationsRequest
 
-	// CountUnreadExecute executes the request
+	// CountUnreadNotificationsExecute executes the request
 	//  @return CountUnreadNotificationsResp
-	CountUnreadExecute(r ApiCountUnreadRequest) (*CountUnreadNotificationsResp, *http.Response, error)
+	CountUnreadNotificationsExecute(r ApiCountUnreadNotificationsRequest) (*CountUnreadNotificationsResp, *http.Response, error)
 
 	/*
-	List Method for List
+	ListNotifications Method for ListNotifications
 
 	分页查询通知列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListRequest
+	@return ApiListNotificationsRequest
 	*/
-	List(ctx context.Context) ApiListRequest
+	ListNotifications(ctx context.Context) ApiListNotificationsRequest
 
-	// ListExecute executes the request
+	// ListNotificationsExecute executes the request
 	//  @return ListNotificationsResp
-	ListExecute(r ApiListRequest) (*ListNotificationsResp, *http.Response, error)
+	ListNotificationsExecute(r ApiListNotificationsRequest) (*ListNotificationsResp, *http.Response, error)
 
 	/*
-	MarkRead Method for MarkRead
+	MarkReadNotification Method for MarkReadNotification
 
 	标记通知为已读。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiMarkReadRequest
+	@return ApiMarkReadNotificationRequest
 	*/
-	MarkRead(ctx context.Context) ApiMarkReadRequest
+	MarkReadNotification(ctx context.Context) ApiMarkReadNotificationRequest
 
-	// MarkReadExecute executes the request
+	// MarkReadNotificationExecute executes the request
 	//  @return MarkReadNotificationResp
-	MarkReadExecute(r ApiMarkReadRequest) (*MarkReadNotificationResp, *http.Response, error)
+	MarkReadNotificationExecute(r ApiMarkReadNotificationRequest) (*MarkReadNotificationResp, *http.Response, error)
 }
 
 // NotificationServiceService NotificationService service
 type NotificationServiceService service
 
-type ApiCountUnreadRequest struct {
+type ApiCountUnreadNotificationsRequest struct {
 	ctx context.Context
 	ApiService NotificationService
 	body *map[string]interface{}
 }
 
-func (r ApiCountUnreadRequest) Body(body map[string]interface{}) ApiCountUnreadRequest {
+func (r ApiCountUnreadNotificationsRequest) Body(body map[string]interface{}) ApiCountUnreadNotificationsRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiCountUnreadRequest) Execute() (*CountUnreadNotificationsResp, *http.Response, error) {
-	return r.ApiService.CountUnreadExecute(r)
+func (r ApiCountUnreadNotificationsRequest) Execute() (*CountUnreadNotificationsResp, *http.Response, error) {
+	return r.ApiService.CountUnreadNotificationsExecute(r)
 }
 
 /*
-CountUnread Method for CountUnread
+CountUnreadNotifications Method for CountUnreadNotifications
 
 统计未读通知数量。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCountUnreadRequest
+ @return ApiCountUnreadNotificationsRequest
 */
-func (a *NotificationServiceService) CountUnread(ctx context.Context) ApiCountUnreadRequest {
-	return ApiCountUnreadRequest{
+func (a *NotificationServiceService) CountUnreadNotifications(ctx context.Context) ApiCountUnreadNotificationsRequest {
+	return ApiCountUnreadNotificationsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -99,7 +99,7 @@ func (a *NotificationServiceService) CountUnread(ctx context.Context) ApiCountUn
 
 // Execute executes the request
 //  @return CountUnreadNotificationsResp
-func (a *NotificationServiceService) CountUnreadExecute(r ApiCountUnreadRequest) (*CountUnreadNotificationsResp, *http.Response, error) {
+func (a *NotificationServiceService) CountUnreadNotificationsExecute(r ApiCountUnreadNotificationsRequest) (*CountUnreadNotificationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -107,7 +107,7 @@ func (a *NotificationServiceService) CountUnreadExecute(r ApiCountUnreadRequest)
 		localVarReturnValue  *CountUnreadNotificationsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NotificationServiceService.CountUnread")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NotificationServiceService.CountUnreadNotifications")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -177,31 +177,31 @@ func (a *NotificationServiceService) CountUnreadExecute(r ApiCountUnreadRequest)
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListRequest struct {
+type ApiListNotificationsRequest struct {
 	ctx context.Context
 	ApiService NotificationService
 	listNotificationsReq *ListNotificationsReq
 }
 
-func (r ApiListRequest) ListNotificationsReq(listNotificationsReq ListNotificationsReq) ApiListRequest {
+func (r ApiListNotificationsRequest) ListNotificationsReq(listNotificationsReq ListNotificationsReq) ApiListNotificationsRequest {
 	r.listNotificationsReq = &listNotificationsReq
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListNotificationsResp, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
+func (r ApiListNotificationsRequest) Execute() (*ListNotificationsResp, *http.Response, error) {
+	return r.ApiService.ListNotificationsExecute(r)
 }
 
 /*
-List Method for List
+ListNotifications Method for ListNotifications
 
 分页查询通知列表。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
+ @return ApiListNotificationsRequest
 */
-func (a *NotificationServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
+func (a *NotificationServiceService) ListNotifications(ctx context.Context) ApiListNotificationsRequest {
+	return ApiListNotificationsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -209,7 +209,7 @@ func (a *NotificationServiceService) List(ctx context.Context) ApiListRequest {
 
 // Execute executes the request
 //  @return ListNotificationsResp
-func (a *NotificationServiceService) ListExecute(r ApiListRequest) (*ListNotificationsResp, *http.Response, error) {
+func (a *NotificationServiceService) ListNotificationsExecute(r ApiListNotificationsRequest) (*ListNotificationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -217,7 +217,7 @@ func (a *NotificationServiceService) ListExecute(r ApiListRequest) (*ListNotific
 		localVarReturnValue  *ListNotificationsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NotificationServiceService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NotificationServiceService.ListNotifications")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -287,31 +287,31 @@ func (a *NotificationServiceService) ListExecute(r ApiListRequest) (*ListNotific
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiMarkReadRequest struct {
+type ApiMarkReadNotificationRequest struct {
 	ctx context.Context
 	ApiService NotificationService
 	markReadNotificationReq *MarkReadNotificationReq
 }
 
-func (r ApiMarkReadRequest) MarkReadNotificationReq(markReadNotificationReq MarkReadNotificationReq) ApiMarkReadRequest {
+func (r ApiMarkReadNotificationRequest) MarkReadNotificationReq(markReadNotificationReq MarkReadNotificationReq) ApiMarkReadNotificationRequest {
 	r.markReadNotificationReq = &markReadNotificationReq
 	return r
 }
 
-func (r ApiMarkReadRequest) Execute() (*MarkReadNotificationResp, *http.Response, error) {
-	return r.ApiService.MarkReadExecute(r)
+func (r ApiMarkReadNotificationRequest) Execute() (*MarkReadNotificationResp, *http.Response, error) {
+	return r.ApiService.MarkReadNotificationExecute(r)
 }
 
 /*
-MarkRead Method for MarkRead
+MarkReadNotification Method for MarkReadNotification
 
 标记通知为已读。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMarkReadRequest
+ @return ApiMarkReadNotificationRequest
 */
-func (a *NotificationServiceService) MarkRead(ctx context.Context) ApiMarkReadRequest {
-	return ApiMarkReadRequest{
+func (a *NotificationServiceService) MarkReadNotification(ctx context.Context) ApiMarkReadNotificationRequest {
+	return ApiMarkReadNotificationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -319,7 +319,7 @@ func (a *NotificationServiceService) MarkRead(ctx context.Context) ApiMarkReadRe
 
 // Execute executes the request
 //  @return MarkReadNotificationResp
-func (a *NotificationServiceService) MarkReadExecute(r ApiMarkReadRequest) (*MarkReadNotificationResp, *http.Response, error) {
+func (a *NotificationServiceService) MarkReadNotificationExecute(r ApiMarkReadNotificationRequest) (*MarkReadNotificationResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -327,7 +327,7 @@ func (a *NotificationServiceService) MarkReadExecute(r ApiMarkReadRequest) (*Mar
 		localVarReturnValue  *MarkReadNotificationResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NotificationServiceService.MarkRead")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NotificationServiceService.MarkReadNotification")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

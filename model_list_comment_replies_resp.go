@@ -17,9 +17,11 @@ import (
 // checks if the ListCommentRepliesResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCommentRepliesResp{}
 
-// ListCommentRepliesResp struct for ListCommentRepliesResp
+// ListCommentRepliesResp 响应结果。
 type ListCommentRepliesResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 回复列表
 	Rows []CommentListItem `json:"rows,omitempty"`
 }
 

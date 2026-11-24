@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
-**RenderSpec** | Pointer to [**RenderSpec**](RenderSpec.md) |  | [optional] 
-**DesignerUserId** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | 草稿主键。 | [optional] 
+**Name** | Pointer to **string** | 草稿名称。 | [optional] 
+**Description** | Pointer to **string** | 草稿说明。 | [optional] 
+**RenderSpec** | Pointer to [**RenderSpec**](RenderSpec.md) | 草稿渲染参数。 | [optional] 
+**DesignerUserId** | Pointer to **string** | 设计者用户 ID。 | [optional] 
 
 ## Methods
 

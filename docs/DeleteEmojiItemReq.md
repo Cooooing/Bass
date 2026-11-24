@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ItemId** | Pointer to **string** |  | [optional] 
+**ItemId** | Pointer to **string** | 待删除表情项 ID。 | [optional] 
 
 ## Methods
 

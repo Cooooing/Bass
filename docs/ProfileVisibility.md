@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleList** | Pointer to **bool** |  | [optional] 
-**CommentList** | Pointer to **bool** |  | [optional] 
-**FollowerList** | Pointer to **bool** |  | [optional] 
-**FollowingList** | Pointer to **bool** |  | [optional] 
-**MoonbreezeList** | Pointer to **bool** |  | [optional] 
+**ArticleList** | Pointer to **bool** | 协议字段。 | [optional] 
+**CommentList** | Pointer to **bool** | 协议字段。 | [optional] 
+**FollowerList** | Pointer to **bool** | 协议字段。 | [optional] 
+**FollowingList** | Pointer to **bool** | 协议字段。 | [optional] 
+**MoonbreezeList** | Pointer to **bool** | 协议字段。 | [optional] 
 
 ## Methods
 

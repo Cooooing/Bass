@@ -19,8 +19,9 @@ import (
 // checks if the CreateTagReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateTagReq{}
 
-// CreateTagReq struct for CreateTagReq
+// CreateTagReq 请求参数。
 type CreateTagReq struct {
+	// 标签信息
 	Tag ReqTag `json:"tag"`
 }
 

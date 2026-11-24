@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**TagIds** | **[]string** |  | 
+**ArticleId** | **string** | 文章 ID | 
+**TagIds** | **[]string** | 标签 ID 列表 | 
 
 ## Methods
 

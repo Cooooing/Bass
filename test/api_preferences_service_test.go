@@ -22,11 +22,11 @@ func Test_bbs_PreferencesServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test PreferencesServiceService GetCurrent", func(t *testing.T) {
+	t.Run("Test PreferencesServiceService GetCurrentPreferences", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PreferencesService.GetCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PreferencesService.GetCurrentPreferences(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_PreferencesServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test PreferencesServiceService UpdateCurrent", func(t *testing.T) {
+	t.Run("Test PreferencesServiceService UpdateCurrentPreferences", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PreferencesService.UpdateCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PreferencesService.UpdateCurrentPreferences(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

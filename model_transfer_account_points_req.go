@@ -19,11 +19,15 @@ import (
 // checks if the TransferAccountPointsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &TransferAccountPointsReq{}
 
-// TransferAccountPointsReq struct for TransferAccountPointsReq
+// TransferAccountPointsReq 请求参数。
 type TransferAccountPointsReq struct {
+	// 收款账号名，必填
 	TargetName string `json:"target_name"`
+	// 转账积分数量，必填
 	Amount string `json:"amount"`
+	// 转账备注
 	Remark *string `json:"remark,omitempty"`
+	// 本次转账的技术幂等键，必填
 	IdempotencyKey string `json:"idempotency_key"`
 }
 

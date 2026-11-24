@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Liked** | Pointer to **bool** |  | [optional] 
+**Liked** | Pointer to **bool** | 是否已点赞 | [optional] 
 
 ## Methods
 

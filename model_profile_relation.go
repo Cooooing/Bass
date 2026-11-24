@@ -17,11 +17,15 @@ import (
 // checks if the ProfileRelation type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ProfileRelation{}
 
-// ProfileRelation struct for ProfileRelation
+// ProfileRelation 协议消息。
 type ProfileRelation struct {
+	// 协议字段。
 	Following *bool `json:"following,omitempty"`
+	// 协议字段。
 	FollowedBy *bool `json:"followed_by,omitempty"`
+	// 协议字段。
 	Blocking *bool `json:"blocking,omitempty"`
+	// 协议字段。
 	BlockedBy *bool `json:"blocked_by,omitempty"`
 }
 

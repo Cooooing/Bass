@@ -17,8 +17,9 @@ import (
 // checks if the SetGlobalChatTopicReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SetGlobalChatTopicReq{}
 
-// SetGlobalChatTopicReq struct for SetGlobalChatTopicReq
+// SetGlobalChatTopicReq 请求参数。
 type SetGlobalChatTopicReq struct {
+	// 话题内容。
 	Content *string `json:"content,omitempty"`
 }
 

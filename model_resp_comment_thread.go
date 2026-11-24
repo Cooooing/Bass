@@ -17,11 +17,15 @@ import (
 // checks if the RespCommentThread type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespCommentThread{}
 
-// RespCommentThread struct for RespCommentThread
+// RespCommentThread 协议消息。
 type RespCommentThread struct {
+	// 顶层评论
 	Root *RespCommentListItem `json:"root,omitempty"`
+	// 回复预览列表
 	PreviewReplies []RespCommentListItem `json:"preview_replies,omitempty"`
+	// 回复数量
 	ReplyCount *int32 `json:"reply_count,omitempty"`
+	// 是否还有更多回复
 	HasMoreReplies *bool `json:"has_more_replies,omitempty"`
 }
 

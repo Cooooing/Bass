@@ -22,11 +22,11 @@ func Test_bbs_DomainServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test DomainServiceService Create", func(t *testing.T) {
+	t.Run("Test DomainServiceService CreateDomain", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.DomainService.Create(context.Background()).Execute()
+		resp, httpRes, err := apiClient.DomainService.CreateDomain(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_DomainServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test DomainServiceService List", func(t *testing.T) {
+	t.Run("Test DomainServiceService ListDomains", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.DomainService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.DomainService.ListDomains(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_DomainServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test DomainServiceService Update", func(t *testing.T) {
+	t.Run("Test DomainServiceService UpdateDomain", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.DomainService.Update(context.Background()).Execute()
+		resp, httpRes, err := apiClient.DomainService.UpdateDomain(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

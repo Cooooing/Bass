@@ -23,104 +23,104 @@ import (
 type BadgeService interface {
 
 	/*
-	DeleteDraft Method for DeleteDraft
+	DeleteBadgeDraft Method for DeleteBadgeDraft
 
 	DeleteDraft 删除一个未发布草稿。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiDeleteDraftRequest
+	@return ApiDeleteBadgeDraftRequest
 	*/
-	DeleteDraft(ctx context.Context) ApiDeleteDraftRequest
+	DeleteBadgeDraft(ctx context.Context) ApiDeleteBadgeDraftRequest
 
-	// DeleteDraftExecute executes the request
+	// DeleteBadgeDraftExecute executes the request
 	//  @return map[string]interface{}
-	DeleteDraftExecute(r ApiDeleteDraftRequest) (map[string]interface{}, *http.Response, error)
+	DeleteBadgeDraftExecute(r ApiDeleteBadgeDraftRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	ListDrafts Method for ListDrafts
+	ListBadgeDrafts Method for ListBadgeDrafts
 
 	ListDrafts 返回当前登录用户的徽章草稿。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListDraftsRequest
+	@return ApiListBadgeDraftsRequest
 	*/
-	ListDrafts(ctx context.Context) ApiListDraftsRequest
+	ListBadgeDrafts(ctx context.Context) ApiListBadgeDraftsRequest
 
-	// ListDraftsExecute executes the request
+	// ListBadgeDraftsExecute executes the request
 	//  @return ListBadgeDraftsResp
-	ListDraftsExecute(r ApiListDraftsRequest) (*ListBadgeDraftsResp, *http.Response, error)
+	ListBadgeDraftsExecute(r ApiListBadgeDraftsRequest) (*ListBadgeDraftsResp, *http.Response, error)
 
 	/*
-	RenderMaker Method for RenderMaker
+	RenderMakerBadge Method for RenderMakerBadge
 
 	RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRenderMakerRequest
+	@return ApiRenderMakerBadgeRequest
 	*/
-	RenderMaker(ctx context.Context) ApiRenderMakerRequest
+	RenderMakerBadge(ctx context.Context) ApiRenderMakerBadgeRequest
 
-	// RenderMakerExecute executes the request
-	//  @return ImageResp
-	RenderMakerExecute(r ApiRenderMakerRequest) (*ImageResp, *http.Response, error)
+	// RenderMakerBadgeExecute executes the request
+	//  @return RenderMakerBadgeResp
+	RenderMakerBadgeExecute(r ApiRenderMakerBadgeRequest) (*RenderMakerBadgeResp, *http.Response, error)
 
 	/*
-	RenderPublished Method for RenderPublished
+	RenderPublishedBadge Method for RenderPublishedBadge
 
 	RenderPublished 匿名返回一个已发布徽章的主站 SVG。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRenderPublishedRequest
+	@return ApiRenderPublishedBadgeRequest
 	*/
-	RenderPublished(ctx context.Context) ApiRenderPublishedRequest
+	RenderPublishedBadge(ctx context.Context) ApiRenderPublishedBadgeRequest
 
-	// RenderPublishedExecute executes the request
-	//  @return ImageResp
-	RenderPublishedExecute(r ApiRenderPublishedRequest) (*ImageResp, *http.Response, error)
+	// RenderPublishedBadgeExecute executes the request
+	//  @return RenderPublishedBadgeResp
+	RenderPublishedBadgeExecute(r ApiRenderPublishedBadgeRequest) (*RenderPublishedBadgeResp, *http.Response, error)
 
 	/*
-	UpsertDraft Method for UpsertDraft
+	UpsertBadgeDraft Method for UpsertBadgeDraft
 
 	UpsertDraft 保存当前登录用户的徽章草稿。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpsertDraftRequest
+	@return ApiUpsertBadgeDraftRequest
 	*/
-	UpsertDraft(ctx context.Context) ApiUpsertDraftRequest
+	UpsertBadgeDraft(ctx context.Context) ApiUpsertBadgeDraftRequest
 
-	// UpsertDraftExecute executes the request
+	// UpsertBadgeDraftExecute executes the request
 	//  @return UpsertBadgeDraftResp
-	UpsertDraftExecute(r ApiUpsertDraftRequest) (*UpsertBadgeDraftResp, *http.Response, error)
+	UpsertBadgeDraftExecute(r ApiUpsertBadgeDraftRequest) (*UpsertBadgeDraftResp, *http.Response, error)
 }
 
 // BadgeServiceService BadgeService service
 type BadgeServiceService service
 
-type ApiDeleteDraftRequest struct {
+type ApiDeleteBadgeDraftRequest struct {
 	ctx context.Context
 	ApiService BadgeService
 	deleteBadgeDraftReq *DeleteBadgeDraftReq
 }
 
-func (r ApiDeleteDraftRequest) DeleteBadgeDraftReq(deleteBadgeDraftReq DeleteBadgeDraftReq) ApiDeleteDraftRequest {
+func (r ApiDeleteBadgeDraftRequest) DeleteBadgeDraftReq(deleteBadgeDraftReq DeleteBadgeDraftReq) ApiDeleteBadgeDraftRequest {
 	r.deleteBadgeDraftReq = &deleteBadgeDraftReq
 	return r
 }
 
-func (r ApiDeleteDraftRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.DeleteDraftExecute(r)
+func (r ApiDeleteBadgeDraftRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DeleteBadgeDraftExecute(r)
 }
 
 /*
-DeleteDraft Method for DeleteDraft
+DeleteBadgeDraft Method for DeleteBadgeDraft
 
 DeleteDraft 删除一个未发布草稿。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiDeleteDraftRequest
+ @return ApiDeleteBadgeDraftRequest
 */
-func (a *BadgeServiceService) DeleteDraft(ctx context.Context) ApiDeleteDraftRequest {
-	return ApiDeleteDraftRequest{
+func (a *BadgeServiceService) DeleteBadgeDraft(ctx context.Context) ApiDeleteBadgeDraftRequest {
+	return ApiDeleteBadgeDraftRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -128,7 +128,7 @@ func (a *BadgeServiceService) DeleteDraft(ctx context.Context) ApiDeleteDraftReq
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *BadgeServiceService) DeleteDraftExecute(r ApiDeleteDraftRequest) (map[string]interface{}, *http.Response, error) {
+func (a *BadgeServiceService) DeleteBadgeDraftExecute(r ApiDeleteBadgeDraftRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -136,7 +136,7 @@ func (a *BadgeServiceService) DeleteDraftExecute(r ApiDeleteDraftRequest) (map[s
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.DeleteDraft")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.DeleteBadgeDraft")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -206,31 +206,31 @@ func (a *BadgeServiceService) DeleteDraftExecute(r ApiDeleteDraftRequest) (map[s
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListDraftsRequest struct {
+type ApiListBadgeDraftsRequest struct {
 	ctx context.Context
 	ApiService BadgeService
 	body *map[string]interface{}
 }
 
-func (r ApiListDraftsRequest) Body(body map[string]interface{}) ApiListDraftsRequest {
+func (r ApiListBadgeDraftsRequest) Body(body map[string]interface{}) ApiListBadgeDraftsRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiListDraftsRequest) Execute() (*ListBadgeDraftsResp, *http.Response, error) {
-	return r.ApiService.ListDraftsExecute(r)
+func (r ApiListBadgeDraftsRequest) Execute() (*ListBadgeDraftsResp, *http.Response, error) {
+	return r.ApiService.ListBadgeDraftsExecute(r)
 }
 
 /*
-ListDrafts Method for ListDrafts
+ListBadgeDrafts Method for ListBadgeDrafts
 
 ListDrafts 返回当前登录用户的徽章草稿。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListDraftsRequest
+ @return ApiListBadgeDraftsRequest
 */
-func (a *BadgeServiceService) ListDrafts(ctx context.Context) ApiListDraftsRequest {
-	return ApiListDraftsRequest{
+func (a *BadgeServiceService) ListBadgeDrafts(ctx context.Context) ApiListBadgeDraftsRequest {
+	return ApiListBadgeDraftsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -238,7 +238,7 @@ func (a *BadgeServiceService) ListDrafts(ctx context.Context) ApiListDraftsReque
 
 // Execute executes the request
 //  @return ListBadgeDraftsResp
-func (a *BadgeServiceService) ListDraftsExecute(r ApiListDraftsRequest) (*ListBadgeDraftsResp, *http.Response, error) {
+func (a *BadgeServiceService) ListBadgeDraftsExecute(r ApiListBadgeDraftsRequest) (*ListBadgeDraftsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -246,7 +246,7 @@ func (a *BadgeServiceService) ListDraftsExecute(r ApiListDraftsRequest) (*ListBa
 		localVarReturnValue  *ListBadgeDraftsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.ListDrafts")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.ListBadgeDrafts")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -316,7 +316,7 @@ func (a *BadgeServiceService) ListDraftsExecute(r ApiListDraftsRequest) (*ListBa
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRenderMakerRequest struct {
+type ApiRenderMakerBadgeRequest struct {
 	ctx context.Context
 	ApiService BadgeService
 	renderSpecImageAssetId *string
@@ -336,111 +336,126 @@ type ApiRenderMakerRequest struct {
 	renderSpecFontAssetId *string
 }
 
-func (r ApiRenderMakerRequest) RenderSpecImageAssetId(renderSpecImageAssetId string) ApiRenderMakerRequest {
+// Platform 已确认可用的徽章图标资源 ID。
+func (r ApiRenderMakerBadgeRequest) RenderSpecImageAssetId(renderSpecImageAssetId string) ApiRenderMakerBadgeRequest {
 	r.renderSpecImageAssetId = &renderSpecImageAssetId
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecText(renderSpecText string) ApiRenderMakerRequest {
+// 文字条内容。
+func (r ApiRenderMakerBadgeRequest) RenderSpecText(renderSpecText string) ApiRenderMakerBadgeRequest {
 	r.renderSpecText = &renderSpecText
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecBackgroundColors(renderSpecBackgroundColors []string) ApiRenderMakerRequest {
+// 背景颜色列表。
+func (r ApiRenderMakerBadgeRequest) RenderSpecBackgroundColors(renderSpecBackgroundColors []string) ApiRenderMakerBadgeRequest {
 	r.renderSpecBackgroundColors = &renderSpecBackgroundColors
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecTextColors(renderSpecTextColors []string) ApiRenderMakerRequest {
+// 文字颜色列表。
+func (r ApiRenderMakerBadgeRequest) RenderSpecTextColors(renderSpecTextColors []string) ApiRenderMakerBadgeRequest {
 	r.renderSpecTextColors = &renderSpecTextColors
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecBackgroundDirection(renderSpecBackgroundDirection string) ApiRenderMakerRequest {
+// 背景渐变方向或角度。
+func (r ApiRenderMakerBadgeRequest) RenderSpecBackgroundDirection(renderSpecBackgroundDirection string) ApiRenderMakerBadgeRequest {
 	r.renderSpecBackgroundDirection = &renderSpecBackgroundDirection
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecTextDirection(renderSpecTextDirection string) ApiRenderMakerRequest {
+// 文字渐变方向或角度。
+func (r ApiRenderMakerBadgeRequest) RenderSpecTextDirection(renderSpecTextDirection string) ApiRenderMakerBadgeRequest {
 	r.renderSpecTextDirection = &renderSpecTextDirection
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecSize(renderSpecSize int32) ApiRenderMakerRequest {
+// 图标边长。
+func (r ApiRenderMakerBadgeRequest) RenderSpecSize(renderSpecSize int32) ApiRenderMakerBadgeRequest {
 	r.renderSpecSize = &renderSpecSize
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecBorder(renderSpecBorder int32) ApiRenderMakerRequest {
+// 图标边距。
+func (r ApiRenderMakerBadgeRequest) RenderSpecBorder(renderSpecBorder int32) ApiRenderMakerBadgeRequest {
 	r.renderSpecBorder = &renderSpecBorder
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecTextBarLength(renderSpecTextBarLength int32) ApiRenderMakerRequest {
+// 文字条长度。
+func (r ApiRenderMakerBadgeRequest) RenderSpecTextBarLength(renderSpecTextBarLength int32) ApiRenderMakerBadgeRequest {
 	r.renderSpecTextBarLength = &renderSpecTextBarLength
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecTextSize(renderSpecTextSize int32) ApiRenderMakerRequest {
+// 文字字号。
+func (r ApiRenderMakerBadgeRequest) RenderSpecTextSize(renderSpecTextSize int32) ApiRenderMakerBadgeRequest {
 	r.renderSpecTextSize = &renderSpecTextSize
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecTextBarRadius(renderSpecTextBarRadius int32) ApiRenderMakerRequest {
+// 文字条圆角。
+func (r ApiRenderMakerBadgeRequest) RenderSpecTextBarRadius(renderSpecTextBarRadius int32) ApiRenderMakerBadgeRequest {
 	r.renderSpecTextBarRadius = &renderSpecTextBarRadius
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecScale(renderSpecScale float64) ApiRenderMakerRequest {
+// 整体缩放比例。
+func (r ApiRenderMakerBadgeRequest) RenderSpecScale(renderSpecScale float64) ApiRenderMakerBadgeRequest {
 	r.renderSpecScale = &renderSpecScale
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecShadow(renderSpecShadow float64) ApiRenderMakerRequest {
+// 阴影强度。
+func (r ApiRenderMakerBadgeRequest) RenderSpecShadow(renderSpecShadow float64) ApiRenderMakerBadgeRequest {
 	r.renderSpecShadow = &renderSpecShadow
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecAnimationSeconds(renderSpecAnimationSeconds float64) ApiRenderMakerRequest {
+// 动画时长。
+func (r ApiRenderMakerBadgeRequest) RenderSpecAnimationSeconds(renderSpecAnimationSeconds float64) ApiRenderMakerBadgeRequest {
 	r.renderSpecAnimationSeconds = &renderSpecAnimationSeconds
 	return r
 }
 
-func (r ApiRenderMakerRequest) RenderSpecFontAssetId(renderSpecFontAssetId string) ApiRenderMakerRequest {
+// Platform 已确认可用的自定义字体资源 ID。
+func (r ApiRenderMakerBadgeRequest) RenderSpecFontAssetId(renderSpecFontAssetId string) ApiRenderMakerBadgeRequest {
 	r.renderSpecFontAssetId = &renderSpecFontAssetId
 	return r
 }
 
-func (r ApiRenderMakerRequest) Execute() (*ImageResp, *http.Response, error) {
-	return r.ApiService.RenderMakerExecute(r)
+func (r ApiRenderMakerBadgeRequest) Execute() (*RenderMakerBadgeResp, *http.Response, error) {
+	return r.ApiService.RenderMakerBadgeExecute(r)
 }
 
 /*
-RenderMaker Method for RenderMaker
+RenderMakerBadge Method for RenderMakerBadge
 
 RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRenderMakerRequest
+ @return ApiRenderMakerBadgeRequest
 */
-func (a *BadgeServiceService) RenderMaker(ctx context.Context) ApiRenderMakerRequest {
-	return ApiRenderMakerRequest{
+func (a *BadgeServiceService) RenderMakerBadge(ctx context.Context) ApiRenderMakerBadgeRequest {
+	return ApiRenderMakerBadgeRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ImageResp
-func (a *BadgeServiceService) RenderMakerExecute(r ApiRenderMakerRequest) (*ImageResp, *http.Response, error) {
+//  @return RenderMakerBadgeResp
+func (a *BadgeServiceService) RenderMakerBadgeExecute(r ApiRenderMakerBadgeRequest) (*RenderMakerBadgeResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ImageResp
+		localVarReturnValue  *RenderMakerBadgeResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.RenderMaker")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.RenderMakerBadge")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -566,47 +581,48 @@ func (a *BadgeServiceService) RenderMakerExecute(r ApiRenderMakerRequest) (*Imag
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRenderPublishedRequest struct {
+type ApiRenderPublishedBadgeRequest struct {
 	ctx context.Context
 	ApiService BadgeService
 	code *string
 }
 
-func (r ApiRenderPublishedRequest) Code(code string) ApiRenderPublishedRequest {
+// 已发布徽章稳定编码。
+func (r ApiRenderPublishedBadgeRequest) Code(code string) ApiRenderPublishedBadgeRequest {
 	r.code = &code
 	return r
 }
 
-func (r ApiRenderPublishedRequest) Execute() (*ImageResp, *http.Response, error) {
-	return r.ApiService.RenderPublishedExecute(r)
+func (r ApiRenderPublishedBadgeRequest) Execute() (*RenderPublishedBadgeResp, *http.Response, error) {
+	return r.ApiService.RenderPublishedBadgeExecute(r)
 }
 
 /*
-RenderPublished Method for RenderPublished
+RenderPublishedBadge Method for RenderPublishedBadge
 
 RenderPublished 匿名返回一个已发布徽章的主站 SVG。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRenderPublishedRequest
+ @return ApiRenderPublishedBadgeRequest
 */
-func (a *BadgeServiceService) RenderPublished(ctx context.Context) ApiRenderPublishedRequest {
-	return ApiRenderPublishedRequest{
+func (a *BadgeServiceService) RenderPublishedBadge(ctx context.Context) ApiRenderPublishedBadgeRequest {
+	return ApiRenderPublishedBadgeRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ImageResp
-func (a *BadgeServiceService) RenderPublishedExecute(r ApiRenderPublishedRequest) (*ImageResp, *http.Response, error) {
+//  @return RenderPublishedBadgeResp
+func (a *BadgeServiceService) RenderPublishedBadgeExecute(r ApiRenderPublishedBadgeRequest) (*RenderPublishedBadgeResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ImageResp
+		localVarReturnValue  *RenderPublishedBadgeResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.RenderPublished")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.RenderPublishedBadge")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -674,31 +690,31 @@ func (a *BadgeServiceService) RenderPublishedExecute(r ApiRenderPublishedRequest
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpsertDraftRequest struct {
+type ApiUpsertBadgeDraftRequest struct {
 	ctx context.Context
 	ApiService BadgeService
 	upsertBadgeDraftReq *UpsertBadgeDraftReq
 }
 
-func (r ApiUpsertDraftRequest) UpsertBadgeDraftReq(upsertBadgeDraftReq UpsertBadgeDraftReq) ApiUpsertDraftRequest {
+func (r ApiUpsertBadgeDraftRequest) UpsertBadgeDraftReq(upsertBadgeDraftReq UpsertBadgeDraftReq) ApiUpsertBadgeDraftRequest {
 	r.upsertBadgeDraftReq = &upsertBadgeDraftReq
 	return r
 }
 
-func (r ApiUpsertDraftRequest) Execute() (*UpsertBadgeDraftResp, *http.Response, error) {
-	return r.ApiService.UpsertDraftExecute(r)
+func (r ApiUpsertBadgeDraftRequest) Execute() (*UpsertBadgeDraftResp, *http.Response, error) {
+	return r.ApiService.UpsertBadgeDraftExecute(r)
 }
 
 /*
-UpsertDraft Method for UpsertDraft
+UpsertBadgeDraft Method for UpsertBadgeDraft
 
 UpsertDraft 保存当前登录用户的徽章草稿。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpsertDraftRequest
+ @return ApiUpsertBadgeDraftRequest
 */
-func (a *BadgeServiceService) UpsertDraft(ctx context.Context) ApiUpsertDraftRequest {
-	return ApiUpsertDraftRequest{
+func (a *BadgeServiceService) UpsertBadgeDraft(ctx context.Context) ApiUpsertBadgeDraftRequest {
+	return ApiUpsertBadgeDraftRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -706,7 +722,7 @@ func (a *BadgeServiceService) UpsertDraft(ctx context.Context) ApiUpsertDraftReq
 
 // Execute executes the request
 //  @return UpsertBadgeDraftResp
-func (a *BadgeServiceService) UpsertDraftExecute(r ApiUpsertDraftRequest) (*UpsertBadgeDraftResp, *http.Response, error) {
+func (a *BadgeServiceService) UpsertBadgeDraftExecute(r ApiUpsertBadgeDraftRequest) (*UpsertBadgeDraftResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -714,7 +730,7 @@ func (a *BadgeServiceService) UpsertDraftExecute(r ApiUpsertDraftRequest) (*Upse
 		localVarReturnValue  *UpsertBadgeDraftResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.UpsertDraft")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BadgeServiceService.UpsertBadgeDraft")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

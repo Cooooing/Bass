@@ -18,19 +18,31 @@ import (
 // checks if the RespArticleBrief type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespArticleBrief{}
 
-// RespArticleBrief struct for RespArticleBrief
+// RespArticleBrief 协议消息。
 type RespArticleBrief struct {
+	// 文章 ID
 	Id *string `json:"id,omitempty"`
+	// 标题
 	Title *string `json:"title,omitempty"`
+	// 文章类型
 	Type *string `json:"type,omitempty"`
+	// 作者展示资料
 	AuthorUser *RespAccountProfile `json:"author_user,omitempty"`
+	// 封面图片 URL
 	CoverImageUrl *string `json:"cover_image_url,omitempty"`
+	// 发布状态
 	PublishStatus *string `json:"publish_status,omitempty"`
+	// 可见范围
 	Visibility *string `json:"visibility,omitempty"`
+	// 管理限制
 	Restriction *string `json:"restriction,omitempty"`
+	// 创建账号 ID
 	CreatedBy *string `json:"created_by,omitempty"`
+	// 更新账号 ID
 	UpdatedBy *string `json:"updated_by,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

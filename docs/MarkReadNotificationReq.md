@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ids** | **[]string** |  | 
+**Ids** | **[]string** | 通知 ID 列表 | 
 
 ## Methods
 

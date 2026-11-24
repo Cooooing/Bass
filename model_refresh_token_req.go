@@ -19,8 +19,9 @@ import (
 // checks if the RefreshTokenReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RefreshTokenReq{}
 
-// RefreshTokenReq struct for RefreshTokenReq
+// RefreshTokenReq 请求参数。
 type RefreshTokenReq struct {
+	// 刷新令牌
 	RefreshToken string `json:"refresh_token"`
 }
 

@@ -17,9 +17,11 @@ import (
 // checks if the RespCommentViewerActionState type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespCommentViewerActionState{}
 
-// RespCommentViewerActionState struct for RespCommentViewerActionState
+// RespCommentViewerActionState 协议消息。
 type RespCommentViewerActionState struct {
+	// 是否已点赞
 	Liked *bool `json:"liked,omitempty"`
+	// 是否已感谢
 	Thanked *bool `json:"thanked,omitempty"`
 }
 

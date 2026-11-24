@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetCurrent**](PrivacySettingService.md#GetCurrent) | **Post** /v1/user/privacy-setting/get-current | 
-[**UpdateCurrent**](PrivacySettingService.md#UpdateCurrent) | **Post** /v1/user/privacy-setting/update-current | 
+[**GetCurrentPrivacySetting**](PrivacySettingService.md#GetCurrentPrivacySetting) | **Post** /v1/user/privacy-setting/get-current | 
+[**UpdateCurrentPrivacySetting**](PrivacySettingService.md#UpdateCurrentPrivacySetting) | **Post** /v1/user/privacy-setting/update-current | 
 
 
 
-## GetCurrent
+## GetCurrentPrivacySetting
 
-> GetCurrentPrivacySettingResp GetCurrent(ctx).Body(body).Execute()
+> GetCurrentPrivacySettingResp GetCurrentPrivacySetting(ctx).Body(body).Execute()
 
 
 
@@ -34,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PrivacySettingService.GetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.PrivacySettingService.GetCurrentPrivacySetting(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.GetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.GetCurrentPrivacySetting``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentPrivacySettingResp
-	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.GetCurrent`: %v\n", resp)
+	// response from `GetCurrentPrivacySetting`: GetCurrentPrivacySettingResp
+	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.GetCurrentPrivacySetting`: %v\n", resp)
 }
 ```
 
@@ -50,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentPrivacySettingRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +75,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## UpdateCurrent
+## UpdateCurrentPrivacySetting
 
-> UpdateCurrentPrivacySettingResp UpdateCurrent(ctx).UpdateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq).Execute()
+> UpdateCurrentPrivacySettingResp UpdateCurrentPrivacySetting(ctx).UpdateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq).Execute()
 
 
 
@@ -100,13 +100,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PrivacySettingService.UpdateCurrent(context.Background()).UpdateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq).Execute()
+	resp, r, err := apiClient.PrivacySettingService.UpdateCurrentPrivacySetting(context.Background()).UpdateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.UpdateCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.UpdateCurrentPrivacySetting``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpdateCurrent`: UpdateCurrentPrivacySettingResp
-	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.UpdateCurrent`: %v\n", resp)
+	// response from `UpdateCurrentPrivacySetting`: UpdateCurrentPrivacySettingResp
+	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.UpdateCurrentPrivacySetting`: %v\n", resp)
 }
 ```
 
@@ -116,7 +116,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiUpdateCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateCurrentPrivacySettingRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

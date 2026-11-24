@@ -17,10 +17,13 @@ import (
 // checks if the ArticlePollOption type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticlePollOption{}
 
-// ArticlePollOption struct for ArticlePollOption
+// ArticlePollOption 协议消息。
 type ArticlePollOption struct {
+	// 选项 ID
 	Id *string `json:"id,omitempty"`
+	// 选项内容
 	Content *string `json:"content,omitempty"`
+	// 可见时的票数
 	VoteCount *int32 `json:"vote_count,omitempty"`
 }
 

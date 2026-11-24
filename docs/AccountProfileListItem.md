@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Account** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
-**ViewerRelation** | Pointer to [**ProfileRelation**](ProfileRelation.md) |  | [optional] 
+**Account** | Pointer to [**AccountProfile**](AccountProfile.md) | 协议字段。 | [optional] 
+**ViewerRelation** | Pointer to [**ProfileRelation**](ProfileRelation.md) | 协议字段。 | [optional] 
 
 ## Methods
 

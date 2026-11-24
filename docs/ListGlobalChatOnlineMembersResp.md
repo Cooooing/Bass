@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]GlobalChatOnlineMember**](GlobalChatOnlineMember.md) |  | [optional] 
+**Rows** | Pointer to [**[]GlobalChatOnlineMember**](GlobalChatOnlineMember.md) | 在线成员列表。 | [optional] 
 
 ## Methods
 

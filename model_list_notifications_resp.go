@@ -17,9 +17,11 @@ import (
 // checks if the ListNotificationsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListNotificationsResp{}
 
-// ListNotificationsResp struct for ListNotificationsResp
+// ListNotificationsResp 响应结果。
 type ListNotificationsResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 通知列表
 	Rows []RespNotification `json:"rows,omitempty"`
 }
 

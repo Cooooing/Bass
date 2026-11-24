@@ -22,62 +22,62 @@ import (
 type PreferencesService interface {
 
 	/*
-	GetCurrent Method for GetCurrent
+	GetCurrentPreferences Method for GetCurrentPreferences
 
 	获取当前账号的偏好设置。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetCurrentRequest
+	@return ApiGetCurrentPreferencesRequest
 	*/
-	GetCurrent(ctx context.Context) ApiGetCurrentRequest
+	GetCurrentPreferences(ctx context.Context) ApiGetCurrentPreferencesRequest
 
-	// GetCurrentExecute executes the request
+	// GetCurrentPreferencesExecute executes the request
 	//  @return GetCurrentPreferencesResp
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPreferencesResp, *http.Response, error)
+	GetCurrentPreferencesExecute(r ApiGetCurrentPreferencesRequest) (*GetCurrentPreferencesResp, *http.Response, error)
 
 	/*
-	UpdateCurrent Method for UpdateCurrent
+	UpdateCurrentPreferences Method for UpdateCurrentPreferences
 
 	更新当前账号的偏好设置。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdateCurrentRequest
+	@return ApiUpdateCurrentPreferencesRequest
 	*/
-	UpdateCurrent(ctx context.Context) ApiUpdateCurrentRequest
+	UpdateCurrentPreferences(ctx context.Context) ApiUpdateCurrentPreferencesRequest
 
-	// UpdateCurrentExecute executes the request
+	// UpdateCurrentPreferencesExecute executes the request
 	//  @return UpdateCurrentPreferencesResp
-	UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPreferencesResp, *http.Response, error)
+	UpdateCurrentPreferencesExecute(r ApiUpdateCurrentPreferencesRequest) (*UpdateCurrentPreferencesResp, *http.Response, error)
 }
 
 // PreferencesServiceService PreferencesService service
 type PreferencesServiceService service
 
-type ApiGetCurrentRequest struct {
+type ApiGetCurrentPreferencesRequest struct {
 	ctx context.Context
 	ApiService PreferencesService
 	body *map[string]interface{}
 }
 
-func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentRequest {
+func (r ApiGetCurrentPreferencesRequest) Body(body map[string]interface{}) ApiGetCurrentPreferencesRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentPreferencesResp, *http.Response, error) {
-	return r.ApiService.GetCurrentExecute(r)
+func (r ApiGetCurrentPreferencesRequest) Execute() (*GetCurrentPreferencesResp, *http.Response, error) {
+	return r.ApiService.GetCurrentPreferencesExecute(r)
 }
 
 /*
-GetCurrent Method for GetCurrent
+GetCurrentPreferences Method for GetCurrentPreferences
 
 获取当前账号的偏好设置。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetCurrentRequest
+ @return ApiGetCurrentPreferencesRequest
 */
-func (a *PreferencesServiceService) GetCurrent(ctx context.Context) ApiGetCurrentRequest {
-	return ApiGetCurrentRequest{
+func (a *PreferencesServiceService) GetCurrentPreferences(ctx context.Context) ApiGetCurrentPreferencesRequest {
+	return ApiGetCurrentPreferencesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -85,7 +85,7 @@ func (a *PreferencesServiceService) GetCurrent(ctx context.Context) ApiGetCurren
 
 // Execute executes the request
 //  @return GetCurrentPreferencesResp
-func (a *PreferencesServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPreferencesResp, *http.Response, error) {
+func (a *PreferencesServiceService) GetCurrentPreferencesExecute(r ApiGetCurrentPreferencesRequest) (*GetCurrentPreferencesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -93,7 +93,7 @@ func (a *PreferencesServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*
 		localVarReturnValue  *GetCurrentPreferencesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceService.GetCurrent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceService.GetCurrentPreferences")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -163,31 +163,31 @@ func (a *PreferencesServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdateCurrentRequest struct {
+type ApiUpdateCurrentPreferencesRequest struct {
 	ctx context.Context
 	ApiService PreferencesService
 	updateCurrentPreferencesReq *UpdateCurrentPreferencesReq
 }
 
-func (r ApiUpdateCurrentRequest) UpdateCurrentPreferencesReq(updateCurrentPreferencesReq UpdateCurrentPreferencesReq) ApiUpdateCurrentRequest {
+func (r ApiUpdateCurrentPreferencesRequest) UpdateCurrentPreferencesReq(updateCurrentPreferencesReq UpdateCurrentPreferencesReq) ApiUpdateCurrentPreferencesRequest {
 	r.updateCurrentPreferencesReq = &updateCurrentPreferencesReq
 	return r
 }
 
-func (r ApiUpdateCurrentRequest) Execute() (*UpdateCurrentPreferencesResp, *http.Response, error) {
-	return r.ApiService.UpdateCurrentExecute(r)
+func (r ApiUpdateCurrentPreferencesRequest) Execute() (*UpdateCurrentPreferencesResp, *http.Response, error) {
+	return r.ApiService.UpdateCurrentPreferencesExecute(r)
 }
 
 /*
-UpdateCurrent Method for UpdateCurrent
+UpdateCurrentPreferences Method for UpdateCurrentPreferences
 
 更新当前账号的偏好设置。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdateCurrentRequest
+ @return ApiUpdateCurrentPreferencesRequest
 */
-func (a *PreferencesServiceService) UpdateCurrent(ctx context.Context) ApiUpdateCurrentRequest {
-	return ApiUpdateCurrentRequest{
+func (a *PreferencesServiceService) UpdateCurrentPreferences(ctx context.Context) ApiUpdateCurrentPreferencesRequest {
+	return ApiUpdateCurrentPreferencesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -195,7 +195,7 @@ func (a *PreferencesServiceService) UpdateCurrent(ctx context.Context) ApiUpdate
 
 // Execute executes the request
 //  @return UpdateCurrentPreferencesResp
-func (a *PreferencesServiceService) UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPreferencesResp, *http.Response, error) {
+func (a *PreferencesServiceService) UpdateCurrentPreferencesExecute(r ApiUpdateCurrentPreferencesRequest) (*UpdateCurrentPreferencesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -203,7 +203,7 @@ func (a *PreferencesServiceService) UpdateCurrentExecute(r ApiUpdateCurrentReque
 		localVarReturnValue  *UpdateCurrentPreferencesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceService.UpdateCurrent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceService.UpdateCurrentPreferences")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

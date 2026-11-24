@@ -18,13 +18,19 @@ import (
 // checks if the Relation type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Relation{}
 
-// Relation struct for Relation
+// Relation 协议消息。
 type Relation struct {
+	// 关系 ID
 	Id *string `json:"id,omitempty"`
+	// 关系类型
 	Type *string `json:"type,omitempty"`
+	// 发起账号 ID
 	ActorId *string `json:"actor_id,omitempty"`
+	// 目标账号 ID
 	TargetId *string `json:"target_id,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

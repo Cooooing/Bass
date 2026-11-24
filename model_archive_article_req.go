@@ -19,9 +19,11 @@ import (
 // checks if the ArchiveArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArchiveArticleReq{}
 
-// ArchiveArticleReq struct for ArchiveArticleReq
+// ArchiveArticleReq 请求参数。
 type ArchiveArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// 可选，归档原因
 	Reason *string `json:"reason,omitempty"`
 }
 

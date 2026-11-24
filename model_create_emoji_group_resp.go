@@ -17,8 +17,9 @@ import (
 // checks if the CreateEmojiGroupResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateEmojiGroupResp{}
 
-// CreateEmojiGroupResp struct for CreateEmojiGroupResp
+// CreateEmojiGroupResp 响应结果。
 type CreateEmojiGroupResp struct {
+	// 已创建分组。
 	Group *EmojiGroup `json:"group,omitempty"`
 }
 

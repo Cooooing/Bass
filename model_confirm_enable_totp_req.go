@@ -19,8 +19,9 @@ import (
 // checks if the ConfirmEnableTotpReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ConfirmEnableTotpReq{}
 
-// ConfirmEnableTotpReq struct for ConfirmEnableTotpReq
+// ConfirmEnableTotpReq 请求参数。
 type ConfirmEnableTotpReq struct {
+	// TOTP 验证码
 	Code string `json:"code"`
 }
 

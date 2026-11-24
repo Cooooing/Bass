@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Count** | Pointer to **int32** |  | [optional] 
+**Count** | Pointer to **int32** | 未读消息总数。 | [optional] 
 
 ## Methods
 

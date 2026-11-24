@@ -17,8 +17,9 @@ import (
 // checks if the ThankCommentResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ThankCommentResp{}
 
-// ThankCommentResp struct for ThankCommentResp
+// ThankCommentResp 响应结果。
 type ThankCommentResp struct {
+	// 是否已感谢
 	Thanked *bool `json:"thanked,omitempty"`
 }
 

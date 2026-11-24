@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**RefreshToken** | **string** |  | 
+**RefreshToken** | **string** | 刷新令牌 | 
 
 ## Methods
 

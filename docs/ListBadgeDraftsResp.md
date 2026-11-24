@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]BadgeDraft**](BadgeDraft.md) |  | [optional] 
+**Rows** | Pointer to [**[]BadgeDraft**](BadgeDraft.md) | 草稿列表。 | [optional] 
 
 ## Methods
 

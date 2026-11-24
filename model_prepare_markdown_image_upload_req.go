@@ -19,10 +19,13 @@ import (
 // checks if the PrepareMarkdownImageUploadReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PrepareMarkdownImageUploadReq{}
 
-// PrepareMarkdownImageUploadReq struct for PrepareMarkdownImageUploadReq
+// PrepareMarkdownImageUploadReq 请求参数。
 type PrepareMarkdownImageUploadReq struct {
+	// 文件 SHA-256，小写十六进制。
 	Hash string `json:"hash"`
+	// 上传 MIME 类型。
 	MimeType string `json:"mime_type"`
+	// 文件大小，最大 5 MiB。
 	Size string `json:"size"`
 }
 

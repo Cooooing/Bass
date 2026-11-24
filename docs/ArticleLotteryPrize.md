@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
-**WinnerLimit** | Pointer to **int32** |  | [optional] 
-**WinnerUsers** | Pointer to [**[]AccountProfile**](AccountProfile.md) |  | [optional] 
+**Id** | Pointer to **string** | 奖项 ID | [optional] 
+**Name** | Pointer to **string** | 奖项名称 | [optional] 
+**Description** | Pointer to **string** | 奖项说明 | [optional] 
+**WinnerLimit** | Pointer to **int32** | 中奖名额 | [optional] 
+**WinnerUsers** | Pointer to [**[]AccountProfile**](AccountProfile.md) | 按抽取顺序的中奖账号资料 | [optional] 
 
 ## Methods
 

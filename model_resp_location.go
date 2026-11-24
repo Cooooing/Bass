@@ -17,10 +17,13 @@ import (
 // checks if the RespLocation type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespLocation{}
 
-// RespLocation struct for RespLocation
+// RespLocation 协议消息。
 type RespLocation struct {
+	// 国家或地区
 	Country *string `json:"country,omitempty"`
+	// 省份或州
 	Province *string `json:"province,omitempty"`
+	// 城市
 	City *string `json:"city,omitempty"`
 }
 

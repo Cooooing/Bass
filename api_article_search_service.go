@@ -22,44 +22,48 @@ import (
 type ArticleSearchService interface {
 
 	/*
-	Search Method for Search
+	SearchArticles Method for SearchArticles
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiSearchRequest
+	@return ApiSearchArticlesRequest
 	*/
-	Search(ctx context.Context) ApiSearchRequest
+	SearchArticles(ctx context.Context) ApiSearchArticlesRequest
 
-	// SearchExecute executes the request
+	// SearchArticlesExecute executes the request
 	//  @return SearchArticlesResp
-	SearchExecute(r ApiSearchRequest) (*SearchArticlesResp, *http.Response, error)
+	SearchArticlesExecute(r ApiSearchArticlesRequest) (*SearchArticlesResp, *http.Response, error)
 }
 
 // ArticleSearchServiceService ArticleSearchService service
 type ArticleSearchServiceService service
 
-type ApiSearchRequest struct {
+type ApiSearchArticlesRequest struct {
 	ctx context.Context
 	ApiService ArticleSearchService
 	searchArticlesReq *SearchArticlesReq
 }
 
-func (r ApiSearchRequest) SearchArticlesReq(searchArticlesReq SearchArticlesReq) ApiSearchRequest {
+func (r ApiSearchArticlesRequest) SearchArticlesReq(searchArticlesReq SearchArticlesReq) ApiSearchArticlesRequest {
 	r.searchArticlesReq = &searchArticlesReq
 	return r
 }
 
-func (r ApiSearchRequest) Execute() (*SearchArticlesResp, *http.Response, error) {
-	return r.ApiService.SearchExecute(r)
+func (r ApiSearchArticlesRequest) Execute() (*SearchArticlesResp, *http.Response, error) {
+	return r.ApiService.SearchArticlesExecute(r)
 }
 
 /*
-Search Method for Search
+SearchArticles Method for SearchArticles
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSearchRequest
+ @return ApiSearchArticlesRequest
 */
-func (a *ArticleSearchServiceService) Search(ctx context.Context) ApiSearchRequest {
-	return ApiSearchRequest{
+func (a *ArticleSearchServiceService) SearchArticles(ctx context.Context) ApiSearchArticlesRequest {
+	return ApiSearchArticlesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -67,7 +71,7 @@ func (a *ArticleSearchServiceService) Search(ctx context.Context) ApiSearchReque
 
 // Execute executes the request
 //  @return SearchArticlesResp
-func (a *ArticleSearchServiceService) SearchExecute(r ApiSearchRequest) (*SearchArticlesResp, *http.Response, error) {
+func (a *ArticleSearchServiceService) SearchArticlesExecute(r ApiSearchArticlesRequest) (*SearchArticlesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -75,7 +79,7 @@ func (a *ArticleSearchServiceService) SearchExecute(r ApiSearchRequest) (*Search
 		localVarReturnValue  *SearchArticlesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleSearchServiceService.Search")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleSearchServiceService.SearchArticles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

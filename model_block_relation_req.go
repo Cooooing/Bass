@@ -19,8 +19,9 @@ import (
 // checks if the BlockRelationReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &BlockRelationReq{}
 
-// BlockRelationReq struct for BlockRelationReq
+// BlockRelationReq 请求参数。
 type BlockRelationReq struct {
+	// 目标账号 ID
 	TargetId string `json:"target_id"`
 }
 

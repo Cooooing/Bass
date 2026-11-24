@@ -17,10 +17,13 @@ import (
 // checks if the ReqPasswordCredential type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqPasswordCredential{}
 
-// ReqPasswordCredential struct for ReqPasswordCredential
+// ReqPasswordCredential 协议消息。
 type ReqPasswordCredential struct {
+	// 账号名、邮箱或手机号
 	Account *string `json:"account,omitempty"`
+	// 密码
 	Password *string `json:"password,omitempty"`
+	// 账号启用 TOTP 时作为 TOTP code
 	Code *string `json:"code,omitempty"`
 }
 

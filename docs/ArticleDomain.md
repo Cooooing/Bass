@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Code** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Icon** | Pointer to **string** |  | [optional] 
-**Url** | Pointer to **string** |  | [optional] 
+**Id** | Pointer to **string** | 领域 ID | [optional] 
+**Code** | Pointer to **string** | 稳定编码 | [optional] 
+**Name** | Pointer to **string** | 领域名称 | [optional] 
+**Icon** | Pointer to **string** | 图标 | [optional] 
+**Url** | Pointer to **string** | 链接 | [optional] 
 
 ## Methods
 

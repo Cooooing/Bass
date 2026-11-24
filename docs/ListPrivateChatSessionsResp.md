@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]PrivateChatSession**](PrivateChatSession.md) |  | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 分页信息。 | [optional] 
+**Rows** | Pointer to [**[]PrivateChatSession**](PrivateChatSession.md) | 会话列表。 | [optional] 
 
 ## Methods
 

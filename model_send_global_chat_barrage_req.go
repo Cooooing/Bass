@@ -17,8 +17,9 @@ import (
 // checks if the SendGlobalChatBarrageReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendGlobalChatBarrageReq{}
 
-// SendGlobalChatBarrageReq struct for SendGlobalChatBarrageReq
+// SendGlobalChatBarrageReq 请求参数。
 type SendGlobalChatBarrageReq struct {
+	// 原始弹幕内容。
 	Content *string `json:"content,omitempty"`
 }
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**CommentId** | Pointer to **string** |  | [optional] 
+**ArticleId** | **string** | 文章 ID | 
+**CommentId** | Pointer to **string** | 置顶的一级评论，未传表示取消 | [optional] 
 
 ## Methods
 

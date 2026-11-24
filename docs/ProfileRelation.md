@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Following** | Pointer to **bool** |  | [optional] 
-**FollowedBy** | Pointer to **bool** |  | [optional] 
-**Blocking** | Pointer to **bool** |  | [optional] 
-**BlockedBy** | Pointer to **bool** |  | [optional] 
+**Following** | Pointer to **bool** | 协议字段。 | [optional] 
+**FollowedBy** | Pointer to **bool** | 协议字段。 | [optional] 
+**Blocking** | Pointer to **bool** | 协议字段。 | [optional] 
+**BlockedBy** | Pointer to **bool** | 协议字段。 | [optional] 
 
 ## Methods
 

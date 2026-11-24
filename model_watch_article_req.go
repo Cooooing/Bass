@@ -19,9 +19,11 @@ import (
 // checks if the WatchArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &WatchArticleReq{}
 
-// WatchArticleReq struct for WatchArticleReq
+// WatchArticleReq 请求参数。
 type WatchArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// 必填，是否关注
 	Active bool `json:"active"`
 }
 

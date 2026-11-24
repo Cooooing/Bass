@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Count** | Pointer to **int32** |  | [optional] 
+**Count** | Pointer to **int32** | 当前收藏文章数量。 | [optional] 
 
 ## Methods
 

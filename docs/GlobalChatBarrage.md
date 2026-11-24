@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**UserId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**PointsCost** | Pointer to **string** |  | [optional] 
-**Sender** | Pointer to [**GlobalChatMember**](GlobalChatMember.md) |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 弹幕 ID。 | [optional] 
+**UserId** | Pointer to **string** | 发送账号 ID。 | [optional] 
+**Content** | Pointer to **string** | 纯文本弹幕内容。 | [optional] 
+**PointsCost** | Pointer to **string** | 本次实际消耗的积分。 | [optional] 
+**Sender** | Pointer to [**GlobalChatMember**](GlobalChatMember.md) | 发送者展示资料。 | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间。 | [optional] 
 
 ## Methods
 

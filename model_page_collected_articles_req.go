@@ -17,8 +17,9 @@ import (
 // checks if the PageCollectedArticlesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PageCollectedArticlesReq{}
 
-// PageCollectedArticlesReq struct for PageCollectedArticlesReq
+// PageCollectedArticlesReq 请求参数。
 type PageCollectedArticlesReq struct {
+	// 可选，分页参数
 	Page *PageReq `json:"page,omitempty"`
 }
 

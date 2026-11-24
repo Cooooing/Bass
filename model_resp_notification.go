@@ -18,16 +18,25 @@ import (
 // checks if the RespNotification type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespNotification{}
 
-// RespNotification struct for RespNotification
+// RespNotification 协议消息。
 type RespNotification struct {
+	// 通知 ID
 	Id *string `json:"id,omitempty"`
+	// 来源事件 ID
 	EventId *string `json:"event_id,omitempty"`
+	// 接收账号 ID
 	ReceiverId *string `json:"receiver_id,omitempty"`
+	// 通知类型
 	NotificationType *string `json:"notification_type,omitempty"`
+	// 通知标题
 	Title *string `json:"title,omitempty"`
+	// 通知内容
 	Content *string `json:"content,omitempty"`
+	// 已读时间
 	ReadAt *time.Time `json:"read_at,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

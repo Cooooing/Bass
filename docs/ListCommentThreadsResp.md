@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]RespCommentThread**](RespCommentThread.md) |  | [optional] 
-**AcceptedAnswer** | Pointer to [**RespPinnedComment**](RespPinnedComment.md) |  | [optional] 
-**PinnedComment** | Pointer to [**RespPinnedComment**](RespPinnedComment.md) |  | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 分页结果 | [optional] 
+**Rows** | Pointer to [**[]RespCommentThread**](RespCommentThread.md) | 评论楼层列表 | [optional] 
+**AcceptedAnswer** | Pointer to [**RespPinnedComment**](RespPinnedComment.md) | 问答已采纳回答；不可见时不返回 | [optional] 
+**PinnedComment** | Pointer to [**RespPinnedComment**](RespPinnedComment.md) | 作者手动置顶评论；不可见时不返回 | [optional] 
 
 ## Methods
 

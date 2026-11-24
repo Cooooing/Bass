@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Moonbreeze** | Pointer to [**Moonbreeze**](Moonbreeze.md) |  | [optional] 
+**Moonbreeze** | Pointer to [**Moonbreeze**](Moonbreeze.md) | 协议字段。 | [optional] 
 
 ## Methods
 

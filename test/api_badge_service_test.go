@@ -22,11 +22,11 @@ func Test_bbs_BadgeServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test BadgeServiceService DeleteDraft", func(t *testing.T) {
+	t.Run("Test BadgeServiceService DeleteBadgeDraft", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.BadgeService.DeleteDraft(context.Background()).Execute()
+		resp, httpRes, err := apiClient.BadgeService.DeleteBadgeDraft(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_BadgeServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test BadgeServiceService ListDrafts", func(t *testing.T) {
+	t.Run("Test BadgeServiceService ListBadgeDrafts", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.BadgeService.ListDrafts(context.Background()).Execute()
+		resp, httpRes, err := apiClient.BadgeService.ListBadgeDrafts(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_BadgeServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test BadgeServiceService RenderMaker", func(t *testing.T) {
+	t.Run("Test BadgeServiceService RenderMakerBadge", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.BadgeService.RenderMaker(context.Background()).Execute()
+		resp, httpRes, err := apiClient.BadgeService.RenderMakerBadge(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_BadgeServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test BadgeServiceService RenderPublished", func(t *testing.T) {
+	t.Run("Test BadgeServiceService RenderPublishedBadge", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.BadgeService.RenderPublished(context.Background()).Execute()
+		resp, httpRes, err := apiClient.BadgeService.RenderPublishedBadge(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +70,11 @@ func Test_bbs_BadgeServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test BadgeServiceService UpsertDraft", func(t *testing.T) {
+	t.Run("Test BadgeServiceService UpsertBadgeDraft", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.BadgeService.UpsertDraft(context.Background()).Execute()
+		resp, httpRes, err := apiClient.BadgeService.UpsertBadgeDraft(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

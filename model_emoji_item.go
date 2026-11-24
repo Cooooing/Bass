@@ -19,9 +19,13 @@ var _ MappedNullable = &EmojiItem{}
 
 // EmojiItem EmojiItem 是可直接插入编辑器的表情图片。
 type EmojiItem struct {
+	// 表情项 ID。
 	Id *string `json:"id,omitempty"`
+	// 平台图片资产 ID。
 	AssetId *string `json:"asset_id,omitempty"`
+	// 可选表情别名。
 	Name *string `json:"name,omitempty"`
+	// 可插入 Markdown 的公开图片地址。
 	ImageUrl *string `json:"image_url,omitempty"`
 }
 

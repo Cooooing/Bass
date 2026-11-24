@@ -19,6 +19,7 @@ var _ MappedNullable = &ListBadgeDraftsResp{}
 
 // ListBadgeDraftsResp Resp 返回草稿行。
 type ListBadgeDraftsResp struct {
+	// 草稿列表。
 	Rows []BadgeDraft `json:"rows,omitempty"`
 }
 

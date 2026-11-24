@@ -19,9 +19,11 @@ import (
 // checks if the CollectArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CollectArticleReq{}
 
-// CollectArticleReq struct for CollectArticleReq
+// CollectArticleReq 请求参数。
 type CollectArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// 必填，是否收藏
 	Active bool `json:"active"`
 }
 

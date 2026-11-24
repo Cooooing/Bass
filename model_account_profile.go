@@ -18,21 +18,31 @@ import (
 // checks if the AccountProfile type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AccountProfile{}
 
-// AccountProfile struct for AccountProfile
+// AccountProfile 协议消息。
 type AccountProfile struct {
+	// 账号 ID
 	Id *string `json:"id,omitempty"`
+	// 账号名
 	Name *string `json:"name,omitempty"`
+	// 昵称
 	Nickname *string `json:"nickname,omitempty"`
+	// 个人主页
 	Url *string `json:"url,omitempty"`
+	// 头像 URL
 	AvatarUrl *string `json:"avatar_url,omitempty"`
-	BackgroundAssetId *string `json:"background_asset_id,omitempty"`
+	// 个人简介
 	Introduction *string `json:"introduction,omitempty"`
+	// MBTI 类型，规范化为大写
 	Mbti *string `json:"mbti,omitempty"`
+	// 账号状态
 	Status *string `json:"status,omitempty"`
+	// 关注数
 	FollowCount *int32 `json:"follow_count,omitempty"`
+	// 粉丝数
 	FollowerCount *int32 `json:"follower_count,omitempty"`
-	ProfileUrl *string `json:"profile_url,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
@@ -213,38 +223,6 @@ func (o *AccountProfile) SetAvatarUrl(v string) {
 	o.AvatarUrl = &v
 }
 
-// GetBackgroundAssetId returns the BackgroundAssetId field value if set, zero value otherwise.
-func (o *AccountProfile) GetBackgroundAssetId() string {
-	if o == nil || IsNil(o.BackgroundAssetId) {
-		var ret string
-		return ret
-	}
-	return *o.BackgroundAssetId
-}
-
-// GetBackgroundAssetIdOk returns a tuple with the BackgroundAssetId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *AccountProfile) GetBackgroundAssetIdOk() (*string, bool) {
-	if o == nil || IsNil(o.BackgroundAssetId) {
-		return nil, false
-	}
-	return o.BackgroundAssetId, true
-}
-
-// HasBackgroundAssetId returns a boolean if a field has been set.
-func (o *AccountProfile) HasBackgroundAssetId() bool {
-	if o != nil && !IsNil(o.BackgroundAssetId) {
-		return true
-	}
-
-	return false
-}
-
-// SetBackgroundAssetId gets a reference to the given string and assigns it to the BackgroundAssetId field.
-func (o *AccountProfile) SetBackgroundAssetId(v string) {
-	o.BackgroundAssetId = &v
-}
-
 // GetIntroduction returns the Introduction field value if set, zero value otherwise.
 func (o *AccountProfile) GetIntroduction() string {
 	if o == nil || IsNil(o.Introduction) {
@@ -405,38 +383,6 @@ func (o *AccountProfile) SetFollowerCount(v int32) {
 	o.FollowerCount = &v
 }
 
-// GetProfileUrl returns the ProfileUrl field value if set, zero value otherwise.
-func (o *AccountProfile) GetProfileUrl() string {
-	if o == nil || IsNil(o.ProfileUrl) {
-		var ret string
-		return ret
-	}
-	return *o.ProfileUrl
-}
-
-// GetProfileUrlOk returns a tuple with the ProfileUrl field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *AccountProfile) GetProfileUrlOk() (*string, bool) {
-	if o == nil || IsNil(o.ProfileUrl) {
-		return nil, false
-	}
-	return o.ProfileUrl, true
-}
-
-// HasProfileUrl returns a boolean if a field has been set.
-func (o *AccountProfile) HasProfileUrl() bool {
-	if o != nil && !IsNil(o.ProfileUrl) {
-		return true
-	}
-
-	return false
-}
-
-// SetProfileUrl gets a reference to the given string and assigns it to the ProfileUrl field.
-func (o *AccountProfile) SetProfileUrl(v string) {
-	o.ProfileUrl = &v
-}
-
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *AccountProfile) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
@@ -526,9 +472,6 @@ func (o AccountProfile) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AvatarUrl) {
 		toSerialize["avatar_url"] = o.AvatarUrl
 	}
-	if !IsNil(o.BackgroundAssetId) {
-		toSerialize["background_asset_id"] = o.BackgroundAssetId
-	}
 	if !IsNil(o.Introduction) {
 		toSerialize["introduction"] = o.Introduction
 	}
@@ -543,9 +486,6 @@ func (o AccountProfile) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.FollowerCount) {
 		toSerialize["follower_count"] = o.FollowerCount
-	}
-	if !IsNil(o.ProfileUrl) {
-		toSerialize["profile_url"] = o.ProfileUrl
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt

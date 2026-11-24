@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Group** | Pointer to [**EmojiGroup**](EmojiGroup.md) |  | [optional] 
+**Group** | Pointer to [**EmojiGroup**](EmojiGroup.md) | 已重命名分组。 | [optional] 
 
 ## Methods
 

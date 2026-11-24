@@ -19,9 +19,11 @@ import (
 // checks if the LikeArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &LikeArticleReq{}
 
-// LikeArticleReq struct for LikeArticleReq
+// LikeArticleReq 请求参数。
 type LikeArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// 必填，是否点赞
 	Active bool `json:"active"`
 }
 

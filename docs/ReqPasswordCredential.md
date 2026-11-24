@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Account** | Pointer to **string** |  | [optional] 
-**Password** | Pointer to **string** |  | [optional] 
-**Code** | Pointer to **string** |  | [optional] 
+**Account** | Pointer to **string** | 账号名、邮箱或手机号 | [optional] 
+**Password** | Pointer to **string** | 密码 | [optional] 
+**Code** | Pointer to **string** | 账号启用 TOTP 时作为 TOTP code | [optional] 
 
 ## Methods
 

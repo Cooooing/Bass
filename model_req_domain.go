@@ -19,15 +19,23 @@ import (
 // checks if the ReqDomain type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqDomain{}
 
-// ReqDomain struct for ReqDomain
+// ReqDomain 协议消息。
 type ReqDomain struct {
+	// 稳定编码
 	Code string `json:"code"`
+	// 领域名称
 	Name string `json:"name"`
+	// 描述
 	Description *string `json:"description,omitempty"`
+	// 启停状态
 	Status *string `json:"status,omitempty"`
+	// 链接
 	Url *string `json:"url,omitempty"`
+	// 图标
 	Icon *string `json:"icon,omitempty"`
+	// 是否在导航中展示
 	IsNav *bool `json:"is_nav,omitempty"`
+	// 排序值，越小越靠前
 	Sort *int32 `json:"sort,omitempty"`
 }
 

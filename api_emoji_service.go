@@ -22,202 +22,202 @@ import (
 type EmojiService interface {
 
 	/*
-	AddItem Method for AddItem
+	AddEmojiItem Method for AddEmojiItem
 
 	向分组加入已上传图片。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAddItemRequest
+	@return ApiAddEmojiItemRequest
 	*/
-	AddItem(ctx context.Context) ApiAddItemRequest
+	AddEmojiItem(ctx context.Context) ApiAddEmojiItemRequest
 
-	// AddItemExecute executes the request
+	// AddEmojiItemExecute executes the request
 	//  @return AddEmojiItemResp
-	AddItemExecute(r ApiAddItemRequest) (*AddEmojiItemResp, *http.Response, error)
+	AddEmojiItemExecute(r ApiAddEmojiItemRequest) (*AddEmojiItemResp, *http.Response, error)
 
 	/*
-	CreateGroup Method for CreateGroup
+	CreateEmojiGroup Method for CreateEmojiGroup
 
 	创建一个表情分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateGroupRequest
+	@return ApiCreateEmojiGroupRequest
 	*/
-	CreateGroup(ctx context.Context) ApiCreateGroupRequest
+	CreateEmojiGroup(ctx context.Context) ApiCreateEmojiGroupRequest
 
-	// CreateGroupExecute executes the request
+	// CreateEmojiGroupExecute executes the request
 	//  @return CreateEmojiGroupResp
-	CreateGroupExecute(r ApiCreateGroupRequest) (*CreateEmojiGroupResp, *http.Response, error)
+	CreateEmojiGroupExecute(r ApiCreateEmojiGroupRequest) (*CreateEmojiGroupResp, *http.Response, error)
 
 	/*
-	CreateShare Method for CreateShare
+	CreateEmojiShare Method for CreateEmojiShare
 
 	生成七天有效的分组分享码。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateShareRequest
+	@return ApiCreateEmojiShareRequest
 	*/
-	CreateShare(ctx context.Context) ApiCreateShareRequest
+	CreateEmojiShare(ctx context.Context) ApiCreateEmojiShareRequest
 
-	// CreateShareExecute executes the request
+	// CreateEmojiShareExecute executes the request
 	//  @return CreateEmojiShareResp
-	CreateShareExecute(r ApiCreateShareRequest) (*CreateEmojiShareResp, *http.Response, error)
+	CreateEmojiShareExecute(r ApiCreateEmojiShareRequest) (*CreateEmojiShareResp, *http.Response, error)
 
 	/*
-	DeleteGroup Method for DeleteGroup
+	DeleteEmojiGroup Method for DeleteEmojiGroup
 
 	删除一个表情分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiDeleteGroupRequest
+	@return ApiDeleteEmojiGroupRequest
 	*/
-	DeleteGroup(ctx context.Context) ApiDeleteGroupRequest
+	DeleteEmojiGroup(ctx context.Context) ApiDeleteEmojiGroupRequest
 
-	// DeleteGroupExecute executes the request
+	// DeleteEmojiGroupExecute executes the request
 	//  @return map[string]interface{}
-	DeleteGroupExecute(r ApiDeleteGroupRequest) (map[string]interface{}, *http.Response, error)
+	DeleteEmojiGroupExecute(r ApiDeleteEmojiGroupRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	DeleteItem Method for DeleteItem
+	DeleteEmojiItem Method for DeleteEmojiItem
 
 	从分组移除表情。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiDeleteItemRequest
+	@return ApiDeleteEmojiItemRequest
 	*/
-	DeleteItem(ctx context.Context) ApiDeleteItemRequest
+	DeleteEmojiItem(ctx context.Context) ApiDeleteEmojiItemRequest
 
-	// DeleteItemExecute executes the request
+	// DeleteEmojiItemExecute executes the request
 	//  @return map[string]interface{}
-	DeleteItemExecute(r ApiDeleteItemRequest) (map[string]interface{}, *http.Response, error)
+	DeleteEmojiItemExecute(r ApiDeleteEmojiItemRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	ImportShare Method for ImportShare
+	ImportEmojiShare Method for ImportEmojiShare
 
 	把分享码导入为一个新分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiImportShareRequest
+	@return ApiImportEmojiShareRequest
 	*/
-	ImportShare(ctx context.Context) ApiImportShareRequest
+	ImportEmojiShare(ctx context.Context) ApiImportEmojiShareRequest
 
-	// ImportShareExecute executes the request
+	// ImportEmojiShareExecute executes the request
 	//  @return ImportEmojiShareResp
-	ImportShareExecute(r ApiImportShareRequest) (*ImportEmojiShareResp, *http.Response, error)
+	ImportEmojiShareExecute(r ApiImportEmojiShareRequest) (*ImportEmojiShareResp, *http.Response, error)
 
 	/*
-	List Method for List
+	ListEmojiGroups Method for ListEmojiGroups
 
 	查询当前账号的表情分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListRequest
+	@return ApiListEmojiGroupsRequest
 	*/
-	List(ctx context.Context) ApiListRequest
+	ListEmojiGroups(ctx context.Context) ApiListEmojiGroupsRequest
 
-	// ListExecute executes the request
+	// ListEmojiGroupsExecute executes the request
 	//  @return ListEmojiGroupsResp
-	ListExecute(r ApiListRequest) (*ListEmojiGroupsResp, *http.Response, error)
+	ListEmojiGroupsExecute(r ApiListEmojiGroupsRequest) (*ListEmojiGroupsResp, *http.Response, error)
 
 	/*
-	MoveItem Method for MoveItem
+	MoveEmojiItem Method for MoveEmojiItem
 
 	将表情移动到另一个当前账号分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiMoveItemRequest
+	@return ApiMoveEmojiItemRequest
 	*/
-	MoveItem(ctx context.Context) ApiMoveItemRequest
+	MoveEmojiItem(ctx context.Context) ApiMoveEmojiItemRequest
 
-	// MoveItemExecute executes the request
+	// MoveEmojiItemExecute executes the request
 	//  @return MoveEmojiItemResp
-	MoveItemExecute(r ApiMoveItemRequest) (*MoveEmojiItemResp, *http.Response, error)
+	MoveEmojiItemExecute(r ApiMoveEmojiItemRequest) (*MoveEmojiItemResp, *http.Response, error)
 
 	/*
-	RenameGroup Method for RenameGroup
+	RenameEmojiGroup Method for RenameEmojiGroup
 
 	重命名一个表情分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRenameGroupRequest
+	@return ApiRenameEmojiGroupRequest
 	*/
-	RenameGroup(ctx context.Context) ApiRenameGroupRequest
+	RenameEmojiGroup(ctx context.Context) ApiRenameEmojiGroupRequest
 
-	// RenameGroupExecute executes the request
+	// RenameEmojiGroupExecute executes the request
 	//  @return RenameEmojiGroupResp
-	RenameGroupExecute(r ApiRenameGroupRequest) (*RenameEmojiGroupResp, *http.Response, error)
+	RenameEmojiGroupExecute(r ApiRenameEmojiGroupRequest) (*RenameEmojiGroupResp, *http.Response, error)
 
 	/*
-	RenameItem Method for RenameItem
+	RenameEmojiItem Method for RenameEmojiItem
 
 	重命名一个表情别名。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRenameItemRequest
+	@return ApiRenameEmojiItemRequest
 	*/
-	RenameItem(ctx context.Context) ApiRenameItemRequest
+	RenameEmojiItem(ctx context.Context) ApiRenameEmojiItemRequest
 
-	// RenameItemExecute executes the request
+	// RenameEmojiItemExecute executes the request
 	//  @return RenameEmojiItemResp
-	RenameItemExecute(r ApiRenameItemRequest) (*RenameEmojiItemResp, *http.Response, error)
+	RenameEmojiItemExecute(r ApiRenameEmojiItemRequest) (*RenameEmojiItemResp, *http.Response, error)
 
 	/*
-	ReorderGroups Method for ReorderGroups
+	ReorderEmojiGroups Method for ReorderEmojiGroups
 
 	重排表情分组。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiReorderGroupsRequest
+	@return ApiReorderEmojiGroupsRequest
 	*/
-	ReorderGroups(ctx context.Context) ApiReorderGroupsRequest
+	ReorderEmojiGroups(ctx context.Context) ApiReorderEmojiGroupsRequest
 
-	// ReorderGroupsExecute executes the request
+	// ReorderEmojiGroupsExecute executes the request
 	//  @return map[string]interface{}
-	ReorderGroupsExecute(r ApiReorderGroupsRequest) (map[string]interface{}, *http.Response, error)
+	ReorderEmojiGroupsExecute(r ApiReorderEmojiGroupsRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	ReorderItems Method for ReorderItems
+	ReorderEmojiItems Method for ReorderEmojiItems
 
 	重排同一分组内的表情。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiReorderItemsRequest
+	@return ApiReorderEmojiItemsRequest
 	*/
-	ReorderItems(ctx context.Context) ApiReorderItemsRequest
+	ReorderEmojiItems(ctx context.Context) ApiReorderEmojiItemsRequest
 
-	// ReorderItemsExecute executes the request
+	// ReorderEmojiItemsExecute executes the request
 	//  @return map[string]interface{}
-	ReorderItemsExecute(r ApiReorderItemsRequest) (map[string]interface{}, *http.Response, error)
+	ReorderEmojiItemsExecute(r ApiReorderEmojiItemsRequest) (map[string]interface{}, *http.Response, error)
 }
 
 // EmojiServiceService EmojiService service
 type EmojiServiceService service
 
-type ApiAddItemRequest struct {
+type ApiAddEmojiItemRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	addEmojiItemReq *AddEmojiItemReq
 }
 
-func (r ApiAddItemRequest) AddEmojiItemReq(addEmojiItemReq AddEmojiItemReq) ApiAddItemRequest {
+func (r ApiAddEmojiItemRequest) AddEmojiItemReq(addEmojiItemReq AddEmojiItemReq) ApiAddEmojiItemRequest {
 	r.addEmojiItemReq = &addEmojiItemReq
 	return r
 }
 
-func (r ApiAddItemRequest) Execute() (*AddEmojiItemResp, *http.Response, error) {
-	return r.ApiService.AddItemExecute(r)
+func (r ApiAddEmojiItemRequest) Execute() (*AddEmojiItemResp, *http.Response, error) {
+	return r.ApiService.AddEmojiItemExecute(r)
 }
 
 /*
-AddItem Method for AddItem
+AddEmojiItem Method for AddEmojiItem
 
 向分组加入已上传图片。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAddItemRequest
+ @return ApiAddEmojiItemRequest
 */
-func (a *EmojiServiceService) AddItem(ctx context.Context) ApiAddItemRequest {
-	return ApiAddItemRequest{
+func (a *EmojiServiceService) AddEmojiItem(ctx context.Context) ApiAddEmojiItemRequest {
+	return ApiAddEmojiItemRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -225,7 +225,7 @@ func (a *EmojiServiceService) AddItem(ctx context.Context) ApiAddItemRequest {
 
 // Execute executes the request
 //  @return AddEmojiItemResp
-func (a *EmojiServiceService) AddItemExecute(r ApiAddItemRequest) (*AddEmojiItemResp, *http.Response, error) {
+func (a *EmojiServiceService) AddEmojiItemExecute(r ApiAddEmojiItemRequest) (*AddEmojiItemResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -233,7 +233,7 @@ func (a *EmojiServiceService) AddItemExecute(r ApiAddItemRequest) (*AddEmojiItem
 		localVarReturnValue  *AddEmojiItemResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.AddItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.AddEmojiItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -303,31 +303,31 @@ func (a *EmojiServiceService) AddItemExecute(r ApiAddItemRequest) (*AddEmojiItem
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCreateGroupRequest struct {
+type ApiCreateEmojiGroupRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	createEmojiGroupReq *CreateEmojiGroupReq
 }
 
-func (r ApiCreateGroupRequest) CreateEmojiGroupReq(createEmojiGroupReq CreateEmojiGroupReq) ApiCreateGroupRequest {
+func (r ApiCreateEmojiGroupRequest) CreateEmojiGroupReq(createEmojiGroupReq CreateEmojiGroupReq) ApiCreateEmojiGroupRequest {
 	r.createEmojiGroupReq = &createEmojiGroupReq
 	return r
 }
 
-func (r ApiCreateGroupRequest) Execute() (*CreateEmojiGroupResp, *http.Response, error) {
-	return r.ApiService.CreateGroupExecute(r)
+func (r ApiCreateEmojiGroupRequest) Execute() (*CreateEmojiGroupResp, *http.Response, error) {
+	return r.ApiService.CreateEmojiGroupExecute(r)
 }
 
 /*
-CreateGroup Method for CreateGroup
+CreateEmojiGroup Method for CreateEmojiGroup
 
 创建一个表情分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateGroupRequest
+ @return ApiCreateEmojiGroupRequest
 */
-func (a *EmojiServiceService) CreateGroup(ctx context.Context) ApiCreateGroupRequest {
-	return ApiCreateGroupRequest{
+func (a *EmojiServiceService) CreateEmojiGroup(ctx context.Context) ApiCreateEmojiGroupRequest {
+	return ApiCreateEmojiGroupRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -335,7 +335,7 @@ func (a *EmojiServiceService) CreateGroup(ctx context.Context) ApiCreateGroupReq
 
 // Execute executes the request
 //  @return CreateEmojiGroupResp
-func (a *EmojiServiceService) CreateGroupExecute(r ApiCreateGroupRequest) (*CreateEmojiGroupResp, *http.Response, error) {
+func (a *EmojiServiceService) CreateEmojiGroupExecute(r ApiCreateEmojiGroupRequest) (*CreateEmojiGroupResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -343,7 +343,7 @@ func (a *EmojiServiceService) CreateGroupExecute(r ApiCreateGroupRequest) (*Crea
 		localVarReturnValue  *CreateEmojiGroupResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.CreateGroup")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.CreateEmojiGroup")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -413,31 +413,31 @@ func (a *EmojiServiceService) CreateGroupExecute(r ApiCreateGroupRequest) (*Crea
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCreateShareRequest struct {
+type ApiCreateEmojiShareRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	createEmojiShareReq *CreateEmojiShareReq
 }
 
-func (r ApiCreateShareRequest) CreateEmojiShareReq(createEmojiShareReq CreateEmojiShareReq) ApiCreateShareRequest {
+func (r ApiCreateEmojiShareRequest) CreateEmojiShareReq(createEmojiShareReq CreateEmojiShareReq) ApiCreateEmojiShareRequest {
 	r.createEmojiShareReq = &createEmojiShareReq
 	return r
 }
 
-func (r ApiCreateShareRequest) Execute() (*CreateEmojiShareResp, *http.Response, error) {
-	return r.ApiService.CreateShareExecute(r)
+func (r ApiCreateEmojiShareRequest) Execute() (*CreateEmojiShareResp, *http.Response, error) {
+	return r.ApiService.CreateEmojiShareExecute(r)
 }
 
 /*
-CreateShare Method for CreateShare
+CreateEmojiShare Method for CreateEmojiShare
 
 生成七天有效的分组分享码。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateShareRequest
+ @return ApiCreateEmojiShareRequest
 */
-func (a *EmojiServiceService) CreateShare(ctx context.Context) ApiCreateShareRequest {
-	return ApiCreateShareRequest{
+func (a *EmojiServiceService) CreateEmojiShare(ctx context.Context) ApiCreateEmojiShareRequest {
+	return ApiCreateEmojiShareRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -445,7 +445,7 @@ func (a *EmojiServiceService) CreateShare(ctx context.Context) ApiCreateShareReq
 
 // Execute executes the request
 //  @return CreateEmojiShareResp
-func (a *EmojiServiceService) CreateShareExecute(r ApiCreateShareRequest) (*CreateEmojiShareResp, *http.Response, error) {
+func (a *EmojiServiceService) CreateEmojiShareExecute(r ApiCreateEmojiShareRequest) (*CreateEmojiShareResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -453,7 +453,7 @@ func (a *EmojiServiceService) CreateShareExecute(r ApiCreateShareRequest) (*Crea
 		localVarReturnValue  *CreateEmojiShareResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.CreateShare")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.CreateEmojiShare")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -523,31 +523,31 @@ func (a *EmojiServiceService) CreateShareExecute(r ApiCreateShareRequest) (*Crea
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiDeleteGroupRequest struct {
+type ApiDeleteEmojiGroupRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	deleteEmojiGroupReq *DeleteEmojiGroupReq
 }
 
-func (r ApiDeleteGroupRequest) DeleteEmojiGroupReq(deleteEmojiGroupReq DeleteEmojiGroupReq) ApiDeleteGroupRequest {
+func (r ApiDeleteEmojiGroupRequest) DeleteEmojiGroupReq(deleteEmojiGroupReq DeleteEmojiGroupReq) ApiDeleteEmojiGroupRequest {
 	r.deleteEmojiGroupReq = &deleteEmojiGroupReq
 	return r
 }
 
-func (r ApiDeleteGroupRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.DeleteGroupExecute(r)
+func (r ApiDeleteEmojiGroupRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DeleteEmojiGroupExecute(r)
 }
 
 /*
-DeleteGroup Method for DeleteGroup
+DeleteEmojiGroup Method for DeleteEmojiGroup
 
 删除一个表情分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiDeleteGroupRequest
+ @return ApiDeleteEmojiGroupRequest
 */
-func (a *EmojiServiceService) DeleteGroup(ctx context.Context) ApiDeleteGroupRequest {
-	return ApiDeleteGroupRequest{
+func (a *EmojiServiceService) DeleteEmojiGroup(ctx context.Context) ApiDeleteEmojiGroupRequest {
+	return ApiDeleteEmojiGroupRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -555,7 +555,7 @@ func (a *EmojiServiceService) DeleteGroup(ctx context.Context) ApiDeleteGroupReq
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *EmojiServiceService) DeleteGroupExecute(r ApiDeleteGroupRequest) (map[string]interface{}, *http.Response, error) {
+func (a *EmojiServiceService) DeleteEmojiGroupExecute(r ApiDeleteEmojiGroupRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -563,7 +563,7 @@ func (a *EmojiServiceService) DeleteGroupExecute(r ApiDeleteGroupRequest) (map[s
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.DeleteGroup")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.DeleteEmojiGroup")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -633,31 +633,31 @@ func (a *EmojiServiceService) DeleteGroupExecute(r ApiDeleteGroupRequest) (map[s
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiDeleteItemRequest struct {
+type ApiDeleteEmojiItemRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	deleteEmojiItemReq *DeleteEmojiItemReq
 }
 
-func (r ApiDeleteItemRequest) DeleteEmojiItemReq(deleteEmojiItemReq DeleteEmojiItemReq) ApiDeleteItemRequest {
+func (r ApiDeleteEmojiItemRequest) DeleteEmojiItemReq(deleteEmojiItemReq DeleteEmojiItemReq) ApiDeleteEmojiItemRequest {
 	r.deleteEmojiItemReq = &deleteEmojiItemReq
 	return r
 }
 
-func (r ApiDeleteItemRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.DeleteItemExecute(r)
+func (r ApiDeleteEmojiItemRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DeleteEmojiItemExecute(r)
 }
 
 /*
-DeleteItem Method for DeleteItem
+DeleteEmojiItem Method for DeleteEmojiItem
 
 从分组移除表情。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiDeleteItemRequest
+ @return ApiDeleteEmojiItemRequest
 */
-func (a *EmojiServiceService) DeleteItem(ctx context.Context) ApiDeleteItemRequest {
-	return ApiDeleteItemRequest{
+func (a *EmojiServiceService) DeleteEmojiItem(ctx context.Context) ApiDeleteEmojiItemRequest {
+	return ApiDeleteEmojiItemRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -665,7 +665,7 @@ func (a *EmojiServiceService) DeleteItem(ctx context.Context) ApiDeleteItemReque
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *EmojiServiceService) DeleteItemExecute(r ApiDeleteItemRequest) (map[string]interface{}, *http.Response, error) {
+func (a *EmojiServiceService) DeleteEmojiItemExecute(r ApiDeleteEmojiItemRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -673,7 +673,7 @@ func (a *EmojiServiceService) DeleteItemExecute(r ApiDeleteItemRequest) (map[str
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.DeleteItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.DeleteEmojiItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -743,31 +743,31 @@ func (a *EmojiServiceService) DeleteItemExecute(r ApiDeleteItemRequest) (map[str
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiImportShareRequest struct {
+type ApiImportEmojiShareRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	importEmojiShareReq *ImportEmojiShareReq
 }
 
-func (r ApiImportShareRequest) ImportEmojiShareReq(importEmojiShareReq ImportEmojiShareReq) ApiImportShareRequest {
+func (r ApiImportEmojiShareRequest) ImportEmojiShareReq(importEmojiShareReq ImportEmojiShareReq) ApiImportEmojiShareRequest {
 	r.importEmojiShareReq = &importEmojiShareReq
 	return r
 }
 
-func (r ApiImportShareRequest) Execute() (*ImportEmojiShareResp, *http.Response, error) {
-	return r.ApiService.ImportShareExecute(r)
+func (r ApiImportEmojiShareRequest) Execute() (*ImportEmojiShareResp, *http.Response, error) {
+	return r.ApiService.ImportEmojiShareExecute(r)
 }
 
 /*
-ImportShare Method for ImportShare
+ImportEmojiShare Method for ImportEmojiShare
 
 把分享码导入为一个新分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiImportShareRequest
+ @return ApiImportEmojiShareRequest
 */
-func (a *EmojiServiceService) ImportShare(ctx context.Context) ApiImportShareRequest {
-	return ApiImportShareRequest{
+func (a *EmojiServiceService) ImportEmojiShare(ctx context.Context) ApiImportEmojiShareRequest {
+	return ApiImportEmojiShareRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -775,7 +775,7 @@ func (a *EmojiServiceService) ImportShare(ctx context.Context) ApiImportShareReq
 
 // Execute executes the request
 //  @return ImportEmojiShareResp
-func (a *EmojiServiceService) ImportShareExecute(r ApiImportShareRequest) (*ImportEmojiShareResp, *http.Response, error) {
+func (a *EmojiServiceService) ImportEmojiShareExecute(r ApiImportEmojiShareRequest) (*ImportEmojiShareResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -783,7 +783,7 @@ func (a *EmojiServiceService) ImportShareExecute(r ApiImportShareRequest) (*Impo
 		localVarReturnValue  *ImportEmojiShareResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ImportShare")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ImportEmojiShare")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -853,31 +853,31 @@ func (a *EmojiServiceService) ImportShareExecute(r ApiImportShareRequest) (*Impo
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListRequest struct {
+type ApiListEmojiGroupsRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	listEmojiGroupsReq *ListEmojiGroupsReq
 }
 
-func (r ApiListRequest) ListEmojiGroupsReq(listEmojiGroupsReq ListEmojiGroupsReq) ApiListRequest {
+func (r ApiListEmojiGroupsRequest) ListEmojiGroupsReq(listEmojiGroupsReq ListEmojiGroupsReq) ApiListEmojiGroupsRequest {
 	r.listEmojiGroupsReq = &listEmojiGroupsReq
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListEmojiGroupsResp, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
+func (r ApiListEmojiGroupsRequest) Execute() (*ListEmojiGroupsResp, *http.Response, error) {
+	return r.ApiService.ListEmojiGroupsExecute(r)
 }
 
 /*
-List Method for List
+ListEmojiGroups Method for ListEmojiGroups
 
 查询当前账号的表情分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
+ @return ApiListEmojiGroupsRequest
 */
-func (a *EmojiServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
+func (a *EmojiServiceService) ListEmojiGroups(ctx context.Context) ApiListEmojiGroupsRequest {
+	return ApiListEmojiGroupsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -885,7 +885,7 @@ func (a *EmojiServiceService) List(ctx context.Context) ApiListRequest {
 
 // Execute executes the request
 //  @return ListEmojiGroupsResp
-func (a *EmojiServiceService) ListExecute(r ApiListRequest) (*ListEmojiGroupsResp, *http.Response, error) {
+func (a *EmojiServiceService) ListEmojiGroupsExecute(r ApiListEmojiGroupsRequest) (*ListEmojiGroupsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -893,7 +893,7 @@ func (a *EmojiServiceService) ListExecute(r ApiListRequest) (*ListEmojiGroupsRes
 		localVarReturnValue  *ListEmojiGroupsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ListEmojiGroups")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -963,31 +963,31 @@ func (a *EmojiServiceService) ListExecute(r ApiListRequest) (*ListEmojiGroupsRes
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiMoveItemRequest struct {
+type ApiMoveEmojiItemRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	moveEmojiItemReq *MoveEmojiItemReq
 }
 
-func (r ApiMoveItemRequest) MoveEmojiItemReq(moveEmojiItemReq MoveEmojiItemReq) ApiMoveItemRequest {
+func (r ApiMoveEmojiItemRequest) MoveEmojiItemReq(moveEmojiItemReq MoveEmojiItemReq) ApiMoveEmojiItemRequest {
 	r.moveEmojiItemReq = &moveEmojiItemReq
 	return r
 }
 
-func (r ApiMoveItemRequest) Execute() (*MoveEmojiItemResp, *http.Response, error) {
-	return r.ApiService.MoveItemExecute(r)
+func (r ApiMoveEmojiItemRequest) Execute() (*MoveEmojiItemResp, *http.Response, error) {
+	return r.ApiService.MoveEmojiItemExecute(r)
 }
 
 /*
-MoveItem Method for MoveItem
+MoveEmojiItem Method for MoveEmojiItem
 
 将表情移动到另一个当前账号分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiMoveItemRequest
+ @return ApiMoveEmojiItemRequest
 */
-func (a *EmojiServiceService) MoveItem(ctx context.Context) ApiMoveItemRequest {
-	return ApiMoveItemRequest{
+func (a *EmojiServiceService) MoveEmojiItem(ctx context.Context) ApiMoveEmojiItemRequest {
+	return ApiMoveEmojiItemRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -995,7 +995,7 @@ func (a *EmojiServiceService) MoveItem(ctx context.Context) ApiMoveItemRequest {
 
 // Execute executes the request
 //  @return MoveEmojiItemResp
-func (a *EmojiServiceService) MoveItemExecute(r ApiMoveItemRequest) (*MoveEmojiItemResp, *http.Response, error) {
+func (a *EmojiServiceService) MoveEmojiItemExecute(r ApiMoveEmojiItemRequest) (*MoveEmojiItemResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1003,7 +1003,7 @@ func (a *EmojiServiceService) MoveItemExecute(r ApiMoveItemRequest) (*MoveEmojiI
 		localVarReturnValue  *MoveEmojiItemResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.MoveItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.MoveEmojiItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1073,31 +1073,31 @@ func (a *EmojiServiceService) MoveItemExecute(r ApiMoveItemRequest) (*MoveEmojiI
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRenameGroupRequest struct {
+type ApiRenameEmojiGroupRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	renameEmojiGroupReq *RenameEmojiGroupReq
 }
 
-func (r ApiRenameGroupRequest) RenameEmojiGroupReq(renameEmojiGroupReq RenameEmojiGroupReq) ApiRenameGroupRequest {
+func (r ApiRenameEmojiGroupRequest) RenameEmojiGroupReq(renameEmojiGroupReq RenameEmojiGroupReq) ApiRenameEmojiGroupRequest {
 	r.renameEmojiGroupReq = &renameEmojiGroupReq
 	return r
 }
 
-func (r ApiRenameGroupRequest) Execute() (*RenameEmojiGroupResp, *http.Response, error) {
-	return r.ApiService.RenameGroupExecute(r)
+func (r ApiRenameEmojiGroupRequest) Execute() (*RenameEmojiGroupResp, *http.Response, error) {
+	return r.ApiService.RenameEmojiGroupExecute(r)
 }
 
 /*
-RenameGroup Method for RenameGroup
+RenameEmojiGroup Method for RenameEmojiGroup
 
 重命名一个表情分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRenameGroupRequest
+ @return ApiRenameEmojiGroupRequest
 */
-func (a *EmojiServiceService) RenameGroup(ctx context.Context) ApiRenameGroupRequest {
-	return ApiRenameGroupRequest{
+func (a *EmojiServiceService) RenameEmojiGroup(ctx context.Context) ApiRenameEmojiGroupRequest {
+	return ApiRenameEmojiGroupRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1105,7 +1105,7 @@ func (a *EmojiServiceService) RenameGroup(ctx context.Context) ApiRenameGroupReq
 
 // Execute executes the request
 //  @return RenameEmojiGroupResp
-func (a *EmojiServiceService) RenameGroupExecute(r ApiRenameGroupRequest) (*RenameEmojiGroupResp, *http.Response, error) {
+func (a *EmojiServiceService) RenameEmojiGroupExecute(r ApiRenameEmojiGroupRequest) (*RenameEmojiGroupResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1113,7 +1113,7 @@ func (a *EmojiServiceService) RenameGroupExecute(r ApiRenameGroupRequest) (*Rena
 		localVarReturnValue  *RenameEmojiGroupResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.RenameGroup")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.RenameEmojiGroup")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1183,31 +1183,31 @@ func (a *EmojiServiceService) RenameGroupExecute(r ApiRenameGroupRequest) (*Rena
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRenameItemRequest struct {
+type ApiRenameEmojiItemRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	renameEmojiItemReq *RenameEmojiItemReq
 }
 
-func (r ApiRenameItemRequest) RenameEmojiItemReq(renameEmojiItemReq RenameEmojiItemReq) ApiRenameItemRequest {
+func (r ApiRenameEmojiItemRequest) RenameEmojiItemReq(renameEmojiItemReq RenameEmojiItemReq) ApiRenameEmojiItemRequest {
 	r.renameEmojiItemReq = &renameEmojiItemReq
 	return r
 }
 
-func (r ApiRenameItemRequest) Execute() (*RenameEmojiItemResp, *http.Response, error) {
-	return r.ApiService.RenameItemExecute(r)
+func (r ApiRenameEmojiItemRequest) Execute() (*RenameEmojiItemResp, *http.Response, error) {
+	return r.ApiService.RenameEmojiItemExecute(r)
 }
 
 /*
-RenameItem Method for RenameItem
+RenameEmojiItem Method for RenameEmojiItem
 
 重命名一个表情别名。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRenameItemRequest
+ @return ApiRenameEmojiItemRequest
 */
-func (a *EmojiServiceService) RenameItem(ctx context.Context) ApiRenameItemRequest {
-	return ApiRenameItemRequest{
+func (a *EmojiServiceService) RenameEmojiItem(ctx context.Context) ApiRenameEmojiItemRequest {
+	return ApiRenameEmojiItemRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1215,7 +1215,7 @@ func (a *EmojiServiceService) RenameItem(ctx context.Context) ApiRenameItemReque
 
 // Execute executes the request
 //  @return RenameEmojiItemResp
-func (a *EmojiServiceService) RenameItemExecute(r ApiRenameItemRequest) (*RenameEmojiItemResp, *http.Response, error) {
+func (a *EmojiServiceService) RenameEmojiItemExecute(r ApiRenameEmojiItemRequest) (*RenameEmojiItemResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1223,7 +1223,7 @@ func (a *EmojiServiceService) RenameItemExecute(r ApiRenameItemRequest) (*Rename
 		localVarReturnValue  *RenameEmojiItemResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.RenameItem")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.RenameEmojiItem")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1293,31 +1293,31 @@ func (a *EmojiServiceService) RenameItemExecute(r ApiRenameItemRequest) (*Rename
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiReorderGroupsRequest struct {
+type ApiReorderEmojiGroupsRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	reorderEmojiGroupsReq *ReorderEmojiGroupsReq
 }
 
-func (r ApiReorderGroupsRequest) ReorderEmojiGroupsReq(reorderEmojiGroupsReq ReorderEmojiGroupsReq) ApiReorderGroupsRequest {
+func (r ApiReorderEmojiGroupsRequest) ReorderEmojiGroupsReq(reorderEmojiGroupsReq ReorderEmojiGroupsReq) ApiReorderEmojiGroupsRequest {
 	r.reorderEmojiGroupsReq = &reorderEmojiGroupsReq
 	return r
 }
 
-func (r ApiReorderGroupsRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.ReorderGroupsExecute(r)
+func (r ApiReorderEmojiGroupsRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.ReorderEmojiGroupsExecute(r)
 }
 
 /*
-ReorderGroups Method for ReorderGroups
+ReorderEmojiGroups Method for ReorderEmojiGroups
 
 重排表情分组。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiReorderGroupsRequest
+ @return ApiReorderEmojiGroupsRequest
 */
-func (a *EmojiServiceService) ReorderGroups(ctx context.Context) ApiReorderGroupsRequest {
-	return ApiReorderGroupsRequest{
+func (a *EmojiServiceService) ReorderEmojiGroups(ctx context.Context) ApiReorderEmojiGroupsRequest {
+	return ApiReorderEmojiGroupsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1325,7 +1325,7 @@ func (a *EmojiServiceService) ReorderGroups(ctx context.Context) ApiReorderGroup
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *EmojiServiceService) ReorderGroupsExecute(r ApiReorderGroupsRequest) (map[string]interface{}, *http.Response, error) {
+func (a *EmojiServiceService) ReorderEmojiGroupsExecute(r ApiReorderEmojiGroupsRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1333,7 +1333,7 @@ func (a *EmojiServiceService) ReorderGroupsExecute(r ApiReorderGroupsRequest) (m
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ReorderGroups")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ReorderEmojiGroups")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1403,31 +1403,31 @@ func (a *EmojiServiceService) ReorderGroupsExecute(r ApiReorderGroupsRequest) (m
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiReorderItemsRequest struct {
+type ApiReorderEmojiItemsRequest struct {
 	ctx context.Context
 	ApiService EmojiService
 	reorderEmojiItemsReq *ReorderEmojiItemsReq
 }
 
-func (r ApiReorderItemsRequest) ReorderEmojiItemsReq(reorderEmojiItemsReq ReorderEmojiItemsReq) ApiReorderItemsRequest {
+func (r ApiReorderEmojiItemsRequest) ReorderEmojiItemsReq(reorderEmojiItemsReq ReorderEmojiItemsReq) ApiReorderEmojiItemsRequest {
 	r.reorderEmojiItemsReq = &reorderEmojiItemsReq
 	return r
 }
 
-func (r ApiReorderItemsRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.ReorderItemsExecute(r)
+func (r ApiReorderEmojiItemsRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.ReorderEmojiItemsExecute(r)
 }
 
 /*
-ReorderItems Method for ReorderItems
+ReorderEmojiItems Method for ReorderEmojiItems
 
 重排同一分组内的表情。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiReorderItemsRequest
+ @return ApiReorderEmojiItemsRequest
 */
-func (a *EmojiServiceService) ReorderItems(ctx context.Context) ApiReorderItemsRequest {
-	return ApiReorderItemsRequest{
+func (a *EmojiServiceService) ReorderEmojiItems(ctx context.Context) ApiReorderEmojiItemsRequest {
+	return ApiReorderEmojiItemsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1435,7 +1435,7 @@ func (a *EmojiServiceService) ReorderItems(ctx context.Context) ApiReorderItemsR
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *EmojiServiceService) ReorderItemsExecute(r ApiReorderItemsRequest) (map[string]interface{}, *http.Response, error) {
+func (a *EmojiServiceService) ReorderEmojiItemsExecute(r ApiReorderEmojiItemsRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1443,7 +1443,7 @@ func (a *EmojiServiceService) ReorderItemsExecute(r ApiReorderItemsRequest) (map
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ReorderItems")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "EmojiServiceService.ReorderEmojiItems")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

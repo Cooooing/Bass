@@ -17,10 +17,13 @@ import (
 // checks if the ListPrivateChatMessagesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListPrivateChatMessagesReq{}
 
-// ListPrivateChatMessagesReq struct for ListPrivateChatMessagesReq
+// ListPrivateChatMessagesReq 请求参数。
 type ListPrivateChatMessagesReq struct {
+	// 对端账号 ID。
 	PeerUserId *string `json:"peer_user_id,omitempty"`
+	// 向前分页游标。
 	BeforeId *string `json:"before_id,omitempty"`
+	// 分页参数。
 	Page *PageReq `json:"page,omitempty"`
 }
 

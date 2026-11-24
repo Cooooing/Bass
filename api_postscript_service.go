@@ -22,62 +22,62 @@ import (
 type PostscriptService interface {
 
 	/*
-	Add Method for Add
+	AddPostscript Method for AddPostscript
 
 	添加文章附言。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAddRequest
+	@return ApiAddPostscriptRequest
 	*/
-	Add(ctx context.Context) ApiAddRequest
+	AddPostscript(ctx context.Context) ApiAddPostscriptRequest
 
-	// AddExecute executes the request
+	// AddPostscriptExecute executes the request
 	//  @return AddPostscriptResp
-	AddExecute(r ApiAddRequest) (*AddPostscriptResp, *http.Response, error)
+	AddPostscriptExecute(r ApiAddPostscriptRequest) (*AddPostscriptResp, *http.Response, error)
 
 	/*
-	List Method for List
+	ListPostscripts Method for ListPostscripts
 
 	查询文章附言列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListRequest
+	@return ApiListPostscriptsRequest
 	*/
-	List(ctx context.Context) ApiListRequest
+	ListPostscripts(ctx context.Context) ApiListPostscriptsRequest
 
-	// ListExecute executes the request
+	// ListPostscriptsExecute executes the request
 	//  @return ListPostscriptsResp
-	ListExecute(r ApiListRequest) (*ListPostscriptsResp, *http.Response, error)
+	ListPostscriptsExecute(r ApiListPostscriptsRequest) (*ListPostscriptsResp, *http.Response, error)
 }
 
 // PostscriptServiceService PostscriptService service
 type PostscriptServiceService service
 
-type ApiAddRequest struct {
+type ApiAddPostscriptRequest struct {
 	ctx context.Context
 	ApiService PostscriptService
 	addPostscriptReq *AddPostscriptReq
 }
 
-func (r ApiAddRequest) AddPostscriptReq(addPostscriptReq AddPostscriptReq) ApiAddRequest {
+func (r ApiAddPostscriptRequest) AddPostscriptReq(addPostscriptReq AddPostscriptReq) ApiAddPostscriptRequest {
 	r.addPostscriptReq = &addPostscriptReq
 	return r
 }
 
-func (r ApiAddRequest) Execute() (*AddPostscriptResp, *http.Response, error) {
-	return r.ApiService.AddExecute(r)
+func (r ApiAddPostscriptRequest) Execute() (*AddPostscriptResp, *http.Response, error) {
+	return r.ApiService.AddPostscriptExecute(r)
 }
 
 /*
-Add Method for Add
+AddPostscript Method for AddPostscript
 
 添加文章附言。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAddRequest
+ @return ApiAddPostscriptRequest
 */
-func (a *PostscriptServiceService) Add(ctx context.Context) ApiAddRequest {
-	return ApiAddRequest{
+func (a *PostscriptServiceService) AddPostscript(ctx context.Context) ApiAddPostscriptRequest {
+	return ApiAddPostscriptRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -85,7 +85,7 @@ func (a *PostscriptServiceService) Add(ctx context.Context) ApiAddRequest {
 
 // Execute executes the request
 //  @return AddPostscriptResp
-func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptResp, *http.Response, error) {
+func (a *PostscriptServiceService) AddPostscriptExecute(r ApiAddPostscriptRequest) (*AddPostscriptResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -93,7 +93,7 @@ func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptRe
 		localVarReturnValue  *AddPostscriptResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceService.Add")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceService.AddPostscript")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -163,31 +163,31 @@ func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptRe
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListRequest struct {
+type ApiListPostscriptsRequest struct {
 	ctx context.Context
 	ApiService PostscriptService
 	listPostscriptsReq *ListPostscriptsReq
 }
 
-func (r ApiListRequest) ListPostscriptsReq(listPostscriptsReq ListPostscriptsReq) ApiListRequest {
+func (r ApiListPostscriptsRequest) ListPostscriptsReq(listPostscriptsReq ListPostscriptsReq) ApiListPostscriptsRequest {
 	r.listPostscriptsReq = &listPostscriptsReq
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListPostscriptsResp, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
+func (r ApiListPostscriptsRequest) Execute() (*ListPostscriptsResp, *http.Response, error) {
+	return r.ApiService.ListPostscriptsExecute(r)
 }
 
 /*
-List Method for List
+ListPostscripts Method for ListPostscripts
 
 查询文章附言列表。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
+ @return ApiListPostscriptsRequest
 */
-func (a *PostscriptServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
+func (a *PostscriptServiceService) ListPostscripts(ctx context.Context) ApiListPostscriptsRequest {
+	return ApiListPostscriptsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -195,7 +195,7 @@ func (a *PostscriptServiceService) List(ctx context.Context) ApiListRequest {
 
 // Execute executes the request
 //  @return ListPostscriptsResp
-func (a *PostscriptServiceService) ListExecute(r ApiListRequest) (*ListPostscriptsResp, *http.Response, error) {
+func (a *PostscriptServiceService) ListPostscriptsExecute(r ApiListPostscriptsRequest) (*ListPostscriptsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -203,7 +203,7 @@ func (a *PostscriptServiceService) ListExecute(r ApiListRequest) (*ListPostscrip
 		localVarReturnValue  *ListPostscriptsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceService.ListPostscripts")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

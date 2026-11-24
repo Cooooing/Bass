@@ -4,13 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CreateTicket**](RealtimeService.md#CreateTicket) | **Post** /v1/realtime/ticket | 
+[**CreateRealtimeTicket**](RealtimeService.md#CreateRealtimeTicket) | **Post** /v1/realtime/ticket | 
 
 
 
-## CreateTicket
+## CreateRealtimeTicket
 
-> CreateRealtimeTicketResp CreateTicket(ctx).Body(body).Execute()
+> CreateRealtimeTicketResp CreateRealtimeTicket(ctx).Body(body).Execute()
+
+
 
 
 
@@ -31,13 +33,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RealtimeService.CreateTicket(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.RealtimeService.CreateRealtimeTicket(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `RealtimeService.CreateTicket``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `RealtimeService.CreateRealtimeTicket``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateTicket`: CreateRealtimeTicketResp
-	fmt.Fprintf(os.Stdout, "Response from `RealtimeService.CreateTicket`: %v\n", resp)
+	// response from `CreateRealtimeTicket`: CreateRealtimeTicketResp
+	fmt.Fprintf(os.Stdout, "Response from `RealtimeService.CreateRealtimeTicket`: %v\n", resp)
 }
 ```
 
@@ -47,7 +49,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateTicketRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateRealtimeTicketRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

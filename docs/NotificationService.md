@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**CountUnread**](NotificationService.md#CountUnread) | **Post** /v1/notify/notification/count-unread | 
-[**List**](NotificationService.md#List) | **Post** /v1/notify/notification/list | 
-[**MarkRead**](NotificationService.md#MarkRead) | **Post** /v1/notify/notification/mark-read | 
+[**CountUnreadNotifications**](NotificationService.md#CountUnreadNotifications) | **Post** /v1/notify/notification/count-unread | 
+[**ListNotifications**](NotificationService.md#ListNotifications) | **Post** /v1/notify/notification/list | 
+[**MarkReadNotification**](NotificationService.md#MarkReadNotification) | **Post** /v1/notify/notification/mark-read | 
 
 
 
-## CountUnread
+## CountUnreadNotifications
 
-> CountUnreadNotificationsResp CountUnread(ctx).Body(body).Execute()
+> CountUnreadNotificationsResp CountUnreadNotifications(ctx).Body(body).Execute()
 
 
 
@@ -35,13 +35,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NotificationService.CountUnread(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.NotificationService.CountUnreadNotifications(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.CountUnread``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.CountUnreadNotifications``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CountUnread`: CountUnreadNotificationsResp
-	fmt.Fprintf(os.Stdout, "Response from `NotificationService.CountUnread`: %v\n", resp)
+	// response from `CountUnreadNotifications`: CountUnreadNotificationsResp
+	fmt.Fprintf(os.Stdout, "Response from `NotificationService.CountUnreadNotifications`: %v\n", resp)
 }
 ```
 
@@ -51,7 +51,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCountUnreadRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCountUnreadNotificationsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -76,9 +76,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## List
+## ListNotifications
 
-> ListNotificationsResp List(ctx).ListNotificationsReq(listNotificationsReq).Execute()
+> ListNotificationsResp ListNotifications(ctx).ListNotificationsReq(listNotificationsReq).Execute()
 
 
 
@@ -101,13 +101,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NotificationService.List(context.Background()).ListNotificationsReq(listNotificationsReq).Execute()
+	resp, r, err := apiClient.NotificationService.ListNotifications(context.Background()).ListNotificationsReq(listNotificationsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.List``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.ListNotifications``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListNotificationsResp
-	fmt.Fprintf(os.Stdout, "Response from `NotificationService.List`: %v\n", resp)
+	// response from `ListNotifications`: ListNotificationsResp
+	fmt.Fprintf(os.Stdout, "Response from `NotificationService.ListNotifications`: %v\n", resp)
 }
 ```
 
@@ -117,7 +117,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListNotificationsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -142,9 +142,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## MarkRead
+## MarkReadNotification
 
-> MarkReadNotificationResp MarkRead(ctx).MarkReadNotificationReq(markReadNotificationReq).Execute()
+> MarkReadNotificationResp MarkReadNotification(ctx).MarkReadNotificationReq(markReadNotificationReq).Execute()
 
 
 
@@ -167,13 +167,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NotificationService.MarkRead(context.Background()).MarkReadNotificationReq(markReadNotificationReq).Execute()
+	resp, r, err := apiClient.NotificationService.MarkReadNotification(context.Background()).MarkReadNotificationReq(markReadNotificationReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.MarkRead``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.MarkReadNotification``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `MarkRead`: MarkReadNotificationResp
-	fmt.Fprintf(os.Stdout, "Response from `NotificationService.MarkRead`: %v\n", resp)
+	// response from `MarkReadNotification`: MarkReadNotificationResp
+	fmt.Fprintf(os.Stdout, "Response from `NotificationService.MarkReadNotification`: %v\n", resp)
 }
 ```
 
@@ -183,7 +183,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiMarkReadRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiMarkReadNotificationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

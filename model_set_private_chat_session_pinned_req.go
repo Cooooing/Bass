@@ -17,9 +17,11 @@ import (
 // checks if the SetPrivateChatSessionPinnedReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SetPrivateChatSessionPinnedReq{}
 
-// SetPrivateChatSessionPinnedReq struct for SetPrivateChatSessionPinnedReq
+// SetPrivateChatSessionPinnedReq 请求参数。
 type SetPrivateChatSessionPinnedReq struct {
+	// 对端账号 ID。
 	PeerUserId *string `json:"peer_user_id,omitempty"`
+	// 是否置顶。
 	Pinned *bool `json:"pinned,omitempty"`
 }
 

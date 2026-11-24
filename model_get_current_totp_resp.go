@@ -17,8 +17,9 @@ import (
 // checks if the GetCurrentTotpResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetCurrentTotpResp{}
 
-// GetCurrentTotpResp struct for GetCurrentTotpResp
+// GetCurrentTotpResp 响应结果。
 type GetCurrentTotpResp struct {
+	// TOTP 状态
 	Totp *RespTotp `json:"totp,omitempty"`
 }
 

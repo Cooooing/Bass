@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**UserId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**PointsCost** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 话题记录 ID。 | [optional] 
+**UserId** | Pointer to **string** | 设置话题的账号 ID。 | [optional] 
+**Content** | Pointer to **string** | 话题内容。 | [optional] 
+**PointsCost** | Pointer to **string** | 本次设置实际消耗的积分。 | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 话题设置时间。 | [optional] 
 
 ## Methods
 

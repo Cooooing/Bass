@@ -17,9 +17,11 @@ import (
 // checks if the ListDomainsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListDomainsReq{}
 
-// ListDomainsReq struct for ListDomainsReq
+// ListDomainsReq 请求参数。
 type ListDomainsReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
+	// 查询条件
 	Query *ReqDomainQuery `json:"query,omitempty"`
 }
 

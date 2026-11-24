@@ -17,14 +17,21 @@ import (
 // checks if the ReqTagQuery type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqTagQuery{}
 
-// ReqTagQuery struct for ReqTagQuery
+// ReqTagQuery 协议消息。
 type ReqTagQuery struct {
+	// 标签 ID 列表
 	Ids []string `json:"ids,omitempty"`
+	// 稳定编码
 	Code *string `json:"code,omitempty"`
+	// 标签名称
 	Name *string `json:"name,omitempty"`
+	// 标签名称列表
 	Names []string `json:"names,omitempty"`
+	// 描述
 	Description *string `json:"description,omitempty"`
+	// 启停状态
 	Status *string `json:"status,omitempty"`
+	// 领域 ID
 	DomainId *string `json:"domain_id,omitempty"`
 }
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Password** | **string** |  | 
-**Code** | Pointer to **string** |  | [optional] 
+**Password** | **string** | 当前密码 | 
+**Code** | Pointer to **string** | 启用 TOTP 时作为 TOTP code | [optional] 
 
 ## Methods
 

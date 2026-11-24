@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Url** | Pointer to **string** |  | [optional] 
-**QrCode** | Pointer to **string** |  | [optional] 
+**Url** | Pointer to **string** | TOTP 绑定 URL | [optional] 
+**QrCode** | Pointer to **string** | TOTP 二维码图片数据 | [optional] 
 
 ## Methods
 

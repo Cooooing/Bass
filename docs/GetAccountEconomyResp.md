@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Balance** | Pointer to **string** |  | [optional] 
-**TotalIncome** | Pointer to **string** |  | [optional] 
-**TotalExpense** | Pointer to **string** |  | [optional] 
+**Balance** | Pointer to **string** | 当前积分 | [optional] 
+**TotalIncome** | Pointer to **string** | 累计获得 | [optional] 
+**TotalExpense** | Pointer to **string** | 累计消耗 | [optional] 
 
 ## Methods
 

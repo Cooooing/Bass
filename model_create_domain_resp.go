@@ -17,8 +17,9 @@ import (
 // checks if the CreateDomainResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateDomainResp{}
 
-// CreateDomainResp struct for CreateDomainResp
+// CreateDomainResp 响应结果。
 type CreateDomainResp struct {
+	// 领域信息
 	Domain *RespDomain `json:"domain,omitempty"`
 }
 

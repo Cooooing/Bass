@@ -17,7 +17,7 @@ import (
 // checks if the ImageResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ImageResp{}
 
-// ImageResp struct for ImageResp
+// ImageResp 协议消息。
 type ImageResp struct {
 	// 图片数据
 	Data *string `json:"data,omitempty"`

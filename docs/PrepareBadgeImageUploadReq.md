@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Hash** | **string** |  | 
-**MimeType** | **string** |  | 
-**Size** | **string** |  | 
+**Hash** | **string** | 文件 SHA-256，小写十六进制。 | 
+**MimeType** | **string** | 上传图片 MIME 类型。 | 
+**Size** | **string** | 文件大小，最大 5 MiB。 | 
 
 ## Methods
 

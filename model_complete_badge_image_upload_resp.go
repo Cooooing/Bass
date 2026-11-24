@@ -17,9 +17,11 @@ import (
 // checks if the CompleteBadgeImageUploadResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CompleteBadgeImageUploadResp{}
 
-// CompleteBadgeImageUploadResp struct for CompleteBadgeImageUploadResp
+// CompleteBadgeImageUploadResp 响应结果。
 type CompleteBadgeImageUploadResp struct {
+	// 已确认资源的 ID。
 	AssetId *string `json:"asset_id,omitempty"`
+	// 可公开访问的图片地址。
 	ImageUrl *string `json:"image_url,omitempty"`
 }
 

@@ -19,8 +19,9 @@ import (
 // checks if the CompleteBadgeImageUploadReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CompleteBadgeImageUploadReq{}
 
-// CompleteBadgeImageUploadReq struct for CompleteBadgeImageUploadReq
+// CompleteBadgeImageUploadReq 请求参数。
 type CompleteBadgeImageUploadReq struct {
+	// 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
 	Hash string `json:"hash"`
 }
 

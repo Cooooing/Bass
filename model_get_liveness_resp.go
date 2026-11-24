@@ -17,10 +17,13 @@ import (
 // checks if the GetLivenessResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetLivenessResp{}
 
-// GetLivenessResp struct for GetLivenessResp
+// GetLivenessResp 响应结果。
 type GetLivenessResp struct {
+	// 当前活跃度总分。
 	Score *int32 `json:"score,omitempty"`
+	// 每日活跃度上限。
 	MaxScore *int32 `json:"max_score,omitempty"`
+	// 自动签到所需的最低活跃度。
 	CheckinScore *int32 `json:"checkin_score,omitempty"`
 }
 

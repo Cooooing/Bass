@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ticket** | Pointer to **string** |  | [optional] 
-**ExpiresInSeconds** | Pointer to **string** |  | [optional] 
-**Path** | Pointer to **string** |  | [optional] 
+**Ticket** | Pointer to **string** | 一次性 SSE 建连凭证。 | [optional] 
+**ExpiresInSeconds** | Pointer to **string** | 有效期秒数。 | [optional] 
+**Path** | Pointer to **string** | realtime node SSE 路径。 | [optional] 
 
 ## Methods
 

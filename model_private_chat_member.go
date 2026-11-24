@@ -17,12 +17,17 @@ import (
 // checks if the PrivateChatMember type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PrivateChatMember{}
 
-// PrivateChatMember struct for PrivateChatMember
+// PrivateChatMember 协议消息。
 type PrivateChatMember struct {
+	// 账号 ID。
 	UserId *string `json:"user_id,omitempty"`
+	// 用户名。
 	Name *string `json:"name,omitempty"`
+	// 昵称。
 	Nickname *string `json:"nickname,omitempty"`
+	// 头像地址。
 	AvatarUrl *string `json:"avatar_url,omitempty"`
+	// 是否存在有效实时连接。
 	Online *bool `json:"online,omitempty"`
 }
 

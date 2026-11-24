@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UserId** | Pointer to **string** |  | [optional] 
-**Enable** | Pointer to **bool** |  | [optional] 
-**EnableTime** | Pointer to **time.Time** |  | [optional] 
+**UserId** | Pointer to **string** | 账号 ID | [optional] 
+**Enable** | Pointer to **bool** | 是否启用 TOTP | [optional] 
+**EnableTime** | Pointer to **time.Time** | 启用时间 | [optional] 
 
 ## Methods
 

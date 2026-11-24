@@ -20,9 +20,11 @@ import (
 // checks if the PublishArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PublishArticleReq{}
 
-// PublishArticleReq struct for PublishArticleReq
+// PublishArticleReq 请求参数。
 type PublishArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// 可选，定时发布时间
 	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
 }
 

@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**BindArticle**](TagService.md#BindArticle) | **Post** /v1/content/tag/bind-article | 
-[**Create**](TagService.md#Create) | **Post** /v1/content/tag/create | 
-[**List**](TagService.md#List) | **Post** /v1/content/tag/list | 
+[**BindArticleTags**](TagService.md#BindArticleTags) | **Post** /v1/content/tag/bind-article | 
+[**CreateTag**](TagService.md#CreateTag) | **Post** /v1/content/tag/create | 
 [**ListArticleTags**](TagService.md#ListArticleTags) | **Post** /v1/content/tag/list-article-tags | 
-[**UnbindArticle**](TagService.md#UnbindArticle) | **Post** /v1/content/tag/unbind-article | 
-[**Update**](TagService.md#Update) | **Post** /v1/content/tag/update | 
+[**ListTags**](TagService.md#ListTags) | **Post** /v1/content/tag/list | 
+[**UnbindArticleTags**](TagService.md#UnbindArticleTags) | **Post** /v1/content/tag/unbind-article | 
+[**UpdateTag**](TagService.md#UpdateTag) | **Post** /v1/content/tag/update | 
 
 
 
-## BindArticle
+## BindArticleTags
 
-> map[string]interface{} BindArticle(ctx).BindArticleTagsReq(bindArticleTagsReq).Execute()
+> map[string]interface{} BindArticleTags(ctx).BindArticleTagsReq(bindArticleTagsReq).Execute()
 
 
 
@@ -38,13 +38,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TagService.BindArticle(context.Background()).BindArticleTagsReq(bindArticleTagsReq).Execute()
+	resp, r, err := apiClient.TagService.BindArticleTags(context.Background()).BindArticleTagsReq(bindArticleTagsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TagService.BindArticle``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TagService.BindArticleTags``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `BindArticle`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `TagService.BindArticle`: %v\n", resp)
+	// response from `BindArticleTags`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `TagService.BindArticleTags`: %v\n", resp)
 }
 ```
 
@@ -54,7 +54,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiBindArticleRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiBindArticleTagsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -79,9 +79,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## Create
+## CreateTag
 
-> CreateTagResp Create(ctx).CreateTagReq(createTagReq).Execute()
+> CreateTagResp CreateTag(ctx).CreateTagReq(createTagReq).Execute()
 
 
 
@@ -104,13 +104,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TagService.Create(context.Background()).CreateTagReq(createTagReq).Execute()
+	resp, r, err := apiClient.TagService.CreateTag(context.Background()).CreateTagReq(createTagReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TagService.Create``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TagService.CreateTag``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Create`: CreateTagResp
-	fmt.Fprintf(os.Stdout, "Response from `TagService.Create`: %v\n", resp)
+	// response from `CreateTag`: CreateTagResp
+	fmt.Fprintf(os.Stdout, "Response from `TagService.CreateTag`: %v\n", resp)
 }
 ```
 
@@ -120,7 +120,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateTagRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -130,72 +130,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CreateTagResp**](CreateTagResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## List
-
-> ListTagsResp List(ctx).ListTagsReq(listTagsReq).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	listTagsReq := *openapiclient.NewListTagsReq() // ListTagsReq | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TagService.List(context.Background()).ListTagsReq(listTagsReq).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TagService.List``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `List`: ListTagsResp
-	fmt.Fprintf(os.Stdout, "Response from `TagService.List`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **listTagsReq** | [**ListTagsReq**](ListTagsReq.md) |  | 
-
-### Return type
-
-[**ListTagsResp**](ListTagsResp.md)
 
 ### Authorization
 
@@ -277,9 +211,75 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## UnbindArticle
+## ListTags
 
-> map[string]interface{} UnbindArticle(ctx).UnbindArticleTagsReq(unbindArticleTagsReq).Execute()
+> ListTagsResp ListTags(ctx).ListTagsReq(listTagsReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	listTagsReq := *openapiclient.NewListTagsReq() // ListTagsReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.TagService.ListTags(context.Background()).ListTagsReq(listTagsReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `TagService.ListTags``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListTags`: ListTagsResp
+	fmt.Fprintf(os.Stdout, "Response from `TagService.ListTags`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListTagsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **listTagsReq** | [**ListTagsReq**](ListTagsReq.md) |  | 
+
+### Return type
+
+[**ListTagsResp**](ListTagsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UnbindArticleTags
+
+> map[string]interface{} UnbindArticleTags(ctx).UnbindArticleTagsReq(unbindArticleTagsReq).Execute()
 
 
 
@@ -302,13 +302,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TagService.UnbindArticle(context.Background()).UnbindArticleTagsReq(unbindArticleTagsReq).Execute()
+	resp, r, err := apiClient.TagService.UnbindArticleTags(context.Background()).UnbindArticleTagsReq(unbindArticleTagsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TagService.UnbindArticle``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TagService.UnbindArticleTags``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UnbindArticle`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `TagService.UnbindArticle`: %v\n", resp)
+	// response from `UnbindArticleTags`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `TagService.UnbindArticleTags`: %v\n", resp)
 }
 ```
 
@@ -318,7 +318,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiUnbindArticleRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUnbindArticleTagsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -343,9 +343,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## Update
+## UpdateTag
 
-> UpdateTagResp Update(ctx).UpdateTagReq(updateTagReq).Execute()
+> UpdateTagResp UpdateTag(ctx).UpdateTagReq(updateTagReq).Execute()
 
 
 
@@ -368,13 +368,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TagService.Update(context.Background()).UpdateTagReq(updateTagReq).Execute()
+	resp, r, err := apiClient.TagService.UpdateTag(context.Background()).UpdateTagReq(updateTagReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `TagService.Update``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `TagService.UpdateTag``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Update`: UpdateTagResp
-	fmt.Fprintf(os.Stdout, "Response from `TagService.Update`: %v\n", resp)
+	// response from `UpdateTag`: UpdateTagResp
+	fmt.Fprintf(os.Stdout, "Response from `TagService.UpdateTag`: %v\n", resp)
 }
 ```
 
@@ -384,7 +384,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiUpdateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateTagRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

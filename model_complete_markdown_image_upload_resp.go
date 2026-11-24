@@ -17,9 +17,11 @@ import (
 // checks if the CompleteMarkdownImageUploadResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CompleteMarkdownImageUploadResp{}
 
-// CompleteMarkdownImageUploadResp struct for CompleteMarkdownImageUploadResp
+// CompleteMarkdownImageUploadResp 响应结果。
 type CompleteMarkdownImageUploadResp struct {
+	// 已确认资源的 ID。
 	AssetId *string `json:"asset_id,omitempty"`
+	// 前端本地预览使用的公开图片地址。
 	ImageUrl *string `json:"image_url,omitempty"`
 }
 

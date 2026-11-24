@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DraftId** | Pointer to **string** |  | [optional] 
+**DraftId** | Pointer to **string** | 草稿 ID。 | [optional] 
 
 ## Methods
 

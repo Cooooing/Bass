@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]ArticleListItem**](ArticleListItem.md) |  | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 分页结果 | [optional] 
+**Rows** | Pointer to [**[]ArticleListItem**](ArticleListItem.md) | 文章列表 | [optional] 
 
 ## Methods
 

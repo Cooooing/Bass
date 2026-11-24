@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Create**](DomainService.md#Create) | **Post** /v1/content/domain/create | 
-[**List**](DomainService.md#List) | **Post** /v1/content/domain/list | 
-[**Update**](DomainService.md#Update) | **Post** /v1/content/domain/update | 
+[**CreateDomain**](DomainService.md#CreateDomain) | **Post** /v1/content/domain/create | 
+[**ListDomains**](DomainService.md#ListDomains) | **Post** /v1/content/domain/list | 
+[**UpdateDomain**](DomainService.md#UpdateDomain) | **Post** /v1/content/domain/update | 
 
 
 
-## Create
+## CreateDomain
 
-> CreateDomainResp Create(ctx).CreateDomainReq(createDomainReq).Execute()
+> CreateDomainResp CreateDomain(ctx).CreateDomainReq(createDomainReq).Execute()
 
 
 
@@ -35,13 +35,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DomainService.Create(context.Background()).CreateDomainReq(createDomainReq).Execute()
+	resp, r, err := apiClient.DomainService.CreateDomain(context.Background()).CreateDomainReq(createDomainReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DomainService.Create``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `DomainService.CreateDomain``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Create`: CreateDomainResp
-	fmt.Fprintf(os.Stdout, "Response from `DomainService.Create`: %v\n", resp)
+	// response from `CreateDomain`: CreateDomainResp
+	fmt.Fprintf(os.Stdout, "Response from `DomainService.CreateDomain`: %v\n", resp)
 }
 ```
 
@@ -51,7 +51,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateDomainRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -76,9 +76,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## List
+## ListDomains
 
-> ListDomainsResp List(ctx).ListDomainsReq(listDomainsReq).Execute()
+> ListDomainsResp ListDomains(ctx).ListDomainsReq(listDomainsReq).Execute()
 
 
 
@@ -101,13 +101,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DomainService.List(context.Background()).ListDomainsReq(listDomainsReq).Execute()
+	resp, r, err := apiClient.DomainService.ListDomains(context.Background()).ListDomainsReq(listDomainsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DomainService.List``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `DomainService.ListDomains``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListDomainsResp
-	fmt.Fprintf(os.Stdout, "Response from `DomainService.List`: %v\n", resp)
+	// response from `ListDomains`: ListDomainsResp
+	fmt.Fprintf(os.Stdout, "Response from `DomainService.ListDomains`: %v\n", resp)
 }
 ```
 
@@ -117,7 +117,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListDomainsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -142,9 +142,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## Update
+## UpdateDomain
 
-> UpdateDomainResp Update(ctx).UpdateDomainReq(updateDomainReq).Execute()
+> UpdateDomainResp UpdateDomain(ctx).UpdateDomainReq(updateDomainReq).Execute()
 
 
 
@@ -167,13 +167,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DomainService.Update(context.Background()).UpdateDomainReq(updateDomainReq).Execute()
+	resp, r, err := apiClient.DomainService.UpdateDomain(context.Background()).UpdateDomainReq(updateDomainReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DomainService.Update``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `DomainService.UpdateDomain``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Update`: UpdateDomainResp
-	fmt.Fprintf(os.Stdout, "Response from `DomainService.Update`: %v\n", resp)
+	// response from `UpdateDomain`: UpdateDomainResp
+	fmt.Fprintf(os.Stdout, "Response from `DomainService.UpdateDomain`: %v\n", resp)
 }
 ```
 
@@ -183,7 +183,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiUpdateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateDomainRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

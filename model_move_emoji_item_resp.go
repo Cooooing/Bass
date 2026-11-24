@@ -17,8 +17,9 @@ import (
 // checks if the MoveEmojiItemResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &MoveEmojiItemResp{}
 
-// MoveEmojiItemResp struct for MoveEmojiItemResp
+// MoveEmojiItemResp 响应结果。
 type MoveEmojiItemResp struct {
+	// 已移动表情项。
 	Item *EmojiItem `json:"item,omitempty"`
 }
 

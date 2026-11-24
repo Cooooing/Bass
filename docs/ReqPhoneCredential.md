@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Phone** | Pointer to **string** |  | [optional] 
-**Code** | Pointer to **string** |  | [optional] 
+**Phone** | Pointer to **string** | 手机号 | [optional] 
+**Code** | Pointer to **string** | 手机 OTP | [optional] 
 
 ## Methods
 

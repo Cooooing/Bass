@@ -17,9 +17,11 @@ import (
 // checks if the SetPrivateChatSessionMutedReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SetPrivateChatSessionMutedReq{}
 
-// SetPrivateChatSessionMutedReq struct for SetPrivateChatSessionMutedReq
+// SetPrivateChatSessionMutedReq 请求参数。
 type SetPrivateChatSessionMutedReq struct {
+	// 对端账号 ID。
 	PeerUserId *string `json:"peer_user_id,omitempty"`
+	// 是否免打扰。
 	Muted *bool `json:"muted,omitempty"`
 }
 

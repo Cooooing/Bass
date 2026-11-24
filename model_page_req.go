@@ -17,7 +17,7 @@ import (
 // checks if the PageReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PageReq{}
 
-// PageReq struct for PageReq
+// PageReq 协议消息。
 type PageReq struct {
 	// 页码
 	Page *string `json:"page,omitempty"`

@@ -17,8 +17,9 @@ import (
 // checks if the CountUnreadNotificationsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CountUnreadNotificationsResp{}
 
-// CountUnreadNotificationsResp struct for CountUnreadNotificationsResp
+// CountUnreadNotificationsResp 响应结果。
 type CountUnreadNotificationsResp struct {
+	// 未读通知数量
 	Count *string `json:"count,omitempty"`
 }
 

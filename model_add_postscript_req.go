@@ -19,9 +19,11 @@ import (
 // checks if the AddPostscriptReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AddPostscriptReq{}
 
-// AddPostscriptReq struct for AddPostscriptReq
+// AddPostscriptReq 请求参数。
 type AddPostscriptReq struct {
+	// 必填，文章 ID。
 	ArticleId string `json:"article_id"`
+	// 必填，附言内容。
 	Content string `json:"content"`
 }
 

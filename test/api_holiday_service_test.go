@@ -22,11 +22,11 @@ func Test_bbs_HolidayServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test HolidayServiceService GetCurrent", func(t *testing.T) {
+	t.Run("Test HolidayServiceService GetCurrentHoliday", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.HolidayService.GetCurrent(context.Background()).Execute()
+		resp, httpRes, err := apiClient.HolidayService.GetCurrentHoliday(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

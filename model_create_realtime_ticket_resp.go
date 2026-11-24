@@ -17,10 +17,13 @@ import (
 // checks if the CreateRealtimeTicketResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateRealtimeTicketResp{}
 
-// CreateRealtimeTicketResp struct for CreateRealtimeTicketResp
+// CreateRealtimeTicketResp 响应结果。
 type CreateRealtimeTicketResp struct {
+	// 一次性 SSE 建连凭证。
 	Ticket *string `json:"ticket,omitempty"`
+	// 有效期秒数。
 	ExpiresInSeconds *string `json:"expires_in_seconds,omitempty"`
+	// realtime node SSE 路径。
 	Path *string `json:"path,omitempty"`
 }
 

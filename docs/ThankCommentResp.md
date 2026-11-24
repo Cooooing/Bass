@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Thanked** | Pointer to **bool** |  | [optional] 
+**Thanked** | Pointer to **bool** | 是否已感谢 | [optional] 
 
 ## Methods
 

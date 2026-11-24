@@ -19,9 +19,11 @@ import (
 // checks if the BindArticleTagsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &BindArticleTagsReq{}
 
-// BindArticleTagsReq struct for BindArticleTagsReq
+// BindArticleTagsReq 请求参数。
 type BindArticleTagsReq struct {
+	// 文章 ID
 	ArticleId string `json:"article_id"`
+	// 标签 ID 列表
 	TagIds []string `json:"tag_ids"`
 }
 

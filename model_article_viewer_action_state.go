@@ -17,12 +17,17 @@ import (
 // checks if the ArticleViewerActionState type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleViewerActionState{}
 
-// ArticleViewerActionState struct for ArticleViewerActionState
+// ArticleViewerActionState 协议消息。
 type ArticleViewerActionState struct {
+	// 是否已点赞
 	Liked *bool `json:"liked,omitempty"`
+	// 是否已感谢
 	Thanked *bool `json:"thanked,omitempty"`
+	// 是否已收藏
 	Collected *bool `json:"collected,omitempty"`
+	// 是否已打赏
 	Rewarded *bool `json:"rewarded,omitempty"`
+	// 是否已关注
 	Watched *bool `json:"watched,omitempty"`
 }
 

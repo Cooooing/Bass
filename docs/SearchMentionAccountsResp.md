@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]AccountProfile**](AccountProfile.md) |  | [optional] 
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
+**Rows** | Pointer to [**[]AccountProfile**](AccountProfile.md) | 最多五个可提及账号候选。 | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 分页结果。 | [optional] 
 
 ## Methods
 

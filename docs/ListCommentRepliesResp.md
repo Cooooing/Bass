@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]CommentListItem**](CommentListItem.md) |  | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 分页结果 | [optional] 
+**Rows** | Pointer to [**[]CommentListItem**](CommentListItem.md) | 回复列表 | [optional] 
 
 ## Methods
 

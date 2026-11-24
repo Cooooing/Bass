@@ -19,8 +19,9 @@ import (
 // checks if the ListArticleTagsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListArticleTagsReq{}
 
-// ListArticleTagsReq struct for ListArticleTagsReq
+// ListArticleTagsReq 请求参数。
 type ListArticleTagsReq struct {
+	// 文章 ID
 	ArticleId string `json:"article_id"`
 }
 

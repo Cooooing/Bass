@@ -19,8 +19,9 @@ import (
 // checks if the ThankArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ThankArticleReq{}
 
-// ThankArticleReq struct for ThankArticleReq
+// ThankArticleReq 请求参数。
 type ThankArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
 }
 

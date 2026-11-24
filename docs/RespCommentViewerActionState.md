@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Liked** | Pointer to **bool** |  | [optional] 
-**Thanked** | Pointer to **bool** |  | [optional] 
+**Liked** | Pointer to **bool** | 是否已点赞 | [optional] 
+**Thanked** | Pointer to **bool** | 是否已感谢 | [optional] 
 
 ## Methods
 

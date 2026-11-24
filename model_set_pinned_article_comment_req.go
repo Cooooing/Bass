@@ -19,9 +19,11 @@ import (
 // checks if the SetPinnedArticleCommentReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SetPinnedArticleCommentReq{}
 
-// SetPinnedArticleCommentReq struct for SetPinnedArticleCommentReq
+// SetPinnedArticleCommentReq 请求参数。
 type SetPinnedArticleCommentReq struct {
+	// 文章 ID
 	ArticleId string `json:"article_id"`
+	// 置顶的一级评论，未传表示取消
 	CommentId *string `json:"comment_id,omitempty"`
 }
 

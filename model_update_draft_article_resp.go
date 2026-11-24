@@ -17,8 +17,9 @@ import (
 // checks if the UpdateDraftArticleResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateDraftArticleResp{}
 
-// UpdateDraftArticleResp struct for UpdateDraftArticleResp
+// UpdateDraftArticleResp 响应结果。
 type UpdateDraftArticleResp struct {
+	// 已保存草稿的文章 ID
 	ArticleId *string `json:"article_id,omitempty"`
 }
 

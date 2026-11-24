@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**OptionIds** | **[]string** |  | 
+**ArticleId** | **string** | 必填，文章 ID | 
+**OptionIds** | **[]string** | 必填，所选选项 ID | 
 
 ## Methods
 

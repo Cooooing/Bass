@@ -17,9 +17,11 @@ import (
 // checks if the RespAccount type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespAccount{}
 
-// RespAccount struct for RespAccount
+// RespAccount 协议消息。
 type RespAccount struct {
+	// 基础信息
 	Basic *RespAccountBasic `json:"basic,omitempty"`
+	// 联系方式
 	Contact *RespAccountContact `json:"contact,omitempty"`
 }
 

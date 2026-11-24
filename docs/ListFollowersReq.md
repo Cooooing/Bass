@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** |  | 
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
+**Name** | **string** | 协议字段。 | 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 协议字段。 | [optional] 
 
 ## Methods
 

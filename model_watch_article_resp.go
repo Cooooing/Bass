@@ -17,8 +17,9 @@ import (
 // checks if the WatchArticleResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &WatchArticleResp{}
 
-// WatchArticleResp struct for WatchArticleResp
+// WatchArticleResp 响应结果。
 type WatchArticleResp struct {
+	// 是否已关注
 	Watched *bool `json:"watched,omitempty"`
 }
 

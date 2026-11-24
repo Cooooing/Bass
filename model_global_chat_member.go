@@ -17,11 +17,15 @@ import (
 // checks if the GlobalChatMember type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GlobalChatMember{}
 
-// GlobalChatMember struct for GlobalChatMember
+// GlobalChatMember 协议消息。
 type GlobalChatMember struct {
+	// 账号 ID。
 	UserId *string `json:"user_id,omitempty"`
+	// 用户名。
 	Name *string `json:"name,omitempty"`
+	// 昵称。
 	Nickname *string `json:"nickname,omitempty"`
+	// 头像地址。
 	AvatarUrl *string `json:"avatar_url,omitempty"`
 }
 

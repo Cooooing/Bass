@@ -17,8 +17,9 @@ import (
 // checks if the GetProfileResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetProfileResp{}
 
-// GetProfileResp struct for GetProfileResp
+// GetProfileResp 响应结果。
 type GetProfileResp struct {
+	// 协议字段。
 	Profile *Profile `json:"profile,omitempty"`
 }
 

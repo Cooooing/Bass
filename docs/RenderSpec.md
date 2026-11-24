@@ -4,21 +4,21 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ImageAssetId** | Pointer to **string** |  | [optional] 
-**Text** | Pointer to **string** |  | [optional] 
-**BackgroundColors** | Pointer to **[]string** |  | [optional] 
-**TextColors** | Pointer to **[]string** |  | [optional] 
-**BackgroundDirection** | Pointer to **string** |  | [optional] 
-**TextDirection** | Pointer to **string** |  | [optional] 
-**Size** | Pointer to **int32** |  | [optional] 
-**Border** | Pointer to **int32** |  | [optional] 
-**TextBarLength** | Pointer to **int32** |  | [optional] 
-**TextSize** | Pointer to **int32** |  | [optional] 
-**TextBarRadius** | Pointer to **int32** |  | [optional] 
-**Scale** | Pointer to **float64** |  | [optional] 
-**Shadow** | Pointer to **float64** |  | [optional] 
-**AnimationSeconds** | Pointer to **float64** |  | [optional] 
-**FontAssetId** | Pointer to **string** |  | [optional] 
+**ImageAssetId** | Pointer to **string** | Platform 已确认可用的徽章图标资源 ID。 | [optional] 
+**Text** | Pointer to **string** | 文字条内容。 | [optional] 
+**BackgroundColors** | Pointer to **[]string** | 背景颜色列表。 | [optional] 
+**TextColors** | Pointer to **[]string** | 文字颜色列表。 | [optional] 
+**BackgroundDirection** | Pointer to **string** | 背景渐变方向或角度。 | [optional] 
+**TextDirection** | Pointer to **string** | 文字渐变方向或角度。 | [optional] 
+**Size** | Pointer to **int32** | 图标边长。 | [optional] 
+**Border** | Pointer to **int32** | 图标边距。 | [optional] 
+**TextBarLength** | Pointer to **int32** | 文字条长度。 | [optional] 
+**TextSize** | Pointer to **int32** | 文字字号。 | [optional] 
+**TextBarRadius** | Pointer to **int32** | 文字条圆角。 | [optional] 
+**Scale** | Pointer to **float64** | 整体缩放比例。 | [optional] 
+**Shadow** | Pointer to **float64** | 阴影强度。 | [optional] 
+**AnimationSeconds** | Pointer to **float64** | 动画时长。 | [optional] 
+**FontAssetId** | Pointer to **string** | Platform 已确认可用的自定义字体资源 ID。 | [optional] 
 
 ## Methods
 

@@ -19,9 +19,11 @@ import (
 // checks if the ListPointRecordsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListPointRecordsReq{}
 
-// ListPointRecordsReq struct for ListPointRecordsReq
+// ListPointRecordsReq 请求参数。
 type ListPointRecordsReq struct {
+	// 账号名，必填
 	Name string `json:"name"`
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
 }
 

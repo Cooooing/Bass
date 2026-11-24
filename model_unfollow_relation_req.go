@@ -19,8 +19,9 @@ import (
 // checks if the UnfollowRelationReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UnfollowRelationReq{}
 
-// UnfollowRelationReq struct for UnfollowRelationReq
+// UnfollowRelationReq 请求参数。
 type UnfollowRelationReq struct {
+	// 目标账号 ID
 	TargetId string `json:"target_id"`
 }
 

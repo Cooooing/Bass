@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**RewardPoints** | Pointer to **string** |  | [optional] 
-**Claimed** | Pointer to **bool** |  | [optional] 
+**RewardPoints** | Pointer to **string** | 本次领取的积分。 | [optional] 
+**Claimed** | Pointer to **bool** | 是否已成功领取。 | [optional] 
 
 ## Methods
 

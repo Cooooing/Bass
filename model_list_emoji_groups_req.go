@@ -17,8 +17,9 @@ import (
 // checks if the ListEmojiGroupsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListEmojiGroupsReq{}
 
-// ListEmojiGroupsReq struct for ListEmojiGroupsReq
+// ListEmojiGroupsReq 请求参数。
 type ListEmojiGroupsReq struct {
+	// 按表情别名进行的模糊查询。
 	Query *string `json:"query,omitempty"`
 }
 

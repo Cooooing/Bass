@@ -17,8 +17,9 @@ import (
 // checks if the GetCurrentPrivacySettingResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetCurrentPrivacySettingResp{}
 
-// GetCurrentPrivacySettingResp struct for GetCurrentPrivacySettingResp
+// GetCurrentPrivacySettingResp 响应结果。
 type GetCurrentPrivacySettingResp struct {
+	// 当前账号隐私设置
 	PrivacySetting *RespPrivacySetting `json:"privacy_setting,omitempty"`
 }
 

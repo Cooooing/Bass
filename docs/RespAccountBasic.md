@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Nickname** | Pointer to **string** |  | [optional] 
-**Url** | Pointer to **string** |  | [optional] 
-**AvatarUrl** | Pointer to **string** |  | [optional] 
-**Introduction** | Pointer to **string** |  | [optional] 
-**Mbti** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**FollowCount** | Pointer to **int32** |  | [optional] 
-**FollowerCount** | Pointer to **int32** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 账号 ID | [optional] 
+**Name** | Pointer to **string** | 账号名 | [optional] 
+**Nickname** | Pointer to **string** | 昵称 | [optional] 
+**Url** | Pointer to **string** | 个人主页 URL | [optional] 
+**AvatarUrl** | Pointer to **string** | 头像 URL | [optional] 
+**Introduction** | Pointer to **string** | 个人简介 | [optional] 
+**Mbti** | Pointer to **string** | MBTI 类型，规范化为大写 | [optional] 
+**Status** | Pointer to **string** | 账号状态 | [optional] 
+**FollowCount** | Pointer to **int32** | 关注数 | [optional] 
+**FollowerCount** | Pointer to **int32** | 粉丝数 | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间 | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | 更新时间 | [optional] 
 
 ## Methods
 

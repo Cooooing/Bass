@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Thread** | Pointer to [**RespCommentThread**](RespCommentThread.md) |  | [optional] 
+**Thread** | Pointer to [**RespCommentThread**](RespCommentThread.md) | 独立置顶评论线程 | [optional] 
 
 ## Methods
 

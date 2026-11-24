@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**VoteCount** | Pointer to **int32** |  | [optional] 
+**Id** | Pointer to **string** | 选项 ID | [optional] 
+**Content** | Pointer to **string** | 选项内容 | [optional] 
+**VoteCount** | Pointer to **int32** | 可见时的票数 | [optional] 
 
 ## Methods
 

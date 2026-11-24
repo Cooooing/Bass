@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Query** | Pointer to **string** |  | [optional] 
+**Query** | Pointer to **string** | 按表情别名进行的模糊查询。 | [optional] 
 
 ## Methods
 

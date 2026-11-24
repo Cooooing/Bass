@@ -19,10 +19,13 @@ import (
 // checks if the SearchArticlesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SearchArticlesReq{}
 
-// SearchArticlesReq struct for SearchArticlesReq
+// SearchArticlesReq 请求参数。
 type SearchArticlesReq struct {
+	// 必填，搜索词
 	Query string `json:"query"`
+	// 可选，不透明续页游标
 	Cursor *string `json:"cursor,omitempty"`
+	// 可选，返回条数
 	Size *int32 `json:"size,omitempty"`
 }
 

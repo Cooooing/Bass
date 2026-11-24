@@ -17,12 +17,17 @@ import (
 // checks if the ArticleTag type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleTag{}
 
-// ArticleTag struct for ArticleTag
+// ArticleTag 协议消息。
 type ArticleTag struct {
+	// 标签 ID
 	Id *string `json:"id,omitempty"`
+	// 稳定编码
 	Code *string `json:"code,omitempty"`
+	// 标签名称
 	Name *string `json:"name,omitempty"`
+	// 图标
 	Icon *string `json:"icon,omitempty"`
+	// 所属领域 ID
 	DomainId *string `json:"domain_id,omitempty"`
 }
 

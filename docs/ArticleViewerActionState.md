@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Liked** | Pointer to **bool** |  | [optional] 
-**Thanked** | Pointer to **bool** |  | [optional] 
-**Collected** | Pointer to **bool** |  | [optional] 
-**Rewarded** | Pointer to **bool** |  | [optional] 
-**Watched** | Pointer to **bool** |  | [optional] 
+**Liked** | Pointer to **bool** | 是否已点赞 | [optional] 
+**Thanked** | Pointer to **bool** | 是否已感谢 | [optional] 
+**Collected** | Pointer to **bool** | 是否已收藏 | [optional] 
+**Rewarded** | Pointer to **bool** | 是否已打赏 | [optional] 
+**Watched** | Pointer to **bool** | 是否已关注 | [optional] 
 
 ## Methods
 

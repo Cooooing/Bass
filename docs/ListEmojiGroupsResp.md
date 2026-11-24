@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]EmojiGroup**](EmojiGroup.md) |  | [optional] 
+**Rows** | Pointer to [**[]EmojiGroup**](EmojiGroup.md) | 表情分组列表。 | [optional] 
 
 ## Methods
 

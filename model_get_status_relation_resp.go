@@ -17,8 +17,9 @@ import (
 // checks if the GetStatusRelationResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetStatusRelationResp{}
 
-// GetStatusRelationResp struct for GetStatusRelationResp
+// GetStatusRelationResp 响应结果。
 type GetStatusRelationResp struct {
+	// 关系状态
 	Status *RespRelationStatus `json:"status,omitempty"`
 }
 

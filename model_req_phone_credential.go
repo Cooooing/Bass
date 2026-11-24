@@ -17,9 +17,11 @@ import (
 // checks if the ReqPhoneCredential type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqPhoneCredential{}
 
-// ReqPhoneCredential struct for ReqPhoneCredential
+// ReqPhoneCredential 协议消息。
 type ReqPhoneCredential struct {
+	// 手机号
 	Phone *string `json:"phone,omitempty"`
+	// 手机 OTP
 	Code *string `json:"code,omitempty"`
 }
 

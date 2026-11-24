@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Tag** | Pointer to [**RespTag**](RespTag.md) |  | [optional] 
+**Tag** | Pointer to [**RespTag**](RespTag.md) | 标签信息 | [optional] 
 
 ## Methods
 

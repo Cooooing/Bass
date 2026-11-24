@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DrawAt** | Pointer to **time.Time** |  | [optional] 
-**DrawnAt** | Pointer to **time.Time** |  | [optional] 
-**EntryCount** | Pointer to **string** |  | [optional] 
-**Entered** | Pointer to **bool** |  | [optional] 
-**Prizes** | Pointer to [**[]ArticleLotteryPrize**](ArticleLotteryPrize.md) |  | [optional] 
+**DrawAt** | Pointer to **time.Time** | 开奖时间 | [optional] 
+**DrawnAt** | Pointer to **time.Time** | 实际开奖时间 | [optional] 
+**EntryCount** | Pointer to **string** | 有效报名人数 | [optional] 
+**Entered** | Pointer to **bool** | 当前账号是否已报名 | [optional] 
+**Prizes** | Pointer to [**[]ArticleLotteryPrize**](ArticleLotteryPrize.md) | 奖项和中奖结果 | [optional] 
 
 ## Methods
 

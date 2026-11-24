@@ -17,9 +17,11 @@ import (
 // checks if the ListGlobalChatMessagesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListGlobalChatMessagesReq{}
 
-// ListGlobalChatMessagesReq struct for ListGlobalChatMessagesReq
+// ListGlobalChatMessagesReq 请求参数。
 type ListGlobalChatMessagesReq struct {
+	// 向前分页游标。
 	BeforeId *string `json:"before_id,omitempty"`
+	// 分页参数。
 	Page *PageReq `json:"page,omitempty"`
 }
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Item** | Pointer to [**EmojiItem**](EmojiItem.md) |  | [optional] 
+**Item** | Pointer to [**EmojiItem**](EmojiItem.md) | 已添加表情项。 | [optional] 
 
 ## Methods
 

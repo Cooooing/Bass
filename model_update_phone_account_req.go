@@ -19,9 +19,11 @@ import (
 // checks if the UpdatePhoneAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdatePhoneAccountReq{}
 
-// UpdatePhoneAccountReq struct for UpdatePhoneAccountReq
+// UpdatePhoneAccountReq 请求参数。
 type UpdatePhoneAccountReq struct {
+	// 新手机号，必填
 	Phone string `json:"phone"`
+	// 手机 OTP，必填
 	Code string `json:"code"`
 }
 

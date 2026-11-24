@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**TypeLabel** | Pointer to **string** |  | [optional] 
-**Direction** | Pointer to **string** |  | [optional] 
-**Amount** | Pointer to **string** |  | [optional] 
-**BalanceAfter** | Pointer to **string** |  | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 记录创建时间 | [optional] 
+**TypeLabel** | Pointer to **string** | 流水类型展示文案 | [optional] 
+**Direction** | Pointer to **string** | 收入或支出方向 | [optional] 
+**Amount** | Pointer to **string** | 绝对变动积分 | [optional] 
+**BalanceAfter** | Pointer to **string** | 变动后的积分余额 | [optional] 
 
 ## Methods
 

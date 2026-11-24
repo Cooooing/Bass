@@ -19,9 +19,11 @@ import (
 // checks if the UpdateTagReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateTagReq{}
 
-// UpdateTagReq struct for UpdateTagReq
+// UpdateTagReq 请求参数。
 type UpdateTagReq struct {
+	// 标签 ID
 	TagId string `json:"tag_id"`
+	// 标签信息
 	Tag ReqTag `json:"tag"`
 }
 

@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
-**ArticleId** | **string** |  | 
-**Order** | Pointer to **string** |  | [optional] 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 分页参数 | [optional] 
+**ArticleId** | **string** | 文章 ID | 
+**Order** | Pointer to **string** | 排序方式 | [optional] 
 
 ## Methods
 

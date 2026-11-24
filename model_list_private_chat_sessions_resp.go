@@ -17,9 +17,11 @@ import (
 // checks if the ListPrivateChatSessionsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListPrivateChatSessionsResp{}
 
-// ListPrivateChatSessionsResp struct for ListPrivateChatSessionsResp
+// ListPrivateChatSessionsResp 响应结果。
 type ListPrivateChatSessionsResp struct {
+	// 分页信息。
 	Page *PageResp `json:"page,omitempty"`
+	// 会话列表。
 	Rows []PrivateChatSession `json:"rows,omitempty"`
 }
 

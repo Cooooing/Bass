@@ -17,9 +17,11 @@ import (
 // checks if the PagePublicMoonbreezesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PagePublicMoonbreezesReq{}
 
-// PagePublicMoonbreezesReq struct for PagePublicMoonbreezesReq
+// PagePublicMoonbreezesReq 请求参数。
 type PagePublicMoonbreezesReq struct {
+	// 协议字段。
 	Cursor *string `json:"cursor,omitempty"`
+	// 协议字段。
 	Size *int32 `json:"size,omitempty"`
 }
 

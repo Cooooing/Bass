@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **string** |  | 
-**Active** | **bool** |  | 
+**Id** | **string** | 评论 ID | 
+**Active** | **bool** | 是否点赞 | 
 
 ## Methods
 

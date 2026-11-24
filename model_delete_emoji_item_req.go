@@ -17,8 +17,9 @@ import (
 // checks if the DeleteEmojiItemReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &DeleteEmojiItemReq{}
 
-// DeleteEmojiItemReq struct for DeleteEmojiItemReq
+// DeleteEmojiItemReq 请求参数。
 type DeleteEmojiItemReq struct {
+	// 待删除表情项 ID。
 	ItemId *string `json:"item_id,omitempty"`
 }
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**PublishStatus** | Pointer to **string** |  | [optional] 
+**ArticleId** | **string** | 必填，文章 ID | 
+**PublishStatus** | Pointer to **string** | 可选，预期发布状态；未传按已发布查询 | [optional] 
 
 ## Methods
 

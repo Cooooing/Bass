@@ -22,60 +22,60 @@ import (
 type AccountService interface {
 
 	/*
-	Avatar Method for Avatar
+	AvatarAccount Method for AvatarAccount
 
 	生成默认账号头像
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAvatarRequest
+	@return ApiAvatarAccountRequest
 	*/
-	Avatar(ctx context.Context) ApiAvatarRequest
+	AvatarAccount(ctx context.Context) ApiAvatarAccountRequest
 
-	// AvatarExecute executes the request
-	//  @return ImageResp
-	AvatarExecute(r ApiAvatarRequest) (*ImageResp, *http.Response, error)
+	// AvatarAccountExecute executes the request
+	//  @return AvatarAccountResp
+	AvatarAccountExecute(r ApiAvatarAccountRequest) (*AvatarAccountResp, *http.Response, error)
 
 	/*
-	CompleteProfileImageUpload Method for CompleteProfileImageUpload
+	CompleteProfileImageUploadAccount Method for CompleteProfileImageUploadAccount
 
 	将已由 MinIO 回调确认的资源绑定到当前账号资料。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCompleteProfileImageUploadRequest
+	@return ApiCompleteProfileImageUploadAccountRequest
 	*/
-	CompleteProfileImageUpload(ctx context.Context) ApiCompleteProfileImageUploadRequest
+	CompleteProfileImageUploadAccount(ctx context.Context) ApiCompleteProfileImageUploadAccountRequest
 
-	// CompleteProfileImageUploadExecute executes the request
+	// CompleteProfileImageUploadAccountExecute executes the request
 	//  @return CompleteProfileImageUploadAccountResp
-	CompleteProfileImageUploadExecute(r ApiCompleteProfileImageUploadRequest) (*CompleteProfileImageUploadAccountResp, *http.Response, error)
+	CompleteProfileImageUploadAccountExecute(r ApiCompleteProfileImageUploadAccountRequest) (*CompleteProfileImageUploadAccountResp, *http.Response, error)
 
 	/*
-	GetCurrent Method for GetCurrent
-
-	获取当前账号完整资料
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetCurrentRequest
-	*/
-	GetCurrent(ctx context.Context) ApiGetCurrentRequest
-
-	// GetCurrentExecute executes the request
-	//  @return GetCurrentAccountResp
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentAccountResp, *http.Response, error)
-
-	/*
-	GetEconomyAccount Method for GetEconomyAccount
+	GetAccountEconomy Method for GetAccountEconomy
 
 	查询当前账号的积分余额和累计收支。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetEconomyAccountRequest
+	@return ApiGetAccountEconomyRequest
 	*/
-	GetEconomyAccount(ctx context.Context) ApiGetEconomyAccountRequest
+	GetAccountEconomy(ctx context.Context) ApiGetAccountEconomyRequest
 
-	// GetEconomyAccountExecute executes the request
+	// GetAccountEconomyExecute executes the request
 	//  @return GetAccountEconomyResp
-	GetEconomyAccountExecute(r ApiGetEconomyAccountRequest) (*GetAccountEconomyResp, *http.Response, error)
+	GetAccountEconomyExecute(r ApiGetAccountEconomyRequest) (*GetAccountEconomyResp, *http.Response, error)
+
+	/*
+	GetCurrentAccount Method for GetCurrentAccount
+
+	获取当前账号完整资料
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiGetCurrentAccountRequest
+	*/
+	GetCurrentAccount(ctx context.Context) ApiGetCurrentAccountRequest
+
+	// GetCurrentAccountExecute executes the request
+	//  @return GetCurrentAccountResp
+	GetCurrentAccountExecute(r ApiGetCurrentAccountRequest) (*GetCurrentAccountResp, *http.Response, error)
 
 	/*
 	GetProfile Method for GetProfile
@@ -134,148 +134,149 @@ type AccountService interface {
 	ListPointRecordsExecute(r ApiListPointRecordsRequest) (*ListPointRecordsResp, *http.Response, error)
 
 	/*
-	PrepareProfileImageUpload Method for PrepareProfileImageUpload
+	PrepareProfileImageUploadAccount Method for PrepareProfileImageUploadAccount
 
 	申请当前账号资料图片的内容寻址直传能力。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPrepareProfileImageUploadRequest
+	@return ApiPrepareProfileImageUploadAccountRequest
 	*/
-	PrepareProfileImageUpload(ctx context.Context) ApiPrepareProfileImageUploadRequest
+	PrepareProfileImageUploadAccount(ctx context.Context) ApiPrepareProfileImageUploadAccountRequest
 
-	// PrepareProfileImageUploadExecute executes the request
+	// PrepareProfileImageUploadAccountExecute executes the request
 	//  @return PrepareProfileImageUploadAccountResp
-	PrepareProfileImageUploadExecute(r ApiPrepareProfileImageUploadRequest) (*PrepareProfileImageUploadAccountResp, *http.Response, error)
+	PrepareProfileImageUploadAccountExecute(r ApiPrepareProfileImageUploadAccountRequest) (*PrepareProfileImageUploadAccountResp, *http.Response, error)
 
 	/*
-	SearchMention Method for SearchMention
+	SearchMentionAccounts Method for SearchMentionAccounts
 
 	检索可提及账号的候选项。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiSearchMentionRequest
+	@return ApiSearchMentionAccountsRequest
 	*/
-	SearchMention(ctx context.Context) ApiSearchMentionRequest
+	SearchMentionAccounts(ctx context.Context) ApiSearchMentionAccountsRequest
 
-	// SearchMentionExecute executes the request
+	// SearchMentionAccountsExecute executes the request
 	//  @return SearchMentionAccountsResp
-	SearchMentionExecute(r ApiSearchMentionRequest) (*SearchMentionAccountsResp, *http.Response, error)
+	SearchMentionAccountsExecute(r ApiSearchMentionAccountsRequest) (*SearchMentionAccountsResp, *http.Response, error)
 
 	/*
-	TransferPoints Method for TransferPoints
+	TransferAccountPoints Method for TransferAccountPoints
 
 	向指定账号转移积分。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiTransferPointsRequest
+	@return ApiTransferAccountPointsRequest
 	*/
-	TransferPoints(ctx context.Context) ApiTransferPointsRequest
+	TransferAccountPoints(ctx context.Context) ApiTransferAccountPointsRequest
 
-	// TransferPointsExecute executes the request
+	// TransferAccountPointsExecute executes the request
 	//  @return TransferAccountPointsResp
-	TransferPointsExecute(r ApiTransferPointsRequest) (*TransferAccountPointsResp, *http.Response, error)
+	TransferAccountPointsExecute(r ApiTransferAccountPointsRequest) (*TransferAccountPointsResp, *http.Response, error)
 
 	/*
-	UpdateEmail Method for UpdateEmail
+	UpdateEmailAccount Method for UpdateEmailAccount
 
 	更新当前账号邮箱
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdateEmailRequest
+	@return ApiUpdateEmailAccountRequest
 	*/
-	UpdateEmail(ctx context.Context) ApiUpdateEmailRequest
+	UpdateEmailAccount(ctx context.Context) ApiUpdateEmailAccountRequest
 
-	// UpdateEmailExecute executes the request
+	// UpdateEmailAccountExecute executes the request
 	//  @return map[string]interface{}
-	UpdateEmailExecute(r ApiUpdateEmailRequest) (map[string]interface{}, *http.Response, error)
+	UpdateEmailAccountExecute(r ApiUpdateEmailAccountRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	UpdatePassword Method for UpdatePassword
+	UpdatePasswordAccount Method for UpdatePasswordAccount
 
 	更新当前账号密码
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdatePasswordRequest
+	@return ApiUpdatePasswordAccountRequest
 	*/
-	UpdatePassword(ctx context.Context) ApiUpdatePasswordRequest
+	UpdatePasswordAccount(ctx context.Context) ApiUpdatePasswordAccountRequest
 
-	// UpdatePasswordExecute executes the request
+	// UpdatePasswordAccountExecute executes the request
 	//  @return map[string]interface{}
-	UpdatePasswordExecute(r ApiUpdatePasswordRequest) (map[string]interface{}, *http.Response, error)
+	UpdatePasswordAccountExecute(r ApiUpdatePasswordAccountRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	UpdatePhone Method for UpdatePhone
+	UpdatePhoneAccount Method for UpdatePhoneAccount
 
 	更新当前账号手机号
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdatePhoneRequest
+	@return ApiUpdatePhoneAccountRequest
 	*/
-	UpdatePhone(ctx context.Context) ApiUpdatePhoneRequest
+	UpdatePhoneAccount(ctx context.Context) ApiUpdatePhoneAccountRequest
 
-	// UpdatePhoneExecute executes the request
+	// UpdatePhoneAccountExecute executes the request
 	//  @return map[string]interface{}
-	UpdatePhoneExecute(r ApiUpdatePhoneRequest) (map[string]interface{}, *http.Response, error)
+	UpdatePhoneAccountExecute(r ApiUpdatePhoneAccountRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	UpdateProfile Method for UpdateProfile
+	UpdateProfileAccount Method for UpdateProfileAccount
 
 	更新当前账号展示资料
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdateProfileRequest
+	@return ApiUpdateProfileAccountRequest
 	*/
-	UpdateProfile(ctx context.Context) ApiUpdateProfileRequest
+	UpdateProfileAccount(ctx context.Context) ApiUpdateProfileAccountRequest
 
-	// UpdateProfileExecute executes the request
+	// UpdateProfileAccountExecute executes the request
 	//  @return UpdateProfileAccountResp
-	UpdateProfileExecute(r ApiUpdateProfileRequest) (*UpdateProfileAccountResp, *http.Response, error)
+	UpdateProfileAccountExecute(r ApiUpdateProfileAccountRequest) (*UpdateProfileAccountResp, *http.Response, error)
 }
 
 // AccountServiceService AccountService service
 type AccountServiceService service
 
-type ApiAvatarRequest struct {
+type ApiAvatarAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	name *string
 }
 
-func (r ApiAvatarRequest) Name(name string) ApiAvatarRequest {
+// 账号名，必填
+func (r ApiAvatarAccountRequest) Name(name string) ApiAvatarAccountRequest {
 	r.name = &name
 	return r
 }
 
-func (r ApiAvatarRequest) Execute() (*ImageResp, *http.Response, error) {
-	return r.ApiService.AvatarExecute(r)
+func (r ApiAvatarAccountRequest) Execute() (*AvatarAccountResp, *http.Response, error) {
+	return r.ApiService.AvatarAccountExecute(r)
 }
 
 /*
-Avatar Method for Avatar
+AvatarAccount Method for AvatarAccount
 
 生成默认账号头像
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAvatarRequest
+ @return ApiAvatarAccountRequest
 */
-func (a *AccountServiceService) Avatar(ctx context.Context) ApiAvatarRequest {
-	return ApiAvatarRequest{
+func (a *AccountServiceService) AvatarAccount(ctx context.Context) ApiAvatarAccountRequest {
+	return ApiAvatarAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ImageResp
-func (a *AccountServiceService) AvatarExecute(r ApiAvatarRequest) (*ImageResp, *http.Response, error) {
+//  @return AvatarAccountResp
+func (a *AccountServiceService) AvatarAccountExecute(r ApiAvatarAccountRequest) (*AvatarAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ImageResp
+		localVarReturnValue  *AvatarAccountResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.Avatar")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.AvatarAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -343,31 +344,31 @@ func (a *AccountServiceService) AvatarExecute(r ApiAvatarRequest) (*ImageResp, *
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCompleteProfileImageUploadRequest struct {
+type ApiCompleteProfileImageUploadAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	completeProfileImageUploadAccountReq *CompleteProfileImageUploadAccountReq
 }
 
-func (r ApiCompleteProfileImageUploadRequest) CompleteProfileImageUploadAccountReq(completeProfileImageUploadAccountReq CompleteProfileImageUploadAccountReq) ApiCompleteProfileImageUploadRequest {
+func (r ApiCompleteProfileImageUploadAccountRequest) CompleteProfileImageUploadAccountReq(completeProfileImageUploadAccountReq CompleteProfileImageUploadAccountReq) ApiCompleteProfileImageUploadAccountRequest {
 	r.completeProfileImageUploadAccountReq = &completeProfileImageUploadAccountReq
 	return r
 }
 
-func (r ApiCompleteProfileImageUploadRequest) Execute() (*CompleteProfileImageUploadAccountResp, *http.Response, error) {
-	return r.ApiService.CompleteProfileImageUploadExecute(r)
+func (r ApiCompleteProfileImageUploadAccountRequest) Execute() (*CompleteProfileImageUploadAccountResp, *http.Response, error) {
+	return r.ApiService.CompleteProfileImageUploadAccountExecute(r)
 }
 
 /*
-CompleteProfileImageUpload Method for CompleteProfileImageUpload
+CompleteProfileImageUploadAccount Method for CompleteProfileImageUploadAccount
 
 将已由 MinIO 回调确认的资源绑定到当前账号资料。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCompleteProfileImageUploadRequest
+ @return ApiCompleteProfileImageUploadAccountRequest
 */
-func (a *AccountServiceService) CompleteProfileImageUpload(ctx context.Context) ApiCompleteProfileImageUploadRequest {
-	return ApiCompleteProfileImageUploadRequest{
+func (a *AccountServiceService) CompleteProfileImageUploadAccount(ctx context.Context) ApiCompleteProfileImageUploadAccountRequest {
+	return ApiCompleteProfileImageUploadAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -375,7 +376,7 @@ func (a *AccountServiceService) CompleteProfileImageUpload(ctx context.Context) 
 
 // Execute executes the request
 //  @return CompleteProfileImageUploadAccountResp
-func (a *AccountServiceService) CompleteProfileImageUploadExecute(r ApiCompleteProfileImageUploadRequest) (*CompleteProfileImageUploadAccountResp, *http.Response, error) {
+func (a *AccountServiceService) CompleteProfileImageUploadAccountExecute(r ApiCompleteProfileImageUploadAccountRequest) (*CompleteProfileImageUploadAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -383,7 +384,7 @@ func (a *AccountServiceService) CompleteProfileImageUploadExecute(r ApiCompleteP
 		localVarReturnValue  *CompleteProfileImageUploadAccountResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.CompleteProfileImageUpload")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.CompleteProfileImageUploadAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -453,52 +454,52 @@ func (a *AccountServiceService) CompleteProfileImageUploadExecute(r ApiCompleteP
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetCurrentRequest struct {
+type ApiGetAccountEconomyRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	body *map[string]interface{}
 }
 
-func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentRequest {
+func (r ApiGetAccountEconomyRequest) Body(body map[string]interface{}) ApiGetAccountEconomyRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentAccountResp, *http.Response, error) {
-	return r.ApiService.GetCurrentExecute(r)
+func (r ApiGetAccountEconomyRequest) Execute() (*GetAccountEconomyResp, *http.Response, error) {
+	return r.ApiService.GetAccountEconomyExecute(r)
 }
 
 /*
-GetCurrent Method for GetCurrent
+GetAccountEconomy Method for GetAccountEconomy
 
-获取当前账号完整资料
+查询当前账号的积分余额和累计收支。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetCurrentRequest
+ @return ApiGetAccountEconomyRequest
 */
-func (a *AccountServiceService) GetCurrent(ctx context.Context) ApiGetCurrentRequest {
-	return ApiGetCurrentRequest{
+func (a *AccountServiceService) GetAccountEconomy(ctx context.Context) ApiGetAccountEconomyRequest {
+	return ApiGetAccountEconomyRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return GetCurrentAccountResp
-func (a *AccountServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentAccountResp, *http.Response, error) {
+//  @return GetAccountEconomyResp
+func (a *AccountServiceService) GetAccountEconomyExecute(r ApiGetAccountEconomyRequest) (*GetAccountEconomyResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetCurrentAccountResp
+		localVarReturnValue  *GetAccountEconomyResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetCurrent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetAccountEconomy")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/account/get-current"
+	localVarPath := localBasePath + "/v1/user/account/economy/get"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -563,52 +564,52 @@ func (a *AccountServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetC
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetEconomyAccountRequest struct {
+type ApiGetCurrentAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	body *map[string]interface{}
 }
 
-func (r ApiGetEconomyAccountRequest) Body(body map[string]interface{}) ApiGetEconomyAccountRequest {
+func (r ApiGetCurrentAccountRequest) Body(body map[string]interface{}) ApiGetCurrentAccountRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiGetEconomyAccountRequest) Execute() (*GetAccountEconomyResp, *http.Response, error) {
-	return r.ApiService.GetEconomyAccountExecute(r)
+func (r ApiGetCurrentAccountRequest) Execute() (*GetCurrentAccountResp, *http.Response, error) {
+	return r.ApiService.GetCurrentAccountExecute(r)
 }
 
 /*
-GetEconomyAccount Method for GetEconomyAccount
+GetCurrentAccount Method for GetCurrentAccount
 
-查询当前账号的积分余额和累计收支。
+获取当前账号完整资料
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetEconomyAccountRequest
+ @return ApiGetCurrentAccountRequest
 */
-func (a *AccountServiceService) GetEconomyAccount(ctx context.Context) ApiGetEconomyAccountRequest {
-	return ApiGetEconomyAccountRequest{
+func (a *AccountServiceService) GetCurrentAccount(ctx context.Context) ApiGetCurrentAccountRequest {
+	return ApiGetCurrentAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return GetAccountEconomyResp
-func (a *AccountServiceService) GetEconomyAccountExecute(r ApiGetEconomyAccountRequest) (*GetAccountEconomyResp, *http.Response, error) {
+//  @return GetCurrentAccountResp
+func (a *AccountServiceService) GetCurrentAccountExecute(r ApiGetCurrentAccountRequest) (*GetCurrentAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetAccountEconomyResp
+		localVarReturnValue  *GetCurrentAccountResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetEconomyAccount")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetCurrentAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/account/economy/get"
+	localVarPath := localBasePath + "/v1/user/account/get-current"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
@@ -1113,31 +1114,31 @@ func (a *AccountServiceService) ListPointRecordsExecute(r ApiListPointRecordsReq
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPrepareProfileImageUploadRequest struct {
+type ApiPrepareProfileImageUploadAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	prepareProfileImageUploadAccountReq *PrepareProfileImageUploadAccountReq
 }
 
-func (r ApiPrepareProfileImageUploadRequest) PrepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq PrepareProfileImageUploadAccountReq) ApiPrepareProfileImageUploadRequest {
+func (r ApiPrepareProfileImageUploadAccountRequest) PrepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq PrepareProfileImageUploadAccountReq) ApiPrepareProfileImageUploadAccountRequest {
 	r.prepareProfileImageUploadAccountReq = &prepareProfileImageUploadAccountReq
 	return r
 }
 
-func (r ApiPrepareProfileImageUploadRequest) Execute() (*PrepareProfileImageUploadAccountResp, *http.Response, error) {
-	return r.ApiService.PrepareProfileImageUploadExecute(r)
+func (r ApiPrepareProfileImageUploadAccountRequest) Execute() (*PrepareProfileImageUploadAccountResp, *http.Response, error) {
+	return r.ApiService.PrepareProfileImageUploadAccountExecute(r)
 }
 
 /*
-PrepareProfileImageUpload Method for PrepareProfileImageUpload
+PrepareProfileImageUploadAccount Method for PrepareProfileImageUploadAccount
 
 申请当前账号资料图片的内容寻址直传能力。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPrepareProfileImageUploadRequest
+ @return ApiPrepareProfileImageUploadAccountRequest
 */
-func (a *AccountServiceService) PrepareProfileImageUpload(ctx context.Context) ApiPrepareProfileImageUploadRequest {
-	return ApiPrepareProfileImageUploadRequest{
+func (a *AccountServiceService) PrepareProfileImageUploadAccount(ctx context.Context) ApiPrepareProfileImageUploadAccountRequest {
+	return ApiPrepareProfileImageUploadAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1145,7 +1146,7 @@ func (a *AccountServiceService) PrepareProfileImageUpload(ctx context.Context) A
 
 // Execute executes the request
 //  @return PrepareProfileImageUploadAccountResp
-func (a *AccountServiceService) PrepareProfileImageUploadExecute(r ApiPrepareProfileImageUploadRequest) (*PrepareProfileImageUploadAccountResp, *http.Response, error) {
+func (a *AccountServiceService) PrepareProfileImageUploadAccountExecute(r ApiPrepareProfileImageUploadAccountRequest) (*PrepareProfileImageUploadAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1153,7 +1154,7 @@ func (a *AccountServiceService) PrepareProfileImageUploadExecute(r ApiPreparePro
 		localVarReturnValue  *PrepareProfileImageUploadAccountResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.PrepareProfileImageUpload")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.PrepareProfileImageUploadAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1223,31 +1224,31 @@ func (a *AccountServiceService) PrepareProfileImageUploadExecute(r ApiPreparePro
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiSearchMentionRequest struct {
+type ApiSearchMentionAccountsRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	searchMentionAccountsReq *SearchMentionAccountsReq
 }
 
-func (r ApiSearchMentionRequest) SearchMentionAccountsReq(searchMentionAccountsReq SearchMentionAccountsReq) ApiSearchMentionRequest {
+func (r ApiSearchMentionAccountsRequest) SearchMentionAccountsReq(searchMentionAccountsReq SearchMentionAccountsReq) ApiSearchMentionAccountsRequest {
 	r.searchMentionAccountsReq = &searchMentionAccountsReq
 	return r
 }
 
-func (r ApiSearchMentionRequest) Execute() (*SearchMentionAccountsResp, *http.Response, error) {
-	return r.ApiService.SearchMentionExecute(r)
+func (r ApiSearchMentionAccountsRequest) Execute() (*SearchMentionAccountsResp, *http.Response, error) {
+	return r.ApiService.SearchMentionAccountsExecute(r)
 }
 
 /*
-SearchMention Method for SearchMention
+SearchMentionAccounts Method for SearchMentionAccounts
 
 检索可提及账号的候选项。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSearchMentionRequest
+ @return ApiSearchMentionAccountsRequest
 */
-func (a *AccountServiceService) SearchMention(ctx context.Context) ApiSearchMentionRequest {
-	return ApiSearchMentionRequest{
+func (a *AccountServiceService) SearchMentionAccounts(ctx context.Context) ApiSearchMentionAccountsRequest {
+	return ApiSearchMentionAccountsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1255,7 +1256,7 @@ func (a *AccountServiceService) SearchMention(ctx context.Context) ApiSearchMent
 
 // Execute executes the request
 //  @return SearchMentionAccountsResp
-func (a *AccountServiceService) SearchMentionExecute(r ApiSearchMentionRequest) (*SearchMentionAccountsResp, *http.Response, error) {
+func (a *AccountServiceService) SearchMentionAccountsExecute(r ApiSearchMentionAccountsRequest) (*SearchMentionAccountsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1263,7 +1264,7 @@ func (a *AccountServiceService) SearchMentionExecute(r ApiSearchMentionRequest) 
 		localVarReturnValue  *SearchMentionAccountsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.SearchMention")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.SearchMentionAccounts")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1333,31 +1334,31 @@ func (a *AccountServiceService) SearchMentionExecute(r ApiSearchMentionRequest) 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiTransferPointsRequest struct {
+type ApiTransferAccountPointsRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	transferAccountPointsReq *TransferAccountPointsReq
 }
 
-func (r ApiTransferPointsRequest) TransferAccountPointsReq(transferAccountPointsReq TransferAccountPointsReq) ApiTransferPointsRequest {
+func (r ApiTransferAccountPointsRequest) TransferAccountPointsReq(transferAccountPointsReq TransferAccountPointsReq) ApiTransferAccountPointsRequest {
 	r.transferAccountPointsReq = &transferAccountPointsReq
 	return r
 }
 
-func (r ApiTransferPointsRequest) Execute() (*TransferAccountPointsResp, *http.Response, error) {
-	return r.ApiService.TransferPointsExecute(r)
+func (r ApiTransferAccountPointsRequest) Execute() (*TransferAccountPointsResp, *http.Response, error) {
+	return r.ApiService.TransferAccountPointsExecute(r)
 }
 
 /*
-TransferPoints Method for TransferPoints
+TransferAccountPoints Method for TransferAccountPoints
 
 向指定账号转移积分。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiTransferPointsRequest
+ @return ApiTransferAccountPointsRequest
 */
-func (a *AccountServiceService) TransferPoints(ctx context.Context) ApiTransferPointsRequest {
-	return ApiTransferPointsRequest{
+func (a *AccountServiceService) TransferAccountPoints(ctx context.Context) ApiTransferAccountPointsRequest {
+	return ApiTransferAccountPointsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1365,7 +1366,7 @@ func (a *AccountServiceService) TransferPoints(ctx context.Context) ApiTransferP
 
 // Execute executes the request
 //  @return TransferAccountPointsResp
-func (a *AccountServiceService) TransferPointsExecute(r ApiTransferPointsRequest) (*TransferAccountPointsResp, *http.Response, error) {
+func (a *AccountServiceService) TransferAccountPointsExecute(r ApiTransferAccountPointsRequest) (*TransferAccountPointsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1373,7 +1374,7 @@ func (a *AccountServiceService) TransferPointsExecute(r ApiTransferPointsRequest
 		localVarReturnValue  *TransferAccountPointsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.TransferPoints")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.TransferAccountPoints")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1443,31 +1444,31 @@ func (a *AccountServiceService) TransferPointsExecute(r ApiTransferPointsRequest
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdateEmailRequest struct {
+type ApiUpdateEmailAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	updateEmailAccountReq *UpdateEmailAccountReq
 }
 
-func (r ApiUpdateEmailRequest) UpdateEmailAccountReq(updateEmailAccountReq UpdateEmailAccountReq) ApiUpdateEmailRequest {
+func (r ApiUpdateEmailAccountRequest) UpdateEmailAccountReq(updateEmailAccountReq UpdateEmailAccountReq) ApiUpdateEmailAccountRequest {
 	r.updateEmailAccountReq = &updateEmailAccountReq
 	return r
 }
 
-func (r ApiUpdateEmailRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.UpdateEmailExecute(r)
+func (r ApiUpdateEmailAccountRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UpdateEmailAccountExecute(r)
 }
 
 /*
-UpdateEmail Method for UpdateEmail
+UpdateEmailAccount Method for UpdateEmailAccount
 
 更新当前账号邮箱
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdateEmailRequest
+ @return ApiUpdateEmailAccountRequest
 */
-func (a *AccountServiceService) UpdateEmail(ctx context.Context) ApiUpdateEmailRequest {
-	return ApiUpdateEmailRequest{
+func (a *AccountServiceService) UpdateEmailAccount(ctx context.Context) ApiUpdateEmailAccountRequest {
+	return ApiUpdateEmailAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1475,7 +1476,7 @@ func (a *AccountServiceService) UpdateEmail(ctx context.Context) ApiUpdateEmailR
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *AccountServiceService) UpdateEmailExecute(r ApiUpdateEmailRequest) (map[string]interface{}, *http.Response, error) {
+func (a *AccountServiceService) UpdateEmailAccountExecute(r ApiUpdateEmailAccountRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1483,7 +1484,7 @@ func (a *AccountServiceService) UpdateEmailExecute(r ApiUpdateEmailRequest) (map
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdateEmail")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdateEmailAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1553,31 +1554,31 @@ func (a *AccountServiceService) UpdateEmailExecute(r ApiUpdateEmailRequest) (map
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdatePasswordRequest struct {
+type ApiUpdatePasswordAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	updatePasswordAccountReq *UpdatePasswordAccountReq
 }
 
-func (r ApiUpdatePasswordRequest) UpdatePasswordAccountReq(updatePasswordAccountReq UpdatePasswordAccountReq) ApiUpdatePasswordRequest {
+func (r ApiUpdatePasswordAccountRequest) UpdatePasswordAccountReq(updatePasswordAccountReq UpdatePasswordAccountReq) ApiUpdatePasswordAccountRequest {
 	r.updatePasswordAccountReq = &updatePasswordAccountReq
 	return r
 }
 
-func (r ApiUpdatePasswordRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.UpdatePasswordExecute(r)
+func (r ApiUpdatePasswordAccountRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UpdatePasswordAccountExecute(r)
 }
 
 /*
-UpdatePassword Method for UpdatePassword
+UpdatePasswordAccount Method for UpdatePasswordAccount
 
 更新当前账号密码
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdatePasswordRequest
+ @return ApiUpdatePasswordAccountRequest
 */
-func (a *AccountServiceService) UpdatePassword(ctx context.Context) ApiUpdatePasswordRequest {
-	return ApiUpdatePasswordRequest{
+func (a *AccountServiceService) UpdatePasswordAccount(ctx context.Context) ApiUpdatePasswordAccountRequest {
+	return ApiUpdatePasswordAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1585,7 +1586,7 @@ func (a *AccountServiceService) UpdatePassword(ctx context.Context) ApiUpdatePas
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *AccountServiceService) UpdatePasswordExecute(r ApiUpdatePasswordRequest) (map[string]interface{}, *http.Response, error) {
+func (a *AccountServiceService) UpdatePasswordAccountExecute(r ApiUpdatePasswordAccountRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1593,7 +1594,7 @@ func (a *AccountServiceService) UpdatePasswordExecute(r ApiUpdatePasswordRequest
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdatePassword")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdatePasswordAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1663,31 +1664,31 @@ func (a *AccountServiceService) UpdatePasswordExecute(r ApiUpdatePasswordRequest
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdatePhoneRequest struct {
+type ApiUpdatePhoneAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	updatePhoneAccountReq *UpdatePhoneAccountReq
 }
 
-func (r ApiUpdatePhoneRequest) UpdatePhoneAccountReq(updatePhoneAccountReq UpdatePhoneAccountReq) ApiUpdatePhoneRequest {
+func (r ApiUpdatePhoneAccountRequest) UpdatePhoneAccountReq(updatePhoneAccountReq UpdatePhoneAccountReq) ApiUpdatePhoneAccountRequest {
 	r.updatePhoneAccountReq = &updatePhoneAccountReq
 	return r
 }
 
-func (r ApiUpdatePhoneRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.UpdatePhoneExecute(r)
+func (r ApiUpdatePhoneAccountRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UpdatePhoneAccountExecute(r)
 }
 
 /*
-UpdatePhone Method for UpdatePhone
+UpdatePhoneAccount Method for UpdatePhoneAccount
 
 更新当前账号手机号
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdatePhoneRequest
+ @return ApiUpdatePhoneAccountRequest
 */
-func (a *AccountServiceService) UpdatePhone(ctx context.Context) ApiUpdatePhoneRequest {
-	return ApiUpdatePhoneRequest{
+func (a *AccountServiceService) UpdatePhoneAccount(ctx context.Context) ApiUpdatePhoneAccountRequest {
+	return ApiUpdatePhoneAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1695,7 +1696,7 @@ func (a *AccountServiceService) UpdatePhone(ctx context.Context) ApiUpdatePhoneR
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *AccountServiceService) UpdatePhoneExecute(r ApiUpdatePhoneRequest) (map[string]interface{}, *http.Response, error) {
+func (a *AccountServiceService) UpdatePhoneAccountExecute(r ApiUpdatePhoneAccountRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1703,7 +1704,7 @@ func (a *AccountServiceService) UpdatePhoneExecute(r ApiUpdatePhoneRequest) (map
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdatePhone")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdatePhoneAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1773,31 +1774,31 @@ func (a *AccountServiceService) UpdatePhoneExecute(r ApiUpdatePhoneRequest) (map
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdateProfileRequest struct {
+type ApiUpdateProfileAccountRequest struct {
 	ctx context.Context
 	ApiService AccountService
 	updateProfileAccountReq *UpdateProfileAccountReq
 }
 
-func (r ApiUpdateProfileRequest) UpdateProfileAccountReq(updateProfileAccountReq UpdateProfileAccountReq) ApiUpdateProfileRequest {
+func (r ApiUpdateProfileAccountRequest) UpdateProfileAccountReq(updateProfileAccountReq UpdateProfileAccountReq) ApiUpdateProfileAccountRequest {
 	r.updateProfileAccountReq = &updateProfileAccountReq
 	return r
 }
 
-func (r ApiUpdateProfileRequest) Execute() (*UpdateProfileAccountResp, *http.Response, error) {
-	return r.ApiService.UpdateProfileExecute(r)
+func (r ApiUpdateProfileAccountRequest) Execute() (*UpdateProfileAccountResp, *http.Response, error) {
+	return r.ApiService.UpdateProfileAccountExecute(r)
 }
 
 /*
-UpdateProfile Method for UpdateProfile
+UpdateProfileAccount Method for UpdateProfileAccount
 
 更新当前账号展示资料
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdateProfileRequest
+ @return ApiUpdateProfileAccountRequest
 */
-func (a *AccountServiceService) UpdateProfile(ctx context.Context) ApiUpdateProfileRequest {
-	return ApiUpdateProfileRequest{
+func (a *AccountServiceService) UpdateProfileAccount(ctx context.Context) ApiUpdateProfileAccountRequest {
+	return ApiUpdateProfileAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1805,7 +1806,7 @@ func (a *AccountServiceService) UpdateProfile(ctx context.Context) ApiUpdateProf
 
 // Execute executes the request
 //  @return UpdateProfileAccountResp
-func (a *AccountServiceService) UpdateProfileExecute(r ApiUpdateProfileRequest) (*UpdateProfileAccountResp, *http.Response, error) {
+func (a *AccountServiceService) UpdateProfileAccountExecute(r ApiUpdateProfileAccountRequest) (*UpdateProfileAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1813,7 +1814,7 @@ func (a *AccountServiceService) UpdateProfileExecute(r ApiUpdateProfileRequest) 
 		localVarReturnValue  *UpdateProfileAccountResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdateProfile")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdateProfileAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

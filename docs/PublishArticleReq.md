@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**ScheduledAt** | Pointer to **time.Time** |  | [optional] 
+**ArticleId** | **string** | 必填，文章 ID | 
+**ScheduledAt** | Pointer to **time.Time** | 可选，定时发布时间 | [optional] 
 
 ## Methods
 

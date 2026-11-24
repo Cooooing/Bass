@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Preference** | Pointer to [**RespPreference**](RespPreference.md) |  | [optional] 
+**Preference** | Pointer to [**RespPreference**](RespPreference.md) | 当前账号偏好设置 | [optional] 
 
 ## Methods
 

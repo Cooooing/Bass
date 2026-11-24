@@ -17,9 +17,11 @@ import (
 // checks if the AccountProfileListItem type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AccountProfileListItem{}
 
-// AccountProfileListItem struct for AccountProfileListItem
+// AccountProfileListItem 协议消息。
 type AccountProfileListItem struct {
+	// 协议字段。
 	Account *AccountProfile `json:"account,omitempty"`
+	// 协议字段。
 	ViewerRelation *ProfileRelation `json:"viewer_relation,omitempty"`
 }
 

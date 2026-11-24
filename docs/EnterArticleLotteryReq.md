@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**Entered** | Pointer to **bool** |  | [optional] 
+**ArticleId** | **string** | 必填，文章 ID | 
+**Entered** | Pointer to **bool** | true 报名，false 撤销报名 | [optional] 
 
 ## Methods
 

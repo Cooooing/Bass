@@ -18,13 +18,19 @@ import (
 // checks if the GlobalChatBarrage type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GlobalChatBarrage{}
 
-// GlobalChatBarrage struct for GlobalChatBarrage
+// GlobalChatBarrage 协议消息。
 type GlobalChatBarrage struct {
+	// 弹幕 ID。
 	Id *string `json:"id,omitempty"`
+	// 发送账号 ID。
 	UserId *string `json:"user_id,omitempty"`
+	// 纯文本弹幕内容。
 	Content *string `json:"content,omitempty"`
+	// 本次实际消耗的积分。
 	PointsCost *string `json:"points_cost,omitempty"`
+	// 发送者展示资料。
 	Sender *GlobalChatMember `json:"sender,omitempty"`
+	// 创建时间。
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 }
 

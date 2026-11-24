@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Domain** | Pointer to [**RespDomain**](RespDomain.md) |  | [optional] 
+**Domain** | Pointer to [**RespDomain**](RespDomain.md) | 领域信息 | [optional] 
 
 ## Methods
 

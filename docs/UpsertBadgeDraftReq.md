@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DraftId** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
-**RenderSpec** | Pointer to [**RenderSpec**](RenderSpec.md) |  | [optional] 
+**DraftId** | Pointer to **string** | 待保存草稿 ID。 | [optional] 
+**Name** | Pointer to **string** | 草稿名称。 | [optional] 
+**Description** | Pointer to **string** | 草稿说明。 | [optional] 
+**RenderSpec** | Pointer to [**RenderSpec**](RenderSpec.md) | 草稿渲染参数。 | [optional] 
 
 ## Methods
 

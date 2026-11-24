@@ -18,12 +18,17 @@ import (
 // checks if the ArticleLottery type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleLottery{}
 
-// ArticleLottery struct for ArticleLottery
+// ArticleLottery 协议消息。
 type ArticleLottery struct {
+	// 开奖时间
 	DrawAt *time.Time `json:"draw_at,omitempty"`
+	// 实际开奖时间
 	DrawnAt *time.Time `json:"drawn_at,omitempty"`
+	// 有效报名人数
 	EntryCount *string `json:"entry_count,omitempty"`
+	// 当前账号是否已报名
 	Entered *bool `json:"entered,omitempty"`
+	// 奖项和中奖结果
 	Prizes []ArticleLotteryPrize `json:"prizes,omitempty"`
 }
 

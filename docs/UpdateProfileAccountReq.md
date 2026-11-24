@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Nickname** | Pointer to **string** |  | [optional] 
-**Url** | Pointer to **string** |  | [optional] 
-**Introduction** | Pointer to **string** |  | [optional] 
-**Mbti** | Pointer to **string** |  | [optional] 
+**Nickname** | Pointer to **string** | 昵称，选填 | [optional] 
+**Url** | Pointer to **string** | 个人主页 URL，选填 | [optional] 
+**Introduction** | Pointer to **string** | 个人简介，选填 | [optional] 
+**Mbti** | Pointer to **string** | MBTI 类型，选填；空字符串表示清除 | [optional] 
 
 ## Methods
 

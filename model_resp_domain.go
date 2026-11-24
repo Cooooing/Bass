@@ -18,20 +18,33 @@ import (
 // checks if the RespDomain type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespDomain{}
 
-// RespDomain struct for RespDomain
+// RespDomain 协议消息。
 type RespDomain struct {
+	// 领域 ID
 	Id *string `json:"id,omitempty"`
+	// 稳定编码
 	Code *string `json:"code,omitempty"`
+	// 领域名称
 	Name *string `json:"name,omitempty"`
+	// 描述
 	Description *string `json:"description,omitempty"`
+	// 启停状态
 	Status *string `json:"status,omitempty"`
+	// 链接
 	Url *string `json:"url,omitempty"`
+	// 图标
 	Icon *string `json:"icon,omitempty"`
+	// 是否在导航中展示
 	IsNav *bool `json:"is_nav,omitempty"`
+	// 排序值，越小越靠前
 	Sort *int32 `json:"sort,omitempty"`
+	// 创建用户 ID
 	CreatedBy *string `json:"created_by,omitempty"`
+	// 更新用户 ID
 	UpdatedBy *string `json:"updated_by,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

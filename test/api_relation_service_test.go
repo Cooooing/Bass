@@ -22,11 +22,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test RelationServiceService Block", func(t *testing.T) {
+	t.Run("Test RelationServiceService BlockRelation", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.Block(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.BlockRelation(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceService Follow", func(t *testing.T) {
+	t.Run("Test RelationServiceService FollowRelation", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.Follow(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.FollowRelation(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceService GetStatus", func(t *testing.T) {
+	t.Run("Test RelationServiceService GetStatusRelation", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.GetStatus(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.GetStatusRelation(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceService ListBlocked", func(t *testing.T) {
+	t.Run("Test RelationServiceService ListBlockedRelations", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.ListBlocked(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.ListBlockedRelations(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +70,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceService ListFollowers", func(t *testing.T) {
+	t.Run("Test RelationServiceService ListFollowersRelations", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.ListFollowers(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.ListFollowersRelations(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -82,11 +82,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceService ListFollowing", func(t *testing.T) {
+	t.Run("Test RelationServiceService ListFollowingRelations", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.ListFollowing(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.ListFollowingRelations(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -94,11 +94,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceService Unblock", func(t *testing.T) {
+	t.Run("Test RelationServiceService UnblockRelation", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.Unblock(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.UnblockRelation(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -106,11 +106,11 @@ func Test_bbs_RelationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test RelationServiceService Unfollow", func(t *testing.T) {
+	t.Run("Test RelationServiceService UnfollowRelation", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.RelationService.Unfollow(context.Background()).Execute()
+		resp, httpRes, err := apiClient.RelationService.UnfollowRelation(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

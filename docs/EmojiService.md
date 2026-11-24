@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AddItem**](EmojiService.md#AddItem) | **Post** /v1/im/emoji/items | 
-[**CreateGroup**](EmojiService.md#CreateGroup) | **Post** /v1/im/emoji/groups | 
-[**CreateShare**](EmojiService.md#CreateShare) | **Post** /v1/im/emoji/shares | 
-[**DeleteGroup**](EmojiService.md#DeleteGroup) | **Post** /v1/im/emoji/groups/delete | 
-[**DeleteItem**](EmojiService.md#DeleteItem) | **Post** /v1/im/emoji/items/delete | 
-[**ImportShare**](EmojiService.md#ImportShare) | **Post** /v1/im/emoji/shares/import | 
-[**List**](EmojiService.md#List) | **Post** /v1/im/emoji/groups/list | 
-[**MoveItem**](EmojiService.md#MoveItem) | **Post** /v1/im/emoji/items/move | 
-[**RenameGroup**](EmojiService.md#RenameGroup) | **Post** /v1/im/emoji/groups/rename | 
-[**RenameItem**](EmojiService.md#RenameItem) | **Post** /v1/im/emoji/items/rename | 
-[**ReorderGroups**](EmojiService.md#ReorderGroups) | **Post** /v1/im/emoji/groups/reorder | 
-[**ReorderItems**](EmojiService.md#ReorderItems) | **Post** /v1/im/emoji/items/reorder | 
+[**AddEmojiItem**](EmojiService.md#AddEmojiItem) | **Post** /v1/im/emoji/items | 
+[**CreateEmojiGroup**](EmojiService.md#CreateEmojiGroup) | **Post** /v1/im/emoji/groups | 
+[**CreateEmojiShare**](EmojiService.md#CreateEmojiShare) | **Post** /v1/im/emoji/shares | 
+[**DeleteEmojiGroup**](EmojiService.md#DeleteEmojiGroup) | **Post** /v1/im/emoji/groups/delete | 
+[**DeleteEmojiItem**](EmojiService.md#DeleteEmojiItem) | **Post** /v1/im/emoji/items/delete | 
+[**ImportEmojiShare**](EmojiService.md#ImportEmojiShare) | **Post** /v1/im/emoji/shares/import | 
+[**ListEmojiGroups**](EmojiService.md#ListEmojiGroups) | **Post** /v1/im/emoji/groups/list | 
+[**MoveEmojiItem**](EmojiService.md#MoveEmojiItem) | **Post** /v1/im/emoji/items/move | 
+[**RenameEmojiGroup**](EmojiService.md#RenameEmojiGroup) | **Post** /v1/im/emoji/groups/rename | 
+[**RenameEmojiItem**](EmojiService.md#RenameEmojiItem) | **Post** /v1/im/emoji/items/rename | 
+[**ReorderEmojiGroups**](EmojiService.md#ReorderEmojiGroups) | **Post** /v1/im/emoji/groups/reorder | 
+[**ReorderEmojiItems**](EmojiService.md#ReorderEmojiItems) | **Post** /v1/im/emoji/items/reorder | 
 
 
 
-## AddItem
+## AddEmojiItem
 
-> AddEmojiItemResp AddItem(ctx).AddEmojiItemReq(addEmojiItemReq).Execute()
+> AddEmojiItemResp AddEmojiItem(ctx).AddEmojiItemReq(addEmojiItemReq).Execute()
 
 
 
@@ -44,13 +44,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.AddItem(context.Background()).AddEmojiItemReq(addEmojiItemReq).Execute()
+	resp, r, err := apiClient.EmojiService.AddEmojiItem(context.Background()).AddEmojiItemReq(addEmojiItemReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.AddItem``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.AddEmojiItem``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AddItem`: AddEmojiItemResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.AddItem`: %v\n", resp)
+	// response from `AddEmojiItem`: AddEmojiItemResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.AddEmojiItem`: %v\n", resp)
 }
 ```
 
@@ -60,7 +60,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAddItemRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiAddEmojiItemRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -85,9 +85,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## CreateGroup
+## CreateEmojiGroup
 
-> CreateEmojiGroupResp CreateGroup(ctx).CreateEmojiGroupReq(createEmojiGroupReq).Execute()
+> CreateEmojiGroupResp CreateEmojiGroup(ctx).CreateEmojiGroupReq(createEmojiGroupReq).Execute()
 
 
 
@@ -110,13 +110,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.CreateGroup(context.Background()).CreateEmojiGroupReq(createEmojiGroupReq).Execute()
+	resp, r, err := apiClient.EmojiService.CreateEmojiGroup(context.Background()).CreateEmojiGroupReq(createEmojiGroupReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.CreateGroup``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.CreateEmojiGroup``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateGroup`: CreateEmojiGroupResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.CreateGroup`: %v\n", resp)
+	// response from `CreateEmojiGroup`: CreateEmojiGroupResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.CreateEmojiGroup`: %v\n", resp)
 }
 ```
 
@@ -126,7 +126,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateGroupRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateEmojiGroupRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -151,9 +151,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## CreateShare
+## CreateEmojiShare
 
-> CreateEmojiShareResp CreateShare(ctx).CreateEmojiShareReq(createEmojiShareReq).Execute()
+> CreateEmojiShareResp CreateEmojiShare(ctx).CreateEmojiShareReq(createEmojiShareReq).Execute()
 
 
 
@@ -176,13 +176,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.CreateShare(context.Background()).CreateEmojiShareReq(createEmojiShareReq).Execute()
+	resp, r, err := apiClient.EmojiService.CreateEmojiShare(context.Background()).CreateEmojiShareReq(createEmojiShareReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.CreateShare``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.CreateEmojiShare``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CreateShare`: CreateEmojiShareResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.CreateShare`: %v\n", resp)
+	// response from `CreateEmojiShare`: CreateEmojiShareResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.CreateEmojiShare`: %v\n", resp)
 }
 ```
 
@@ -192,7 +192,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateShareRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateEmojiShareRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -217,9 +217,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## DeleteGroup
+## DeleteEmojiGroup
 
-> map[string]interface{} DeleteGroup(ctx).DeleteEmojiGroupReq(deleteEmojiGroupReq).Execute()
+> map[string]interface{} DeleteEmojiGroup(ctx).DeleteEmojiGroupReq(deleteEmojiGroupReq).Execute()
 
 
 
@@ -242,13 +242,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.DeleteGroup(context.Background()).DeleteEmojiGroupReq(deleteEmojiGroupReq).Execute()
+	resp, r, err := apiClient.EmojiService.DeleteEmojiGroup(context.Background()).DeleteEmojiGroupReq(deleteEmojiGroupReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.DeleteGroup``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.DeleteEmojiGroup``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteGroup`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.DeleteGroup`: %v\n", resp)
+	// response from `DeleteEmojiGroup`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.DeleteEmojiGroup`: %v\n", resp)
 }
 ```
 
@@ -258,7 +258,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiDeleteGroupRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiDeleteEmojiGroupRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -283,9 +283,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## DeleteItem
+## DeleteEmojiItem
 
-> map[string]interface{} DeleteItem(ctx).DeleteEmojiItemReq(deleteEmojiItemReq).Execute()
+> map[string]interface{} DeleteEmojiItem(ctx).DeleteEmojiItemReq(deleteEmojiItemReq).Execute()
 
 
 
@@ -308,13 +308,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.DeleteItem(context.Background()).DeleteEmojiItemReq(deleteEmojiItemReq).Execute()
+	resp, r, err := apiClient.EmojiService.DeleteEmojiItem(context.Background()).DeleteEmojiItemReq(deleteEmojiItemReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.DeleteItem``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.DeleteEmojiItem``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteItem`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.DeleteItem`: %v\n", resp)
+	// response from `DeleteEmojiItem`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.DeleteEmojiItem`: %v\n", resp)
 }
 ```
 
@@ -324,7 +324,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiDeleteItemRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiDeleteEmojiItemRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -349,9 +349,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## ImportShare
+## ImportEmojiShare
 
-> ImportEmojiShareResp ImportShare(ctx).ImportEmojiShareReq(importEmojiShareReq).Execute()
+> ImportEmojiShareResp ImportEmojiShare(ctx).ImportEmojiShareReq(importEmojiShareReq).Execute()
 
 
 
@@ -374,13 +374,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.ImportShare(context.Background()).ImportEmojiShareReq(importEmojiShareReq).Execute()
+	resp, r, err := apiClient.EmojiService.ImportEmojiShare(context.Background()).ImportEmojiShareReq(importEmojiShareReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.ImportShare``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.ImportEmojiShare``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ImportShare`: ImportEmojiShareResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.ImportShare`: %v\n", resp)
+	// response from `ImportEmojiShare`: ImportEmojiShareResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.ImportEmojiShare`: %v\n", resp)
 }
 ```
 
@@ -390,7 +390,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiImportShareRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiImportEmojiShareRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -415,9 +415,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## List
+## ListEmojiGroups
 
-> ListEmojiGroupsResp List(ctx).ListEmojiGroupsReq(listEmojiGroupsReq).Execute()
+> ListEmojiGroupsResp ListEmojiGroups(ctx).ListEmojiGroupsReq(listEmojiGroupsReq).Execute()
 
 
 
@@ -440,13 +440,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.List(context.Background()).ListEmojiGroupsReq(listEmojiGroupsReq).Execute()
+	resp, r, err := apiClient.EmojiService.ListEmojiGroups(context.Background()).ListEmojiGroupsReq(listEmojiGroupsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.List``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.ListEmojiGroups``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListEmojiGroupsResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.List`: %v\n", resp)
+	// response from `ListEmojiGroups`: ListEmojiGroupsResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.ListEmojiGroups`: %v\n", resp)
 }
 ```
 
@@ -456,7 +456,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListEmojiGroupsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -481,9 +481,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## MoveItem
+## MoveEmojiItem
 
-> MoveEmojiItemResp MoveItem(ctx).MoveEmojiItemReq(moveEmojiItemReq).Execute()
+> MoveEmojiItemResp MoveEmojiItem(ctx).MoveEmojiItemReq(moveEmojiItemReq).Execute()
 
 
 
@@ -506,13 +506,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.MoveItem(context.Background()).MoveEmojiItemReq(moveEmojiItemReq).Execute()
+	resp, r, err := apiClient.EmojiService.MoveEmojiItem(context.Background()).MoveEmojiItemReq(moveEmojiItemReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.MoveItem``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.MoveEmojiItem``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `MoveItem`: MoveEmojiItemResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.MoveItem`: %v\n", resp)
+	// response from `MoveEmojiItem`: MoveEmojiItemResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.MoveEmojiItem`: %v\n", resp)
 }
 ```
 
@@ -522,7 +522,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiMoveItemRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiMoveEmojiItemRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -547,9 +547,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RenameGroup
+## RenameEmojiGroup
 
-> RenameEmojiGroupResp RenameGroup(ctx).RenameEmojiGroupReq(renameEmojiGroupReq).Execute()
+> RenameEmojiGroupResp RenameEmojiGroup(ctx).RenameEmojiGroupReq(renameEmojiGroupReq).Execute()
 
 
 
@@ -572,13 +572,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.RenameGroup(context.Background()).RenameEmojiGroupReq(renameEmojiGroupReq).Execute()
+	resp, r, err := apiClient.EmojiService.RenameEmojiGroup(context.Background()).RenameEmojiGroupReq(renameEmojiGroupReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.RenameGroup``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.RenameEmojiGroup``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RenameGroup`: RenameEmojiGroupResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.RenameGroup`: %v\n", resp)
+	// response from `RenameEmojiGroup`: RenameEmojiGroupResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.RenameEmojiGroup`: %v\n", resp)
 }
 ```
 
@@ -588,7 +588,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRenameGroupRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiRenameEmojiGroupRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -613,9 +613,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## RenameItem
+## RenameEmojiItem
 
-> RenameEmojiItemResp RenameItem(ctx).RenameEmojiItemReq(renameEmojiItemReq).Execute()
+> RenameEmojiItemResp RenameEmojiItem(ctx).RenameEmojiItemReq(renameEmojiItemReq).Execute()
 
 
 
@@ -638,13 +638,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.RenameItem(context.Background()).RenameEmojiItemReq(renameEmojiItemReq).Execute()
+	resp, r, err := apiClient.EmojiService.RenameEmojiItem(context.Background()).RenameEmojiItemReq(renameEmojiItemReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.RenameItem``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.RenameEmojiItem``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RenameItem`: RenameEmojiItemResp
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.RenameItem`: %v\n", resp)
+	// response from `RenameEmojiItem`: RenameEmojiItemResp
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.RenameEmojiItem`: %v\n", resp)
 }
 ```
 
@@ -654,7 +654,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiRenameItemRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiRenameEmojiItemRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -679,9 +679,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## ReorderGroups
+## ReorderEmojiGroups
 
-> map[string]interface{} ReorderGroups(ctx).ReorderEmojiGroupsReq(reorderEmojiGroupsReq).Execute()
+> map[string]interface{} ReorderEmojiGroups(ctx).ReorderEmojiGroupsReq(reorderEmojiGroupsReq).Execute()
 
 
 
@@ -704,13 +704,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.ReorderGroups(context.Background()).ReorderEmojiGroupsReq(reorderEmojiGroupsReq).Execute()
+	resp, r, err := apiClient.EmojiService.ReorderEmojiGroups(context.Background()).ReorderEmojiGroupsReq(reorderEmojiGroupsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.ReorderGroups``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.ReorderEmojiGroups``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ReorderGroups`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.ReorderGroups`: %v\n", resp)
+	// response from `ReorderEmojiGroups`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.ReorderEmojiGroups`: %v\n", resp)
 }
 ```
 
@@ -720,7 +720,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiReorderGroupsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiReorderEmojiGroupsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -745,9 +745,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## ReorderItems
+## ReorderEmojiItems
 
-> map[string]interface{} ReorderItems(ctx).ReorderEmojiItemsReq(reorderEmojiItemsReq).Execute()
+> map[string]interface{} ReorderEmojiItems(ctx).ReorderEmojiItemsReq(reorderEmojiItemsReq).Execute()
 
 
 
@@ -770,13 +770,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.EmojiService.ReorderItems(context.Background()).ReorderEmojiItemsReq(reorderEmojiItemsReq).Execute()
+	resp, r, err := apiClient.EmojiService.ReorderEmojiItems(context.Background()).ReorderEmojiItemsReq(reorderEmojiItemsReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.ReorderItems``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `EmojiService.ReorderEmojiItems``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ReorderItems`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `EmojiService.ReorderItems`: %v\n", resp)
+	// response from `ReorderEmojiItems`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `EmojiService.ReorderEmojiItems`: %v\n", resp)
 }
 ```
 
@@ -786,7 +786,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiReorderItemsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiReorderEmojiItemsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

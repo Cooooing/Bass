@@ -71,45 +71,45 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AccountService* | [**Avatar**](docs/AccountService.md#avatar) | **Get** /v1/user/account/avatar | 
-*AccountService* | [**CompleteProfileImageUpload**](docs/AccountService.md#completeprofileimageupload) | **Post** /v1/user/account/complete-profile-image-upload | 
-*AccountService* | [**GetCurrent**](docs/AccountService.md#getcurrent) | **Post** /v1/user/account/get-current | 
-*AccountService* | [**GetEconomyAccount**](docs/AccountService.md#geteconomyaccount) | **Post** /v1/user/account/economy/get | 
+*AccountService* | [**AvatarAccount**](docs/AccountService.md#avataraccount) | **Get** /v1/user/account/avatar | 
+*AccountService* | [**CompleteProfileImageUploadAccount**](docs/AccountService.md#completeprofileimageuploadaccount) | **Post** /v1/user/account/complete-profile-image-upload | 
+*AccountService* | [**GetAccountEconomy**](docs/AccountService.md#getaccounteconomy) | **Post** /v1/user/account/economy/get | 
+*AccountService* | [**GetCurrentAccount**](docs/AccountService.md#getcurrentaccount) | **Post** /v1/user/account/get-current | 
 *AccountService* | [**GetProfile**](docs/AccountService.md#getprofile) | **Post** /v1/user/account/get-profile | 
 *AccountService* | [**ListFollowers**](docs/AccountService.md#listfollowers) | **Post** /v1/user/account/list-followers | 
 *AccountService* | [**ListFollowing**](docs/AccountService.md#listfollowing) | **Post** /v1/user/account/list-following | 
 *AccountService* | [**ListPointRecords**](docs/AccountService.md#listpointrecords) | **Post** /v1/user/account/list-point-records | 
-*AccountService* | [**PrepareProfileImageUpload**](docs/AccountService.md#prepareprofileimageupload) | **Post** /v1/user/account/prepare-profile-image-upload | 
-*AccountService* | [**SearchMention**](docs/AccountService.md#searchmention) | **Post** /v1/user/account/search-mention | 
-*AccountService* | [**TransferPoints**](docs/AccountService.md#transferpoints) | **Post** /v1/user/account/economy/transfer | 
-*AccountService* | [**UpdateEmail**](docs/AccountService.md#updateemail) | **Post** /v1/user/account/update-email | 
-*AccountService* | [**UpdatePassword**](docs/AccountService.md#updatepassword) | **Post** /v1/user/account/update-password | 
-*AccountService* | [**UpdatePhone**](docs/AccountService.md#updatephone) | **Post** /v1/user/account/update-phone | 
-*AccountService* | [**UpdateProfile**](docs/AccountService.md#updateprofile) | **Post** /v1/user/account/update-profile | 
-*ArticleSearchService* | [**Search**](docs/ArticleSearchService.md#search) | **Post** /v1/content/article/search | 
-*ArticleService* | [**AcceptAnswer**](docs/ArticleService.md#acceptanswer) | **Post** /v1/content/article/answer/accept | 
-*ArticleService* | [**Archive**](docs/ArticleService.md#archive) | **Post** /v1/content/article/archive | 
-*ArticleService* | [**CancelPublish**](docs/ArticleService.md#cancelpublish) | **Post** /v1/content/article/publish/cancel | 
-*ArticleService* | [**Collect**](docs/ArticleService.md#collect) | **Post** /v1/content/article/collect | 
-*ArticleService* | [**CountCollected**](docs/ArticleService.md#countcollected) | **Post** /v1/content/article/collect/count | 
-*ArticleService* | [**CreateDraft**](docs/ArticleService.md#createdraft) | **Post** /v1/content/article/draft/create | 
-*ArticleService* | [**DiscardDraft**](docs/ArticleService.md#discarddraft) | **Post** /v1/content/article/draft/discard | 
-*ArticleService* | [**EnterLottery**](docs/ArticleService.md#enterlottery) | **Post** /v1/content/article/lottery/entry | 
-*ArticleService* | [**Get**](docs/ArticleService.md#get) | **Post** /v1/content/article/get | 
-*ArticleService* | [**Like**](docs/ArticleService.md#like) | **Post** /v1/content/article/like | 
-*ArticleService* | [**List**](docs/ArticleService.md#list) | **Post** /v1/content/article/list | 
-*ArticleService* | [**ListFollowing**](docs/ArticleService.md#listfollowing) | **Post** /v1/content/article/following/list | 
-*ArticleService* | [**ListNearby**](docs/ArticleService.md#listnearby) | **Post** /v1/content/article/nearby/list | 
-*ArticleService* | [**PageCollected**](docs/ArticleService.md#pagecollected) | **Post** /v1/content/article/collected/page | 
-*ArticleService* | [**PageViewHistory**](docs/ArticleService.md#pageviewhistory) | **Post** /v1/content/article/view-history/page | 
-*ArticleService* | [**PageWatched**](docs/ArticleService.md#pagewatched) | **Post** /v1/content/article/watched/page | 
-*ArticleService* | [**Publish**](docs/ArticleService.md#publish) | **Post** /v1/content/article/publish | 
-*ArticleService* | [**Reward**](docs/ArticleService.md#reward) | **Post** /v1/content/article/reward | 
-*ArticleService* | [**SetPinnedComment**](docs/ArticleService.md#setpinnedcomment) | **Post** /v1/content/article/comment/pin | 
-*ArticleService* | [**Thank**](docs/ArticleService.md#thank) | **Post** /v1/content/article/thank | 
-*ArticleService* | [**UpdateDraft**](docs/ArticleService.md#updatedraft) | **Post** /v1/content/article/draft/update | 
-*ArticleService* | [**VotePoll**](docs/ArticleService.md#votepoll) | **Post** /v1/content/article/poll/vote | 
-*ArticleService* | [**Watch**](docs/ArticleService.md#watch) | **Post** /v1/content/article/watch | 
+*AccountService* | [**PrepareProfileImageUploadAccount**](docs/AccountService.md#prepareprofileimageuploadaccount) | **Post** /v1/user/account/prepare-profile-image-upload | 
+*AccountService* | [**SearchMentionAccounts**](docs/AccountService.md#searchmentionaccounts) | **Post** /v1/user/account/search-mention | 
+*AccountService* | [**TransferAccountPoints**](docs/AccountService.md#transferaccountpoints) | **Post** /v1/user/account/economy/transfer | 
+*AccountService* | [**UpdateEmailAccount**](docs/AccountService.md#updateemailaccount) | **Post** /v1/user/account/update-email | 
+*AccountService* | [**UpdatePasswordAccount**](docs/AccountService.md#updatepasswordaccount) | **Post** /v1/user/account/update-password | 
+*AccountService* | [**UpdatePhoneAccount**](docs/AccountService.md#updatephoneaccount) | **Post** /v1/user/account/update-phone | 
+*AccountService* | [**UpdateProfileAccount**](docs/AccountService.md#updateprofileaccount) | **Post** /v1/user/account/update-profile | 
+*ArticleSearchService* | [**SearchArticles**](docs/ArticleSearchService.md#searcharticles) | **Post** /v1/content/article/search | 
+*ArticleService* | [**AcceptArticleAnswer**](docs/ArticleService.md#acceptarticleanswer) | **Post** /v1/content/article/answer/accept | 
+*ArticleService* | [**ArchiveArticle**](docs/ArticleService.md#archivearticle) | **Post** /v1/content/article/archive | 
+*ArticleService* | [**CancelPublishArticle**](docs/ArticleService.md#cancelpublisharticle) | **Post** /v1/content/article/publish/cancel | 
+*ArticleService* | [**CollectArticle**](docs/ArticleService.md#collectarticle) | **Post** /v1/content/article/collect | 
+*ArticleService* | [**CountCollectedArticles**](docs/ArticleService.md#countcollectedarticles) | **Post** /v1/content/article/collect/count | 
+*ArticleService* | [**CreateDraftArticle**](docs/ArticleService.md#createdraftarticle) | **Post** /v1/content/article/draft/create | 
+*ArticleService* | [**DiscardDraftArticle**](docs/ArticleService.md#discarddraftarticle) | **Post** /v1/content/article/draft/discard | 
+*ArticleService* | [**EnterArticleLottery**](docs/ArticleService.md#enterarticlelottery) | **Post** /v1/content/article/lottery/entry | 
+*ArticleService* | [**GetArticle**](docs/ArticleService.md#getarticle) | **Post** /v1/content/article/get | 
+*ArticleService* | [**LikeArticle**](docs/ArticleService.md#likearticle) | **Post** /v1/content/article/like | 
+*ArticleService* | [**ListArticles**](docs/ArticleService.md#listarticles) | **Post** /v1/content/article/list | 
+*ArticleService* | [**ListFollowingArticles**](docs/ArticleService.md#listfollowingarticles) | **Post** /v1/content/article/following/list | 
+*ArticleService* | [**ListNearbyArticles**](docs/ArticleService.md#listnearbyarticles) | **Post** /v1/content/article/nearby/list | 
+*ArticleService* | [**PageArticleViewHistory**](docs/ArticleService.md#pagearticleviewhistory) | **Post** /v1/content/article/view-history/page | 
+*ArticleService* | [**PageCollectedArticles**](docs/ArticleService.md#pagecollectedarticles) | **Post** /v1/content/article/collected/page | 
+*ArticleService* | [**PageWatchedArticles**](docs/ArticleService.md#pagewatchedarticles) | **Post** /v1/content/article/watched/page | 
+*ArticleService* | [**PublishArticle**](docs/ArticleService.md#publisharticle) | **Post** /v1/content/article/publish | 
+*ArticleService* | [**RewardArticle**](docs/ArticleService.md#rewardarticle) | **Post** /v1/content/article/reward | 
+*ArticleService* | [**SetPinnedArticleComment**](docs/ArticleService.md#setpinnedarticlecomment) | **Post** /v1/content/article/comment/pin | 
+*ArticleService* | [**ThankArticle**](docs/ArticleService.md#thankarticle) | **Post** /v1/content/article/thank | 
+*ArticleService* | [**UpdateDraftArticle**](docs/ArticleService.md#updatedraftarticle) | **Post** /v1/content/article/draft/update | 
+*ArticleService* | [**VoteArticlePoll**](docs/ArticleService.md#votearticlepoll) | **Post** /v1/content/article/poll/vote | 
+*ArticleService* | [**WatchArticle**](docs/ArticleService.md#watcharticle) | **Post** /v1/content/article/watch | 
 *AssetService* | [**CompleteBadgeFontUpload**](docs/AssetService.md#completebadgefontupload) | **Post** /v1/asset/badge-font/complete | 
 *AssetService* | [**CompleteBadgeImageUpload**](docs/AssetService.md#completebadgeimageupload) | **Post** /v1/asset/badge-image/complete | 
 *AssetService* | [**CompleteMarkdownImageUpload**](docs/AssetService.md#completemarkdownimageupload) | **Post** /v1/asset/markdown-image/complete | 
@@ -122,33 +122,33 @@ Class | Method | HTTP request | Description
 *AuthService* | [**Logout**](docs/AuthService.md#logout) | **Post** /v1/user/auth/logout | 
 *AuthService* | [**RefreshToken**](docs/AuthService.md#refreshtoken) | **Post** /v1/user/auth/refresh-token | 
 *AuthService* | [**Register**](docs/AuthService.md#register) | **Post** /v1/user/auth/register | 
-*BadgeService* | [**DeleteDraft**](docs/BadgeService.md#deletedraft) | **Post** /v1/badge/draft/delete | 
-*BadgeService* | [**ListDrafts**](docs/BadgeService.md#listdrafts) | **Post** /v1/badge/draft/list | 
-*BadgeService* | [**RenderMaker**](docs/BadgeService.md#rendermaker) | **Get** /v1/badge/maker/render | 
-*BadgeService* | [**RenderPublished**](docs/BadgeService.md#renderpublished) | **Get** /v1/badge/render | 
-*BadgeService* | [**UpsertDraft**](docs/BadgeService.md#upsertdraft) | **Post** /v1/badge/draft/upsert | 
-*CommentService* | [**Create**](docs/CommentService.md#create) | **Post** /v1/content/comment/create | 
-*CommentService* | [**Like**](docs/CommentService.md#like) | **Post** /v1/content/comment/like | 
-*CommentService* | [**List**](docs/CommentService.md#list) | **Post** /v1/content/comment/list | 
-*CommentService* | [**ListReplies**](docs/CommentService.md#listreplies) | **Post** /v1/content/comment/list-replies | 
-*CommentService* | [**ListThreads**](docs/CommentService.md#listthreads) | **Post** /v1/content/comment/list-threads | 
-*CommentService* | [**ListTimeline**](docs/CommentService.md#listtimeline) | **Post** /v1/content/comment/list-timeline | 
-*CommentService* | [**Thank**](docs/CommentService.md#thank) | **Post** /v1/content/comment/thank | 
-*DomainService* | [**Create**](docs/DomainService.md#create) | **Post** /v1/content/domain/create | 
-*DomainService* | [**List**](docs/DomainService.md#list) | **Post** /v1/content/domain/list | 
-*DomainService* | [**Update**](docs/DomainService.md#update) | **Post** /v1/content/domain/update | 
-*EmojiService* | [**AddItem**](docs/EmojiService.md#additem) | **Post** /v1/im/emoji/items | 
-*EmojiService* | [**CreateGroup**](docs/EmojiService.md#creategroup) | **Post** /v1/im/emoji/groups | 
-*EmojiService* | [**CreateShare**](docs/EmojiService.md#createshare) | **Post** /v1/im/emoji/shares | 
-*EmojiService* | [**DeleteGroup**](docs/EmojiService.md#deletegroup) | **Post** /v1/im/emoji/groups/delete | 
-*EmojiService* | [**DeleteItem**](docs/EmojiService.md#deleteitem) | **Post** /v1/im/emoji/items/delete | 
-*EmojiService* | [**ImportShare**](docs/EmojiService.md#importshare) | **Post** /v1/im/emoji/shares/import | 
-*EmojiService* | [**List**](docs/EmojiService.md#list) | **Post** /v1/im/emoji/groups/list | 
-*EmojiService* | [**MoveItem**](docs/EmojiService.md#moveitem) | **Post** /v1/im/emoji/items/move | 
-*EmojiService* | [**RenameGroup**](docs/EmojiService.md#renamegroup) | **Post** /v1/im/emoji/groups/rename | 
-*EmojiService* | [**RenameItem**](docs/EmojiService.md#renameitem) | **Post** /v1/im/emoji/items/rename | 
-*EmojiService* | [**ReorderGroups**](docs/EmojiService.md#reordergroups) | **Post** /v1/im/emoji/groups/reorder | 
-*EmojiService* | [**ReorderItems**](docs/EmojiService.md#reorderitems) | **Post** /v1/im/emoji/items/reorder | 
+*BadgeService* | [**DeleteBadgeDraft**](docs/BadgeService.md#deletebadgedraft) | **Post** /v1/badge/draft/delete | 
+*BadgeService* | [**ListBadgeDrafts**](docs/BadgeService.md#listbadgedrafts) | **Post** /v1/badge/draft/list | 
+*BadgeService* | [**RenderMakerBadge**](docs/BadgeService.md#rendermakerbadge) | **Get** /v1/badge/maker/render | 
+*BadgeService* | [**RenderPublishedBadge**](docs/BadgeService.md#renderpublishedbadge) | **Get** /v1/badge/render | 
+*BadgeService* | [**UpsertBadgeDraft**](docs/BadgeService.md#upsertbadgedraft) | **Post** /v1/badge/draft/upsert | 
+*CommentService* | [**CreateComment**](docs/CommentService.md#createcomment) | **Post** /v1/content/comment/create | 
+*CommentService* | [**LikeComment**](docs/CommentService.md#likecomment) | **Post** /v1/content/comment/like | 
+*CommentService* | [**ListCommentReplies**](docs/CommentService.md#listcommentreplies) | **Post** /v1/content/comment/list-replies | 
+*CommentService* | [**ListCommentThreads**](docs/CommentService.md#listcommentthreads) | **Post** /v1/content/comment/list-threads | 
+*CommentService* | [**ListCommentTimeline**](docs/CommentService.md#listcommenttimeline) | **Post** /v1/content/comment/list-timeline | 
+*CommentService* | [**ListComments**](docs/CommentService.md#listcomments) | **Post** /v1/content/comment/list | 
+*CommentService* | [**ThankComment**](docs/CommentService.md#thankcomment) | **Post** /v1/content/comment/thank | 
+*DomainService* | [**CreateDomain**](docs/DomainService.md#createdomain) | **Post** /v1/content/domain/create | 
+*DomainService* | [**ListDomains**](docs/DomainService.md#listdomains) | **Post** /v1/content/domain/list | 
+*DomainService* | [**UpdateDomain**](docs/DomainService.md#updatedomain) | **Post** /v1/content/domain/update | 
+*EmojiService* | [**AddEmojiItem**](docs/EmojiService.md#addemojiitem) | **Post** /v1/im/emoji/items | 
+*EmojiService* | [**CreateEmojiGroup**](docs/EmojiService.md#createemojigroup) | **Post** /v1/im/emoji/groups | 
+*EmojiService* | [**CreateEmojiShare**](docs/EmojiService.md#createemojishare) | **Post** /v1/im/emoji/shares | 
+*EmojiService* | [**DeleteEmojiGroup**](docs/EmojiService.md#deleteemojigroup) | **Post** /v1/im/emoji/groups/delete | 
+*EmojiService* | [**DeleteEmojiItem**](docs/EmojiService.md#deleteemojiitem) | **Post** /v1/im/emoji/items/delete | 
+*EmojiService* | [**ImportEmojiShare**](docs/EmojiService.md#importemojishare) | **Post** /v1/im/emoji/shares/import | 
+*EmojiService* | [**ListEmojiGroups**](docs/EmojiService.md#listemojigroups) | **Post** /v1/im/emoji/groups/list | 
+*EmojiService* | [**MoveEmojiItem**](docs/EmojiService.md#moveemojiitem) | **Post** /v1/im/emoji/items/move | 
+*EmojiService* | [**RenameEmojiGroup**](docs/EmojiService.md#renameemojigroup) | **Post** /v1/im/emoji/groups/rename | 
+*EmojiService* | [**RenameEmojiItem**](docs/EmojiService.md#renameemojiitem) | **Post** /v1/im/emoji/items/rename | 
+*EmojiService* | [**ReorderEmojiGroups**](docs/EmojiService.md#reorderemojigroups) | **Post** /v1/im/emoji/groups/reorder | 
+*EmojiService* | [**ReorderEmojiItems**](docs/EmojiService.md#reorderemojiitems) | **Post** /v1/im/emoji/items/reorder | 
 *GlobalChatService* | [**GetGlobalChatTopic**](docs/GlobalChatService.md#getglobalchattopic) | **Post** /v1/im/global-chat/topic/get | 
 *GlobalChatService* | [**ListGlobalChatBarrages**](docs/GlobalChatService.md#listglobalchatbarrages) | **Post** /v1/im/global-chat/barrages/list | 
 *GlobalChatService* | [**ListGlobalChatMessages**](docs/GlobalChatService.md#listglobalchatmessages) | **Post** /v1/im/global-chat/messages/list | 
@@ -157,29 +157,29 @@ Class | Method | HTTP request | Description
 *GlobalChatService* | [**SendGlobalChatBarrage**](docs/GlobalChatService.md#sendglobalchatbarrage) | **Post** /v1/im/global-chat/barrages | 
 *GlobalChatService* | [**SendGlobalChatMessage**](docs/GlobalChatService.md#sendglobalchatmessage) | **Post** /v1/im/global-chat/messages | 
 *GlobalChatService* | [**SetGlobalChatTopic**](docs/GlobalChatService.md#setglobalchattopic) | **Post** /v1/im/global-chat/topic/set | 
-*HolidayService* | [**GetCurrent**](docs/HolidayService.md#getcurrent) | **Post** /v1/platform/holiday/get-current | 
-*LivenessService* | [**ClaimYesterdayReward**](docs/LivenessService.md#claimyesterdayreward) | **Post** /v1/user/liveness/yesterday-reward/claim | 
+*HolidayService* | [**GetCurrentHoliday**](docs/HolidayService.md#getcurrentholiday) | **Post** /v1/platform/holiday/get-current | 
+*LivenessService* | [**ClaimYesterdayLivenessReward**](docs/LivenessService.md#claimyesterdaylivenessreward) | **Post** /v1/user/liveness/yesterday-reward/claim | 
 *LivenessService* | [**GetLiveness**](docs/LivenessService.md#getliveness) | **Get** /v1/user/liveness | 
-*LocationService* | [**GetCurrent**](docs/LocationService.md#getcurrent) | **Post** /v1/platform/location/get-current | 
-*MoonbreezeService* | [**Create**](docs/MoonbreezeService.md#create) | **Post** /v1/content/moonbreeze/create | 
-*MoonbreezeService* | [**PageMember**](docs/MoonbreezeService.md#pagemember) | **Post** /v1/content/moonbreeze/page-member | 
-*MoonbreezeService* | [**PagePublic**](docs/MoonbreezeService.md#pagepublic) | **Post** /v1/content/moonbreeze/page-public | 
-*MoonbreezeService* | [**PageWatching**](docs/MoonbreezeService.md#pagewatching) | **Post** /v1/content/moonbreeze/page-watching | 
-*NotificationService* | [**CountUnread**](docs/NotificationService.md#countunread) | **Post** /v1/notify/notification/count-unread | 
-*NotificationService* | [**List**](docs/NotificationService.md#list) | **Post** /v1/notify/notification/list | 
-*NotificationService* | [**MarkRead**](docs/NotificationService.md#markread) | **Post** /v1/notify/notification/mark-read | 
+*LocationService* | [**GetCurrentLocation**](docs/LocationService.md#getcurrentlocation) | **Post** /v1/platform/location/get-current | 
+*MoonbreezeService* | [**CreateMoonbreeze**](docs/MoonbreezeService.md#createmoonbreeze) | **Post** /v1/content/moonbreeze/create | 
+*MoonbreezeService* | [**PageMemberMoonbreezes**](docs/MoonbreezeService.md#pagemembermoonbreezes) | **Post** /v1/content/moonbreeze/page-member | 
+*MoonbreezeService* | [**PagePublicMoonbreezes**](docs/MoonbreezeService.md#pagepublicmoonbreezes) | **Post** /v1/content/moonbreeze/page-public | 
+*MoonbreezeService* | [**PageWatchingMoonbreezes**](docs/MoonbreezeService.md#pagewatchingmoonbreezes) | **Post** /v1/content/moonbreeze/page-watching | 
+*NotificationService* | [**CountUnreadNotifications**](docs/NotificationService.md#countunreadnotifications) | **Post** /v1/notify/notification/count-unread | 
+*NotificationService* | [**ListNotifications**](docs/NotificationService.md#listnotifications) | **Post** /v1/notify/notification/list | 
+*NotificationService* | [**MarkReadNotification**](docs/NotificationService.md#markreadnotification) | **Post** /v1/notify/notification/mark-read | 
 *OtpService* | [**BeginEnableTotp**](docs/OtpService.md#beginenabletotp) | **Post** /v1/user/otp/totp/begin-enable | 
 *OtpService* | [**ConfirmEnableTotp**](docs/OtpService.md#confirmenabletotp) | **Post** /v1/user/otp/totp/confirm-enable | 
 *OtpService* | [**DisableTotp**](docs/OtpService.md#disabletotp) | **Post** /v1/user/otp/totp/disable | 
 *OtpService* | [**GetCurrentTotp**](docs/OtpService.md#getcurrenttotp) | **Post** /v1/user/otp/totp/get-current | 
 *OtpService* | [**SendEmailOtp**](docs/OtpService.md#sendemailotp) | **Post** /v1/user/otp/email/send | 
 *OtpService* | [**SendPhoneOtp**](docs/OtpService.md#sendphoneotp) | **Post** /v1/user/otp/phone/send | 
-*PostscriptService* | [**Add**](docs/PostscriptService.md#add) | **Post** /v1/content/postscript/add | 
-*PostscriptService* | [**List**](docs/PostscriptService.md#list) | **Post** /v1/content/postscript/list | 
-*PreferencesService* | [**GetCurrent**](docs/PreferencesService.md#getcurrent) | **Post** /v1/user/preference/get-current | 
-*PreferencesService* | [**UpdateCurrent**](docs/PreferencesService.md#updatecurrent) | **Post** /v1/user/preference/update-current | 
-*PrivacySettingService* | [**GetCurrent**](docs/PrivacySettingService.md#getcurrent) | **Post** /v1/user/privacy-setting/get-current | 
-*PrivacySettingService* | [**UpdateCurrent**](docs/PrivacySettingService.md#updatecurrent) | **Post** /v1/user/privacy-setting/update-current | 
+*PostscriptService* | [**AddPostscript**](docs/PostscriptService.md#addpostscript) | **Post** /v1/content/postscript/add | 
+*PostscriptService* | [**ListPostscripts**](docs/PostscriptService.md#listpostscripts) | **Post** /v1/content/postscript/list | 
+*PreferencesService* | [**GetCurrentPreferences**](docs/PreferencesService.md#getcurrentpreferences) | **Post** /v1/user/preference/get-current | 
+*PreferencesService* | [**UpdateCurrentPreferences**](docs/PreferencesService.md#updatecurrentpreferences) | **Post** /v1/user/preference/update-current | 
+*PrivacySettingService* | [**GetCurrentPrivacySetting**](docs/PrivacySettingService.md#getcurrentprivacysetting) | **Post** /v1/user/privacy-setting/get-current | 
+*PrivacySettingService* | [**UpdateCurrentPrivacySetting**](docs/PrivacySettingService.md#updatecurrentprivacysetting) | **Post** /v1/user/privacy-setting/update-current | 
 *PrivateChatService* | [**CountPrivateChatUnread**](docs/PrivateChatService.md#countprivatechatunread) | **Post** /v1/im/private-chat/unread-count | 
 *PrivateChatService* | [**ListPrivateChatMessages**](docs/PrivateChatService.md#listprivatechatmessages) | **Post** /v1/im/private-chat/messages/list | 
 *PrivateChatService* | [**ListPrivateChatSessions**](docs/PrivateChatService.md#listprivatechatsessions) | **Get** /v1/im/private-chat/sessions | 
@@ -188,21 +188,21 @@ Class | Method | HTTP request | Description
 *PrivateChatService* | [**SendPrivateChatMessage**](docs/PrivateChatService.md#sendprivatechatmessage) | **Post** /v1/im/private-chat/messages | 
 *PrivateChatService* | [**SetPrivateChatSessionMuted**](docs/PrivateChatService.md#setprivatechatsessionmuted) | **Post** /v1/im/private-chat/muted | 
 *PrivateChatService* | [**SetPrivateChatSessionPinned**](docs/PrivateChatService.md#setprivatechatsessionpinned) | **Post** /v1/im/private-chat/pinned | 
-*RealtimeService* | [**CreateTicket**](docs/RealtimeService.md#createticket) | **Post** /v1/realtime/ticket | 
-*RelationService* | [**Block**](docs/RelationService.md#block) | **Post** /v1/user/relation/block | 
-*RelationService* | [**Follow**](docs/RelationService.md#follow) | **Post** /v1/user/relation/follow | 
-*RelationService* | [**GetStatus**](docs/RelationService.md#getstatus) | **Post** /v1/user/relation/get-status | 
-*RelationService* | [**ListBlocked**](docs/RelationService.md#listblocked) | **Post** /v1/user/relation/list-blocked | 
-*RelationService* | [**ListFollowers**](docs/RelationService.md#listfollowers) | **Post** /v1/user/relation/list-followers | 
-*RelationService* | [**ListFollowing**](docs/RelationService.md#listfollowing) | **Post** /v1/user/relation/list-following | 
-*RelationService* | [**Unblock**](docs/RelationService.md#unblock) | **Post** /v1/user/relation/unblock | 
-*RelationService* | [**Unfollow**](docs/RelationService.md#unfollow) | **Post** /v1/user/relation/unfollow | 
-*TagService* | [**BindArticle**](docs/TagService.md#bindarticle) | **Post** /v1/content/tag/bind-article | 
-*TagService* | [**Create**](docs/TagService.md#create) | **Post** /v1/content/tag/create | 
-*TagService* | [**List**](docs/TagService.md#list) | **Post** /v1/content/tag/list | 
+*RealtimeService* | [**CreateRealtimeTicket**](docs/RealtimeService.md#createrealtimeticket) | **Post** /v1/realtime/ticket | 
+*RelationService* | [**BlockRelation**](docs/RelationService.md#blockrelation) | **Post** /v1/user/relation/block | 
+*RelationService* | [**FollowRelation**](docs/RelationService.md#followrelation) | **Post** /v1/user/relation/follow | 
+*RelationService* | [**GetStatusRelation**](docs/RelationService.md#getstatusrelation) | **Post** /v1/user/relation/get-status | 
+*RelationService* | [**ListBlockedRelations**](docs/RelationService.md#listblockedrelations) | **Post** /v1/user/relation/list-blocked | 
+*RelationService* | [**ListFollowersRelations**](docs/RelationService.md#listfollowersrelations) | **Post** /v1/user/relation/list-followers | 
+*RelationService* | [**ListFollowingRelations**](docs/RelationService.md#listfollowingrelations) | **Post** /v1/user/relation/list-following | 
+*RelationService* | [**UnblockRelation**](docs/RelationService.md#unblockrelation) | **Post** /v1/user/relation/unblock | 
+*RelationService* | [**UnfollowRelation**](docs/RelationService.md#unfollowrelation) | **Post** /v1/user/relation/unfollow | 
+*TagService* | [**BindArticleTags**](docs/TagService.md#bindarticletags) | **Post** /v1/content/tag/bind-article | 
+*TagService* | [**CreateTag**](docs/TagService.md#createtag) | **Post** /v1/content/tag/create | 
 *TagService* | [**ListArticleTags**](docs/TagService.md#listarticletags) | **Post** /v1/content/tag/list-article-tags | 
-*TagService* | [**UnbindArticle**](docs/TagService.md#unbindarticle) | **Post** /v1/content/tag/unbind-article | 
-*TagService* | [**Update**](docs/TagService.md#update) | **Post** /v1/content/tag/update | 
+*TagService* | [**ListTags**](docs/TagService.md#listtags) | **Post** /v1/content/tag/list | 
+*TagService* | [**UnbindArticleTags**](docs/TagService.md#unbindarticletags) | **Post** /v1/content/tag/unbind-article | 
+*TagService* | [**UpdateTag**](docs/TagService.md#updatetag) | **Post** /v1/content/tag/update | 
 
 
 ## Documentation For Models
@@ -230,6 +230,7 @@ Class | Method | HTTP request | Description
  - [ArticleTag](docs/ArticleTag.md)
  - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
  - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
+ - [AvatarAccountResp](docs/AvatarAccountResp.md)
  - [BadgeDraft](docs/BadgeDraft.md)
  - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
  - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
@@ -365,13 +366,15 @@ Class | Method | HTTP request | Description
  - [PageCollectedArticlesReq](docs/PageCollectedArticlesReq.md)
  - [PageCollectedArticlesResp](docs/PageCollectedArticlesResp.md)
  - [PageMemberMoonbreezesReq](docs/PageMemberMoonbreezesReq.md)
- - [PageMoonbreezesResp](docs/PageMoonbreezesResp.md)
+ - [PageMemberMoonbreezesResp](docs/PageMemberMoonbreezesResp.md)
  - [PagePublicMoonbreezesReq](docs/PagePublicMoonbreezesReq.md)
+ - [PagePublicMoonbreezesResp](docs/PagePublicMoonbreezesResp.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
  - [PageWatchedArticlesReq](docs/PageWatchedArticlesReq.md)
  - [PageWatchedArticlesResp](docs/PageWatchedArticlesResp.md)
  - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
+ - [PageWatchingMoonbreezesResp](docs/PageWatchingMoonbreezesResp.md)
  - [PrepareBadgeFontUploadReq](docs/PrepareBadgeFontUploadReq.md)
  - [PrepareBadgeFontUploadResp](docs/PrepareBadgeFontUploadResp.md)
  - [PrepareBadgeImageUploadReq](docs/PrepareBadgeImageUploadReq.md)
@@ -396,6 +399,8 @@ Class | Method | HTTP request | Description
  - [RenameEmojiGroupResp](docs/RenameEmojiGroupResp.md)
  - [RenameEmojiItemReq](docs/RenameEmojiItemReq.md)
  - [RenameEmojiItemResp](docs/RenameEmojiItemResp.md)
+ - [RenderMakerBadgeResp](docs/RenderMakerBadgeResp.md)
+ - [RenderPublishedBadgeResp](docs/RenderPublishedBadgeResp.md)
  - [RenderSpec](docs/RenderSpec.md)
  - [ReorderEmojiGroupsReq](docs/ReorderEmojiGroupsReq.md)
  - [ReorderEmojiItemsReq](docs/ReorderEmojiItemsReq.md)

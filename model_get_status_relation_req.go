@@ -19,8 +19,9 @@ import (
 // checks if the GetStatusRelationReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetStatusRelationReq{}
 
-// GetStatusRelationReq struct for GetStatusRelationReq
+// GetStatusRelationReq 请求参数。
 type GetStatusRelationReq struct {
+	// 目标账号 ID
 	TargetId string `json:"target_id"`
 }
 

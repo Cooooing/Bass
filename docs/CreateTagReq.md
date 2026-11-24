@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Tag** | [**ReqTag**](ReqTag.md) |  | 
+**Tag** | [**ReqTag**](ReqTag.md) | 标签信息 | 
 
 ## Methods
 

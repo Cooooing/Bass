@@ -19,9 +19,13 @@ var _ MappedNullable = &UpsertBadgeDraftReq{}
 
 // UpsertBadgeDraftReq Req 缺失 draft_id 时创建，存在时更新。
 type UpsertBadgeDraftReq struct {
+	// 待保存草稿 ID。
 	DraftId *string `json:"draft_id,omitempty"`
+	// 草稿名称。
 	Name *string `json:"name,omitempty"`
+	// 草稿说明。
 	Description *string `json:"description,omitempty"`
+	// 草稿渲染参数。
 	RenderSpec *RenderSpec `json:"render_spec,omitempty"`
 }
 

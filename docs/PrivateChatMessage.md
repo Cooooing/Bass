@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**SenderId** | Pointer to **string** |  | [optional] 
-**ReceiverId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**MessageType** | Pointer to **string** |  | [optional] 
-**Revoked** | Pointer to **bool** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**RevokedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 消息 ID。 | [optional] 
+**SenderId** | Pointer to **string** | 发送账号 ID。 | [optional] 
+**ReceiverId** | Pointer to **string** | 接收账号 ID。 | [optional] 
+**Content** | Pointer to **string** | 原始 Markdown 内容。 | [optional] 
+**MessageType** | Pointer to **string** | 消息类型。 | [optional] 
+**Revoked** | Pointer to **bool** | 是否已撤回。 | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间。 | [optional] 
+**RevokedAt** | Pointer to **time.Time** | 撤回时间。 | [optional] 
 
 ## Methods
 

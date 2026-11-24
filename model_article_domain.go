@@ -17,12 +17,17 @@ import (
 // checks if the ArticleDomain type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleDomain{}
 
-// ArticleDomain struct for ArticleDomain
+// ArticleDomain 协议消息。
 type ArticleDomain struct {
+	// 领域 ID
 	Id *string `json:"id,omitempty"`
+	// 稳定编码
 	Code *string `json:"code,omitempty"`
+	// 领域名称
 	Name *string `json:"name,omitempty"`
+	// 图标
 	Icon *string `json:"icon,omitempty"`
+	// 链接
 	Url *string `json:"url,omitempty"`
 }
 

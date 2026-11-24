@@ -17,9 +17,11 @@ import (
 // checks if the ListFollowersRelationsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListFollowersRelationsResp{}
 
-// ListFollowersRelationsResp struct for ListFollowersRelationsResp
+// ListFollowersRelationsResp 响应结果。
 type ListFollowersRelationsResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 账号关系列表
 	Rows []Relation `json:"rows,omitempty"`
 }
 

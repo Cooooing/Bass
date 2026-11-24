@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UserId** | Pointer to **string** |  | [optional] 
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
+**UserId** | Pointer to **string** | 按发送账号筛选；仅管理端可用。 | [optional] 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 分页参数。 | [optional] 
 
 ## Methods
 

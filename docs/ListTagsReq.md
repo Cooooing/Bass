@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
-**Query** | Pointer to [**ReqTagQuery**](ReqTagQuery.md) |  | [optional] 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 分页参数 | [optional] 
+**Query** | Pointer to [**ReqTagQuery**](ReqTagQuery.md) | 查询条件 | [optional] 
 
 ## Methods
 

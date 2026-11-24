@@ -19,9 +19,11 @@ import (
 // checks if the VoteArticlePollReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &VoteArticlePollReq{}
 
-// VoteArticlePollReq struct for VoteArticlePollReq
+// VoteArticlePollReq 请求参数。
 type VoteArticlePollReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// 必填，所选选项 ID
 	OptionIds []string `json:"option_ids"`
 }
 

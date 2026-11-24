@@ -19,14 +19,21 @@ import (
 // checks if the ReqTag type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqTag{}
 
-// ReqTag struct for ReqTag
+// ReqTag 协议消息。
 type ReqTag struct {
+	// 稳定编码
 	Code string `json:"code"`
+	// 标签名称
 	Name string `json:"name"`
+	// 描述
 	Description *string `json:"description,omitempty"`
+	// 领域 ID
 	DomainId *string `json:"domain_id,omitempty"`
+	// 启停状态
 	Status *string `json:"status,omitempty"`
+	// 图标
 	Icon *string `json:"icon,omitempty"`
+	// 排序值，越小越靠前
 	Sort *int32 `json:"sort,omitempty"`
 }
 

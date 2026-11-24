@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Score** | Pointer to **int32** |  | [optional] 
-**MaxScore** | Pointer to **int32** |  | [optional] 
-**CheckinScore** | Pointer to **int32** |  | [optional] 
+**Score** | Pointer to **int32** | 当前活跃度总分。 | [optional] 
+**MaxScore** | Pointer to **int32** | 每日活跃度上限。 | [optional] 
+**CheckinScore** | Pointer to **int32** | 自动签到所需的最低活跃度。 | [optional] 
 
 ## Methods
 

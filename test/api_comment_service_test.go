@@ -22,11 +22,11 @@ func Test_bbs_CommentServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test CommentServiceService Create", func(t *testing.T) {
+	t.Run("Test CommentServiceService CreateComment", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentService.Create(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.CreateComment(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_CommentServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceService Like", func(t *testing.T) {
+	t.Run("Test CommentServiceService LikeComment", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentService.Like(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.LikeComment(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_CommentServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceService List", func(t *testing.T) {
+	t.Run("Test CommentServiceService ListCommentReplies", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.ListCommentReplies(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_CommentServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceService ListReplies", func(t *testing.T) {
+	t.Run("Test CommentServiceService ListCommentThreads", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentService.ListReplies(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.ListCommentThreads(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +70,11 @@ func Test_bbs_CommentServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceService ListThreads", func(t *testing.T) {
+	t.Run("Test CommentServiceService ListCommentTimeline", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentService.ListThreads(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.ListCommentTimeline(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -82,11 +82,11 @@ func Test_bbs_CommentServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceService ListTimeline", func(t *testing.T) {
+	t.Run("Test CommentServiceService ListComments", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentService.ListTimeline(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.ListComments(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -94,11 +94,11 @@ func Test_bbs_CommentServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test CommentServiceService Thank", func(t *testing.T) {
+	t.Run("Test CommentServiceService ThankComment", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.CommentService.Thank(context.Background()).Execute()
+		resp, httpRes, err := apiClient.CommentService.ThankComment(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

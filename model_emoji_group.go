@@ -19,8 +19,11 @@ var _ MappedNullable = &EmojiGroup{}
 
 // EmojiGroup EmojiGroup 是当前账号可操作的表情分组。
 type EmojiGroup struct {
+	// 分组 ID。
 	Id *string `json:"id,omitempty"`
+	// 分组名称。
 	Name *string `json:"name,omitempty"`
+	// 分组内可用表情。
 	Items []EmojiItem `json:"items,omitempty"`
 }
 

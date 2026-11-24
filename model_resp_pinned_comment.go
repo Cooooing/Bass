@@ -17,8 +17,9 @@ import (
 // checks if the RespPinnedComment type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespPinnedComment{}
 
-// RespPinnedComment struct for RespPinnedComment
+// RespPinnedComment 协议消息。
 type RespPinnedComment struct {
+	// 独立置顶评论线程
 	Thread *RespCommentThread `json:"thread,omitempty"`
 }
 

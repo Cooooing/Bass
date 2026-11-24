@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Account** | Pointer to [**RespCurrentAccount**](RespCurrentAccount.md) |  | [optional] 
+**Account** | Pointer to [**RespCurrentAccount**](RespCurrentAccount.md) | 当前账号完整资料 | [optional] 
 
 ## Methods
 

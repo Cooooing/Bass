@@ -4,19 +4,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Code** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
-**DomainId** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**Icon** | Pointer to **string** |  | [optional] 
-**Sort** | Pointer to **int32** |  | [optional] 
-**ArticleCount** | Pointer to **int32** |  | [optional] 
-**CreatedBy** | Pointer to **string** |  | [optional] 
-**UpdatedBy** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 标签 ID | [optional] 
+**Code** | Pointer to **string** | 稳定编码 | [optional] 
+**Name** | Pointer to **string** | 标签名称 | [optional] 
+**Description** | Pointer to **string** | 描述 | [optional] 
+**DomainId** | Pointer to **string** | 领域 ID | [optional] 
+**Status** | Pointer to **string** | 启停状态 | [optional] 
+**Icon** | Pointer to **string** | 图标 | [optional] 
+**Sort** | Pointer to **int32** | 排序值，越小越靠前 | [optional] 
+**ArticleCount** | Pointer to **int32** | 文章数量 | [optional] 
+**CreatedBy** | Pointer to **string** | 创建用户 ID | [optional] 
+**UpdatedBy** | Pointer to **string** | 更新用户 ID | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间 | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | 更新时间 | [optional] 
 
 ## Methods
 

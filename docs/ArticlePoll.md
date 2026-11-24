@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**EndsAt** | Pointer to **time.Time** |  | [optional] 
-**MaxChoices** | Pointer to **int32** |  | [optional] 
-**Options** | Pointer to [**[]ArticlePollOption**](ArticlePollOption.md) |  | [optional] 
-**SelectedOptionIds** | Pointer to **[]string** |  | [optional] 
-**ResultVisible** | Pointer to **bool** |  | [optional] 
-**ParticipantCount** | Pointer to **string** |  | [optional] 
-**TotalVoteCount** | Pointer to **string** |  | [optional] 
+**EndsAt** | Pointer to **time.Time** | 截止时间 | [optional] 
+**MaxChoices** | Pointer to **int32** | 每人最多选择数 | [optional] 
+**Options** | Pointer to [**[]ArticlePollOption**](ArticlePollOption.md) | 投票选项 | [optional] 
+**SelectedOptionIds** | Pointer to **[]string** | 当前账号已选选项 ID | [optional] 
+**ResultVisible** | Pointer to **bool** | 当前账号是否可查看实时结果 | [optional] 
+**ParticipantCount** | Pointer to **string** | 已投票账号数 | [optional] 
+**TotalVoteCount** | Pointer to **string** | 所有选项累计票数 | [optional] 
 
 ## Methods
 

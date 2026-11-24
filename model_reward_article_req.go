@@ -19,8 +19,9 @@ import (
 // checks if the RewardArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RewardArticleReq{}
 
-// RewardArticleReq struct for RewardArticleReq
+// RewardArticleReq 请求参数。
 type RewardArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
 }
 

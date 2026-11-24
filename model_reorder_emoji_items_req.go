@@ -17,9 +17,11 @@ import (
 // checks if the ReorderEmojiItemsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReorderEmojiItemsReq{}
 
-// ReorderEmojiItemsReq struct for ReorderEmojiItemsReq
+// ReorderEmojiItemsReq 请求参数。
 type ReorderEmojiItemsReq struct {
+	// 可选目标分组 ID；为空时重排未分组表情。
 	GroupId *string `json:"group_id,omitempty"`
+	// 按最终展示顺序排列的完整表情项 ID 序列。
 	ItemIds []string `json:"item_ids,omitempty"`
 }
 

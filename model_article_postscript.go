@@ -18,16 +18,25 @@ import (
 // checks if the ArticlePostscript type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticlePostscript{}
 
-// ArticlePostscript struct for ArticlePostscript
+// ArticlePostscript 协议消息。
 type ArticlePostscript struct {
+	// 附言 ID
 	Id *string `json:"id,omitempty"`
+	// 文章 ID
 	ArticleId *string `json:"article_id,omitempty"`
+	// 原始内容
 	Content *string `json:"content,omitempty"`
+	// 渲染内容
 	ContentRender *string `json:"content_render,omitempty"`
+	// 治理限制
 	Restriction *string `json:"restriction,omitempty"`
+	// 创建账号 ID
 	CreatedBy *string `json:"created_by,omitempty"`
+	// 更新账号 ID
 	UpdatedBy *string `json:"updated_by,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

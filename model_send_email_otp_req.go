@@ -19,8 +19,9 @@ import (
 // checks if the SendEmailOtpReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendEmailOtpReq{}
 
-// SendEmailOtpReq struct for SendEmailOtpReq
+// SendEmailOtpReq 请求参数。
 type SendEmailOtpReq struct {
+	// 邮箱地址
 	Email string `json:"email"`
 }
 

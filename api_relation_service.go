@@ -22,146 +22,146 @@ import (
 type RelationService interface {
 
 	/*
-	Block Method for Block
+	BlockRelation Method for BlockRelation
 
 	当前账号拉黑目标账号。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiBlockRequest
+	@return ApiBlockRelationRequest
 	*/
-	Block(ctx context.Context) ApiBlockRequest
+	BlockRelation(ctx context.Context) ApiBlockRelationRequest
 
-	// BlockExecute executes the request
+	// BlockRelationExecute executes the request
 	//  @return map[string]interface{}
-	BlockExecute(r ApiBlockRequest) (map[string]interface{}, *http.Response, error)
+	BlockRelationExecute(r ApiBlockRelationRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Follow Method for Follow
+	FollowRelation Method for FollowRelation
 
 	当前账号关注目标账号。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiFollowRequest
+	@return ApiFollowRelationRequest
 	*/
-	Follow(ctx context.Context) ApiFollowRequest
+	FollowRelation(ctx context.Context) ApiFollowRelationRequest
 
-	// FollowExecute executes the request
+	// FollowRelationExecute executes the request
 	//  @return map[string]interface{}
-	FollowExecute(r ApiFollowRequest) (map[string]interface{}, *http.Response, error)
+	FollowRelationExecute(r ApiFollowRelationRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	GetStatus Method for GetStatus
+	GetStatusRelation Method for GetStatusRelation
 
 	查询当前账号与目标账号之间的关系。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetStatusRequest
+	@return ApiGetStatusRelationRequest
 	*/
-	GetStatus(ctx context.Context) ApiGetStatusRequest
+	GetStatusRelation(ctx context.Context) ApiGetStatusRelationRequest
 
-	// GetStatusExecute executes the request
+	// GetStatusRelationExecute executes the request
 	//  @return GetStatusRelationResp
-	GetStatusExecute(r ApiGetStatusRequest) (*GetStatusRelationResp, *http.Response, error)
+	GetStatusRelationExecute(r ApiGetStatusRelationRequest) (*GetStatusRelationResp, *http.Response, error)
 
 	/*
-	ListBlocked Method for ListBlocked
+	ListBlockedRelations Method for ListBlockedRelations
 
 	分页查询当前账号拉黑的账号列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListBlockedRequest
+	@return ApiListBlockedRelationsRequest
 	*/
-	ListBlocked(ctx context.Context) ApiListBlockedRequest
+	ListBlockedRelations(ctx context.Context) ApiListBlockedRelationsRequest
 
-	// ListBlockedExecute executes the request
+	// ListBlockedRelationsExecute executes the request
 	//  @return ListBlockedRelationsResp
-	ListBlockedExecute(r ApiListBlockedRequest) (*ListBlockedRelationsResp, *http.Response, error)
+	ListBlockedRelationsExecute(r ApiListBlockedRelationsRequest) (*ListBlockedRelationsResp, *http.Response, error)
 
 	/*
-	ListFollowers Method for ListFollowers
+	ListFollowersRelations Method for ListFollowersRelations
 
 	分页查询当前账号的粉丝账号列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListFollowersRequest
+	@return ApiListFollowersRelationsRequest
 	*/
-	ListFollowers(ctx context.Context) ApiListFollowersRequest
+	ListFollowersRelations(ctx context.Context) ApiListFollowersRelationsRequest
 
-	// ListFollowersExecute executes the request
+	// ListFollowersRelationsExecute executes the request
 	//  @return ListFollowersRelationsResp
-	ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersRelationsResp, *http.Response, error)
+	ListFollowersRelationsExecute(r ApiListFollowersRelationsRequest) (*ListFollowersRelationsResp, *http.Response, error)
 
 	/*
-	ListFollowing Method for ListFollowing
+	ListFollowingRelations Method for ListFollowingRelations
 
 	分页查询当前账号关注的账号列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListFollowingRequest
+	@return ApiListFollowingRelationsRequest
 	*/
-	ListFollowing(ctx context.Context) ApiListFollowingRequest
+	ListFollowingRelations(ctx context.Context) ApiListFollowingRelationsRequest
 
-	// ListFollowingExecute executes the request
+	// ListFollowingRelationsExecute executes the request
 	//  @return ListFollowingRelationsResp
-	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingRelationsResp, *http.Response, error)
+	ListFollowingRelationsExecute(r ApiListFollowingRelationsRequest) (*ListFollowingRelationsResp, *http.Response, error)
 
 	/*
-	Unblock Method for Unblock
+	UnblockRelation Method for UnblockRelation
 
 	当前账号取消拉黑目标账号。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUnblockRequest
+	@return ApiUnblockRelationRequest
 	*/
-	Unblock(ctx context.Context) ApiUnblockRequest
+	UnblockRelation(ctx context.Context) ApiUnblockRelationRequest
 
-	// UnblockExecute executes the request
+	// UnblockRelationExecute executes the request
 	//  @return map[string]interface{}
-	UnblockExecute(r ApiUnblockRequest) (map[string]interface{}, *http.Response, error)
+	UnblockRelationExecute(r ApiUnblockRelationRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Unfollow Method for Unfollow
+	UnfollowRelation Method for UnfollowRelation
 
 	当前账号取消关注目标账号。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUnfollowRequest
+	@return ApiUnfollowRelationRequest
 	*/
-	Unfollow(ctx context.Context) ApiUnfollowRequest
+	UnfollowRelation(ctx context.Context) ApiUnfollowRelationRequest
 
-	// UnfollowExecute executes the request
+	// UnfollowRelationExecute executes the request
 	//  @return map[string]interface{}
-	UnfollowExecute(r ApiUnfollowRequest) (map[string]interface{}, *http.Response, error)
+	UnfollowRelationExecute(r ApiUnfollowRelationRequest) (map[string]interface{}, *http.Response, error)
 }
 
 // RelationServiceService RelationService service
 type RelationServiceService service
 
-type ApiBlockRequest struct {
+type ApiBlockRelationRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	blockRelationReq *BlockRelationReq
 }
 
-func (r ApiBlockRequest) BlockRelationReq(blockRelationReq BlockRelationReq) ApiBlockRequest {
+func (r ApiBlockRelationRequest) BlockRelationReq(blockRelationReq BlockRelationReq) ApiBlockRelationRequest {
 	r.blockRelationReq = &blockRelationReq
 	return r
 }
 
-func (r ApiBlockRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.BlockExecute(r)
+func (r ApiBlockRelationRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.BlockRelationExecute(r)
 }
 
 /*
-Block Method for Block
+BlockRelation Method for BlockRelation
 
 当前账号拉黑目标账号。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiBlockRequest
+ @return ApiBlockRelationRequest
 */
-func (a *RelationServiceService) Block(ctx context.Context) ApiBlockRequest {
-	return ApiBlockRequest{
+func (a *RelationServiceService) BlockRelation(ctx context.Context) ApiBlockRelationRequest {
+	return ApiBlockRelationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -169,7 +169,7 @@ func (a *RelationServiceService) Block(ctx context.Context) ApiBlockRequest {
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *RelationServiceService) BlockExecute(r ApiBlockRequest) (map[string]interface{}, *http.Response, error) {
+func (a *RelationServiceService) BlockRelationExecute(r ApiBlockRelationRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -177,7 +177,7 @@ func (a *RelationServiceService) BlockExecute(r ApiBlockRequest) (map[string]int
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.Block")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.BlockRelation")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -247,31 +247,31 @@ func (a *RelationServiceService) BlockExecute(r ApiBlockRequest) (map[string]int
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiFollowRequest struct {
+type ApiFollowRelationRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	followRelationReq *FollowRelationReq
 }
 
-func (r ApiFollowRequest) FollowRelationReq(followRelationReq FollowRelationReq) ApiFollowRequest {
+func (r ApiFollowRelationRequest) FollowRelationReq(followRelationReq FollowRelationReq) ApiFollowRelationRequest {
 	r.followRelationReq = &followRelationReq
 	return r
 }
 
-func (r ApiFollowRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.FollowExecute(r)
+func (r ApiFollowRelationRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.FollowRelationExecute(r)
 }
 
 /*
-Follow Method for Follow
+FollowRelation Method for FollowRelation
 
 当前账号关注目标账号。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiFollowRequest
+ @return ApiFollowRelationRequest
 */
-func (a *RelationServiceService) Follow(ctx context.Context) ApiFollowRequest {
-	return ApiFollowRequest{
+func (a *RelationServiceService) FollowRelation(ctx context.Context) ApiFollowRelationRequest {
+	return ApiFollowRelationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -279,7 +279,7 @@ func (a *RelationServiceService) Follow(ctx context.Context) ApiFollowRequest {
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *RelationServiceService) FollowExecute(r ApiFollowRequest) (map[string]interface{}, *http.Response, error) {
+func (a *RelationServiceService) FollowRelationExecute(r ApiFollowRelationRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -287,7 +287,7 @@ func (a *RelationServiceService) FollowExecute(r ApiFollowRequest) (map[string]i
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.Follow")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.FollowRelation")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -357,31 +357,31 @@ func (a *RelationServiceService) FollowExecute(r ApiFollowRequest) (map[string]i
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetStatusRequest struct {
+type ApiGetStatusRelationRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	getStatusRelationReq *GetStatusRelationReq
 }
 
-func (r ApiGetStatusRequest) GetStatusRelationReq(getStatusRelationReq GetStatusRelationReq) ApiGetStatusRequest {
+func (r ApiGetStatusRelationRequest) GetStatusRelationReq(getStatusRelationReq GetStatusRelationReq) ApiGetStatusRelationRequest {
 	r.getStatusRelationReq = &getStatusRelationReq
 	return r
 }
 
-func (r ApiGetStatusRequest) Execute() (*GetStatusRelationResp, *http.Response, error) {
-	return r.ApiService.GetStatusExecute(r)
+func (r ApiGetStatusRelationRequest) Execute() (*GetStatusRelationResp, *http.Response, error) {
+	return r.ApiService.GetStatusRelationExecute(r)
 }
 
 /*
-GetStatus Method for GetStatus
+GetStatusRelation Method for GetStatusRelation
 
 查询当前账号与目标账号之间的关系。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetStatusRequest
+ @return ApiGetStatusRelationRequest
 */
-func (a *RelationServiceService) GetStatus(ctx context.Context) ApiGetStatusRequest {
-	return ApiGetStatusRequest{
+func (a *RelationServiceService) GetStatusRelation(ctx context.Context) ApiGetStatusRelationRequest {
+	return ApiGetStatusRelationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -389,7 +389,7 @@ func (a *RelationServiceService) GetStatus(ctx context.Context) ApiGetStatusRequ
 
 // Execute executes the request
 //  @return GetStatusRelationResp
-func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetStatusRelationResp, *http.Response, error) {
+func (a *RelationServiceService) GetStatusRelationExecute(r ApiGetStatusRelationRequest) (*GetStatusRelationResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -397,7 +397,7 @@ func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetSt
 		localVarReturnValue  *GetStatusRelationResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.GetStatus")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.GetStatusRelation")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -467,31 +467,31 @@ func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetSt
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListBlockedRequest struct {
+type ApiListBlockedRelationsRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	listBlockedRelationsReq *ListBlockedRelationsReq
 }
 
-func (r ApiListBlockedRequest) ListBlockedRelationsReq(listBlockedRelationsReq ListBlockedRelationsReq) ApiListBlockedRequest {
+func (r ApiListBlockedRelationsRequest) ListBlockedRelationsReq(listBlockedRelationsReq ListBlockedRelationsReq) ApiListBlockedRelationsRequest {
 	r.listBlockedRelationsReq = &listBlockedRelationsReq
 	return r
 }
 
-func (r ApiListBlockedRequest) Execute() (*ListBlockedRelationsResp, *http.Response, error) {
-	return r.ApiService.ListBlockedExecute(r)
+func (r ApiListBlockedRelationsRequest) Execute() (*ListBlockedRelationsResp, *http.Response, error) {
+	return r.ApiService.ListBlockedRelationsExecute(r)
 }
 
 /*
-ListBlocked Method for ListBlocked
+ListBlockedRelations Method for ListBlockedRelations
 
 分页查询当前账号拉黑的账号列表。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListBlockedRequest
+ @return ApiListBlockedRelationsRequest
 */
-func (a *RelationServiceService) ListBlocked(ctx context.Context) ApiListBlockedRequest {
-	return ApiListBlockedRequest{
+func (a *RelationServiceService) ListBlockedRelations(ctx context.Context) ApiListBlockedRelationsRequest {
+	return ApiListBlockedRelationsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -499,7 +499,7 @@ func (a *RelationServiceService) ListBlocked(ctx context.Context) ApiListBlocked
 
 // Execute executes the request
 //  @return ListBlockedRelationsResp
-func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*ListBlockedRelationsResp, *http.Response, error) {
+func (a *RelationServiceService) ListBlockedRelationsExecute(r ApiListBlockedRelationsRequest) (*ListBlockedRelationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -507,7 +507,7 @@ func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*L
 		localVarReturnValue  *ListBlockedRelationsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListBlocked")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListBlockedRelations")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -577,31 +577,31 @@ func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*L
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListFollowersRequest struct {
+type ApiListFollowersRelationsRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	listFollowersRelationsReq *ListFollowersRelationsReq
 }
 
-func (r ApiListFollowersRequest) ListFollowersRelationsReq(listFollowersRelationsReq ListFollowersRelationsReq) ApiListFollowersRequest {
+func (r ApiListFollowersRelationsRequest) ListFollowersRelationsReq(listFollowersRelationsReq ListFollowersRelationsReq) ApiListFollowersRelationsRequest {
 	r.listFollowersRelationsReq = &listFollowersRelationsReq
 	return r
 }
 
-func (r ApiListFollowersRequest) Execute() (*ListFollowersRelationsResp, *http.Response, error) {
-	return r.ApiService.ListFollowersExecute(r)
+func (r ApiListFollowersRelationsRequest) Execute() (*ListFollowersRelationsResp, *http.Response, error) {
+	return r.ApiService.ListFollowersRelationsExecute(r)
 }
 
 /*
-ListFollowers Method for ListFollowers
+ListFollowersRelations Method for ListFollowersRelations
 
 分页查询当前账号的粉丝账号列表。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListFollowersRequest
+ @return ApiListFollowersRelationsRequest
 */
-func (a *RelationServiceService) ListFollowers(ctx context.Context) ApiListFollowersRequest {
-	return ApiListFollowersRequest{
+func (a *RelationServiceService) ListFollowersRelations(ctx context.Context) ApiListFollowersRelationsRequest {
+	return ApiListFollowersRelationsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -609,7 +609,7 @@ func (a *RelationServiceService) ListFollowers(ctx context.Context) ApiListFollo
 
 // Execute executes the request
 //  @return ListFollowersRelationsResp
-func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersRelationsResp, *http.Response, error) {
+func (a *RelationServiceService) ListFollowersRelationsExecute(r ApiListFollowersRelationsRequest) (*ListFollowersRelationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -617,7 +617,7 @@ func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest)
 		localVarReturnValue  *ListFollowersRelationsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListFollowers")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListFollowersRelations")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -687,31 +687,31 @@ func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest)
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListFollowingRequest struct {
+type ApiListFollowingRelationsRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	listFollowingRelationsReq *ListFollowingRelationsReq
 }
 
-func (r ApiListFollowingRequest) ListFollowingRelationsReq(listFollowingRelationsReq ListFollowingRelationsReq) ApiListFollowingRequest {
+func (r ApiListFollowingRelationsRequest) ListFollowingRelationsReq(listFollowingRelationsReq ListFollowingRelationsReq) ApiListFollowingRelationsRequest {
 	r.listFollowingRelationsReq = &listFollowingRelationsReq
 	return r
 }
 
-func (r ApiListFollowingRequest) Execute() (*ListFollowingRelationsResp, *http.Response, error) {
-	return r.ApiService.ListFollowingExecute(r)
+func (r ApiListFollowingRelationsRequest) Execute() (*ListFollowingRelationsResp, *http.Response, error) {
+	return r.ApiService.ListFollowingRelationsExecute(r)
 }
 
 /*
-ListFollowing Method for ListFollowing
+ListFollowingRelations Method for ListFollowingRelations
 
 分页查询当前账号关注的账号列表。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListFollowingRequest
+ @return ApiListFollowingRelationsRequest
 */
-func (a *RelationServiceService) ListFollowing(ctx context.Context) ApiListFollowingRequest {
-	return ApiListFollowingRequest{
+func (a *RelationServiceService) ListFollowingRelations(ctx context.Context) ApiListFollowingRelationsRequest {
+	return ApiListFollowingRelationsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -719,7 +719,7 @@ func (a *RelationServiceService) ListFollowing(ctx context.Context) ApiListFollo
 
 // Execute executes the request
 //  @return ListFollowingRelationsResp
-func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingRelationsResp, *http.Response, error) {
+func (a *RelationServiceService) ListFollowingRelationsExecute(r ApiListFollowingRelationsRequest) (*ListFollowingRelationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -727,7 +727,7 @@ func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest)
 		localVarReturnValue  *ListFollowingRelationsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListFollowing")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListFollowingRelations")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -797,31 +797,31 @@ func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest)
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUnblockRequest struct {
+type ApiUnblockRelationRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	unblockRelationReq *UnblockRelationReq
 }
 
-func (r ApiUnblockRequest) UnblockRelationReq(unblockRelationReq UnblockRelationReq) ApiUnblockRequest {
+func (r ApiUnblockRelationRequest) UnblockRelationReq(unblockRelationReq UnblockRelationReq) ApiUnblockRelationRequest {
 	r.unblockRelationReq = &unblockRelationReq
 	return r
 }
 
-func (r ApiUnblockRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.UnblockExecute(r)
+func (r ApiUnblockRelationRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UnblockRelationExecute(r)
 }
 
 /*
-Unblock Method for Unblock
+UnblockRelation Method for UnblockRelation
 
 当前账号取消拉黑目标账号。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUnblockRequest
+ @return ApiUnblockRelationRequest
 */
-func (a *RelationServiceService) Unblock(ctx context.Context) ApiUnblockRequest {
-	return ApiUnblockRequest{
+func (a *RelationServiceService) UnblockRelation(ctx context.Context) ApiUnblockRelationRequest {
+	return ApiUnblockRelationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -829,7 +829,7 @@ func (a *RelationServiceService) Unblock(ctx context.Context) ApiUnblockRequest 
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *RelationServiceService) UnblockExecute(r ApiUnblockRequest) (map[string]interface{}, *http.Response, error) {
+func (a *RelationServiceService) UnblockRelationExecute(r ApiUnblockRelationRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -837,7 +837,7 @@ func (a *RelationServiceService) UnblockExecute(r ApiUnblockRequest) (map[string
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.Unblock")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.UnblockRelation")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -907,31 +907,31 @@ func (a *RelationServiceService) UnblockExecute(r ApiUnblockRequest) (map[string
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUnfollowRequest struct {
+type ApiUnfollowRelationRequest struct {
 	ctx context.Context
 	ApiService RelationService
 	unfollowRelationReq *UnfollowRelationReq
 }
 
-func (r ApiUnfollowRequest) UnfollowRelationReq(unfollowRelationReq UnfollowRelationReq) ApiUnfollowRequest {
+func (r ApiUnfollowRelationRequest) UnfollowRelationReq(unfollowRelationReq UnfollowRelationReq) ApiUnfollowRelationRequest {
 	r.unfollowRelationReq = &unfollowRelationReq
 	return r
 }
 
-func (r ApiUnfollowRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.UnfollowExecute(r)
+func (r ApiUnfollowRelationRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UnfollowRelationExecute(r)
 }
 
 /*
-Unfollow Method for Unfollow
+UnfollowRelation Method for UnfollowRelation
 
 当前账号取消关注目标账号。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUnfollowRequest
+ @return ApiUnfollowRelationRequest
 */
-func (a *RelationServiceService) Unfollow(ctx context.Context) ApiUnfollowRequest {
-	return ApiUnfollowRequest{
+func (a *RelationServiceService) UnfollowRelation(ctx context.Context) ApiUnfollowRelationRequest {
+	return ApiUnfollowRelationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -939,7 +939,7 @@ func (a *RelationServiceService) Unfollow(ctx context.Context) ApiUnfollowReques
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *RelationServiceService) UnfollowExecute(r ApiUnfollowRequest) (map[string]interface{}, *http.Response, error) {
+func (a *RelationServiceService) UnfollowRelationExecute(r ApiUnfollowRelationRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -947,7 +947,7 @@ func (a *RelationServiceService) UnfollowExecute(r ApiUnfollowRequest) (map[stri
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.Unfollow")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.UnfollowRelation")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

@@ -17,8 +17,9 @@ import (
 // checks if the UpdateProfileAccountResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateProfileAccountResp{}
 
-// UpdateProfileAccountResp struct for UpdateProfileAccountResp
+// UpdateProfileAccountResp 响应结果。
 type UpdateProfileAccountResp struct {
+	// 更新后的账号资料
 	Profile *AccountProfile `json:"profile,omitempty"`
 }
 

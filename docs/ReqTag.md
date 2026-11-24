@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | **string** |  | 
-**Name** | **string** |  | 
-**Description** | Pointer to **string** |  | [optional] 
-**DomainId** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**Icon** | Pointer to **string** |  | [optional] 
-**Sort** | Pointer to **int32** |  | [optional] 
+**Code** | **string** | 稳定编码 | 
+**Name** | **string** | 标签名称 | 
+**Description** | Pointer to **string** | 描述 | [optional] 
+**DomainId** | Pointer to **string** | 领域 ID | [optional] 
+**Status** | Pointer to **string** | 启停状态 | [optional] 
+**Icon** | Pointer to **string** | 图标 | [optional] 
+**Sort** | Pointer to **int32** | 排序值，越小越靠前 | [optional] 
 
 ## Methods
 

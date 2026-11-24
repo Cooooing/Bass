@@ -18,13 +18,19 @@ import (
 // checks if the LoginResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &LoginResp{}
 
-// LoginResp struct for LoginResp
+// LoginResp 响应结果。
 type LoginResp struct {
+	// 访问令牌
 	AccessToken *string `json:"access_token,omitempty"`
+	// 刷新令牌
 	RefreshToken *string `json:"refresh_token,omitempty"`
+	// 访问令牌过期时间
 	AccessTokenExpiresAt *time.Time `json:"access_token_expires_at,omitempty"`
+	// 刷新令牌空闲过期时间
 	RefreshTokenExpiresAt *time.Time `json:"refresh_token_expires_at,omitempty"`
+	// session 绝对过期时间
 	SessionExpiresAt *time.Time `json:"session_expires_at,omitempty"`
+	// 当前账号完整资料
 	Account *RespAccount `json:"account,omitempty"`
 }
 

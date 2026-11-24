@@ -22,11 +22,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test ArticleServiceService AcceptAnswer", func(t *testing.T) {
+	t.Run("Test ArticleServiceService AcceptArticleAnswer", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.AcceptAnswer(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.AcceptArticleAnswer(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Archive", func(t *testing.T) {
+	t.Run("Test ArticleServiceService ArchiveArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Archive(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.ArchiveArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService CancelPublish", func(t *testing.T) {
+	t.Run("Test ArticleServiceService CancelPublishArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.CancelPublish(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.CancelPublishArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -58,11 +58,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Collect", func(t *testing.T) {
+	t.Run("Test ArticleServiceService CollectArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Collect(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.CollectArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +70,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService CountCollected", func(t *testing.T) {
+	t.Run("Test ArticleServiceService CountCollectedArticles", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.CountCollected(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.CountCollectedArticles(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -82,11 +82,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService CreateDraft", func(t *testing.T) {
+	t.Run("Test ArticleServiceService CreateDraftArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.CreateDraft(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.CreateDraftArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -94,11 +94,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService DiscardDraft", func(t *testing.T) {
+	t.Run("Test ArticleServiceService DiscardDraftArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.DiscardDraft(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.DiscardDraftArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -106,11 +106,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService EnterLottery", func(t *testing.T) {
+	t.Run("Test ArticleServiceService EnterArticleLottery", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.EnterLottery(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.EnterArticleLottery(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -118,11 +118,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Get", func(t *testing.T) {
+	t.Run("Test ArticleServiceService GetArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Get(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.GetArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -130,11 +130,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Like", func(t *testing.T) {
+	t.Run("Test ArticleServiceService LikeArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Like(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.LikeArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -142,11 +142,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService List", func(t *testing.T) {
+	t.Run("Test ArticleServiceService ListArticles", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.ListArticles(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -154,11 +154,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService ListFollowing", func(t *testing.T) {
+	t.Run("Test ArticleServiceService ListFollowingArticles", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.ListFollowing(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.ListFollowingArticles(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -166,11 +166,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService ListNearby", func(t *testing.T) {
+	t.Run("Test ArticleServiceService ListNearbyArticles", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.ListNearby(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.ListNearbyArticles(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -178,11 +178,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService PageCollected", func(t *testing.T) {
+	t.Run("Test ArticleServiceService PageArticleViewHistory", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.PageCollected(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.PageArticleViewHistory(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -190,11 +190,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService PageViewHistory", func(t *testing.T) {
+	t.Run("Test ArticleServiceService PageCollectedArticles", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.PageViewHistory(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.PageCollectedArticles(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -202,11 +202,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService PageWatched", func(t *testing.T) {
+	t.Run("Test ArticleServiceService PageWatchedArticles", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.PageWatched(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.PageWatchedArticles(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -214,11 +214,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Publish", func(t *testing.T) {
+	t.Run("Test ArticleServiceService PublishArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Publish(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.PublishArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -226,11 +226,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Reward", func(t *testing.T) {
+	t.Run("Test ArticleServiceService RewardArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Reward(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.RewardArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -238,11 +238,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService SetPinnedComment", func(t *testing.T) {
+	t.Run("Test ArticleServiceService SetPinnedArticleComment", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.SetPinnedComment(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.SetPinnedArticleComment(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -250,11 +250,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Thank", func(t *testing.T) {
+	t.Run("Test ArticleServiceService ThankArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Thank(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.ThankArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -262,11 +262,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService UpdateDraft", func(t *testing.T) {
+	t.Run("Test ArticleServiceService UpdateDraftArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.UpdateDraft(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.UpdateDraftArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -274,11 +274,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService VotePoll", func(t *testing.T) {
+	t.Run("Test ArticleServiceService VoteArticlePoll", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.VotePoll(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.VoteArticlePoll(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -286,11 +286,11 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test ArticleServiceService Watch", func(t *testing.T) {
+	t.Run("Test ArticleServiceService WatchArticle", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.ArticleService.Watch(context.Background()).Execute()
+		resp, httpRes, err := apiClient.ArticleService.WatchArticle(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

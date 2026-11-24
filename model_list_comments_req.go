@@ -17,9 +17,11 @@ import (
 // checks if the ListCommentsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCommentsReq{}
 
-// ListCommentsReq struct for ListCommentsReq
+// ListCommentsReq 请求参数。
 type ListCommentsReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
+	// 查询条件
 	Query *ReqCommentQuery `json:"query,omitempty"`
 }
 

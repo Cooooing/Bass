@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetCurrent**](HolidayService.md#GetCurrent) | **Post** /v1/platform/holiday/get-current | 
+[**GetCurrentHoliday**](HolidayService.md#GetCurrentHoliday) | **Post** /v1/platform/holiday/get-current | 
 
 
 
-## GetCurrent
+## GetCurrentHoliday
 
-> GetCurrentHolidayResp GetCurrent(ctx).Body(body).Execute()
+> GetCurrentHolidayResp GetCurrentHoliday(ctx).Body(body).Execute()
 
 
 
@@ -33,13 +33,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.HolidayService.GetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.HolidayService.GetCurrentHoliday(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `HolidayService.GetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `HolidayService.GetCurrentHoliday``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentHolidayResp
-	fmt.Fprintf(os.Stdout, "Response from `HolidayService.GetCurrent`: %v\n", resp)
+	// response from `GetCurrentHoliday`: GetCurrentHolidayResp
+	fmt.Fprintf(os.Stdout, "Response from `HolidayService.GetCurrentHoliday`: %v\n", resp)
 }
 ```
 
@@ -49,7 +49,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentHolidayRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

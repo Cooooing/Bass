@@ -17,8 +17,9 @@ import (
 // checks if the ListPostscriptsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListPostscriptsResp{}
 
-// ListPostscriptsResp struct for ListPostscriptsResp
+// ListPostscriptsResp 响应结果。
 type ListPostscriptsResp struct {
+	// 文章附言列表。
 	Rows []ArticlePostscript `json:"rows,omitempty"`
 }
 

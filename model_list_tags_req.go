@@ -17,9 +17,11 @@ import (
 // checks if the ListTagsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListTagsReq{}
 
-// ListTagsReq struct for ListTagsReq
+// ListTagsReq 请求参数。
 type ListTagsReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
+	// 查询条件
 	Query *ReqTagQuery `json:"query,omitempty"`
 }
 

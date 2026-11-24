@@ -19,8 +19,9 @@ import (
 // checks if the ThankCommentReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ThankCommentReq{}
 
-// ThankCommentReq struct for ThankCommentReq
+// ThankCommentReq 请求参数。
 type ThankCommentReq struct {
+	// 评论 ID
 	Id string `json:"id"`
 }
 

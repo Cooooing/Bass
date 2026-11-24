@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UserId** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Nickname** | Pointer to **string** |  | [optional] 
-**AvatarUrl** | Pointer to **string** |  | [optional] 
+**UserId** | Pointer to **string** | 在线账号 ID。 | [optional] 
+**Name** | Pointer to **string** | 用户名。 | [optional] 
+**Nickname** | Pointer to **string** | 昵称。 | [optional] 
+**AvatarUrl** | Pointer to **string** | 头像地址。 | [optional] 
 
 ## Methods
 

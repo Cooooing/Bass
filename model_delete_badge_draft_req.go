@@ -19,6 +19,7 @@ var _ MappedNullable = &DeleteBadgeDraftReq{}
 
 // DeleteBadgeDraftReq Req 指定待删除草稿。
 type DeleteBadgeDraftReq struct {
+	// 草稿 ID。
 	DraftId *string `json:"draft_id,omitempty"`
 }
 

@@ -17,8 +17,9 @@ import (
 // checks if the ListGlobalChatOnlineMembersResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListGlobalChatOnlineMembersResp{}
 
-// ListGlobalChatOnlineMembersResp struct for ListGlobalChatOnlineMembersResp
+// ListGlobalChatOnlineMembersResp 响应结果。
 type ListGlobalChatOnlineMembersResp struct {
+	// 在线成员列表。
 	Rows []GlobalChatOnlineMember `json:"rows,omitempty"`
 }
 

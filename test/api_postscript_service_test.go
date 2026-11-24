@@ -22,11 +22,11 @@ func Test_bbs_PostscriptServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test PostscriptServiceService Add", func(t *testing.T) {
+	t.Run("Test PostscriptServiceService AddPostscript", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PostscriptService.Add(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PostscriptService.AddPostscript(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_PostscriptServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test PostscriptServiceService List", func(t *testing.T) {
+	t.Run("Test PostscriptServiceService ListPostscripts", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.PostscriptService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.PostscriptService.ListPostscripts(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

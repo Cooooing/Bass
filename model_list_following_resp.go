@@ -17,9 +17,11 @@ import (
 // checks if the ListFollowingResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListFollowingResp{}
 
-// ListFollowingResp struct for ListFollowingResp
+// ListFollowingResp 响应结果。
 type ListFollowingResp struct {
+	// 协议字段。
 	Page *PageResp `json:"page,omitempty"`
+	// 协议字段。
 	Rows []AccountProfileListItem `json:"rows,omitempty"`
 }
 

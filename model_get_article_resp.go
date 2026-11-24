@@ -17,8 +17,9 @@ import (
 // checks if the GetArticleResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetArticleResp{}
 
-// GetArticleResp struct for GetArticleResp
+// GetArticleResp 响应结果。
 type GetArticleResp struct {
+	// 文章详情
 	Article *ArticleDetail `json:"article,omitempty"`
 }
 

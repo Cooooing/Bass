@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | **string** |  | 
+**Code** | **string** | TOTP 验证码 | 
 
 ## Methods
 

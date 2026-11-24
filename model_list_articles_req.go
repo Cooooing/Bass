@@ -17,9 +17,11 @@ import (
 // checks if the ListArticlesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListArticlesReq{}
 
-// ListArticlesReq struct for ListArticlesReq
+// ListArticlesReq 请求参数。
 type ListArticlesReq struct {
+	// 可选，分页参数
 	Page *PageReq `json:"page,omitempty"`
+	// 可选，查询条件
 	Query *ReqArticleQuery `json:"query,omitempty"`
 }
 

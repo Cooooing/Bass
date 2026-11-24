@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Location** | Pointer to [**RespLocation**](RespLocation.md) |  | [optional] 
+**Location** | Pointer to [**RespLocation**](RespLocation.md) | 当前请求来源地理数据 | [optional] 
 
 ## Methods
 

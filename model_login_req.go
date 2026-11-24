@@ -19,11 +19,15 @@ import (
 // checks if the LoginReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &LoginReq{}
 
-// LoginReq struct for LoginReq
+// LoginReq 请求参数。
 type LoginReq struct {
+	// 登录方式
 	Type string `json:"type"`
+	// 密码登录凭证
 	PasswordCredential *ReqPasswordCredential `json:"password_credential,omitempty"`
+	// 邮箱登录凭证
 	EmailCredential *ReqEmailCredential `json:"email_credential,omitempty"`
+	// 手机登录凭证
 	PhoneCredential *ReqPhoneCredential `json:"phone_credential,omitempty"`
 }
 

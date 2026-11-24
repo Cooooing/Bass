@@ -17,8 +17,9 @@ import (
 // checks if the ListNearbyArticlesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListNearbyArticlesReq{}
 
-// ListNearbyArticlesReq struct for ListNearbyArticlesReq
+// ListNearbyArticlesReq 请求参数。
 type ListNearbyArticlesReq struct {
+	// 可选，分页参数
 	Page *PageReq `json:"page,omitempty"`
 }
 

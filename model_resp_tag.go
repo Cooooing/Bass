@@ -18,20 +18,33 @@ import (
 // checks if the RespTag type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespTag{}
 
-// RespTag struct for RespTag
+// RespTag 协议消息。
 type RespTag struct {
+	// 标签 ID
 	Id *string `json:"id,omitempty"`
+	// 稳定编码
 	Code *string `json:"code,omitempty"`
+	// 标签名称
 	Name *string `json:"name,omitempty"`
+	// 描述
 	Description *string `json:"description,omitempty"`
+	// 领域 ID
 	DomainId *string `json:"domain_id,omitempty"`
+	// 启停状态
 	Status *string `json:"status,omitempty"`
+	// 图标
 	Icon *string `json:"icon,omitempty"`
+	// 排序值，越小越靠前
 	Sort *int32 `json:"sort,omitempty"`
+	// 文章数量
 	ArticleCount *int32 `json:"article_count,omitempty"`
+	// 创建用户 ID
 	CreatedBy *string `json:"created_by,omitempty"`
+	// 更新用户 ID
 	UpdatedBy *string `json:"updated_by,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Content** | Pointer to **string** |  | [optional] 
+**Content** | Pointer to **string** | 话题内容。 | [optional] 
 
 ## Methods
 

@@ -4,16 +4,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Create**](MoonbreezeService.md#Create) | **Post** /v1/content/moonbreeze/create | 
-[**PageMember**](MoonbreezeService.md#PageMember) | **Post** /v1/content/moonbreeze/page-member | 
-[**PagePublic**](MoonbreezeService.md#PagePublic) | **Post** /v1/content/moonbreeze/page-public | 
-[**PageWatching**](MoonbreezeService.md#PageWatching) | **Post** /v1/content/moonbreeze/page-watching | 
+[**CreateMoonbreeze**](MoonbreezeService.md#CreateMoonbreeze) | **Post** /v1/content/moonbreeze/create | 
+[**PageMemberMoonbreezes**](MoonbreezeService.md#PageMemberMoonbreezes) | **Post** /v1/content/moonbreeze/page-member | 
+[**PagePublicMoonbreezes**](MoonbreezeService.md#PagePublicMoonbreezes) | **Post** /v1/content/moonbreeze/page-public | 
+[**PageWatchingMoonbreezes**](MoonbreezeService.md#PageWatchingMoonbreezes) | **Post** /v1/content/moonbreeze/page-watching | 
 
 
 
-## Create
+## CreateMoonbreeze
 
-> CreateMoonbreezeResp Create(ctx).CreateMoonbreezeReq(createMoonbreezeReq).Execute()
+> CreateMoonbreezeResp CreateMoonbreeze(ctx).CreateMoonbreezeReq(createMoonbreezeReq).Execute()
+
+
 
 
 
@@ -34,13 +36,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.MoonbreezeService.Create(context.Background()).CreateMoonbreezeReq(createMoonbreezeReq).Execute()
+	resp, r, err := apiClient.MoonbreezeService.CreateMoonbreeze(context.Background()).CreateMoonbreezeReq(createMoonbreezeReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.Create``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.CreateMoonbreeze``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Create`: CreateMoonbreezeResp
-	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.Create`: %v\n", resp)
+	// response from `CreateMoonbreeze`: CreateMoonbreezeResp
+	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.CreateMoonbreeze`: %v\n", resp)
 }
 ```
 
@@ -50,7 +52,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateMoonbreezeRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -75,9 +77,11 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## PageMember
+## PageMemberMoonbreezes
 
-> PageMoonbreezesResp PageMember(ctx).PageMemberMoonbreezesReq(pageMemberMoonbreezesReq).Execute()
+> PageMemberMoonbreezesResp PageMemberMoonbreezes(ctx).PageMemberMoonbreezesReq(pageMemberMoonbreezesReq).Execute()
+
+
 
 
 
@@ -98,13 +102,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.MoonbreezeService.PageMember(context.Background()).PageMemberMoonbreezesReq(pageMemberMoonbreezesReq).Execute()
+	resp, r, err := apiClient.MoonbreezeService.PageMemberMoonbreezes(context.Background()).PageMemberMoonbreezesReq(pageMemberMoonbreezesReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.PageMember``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.PageMemberMoonbreezes``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PageMember`: PageMoonbreezesResp
-	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.PageMember`: %v\n", resp)
+	// response from `PageMemberMoonbreezes`: PageMemberMoonbreezesResp
+	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.PageMemberMoonbreezes`: %v\n", resp)
 }
 ```
 
@@ -114,7 +118,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPageMemberRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPageMemberMoonbreezesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -123,7 +127,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PageMemberMoonbreezesResp**](PageMemberMoonbreezesResp.md)
 
 ### Authorization
 
@@ -139,9 +143,11 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## PagePublic
+## PagePublicMoonbreezes
 
-> PageMoonbreezesResp PagePublic(ctx).PagePublicMoonbreezesReq(pagePublicMoonbreezesReq).Execute()
+> PagePublicMoonbreezesResp PagePublicMoonbreezes(ctx).PagePublicMoonbreezesReq(pagePublicMoonbreezesReq).Execute()
+
+
 
 
 
@@ -162,13 +168,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.MoonbreezeService.PagePublic(context.Background()).PagePublicMoonbreezesReq(pagePublicMoonbreezesReq).Execute()
+	resp, r, err := apiClient.MoonbreezeService.PagePublicMoonbreezes(context.Background()).PagePublicMoonbreezesReq(pagePublicMoonbreezesReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.PagePublic``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.PagePublicMoonbreezes``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PagePublic`: PageMoonbreezesResp
-	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.PagePublic`: %v\n", resp)
+	// response from `PagePublicMoonbreezes`: PagePublicMoonbreezesResp
+	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.PagePublicMoonbreezes`: %v\n", resp)
 }
 ```
 
@@ -178,7 +184,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPagePublicRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPagePublicMoonbreezesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -187,7 +193,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PagePublicMoonbreezesResp**](PagePublicMoonbreezesResp.md)
 
 ### Authorization
 
@@ -203,9 +209,11 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## PageWatching
+## PageWatchingMoonbreezes
 
-> PageMoonbreezesResp PageWatching(ctx).PageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq).Execute()
+> PageWatchingMoonbreezesResp PageWatchingMoonbreezes(ctx).PageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq).Execute()
+
+
 
 
 
@@ -226,13 +234,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.MoonbreezeService.PageWatching(context.Background()).PageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq).Execute()
+	resp, r, err := apiClient.MoonbreezeService.PageWatchingMoonbreezes(context.Background()).PageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.PageWatching``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `MoonbreezeService.PageWatchingMoonbreezes``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PageWatching`: PageMoonbreezesResp
-	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.PageWatching`: %v\n", resp)
+	// response from `PageWatchingMoonbreezes`: PageWatchingMoonbreezesResp
+	fmt.Fprintf(os.Stdout, "Response from `MoonbreezeService.PageWatchingMoonbreezes`: %v\n", resp)
 }
 ```
 
@@ -242,7 +250,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiPageWatchingRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiPageWatchingMoonbreezesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -251,7 +259,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PageMoonbreezesResp**](PageMoonbreezesResp.md)
+[**PageWatchingMoonbreezesResp**](PageWatchingMoonbreezesResp.md)
 
 ### Authorization
 

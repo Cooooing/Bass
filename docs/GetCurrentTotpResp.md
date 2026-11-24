@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Totp** | Pointer to [**RespTotp**](RespTotp.md) |  | [optional] 
+**Totp** | Pointer to [**RespTotp**](RespTotp.md) | TOTP 状态 | [optional] 
 
 ## Methods
 

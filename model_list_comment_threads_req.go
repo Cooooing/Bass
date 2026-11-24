@@ -19,11 +19,15 @@ import (
 // checks if the ListCommentThreadsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCommentThreadsReq{}
 
-// ListCommentThreadsReq struct for ListCommentThreadsReq
+// ListCommentThreadsReq 请求参数。
 type ListCommentThreadsReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
+	// 文章 ID
 	ArticleId string `json:"article_id"`
+	// 顶层评论排序方式
 	Order *string `json:"order,omitempty"`
+	// 每个楼层返回的回复预览数量
 	ReplyPreviewLimit *int32 `json:"reply_preview_limit,omitempty"`
 }
 

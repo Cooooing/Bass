@@ -19,8 +19,11 @@ var _ MappedNullable = &PrepareBadgeFontUploadResp{}
 
 // PrepareBadgeFontUploadResp Resp 返回已存在字体或一次直传凭证。
 type PrepareBadgeFontUploadResp struct {
+	// 已存在资源的 ID。
 	AssetId *string `json:"asset_id,omitempty"`
+	// 新资源的 MinIO multipart POST 地址。
 	UploadUrl *string `json:"upload_url,omitempty"`
+	// MinIO multipart POST 表单字段。
 	FormFields *map[string]string `json:"form_fields,omitempty"`
 }
 

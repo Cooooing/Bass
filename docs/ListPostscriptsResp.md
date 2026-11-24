@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]ArticlePostscript**](ArticlePostscript.md) |  | [optional] 
+**Rows** | Pointer to [**[]ArticlePostscript**](ArticlePostscript.md) | 文章附言列表。 | [optional] 
 
 ## Methods
 

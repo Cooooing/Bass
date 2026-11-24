@@ -4,14 +4,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**ClaimYesterdayReward**](LivenessService.md#ClaimYesterdayReward) | **Post** /v1/user/liveness/yesterday-reward/claim | 
+[**ClaimYesterdayLivenessReward**](LivenessService.md#ClaimYesterdayLivenessReward) | **Post** /v1/user/liveness/yesterday-reward/claim | 
 [**GetLiveness**](LivenessService.md#GetLiveness) | **Get** /v1/user/liveness | 
 
 
 
-## ClaimYesterdayReward
+## ClaimYesterdayLivenessReward
 
-> ClaimYesterdayLivenessRewardResp ClaimYesterdayReward(ctx).Body(body).Execute()
+> ClaimYesterdayLivenessRewardResp ClaimYesterdayLivenessReward(ctx).Body(body).Execute()
+
+
 
 
 
@@ -32,13 +34,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LivenessService.ClaimYesterdayReward(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.LivenessService.ClaimYesterdayLivenessReward(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `LivenessService.ClaimYesterdayReward``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LivenessService.ClaimYesterdayLivenessReward``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ClaimYesterdayReward`: ClaimYesterdayLivenessRewardResp
-	fmt.Fprintf(os.Stdout, "Response from `LivenessService.ClaimYesterdayReward`: %v\n", resp)
+	// response from `ClaimYesterdayLivenessReward`: ClaimYesterdayLivenessRewardResp
+	fmt.Fprintf(os.Stdout, "Response from `LivenessService.ClaimYesterdayLivenessReward`: %v\n", resp)
 }
 ```
 
@@ -48,7 +50,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiClaimYesterdayRewardRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiClaimYesterdayLivenessRewardRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -76,6 +78,8 @@ No authorization required
 ## GetLiveness
 
 > GetLivenessResp GetLiveness(ctx).Execute()
+
+
 
 
 

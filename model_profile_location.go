@@ -17,10 +17,13 @@ import (
 // checks if the ProfileLocation type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ProfileLocation{}
 
-// ProfileLocation struct for ProfileLocation
+// ProfileLocation 协议消息。
 type ProfileLocation struct {
+	// 协议字段。
 	Country *string `json:"country,omitempty"`
+	// 协议字段。
 	Province *string `json:"province,omitempty"`
+	// 协议字段。
 	City *string `json:"city,omitempty"`
 }
 

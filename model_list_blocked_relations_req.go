@@ -17,8 +17,9 @@ import (
 // checks if the ListBlockedRelationsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListBlockedRelationsReq{}
 
-// ListBlockedRelationsReq struct for ListBlockedRelationsReq
+// ListBlockedRelationsReq 请求参数。
 type ListBlockedRelationsReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
 }
 

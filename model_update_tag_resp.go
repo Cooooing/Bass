@@ -17,8 +17,9 @@ import (
 // checks if the UpdateTagResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateTagResp{}
 
-// UpdateTagResp struct for UpdateTagResp
+// UpdateTagResp 响应结果。
 type UpdateTagResp struct {
+	// 标签信息
 	Tag *RespTag `json:"tag,omitempty"`
 }
 

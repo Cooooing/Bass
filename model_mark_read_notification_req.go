@@ -19,8 +19,9 @@ import (
 // checks if the MarkReadNotificationReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &MarkReadNotificationReq{}
 
-// MarkReadNotificationReq struct for MarkReadNotificationReq
+// MarkReadNotificationReq 请求参数。
 type MarkReadNotificationReq struct {
+	// 通知 ID 列表
 	Ids []string `json:"ids"`
 }
 

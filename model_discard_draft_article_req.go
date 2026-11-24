@@ -19,8 +19,9 @@ import (
 // checks if the DiscardDraftArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &DiscardDraftArticleReq{}
 
-// DiscardDraftArticleReq struct for DiscardDraftArticleReq
+// DiscardDraftArticleReq 请求参数。
 type DiscardDraftArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
 }
 

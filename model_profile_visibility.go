@@ -17,12 +17,17 @@ import (
 // checks if the ProfileVisibility type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ProfileVisibility{}
 
-// ProfileVisibility struct for ProfileVisibility
+// ProfileVisibility 协议消息。
 type ProfileVisibility struct {
+	// 协议字段。
 	ArticleList *bool `json:"article_list,omitempty"`
+	// 协议字段。
 	CommentList *bool `json:"comment_list,omitempty"`
+	// 协议字段。
 	FollowerList *bool `json:"follower_list,omitempty"`
+	// 协议字段。
 	FollowingList *bool `json:"following_list,omitempty"`
+	// 协议字段。
 	MoonbreezeList *bool `json:"moonbreeze_list,omitempty"`
 }
 

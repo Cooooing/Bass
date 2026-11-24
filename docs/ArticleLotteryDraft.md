@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Prizes** | Pointer to [**[]ArticleLotteryPrizeDraft**](ArticleLotteryPrizeDraft.md) |  | [optional] 
-**DrawAt** | Pointer to **time.Time** |  | [optional] 
+**Prizes** | Pointer to [**[]ArticleLotteryPrizeDraft**](ArticleLotteryPrizeDraft.md) | 奖项配置 | [optional] 
+**DrawAt** | Pointer to **time.Time** | 开奖时间 | [optional] 
 
 ## Methods
 

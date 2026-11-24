@@ -17,11 +17,15 @@ import (
 // checks if the UpdateProfileAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateProfileAccountReq{}
 
-// UpdateProfileAccountReq struct for UpdateProfileAccountReq
+// UpdateProfileAccountReq 请求参数。
 type UpdateProfileAccountReq struct {
+	// 昵称，选填
 	Nickname *string `json:"nickname,omitempty"`
+	// 个人主页 URL，选填
 	Url *string `json:"url,omitempty"`
+	// 个人简介，选填
 	Introduction *string `json:"introduction,omitempty"`
+	// MBTI 类型，选填；空字符串表示清除
 	Mbti *string `json:"mbti,omitempty"`
 }
 

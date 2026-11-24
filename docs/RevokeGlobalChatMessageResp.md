@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Message** | Pointer to [**GlobalChatMessage**](GlobalChatMessage.md) |  | [optional] 
+**Message** | Pointer to [**GlobalChatMessage**](GlobalChatMessage.md) | 已撤回消息。 | [optional] 
 
 ## Methods
 

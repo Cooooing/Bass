@@ -17,8 +17,9 @@ import (
 // checks if the PageWatchedArticlesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PageWatchedArticlesReq{}
 
-// PageWatchedArticlesReq struct for PageWatchedArticlesReq
+// PageWatchedArticlesReq 请求参数。
 type PageWatchedArticlesReq struct {
+	// 可选，分页参数
 	Page *PageReq `json:"page,omitempty"`
 }
 

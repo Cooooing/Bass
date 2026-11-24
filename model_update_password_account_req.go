@@ -19,9 +19,11 @@ import (
 // checks if the UpdatePasswordAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdatePasswordAccountReq{}
 
-// UpdatePasswordAccountReq struct for UpdatePasswordAccountReq
+// UpdatePasswordAccountReq 请求参数。
 type UpdatePasswordAccountReq struct {
+	// 旧密码，必填
 	OldPassword string `json:"old_password"`
+	// 新密码，必填
 	NewPassword string `json:"new_password"`
 }
 

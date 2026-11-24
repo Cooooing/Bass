@@ -17,8 +17,9 @@ import (
 // checks if the GetCurrentPreferencesResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetCurrentPreferencesResp{}
 
-// GetCurrentPreferencesResp struct for GetCurrentPreferencesResp
+// GetCurrentPreferencesResp 响应结果。
 type GetCurrentPreferencesResp struct {
+	// 当前账号偏好设置
 	Preference *RespPreference `json:"preference,omitempty"`
 }
 

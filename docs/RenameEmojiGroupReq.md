@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GroupId** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
+**GroupId** | Pointer to **string** | 待修改分组 ID。 | [optional] 
+**Name** | Pointer to **string** | 新分组名称。 | [optional] 
 
 ## Methods
 

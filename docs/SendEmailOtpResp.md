@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | Pointer to **string** |  | [optional] 
+**Code** | Pointer to **string** | 非生产环境返回验证码，生产环境为空 | [optional] 
 
 ## Methods
 

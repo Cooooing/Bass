@@ -17,12 +17,17 @@ import (
 // checks if the RespPreference type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespPreference{}
 
-// RespPreference struct for RespPreference
+// RespPreference 协议消息。
 type RespPreference struct {
+	// 账号 ID
 	UserId *string `json:"user_id,omitempty"`
+	// 时区
 	Timezone *string `json:"timezone,omitempty"`
+	// 桌面端主题
 	Theme *string `json:"theme,omitempty"`
+	// 移动端主题
 	MobileTheme *string `json:"mobile_theme,omitempty"`
+	// 界面语言
 	Language *string `json:"language,omitempty"`
 }
 

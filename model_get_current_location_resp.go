@@ -17,8 +17,9 @@ import (
 // checks if the GetCurrentLocationResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetCurrentLocationResp{}
 
-// GetCurrentLocationResp struct for GetCurrentLocationResp
+// GetCurrentLocationResp 响应结果。
 type GetCurrentLocationResp struct {
+	// 当前请求来源地理数据
 	Location *RespLocation `json:"location,omitempty"`
 }
 

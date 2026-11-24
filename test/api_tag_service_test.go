@@ -22,11 +22,11 @@ func Test_bbs_TagServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test TagServiceService BindArticle", func(t *testing.T) {
+	t.Run("Test TagServiceService BindArticleTags", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TagService.BindArticle(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TagService.BindArticleTags(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,23 +34,11 @@ func Test_bbs_TagServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test TagServiceService Create", func(t *testing.T) {
+	t.Run("Test TagServiceService CreateTag", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TagService.Create(context.Background()).Execute()
-
-		require.Nil(t, err)
-		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
-
-	})
-
-	t.Run("Test TagServiceService List", func(t *testing.T) {
-
-		t.Skip("skip test")  // remove to run test
-
-		resp, httpRes, err := apiClient.TagService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TagService.CreateTag(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -70,11 +58,11 @@ func Test_bbs_TagServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test TagServiceService UnbindArticle", func(t *testing.T) {
+	t.Run("Test TagServiceService ListTags", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TagService.UnbindArticle(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TagService.ListTags(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -82,11 +70,23 @@ func Test_bbs_TagServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test TagServiceService Update", func(t *testing.T) {
+	t.Run("Test TagServiceService UnbindArticleTags", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.TagService.Update(context.Background()).Execute()
+		resp, httpRes, err := apiClient.TagService.UnbindArticleTags(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test TagServiceService UpdateTag", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.TagService.UpdateTag(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

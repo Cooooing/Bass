@@ -17,16 +17,25 @@ import (
 // checks if the ReqCommentQuery type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqCommentQuery{}
 
-// ReqCommentQuery struct for ReqCommentQuery
+// ReqCommentQuery 协议消息。
 type ReqCommentQuery struct {
+	// 评论 ID
 	CommentId *string `json:"comment_id,omitempty"`
+	// 文章 ID
 	ArticleId *string `json:"article_id,omitempty"`
+	// 父评论 ID
 	ParentId *string `json:"parent_id,omitempty"`
+	// 回复的评论 ID
 	ReplyId *string `json:"reply_id,omitempty"`
+	// 排序方式
 	Order *string `json:"order,omitempty"`
+	// 评论账号 ID
 	UserId *string `json:"user_id,omitempty"`
+	// 评论层级
 	Level *int32 `json:"level,omitempty"`
+	// 管理限制
 	Restriction *string `json:"restriction,omitempty"`
+	// 管理限制列表
 	Restrictions []string `json:"restrictions,omitempty"`
 }
 

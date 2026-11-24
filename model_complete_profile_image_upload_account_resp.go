@@ -17,9 +17,11 @@ import (
 // checks if the CompleteProfileImageUploadAccountResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CompleteProfileImageUploadAccountResp{}
 
-// CompleteProfileImageUploadAccountResp struct for CompleteProfileImageUploadAccountResp
+// CompleteProfileImageUploadAccountResp 响应结果。
 type CompleteProfileImageUploadAccountResp struct {
+	// 协议字段。
 	Profile *AccountProfile `json:"profile,omitempty"`
+	// 协议字段。
 	ImageUrl *string `json:"image_url,omitempty"`
 }
 

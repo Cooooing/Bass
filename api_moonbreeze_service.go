@@ -22,80 +22,90 @@ import (
 type MoonbreezeService interface {
 
 	/*
-	Create Method for Create
+	CreateMoonbreeze Method for CreateMoonbreeze
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateRequest
+	@return ApiCreateMoonbreezeRequest
 	*/
-	Create(ctx context.Context) ApiCreateRequest
+	CreateMoonbreeze(ctx context.Context) ApiCreateMoonbreezeRequest
 
-	// CreateExecute executes the request
+	// CreateMoonbreezeExecute executes the request
 	//  @return CreateMoonbreezeResp
-	CreateExecute(r ApiCreateRequest) (*CreateMoonbreezeResp, *http.Response, error)
+	CreateMoonbreezeExecute(r ApiCreateMoonbreezeRequest) (*CreateMoonbreezeResp, *http.Response, error)
 
 	/*
-	PageMember Method for PageMember
+	PageMemberMoonbreezes Method for PageMemberMoonbreezes
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPageMemberRequest
+	@return ApiPageMemberMoonbreezesRequest
 	*/
-	PageMember(ctx context.Context) ApiPageMemberRequest
+	PageMemberMoonbreezes(ctx context.Context) ApiPageMemberMoonbreezesRequest
 
-	// PageMemberExecute executes the request
-	//  @return PageMoonbreezesResp
-	PageMemberExecute(r ApiPageMemberRequest) (*PageMoonbreezesResp, *http.Response, error)
+	// PageMemberMoonbreezesExecute executes the request
+	//  @return PageMemberMoonbreezesResp
+	PageMemberMoonbreezesExecute(r ApiPageMemberMoonbreezesRequest) (*PageMemberMoonbreezesResp, *http.Response, error)
 
 	/*
-	PagePublic Method for PagePublic
+	PagePublicMoonbreezes Method for PagePublicMoonbreezes
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPagePublicRequest
+	@return ApiPagePublicMoonbreezesRequest
 	*/
-	PagePublic(ctx context.Context) ApiPagePublicRequest
+	PagePublicMoonbreezes(ctx context.Context) ApiPagePublicMoonbreezesRequest
 
-	// PagePublicExecute executes the request
-	//  @return PageMoonbreezesResp
-	PagePublicExecute(r ApiPagePublicRequest) (*PageMoonbreezesResp, *http.Response, error)
+	// PagePublicMoonbreezesExecute executes the request
+	//  @return PagePublicMoonbreezesResp
+	PagePublicMoonbreezesExecute(r ApiPagePublicMoonbreezesRequest) (*PagePublicMoonbreezesResp, *http.Response, error)
 
 	/*
-	PageWatching Method for PageWatching
+	PageWatchingMoonbreezes Method for PageWatchingMoonbreezes
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPageWatchingRequest
+	@return ApiPageWatchingMoonbreezesRequest
 	*/
-	PageWatching(ctx context.Context) ApiPageWatchingRequest
+	PageWatchingMoonbreezes(ctx context.Context) ApiPageWatchingMoonbreezesRequest
 
-	// PageWatchingExecute executes the request
-	//  @return PageMoonbreezesResp
-	PageWatchingExecute(r ApiPageWatchingRequest) (*PageMoonbreezesResp, *http.Response, error)
+	// PageWatchingMoonbreezesExecute executes the request
+	//  @return PageWatchingMoonbreezesResp
+	PageWatchingMoonbreezesExecute(r ApiPageWatchingMoonbreezesRequest) (*PageWatchingMoonbreezesResp, *http.Response, error)
 }
 
 // MoonbreezeServiceService MoonbreezeService service
 type MoonbreezeServiceService service
 
-type ApiCreateRequest struct {
+type ApiCreateMoonbreezeRequest struct {
 	ctx context.Context
 	ApiService MoonbreezeService
 	createMoonbreezeReq *CreateMoonbreezeReq
 }
 
-func (r ApiCreateRequest) CreateMoonbreezeReq(createMoonbreezeReq CreateMoonbreezeReq) ApiCreateRequest {
+func (r ApiCreateMoonbreezeRequest) CreateMoonbreezeReq(createMoonbreezeReq CreateMoonbreezeReq) ApiCreateMoonbreezeRequest {
 	r.createMoonbreezeReq = &createMoonbreezeReq
 	return r
 }
 
-func (r ApiCreateRequest) Execute() (*CreateMoonbreezeResp, *http.Response, error) {
-	return r.ApiService.CreateExecute(r)
+func (r ApiCreateMoonbreezeRequest) Execute() (*CreateMoonbreezeResp, *http.Response, error) {
+	return r.ApiService.CreateMoonbreezeExecute(r)
 }
 
 /*
-Create Method for Create
+CreateMoonbreeze Method for CreateMoonbreeze
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateRequest
+ @return ApiCreateMoonbreezeRequest
 */
-func (a *MoonbreezeServiceService) Create(ctx context.Context) ApiCreateRequest {
-	return ApiCreateRequest{
+func (a *MoonbreezeServiceService) CreateMoonbreeze(ctx context.Context) ApiCreateMoonbreezeRequest {
+	return ApiCreateMoonbreezeRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -103,7 +113,7 @@ func (a *MoonbreezeServiceService) Create(ctx context.Context) ApiCreateRequest 
 
 // Execute executes the request
 //  @return CreateMoonbreezeResp
-func (a *MoonbreezeServiceService) CreateExecute(r ApiCreateRequest) (*CreateMoonbreezeResp, *http.Response, error) {
+func (a *MoonbreezeServiceService) CreateMoonbreezeExecute(r ApiCreateMoonbreezeRequest) (*CreateMoonbreezeResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -111,7 +121,7 @@ func (a *MoonbreezeServiceService) CreateExecute(r ApiCreateRequest) (*CreateMoo
 		localVarReturnValue  *CreateMoonbreezeResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.Create")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.CreateMoonbreeze")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -181,45 +191,47 @@ func (a *MoonbreezeServiceService) CreateExecute(r ApiCreateRequest) (*CreateMoo
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPageMemberRequest struct {
+type ApiPageMemberMoonbreezesRequest struct {
 	ctx context.Context
 	ApiService MoonbreezeService
 	pageMemberMoonbreezesReq *PageMemberMoonbreezesReq
 }
 
-func (r ApiPageMemberRequest) PageMemberMoonbreezesReq(pageMemberMoonbreezesReq PageMemberMoonbreezesReq) ApiPageMemberRequest {
+func (r ApiPageMemberMoonbreezesRequest) PageMemberMoonbreezesReq(pageMemberMoonbreezesReq PageMemberMoonbreezesReq) ApiPageMemberMoonbreezesRequest {
 	r.pageMemberMoonbreezesReq = &pageMemberMoonbreezesReq
 	return r
 }
 
-func (r ApiPageMemberRequest) Execute() (*PageMoonbreezesResp, *http.Response, error) {
-	return r.ApiService.PageMemberExecute(r)
+func (r ApiPageMemberMoonbreezesRequest) Execute() (*PageMemberMoonbreezesResp, *http.Response, error) {
+	return r.ApiService.PageMemberMoonbreezesExecute(r)
 }
 
 /*
-PageMember Method for PageMember
+PageMemberMoonbreezes Method for PageMemberMoonbreezes
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPageMemberRequest
+ @return ApiPageMemberMoonbreezesRequest
 */
-func (a *MoonbreezeServiceService) PageMember(ctx context.Context) ApiPageMemberRequest {
-	return ApiPageMemberRequest{
+func (a *MoonbreezeServiceService) PageMemberMoonbreezes(ctx context.Context) ApiPageMemberMoonbreezesRequest {
+	return ApiPageMemberMoonbreezesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PageMoonbreezesResp
-func (a *MoonbreezeServiceService) PageMemberExecute(r ApiPageMemberRequest) (*PageMoonbreezesResp, *http.Response, error) {
+//  @return PageMemberMoonbreezesResp
+func (a *MoonbreezeServiceService) PageMemberMoonbreezesExecute(r ApiPageMemberMoonbreezesRequest) (*PageMemberMoonbreezesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *PageMoonbreezesResp
+		localVarReturnValue  *PageMemberMoonbreezesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.PageMember")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.PageMemberMoonbreezes")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -289,45 +301,47 @@ func (a *MoonbreezeServiceService) PageMemberExecute(r ApiPageMemberRequest) (*P
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPagePublicRequest struct {
+type ApiPagePublicMoonbreezesRequest struct {
 	ctx context.Context
 	ApiService MoonbreezeService
 	pagePublicMoonbreezesReq *PagePublicMoonbreezesReq
 }
 
-func (r ApiPagePublicRequest) PagePublicMoonbreezesReq(pagePublicMoonbreezesReq PagePublicMoonbreezesReq) ApiPagePublicRequest {
+func (r ApiPagePublicMoonbreezesRequest) PagePublicMoonbreezesReq(pagePublicMoonbreezesReq PagePublicMoonbreezesReq) ApiPagePublicMoonbreezesRequest {
 	r.pagePublicMoonbreezesReq = &pagePublicMoonbreezesReq
 	return r
 }
 
-func (r ApiPagePublicRequest) Execute() (*PageMoonbreezesResp, *http.Response, error) {
-	return r.ApiService.PagePublicExecute(r)
+func (r ApiPagePublicMoonbreezesRequest) Execute() (*PagePublicMoonbreezesResp, *http.Response, error) {
+	return r.ApiService.PagePublicMoonbreezesExecute(r)
 }
 
 /*
-PagePublic Method for PagePublic
+PagePublicMoonbreezes Method for PagePublicMoonbreezes
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPagePublicRequest
+ @return ApiPagePublicMoonbreezesRequest
 */
-func (a *MoonbreezeServiceService) PagePublic(ctx context.Context) ApiPagePublicRequest {
-	return ApiPagePublicRequest{
+func (a *MoonbreezeServiceService) PagePublicMoonbreezes(ctx context.Context) ApiPagePublicMoonbreezesRequest {
+	return ApiPagePublicMoonbreezesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PageMoonbreezesResp
-func (a *MoonbreezeServiceService) PagePublicExecute(r ApiPagePublicRequest) (*PageMoonbreezesResp, *http.Response, error) {
+//  @return PagePublicMoonbreezesResp
+func (a *MoonbreezeServiceService) PagePublicMoonbreezesExecute(r ApiPagePublicMoonbreezesRequest) (*PagePublicMoonbreezesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *PageMoonbreezesResp
+		localVarReturnValue  *PagePublicMoonbreezesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.PagePublic")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.PagePublicMoonbreezes")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -397,45 +411,47 @@ func (a *MoonbreezeServiceService) PagePublicExecute(r ApiPagePublicRequest) (*P
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPageWatchingRequest struct {
+type ApiPageWatchingMoonbreezesRequest struct {
 	ctx context.Context
 	ApiService MoonbreezeService
 	pageWatchingMoonbreezesReq *PageWatchingMoonbreezesReq
 }
 
-func (r ApiPageWatchingRequest) PageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq PageWatchingMoonbreezesReq) ApiPageWatchingRequest {
+func (r ApiPageWatchingMoonbreezesRequest) PageWatchingMoonbreezesReq(pageWatchingMoonbreezesReq PageWatchingMoonbreezesReq) ApiPageWatchingMoonbreezesRequest {
 	r.pageWatchingMoonbreezesReq = &pageWatchingMoonbreezesReq
 	return r
 }
 
-func (r ApiPageWatchingRequest) Execute() (*PageMoonbreezesResp, *http.Response, error) {
-	return r.ApiService.PageWatchingExecute(r)
+func (r ApiPageWatchingMoonbreezesRequest) Execute() (*PageWatchingMoonbreezesResp, *http.Response, error) {
+	return r.ApiService.PageWatchingMoonbreezesExecute(r)
 }
 
 /*
-PageWatching Method for PageWatching
+PageWatchingMoonbreezes Method for PageWatchingMoonbreezes
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPageWatchingRequest
+ @return ApiPageWatchingMoonbreezesRequest
 */
-func (a *MoonbreezeServiceService) PageWatching(ctx context.Context) ApiPageWatchingRequest {
-	return ApiPageWatchingRequest{
+func (a *MoonbreezeServiceService) PageWatchingMoonbreezes(ctx context.Context) ApiPageWatchingMoonbreezesRequest {
+	return ApiPageWatchingMoonbreezesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return PageMoonbreezesResp
-func (a *MoonbreezeServiceService) PageWatchingExecute(r ApiPageWatchingRequest) (*PageMoonbreezesResp, *http.Response, error) {
+//  @return PageWatchingMoonbreezesResp
+func (a *MoonbreezeServiceService) PageWatchingMoonbreezesExecute(r ApiPageWatchingMoonbreezesRequest) (*PageWatchingMoonbreezesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *PageMoonbreezesResp
+		localVarReturnValue  *PageWatchingMoonbreezesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.PageWatching")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "MoonbreezeServiceService.PageWatchingMoonbreezes")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

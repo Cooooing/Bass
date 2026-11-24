@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GroupId** | Pointer to **string** |  | [optional] 
-**ItemIds** | Pointer to **[]string** |  | [optional] 
+**GroupId** | Pointer to **string** | 可选目标分组 ID；为空时重排未分组表情。 | [optional] 
+**ItemIds** | Pointer to **[]string** | 按最终展示顺序排列的完整表情项 ID 序列。 | [optional] 
 
 ## Methods
 

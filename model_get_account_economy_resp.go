@@ -17,10 +17,13 @@ import (
 // checks if the GetAccountEconomyResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetAccountEconomyResp{}
 
-// GetAccountEconomyResp struct for GetAccountEconomyResp
+// GetAccountEconomyResp 响应结果。
 type GetAccountEconomyResp struct {
+	// 当前积分
 	Balance *string `json:"balance,omitempty"`
+	// 累计获得
 	TotalIncome *string `json:"total_income,omitempty"`
+	// 累计消耗
 	TotalExpense *string `json:"total_expense,omitempty"`
 }
 

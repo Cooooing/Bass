@@ -18,12 +18,17 @@ import (
 // checks if the RespPointRecord type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespPointRecord{}
 
-// RespPointRecord struct for RespPointRecord
+// RespPointRecord 协议消息。
 type RespPointRecord struct {
+	// 记录创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 流水类型展示文案
 	TypeLabel *string `json:"type_label,omitempty"`
+	// 收入或支出方向
 	Direction *string `json:"direction,omitempty"`
+	// 绝对变动积分
 	Amount *string `json:"amount,omitempty"`
+	// 变动后的积分余额
 	BalanceAfter *string `json:"balance_after,omitempty"`
 }
 

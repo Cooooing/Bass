@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** |  | 
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
+**Name** | **string** | 账号名，必填 | 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 分页参数 | [optional] 
 
 ## Methods
 

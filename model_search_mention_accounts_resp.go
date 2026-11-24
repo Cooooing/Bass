@@ -17,9 +17,11 @@ import (
 // checks if the SearchMentionAccountsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SearchMentionAccountsResp{}
 
-// SearchMentionAccountsResp struct for SearchMentionAccountsResp
+// SearchMentionAccountsResp 响应结果。
 type SearchMentionAccountsResp struct {
+	// 最多五个可提及账号候选。
 	Rows []AccountProfile `json:"rows,omitempty"`
+	// 分页结果。
 	Page *PageResp `json:"page,omitempty"`
 }
 

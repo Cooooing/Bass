@@ -19,8 +19,9 @@ import (
 // checks if the GetProfileReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetProfileReq{}
 
-// GetProfileReq struct for GetProfileReq
+// GetProfileReq 请求参数。
 type GetProfileReq struct {
+	// 账号名，必填
 	Name string `json:"name"`
 }
 

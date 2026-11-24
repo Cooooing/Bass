@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]ArticleListItem**](ArticleListItem.md) |  | [optional] 
-**NextCursor** | Pointer to **string** |  | [optional] 
+**Rows** | Pointer to [**[]ArticleListItem**](ArticleListItem.md) | 文章列表 | [optional] 
+**NextCursor** | Pointer to **string** | 下一页游标 | [optional] 
 
 ## Methods
 

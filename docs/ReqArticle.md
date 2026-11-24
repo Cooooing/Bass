@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Title** | **string** |  | 
-**Content** | **string** |  | 
-**RewardContent** | Pointer to **string** |  | [optional] 
-**RewardPoints** | Pointer to **int32** |  | [optional] 
-**Type** | **string** |  | 
-**Statement** | Pointer to **string** |  | [optional] 
-**Commentable** | Pointer to **bool** |  | [optional] 
-**Poll** | Pointer to [**ArticlePollDraft**](ArticlePollDraft.md) |  | [optional] 
-**Lottery** | Pointer to [**ArticleLotteryDraft**](ArticleLotteryDraft.md) |  | [optional] 
+**Title** | **string** | 必填，标题 | 
+**Content** | **string** | 必填，正文 | 
+**RewardContent** | Pointer to **string** | 可选，打赏区内容 | [optional] 
+**RewardPoints** | Pointer to **int32** | 可选，打赏积分 | [optional] 
+**Type** | **string** | 必填，文章类型 | 
+**Statement** | Pointer to **string** | 可选，创作声明 | [optional] 
+**Commentable** | Pointer to **bool** | 可选，是否允许评论 | [optional] 
+**Poll** | Pointer to [**ArticlePollDraft**](ArticlePollDraft.md) | 可选，投票文章的草稿配置 | [optional] 
+**Lottery** | Pointer to [**ArticleLotteryDraft**](ArticleLotteryDraft.md) | 可选，抽奖文章的草稿配置 | [optional] 
 
 ## Methods
 

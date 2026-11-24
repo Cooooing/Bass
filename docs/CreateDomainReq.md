@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Domain** | [**ReqDomain**](ReqDomain.md) |  | 
+**Domain** | [**ReqDomain**](ReqDomain.md) | 领域信息 | 
 
 ## Methods
 

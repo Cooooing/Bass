@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ids** | Pointer to **[]string** |  | [optional] 
-**Code** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Description** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**Url** | Pointer to **string** |  | [optional] 
-**Icon** | Pointer to **string** |  | [optional] 
-**IsNav** | Pointer to **bool** |  | [optional] 
+**Ids** | Pointer to **[]string** | 领域 ID 列表 | [optional] 
+**Code** | Pointer to **string** | 稳定编码 | [optional] 
+**Name** | Pointer to **string** | 领域名称 | [optional] 
+**Description** | Pointer to **string** | 描述 | [optional] 
+**Status** | Pointer to **string** | 启停状态 | [optional] 
+**Url** | Pointer to **string** | 链接 | [optional] 
+**Icon** | Pointer to **string** | 图标 | [optional] 
+**IsNav** | Pointer to **bool** | 是否在导航中展示 | [optional] 
 
 ## Methods
 

@@ -17,9 +17,11 @@ import (
 // checks if the RenameEmojiItemReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RenameEmojiItemReq{}
 
-// RenameEmojiItemReq struct for RenameEmojiItemReq
+// RenameEmojiItemReq 请求参数。
 type RenameEmojiItemReq struct {
+	// 待重命名表情项 ID。
 	ItemId *string `json:"item_id,omitempty"`
+	// 新表情别名。
 	Name *string `json:"name,omitempty"`
 }
 

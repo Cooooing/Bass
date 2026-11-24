@@ -19,9 +19,11 @@ import (
 // checks if the ListFollowingReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListFollowingReq{}
 
-// ListFollowingReq struct for ListFollowingReq
+// ListFollowingReq 请求参数。
 type ListFollowingReq struct {
+	// 协议字段。
 	Name string `json:"name"`
+	// 协议字段。
 	Page *PageReq `json:"page,omitempty"`
 }
 

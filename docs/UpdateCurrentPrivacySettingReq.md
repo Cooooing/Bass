@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PublicPoints** | Pointer to **bool** |  | [optional] 
-**PublicFollowerList** | Pointer to **bool** |  | [optional] 
-**PublicFollowingList** | Pointer to **bool** |  | [optional] 
-**PublicArticleList** | Pointer to **bool** |  | [optional] 
-**PublicCommentList** | Pointer to **bool** |  | [optional] 
-**PublicOnlineStatus** | Pointer to **bool** |  | [optional] 
-**PublicLocation** | Pointer to **bool** |  | [optional] 
-**PublicMoonbreezeList** | Pointer to **bool** |  | [optional] 
+**PublicPoints** | Pointer to **bool** | 是否公开积分 | [optional] 
+**PublicFollowerList** | Pointer to **bool** | 是否公开粉丝列表 | [optional] 
+**PublicFollowingList** | Pointer to **bool** | 是否公开关注列表 | [optional] 
+**PublicArticleList** | Pointer to **bool** | 是否公开帖子列表 | [optional] 
+**PublicCommentList** | Pointer to **bool** | 是否公开回复列表 | [optional] 
+**PublicOnlineStatus** | Pointer to **bool** | 是否公开在线状态 | [optional] 
+**PublicLocation** | Pointer to **bool** | 是否公开地理资料 | [optional] 
+**PublicMoonbreezeList** | Pointer to **bool** | 是否公开清风明月列表 | [optional] 
 
 ## Methods
 

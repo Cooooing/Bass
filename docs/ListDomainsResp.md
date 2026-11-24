@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]RespDomain**](RespDomain.md) |  | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 分页结果 | [optional] 
+**Rows** | Pointer to [**[]RespDomain**](RespDomain.md) | 领域列表 | [optional] 
 
 ## Methods
 

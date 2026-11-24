@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Topic** | Pointer to [**GlobalChatTopic**](GlobalChatTopic.md) |  | [optional] 
+**Topic** | Pointer to [**GlobalChatTopic**](GlobalChatTopic.md) | 当前话题；未设置时为空。 | [optional] 
 
 ## Methods
 

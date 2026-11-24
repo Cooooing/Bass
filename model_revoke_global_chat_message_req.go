@@ -17,8 +17,9 @@ import (
 // checks if the RevokeGlobalChatMessageReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RevokeGlobalChatMessageReq{}
 
-// RevokeGlobalChatMessageReq struct for RevokeGlobalChatMessageReq
+// RevokeGlobalChatMessageReq 请求参数。
 type RevokeGlobalChatMessageReq struct {
+	// 消息 ID。
 	MessageId *string `json:"message_id,omitempty"`
 }
 

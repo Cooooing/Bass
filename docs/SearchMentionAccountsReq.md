@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Query** | Pointer to **string** |  | [optional] 
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
+**Query** | Pointer to **string** | 用户名或昵称搜索词，可为空。 | [optional] 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 分页参数。 | [optional] 
 
 ## Methods
 

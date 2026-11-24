@@ -17,8 +17,9 @@ import (
 // checks if the ListNotificationsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListNotificationsReq{}
 
-// ListNotificationsReq struct for ListNotificationsReq
+// ListNotificationsReq 请求参数。
 type ListNotificationsReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
 }
 

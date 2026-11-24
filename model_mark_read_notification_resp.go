@@ -17,8 +17,9 @@ import (
 // checks if the MarkReadNotificationResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &MarkReadNotificationResp{}
 
-// MarkReadNotificationResp struct for MarkReadNotificationResp
+// MarkReadNotificationResp 响应结果。
 type MarkReadNotificationResp struct {
+	// 成功标记的通知数量
 	Count *int32 `json:"count,omitempty"`
 }
 

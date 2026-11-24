@@ -17,8 +17,9 @@ import (
 // checks if the ListFollowersRelationsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListFollowersRelationsReq{}
 
-// ListFollowersRelationsReq struct for ListFollowersRelationsReq
+// ListFollowersRelationsReq 请求参数。
 type ListFollowersRelationsReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
 }
 

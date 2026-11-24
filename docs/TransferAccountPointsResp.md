@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Balance** | Pointer to **string** |  | [optional] 
+**Balance** | Pointer to **string** | 转账后的当前积分 | [optional] 
 
 ## Methods
 

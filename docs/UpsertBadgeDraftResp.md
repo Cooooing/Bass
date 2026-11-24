@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Draft** | Pointer to [**BadgeDraft**](BadgeDraft.md) |  | [optional] 
+**Draft** | Pointer to [**BadgeDraft**](BadgeDraft.md) | 已保存草稿。 | [optional] 
 
 ## Methods
 

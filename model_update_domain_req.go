@@ -19,9 +19,11 @@ import (
 // checks if the UpdateDomainReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateDomainReq{}
 
-// UpdateDomainReq struct for UpdateDomainReq
+// UpdateDomainReq 请求参数。
 type UpdateDomainReq struct {
+	// 领域 ID
 	DomainId string `json:"domain_id"`
+	// 领域信息
 	Domain ReqDomain `json:"domain"`
 }
 

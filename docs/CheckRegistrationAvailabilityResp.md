@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**NameAvailable** | Pointer to **bool** |  | [optional] 
-**EmailCanRegister** | Pointer to **bool** |  | [optional] 
-**PhoneCanRegister** | Pointer to **bool** |  | [optional] 
+**NameAvailable** | Pointer to **bool** | 账号名是否可用 | [optional] 
+**EmailCanRegister** | Pointer to **bool** | 邮箱是否可继续用于注册 | [optional] 
+**PhoneCanRegister** | Pointer to **bool** | 手机号是否可继续用于注册 | [optional] 
 
 ## Methods
 

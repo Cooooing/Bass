@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Basic** | Pointer to [**RespAccountBasic**](RespAccountBasic.md) |  | [optional] 
-**Contact** | Pointer to [**RespAccountContact**](RespAccountContact.md) |  | [optional] 
+**Basic** | Pointer to [**RespAccountBasic**](RespAccountBasic.md) | 基础信息 | [optional] 
+**Contact** | Pointer to [**RespAccountContact**](RespAccountContact.md) | 联系方式 | [optional] 
 
 ## Methods
 

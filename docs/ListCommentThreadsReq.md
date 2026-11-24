@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
-**ArticleId** | **string** |  | 
-**Order** | Pointer to **string** |  | [optional] 
-**ReplyPreviewLimit** | Pointer to **int32** |  | [optional] 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 分页参数 | [optional] 
+**ArticleId** | **string** | 文章 ID | 
+**Order** | Pointer to **string** | 顶层评论排序方式 | [optional] 
+**ReplyPreviewLimit** | Pointer to **int32** | 每个楼层返回的回复预览数量 | [optional] 
 
 ## Methods
 

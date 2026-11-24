@@ -17,8 +17,9 @@ import (
 // checks if the TransferAccountPointsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &TransferAccountPointsResp{}
 
-// TransferAccountPointsResp struct for TransferAccountPointsResp
+// TransferAccountPointsResp 响应结果。
 type TransferAccountPointsResp struct {
+	// 转账后的当前积分
 	Balance *string `json:"balance,omitempty"`
 }
 

@@ -17,8 +17,9 @@ import (
 // checks if the CountCollectedArticlesResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CountCollectedArticlesResp{}
 
-// CountCollectedArticlesResp struct for CountCollectedArticlesResp
+// CountCollectedArticlesResp 响应结果。
 type CountCollectedArticlesResp struct {
+	// 当前收藏文章数量。
 	Count *int32 `json:"count,omitempty"`
 }
 

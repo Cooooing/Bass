@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Group** | Pointer to [**EmojiGroup**](EmojiGroup.md) |  | [optional] 
-**SkippedCount** | Pointer to **int32** |  | [optional] 
+**Group** | Pointer to [**EmojiGroup**](EmojiGroup.md) | 新建的导入分组。 | [optional] 
+**SkippedCount** | Pointer to **int32** | 因资源不可用而跳过的表情数。 | [optional] 
 
 ## Methods
 

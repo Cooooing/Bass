@@ -17,8 +17,9 @@ import (
 // checks if the CollectArticleResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CollectArticleResp{}
 
-// CollectArticleResp struct for CollectArticleResp
+// CollectArticleResp 响应结果。
 type CollectArticleResp struct {
+	// 是否已收藏
 	Collected *bool `json:"collected,omitempty"`
 }
 

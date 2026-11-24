@@ -17,8 +17,9 @@ import (
 // checks if the CreateMoonbreezeReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateMoonbreezeReq{}
 
-// CreateMoonbreezeReq struct for CreateMoonbreezeReq
+// CreateMoonbreezeReq 请求参数。
 type CreateMoonbreezeReq struct {
+	// 协议字段。
 	Content *string `json:"content,omitempty"`
 }
 

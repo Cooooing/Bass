@@ -17,8 +17,9 @@ import (
 // checks if the GetCurrentAccountResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetCurrentAccountResp{}
 
-// GetCurrentAccountResp struct for GetCurrentAccountResp
+// GetCurrentAccountResp 响应结果。
 type GetCurrentAccountResp struct {
+	// 当前账号完整资料
 	Account *RespCurrentAccount `json:"account,omitempty"`
 }
 

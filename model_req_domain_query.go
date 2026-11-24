@@ -17,15 +17,23 @@ import (
 // checks if the ReqDomainQuery type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqDomainQuery{}
 
-// ReqDomainQuery struct for ReqDomainQuery
+// ReqDomainQuery 协议消息。
 type ReqDomainQuery struct {
+	// 领域 ID 列表
 	Ids []string `json:"ids,omitempty"`
+	// 稳定编码
 	Code *string `json:"code,omitempty"`
+	// 领域名称
 	Name *string `json:"name,omitempty"`
+	// 描述
 	Description *string `json:"description,omitempty"`
+	// 启停状态
 	Status *string `json:"status,omitempty"`
+	// 链接
 	Url *string `json:"url,omitempty"`
+	// 图标
 	Icon *string `json:"icon,omitempty"`
+	// 是否在导航中展示
 	IsNav *bool `json:"is_nav,omitempty"`
 }
 

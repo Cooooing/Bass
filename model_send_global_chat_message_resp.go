@@ -17,8 +17,9 @@ import (
 // checks if the SendGlobalChatMessageResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendGlobalChatMessageResp{}
 
-// SendGlobalChatMessageResp struct for SendGlobalChatMessageResp
+// SendGlobalChatMessageResp 响应结果。
 type SendGlobalChatMessageResp struct {
+	// 消息。
 	Message *GlobalChatMessage `json:"message,omitempty"`
 }
 

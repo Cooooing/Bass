@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rewarded** | Pointer to **bool** |  | [optional] 
+**Rewarded** | Pointer to **bool** | 是否已完成打赏 | [optional] 
 
 ## Methods
 

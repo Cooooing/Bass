@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]ArticleViewHistoryItem**](ArticleViewHistoryItem.md) |  | [optional] 
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
+**Rows** | Pointer to [**[]ArticleViewHistoryItem**](ArticleViewHistoryItem.md) | 协议字段。 | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 协议字段。 | [optional] 
 
 ## Methods
 

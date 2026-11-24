@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ItemId** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
+**ItemId** | Pointer to **string** | 待重命名表情项 ID。 | [optional] 
+**Name** | Pointer to **string** | 新表情别名。 | [optional] 
 
 ## Methods
 

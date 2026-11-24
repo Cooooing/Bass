@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GroupId** | Pointer to **string** |  | [optional] 
+**GroupId** | Pointer to **string** | 待分享分组 ID。 | [optional] 
 
 ## Methods
 

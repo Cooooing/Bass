@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**Reason** | Pointer to **string** |  | [optional] 
+**ArticleId** | **string** | 必填，文章 ID | 
+**Reason** | Pointer to **string** | 可选，归档原因 | [optional] 
 
 ## Methods
 

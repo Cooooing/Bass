@@ -22,11 +22,11 @@ func Test_bbs_NotificationServiceService(t *testing.T) {
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
 
-	t.Run("Test NotificationServiceService CountUnread", func(t *testing.T) {
+	t.Run("Test NotificationServiceService CountUnreadNotifications", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.NotificationService.CountUnread(context.Background()).Execute()
+		resp, httpRes, err := apiClient.NotificationService.CountUnreadNotifications(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -34,11 +34,11 @@ func Test_bbs_NotificationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test NotificationServiceService List", func(t *testing.T) {
+	t.Run("Test NotificationServiceService ListNotifications", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.NotificationService.List(context.Background()).Execute()
+		resp, httpRes, err := apiClient.NotificationService.ListNotifications(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)
@@ -46,11 +46,11 @@ func Test_bbs_NotificationServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test NotificationServiceService MarkRead", func(t *testing.T) {
+	t.Run("Test NotificationServiceService MarkReadNotification", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.NotificationService.MarkRead(context.Background()).Execute()
+		resp, httpRes, err := apiClient.NotificationService.MarkReadNotification(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

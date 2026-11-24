@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | Pointer to **string** |  | [optional] 
+**ArticleId** | Pointer to **string** | 已保存草稿的文章 ID | [optional] 
 
 ## Methods
 

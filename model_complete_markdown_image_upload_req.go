@@ -19,8 +19,9 @@ import (
 // checks if the CompleteMarkdownImageUploadReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CompleteMarkdownImageUploadReq{}
 
-// CompleteMarkdownImageUploadReq struct for CompleteMarkdownImageUploadReq
+// CompleteMarkdownImageUploadReq 请求参数。
 type CompleteMarkdownImageUploadReq struct {
+	// 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
 	Hash string `json:"hash"`
 }
 

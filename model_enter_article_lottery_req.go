@@ -19,9 +19,11 @@ import (
 // checks if the EnterArticleLotteryReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &EnterArticleLotteryReq{}
 
-// EnterArticleLotteryReq struct for EnterArticleLotteryReq
+// EnterArticleLotteryReq 请求参数。
 type EnterArticleLotteryReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// true 报名，false 撤销报名
 	Entered *bool `json:"entered,omitempty"`
 }
 

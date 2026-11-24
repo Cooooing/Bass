@@ -22,19 +22,23 @@ import (
 type LivenessService interface {
 
 	/*
-	ClaimYesterdayReward Method for ClaimYesterdayReward
+	ClaimYesterdayLivenessReward Method for ClaimYesterdayLivenessReward
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiClaimYesterdayRewardRequest
+	@return ApiClaimYesterdayLivenessRewardRequest
 	*/
-	ClaimYesterdayReward(ctx context.Context) ApiClaimYesterdayRewardRequest
+	ClaimYesterdayLivenessReward(ctx context.Context) ApiClaimYesterdayLivenessRewardRequest
 
-	// ClaimYesterdayRewardExecute executes the request
+	// ClaimYesterdayLivenessRewardExecute executes the request
 	//  @return ClaimYesterdayLivenessRewardResp
-	ClaimYesterdayRewardExecute(r ApiClaimYesterdayRewardRequest) (*ClaimYesterdayLivenessRewardResp, *http.Response, error)
+	ClaimYesterdayLivenessRewardExecute(r ApiClaimYesterdayLivenessRewardRequest) (*ClaimYesterdayLivenessRewardResp, *http.Response, error)
 
 	/*
 	GetLiveness Method for GetLiveness
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetLivenessRequest
@@ -49,29 +53,31 @@ type LivenessService interface {
 // LivenessServiceService LivenessService service
 type LivenessServiceService service
 
-type ApiClaimYesterdayRewardRequest struct {
+type ApiClaimYesterdayLivenessRewardRequest struct {
 	ctx context.Context
 	ApiService LivenessService
 	body *map[string]interface{}
 }
 
-func (r ApiClaimYesterdayRewardRequest) Body(body map[string]interface{}) ApiClaimYesterdayRewardRequest {
+func (r ApiClaimYesterdayLivenessRewardRequest) Body(body map[string]interface{}) ApiClaimYesterdayLivenessRewardRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiClaimYesterdayRewardRequest) Execute() (*ClaimYesterdayLivenessRewardResp, *http.Response, error) {
-	return r.ApiService.ClaimYesterdayRewardExecute(r)
+func (r ApiClaimYesterdayLivenessRewardRequest) Execute() (*ClaimYesterdayLivenessRewardResp, *http.Response, error) {
+	return r.ApiService.ClaimYesterdayLivenessRewardExecute(r)
 }
 
 /*
-ClaimYesterdayReward Method for ClaimYesterdayReward
+ClaimYesterdayLivenessReward Method for ClaimYesterdayLivenessReward
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiClaimYesterdayRewardRequest
+ @return ApiClaimYesterdayLivenessRewardRequest
 */
-func (a *LivenessServiceService) ClaimYesterdayReward(ctx context.Context) ApiClaimYesterdayRewardRequest {
-	return ApiClaimYesterdayRewardRequest{
+func (a *LivenessServiceService) ClaimYesterdayLivenessReward(ctx context.Context) ApiClaimYesterdayLivenessRewardRequest {
+	return ApiClaimYesterdayLivenessRewardRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -79,7 +85,7 @@ func (a *LivenessServiceService) ClaimYesterdayReward(ctx context.Context) ApiCl
 
 // Execute executes the request
 //  @return ClaimYesterdayLivenessRewardResp
-func (a *LivenessServiceService) ClaimYesterdayRewardExecute(r ApiClaimYesterdayRewardRequest) (*ClaimYesterdayLivenessRewardResp, *http.Response, error) {
+func (a *LivenessServiceService) ClaimYesterdayLivenessRewardExecute(r ApiClaimYesterdayLivenessRewardRequest) (*ClaimYesterdayLivenessRewardResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -87,7 +93,7 @@ func (a *LivenessServiceService) ClaimYesterdayRewardExecute(r ApiClaimYesterday
 		localVarReturnValue  *ClaimYesterdayLivenessRewardResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LivenessServiceService.ClaimYesterdayReward")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LivenessServiceService.ClaimYesterdayLivenessReward")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -168,6 +174,8 @@ func (r ApiGetLivenessRequest) Execute() (*GetLivenessResp, *http.Response, erro
 
 /*
 GetLiveness Method for GetLiveness
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetLivenessRequest

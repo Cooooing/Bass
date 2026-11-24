@@ -19,9 +19,11 @@ import (
 // checks if the CancelAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CancelAccountReq{}
 
-// CancelAccountReq struct for CancelAccountReq
+// CancelAccountReq 请求参数。
 type CancelAccountReq struct {
+	// 当前密码
 	Password string `json:"password"`
+	// 启用 TOTP 时作为 TOTP code
 	Code *string `json:"code,omitempty"`
 }
 

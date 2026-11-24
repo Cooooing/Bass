@@ -17,9 +17,11 @@ import (
 // checks if the SendGlobalChatMessageReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendGlobalChatMessageReq{}
 
-// SendGlobalChatMessageReq struct for SendGlobalChatMessageReq
+// SendGlobalChatMessageReq 请求参数。
 type SendGlobalChatMessageReq struct {
+	// 客户端幂等消息 ID。
 	ClientMessageId *string `json:"client_message_id,omitempty"`
+	// 原始 Markdown 内容。
 	Content *string `json:"content,omitempty"`
 }
 

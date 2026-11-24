@@ -19,9 +19,11 @@ import (
 // checks if the LikeCommentReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &LikeCommentReq{}
 
-// LikeCommentReq struct for LikeCommentReq
+// LikeCommentReq 请求参数。
 type LikeCommentReq struct {
+	// 评论 ID
 	Id string `json:"id"`
+	// 是否点赞
 	Active bool `json:"active"`
 }
 

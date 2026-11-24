@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Comment** | Pointer to [**RespCommentDetail**](RespCommentDetail.md) |  | [optional] 
+**Comment** | Pointer to [**RespCommentDetail**](RespCommentDetail.md) | 创建后的评论 | [optional] 
 
 ## Methods
 

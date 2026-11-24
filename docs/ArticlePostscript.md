@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**ArticleId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
-**ContentRender** | Pointer to **string** |  | [optional] 
-**Restriction** | Pointer to **string** |  | [optional] 
-**CreatedBy** | Pointer to **string** |  | [optional] 
-**UpdatedBy** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 附言 ID | [optional] 
+**ArticleId** | Pointer to **string** | 文章 ID | [optional] 
+**Content** | Pointer to **string** | 原始内容 | [optional] 
+**ContentRender** | Pointer to **string** | 渲染内容 | [optional] 
+**Restriction** | Pointer to **string** | 治理限制 | [optional] 
+**CreatedBy** | Pointer to **string** | 创建账号 ID | [optional] 
+**UpdatedBy** | Pointer to **string** | 更新账号 ID | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间 | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | 更新时间 | [optional] 
 
 ## Methods
 

@@ -19,10 +19,13 @@ import (
 // checks if the ListCommentTimelineReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCommentTimelineReq{}
 
-// ListCommentTimelineReq struct for ListCommentTimelineReq
+// ListCommentTimelineReq 请求参数。
 type ListCommentTimelineReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
+	// 文章 ID
 	ArticleId string `json:"article_id"`
+	// 排序方式
 	Order *string `json:"order,omitempty"`
 }
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Content** | Pointer to **string** |  | [optional] 
+**Content** | Pointer to **string** | 原始弹幕内容。 | [optional] 
 
 ## Methods
 

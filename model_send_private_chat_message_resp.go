@@ -17,8 +17,9 @@ import (
 // checks if the SendPrivateChatMessageResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendPrivateChatMessageResp{}
 
-// SendPrivateChatMessageResp struct for SendPrivateChatMessageResp
+// SendPrivateChatMessageResp 响应结果。
 type SendPrivateChatMessageResp struct {
+	// 消息。
 	Message *PrivateChatMessage `json:"message,omitempty"`
 }
 

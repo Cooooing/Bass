@@ -19,8 +19,9 @@ import (
 // checks if the CancelPublishArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CancelPublishArticleReq{}
 
-// CancelPublishArticleReq struct for CancelPublishArticleReq
+// CancelPublishArticleReq 请求参数。
 type CancelPublishArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
 }
 

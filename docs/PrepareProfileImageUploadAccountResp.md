@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AssetId** | Pointer to **string** |  | [optional] 
-**UploadUrl** | Pointer to **string** |  | [optional] 
-**FormFields** | Pointer to **map[string]string** |  | [optional] 
+**AssetId** | Pointer to **string** | 已存在时直接返回 | [optional] 
+**UploadUrl** | Pointer to **string** | 新资源的 MinIO multipart POST 地址 | [optional] 
+**FormFields** | Pointer to **map[string]string** | 协议字段。 | [optional] 
 
 ## Methods
 

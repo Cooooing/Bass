@@ -17,9 +17,11 @@ import (
 // checks if the SearchMentionAccountsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SearchMentionAccountsReq{}
 
-// SearchMentionAccountsReq struct for SearchMentionAccountsReq
+// SearchMentionAccountsReq 请求参数。
 type SearchMentionAccountsReq struct {
+	// 用户名或昵称搜索词，可为空。
 	Query *string `json:"query,omitempty"`
+	// 分页参数。
 	Page *PageReq `json:"page,omitempty"`
 }
 

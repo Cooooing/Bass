@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetCurrent**](LocationService.md#GetCurrent) | **Post** /v1/platform/location/get-current | 
+[**GetCurrentLocation**](LocationService.md#GetCurrentLocation) | **Post** /v1/platform/location/get-current | 
 
 
 
-## GetCurrent
+## GetCurrentLocation
 
-> GetCurrentLocationResp GetCurrent(ctx).Body(body).Execute()
+> GetCurrentLocationResp GetCurrentLocation(ctx).Body(body).Execute()
 
 
 
@@ -33,13 +33,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LocationService.GetCurrent(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.LocationService.GetCurrentLocation(context.Background()).Body(body).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `LocationService.GetCurrent``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LocationService.GetCurrentLocation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentLocationResp
-	fmt.Fprintf(os.Stdout, "Response from `LocationService.GetCurrent`: %v\n", resp)
+	// response from `GetCurrentLocation`: GetCurrentLocationResp
+	fmt.Fprintf(os.Stdout, "Response from `LocationService.GetCurrentLocation`: %v\n", resp)
 }
 ```
 
@@ -49,7 +49,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetCurrentRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetCurrentLocationRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

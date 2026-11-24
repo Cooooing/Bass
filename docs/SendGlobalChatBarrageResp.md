@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Barrage** | Pointer to [**GlobalChatBarrage**](GlobalChatBarrage.md) |  | [optional] 
+**Barrage** | Pointer to [**GlobalChatBarrage**](GlobalChatBarrage.md) | 已发布的弹幕。 | [optional] 
 
 ## Methods
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ClientMessageId** | Pointer to **string** |  | [optional] 
-**Content** | Pointer to **string** |  | [optional] 
+**ClientMessageId** | Pointer to **string** | 客户端幂等消息 ID。 | [optional] 
+**Content** | Pointer to **string** | 原始 Markdown 内容。 | [optional] 
 
 ## Methods
 

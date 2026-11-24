@@ -4,13 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Search**](ArticleSearchService.md#Search) | **Post** /v1/content/article/search | 
+[**SearchArticles**](ArticleSearchService.md#SearchArticles) | **Post** /v1/content/article/search | 
 
 
 
-## Search
+## SearchArticles
 
-> SearchArticlesResp Search(ctx).SearchArticlesReq(searchArticlesReq).Execute()
+> SearchArticlesResp SearchArticles(ctx).SearchArticlesReq(searchArticlesReq).Execute()
+
+
 
 
 
@@ -31,13 +33,13 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleSearchService.Search(context.Background()).SearchArticlesReq(searchArticlesReq).Execute()
+	resp, r, err := apiClient.ArticleSearchService.SearchArticles(context.Background()).SearchArticlesReq(searchArticlesReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ArticleSearchService.Search``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleSearchService.SearchArticles``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Search`: SearchArticlesResp
-	fmt.Fprintf(os.Stdout, "Response from `ArticleSearchService.Search`: %v\n", resp)
+	// response from `SearchArticles`: SearchArticlesResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleSearchService.SearchArticles`: %v\n", resp)
 }
 ```
 
@@ -47,7 +49,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiSearchRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiSearchArticlesRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

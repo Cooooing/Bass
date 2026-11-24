@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | [**ReqArticle**](ReqArticle.md) |  | 
+**Article** | [**ReqArticle**](ReqArticle.md) | 必填，草稿内容 | 
 
 ## Methods
 

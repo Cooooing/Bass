@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PeerUserId** | Pointer to **string** |  | [optional] 
-**BeforeId** | Pointer to **string** |  | [optional] 
-**Page** | Pointer to [**PageReq**](PageReq.md) |  | [optional] 
+**PeerUserId** | Pointer to **string** | 对端账号 ID。 | [optional] 
+**BeforeId** | Pointer to **string** | 向前分页游标。 | [optional] 
+**Page** | Pointer to [**PageReq**](PageReq.md) | 分页参数。 | [optional] 
 
 ## Methods
 

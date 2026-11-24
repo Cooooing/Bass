@@ -19,9 +19,11 @@ import (
 // checks if the CompleteProfileImageUploadAccountReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CompleteProfileImageUploadAccountReq{}
 
-// CompleteProfileImageUploadAccountReq struct for CompleteProfileImageUploadAccountReq
+// CompleteProfileImageUploadAccountReq 请求参数。
 type CompleteProfileImageUploadAccountReq struct {
+	// 协议字段。
 	Purpose string `json:"purpose"`
+	// 文件 SHA-256；回调尚未入库时返回可重试错误
 	Hash string `json:"hash"`
 }
 

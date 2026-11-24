@@ -227,16 +227,19 @@ type ApiCheckRegistrationAvailabilityRequest struct {
 	phone *string
 }
 
+// 待检查的账号名
 func (r ApiCheckRegistrationAvailabilityRequest) Name(name string) ApiCheckRegistrationAvailabilityRequest {
 	r.name = &name
 	return r
 }
 
+// 待检查的邮箱
 func (r ApiCheckRegistrationAvailabilityRequest) Email(email string) ApiCheckRegistrationAvailabilityRequest {
 	r.email = &email
 	return r
 }
 
+// 待检查的手机号
 func (r ApiCheckRegistrationAvailabilityRequest) Phone(phone string) ApiCheckRegistrationAvailabilityRequest {
 	r.phone = &phone
 	return r

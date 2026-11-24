@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Purpose** | **string** |  | 
-**Hash** | **string** |  | 
+**Purpose** | **string** | 协议字段。 | 
+**Hash** | **string** | 文件 SHA-256；回调尚未入库时返回可重试错误 | 
 
 ## Methods
 

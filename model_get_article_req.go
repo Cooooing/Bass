@@ -19,9 +19,11 @@ import (
 // checks if the GetArticleReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GetArticleReq{}
 
-// GetArticleReq struct for GetArticleReq
+// GetArticleReq 请求参数。
 type GetArticleReq struct {
+	// 必填，文章 ID
 	ArticleId string `json:"article_id"`
+	// 可选，预期发布状态；未传按已发布查询
 	PublishStatus *string `json:"publish_status,omitempty"`
 }
 

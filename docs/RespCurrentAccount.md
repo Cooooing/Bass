@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Profile** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
-**Contact** | Pointer to [**AccountContact**](AccountContact.md) |  | [optional] 
-**Location** | Pointer to [**ProfileLocation**](ProfileLocation.md) |  | [optional] 
+**Profile** | Pointer to [**AccountProfile**](AccountProfile.md) | 账号展示资料 | [optional] 
+**Contact** | Pointer to [**AccountContact**](AccountContact.md) | 账号联系方式 | [optional] 
+**Location** | Pointer to [**ProfileLocation**](ProfileLocation.md) | 当前账号地理资料 | [optional] 
 
 ## Methods
 

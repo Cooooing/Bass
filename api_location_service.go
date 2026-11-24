@@ -22,48 +22,48 @@ import (
 type LocationService interface {
 
 	/*
-	GetCurrent Method for GetCurrent
+	GetCurrentLocation Method for GetCurrentLocation
 
 	按当前请求来源 IP 获取地理数据。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetCurrentRequest
+	@return ApiGetCurrentLocationRequest
 	*/
-	GetCurrent(ctx context.Context) ApiGetCurrentRequest
+	GetCurrentLocation(ctx context.Context) ApiGetCurrentLocationRequest
 
-	// GetCurrentExecute executes the request
+	// GetCurrentLocationExecute executes the request
 	//  @return GetCurrentLocationResp
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentLocationResp, *http.Response, error)
+	GetCurrentLocationExecute(r ApiGetCurrentLocationRequest) (*GetCurrentLocationResp, *http.Response, error)
 }
 
 // LocationServiceService LocationService service
 type LocationServiceService service
 
-type ApiGetCurrentRequest struct {
+type ApiGetCurrentLocationRequest struct {
 	ctx context.Context
 	ApiService LocationService
 	body *map[string]interface{}
 }
 
-func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentRequest {
+func (r ApiGetCurrentLocationRequest) Body(body map[string]interface{}) ApiGetCurrentLocationRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentLocationResp, *http.Response, error) {
-	return r.ApiService.GetCurrentExecute(r)
+func (r ApiGetCurrentLocationRequest) Execute() (*GetCurrentLocationResp, *http.Response, error) {
+	return r.ApiService.GetCurrentLocationExecute(r)
 }
 
 /*
-GetCurrent Method for GetCurrent
+GetCurrentLocation Method for GetCurrentLocation
 
 按当前请求来源 IP 获取地理数据。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetCurrentRequest
+ @return ApiGetCurrentLocationRequest
 */
-func (a *LocationServiceService) GetCurrent(ctx context.Context) ApiGetCurrentRequest {
-	return ApiGetCurrentRequest{
+func (a *LocationServiceService) GetCurrentLocation(ctx context.Context) ApiGetCurrentLocationRequest {
+	return ApiGetCurrentLocationRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -71,7 +71,7 @@ func (a *LocationServiceService) GetCurrent(ctx context.Context) ApiGetCurrentRe
 
 // Execute executes the request
 //  @return GetCurrentLocationResp
-func (a *LocationServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentLocationResp, *http.Response, error) {
+func (a *LocationServiceService) GetCurrentLocationExecute(r ApiGetCurrentLocationRequest) (*GetCurrentLocationResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -79,7 +79,7 @@ func (a *LocationServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*Get
 		localVarReturnValue  *GetCurrentLocationResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LocationServiceService.GetCurrent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LocationServiceService.GetCurrentLocation")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

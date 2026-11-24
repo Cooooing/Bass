@@ -19,20 +19,35 @@ var _ MappedNullable = &RenderSpec{}
 
 // RenderSpec RenderSpec 是客户端 Maker 传递的完整渲染参数。
 type RenderSpec struct {
+	// Platform 已确认可用的徽章图标资源 ID。
 	ImageAssetId *string `json:"image_asset_id,omitempty"`
+	// 文字条内容。
 	Text *string `json:"text,omitempty"`
+	// 背景颜色列表。
 	BackgroundColors []string `json:"background_colors,omitempty"`
+	// 文字颜色列表。
 	TextColors []string `json:"text_colors,omitempty"`
+	// 背景渐变方向或角度。
 	BackgroundDirection *string `json:"background_direction,omitempty"`
+	// 文字渐变方向或角度。
 	TextDirection *string `json:"text_direction,omitempty"`
+	// 图标边长。
 	Size *int32 `json:"size,omitempty"`
+	// 图标边距。
 	Border *int32 `json:"border,omitempty"`
+	// 文字条长度。
 	TextBarLength *int32 `json:"text_bar_length,omitempty"`
+	// 文字字号。
 	TextSize *int32 `json:"text_size,omitempty"`
+	// 文字条圆角。
 	TextBarRadius *int32 `json:"text_bar_radius,omitempty"`
+	// 整体缩放比例。
 	Scale *float64 `json:"scale,omitempty"`
+	// 阴影强度。
 	Shadow *float64 `json:"shadow,omitempty"`
+	// 动画时长。
 	AnimationSeconds *float64 `json:"animation_seconds,omitempty"`
+	// Platform 已确认可用的自定义字体资源 ID。
 	FontAssetId *string `json:"font_asset_id,omitempty"`
 }
 

@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Items** | Pointer to [**[]EmojiItem**](EmojiItem.md) |  | [optional] 
+**Id** | Pointer to **string** | 分组 ID。 | [optional] 
+**Name** | Pointer to **string** | 分组名称。 | [optional] 
+**Items** | Pointer to [**[]EmojiItem**](EmojiItem.md) | 分组内可用表情。 | [optional] 
 
 ## Methods
 

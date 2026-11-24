@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Status** | Pointer to [**RespRelationStatus**](RespRelationStatus.md) |  | [optional] 
+**Status** | Pointer to [**RespRelationStatus**](RespRelationStatus.md) | 关系状态 | [optional] 
 
 ## Methods
 

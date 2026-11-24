@@ -17,9 +17,11 @@ import (
 // checks if the ImportEmojiShareResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ImportEmojiShareResp{}
 
-// ImportEmojiShareResp struct for ImportEmojiShareResp
+// ImportEmojiShareResp 响应结果。
 type ImportEmojiShareResp struct {
+	// 新建的导入分组。
 	Group *EmojiGroup `json:"group,omitempty"`
+	// 因资源不可用而跳过的表情数。
 	SkippedCount *int32 `json:"skipped_count,omitempty"`
 }
 

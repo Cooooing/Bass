@@ -22,76 +22,76 @@ import (
 type DomainService interface {
 
 	/*
-	Create Method for Create
+	CreateDomain Method for CreateDomain
 
 	创建领域。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateRequest
+	@return ApiCreateDomainRequest
 	*/
-	Create(ctx context.Context) ApiCreateRequest
+	CreateDomain(ctx context.Context) ApiCreateDomainRequest
 
-	// CreateExecute executes the request
+	// CreateDomainExecute executes the request
 	//  @return CreateDomainResp
-	CreateExecute(r ApiCreateRequest) (*CreateDomainResp, *http.Response, error)
+	CreateDomainExecute(r ApiCreateDomainRequest) (*CreateDomainResp, *http.Response, error)
 
 	/*
-	List Method for List
+	ListDomains Method for ListDomains
 
 	查询领域列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListRequest
+	@return ApiListDomainsRequest
 	*/
-	List(ctx context.Context) ApiListRequest
+	ListDomains(ctx context.Context) ApiListDomainsRequest
 
-	// ListExecute executes the request
+	// ListDomainsExecute executes the request
 	//  @return ListDomainsResp
-	ListExecute(r ApiListRequest) (*ListDomainsResp, *http.Response, error)
+	ListDomainsExecute(r ApiListDomainsRequest) (*ListDomainsResp, *http.Response, error)
 
 	/*
-	Update Method for Update
+	UpdateDomain Method for UpdateDomain
 
 	更新领域。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdateRequest
+	@return ApiUpdateDomainRequest
 	*/
-	Update(ctx context.Context) ApiUpdateRequest
+	UpdateDomain(ctx context.Context) ApiUpdateDomainRequest
 
-	// UpdateExecute executes the request
+	// UpdateDomainExecute executes the request
 	//  @return UpdateDomainResp
-	UpdateExecute(r ApiUpdateRequest) (*UpdateDomainResp, *http.Response, error)
+	UpdateDomainExecute(r ApiUpdateDomainRequest) (*UpdateDomainResp, *http.Response, error)
 }
 
 // DomainServiceService DomainService service
 type DomainServiceService service
 
-type ApiCreateRequest struct {
+type ApiCreateDomainRequest struct {
 	ctx context.Context
 	ApiService DomainService
 	createDomainReq *CreateDomainReq
 }
 
-func (r ApiCreateRequest) CreateDomainReq(createDomainReq CreateDomainReq) ApiCreateRequest {
+func (r ApiCreateDomainRequest) CreateDomainReq(createDomainReq CreateDomainReq) ApiCreateDomainRequest {
 	r.createDomainReq = &createDomainReq
 	return r
 }
 
-func (r ApiCreateRequest) Execute() (*CreateDomainResp, *http.Response, error) {
-	return r.ApiService.CreateExecute(r)
+func (r ApiCreateDomainRequest) Execute() (*CreateDomainResp, *http.Response, error) {
+	return r.ApiService.CreateDomainExecute(r)
 }
 
 /*
-Create Method for Create
+CreateDomain Method for CreateDomain
 
 创建领域。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateRequest
+ @return ApiCreateDomainRequest
 */
-func (a *DomainServiceService) Create(ctx context.Context) ApiCreateRequest {
-	return ApiCreateRequest{
+func (a *DomainServiceService) CreateDomain(ctx context.Context) ApiCreateDomainRequest {
+	return ApiCreateDomainRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -99,7 +99,7 @@ func (a *DomainServiceService) Create(ctx context.Context) ApiCreateRequest {
 
 // Execute executes the request
 //  @return CreateDomainResp
-func (a *DomainServiceService) CreateExecute(r ApiCreateRequest) (*CreateDomainResp, *http.Response, error) {
+func (a *DomainServiceService) CreateDomainExecute(r ApiCreateDomainRequest) (*CreateDomainResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -107,7 +107,7 @@ func (a *DomainServiceService) CreateExecute(r ApiCreateRequest) (*CreateDomainR
 		localVarReturnValue  *CreateDomainResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.Create")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.CreateDomain")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -177,31 +177,31 @@ func (a *DomainServiceService) CreateExecute(r ApiCreateRequest) (*CreateDomainR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListRequest struct {
+type ApiListDomainsRequest struct {
 	ctx context.Context
 	ApiService DomainService
 	listDomainsReq *ListDomainsReq
 }
 
-func (r ApiListRequest) ListDomainsReq(listDomainsReq ListDomainsReq) ApiListRequest {
+func (r ApiListDomainsRequest) ListDomainsReq(listDomainsReq ListDomainsReq) ApiListDomainsRequest {
 	r.listDomainsReq = &listDomainsReq
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListDomainsResp, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
+func (r ApiListDomainsRequest) Execute() (*ListDomainsResp, *http.Response, error) {
+	return r.ApiService.ListDomainsExecute(r)
 }
 
 /*
-List Method for List
+ListDomains Method for ListDomains
 
 查询领域列表。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
+ @return ApiListDomainsRequest
 */
-func (a *DomainServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
+func (a *DomainServiceService) ListDomains(ctx context.Context) ApiListDomainsRequest {
+	return ApiListDomainsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -209,7 +209,7 @@ func (a *DomainServiceService) List(ctx context.Context) ApiListRequest {
 
 // Execute executes the request
 //  @return ListDomainsResp
-func (a *DomainServiceService) ListExecute(r ApiListRequest) (*ListDomainsResp, *http.Response, error) {
+func (a *DomainServiceService) ListDomainsExecute(r ApiListDomainsRequest) (*ListDomainsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -217,7 +217,7 @@ func (a *DomainServiceService) ListExecute(r ApiListRequest) (*ListDomainsResp, 
 		localVarReturnValue  *ListDomainsResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.ListDomains")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -287,31 +287,31 @@ func (a *DomainServiceService) ListExecute(r ApiListRequest) (*ListDomainsResp, 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdateRequest struct {
+type ApiUpdateDomainRequest struct {
 	ctx context.Context
 	ApiService DomainService
 	updateDomainReq *UpdateDomainReq
 }
 
-func (r ApiUpdateRequest) UpdateDomainReq(updateDomainReq UpdateDomainReq) ApiUpdateRequest {
+func (r ApiUpdateDomainRequest) UpdateDomainReq(updateDomainReq UpdateDomainReq) ApiUpdateDomainRequest {
 	r.updateDomainReq = &updateDomainReq
 	return r
 }
 
-func (r ApiUpdateRequest) Execute() (*UpdateDomainResp, *http.Response, error) {
-	return r.ApiService.UpdateExecute(r)
+func (r ApiUpdateDomainRequest) Execute() (*UpdateDomainResp, *http.Response, error) {
+	return r.ApiService.UpdateDomainExecute(r)
 }
 
 /*
-Update Method for Update
+UpdateDomain Method for UpdateDomain
 
 更新领域。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdateRequest
+ @return ApiUpdateDomainRequest
 */
-func (a *DomainServiceService) Update(ctx context.Context) ApiUpdateRequest {
-	return ApiUpdateRequest{
+func (a *DomainServiceService) UpdateDomain(ctx context.Context) ApiUpdateDomainRequest {
+	return ApiUpdateDomainRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -319,7 +319,7 @@ func (a *DomainServiceService) Update(ctx context.Context) ApiUpdateRequest {
 
 // Execute executes the request
 //  @return UpdateDomainResp
-func (a *DomainServiceService) UpdateExecute(r ApiUpdateRequest) (*UpdateDomainResp, *http.Response, error) {
+func (a *DomainServiceService) UpdateDomainExecute(r ApiUpdateDomainRequest) (*UpdateDomainResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -327,7 +327,7 @@ func (a *DomainServiceService) UpdateExecute(r ApiUpdateRequest) (*UpdateDomainR
 		localVarReturnValue  *UpdateDomainResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.Update")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.UpdateDomain")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

@@ -19,6 +19,7 @@ var _ MappedNullable = &UpsertBadgeDraftResp{}
 
 // UpsertBadgeDraftResp Resp 返回保存后的草稿。
 type UpsertBadgeDraftResp struct {
+	// 已保存草稿。
 	Draft *BadgeDraft `json:"draft,omitempty"`
 }
 

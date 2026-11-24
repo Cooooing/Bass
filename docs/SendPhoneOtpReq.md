@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Phone** | **string** |  | 
+**Phone** | **string** | 手机号 | 
 
 ## Methods
 

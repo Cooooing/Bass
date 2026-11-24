@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Collected** | Pointer to **bool** |  | [optional] 
+**Collected** | Pointer to **bool** | 是否已收藏 | [optional] 
 
 ## Methods
 

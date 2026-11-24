@@ -22,356 +22,356 @@ import (
 type ArticleService interface {
 
 	/*
-	AcceptAnswer Method for AcceptAnswer
+	AcceptArticleAnswer Method for AcceptArticleAnswer
 
 	采纳文章回答
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiAcceptAnswerRequest
+	@return ApiAcceptArticleAnswerRequest
 	*/
-	AcceptAnswer(ctx context.Context) ApiAcceptAnswerRequest
+	AcceptArticleAnswer(ctx context.Context) ApiAcceptArticleAnswerRequest
 
-	// AcceptAnswerExecute executes the request
+	// AcceptArticleAnswerExecute executes the request
 	//  @return map[string]interface{}
-	AcceptAnswerExecute(r ApiAcceptAnswerRequest) (map[string]interface{}, *http.Response, error)
+	AcceptArticleAnswerExecute(r ApiAcceptArticleAnswerRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Archive Method for Archive
+	ArchiveArticle Method for ArchiveArticle
 
 	归档文章
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiArchiveRequest
+	@return ApiArchiveArticleRequest
 	*/
-	Archive(ctx context.Context) ApiArchiveRequest
+	ArchiveArticle(ctx context.Context) ApiArchiveArticleRequest
 
-	// ArchiveExecute executes the request
+	// ArchiveArticleExecute executes the request
 	//  @return map[string]interface{}
-	ArchiveExecute(r ApiArchiveRequest) (map[string]interface{}, *http.Response, error)
+	ArchiveArticleExecute(r ApiArchiveArticleRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	CancelPublish Method for CancelPublish
+	CancelPublishArticle Method for CancelPublishArticle
 
 	取消定时发布
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCancelPublishRequest
+	@return ApiCancelPublishArticleRequest
 	*/
-	CancelPublish(ctx context.Context) ApiCancelPublishRequest
+	CancelPublishArticle(ctx context.Context) ApiCancelPublishArticleRequest
 
-	// CancelPublishExecute executes the request
+	// CancelPublishArticleExecute executes the request
 	//  @return map[string]interface{}
-	CancelPublishExecute(r ApiCancelPublishRequest) (map[string]interface{}, *http.Response, error)
+	CancelPublishArticleExecute(r ApiCancelPublishArticleRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Collect Method for Collect
+	CollectArticle Method for CollectArticle
 
 	收藏文章
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCollectRequest
+	@return ApiCollectArticleRequest
 	*/
-	Collect(ctx context.Context) ApiCollectRequest
+	CollectArticle(ctx context.Context) ApiCollectArticleRequest
 
-	// CollectExecute executes the request
+	// CollectArticleExecute executes the request
 	//  @return CollectArticleResp
-	CollectExecute(r ApiCollectRequest) (*CollectArticleResp, *http.Response, error)
+	CollectArticleExecute(r ApiCollectArticleRequest) (*CollectArticleResp, *http.Response, error)
 
 	/*
-	CountCollected Method for CountCollected
+	CountCollectedArticles Method for CountCollectedArticles
 
 	统计当前账号收藏的文章数量。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCountCollectedRequest
+	@return ApiCountCollectedArticlesRequest
 	*/
-	CountCollected(ctx context.Context) ApiCountCollectedRequest
+	CountCollectedArticles(ctx context.Context) ApiCountCollectedArticlesRequest
 
-	// CountCollectedExecute executes the request
+	// CountCollectedArticlesExecute executes the request
 	//  @return CountCollectedArticlesResp
-	CountCollectedExecute(r ApiCountCollectedRequest) (*CountCollectedArticlesResp, *http.Response, error)
+	CountCollectedArticlesExecute(r ApiCountCollectedArticlesRequest) (*CountCollectedArticlesResp, *http.Response, error)
 
 	/*
-	CreateDraft Method for CreateDraft
+	CreateDraftArticle Method for CreateDraftArticle
 
 	创建文章草稿
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateDraftRequest
+	@return ApiCreateDraftArticleRequest
 	*/
-	CreateDraft(ctx context.Context) ApiCreateDraftRequest
+	CreateDraftArticle(ctx context.Context) ApiCreateDraftArticleRequest
 
-	// CreateDraftExecute executes the request
+	// CreateDraftArticleExecute executes the request
 	//  @return CreateDraftArticleResp
-	CreateDraftExecute(r ApiCreateDraftRequest) (*CreateDraftArticleResp, *http.Response, error)
+	CreateDraftArticleExecute(r ApiCreateDraftArticleRequest) (*CreateDraftArticleResp, *http.Response, error)
 
 	/*
-	DiscardDraft Method for DiscardDraft
+	DiscardDraftArticle Method for DiscardDraftArticle
 
 	丢弃文章草稿
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiDiscardDraftRequest
+	@return ApiDiscardDraftArticleRequest
 	*/
-	DiscardDraft(ctx context.Context) ApiDiscardDraftRequest
+	DiscardDraftArticle(ctx context.Context) ApiDiscardDraftArticleRequest
 
-	// DiscardDraftExecute executes the request
+	// DiscardDraftArticleExecute executes the request
 	//  @return map[string]interface{}
-	DiscardDraftExecute(r ApiDiscardDraftRequest) (map[string]interface{}, *http.Response, error)
+	DiscardDraftArticleExecute(r ApiDiscardDraftArticleRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	EnterLottery Method for EnterLottery
+	EnterArticleLottery Method for EnterArticleLottery
 
 	报名或撤销抽奖报名。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiEnterLotteryRequest
+	@return ApiEnterArticleLotteryRequest
 	*/
-	EnterLottery(ctx context.Context) ApiEnterLotteryRequest
+	EnterArticleLottery(ctx context.Context) ApiEnterArticleLotteryRequest
 
-	// EnterLotteryExecute executes the request
+	// EnterArticleLotteryExecute executes the request
 	//  @return map[string]interface{}
-	EnterLotteryExecute(r ApiEnterLotteryRequest) (map[string]interface{}, *http.Response, error)
+	EnterArticleLotteryExecute(r ApiEnterArticleLotteryRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Get Method for Get
+	GetArticle Method for GetArticle
 
 	查询文章详情
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetRequest
+	@return ApiGetArticleRequest
 	*/
-	Get(ctx context.Context) ApiGetRequest
+	GetArticle(ctx context.Context) ApiGetArticleRequest
 
-	// GetExecute executes the request
+	// GetArticleExecute executes the request
 	//  @return GetArticleResp
-	GetExecute(r ApiGetRequest) (*GetArticleResp, *http.Response, error)
+	GetArticleExecute(r ApiGetArticleRequest) (*GetArticleResp, *http.Response, error)
 
 	/*
-	Like Method for Like
+	LikeArticle Method for LikeArticle
 
 	点赞文章
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiLikeRequest
+	@return ApiLikeArticleRequest
 	*/
-	Like(ctx context.Context) ApiLikeRequest
+	LikeArticle(ctx context.Context) ApiLikeArticleRequest
 
-	// LikeExecute executes the request
+	// LikeArticleExecute executes the request
 	//  @return LikeArticleResp
-	LikeExecute(r ApiLikeRequest) (*LikeArticleResp, *http.Response, error)
+	LikeArticleExecute(r ApiLikeArticleRequest) (*LikeArticleResp, *http.Response, error)
 
 	/*
-	List Method for List
+	ListArticles Method for ListArticles
 
 	查询文章列表
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListRequest
+	@return ApiListArticlesRequest
 	*/
-	List(ctx context.Context) ApiListRequest
+	ListArticles(ctx context.Context) ApiListArticlesRequest
 
-	// ListExecute executes the request
+	// ListArticlesExecute executes the request
 	//  @return ListArticlesResp
-	ListExecute(r ApiListRequest) (*ListArticlesResp, *http.Response, error)
+	ListArticlesExecute(r ApiListArticlesRequest) (*ListArticlesResp, *http.Response, error)
 
 	/*
-	ListFollowing Method for ListFollowing
+	ListFollowingArticles Method for ListFollowingArticles
 
 	查询当前账号关注作者发布的文章。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListFollowingRequest
+	@return ApiListFollowingArticlesRequest
 	*/
-	ListFollowing(ctx context.Context) ApiListFollowingRequest
+	ListFollowingArticles(ctx context.Context) ApiListFollowingArticlesRequest
 
-	// ListFollowingExecute executes the request
+	// ListFollowingArticlesExecute executes the request
 	//  @return ListFollowingArticlesResp
-	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingArticlesResp, *http.Response, error)
+	ListFollowingArticlesExecute(r ApiListFollowingArticlesRequest) (*ListFollowingArticlesResp, *http.Response, error)
 
 	/*
-	ListNearby Method for ListNearby
+	ListNearbyArticles Method for ListNearbyArticles
 
 	查询当前账号所在城市发布的文章。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListNearbyRequest
+	@return ApiListNearbyArticlesRequest
 	*/
-	ListNearby(ctx context.Context) ApiListNearbyRequest
+	ListNearbyArticles(ctx context.Context) ApiListNearbyArticlesRequest
 
-	// ListNearbyExecute executes the request
+	// ListNearbyArticlesExecute executes the request
 	//  @return ListNearbyArticlesResp
-	ListNearbyExecute(r ApiListNearbyRequest) (*ListNearbyArticlesResp, *http.Response, error)
+	ListNearbyArticlesExecute(r ApiListNearbyArticlesRequest) (*ListNearbyArticlesResp, *http.Response, error)
 
 	/*
-	PageCollected Method for PageCollected
-
-	查询当前账号收藏的文章。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPageCollectedRequest
-	*/
-	PageCollected(ctx context.Context) ApiPageCollectedRequest
-
-	// PageCollectedExecute executes the request
-	//  @return PageCollectedArticlesResp
-	PageCollectedExecute(r ApiPageCollectedRequest) (*PageCollectedArticlesResp, *http.Response, error)
-
-	/*
-	PageViewHistory Method for PageViewHistory
+	PageArticleViewHistory Method for PageArticleViewHistory
 
 	查询当前账号的浏览历史。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPageViewHistoryRequest
+	@return ApiPageArticleViewHistoryRequest
 	*/
-	PageViewHistory(ctx context.Context) ApiPageViewHistoryRequest
+	PageArticleViewHistory(ctx context.Context) ApiPageArticleViewHistoryRequest
 
-	// PageViewHistoryExecute executes the request
+	// PageArticleViewHistoryExecute executes the request
 	//  @return PageArticleViewHistoryResp
-	PageViewHistoryExecute(r ApiPageViewHistoryRequest) (*PageArticleViewHistoryResp, *http.Response, error)
+	PageArticleViewHistoryExecute(r ApiPageArticleViewHistoryRequest) (*PageArticleViewHistoryResp, *http.Response, error)
 
 	/*
-	PageWatched Method for PageWatched
+	PageCollectedArticles Method for PageCollectedArticles
+
+	查询当前账号收藏的文章。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiPageCollectedArticlesRequest
+	*/
+	PageCollectedArticles(ctx context.Context) ApiPageCollectedArticlesRequest
+
+	// PageCollectedArticlesExecute executes the request
+	//  @return PageCollectedArticlesResp
+	PageCollectedArticlesExecute(r ApiPageCollectedArticlesRequest) (*PageCollectedArticlesResp, *http.Response, error)
+
+	/*
+	PageWatchedArticles Method for PageWatchedArticles
 
 	查询当前账号关注的文章。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPageWatchedRequest
+	@return ApiPageWatchedArticlesRequest
 	*/
-	PageWatched(ctx context.Context) ApiPageWatchedRequest
+	PageWatchedArticles(ctx context.Context) ApiPageWatchedArticlesRequest
 
-	// PageWatchedExecute executes the request
+	// PageWatchedArticlesExecute executes the request
 	//  @return PageWatchedArticlesResp
-	PageWatchedExecute(r ApiPageWatchedRequest) (*PageWatchedArticlesResp, *http.Response, error)
+	PageWatchedArticlesExecute(r ApiPageWatchedArticlesRequest) (*PageWatchedArticlesResp, *http.Response, error)
 
 	/*
-	Publish Method for Publish
+	PublishArticle Method for PublishArticle
 
 	发布文章
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiPublishRequest
+	@return ApiPublishArticleRequest
 	*/
-	Publish(ctx context.Context) ApiPublishRequest
+	PublishArticle(ctx context.Context) ApiPublishArticleRequest
 
-	// PublishExecute executes the request
+	// PublishArticleExecute executes the request
 	//  @return map[string]interface{}
-	PublishExecute(r ApiPublishRequest) (map[string]interface{}, *http.Response, error)
+	PublishArticleExecute(r ApiPublishArticleRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Reward Method for Reward
+	RewardArticle Method for RewardArticle
 
 	打赏文章
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiRewardRequest
+	@return ApiRewardArticleRequest
 	*/
-	Reward(ctx context.Context) ApiRewardRequest
+	RewardArticle(ctx context.Context) ApiRewardArticleRequest
 
-	// RewardExecute executes the request
+	// RewardArticleExecute executes the request
 	//  @return RewardArticleResp
-	RewardExecute(r ApiRewardRequest) (*RewardArticleResp, *http.Response, error)
+	RewardArticleExecute(r ApiRewardArticleRequest) (*RewardArticleResp, *http.Response, error)
 
 	/*
-	SetPinnedComment Method for SetPinnedComment
+	SetPinnedArticleComment Method for SetPinnedArticleComment
 
 	设置或取消当前账号文章的置顶评论。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiSetPinnedCommentRequest
+	@return ApiSetPinnedArticleCommentRequest
 	*/
-	SetPinnedComment(ctx context.Context) ApiSetPinnedCommentRequest
+	SetPinnedArticleComment(ctx context.Context) ApiSetPinnedArticleCommentRequest
 
-	// SetPinnedCommentExecute executes the request
+	// SetPinnedArticleCommentExecute executes the request
 	//  @return map[string]interface{}
-	SetPinnedCommentExecute(r ApiSetPinnedCommentRequest) (map[string]interface{}, *http.Response, error)
+	SetPinnedArticleCommentExecute(r ApiSetPinnedArticleCommentRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Thank Method for Thank
+	ThankArticle Method for ThankArticle
 
 	感谢文章，确认后不可撤销。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiThankRequest
+	@return ApiThankArticleRequest
 	*/
-	Thank(ctx context.Context) ApiThankRequest
+	ThankArticle(ctx context.Context) ApiThankArticleRequest
 
-	// ThankExecute executes the request
+	// ThankArticleExecute executes the request
 	//  @return ThankArticleResp
-	ThankExecute(r ApiThankRequest) (*ThankArticleResp, *http.Response, error)
+	ThankArticleExecute(r ApiThankArticleRequest) (*ThankArticleResp, *http.Response, error)
 
 	/*
-	UpdateDraft Method for UpdateDraft
+	UpdateDraftArticle Method for UpdateDraftArticle
 
 	编辑文章草稿
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdateDraftRequest
+	@return ApiUpdateDraftArticleRequest
 	*/
-	UpdateDraft(ctx context.Context) ApiUpdateDraftRequest
+	UpdateDraftArticle(ctx context.Context) ApiUpdateDraftArticleRequest
 
-	// UpdateDraftExecute executes the request
+	// UpdateDraftArticleExecute executes the request
 	//  @return UpdateDraftArticleResp
-	UpdateDraftExecute(r ApiUpdateDraftRequest) (*UpdateDraftArticleResp, *http.Response, error)
+	UpdateDraftArticleExecute(r ApiUpdateDraftArticleRequest) (*UpdateDraftArticleResp, *http.Response, error)
 
 	/*
-	VotePoll Method for VotePoll
+	VoteArticlePoll Method for VoteArticlePoll
 
 	提交一次不可修改的文章投票。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiVotePollRequest
+	@return ApiVoteArticlePollRequest
 	*/
-	VotePoll(ctx context.Context) ApiVotePollRequest
+	VoteArticlePoll(ctx context.Context) ApiVoteArticlePollRequest
 
-	// VotePollExecute executes the request
+	// VoteArticlePollExecute executes the request
 	//  @return map[string]interface{}
-	VotePollExecute(r ApiVotePollRequest) (map[string]interface{}, *http.Response, error)
+	VoteArticlePollExecute(r ApiVoteArticlePollRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Watch Method for Watch
+	WatchArticle Method for WatchArticle
 
 	关注文章
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiWatchRequest
+	@return ApiWatchArticleRequest
 	*/
-	Watch(ctx context.Context) ApiWatchRequest
+	WatchArticle(ctx context.Context) ApiWatchArticleRequest
 
-	// WatchExecute executes the request
+	// WatchArticleExecute executes the request
 	//  @return WatchArticleResp
-	WatchExecute(r ApiWatchRequest) (*WatchArticleResp, *http.Response, error)
+	WatchArticleExecute(r ApiWatchArticleRequest) (*WatchArticleResp, *http.Response, error)
 }
 
 // ArticleServiceService ArticleService service
 type ArticleServiceService service
 
-type ApiAcceptAnswerRequest struct {
+type ApiAcceptArticleAnswerRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	acceptArticleAnswerReq *AcceptArticleAnswerReq
 }
 
-func (r ApiAcceptAnswerRequest) AcceptArticleAnswerReq(acceptArticleAnswerReq AcceptArticleAnswerReq) ApiAcceptAnswerRequest {
+func (r ApiAcceptArticleAnswerRequest) AcceptArticleAnswerReq(acceptArticleAnswerReq AcceptArticleAnswerReq) ApiAcceptArticleAnswerRequest {
 	r.acceptArticleAnswerReq = &acceptArticleAnswerReq
 	return r
 }
 
-func (r ApiAcceptAnswerRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.AcceptAnswerExecute(r)
+func (r ApiAcceptArticleAnswerRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.AcceptArticleAnswerExecute(r)
 }
 
 /*
-AcceptAnswer Method for AcceptAnswer
+AcceptArticleAnswer Method for AcceptArticleAnswer
 
 采纳文章回答
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiAcceptAnswerRequest
+ @return ApiAcceptArticleAnswerRequest
 */
-func (a *ArticleServiceService) AcceptAnswer(ctx context.Context) ApiAcceptAnswerRequest {
-	return ApiAcceptAnswerRequest{
+func (a *ArticleServiceService) AcceptArticleAnswer(ctx context.Context) ApiAcceptArticleAnswerRequest {
+	return ApiAcceptArticleAnswerRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -379,7 +379,7 @@ func (a *ArticleServiceService) AcceptAnswer(ctx context.Context) ApiAcceptAnswe
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) AcceptAnswerExecute(r ApiAcceptAnswerRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) AcceptArticleAnswerExecute(r ApiAcceptArticleAnswerRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -387,7 +387,7 @@ func (a *ArticleServiceService) AcceptAnswerExecute(r ApiAcceptAnswerRequest) (m
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.AcceptAnswer")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.AcceptArticleAnswer")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -457,31 +457,31 @@ func (a *ArticleServiceService) AcceptAnswerExecute(r ApiAcceptAnswerRequest) (m
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiArchiveRequest struct {
+type ApiArchiveArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	archiveArticleReq *ArchiveArticleReq
 }
 
-func (r ApiArchiveRequest) ArchiveArticleReq(archiveArticleReq ArchiveArticleReq) ApiArchiveRequest {
+func (r ApiArchiveArticleRequest) ArchiveArticleReq(archiveArticleReq ArchiveArticleReq) ApiArchiveArticleRequest {
 	r.archiveArticleReq = &archiveArticleReq
 	return r
 }
 
-func (r ApiArchiveRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.ArchiveExecute(r)
+func (r ApiArchiveArticleRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.ArchiveArticleExecute(r)
 }
 
 /*
-Archive Method for Archive
+ArchiveArticle Method for ArchiveArticle
 
 归档文章
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiArchiveRequest
+ @return ApiArchiveArticleRequest
 */
-func (a *ArticleServiceService) Archive(ctx context.Context) ApiArchiveRequest {
-	return ApiArchiveRequest{
+func (a *ArticleServiceService) ArchiveArticle(ctx context.Context) ApiArchiveArticleRequest {
+	return ApiArchiveArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -489,7 +489,7 @@ func (a *ArticleServiceService) Archive(ctx context.Context) ApiArchiveRequest {
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) ArchiveExecute(r ApiArchiveRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) ArchiveArticleExecute(r ApiArchiveArticleRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -497,7 +497,7 @@ func (a *ArticleServiceService) ArchiveExecute(r ApiArchiveRequest) (map[string]
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Archive")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ArchiveArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -567,31 +567,31 @@ func (a *ArticleServiceService) ArchiveExecute(r ApiArchiveRequest) (map[string]
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCancelPublishRequest struct {
+type ApiCancelPublishArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	cancelPublishArticleReq *CancelPublishArticleReq
 }
 
-func (r ApiCancelPublishRequest) CancelPublishArticleReq(cancelPublishArticleReq CancelPublishArticleReq) ApiCancelPublishRequest {
+func (r ApiCancelPublishArticleRequest) CancelPublishArticleReq(cancelPublishArticleReq CancelPublishArticleReq) ApiCancelPublishArticleRequest {
 	r.cancelPublishArticleReq = &cancelPublishArticleReq
 	return r
 }
 
-func (r ApiCancelPublishRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.CancelPublishExecute(r)
+func (r ApiCancelPublishArticleRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.CancelPublishArticleExecute(r)
 }
 
 /*
-CancelPublish Method for CancelPublish
+CancelPublishArticle Method for CancelPublishArticle
 
 取消定时发布
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCancelPublishRequest
+ @return ApiCancelPublishArticleRequest
 */
-func (a *ArticleServiceService) CancelPublish(ctx context.Context) ApiCancelPublishRequest {
-	return ApiCancelPublishRequest{
+func (a *ArticleServiceService) CancelPublishArticle(ctx context.Context) ApiCancelPublishArticleRequest {
+	return ApiCancelPublishArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -599,7 +599,7 @@ func (a *ArticleServiceService) CancelPublish(ctx context.Context) ApiCancelPubl
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) CancelPublishExecute(r ApiCancelPublishRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) CancelPublishArticleExecute(r ApiCancelPublishArticleRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -607,7 +607,7 @@ func (a *ArticleServiceService) CancelPublishExecute(r ApiCancelPublishRequest) 
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CancelPublish")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CancelPublishArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -677,31 +677,31 @@ func (a *ArticleServiceService) CancelPublishExecute(r ApiCancelPublishRequest) 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCollectRequest struct {
+type ApiCollectArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	collectArticleReq *CollectArticleReq
 }
 
-func (r ApiCollectRequest) CollectArticleReq(collectArticleReq CollectArticleReq) ApiCollectRequest {
+func (r ApiCollectArticleRequest) CollectArticleReq(collectArticleReq CollectArticleReq) ApiCollectArticleRequest {
 	r.collectArticleReq = &collectArticleReq
 	return r
 }
 
-func (r ApiCollectRequest) Execute() (*CollectArticleResp, *http.Response, error) {
-	return r.ApiService.CollectExecute(r)
+func (r ApiCollectArticleRequest) Execute() (*CollectArticleResp, *http.Response, error) {
+	return r.ApiService.CollectArticleExecute(r)
 }
 
 /*
-Collect Method for Collect
+CollectArticle Method for CollectArticle
 
 收藏文章
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCollectRequest
+ @return ApiCollectArticleRequest
 */
-func (a *ArticleServiceService) Collect(ctx context.Context) ApiCollectRequest {
-	return ApiCollectRequest{
+func (a *ArticleServiceService) CollectArticle(ctx context.Context) ApiCollectArticleRequest {
+	return ApiCollectArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -709,7 +709,7 @@ func (a *ArticleServiceService) Collect(ctx context.Context) ApiCollectRequest {
 
 // Execute executes the request
 //  @return CollectArticleResp
-func (a *ArticleServiceService) CollectExecute(r ApiCollectRequest) (*CollectArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) CollectArticleExecute(r ApiCollectArticleRequest) (*CollectArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -717,7 +717,7 @@ func (a *ArticleServiceService) CollectExecute(r ApiCollectRequest) (*CollectArt
 		localVarReturnValue  *CollectArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Collect")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CollectArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -787,31 +787,31 @@ func (a *ArticleServiceService) CollectExecute(r ApiCollectRequest) (*CollectArt
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCountCollectedRequest struct {
+type ApiCountCollectedArticlesRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	body *map[string]interface{}
 }
 
-func (r ApiCountCollectedRequest) Body(body map[string]interface{}) ApiCountCollectedRequest {
+func (r ApiCountCollectedArticlesRequest) Body(body map[string]interface{}) ApiCountCollectedArticlesRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiCountCollectedRequest) Execute() (*CountCollectedArticlesResp, *http.Response, error) {
-	return r.ApiService.CountCollectedExecute(r)
+func (r ApiCountCollectedArticlesRequest) Execute() (*CountCollectedArticlesResp, *http.Response, error) {
+	return r.ApiService.CountCollectedArticlesExecute(r)
 }
 
 /*
-CountCollected Method for CountCollected
+CountCollectedArticles Method for CountCollectedArticles
 
 统计当前账号收藏的文章数量。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCountCollectedRequest
+ @return ApiCountCollectedArticlesRequest
 */
-func (a *ArticleServiceService) CountCollected(ctx context.Context) ApiCountCollectedRequest {
-	return ApiCountCollectedRequest{
+func (a *ArticleServiceService) CountCollectedArticles(ctx context.Context) ApiCountCollectedArticlesRequest {
+	return ApiCountCollectedArticlesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -819,7 +819,7 @@ func (a *ArticleServiceService) CountCollected(ctx context.Context) ApiCountColl
 
 // Execute executes the request
 //  @return CountCollectedArticlesResp
-func (a *ArticleServiceService) CountCollectedExecute(r ApiCountCollectedRequest) (*CountCollectedArticlesResp, *http.Response, error) {
+func (a *ArticleServiceService) CountCollectedArticlesExecute(r ApiCountCollectedArticlesRequest) (*CountCollectedArticlesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -827,7 +827,7 @@ func (a *ArticleServiceService) CountCollectedExecute(r ApiCountCollectedRequest
 		localVarReturnValue  *CountCollectedArticlesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CountCollected")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CountCollectedArticles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -897,31 +897,31 @@ func (a *ArticleServiceService) CountCollectedExecute(r ApiCountCollectedRequest
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCreateDraftRequest struct {
+type ApiCreateDraftArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	createDraftArticleReq *CreateDraftArticleReq
 }
 
-func (r ApiCreateDraftRequest) CreateDraftArticleReq(createDraftArticleReq CreateDraftArticleReq) ApiCreateDraftRequest {
+func (r ApiCreateDraftArticleRequest) CreateDraftArticleReq(createDraftArticleReq CreateDraftArticleReq) ApiCreateDraftArticleRequest {
 	r.createDraftArticleReq = &createDraftArticleReq
 	return r
 }
 
-func (r ApiCreateDraftRequest) Execute() (*CreateDraftArticleResp, *http.Response, error) {
-	return r.ApiService.CreateDraftExecute(r)
+func (r ApiCreateDraftArticleRequest) Execute() (*CreateDraftArticleResp, *http.Response, error) {
+	return r.ApiService.CreateDraftArticleExecute(r)
 }
 
 /*
-CreateDraft Method for CreateDraft
+CreateDraftArticle Method for CreateDraftArticle
 
 创建文章草稿
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateDraftRequest
+ @return ApiCreateDraftArticleRequest
 */
-func (a *ArticleServiceService) CreateDraft(ctx context.Context) ApiCreateDraftRequest {
-	return ApiCreateDraftRequest{
+func (a *ArticleServiceService) CreateDraftArticle(ctx context.Context) ApiCreateDraftArticleRequest {
+	return ApiCreateDraftArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -929,7 +929,7 @@ func (a *ArticleServiceService) CreateDraft(ctx context.Context) ApiCreateDraftR
 
 // Execute executes the request
 //  @return CreateDraftArticleResp
-func (a *ArticleServiceService) CreateDraftExecute(r ApiCreateDraftRequest) (*CreateDraftArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) CreateDraftArticleExecute(r ApiCreateDraftArticleRequest) (*CreateDraftArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -937,7 +937,7 @@ func (a *ArticleServiceService) CreateDraftExecute(r ApiCreateDraftRequest) (*Cr
 		localVarReturnValue  *CreateDraftArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CreateDraft")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.CreateDraftArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1007,31 +1007,31 @@ func (a *ArticleServiceService) CreateDraftExecute(r ApiCreateDraftRequest) (*Cr
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiDiscardDraftRequest struct {
+type ApiDiscardDraftArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	discardDraftArticleReq *DiscardDraftArticleReq
 }
 
-func (r ApiDiscardDraftRequest) DiscardDraftArticleReq(discardDraftArticleReq DiscardDraftArticleReq) ApiDiscardDraftRequest {
+func (r ApiDiscardDraftArticleRequest) DiscardDraftArticleReq(discardDraftArticleReq DiscardDraftArticleReq) ApiDiscardDraftArticleRequest {
 	r.discardDraftArticleReq = &discardDraftArticleReq
 	return r
 }
 
-func (r ApiDiscardDraftRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.DiscardDraftExecute(r)
+func (r ApiDiscardDraftArticleRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.DiscardDraftArticleExecute(r)
 }
 
 /*
-DiscardDraft Method for DiscardDraft
+DiscardDraftArticle Method for DiscardDraftArticle
 
 丢弃文章草稿
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiDiscardDraftRequest
+ @return ApiDiscardDraftArticleRequest
 */
-func (a *ArticleServiceService) DiscardDraft(ctx context.Context) ApiDiscardDraftRequest {
-	return ApiDiscardDraftRequest{
+func (a *ArticleServiceService) DiscardDraftArticle(ctx context.Context) ApiDiscardDraftArticleRequest {
+	return ApiDiscardDraftArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1039,7 +1039,7 @@ func (a *ArticleServiceService) DiscardDraft(ctx context.Context) ApiDiscardDraf
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) DiscardDraftExecute(r ApiDiscardDraftRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) DiscardDraftArticleExecute(r ApiDiscardDraftArticleRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1047,7 +1047,7 @@ func (a *ArticleServiceService) DiscardDraftExecute(r ApiDiscardDraftRequest) (m
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.DiscardDraft")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.DiscardDraftArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1117,31 +1117,31 @@ func (a *ArticleServiceService) DiscardDraftExecute(r ApiDiscardDraftRequest) (m
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiEnterLotteryRequest struct {
+type ApiEnterArticleLotteryRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	enterArticleLotteryReq *EnterArticleLotteryReq
 }
 
-func (r ApiEnterLotteryRequest) EnterArticleLotteryReq(enterArticleLotteryReq EnterArticleLotteryReq) ApiEnterLotteryRequest {
+func (r ApiEnterArticleLotteryRequest) EnterArticleLotteryReq(enterArticleLotteryReq EnterArticleLotteryReq) ApiEnterArticleLotteryRequest {
 	r.enterArticleLotteryReq = &enterArticleLotteryReq
 	return r
 }
 
-func (r ApiEnterLotteryRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.EnterLotteryExecute(r)
+func (r ApiEnterArticleLotteryRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.EnterArticleLotteryExecute(r)
 }
 
 /*
-EnterLottery Method for EnterLottery
+EnterArticleLottery Method for EnterArticleLottery
 
 报名或撤销抽奖报名。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiEnterLotteryRequest
+ @return ApiEnterArticleLotteryRequest
 */
-func (a *ArticleServiceService) EnterLottery(ctx context.Context) ApiEnterLotteryRequest {
-	return ApiEnterLotteryRequest{
+func (a *ArticleServiceService) EnterArticleLottery(ctx context.Context) ApiEnterArticleLotteryRequest {
+	return ApiEnterArticleLotteryRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1149,7 +1149,7 @@ func (a *ArticleServiceService) EnterLottery(ctx context.Context) ApiEnterLotter
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) EnterLotteryExecute(r ApiEnterLotteryRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) EnterArticleLotteryExecute(r ApiEnterArticleLotteryRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1157,7 +1157,7 @@ func (a *ArticleServiceService) EnterLotteryExecute(r ApiEnterLotteryRequest) (m
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.EnterLottery")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.EnterArticleLottery")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1227,31 +1227,31 @@ func (a *ArticleServiceService) EnterLotteryExecute(r ApiEnterLotteryRequest) (m
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetRequest struct {
+type ApiGetArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	getArticleReq *GetArticleReq
 }
 
-func (r ApiGetRequest) GetArticleReq(getArticleReq GetArticleReq) ApiGetRequest {
+func (r ApiGetArticleRequest) GetArticleReq(getArticleReq GetArticleReq) ApiGetArticleRequest {
 	r.getArticleReq = &getArticleReq
 	return r
 }
 
-func (r ApiGetRequest) Execute() (*GetArticleResp, *http.Response, error) {
-	return r.ApiService.GetExecute(r)
+func (r ApiGetArticleRequest) Execute() (*GetArticleResp, *http.Response, error) {
+	return r.ApiService.GetArticleExecute(r)
 }
 
 /*
-Get Method for Get
+GetArticle Method for GetArticle
 
 查询文章详情
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetRequest
+ @return ApiGetArticleRequest
 */
-func (a *ArticleServiceService) Get(ctx context.Context) ApiGetRequest {
-	return ApiGetRequest{
+func (a *ArticleServiceService) GetArticle(ctx context.Context) ApiGetArticleRequest {
+	return ApiGetArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1259,7 +1259,7 @@ func (a *ArticleServiceService) Get(ctx context.Context) ApiGetRequest {
 
 // Execute executes the request
 //  @return GetArticleResp
-func (a *ArticleServiceService) GetExecute(r ApiGetRequest) (*GetArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) GetArticleExecute(r ApiGetArticleRequest) (*GetArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1267,7 +1267,7 @@ func (a *ArticleServiceService) GetExecute(r ApiGetRequest) (*GetArticleResp, *h
 		localVarReturnValue  *GetArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Get")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.GetArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1337,31 +1337,31 @@ func (a *ArticleServiceService) GetExecute(r ApiGetRequest) (*GetArticleResp, *h
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiLikeRequest struct {
+type ApiLikeArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	likeArticleReq *LikeArticleReq
 }
 
-func (r ApiLikeRequest) LikeArticleReq(likeArticleReq LikeArticleReq) ApiLikeRequest {
+func (r ApiLikeArticleRequest) LikeArticleReq(likeArticleReq LikeArticleReq) ApiLikeArticleRequest {
 	r.likeArticleReq = &likeArticleReq
 	return r
 }
 
-func (r ApiLikeRequest) Execute() (*LikeArticleResp, *http.Response, error) {
-	return r.ApiService.LikeExecute(r)
+func (r ApiLikeArticleRequest) Execute() (*LikeArticleResp, *http.Response, error) {
+	return r.ApiService.LikeArticleExecute(r)
 }
 
 /*
-Like Method for Like
+LikeArticle Method for LikeArticle
 
 点赞文章
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiLikeRequest
+ @return ApiLikeArticleRequest
 */
-func (a *ArticleServiceService) Like(ctx context.Context) ApiLikeRequest {
-	return ApiLikeRequest{
+func (a *ArticleServiceService) LikeArticle(ctx context.Context) ApiLikeArticleRequest {
+	return ApiLikeArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1369,7 +1369,7 @@ func (a *ArticleServiceService) Like(ctx context.Context) ApiLikeRequest {
 
 // Execute executes the request
 //  @return LikeArticleResp
-func (a *ArticleServiceService) LikeExecute(r ApiLikeRequest) (*LikeArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) LikeArticleExecute(r ApiLikeArticleRequest) (*LikeArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1377,7 +1377,7 @@ func (a *ArticleServiceService) LikeExecute(r ApiLikeRequest) (*LikeArticleResp,
 		localVarReturnValue  *LikeArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Like")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.LikeArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1447,31 +1447,31 @@ func (a *ArticleServiceService) LikeExecute(r ApiLikeRequest) (*LikeArticleResp,
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListRequest struct {
+type ApiListArticlesRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	listArticlesReq *ListArticlesReq
 }
 
-func (r ApiListRequest) ListArticlesReq(listArticlesReq ListArticlesReq) ApiListRequest {
+func (r ApiListArticlesRequest) ListArticlesReq(listArticlesReq ListArticlesReq) ApiListArticlesRequest {
 	r.listArticlesReq = &listArticlesReq
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListArticlesResp, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
+func (r ApiListArticlesRequest) Execute() (*ListArticlesResp, *http.Response, error) {
+	return r.ApiService.ListArticlesExecute(r)
 }
 
 /*
-List Method for List
+ListArticles Method for ListArticles
 
 查询文章列表
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
+ @return ApiListArticlesRequest
 */
-func (a *ArticleServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
+func (a *ArticleServiceService) ListArticles(ctx context.Context) ApiListArticlesRequest {
+	return ApiListArticlesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1479,7 +1479,7 @@ func (a *ArticleServiceService) List(ctx context.Context) ApiListRequest {
 
 // Execute executes the request
 //  @return ListArticlesResp
-func (a *ArticleServiceService) ListExecute(r ApiListRequest) (*ListArticlesResp, *http.Response, error) {
+func (a *ArticleServiceService) ListArticlesExecute(r ApiListArticlesRequest) (*ListArticlesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1487,7 +1487,7 @@ func (a *ArticleServiceService) ListExecute(r ApiListRequest) (*ListArticlesResp
 		localVarReturnValue  *ListArticlesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ListArticles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1557,31 +1557,31 @@ func (a *ArticleServiceService) ListExecute(r ApiListRequest) (*ListArticlesResp
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListFollowingRequest struct {
+type ApiListFollowingArticlesRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	listFollowingArticlesReq *ListFollowingArticlesReq
 }
 
-func (r ApiListFollowingRequest) ListFollowingArticlesReq(listFollowingArticlesReq ListFollowingArticlesReq) ApiListFollowingRequest {
+func (r ApiListFollowingArticlesRequest) ListFollowingArticlesReq(listFollowingArticlesReq ListFollowingArticlesReq) ApiListFollowingArticlesRequest {
 	r.listFollowingArticlesReq = &listFollowingArticlesReq
 	return r
 }
 
-func (r ApiListFollowingRequest) Execute() (*ListFollowingArticlesResp, *http.Response, error) {
-	return r.ApiService.ListFollowingExecute(r)
+func (r ApiListFollowingArticlesRequest) Execute() (*ListFollowingArticlesResp, *http.Response, error) {
+	return r.ApiService.ListFollowingArticlesExecute(r)
 }
 
 /*
-ListFollowing Method for ListFollowing
+ListFollowingArticles Method for ListFollowingArticles
 
 查询当前账号关注作者发布的文章。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListFollowingRequest
+ @return ApiListFollowingArticlesRequest
 */
-func (a *ArticleServiceService) ListFollowing(ctx context.Context) ApiListFollowingRequest {
-	return ApiListFollowingRequest{
+func (a *ArticleServiceService) ListFollowingArticles(ctx context.Context) ApiListFollowingArticlesRequest {
+	return ApiListFollowingArticlesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1589,7 +1589,7 @@ func (a *ArticleServiceService) ListFollowing(ctx context.Context) ApiListFollow
 
 // Execute executes the request
 //  @return ListFollowingArticlesResp
-func (a *ArticleServiceService) ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingArticlesResp, *http.Response, error) {
+func (a *ArticleServiceService) ListFollowingArticlesExecute(r ApiListFollowingArticlesRequest) (*ListFollowingArticlesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1597,7 +1597,7 @@ func (a *ArticleServiceService) ListFollowingExecute(r ApiListFollowingRequest) 
 		localVarReturnValue  *ListFollowingArticlesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ListFollowing")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ListFollowingArticles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1667,31 +1667,31 @@ func (a *ArticleServiceService) ListFollowingExecute(r ApiListFollowingRequest) 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiListNearbyRequest struct {
+type ApiListNearbyArticlesRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	listNearbyArticlesReq *ListNearbyArticlesReq
 }
 
-func (r ApiListNearbyRequest) ListNearbyArticlesReq(listNearbyArticlesReq ListNearbyArticlesReq) ApiListNearbyRequest {
+func (r ApiListNearbyArticlesRequest) ListNearbyArticlesReq(listNearbyArticlesReq ListNearbyArticlesReq) ApiListNearbyArticlesRequest {
 	r.listNearbyArticlesReq = &listNearbyArticlesReq
 	return r
 }
 
-func (r ApiListNearbyRequest) Execute() (*ListNearbyArticlesResp, *http.Response, error) {
-	return r.ApiService.ListNearbyExecute(r)
+func (r ApiListNearbyArticlesRequest) Execute() (*ListNearbyArticlesResp, *http.Response, error) {
+	return r.ApiService.ListNearbyArticlesExecute(r)
 }
 
 /*
-ListNearby Method for ListNearby
+ListNearbyArticles Method for ListNearbyArticles
 
 查询当前账号所在城市发布的文章。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListNearbyRequest
+ @return ApiListNearbyArticlesRequest
 */
-func (a *ArticleServiceService) ListNearby(ctx context.Context) ApiListNearbyRequest {
-	return ApiListNearbyRequest{
+func (a *ArticleServiceService) ListNearbyArticles(ctx context.Context) ApiListNearbyArticlesRequest {
+	return ApiListNearbyArticlesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1699,7 +1699,7 @@ func (a *ArticleServiceService) ListNearby(ctx context.Context) ApiListNearbyReq
 
 // Execute executes the request
 //  @return ListNearbyArticlesResp
-func (a *ArticleServiceService) ListNearbyExecute(r ApiListNearbyRequest) (*ListNearbyArticlesResp, *http.Response, error) {
+func (a *ArticleServiceService) ListNearbyArticlesExecute(r ApiListNearbyArticlesRequest) (*ListNearbyArticlesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1707,7 +1707,7 @@ func (a *ArticleServiceService) ListNearbyExecute(r ApiListNearbyRequest) (*List
 		localVarReturnValue  *ListNearbyArticlesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ListNearby")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ListNearbyArticles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1777,141 +1777,31 @@ func (a *ArticleServiceService) ListNearbyExecute(r ApiListNearbyRequest) (*List
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPageCollectedRequest struct {
-	ctx context.Context
-	ApiService ArticleService
-	pageCollectedArticlesReq *PageCollectedArticlesReq
-}
-
-func (r ApiPageCollectedRequest) PageCollectedArticlesReq(pageCollectedArticlesReq PageCollectedArticlesReq) ApiPageCollectedRequest {
-	r.pageCollectedArticlesReq = &pageCollectedArticlesReq
-	return r
-}
-
-func (r ApiPageCollectedRequest) Execute() (*PageCollectedArticlesResp, *http.Response, error) {
-	return r.ApiService.PageCollectedExecute(r)
-}
-
-/*
-PageCollected Method for PageCollected
-
-查询当前账号收藏的文章。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPageCollectedRequest
-*/
-func (a *ArticleServiceService) PageCollected(ctx context.Context) ApiPageCollectedRequest {
-	return ApiPageCollectedRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return PageCollectedArticlesResp
-func (a *ArticleServiceService) PageCollectedExecute(r ApiPageCollectedRequest) (*PageCollectedArticlesResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *PageCollectedArticlesResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageCollected")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/content/article/collected/page"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.pageCollectedArticlesReq == nil {
-		return localVarReturnValue, nil, reportError("pageCollectedArticlesReq is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.pageCollectedArticlesReq
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiPageViewHistoryRequest struct {
+type ApiPageArticleViewHistoryRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	pageArticleViewHistoryReq *PageArticleViewHistoryReq
 }
 
-func (r ApiPageViewHistoryRequest) PageArticleViewHistoryReq(pageArticleViewHistoryReq PageArticleViewHistoryReq) ApiPageViewHistoryRequest {
+func (r ApiPageArticleViewHistoryRequest) PageArticleViewHistoryReq(pageArticleViewHistoryReq PageArticleViewHistoryReq) ApiPageArticleViewHistoryRequest {
 	r.pageArticleViewHistoryReq = &pageArticleViewHistoryReq
 	return r
 }
 
-func (r ApiPageViewHistoryRequest) Execute() (*PageArticleViewHistoryResp, *http.Response, error) {
-	return r.ApiService.PageViewHistoryExecute(r)
+func (r ApiPageArticleViewHistoryRequest) Execute() (*PageArticleViewHistoryResp, *http.Response, error) {
+	return r.ApiService.PageArticleViewHistoryExecute(r)
 }
 
 /*
-PageViewHistory Method for PageViewHistory
+PageArticleViewHistory Method for PageArticleViewHistory
 
 查询当前账号的浏览历史。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPageViewHistoryRequest
+ @return ApiPageArticleViewHistoryRequest
 */
-func (a *ArticleServiceService) PageViewHistory(ctx context.Context) ApiPageViewHistoryRequest {
-	return ApiPageViewHistoryRequest{
+func (a *ArticleServiceService) PageArticleViewHistory(ctx context.Context) ApiPageArticleViewHistoryRequest {
+	return ApiPageArticleViewHistoryRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -1919,7 +1809,7 @@ func (a *ArticleServiceService) PageViewHistory(ctx context.Context) ApiPageView
 
 // Execute executes the request
 //  @return PageArticleViewHistoryResp
-func (a *ArticleServiceService) PageViewHistoryExecute(r ApiPageViewHistoryRequest) (*PageArticleViewHistoryResp, *http.Response, error) {
+func (a *ArticleServiceService) PageArticleViewHistoryExecute(r ApiPageArticleViewHistoryRequest) (*PageArticleViewHistoryResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -1927,7 +1817,7 @@ func (a *ArticleServiceService) PageViewHistoryExecute(r ApiPageViewHistoryReque
 		localVarReturnValue  *PageArticleViewHistoryResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageViewHistory")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageArticleViewHistory")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -1997,31 +1887,141 @@ func (a *ArticleServiceService) PageViewHistoryExecute(r ApiPageViewHistoryReque
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPageWatchedRequest struct {
+type ApiPageCollectedArticlesRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	pageCollectedArticlesReq *PageCollectedArticlesReq
+}
+
+func (r ApiPageCollectedArticlesRequest) PageCollectedArticlesReq(pageCollectedArticlesReq PageCollectedArticlesReq) ApiPageCollectedArticlesRequest {
+	r.pageCollectedArticlesReq = &pageCollectedArticlesReq
+	return r
+}
+
+func (r ApiPageCollectedArticlesRequest) Execute() (*PageCollectedArticlesResp, *http.Response, error) {
+	return r.ApiService.PageCollectedArticlesExecute(r)
+}
+
+/*
+PageCollectedArticles Method for PageCollectedArticles
+
+查询当前账号收藏的文章。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPageCollectedArticlesRequest
+*/
+func (a *ArticleServiceService) PageCollectedArticles(ctx context.Context) ApiPageCollectedArticlesRequest {
+	return ApiPageCollectedArticlesRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PageCollectedArticlesResp
+func (a *ArticleServiceService) PageCollectedArticlesExecute(r ApiPageCollectedArticlesRequest) (*PageCollectedArticlesResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PageCollectedArticlesResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageCollectedArticles")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/collected/page"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.pageCollectedArticlesReq == nil {
+		return localVarReturnValue, nil, reportError("pageCollectedArticlesReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.pageCollectedArticlesReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPageWatchedArticlesRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	pageWatchedArticlesReq *PageWatchedArticlesReq
 }
 
-func (r ApiPageWatchedRequest) PageWatchedArticlesReq(pageWatchedArticlesReq PageWatchedArticlesReq) ApiPageWatchedRequest {
+func (r ApiPageWatchedArticlesRequest) PageWatchedArticlesReq(pageWatchedArticlesReq PageWatchedArticlesReq) ApiPageWatchedArticlesRequest {
 	r.pageWatchedArticlesReq = &pageWatchedArticlesReq
 	return r
 }
 
-func (r ApiPageWatchedRequest) Execute() (*PageWatchedArticlesResp, *http.Response, error) {
-	return r.ApiService.PageWatchedExecute(r)
+func (r ApiPageWatchedArticlesRequest) Execute() (*PageWatchedArticlesResp, *http.Response, error) {
+	return r.ApiService.PageWatchedArticlesExecute(r)
 }
 
 /*
-PageWatched Method for PageWatched
+PageWatchedArticles Method for PageWatchedArticles
 
 查询当前账号关注的文章。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPageWatchedRequest
+ @return ApiPageWatchedArticlesRequest
 */
-func (a *ArticleServiceService) PageWatched(ctx context.Context) ApiPageWatchedRequest {
-	return ApiPageWatchedRequest{
+func (a *ArticleServiceService) PageWatchedArticles(ctx context.Context) ApiPageWatchedArticlesRequest {
+	return ApiPageWatchedArticlesRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2029,7 +2029,7 @@ func (a *ArticleServiceService) PageWatched(ctx context.Context) ApiPageWatchedR
 
 // Execute executes the request
 //  @return PageWatchedArticlesResp
-func (a *ArticleServiceService) PageWatchedExecute(r ApiPageWatchedRequest) (*PageWatchedArticlesResp, *http.Response, error) {
+func (a *ArticleServiceService) PageWatchedArticlesExecute(r ApiPageWatchedArticlesRequest) (*PageWatchedArticlesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2037,7 +2037,7 @@ func (a *ArticleServiceService) PageWatchedExecute(r ApiPageWatchedRequest) (*Pa
 		localVarReturnValue  *PageWatchedArticlesResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageWatched")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageWatchedArticles")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2107,31 +2107,31 @@ func (a *ArticleServiceService) PageWatchedExecute(r ApiPageWatchedRequest) (*Pa
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPublishRequest struct {
+type ApiPublishArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	publishArticleReq *PublishArticleReq
 }
 
-func (r ApiPublishRequest) PublishArticleReq(publishArticleReq PublishArticleReq) ApiPublishRequest {
+func (r ApiPublishArticleRequest) PublishArticleReq(publishArticleReq PublishArticleReq) ApiPublishArticleRequest {
 	r.publishArticleReq = &publishArticleReq
 	return r
 }
 
-func (r ApiPublishRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.PublishExecute(r)
+func (r ApiPublishArticleRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.PublishArticleExecute(r)
 }
 
 /*
-Publish Method for Publish
+PublishArticle Method for PublishArticle
 
 发布文章
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPublishRequest
+ @return ApiPublishArticleRequest
 */
-func (a *ArticleServiceService) Publish(ctx context.Context) ApiPublishRequest {
-	return ApiPublishRequest{
+func (a *ArticleServiceService) PublishArticle(ctx context.Context) ApiPublishArticleRequest {
+	return ApiPublishArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2139,7 +2139,7 @@ func (a *ArticleServiceService) Publish(ctx context.Context) ApiPublishRequest {
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) PublishExecute(r ApiPublishRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) PublishArticleExecute(r ApiPublishArticleRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2147,7 +2147,7 @@ func (a *ArticleServiceService) PublishExecute(r ApiPublishRequest) (map[string]
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Publish")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PublishArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2217,31 +2217,31 @@ func (a *ArticleServiceService) PublishExecute(r ApiPublishRequest) (map[string]
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiRewardRequest struct {
+type ApiRewardArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	rewardArticleReq *RewardArticleReq
 }
 
-func (r ApiRewardRequest) RewardArticleReq(rewardArticleReq RewardArticleReq) ApiRewardRequest {
+func (r ApiRewardArticleRequest) RewardArticleReq(rewardArticleReq RewardArticleReq) ApiRewardArticleRequest {
 	r.rewardArticleReq = &rewardArticleReq
 	return r
 }
 
-func (r ApiRewardRequest) Execute() (*RewardArticleResp, *http.Response, error) {
-	return r.ApiService.RewardExecute(r)
+func (r ApiRewardArticleRequest) Execute() (*RewardArticleResp, *http.Response, error) {
+	return r.ApiService.RewardArticleExecute(r)
 }
 
 /*
-Reward Method for Reward
+RewardArticle Method for RewardArticle
 
 打赏文章
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiRewardRequest
+ @return ApiRewardArticleRequest
 */
-func (a *ArticleServiceService) Reward(ctx context.Context) ApiRewardRequest {
-	return ApiRewardRequest{
+func (a *ArticleServiceService) RewardArticle(ctx context.Context) ApiRewardArticleRequest {
+	return ApiRewardArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2249,7 +2249,7 @@ func (a *ArticleServiceService) Reward(ctx context.Context) ApiRewardRequest {
 
 // Execute executes the request
 //  @return RewardArticleResp
-func (a *ArticleServiceService) RewardExecute(r ApiRewardRequest) (*RewardArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) RewardArticleExecute(r ApiRewardArticleRequest) (*RewardArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2257,7 +2257,7 @@ func (a *ArticleServiceService) RewardExecute(r ApiRewardRequest) (*RewardArticl
 		localVarReturnValue  *RewardArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Reward")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.RewardArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2327,31 +2327,31 @@ func (a *ArticleServiceService) RewardExecute(r ApiRewardRequest) (*RewardArticl
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiSetPinnedCommentRequest struct {
+type ApiSetPinnedArticleCommentRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	setPinnedArticleCommentReq *SetPinnedArticleCommentReq
 }
 
-func (r ApiSetPinnedCommentRequest) SetPinnedArticleCommentReq(setPinnedArticleCommentReq SetPinnedArticleCommentReq) ApiSetPinnedCommentRequest {
+func (r ApiSetPinnedArticleCommentRequest) SetPinnedArticleCommentReq(setPinnedArticleCommentReq SetPinnedArticleCommentReq) ApiSetPinnedArticleCommentRequest {
 	r.setPinnedArticleCommentReq = &setPinnedArticleCommentReq
 	return r
 }
 
-func (r ApiSetPinnedCommentRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.SetPinnedCommentExecute(r)
+func (r ApiSetPinnedArticleCommentRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.SetPinnedArticleCommentExecute(r)
 }
 
 /*
-SetPinnedComment Method for SetPinnedComment
+SetPinnedArticleComment Method for SetPinnedArticleComment
 
 设置或取消当前账号文章的置顶评论。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiSetPinnedCommentRequest
+ @return ApiSetPinnedArticleCommentRequest
 */
-func (a *ArticleServiceService) SetPinnedComment(ctx context.Context) ApiSetPinnedCommentRequest {
-	return ApiSetPinnedCommentRequest{
+func (a *ArticleServiceService) SetPinnedArticleComment(ctx context.Context) ApiSetPinnedArticleCommentRequest {
+	return ApiSetPinnedArticleCommentRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2359,7 +2359,7 @@ func (a *ArticleServiceService) SetPinnedComment(ctx context.Context) ApiSetPinn
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) SetPinnedCommentExecute(r ApiSetPinnedCommentRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) SetPinnedArticleCommentExecute(r ApiSetPinnedArticleCommentRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2367,7 +2367,7 @@ func (a *ArticleServiceService) SetPinnedCommentExecute(r ApiSetPinnedCommentReq
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.SetPinnedComment")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.SetPinnedArticleComment")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2437,31 +2437,31 @@ func (a *ArticleServiceService) SetPinnedCommentExecute(r ApiSetPinnedCommentReq
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiThankRequest struct {
+type ApiThankArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	thankArticleReq *ThankArticleReq
 }
 
-func (r ApiThankRequest) ThankArticleReq(thankArticleReq ThankArticleReq) ApiThankRequest {
+func (r ApiThankArticleRequest) ThankArticleReq(thankArticleReq ThankArticleReq) ApiThankArticleRequest {
 	r.thankArticleReq = &thankArticleReq
 	return r
 }
 
-func (r ApiThankRequest) Execute() (*ThankArticleResp, *http.Response, error) {
-	return r.ApiService.ThankExecute(r)
+func (r ApiThankArticleRequest) Execute() (*ThankArticleResp, *http.Response, error) {
+	return r.ApiService.ThankArticleExecute(r)
 }
 
 /*
-Thank Method for Thank
+ThankArticle Method for ThankArticle
 
 感谢文章，确认后不可撤销。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiThankRequest
+ @return ApiThankArticleRequest
 */
-func (a *ArticleServiceService) Thank(ctx context.Context) ApiThankRequest {
-	return ApiThankRequest{
+func (a *ArticleServiceService) ThankArticle(ctx context.Context) ApiThankArticleRequest {
+	return ApiThankArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2469,7 +2469,7 @@ func (a *ArticleServiceService) Thank(ctx context.Context) ApiThankRequest {
 
 // Execute executes the request
 //  @return ThankArticleResp
-func (a *ArticleServiceService) ThankExecute(r ApiThankRequest) (*ThankArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) ThankArticleExecute(r ApiThankArticleRequest) (*ThankArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2477,7 +2477,7 @@ func (a *ArticleServiceService) ThankExecute(r ApiThankRequest) (*ThankArticleRe
 		localVarReturnValue  *ThankArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Thank")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ThankArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2547,31 +2547,31 @@ func (a *ArticleServiceService) ThankExecute(r ApiThankRequest) (*ThankArticleRe
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdateDraftRequest struct {
+type ApiUpdateDraftArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	updateDraftArticleReq *UpdateDraftArticleReq
 }
 
-func (r ApiUpdateDraftRequest) UpdateDraftArticleReq(updateDraftArticleReq UpdateDraftArticleReq) ApiUpdateDraftRequest {
+func (r ApiUpdateDraftArticleRequest) UpdateDraftArticleReq(updateDraftArticleReq UpdateDraftArticleReq) ApiUpdateDraftArticleRequest {
 	r.updateDraftArticleReq = &updateDraftArticleReq
 	return r
 }
 
-func (r ApiUpdateDraftRequest) Execute() (*UpdateDraftArticleResp, *http.Response, error) {
-	return r.ApiService.UpdateDraftExecute(r)
+func (r ApiUpdateDraftArticleRequest) Execute() (*UpdateDraftArticleResp, *http.Response, error) {
+	return r.ApiService.UpdateDraftArticleExecute(r)
 }
 
 /*
-UpdateDraft Method for UpdateDraft
+UpdateDraftArticle Method for UpdateDraftArticle
 
 编辑文章草稿
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdateDraftRequest
+ @return ApiUpdateDraftArticleRequest
 */
-func (a *ArticleServiceService) UpdateDraft(ctx context.Context) ApiUpdateDraftRequest {
-	return ApiUpdateDraftRequest{
+func (a *ArticleServiceService) UpdateDraftArticle(ctx context.Context) ApiUpdateDraftArticleRequest {
+	return ApiUpdateDraftArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2579,7 +2579,7 @@ func (a *ArticleServiceService) UpdateDraft(ctx context.Context) ApiUpdateDraftR
 
 // Execute executes the request
 //  @return UpdateDraftArticleResp
-func (a *ArticleServiceService) UpdateDraftExecute(r ApiUpdateDraftRequest) (*UpdateDraftArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) UpdateDraftArticleExecute(r ApiUpdateDraftArticleRequest) (*UpdateDraftArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2587,7 +2587,7 @@ func (a *ArticleServiceService) UpdateDraftExecute(r ApiUpdateDraftRequest) (*Up
 		localVarReturnValue  *UpdateDraftArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.UpdateDraft")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.UpdateDraftArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2657,31 +2657,31 @@ func (a *ArticleServiceService) UpdateDraftExecute(r ApiUpdateDraftRequest) (*Up
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiVotePollRequest struct {
+type ApiVoteArticlePollRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	voteArticlePollReq *VoteArticlePollReq
 }
 
-func (r ApiVotePollRequest) VoteArticlePollReq(voteArticlePollReq VoteArticlePollReq) ApiVotePollRequest {
+func (r ApiVoteArticlePollRequest) VoteArticlePollReq(voteArticlePollReq VoteArticlePollReq) ApiVoteArticlePollRequest {
 	r.voteArticlePollReq = &voteArticlePollReq
 	return r
 }
 
-func (r ApiVotePollRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.VotePollExecute(r)
+func (r ApiVoteArticlePollRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.VoteArticlePollExecute(r)
 }
 
 /*
-VotePoll Method for VotePoll
+VoteArticlePoll Method for VoteArticlePoll
 
 提交一次不可修改的文章投票。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiVotePollRequest
+ @return ApiVoteArticlePollRequest
 */
-func (a *ArticleServiceService) VotePoll(ctx context.Context) ApiVotePollRequest {
-	return ApiVotePollRequest{
+func (a *ArticleServiceService) VoteArticlePoll(ctx context.Context) ApiVoteArticlePollRequest {
+	return ApiVoteArticlePollRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2689,7 +2689,7 @@ func (a *ArticleServiceService) VotePoll(ctx context.Context) ApiVotePollRequest
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *ArticleServiceService) VotePollExecute(r ApiVotePollRequest) (map[string]interface{}, *http.Response, error) {
+func (a *ArticleServiceService) VoteArticlePollExecute(r ApiVoteArticlePollRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2697,7 +2697,7 @@ func (a *ArticleServiceService) VotePollExecute(r ApiVotePollRequest) (map[strin
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.VotePoll")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.VoteArticlePoll")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -2767,31 +2767,31 @@ func (a *ArticleServiceService) VotePollExecute(r ApiVotePollRequest) (map[strin
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiWatchRequest struct {
+type ApiWatchArticleRequest struct {
 	ctx context.Context
 	ApiService ArticleService
 	watchArticleReq *WatchArticleReq
 }
 
-func (r ApiWatchRequest) WatchArticleReq(watchArticleReq WatchArticleReq) ApiWatchRequest {
+func (r ApiWatchArticleRequest) WatchArticleReq(watchArticleReq WatchArticleReq) ApiWatchArticleRequest {
 	r.watchArticleReq = &watchArticleReq
 	return r
 }
 
-func (r ApiWatchRequest) Execute() (*WatchArticleResp, *http.Response, error) {
-	return r.ApiService.WatchExecute(r)
+func (r ApiWatchArticleRequest) Execute() (*WatchArticleResp, *http.Response, error) {
+	return r.ApiService.WatchArticleExecute(r)
 }
 
 /*
-Watch Method for Watch
+WatchArticle Method for WatchArticle
 
 关注文章
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiWatchRequest
+ @return ApiWatchArticleRequest
 */
-func (a *ArticleServiceService) Watch(ctx context.Context) ApiWatchRequest {
-	return ApiWatchRequest{
+func (a *ArticleServiceService) WatchArticle(ctx context.Context) ApiWatchArticleRequest {
+	return ApiWatchArticleRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -2799,7 +2799,7 @@ func (a *ArticleServiceService) Watch(ctx context.Context) ApiWatchRequest {
 
 // Execute executes the request
 //  @return WatchArticleResp
-func (a *ArticleServiceService) WatchExecute(r ApiWatchRequest) (*WatchArticleResp, *http.Response, error) {
+func (a *ArticleServiceService) WatchArticleExecute(r ApiWatchArticleRequest) (*WatchArticleResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -2807,7 +2807,7 @@ func (a *ArticleServiceService) WatchExecute(r ApiWatchRequest) (*WatchArticleRe
 		localVarReturnValue  *WatchArticleResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.Watch")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.WatchArticle")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

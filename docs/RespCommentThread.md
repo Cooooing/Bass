@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Root** | Pointer to [**RespCommentListItem**](RespCommentListItem.md) |  | [optional] 
-**PreviewReplies** | Pointer to [**[]RespCommentListItem**](RespCommentListItem.md) |  | [optional] 
-**ReplyCount** | Pointer to **int32** |  | [optional] 
-**HasMoreReplies** | Pointer to **bool** |  | [optional] 
+**Root** | Pointer to [**RespCommentListItem**](RespCommentListItem.md) | 顶层评论 | [optional] 
+**PreviewReplies** | Pointer to [**[]RespCommentListItem**](RespCommentListItem.md) | 回复预览列表 | [optional] 
+**ReplyCount** | Pointer to **int32** | 回复数量 | [optional] 
+**HasMoreReplies** | Pointer to **bool** | 是否还有更多回复 | [optional] 
 
 ## Methods
 

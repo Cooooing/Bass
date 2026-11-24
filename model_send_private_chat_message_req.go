@@ -17,10 +17,13 @@ import (
 // checks if the SendPrivateChatMessageReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendPrivateChatMessageReq{}
 
-// SendPrivateChatMessageReq struct for SendPrivateChatMessageReq
+// SendPrivateChatMessageReq 请求参数。
 type SendPrivateChatMessageReq struct {
+	// 接收账号 ID。
 	ReceiverId *string `json:"receiver_id,omitempty"`
+	// 客户端幂等消息 ID。
 	ClientMessageId *string `json:"client_message_id,omitempty"`
+	// 原始 Markdown 内容。
 	Content *string `json:"content,omitempty"`
 }
 

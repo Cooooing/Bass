@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AssetId** | Pointer to **string** |  | [optional] 
-**FontUrl** | Pointer to **string** |  | [optional] 
+**AssetId** | Pointer to **string** | 已确认资源的 ID。 | [optional] 
+**FontUrl** | Pointer to **string** | 前端本地预览可用的字体公开地址。 | [optional] 
 
 ## Methods
 

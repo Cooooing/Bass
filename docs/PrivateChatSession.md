@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PeerUserId** | Pointer to **string** |  | [optional] 
-**LastReadMessageId** | Pointer to **string** |  | [optional] 
-**UnreadCount** | Pointer to **int32** |  | [optional] 
-**Muted** | Pointer to **bool** |  | [optional] 
-**Pinned** | Pointer to **bool** |  | [optional] 
-**LastMessage** | Pointer to [**PrivateChatMessage**](PrivateChatMessage.md) |  | [optional] 
-**LastMessageAt** | Pointer to **time.Time** |  | [optional] 
-**Peer** | Pointer to [**PrivateChatMember**](PrivateChatMember.md) |  | [optional] 
+**PeerUserId** | Pointer to **string** | 对端账号 ID。 | [optional] 
+**LastReadMessageId** | Pointer to **string** | 最后已读消息 ID。 | [optional] 
+**UnreadCount** | Pointer to **int32** | 未读消息数。 | [optional] 
+**Muted** | Pointer to **bool** | 是否免打扰。 | [optional] 
+**Pinned** | Pointer to **bool** | 是否置顶。 | [optional] 
+**LastMessage** | Pointer to [**PrivateChatMessage**](PrivateChatMessage.md) | 最后一条消息。 | [optional] 
+**LastMessageAt** | Pointer to **time.Time** | 最后消息时间。 | [optional] 
+**Peer** | Pointer to [**PrivateChatMember**](PrivateChatMember.md) | 对端展示资料。 | [optional] 
 
 ## Methods
 

@@ -17,8 +17,9 @@ import (
 // checks if the AddEmojiItemResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AddEmojiItemResp{}
 
-// AddEmojiItemResp struct for AddEmojiItemResp
+// AddEmojiItemResp 响应结果。
 type AddEmojiItemResp struct {
+	// 已添加表情项。
 	Item *EmojiItem `json:"item,omitempty"`
 }
 

@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Phone** | **string** |  | 
-**Code** | **string** |  | 
+**Phone** | **string** | 新手机号，必填 | 
+**Code** | **string** | 手机 OTP，必填 | 
 
 ## Methods
 

@@ -17,11 +17,15 @@ import (
 // checks if the ListCommentThreadsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCommentThreadsResp{}
 
-// ListCommentThreadsResp struct for ListCommentThreadsResp
+// ListCommentThreadsResp 响应结果。
 type ListCommentThreadsResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 评论楼层列表
 	Rows []RespCommentThread `json:"rows,omitempty"`
+	// 问答已采纳回答；不可见时不返回
 	AcceptedAnswer *RespPinnedComment `json:"accepted_answer,omitempty"`
+	// 作者手动置顶评论；不可见时不返回
 	PinnedComment *RespPinnedComment `json:"pinned_comment,omitempty"`
 }
 

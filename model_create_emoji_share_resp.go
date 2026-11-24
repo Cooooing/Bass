@@ -17,9 +17,11 @@ import (
 // checks if the CreateEmojiShareResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateEmojiShareResp{}
 
-// CreateEmojiShareResp struct for CreateEmojiShareResp
+// CreateEmojiShareResp 响应结果。
 type CreateEmojiShareResp struct {
+	// 高熵分享码。
 	Code *string `json:"code,omitempty"`
+	// 分享码剩余有效秒数。
 	ExpiresInSeconds *string `json:"expires_in_seconds,omitempty"`
 }
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**MessageId** | Pointer to **string** |  | [optional] 
+**MessageId** | Pointer to **string** | 消息 ID。 | [optional] 
 
 ## Methods
 

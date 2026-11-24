@@ -18,12 +18,17 @@ import (
 // checks if the GlobalChatTopic type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &GlobalChatTopic{}
 
-// GlobalChatTopic struct for GlobalChatTopic
+// GlobalChatTopic 协议消息。
 type GlobalChatTopic struct {
+	// 话题记录 ID。
 	Id *string `json:"id,omitempty"`
+	// 设置话题的账号 ID。
 	UserId *string `json:"user_id,omitempty"`
+	// 话题内容。
 	Content *string `json:"content,omitempty"`
+	// 本次设置实际消耗的积分。
 	PointsCost *string `json:"points_cost,omitempty"`
+	// 话题设置时间。
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 }
 

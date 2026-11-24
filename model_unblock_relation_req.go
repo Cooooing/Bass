@@ -19,8 +19,9 @@ import (
 // checks if the UnblockRelationReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UnblockRelationReq{}
 
-// UnblockRelationReq struct for UnblockRelationReq
+// UnblockRelationReq 请求参数。
 type UnblockRelationReq struct {
+	// 目标账号 ID
 	TargetId string `json:"target_id"`
 }
 

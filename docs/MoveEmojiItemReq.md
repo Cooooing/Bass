@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ItemId** | Pointer to **string** |  | [optional] 
-**GroupId** | Pointer to **string** |  | [optional] 
+**ItemId** | Pointer to **string** | 待移动表情项 ID。 | [optional] 
+**GroupId** | Pointer to **string** | 目标分组 ID。 | [optional] 
 
 ## Methods
 

@@ -17,12 +17,17 @@ import (
 // checks if the RespRelationStatus type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespRelationStatus{}
 
-// RespRelationStatus struct for RespRelationStatus
+// RespRelationStatus 协议消息。
 type RespRelationStatus struct {
+	// 目标账号 ID
 	TargetId *string `json:"target_id,omitempty"`
+	// 当前账号是否关注目标账号
 	Following *bool `json:"following,omitempty"`
+	// 目标账号是否关注当前账号
 	FollowedBy *bool `json:"followed_by,omitempty"`
+	// 当前账号是否拉黑目标账号
 	Blocking *bool `json:"blocking,omitempty"`
+	// 目标账号是否拉黑当前账号
 	BlockedBy *bool `json:"blocked_by,omitempty"`
 }
 

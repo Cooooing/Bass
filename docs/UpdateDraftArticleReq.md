@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ArticleId** | **string** |  | 
-**Article** | [**ReqArticle**](ReqArticle.md) |  | 
+**ArticleId** | **string** | 必填，文章 ID | 
+**Article** | [**ReqArticle**](ReqArticle.md) | 必填，草稿内容 | 
 
 ## Methods
 

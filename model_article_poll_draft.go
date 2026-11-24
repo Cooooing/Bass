@@ -18,10 +18,13 @@ import (
 // checks if the ArticlePollDraft type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticlePollDraft{}
 
-// ArticlePollDraft struct for ArticlePollDraft
+// ArticlePollDraft 协议消息。
 type ArticlePollDraft struct {
+	// 投票选项
 	Options []string `json:"options,omitempty"`
+	// 截止时间
 	EndsAt *time.Time `json:"ends_at,omitempty"`
+	// 每人最多选择数
 	MaxChoices *int32 `json:"max_choices,omitempty"`
 }
 

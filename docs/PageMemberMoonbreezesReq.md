@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | Pointer to **string** |  | [optional] 
-**Cursor** | Pointer to **string** |  | [optional] 
-**Size** | Pointer to **int32** |  | [optional] 
+**Name** | Pointer to **string** | 协议字段。 | [optional] 
+**Cursor** | Pointer to **string** | 协议字段。 | [optional] 
+**Size** | Pointer to **int32** | 协议字段。 | [optional] 
 
 ## Methods
 

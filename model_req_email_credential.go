@@ -17,9 +17,11 @@ import (
 // checks if the ReqEmailCredential type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqEmailCredential{}
 
-// ReqEmailCredential struct for ReqEmailCredential
+// ReqEmailCredential 协议消息。
 type ReqEmailCredential struct {
+	// 邮箱地址
 	Email *string `json:"email,omitempty"`
+	// 邮箱 OTP
 	Code *string `json:"code,omitempty"`
 }
 

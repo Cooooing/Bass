@@ -18,15 +18,23 @@ import (
 // checks if the Profile type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &Profile{}
 
-// Profile struct for Profile
+// Profile 协议消息。
 type Profile struct {
+	// 协议字段。
 	Account *AccountProfile `json:"account,omitempty"`
+	// 协议字段。
 	BackgroundUrl *string `json:"background_url,omitempty"`
+	// 协议字段。
 	Location *ProfileLocation `json:"location,omitempty"`
+	// 协议字段。
 	LastSuccessLoginAt *time.Time `json:"last_success_login_at,omitempty"`
+	// 协议字段。
 	Visibility *ProfileVisibility `json:"visibility,omitempty"`
+	// 协议字段。
 	ViewerRelation *ProfileRelation `json:"viewer_relation,omitempty"`
+	// 仅本人或允许公开在线状态的账号返回。
 	Online *bool `json:"online,omitempty"`
+	// 仅本人或允许公开积分的账号返回。
 	Points *string `json:"points,omitempty"`
 }
 

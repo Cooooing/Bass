@@ -19,13 +19,19 @@ import (
 // checks if the RegisterReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RegisterReq{}
 
-// RegisterReq struct for RegisterReq
+// RegisterReq 请求参数。
 type RegisterReq struct {
+	// 注册方式
 	Type string `json:"type"`
+	// 账号名
 	Name string `json:"name"`
+	// 账号密码
 	Password string `json:"password"`
+	// 昵称
 	Nickname *string `json:"nickname,omitempty"`
+	// 邮箱注册凭证
 	EmailCredential *ReqEmailCredential `json:"email_credential,omitempty"`
+	// 手机注册凭证
 	PhoneCredential *ReqPhoneCredential `json:"phone_credential,omitempty"`
 }
 

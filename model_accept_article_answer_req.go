@@ -19,9 +19,11 @@ import (
 // checks if the AcceptArticleAnswerReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AcceptArticleAnswerReq{}
 
-// AcceptArticleAnswerReq struct for AcceptArticleAnswerReq
+// AcceptArticleAnswerReq 请求参数。
 type AcceptArticleAnswerReq struct {
+	// 问答文章 ID
 	ArticleId string `json:"article_id"`
+	// 采纳的一级回答 ID
 	CommentId string `json:"comment_id"`
 }
 

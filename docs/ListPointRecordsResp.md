@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Rows** | Pointer to [**[]RespPointRecord**](RespPointRecord.md) |  | [optional] 
-**Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
+**Rows** | Pointer to [**[]RespPointRecord**](RespPointRecord.md) | 积分流水列表 | [optional] 
+**Page** | Pointer to [**PageResp**](PageResp.md) | 分页结果 | [optional] 
 
 ## Methods
 

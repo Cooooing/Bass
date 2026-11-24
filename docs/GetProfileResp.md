@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Profile** | Pointer to [**Profile**](Profile.md) |  | [optional] 
+**Profile** | Pointer to [**Profile**](Profile.md) | 协议字段。 | [optional] 
 
 ## Methods
 

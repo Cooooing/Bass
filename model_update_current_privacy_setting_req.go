@@ -17,15 +17,23 @@ import (
 // checks if the UpdateCurrentPrivacySettingReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateCurrentPrivacySettingReq{}
 
-// UpdateCurrentPrivacySettingReq struct for UpdateCurrentPrivacySettingReq
+// UpdateCurrentPrivacySettingReq 请求参数。
 type UpdateCurrentPrivacySettingReq struct {
+	// 是否公开积分
 	PublicPoints *bool `json:"public_points,omitempty"`
+	// 是否公开粉丝列表
 	PublicFollowerList *bool `json:"public_follower_list,omitempty"`
+	// 是否公开关注列表
 	PublicFollowingList *bool `json:"public_following_list,omitempty"`
+	// 是否公开帖子列表
 	PublicArticleList *bool `json:"public_article_list,omitempty"`
+	// 是否公开回复列表
 	PublicCommentList *bool `json:"public_comment_list,omitempty"`
+	// 是否公开在线状态
 	PublicOnlineStatus *bool `json:"public_online_status,omitempty"`
+	// 是否公开地理资料
 	PublicLocation *bool `json:"public_location,omitempty"`
+	// 是否公开清风明月列表
 	PublicMoonbreezeList *bool `json:"public_moonbreeze_list,omitempty"`
 }
 

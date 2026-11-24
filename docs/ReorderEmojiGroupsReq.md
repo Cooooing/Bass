@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GroupIds** | Pointer to **[]string** |  | [optional] 
+**GroupIds** | Pointer to **[]string** | 按最终展示顺序排列的完整分组 ID 序列。 | [optional] 
 
 ## Methods
 

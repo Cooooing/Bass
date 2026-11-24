@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TagId** | **string** |  | 
-**Tag** | [**ReqTag**](ReqTag.md) |  | 
+**TagId** | **string** | 标签 ID | 
+**Tag** | [**ReqTag**](ReqTag.md) | 标签信息 | 
 
 ## Methods
 

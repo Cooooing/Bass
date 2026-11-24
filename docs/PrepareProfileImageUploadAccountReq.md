@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Purpose** | **string** |  | 
-**Hash** | **string** |  | 
-**MimeType** | **string** |  | 
-**Size** | **string** |  | 
+**Purpose** | **string** | 图片用途，必填；仅用于 BFF 业务校验 | 
+**Hash** | **string** | 文件 SHA-256，小写十六进制 | 
+**MimeType** | **string** | 上传 MIME 类型 | 
+**Size** | **string** | 文件大小，最大 2 MiB | 
 
 ## Methods
 

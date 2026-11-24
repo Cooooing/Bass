@@ -17,8 +17,9 @@ import (
 // checks if the CountPrivateChatUnreadResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CountPrivateChatUnreadResp{}
 
-// CountPrivateChatUnreadResp struct for CountPrivateChatUnreadResp
+// CountPrivateChatUnreadResp 响应结果。
 type CountPrivateChatUnreadResp struct {
+	// 未读消息总数。
 	Count *int32 `json:"count,omitempty"`
 }
 

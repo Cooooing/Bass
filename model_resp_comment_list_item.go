@@ -18,27 +18,47 @@ import (
 // checks if the RespCommentListItem type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespCommentListItem{}
 
-// RespCommentListItem struct for RespCommentListItem
+// RespCommentListItem 协议消息。
 type RespCommentListItem struct {
+	// 评论 ID
 	Id *string `json:"id,omitempty"`
+	// 文章 ID
 	ArticleId *string `json:"article_id,omitempty"`
+	// 原始内容
 	Content *string `json:"content,omitempty"`
+	// 渲染后的内容
 	ContentRender *string `json:"content_render,omitempty"`
+	// 评论层级
 	Level *int32 `json:"level,omitempty"`
+	// 父评论 ID
 	ParentId *string `json:"parent_id,omitempty"`
+	// 回复的评论 ID
 	ReplyId *string `json:"reply_id,omitempty"`
+	// 回复数量
 	ReplyCount *int32 `json:"reply_count,omitempty"`
+	// 点赞数量
 	LikeCount *int32 `json:"like_count,omitempty"`
+	// 感谢数量
 	ThankCount *int32 `json:"thank_count,omitempty"`
+	// 评论账号展示资料
 	User *RespAccountProfile `json:"user,omitempty"`
+	// 被回复账号展示资料
 	ReplyUser *RespAccountProfile `json:"reply_user,omitempty"`
+	// 所属文章摘要
 	Article *RespArticleBrief `json:"article,omitempty"`
+	// 当前查看账号的评论行为状态
 	ViewerActionState *RespCommentViewerActionState `json:"viewer_action_state,omitempty"`
+	// 管理限制
 	Restriction *string `json:"restriction,omitempty"`
+	// 逻辑删除时间
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
+	// 创建账号 ID
 	CreatedBy *string `json:"created_by,omitempty"`
+	// 更新账号 ID
 	UpdatedBy *string `json:"updated_by,omitempty"`
+	// 创建时间
 	CreatedAt *time.Time `json:"created_at,omitempty"`
+	// 更新时间
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 

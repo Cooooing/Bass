@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PeerUserId** | Pointer to **string** |  | [optional] 
-**Pinned** | Pointer to **bool** |  | [optional] 
+**PeerUserId** | Pointer to **string** | 对端账号 ID。 | [optional] 
+**Pinned** | Pointer to **bool** | 是否置顶。 | [optional] 
 
 ## Methods
 

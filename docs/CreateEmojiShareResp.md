@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | Pointer to **string** |  | [optional] 
-**ExpiresInSeconds** | Pointer to **string** |  | [optional] 
+**Code** | Pointer to **string** | 高熵分享码。 | [optional] 
+**ExpiresInSeconds** | Pointer to **string** | 分享码剩余有效秒数。 | [optional] 
 
 ## Methods
 

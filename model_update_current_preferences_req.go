@@ -17,11 +17,15 @@ import (
 // checks if the UpdateCurrentPreferencesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &UpdateCurrentPreferencesReq{}
 
-// UpdateCurrentPreferencesReq struct for UpdateCurrentPreferencesReq
+// UpdateCurrentPreferencesReq 请求参数。
 type UpdateCurrentPreferencesReq struct {
+	// 时区
 	Timezone *string `json:"timezone,omitempty"`
+	// 桌面端主题
 	Theme *string `json:"theme,omitempty"`
+	// 移动端主题
 	MobileTheme *string `json:"mobile_theme,omitempty"`
+	// 界面语言
 	Language *string `json:"language,omitempty"`
 }
 

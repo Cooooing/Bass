@@ -19,11 +19,15 @@ import (
 // checks if the ListCommentRepliesReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListCommentRepliesReq{}
 
-// ListCommentRepliesReq struct for ListCommentRepliesReq
+// ListCommentRepliesReq 请求参数。
 type ListCommentRepliesReq struct {
+	// 分页参数
 	Page *PageReq `json:"page,omitempty"`
+	// 文章 ID
 	ArticleId string `json:"article_id"`
+	// 顶层评论 ID
 	ParentId string `json:"parent_id"`
+	// 排序方式
 	Order *string `json:"order,omitempty"`
 }
 

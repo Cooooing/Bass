@@ -17,7 +17,7 @@ import (
 // checks if the PageResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PageResp{}
 
-// PageResp struct for PageResp
+// PageResp 协议消息。
 type PageResp struct {
 	// 总数
 	Total *string `json:"total,omitempty"`

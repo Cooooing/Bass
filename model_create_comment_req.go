@@ -19,10 +19,13 @@ import (
 // checks if the CreateCommentReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CreateCommentReq{}
 
-// CreateCommentReq struct for CreateCommentReq
+// CreateCommentReq 请求参数。
 type CreateCommentReq struct {
+	// 文章 ID
 	ArticleId string `json:"article_id"`
+	// 评论内容
 	Content string `json:"content"`
+	// 回复的评论 ID
 	ReplyId *string `json:"reply_id,omitempty"`
 }
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Message** | Pointer to [**PrivateChatMessage**](PrivateChatMessage.md) |  | [optional] 
+**Message** | Pointer to [**PrivateChatMessage**](PrivateChatMessage.md) | 已撤回消息。 | [optional] 
 
 ## Methods
 

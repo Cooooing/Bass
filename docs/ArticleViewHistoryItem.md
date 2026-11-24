@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | Pointer to [**ArticleListItem**](ArticleListItem.md) |  | [optional] 
-**ViewedAt** | Pointer to **time.Time** |  | [optional] 
+**Article** | Pointer to [**ArticleListItem**](ArticleListItem.md) | 当前仍可展示的文章 | [optional] 
+**ViewedAt** | Pointer to **time.Time** | 最近浏览时间 | [optional] 
 
 ## Methods
 

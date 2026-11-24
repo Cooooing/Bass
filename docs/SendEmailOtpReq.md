@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | **string** |  | 
+**Email** | **string** | 邮箱地址 | 
 
 ## Methods
 

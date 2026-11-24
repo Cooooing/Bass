@@ -17,8 +17,9 @@ import (
 // checks if the ReorderEmojiGroupsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReorderEmojiGroupsReq{}
 
-// ReorderEmojiGroupsReq struct for ReorderEmojiGroupsReq
+// ReorderEmojiGroupsReq 请求参数。
 type ReorderEmojiGroupsReq struct {
+	// 按最终展示顺序排列的完整分组 ID 序列。
 	GroupIds []string `json:"group_ids,omitempty"`
 }
 

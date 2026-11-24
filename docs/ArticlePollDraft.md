@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Options** | Pointer to **[]string** |  | [optional] 
-**EndsAt** | Pointer to **time.Time** |  | [optional] 
-**MaxChoices** | Pointer to **int32** |  | [optional] 
+**Options** | Pointer to **[]string** | 投票选项 | [optional] 
+**EndsAt** | Pointer to **time.Time** | 截止时间 | [optional] 
+**MaxChoices** | Pointer to **int32** | 每人最多选择数 | [optional] 
 
 ## Methods
 

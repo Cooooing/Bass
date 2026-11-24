@@ -17,9 +17,11 @@ import (
 // checks if the ClaimYesterdayLivenessRewardResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ClaimYesterdayLivenessRewardResp{}
 
-// ClaimYesterdayLivenessRewardResp struct for ClaimYesterdayLivenessRewardResp
+// ClaimYesterdayLivenessRewardResp 响应结果。
 type ClaimYesterdayLivenessRewardResp struct {
+	// 本次领取的积分。
 	RewardPoints *string `json:"reward_points,omitempty"`
+	// 是否已成功领取。
 	Claimed *bool `json:"claimed,omitempty"`
 }
 

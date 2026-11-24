@@ -17,8 +17,9 @@ import (
 // checks if the LikeCommentResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &LikeCommentResp{}
 
-// LikeCommentResp struct for LikeCommentResp
+// LikeCommentResp 响应结果。
 type LikeCommentResp struct {
+	// 是否已点赞
 	Liked *bool `json:"liked,omitempty"`
 }
 

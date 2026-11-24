@@ -22,44 +22,48 @@ import (
 type RealtimeService interface {
 
 	/*
-	CreateTicket Method for CreateTicket
+	CreateRealtimeTicket Method for CreateRealtimeTicket
+
+	服务方法。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateTicketRequest
+	@return ApiCreateRealtimeTicketRequest
 	*/
-	CreateTicket(ctx context.Context) ApiCreateTicketRequest
+	CreateRealtimeTicket(ctx context.Context) ApiCreateRealtimeTicketRequest
 
-	// CreateTicketExecute executes the request
+	// CreateRealtimeTicketExecute executes the request
 	//  @return CreateRealtimeTicketResp
-	CreateTicketExecute(r ApiCreateTicketRequest) (*CreateRealtimeTicketResp, *http.Response, error)
+	CreateRealtimeTicketExecute(r ApiCreateRealtimeTicketRequest) (*CreateRealtimeTicketResp, *http.Response, error)
 }
 
 // RealtimeServiceService RealtimeService service
 type RealtimeServiceService service
 
-type ApiCreateTicketRequest struct {
+type ApiCreateRealtimeTicketRequest struct {
 	ctx context.Context
 	ApiService RealtimeService
 	body *map[string]interface{}
 }
 
-func (r ApiCreateTicketRequest) Body(body map[string]interface{}) ApiCreateTicketRequest {
+func (r ApiCreateRealtimeTicketRequest) Body(body map[string]interface{}) ApiCreateRealtimeTicketRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiCreateTicketRequest) Execute() (*CreateRealtimeTicketResp, *http.Response, error) {
-	return r.ApiService.CreateTicketExecute(r)
+func (r ApiCreateRealtimeTicketRequest) Execute() (*CreateRealtimeTicketResp, *http.Response, error) {
+	return r.ApiService.CreateRealtimeTicketExecute(r)
 }
 
 /*
-CreateTicket Method for CreateTicket
+CreateRealtimeTicket Method for CreateRealtimeTicket
+
+服务方法。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateTicketRequest
+ @return ApiCreateRealtimeTicketRequest
 */
-func (a *RealtimeServiceService) CreateTicket(ctx context.Context) ApiCreateTicketRequest {
-	return ApiCreateTicketRequest{
+func (a *RealtimeServiceService) CreateRealtimeTicket(ctx context.Context) ApiCreateRealtimeTicketRequest {
+	return ApiCreateRealtimeTicketRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -67,7 +71,7 @@ func (a *RealtimeServiceService) CreateTicket(ctx context.Context) ApiCreateTick
 
 // Execute executes the request
 //  @return CreateRealtimeTicketResp
-func (a *RealtimeServiceService) CreateTicketExecute(r ApiCreateTicketRequest) (*CreateRealtimeTicketResp, *http.Response, error) {
+func (a *RealtimeServiceService) CreateRealtimeTicketExecute(r ApiCreateRealtimeTicketRequest) (*CreateRealtimeTicketResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -75,7 +79,7 @@ func (a *RealtimeServiceService) CreateTicketExecute(r ApiCreateTicketRequest) (
 		localVarReturnValue  *CreateRealtimeTicketResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RealtimeServiceService.CreateTicket")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RealtimeServiceService.CreateRealtimeTicket")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

@@ -17,10 +17,13 @@ import (
 // checks if the PrepareProfileImageUploadAccountResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PrepareProfileImageUploadAccountResp{}
 
-// PrepareProfileImageUploadAccountResp struct for PrepareProfileImageUploadAccountResp
+// PrepareProfileImageUploadAccountResp 响应结果。
 type PrepareProfileImageUploadAccountResp struct {
+	// 已存在时直接返回
 	AssetId *string `json:"asset_id,omitempty"`
+	// 新资源的 MinIO multipart POST 地址
 	UploadUrl *string `json:"upload_url,omitempty"`
+	// 协议字段。
 	FormFields *map[string]string `json:"form_fields,omitempty"`
 }
 

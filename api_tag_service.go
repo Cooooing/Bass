@@ -22,46 +22,32 @@ import (
 type TagService interface {
 
 	/*
-	BindArticle Method for BindArticle
+	BindArticleTags Method for BindArticleTags
 
 	绑定文章标签。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiBindArticleRequest
+	@return ApiBindArticleTagsRequest
 	*/
-	BindArticle(ctx context.Context) ApiBindArticleRequest
+	BindArticleTags(ctx context.Context) ApiBindArticleTagsRequest
 
-	// BindArticleExecute executes the request
+	// BindArticleTagsExecute executes the request
 	//  @return map[string]interface{}
-	BindArticleExecute(r ApiBindArticleRequest) (map[string]interface{}, *http.Response, error)
+	BindArticleTagsExecute(r ApiBindArticleTagsRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Create Method for Create
+	CreateTag Method for CreateTag
 
 	创建标签。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiCreateRequest
+	@return ApiCreateTagRequest
 	*/
-	Create(ctx context.Context) ApiCreateRequest
+	CreateTag(ctx context.Context) ApiCreateTagRequest
 
-	// CreateExecute executes the request
+	// CreateTagExecute executes the request
 	//  @return CreateTagResp
-	CreateExecute(r ApiCreateRequest) (*CreateTagResp, *http.Response, error)
-
-	/*
-	List Method for List
-
-	查询标签列表。
-
-	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiListRequest
-	*/
-	List(ctx context.Context) ApiListRequest
-
-	// ListExecute executes the request
-	//  @return ListTagsResp
-	ListExecute(r ApiListRequest) (*ListTagsResp, *http.Response, error)
+	CreateTagExecute(r ApiCreateTagRequest) (*CreateTagResp, *http.Response, error)
 
 	/*
 	ListArticleTags Method for ListArticleTags
@@ -78,62 +64,76 @@ type TagService interface {
 	ListArticleTagsExecute(r ApiListArticleTagsRequest) (*ListArticleTagsResp, *http.Response, error)
 
 	/*
-	UnbindArticle Method for UnbindArticle
+	ListTags Method for ListTags
+
+	查询标签列表。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListTagsRequest
+	*/
+	ListTags(ctx context.Context) ApiListTagsRequest
+
+	// ListTagsExecute executes the request
+	//  @return ListTagsResp
+	ListTagsExecute(r ApiListTagsRequest) (*ListTagsResp, *http.Response, error)
+
+	/*
+	UnbindArticleTags Method for UnbindArticleTags
 
 	解绑文章标签。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUnbindArticleRequest
+	@return ApiUnbindArticleTagsRequest
 	*/
-	UnbindArticle(ctx context.Context) ApiUnbindArticleRequest
+	UnbindArticleTags(ctx context.Context) ApiUnbindArticleTagsRequest
 
-	// UnbindArticleExecute executes the request
+	// UnbindArticleTagsExecute executes the request
 	//  @return map[string]interface{}
-	UnbindArticleExecute(r ApiUnbindArticleRequest) (map[string]interface{}, *http.Response, error)
+	UnbindArticleTagsExecute(r ApiUnbindArticleTagsRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
-	Update Method for Update
+	UpdateTag Method for UpdateTag
 
 	更新标签。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiUpdateRequest
+	@return ApiUpdateTagRequest
 	*/
-	Update(ctx context.Context) ApiUpdateRequest
+	UpdateTag(ctx context.Context) ApiUpdateTagRequest
 
-	// UpdateExecute executes the request
+	// UpdateTagExecute executes the request
 	//  @return UpdateTagResp
-	UpdateExecute(r ApiUpdateRequest) (*UpdateTagResp, *http.Response, error)
+	UpdateTagExecute(r ApiUpdateTagRequest) (*UpdateTagResp, *http.Response, error)
 }
 
 // TagServiceService TagService service
 type TagServiceService service
 
-type ApiBindArticleRequest struct {
+type ApiBindArticleTagsRequest struct {
 	ctx context.Context
 	ApiService TagService
 	bindArticleTagsReq *BindArticleTagsReq
 }
 
-func (r ApiBindArticleRequest) BindArticleTagsReq(bindArticleTagsReq BindArticleTagsReq) ApiBindArticleRequest {
+func (r ApiBindArticleTagsRequest) BindArticleTagsReq(bindArticleTagsReq BindArticleTagsReq) ApiBindArticleTagsRequest {
 	r.bindArticleTagsReq = &bindArticleTagsReq
 	return r
 }
 
-func (r ApiBindArticleRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.BindArticleExecute(r)
+func (r ApiBindArticleTagsRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.BindArticleTagsExecute(r)
 }
 
 /*
-BindArticle Method for BindArticle
+BindArticleTags Method for BindArticleTags
 
 绑定文章标签。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiBindArticleRequest
+ @return ApiBindArticleTagsRequest
 */
-func (a *TagServiceService) BindArticle(ctx context.Context) ApiBindArticleRequest {
-	return ApiBindArticleRequest{
+func (a *TagServiceService) BindArticleTags(ctx context.Context) ApiBindArticleTagsRequest {
+	return ApiBindArticleTagsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -141,7 +141,7 @@ func (a *TagServiceService) BindArticle(ctx context.Context) ApiBindArticleReque
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *TagServiceService) BindArticleExecute(r ApiBindArticleRequest) (map[string]interface{}, *http.Response, error) {
+func (a *TagServiceService) BindArticleTagsExecute(r ApiBindArticleTagsRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -149,7 +149,7 @@ func (a *TagServiceService) BindArticleExecute(r ApiBindArticleRequest) (map[str
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.BindArticle")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.BindArticleTags")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -219,31 +219,31 @@ func (a *TagServiceService) BindArticleExecute(r ApiBindArticleRequest) (map[str
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiCreateRequest struct {
+type ApiCreateTagRequest struct {
 	ctx context.Context
 	ApiService TagService
 	createTagReq *CreateTagReq
 }
 
-func (r ApiCreateRequest) CreateTagReq(createTagReq CreateTagReq) ApiCreateRequest {
+func (r ApiCreateTagRequest) CreateTagReq(createTagReq CreateTagReq) ApiCreateTagRequest {
 	r.createTagReq = &createTagReq
 	return r
 }
 
-func (r ApiCreateRequest) Execute() (*CreateTagResp, *http.Response, error) {
-	return r.ApiService.CreateExecute(r)
+func (r ApiCreateTagRequest) Execute() (*CreateTagResp, *http.Response, error) {
+	return r.ApiService.CreateTagExecute(r)
 }
 
 /*
-Create Method for Create
+CreateTag Method for CreateTag
 
 创建标签。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiCreateRequest
+ @return ApiCreateTagRequest
 */
-func (a *TagServiceService) Create(ctx context.Context) ApiCreateRequest {
-	return ApiCreateRequest{
+func (a *TagServiceService) CreateTag(ctx context.Context) ApiCreateTagRequest {
+	return ApiCreateTagRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -251,7 +251,7 @@ func (a *TagServiceService) Create(ctx context.Context) ApiCreateRequest {
 
 // Execute executes the request
 //  @return CreateTagResp
-func (a *TagServiceService) CreateExecute(r ApiCreateRequest) (*CreateTagResp, *http.Response, error) {
+func (a *TagServiceService) CreateTagExecute(r ApiCreateTagRequest) (*CreateTagResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -259,7 +259,7 @@ func (a *TagServiceService) CreateExecute(r ApiCreateRequest) (*CreateTagResp, *
 		localVarReturnValue  *CreateTagResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.Create")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.CreateTag")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -292,116 +292,6 @@ func (a *TagServiceService) CreateExecute(r ApiCreateRequest) (*CreateTagResp, *
 	}
 	// body params
 	localVarPostBody = r.createTagReq
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := &GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiListRequest struct {
-	ctx context.Context
-	ApiService TagService
-	listTagsReq *ListTagsReq
-}
-
-func (r ApiListRequest) ListTagsReq(listTagsReq ListTagsReq) ApiListRequest {
-	r.listTagsReq = &listTagsReq
-	return r
-}
-
-func (r ApiListRequest) Execute() (*ListTagsResp, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
-}
-
-/*
-List Method for List
-
-查询标签列表。
-
- @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
-*/
-func (a *TagServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
-		ApiService: a,
-		ctx: ctx,
-	}
-}
-
-// Execute executes the request
-//  @return ListTagsResp
-func (a *TagServiceService) ListExecute(r ApiListRequest) (*ListTagsResp, *http.Response, error) {
-	var (
-		localVarHTTPMethod   = http.MethodPost
-		localVarPostBody     interface{}
-		formFiles            []formFile
-		localVarReturnValue  *ListTagsResp
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.List")
-	if err != nil {
-		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/content/tag/list"
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := url.Values{}
-	localVarFormParams := url.Values{}
-	if r.listTagsReq == nil {
-		return localVarReturnValue, nil, reportError("listTagsReq is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	// body params
-	localVarPostBody = r.listTagsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -549,31 +439,141 @@ func (a *TagServiceService) ListArticleTagsExecute(r ApiListArticleTagsRequest) 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUnbindArticleRequest struct {
+type ApiListTagsRequest struct {
+	ctx context.Context
+	ApiService TagService
+	listTagsReq *ListTagsReq
+}
+
+func (r ApiListTagsRequest) ListTagsReq(listTagsReq ListTagsReq) ApiListTagsRequest {
+	r.listTagsReq = &listTagsReq
+	return r
+}
+
+func (r ApiListTagsRequest) Execute() (*ListTagsResp, *http.Response, error) {
+	return r.ApiService.ListTagsExecute(r)
+}
+
+/*
+ListTags Method for ListTags
+
+查询标签列表。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListTagsRequest
+*/
+func (a *TagServiceService) ListTags(ctx context.Context) ApiListTagsRequest {
+	return ApiListTagsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListTagsResp
+func (a *TagServiceService) ListTagsExecute(r ApiListTagsRequest) (*ListTagsResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListTagsResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.ListTags")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/tag/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listTagsReq == nil {
+		return localVarReturnValue, nil, reportError("listTagsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listTagsReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUnbindArticleTagsRequest struct {
 	ctx context.Context
 	ApiService TagService
 	unbindArticleTagsReq *UnbindArticleTagsReq
 }
 
-func (r ApiUnbindArticleRequest) UnbindArticleTagsReq(unbindArticleTagsReq UnbindArticleTagsReq) ApiUnbindArticleRequest {
+func (r ApiUnbindArticleTagsRequest) UnbindArticleTagsReq(unbindArticleTagsReq UnbindArticleTagsReq) ApiUnbindArticleTagsRequest {
 	r.unbindArticleTagsReq = &unbindArticleTagsReq
 	return r
 }
 
-func (r ApiUnbindArticleRequest) Execute() (map[string]interface{}, *http.Response, error) {
-	return r.ApiService.UnbindArticleExecute(r)
+func (r ApiUnbindArticleTagsRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UnbindArticleTagsExecute(r)
 }
 
 /*
-UnbindArticle Method for UnbindArticle
+UnbindArticleTags Method for UnbindArticleTags
 
 解绑文章标签。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUnbindArticleRequest
+ @return ApiUnbindArticleTagsRequest
 */
-func (a *TagServiceService) UnbindArticle(ctx context.Context) ApiUnbindArticleRequest {
-	return ApiUnbindArticleRequest{
+func (a *TagServiceService) UnbindArticleTags(ctx context.Context) ApiUnbindArticleTagsRequest {
+	return ApiUnbindArticleTagsRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -581,7 +581,7 @@ func (a *TagServiceService) UnbindArticle(ctx context.Context) ApiUnbindArticleR
 
 // Execute executes the request
 //  @return map[string]interface{}
-func (a *TagServiceService) UnbindArticleExecute(r ApiUnbindArticleRequest) (map[string]interface{}, *http.Response, error) {
+func (a *TagServiceService) UnbindArticleTagsExecute(r ApiUnbindArticleTagsRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -589,7 +589,7 @@ func (a *TagServiceService) UnbindArticleExecute(r ApiUnbindArticleRequest) (map
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.UnbindArticle")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.UnbindArticleTags")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -659,31 +659,31 @@ func (a *TagServiceService) UnbindArticleExecute(r ApiUnbindArticleRequest) (map
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiUpdateRequest struct {
+type ApiUpdateTagRequest struct {
 	ctx context.Context
 	ApiService TagService
 	updateTagReq *UpdateTagReq
 }
 
-func (r ApiUpdateRequest) UpdateTagReq(updateTagReq UpdateTagReq) ApiUpdateRequest {
+func (r ApiUpdateTagRequest) UpdateTagReq(updateTagReq UpdateTagReq) ApiUpdateTagRequest {
 	r.updateTagReq = &updateTagReq
 	return r
 }
 
-func (r ApiUpdateRequest) Execute() (*UpdateTagResp, *http.Response, error) {
-	return r.ApiService.UpdateExecute(r)
+func (r ApiUpdateTagRequest) Execute() (*UpdateTagResp, *http.Response, error) {
+	return r.ApiService.UpdateTagExecute(r)
 }
 
 /*
-Update Method for Update
+UpdateTag Method for UpdateTag
 
 更新标签。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiUpdateRequest
+ @return ApiUpdateTagRequest
 */
-func (a *TagServiceService) Update(ctx context.Context) ApiUpdateRequest {
-	return ApiUpdateRequest{
+func (a *TagServiceService) UpdateTag(ctx context.Context) ApiUpdateTagRequest {
+	return ApiUpdateTagRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -691,7 +691,7 @@ func (a *TagServiceService) Update(ctx context.Context) ApiUpdateRequest {
 
 // Execute executes the request
 //  @return UpdateTagResp
-func (a *TagServiceService) UpdateExecute(r ApiUpdateRequest) (*UpdateTagResp, *http.Response, error) {
+func (a *TagServiceService) UpdateTagExecute(r ApiUpdateTagRequest) (*UpdateTagResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -699,7 +699,7 @@ func (a *TagServiceService) UpdateExecute(r ApiUpdateRequest) (*UpdateTagResp, *
 		localVarReturnValue  *UpdateTagResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.Update")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TagServiceService.UpdateTag")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

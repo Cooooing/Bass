@@ -17,9 +17,11 @@ import (
 // checks if the MoveEmojiItemReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &MoveEmojiItemReq{}
 
-// MoveEmojiItemReq struct for MoveEmojiItemReq
+// MoveEmojiItemReq 请求参数。
 type MoveEmojiItemReq struct {
+	// 待移动表情项 ID。
 	ItemId *string `json:"item_id,omitempty"`
+	// 目标分组 ID。
 	GroupId *string `json:"group_id,omitempty"`
 }
 

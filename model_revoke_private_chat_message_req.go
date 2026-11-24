@@ -17,8 +17,9 @@ import (
 // checks if the RevokePrivateChatMessageReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RevokePrivateChatMessageReq{}
 
-// RevokePrivateChatMessageReq struct for RevokePrivateChatMessageReq
+// RevokePrivateChatMessageReq 请求参数。
 type RevokePrivateChatMessageReq struct {
+	// 消息 ID。
 	MessageId *string `json:"message_id,omitempty"`
 }
 

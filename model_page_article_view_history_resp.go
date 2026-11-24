@@ -17,9 +17,11 @@ import (
 // checks if the PageArticleViewHistoryResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PageArticleViewHistoryResp{}
 
-// PageArticleViewHistoryResp struct for PageArticleViewHistoryResp
+// PageArticleViewHistoryResp 响应结果。
 type PageArticleViewHistoryResp struct {
+	// 协议字段。
 	Rows []ArticleViewHistoryItem `json:"rows,omitempty"`
+	// 协议字段。
 	Page *PageResp `json:"page,omitempty"`
 }
 

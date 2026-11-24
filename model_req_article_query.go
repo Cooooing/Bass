@@ -17,19 +17,31 @@ import (
 // checks if the ReqArticleQuery type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ReqArticleQuery{}
 
-// ReqArticleQuery struct for ReqArticleQuery
+// ReqArticleQuery 协议消息。
 type ReqArticleQuery struct {
+	// 可选，标签 ID
 	TagId *string `json:"tag_id,omitempty"`
+	// 可选，领域 ID
 	DomainId *string `json:"domain_id,omitempty"`
+	// 可选，文章类型
 	Type *string `json:"type,omitempty"`
+	// 可选，排序方式
 	Order *string `json:"order,omitempty"`
+	// 可选，作者账号 ID
 	AuthorId *string `json:"author_id,omitempty"`
+	// 可选，发布状态
 	PublishStatus *string `json:"publish_status,omitempty"`
+	// 可选，发布状态列表
 	PublishStatuses []string `json:"publish_statuses,omitempty"`
+	// 可选，可见范围
 	Visibility *string `json:"visibility,omitempty"`
+	// 可选，可见范围列表
 	Visibilities []string `json:"visibilities,omitempty"`
+	// 可选，治理限制
 	Restriction *string `json:"restriction,omitempty"`
+	// 可选，治理限制列表
 	Restrictions []string `json:"restrictions,omitempty"`
+	// 可选，仅本人草稿：是否已设置发布时间
 	Scheduled *bool `json:"scheduled,omitempty"`
 }
 

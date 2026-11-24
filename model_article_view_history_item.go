@@ -18,9 +18,11 @@ import (
 // checks if the ArticleViewHistoryItem type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleViewHistoryItem{}
 
-// ArticleViewHistoryItem struct for ArticleViewHistoryItem
+// ArticleViewHistoryItem 协议消息。
 type ArticleViewHistoryItem struct {
+	// 当前仍可展示的文章
 	Article *ArticleListItem `json:"article,omitempty"`
+	// 最近浏览时间
 	ViewedAt *time.Time `json:"viewed_at,omitempty"`
 }
 

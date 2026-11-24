@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TargetId** | **string** |  | 
+**TargetId** | **string** | 目标账号 ID | 
 
 ## Methods
 

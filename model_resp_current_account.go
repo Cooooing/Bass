@@ -17,10 +17,13 @@ import (
 // checks if the RespCurrentAccount type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &RespCurrentAccount{}
 
-// RespCurrentAccount struct for RespCurrentAccount
+// RespCurrentAccount 协议消息。
 type RespCurrentAccount struct {
+	// 账号展示资料
 	Profile *AccountProfile `json:"profile,omitempty"`
+	// 账号联系方式
 	Contact *AccountContact `json:"contact,omitempty"`
+	// 当前账号地理资料
 	Location *ProfileLocation `json:"location,omitempty"`
 }
 

@@ -19,8 +19,9 @@ import (
 // checks if the DisableTotpReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &DisableTotpReq{}
 
-// DisableTotpReq struct for DisableTotpReq
+// DisableTotpReq 请求参数。
 type DisableTotpReq struct {
+	// TOTP 验证码
 	Code string `json:"code"`
 }
 

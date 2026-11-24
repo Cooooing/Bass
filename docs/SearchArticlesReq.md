@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Query** | **string** |  | 
-**Cursor** | Pointer to **string** |  | [optional] 
-**Size** | Pointer to **int32** |  | [optional] 
+**Query** | **string** | 必填，搜索词 | 
+**Cursor** | Pointer to **string** | 可选，不透明续页游标 | [optional] 
+**Size** | Pointer to **int32** | 可选，返回条数 | [optional] 
 
 ## Methods
 

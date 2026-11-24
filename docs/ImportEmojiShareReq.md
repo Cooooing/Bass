@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | Pointer to **string** |  | [optional] 
+**Code** | Pointer to **string** | 待导入分享码。 | [optional] 
 
 ## Methods
 

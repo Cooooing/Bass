@@ -17,10 +17,13 @@ import (
 // checks if the CheckRegistrationAvailabilityResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &CheckRegistrationAvailabilityResp{}
 
-// CheckRegistrationAvailabilityResp struct for CheckRegistrationAvailabilityResp
+// CheckRegistrationAvailabilityResp 响应结果。
 type CheckRegistrationAvailabilityResp struct {
+	// 账号名是否可用
 	NameAvailable *bool `json:"name_available,omitempty"`
+	// 邮箱是否可继续用于注册
 	EmailCanRegister *bool `json:"email_can_register,omitempty"`
+	// 手机号是否可继续用于注册
 	PhoneCanRegister *bool `json:"phone_can_register,omitempty"`
 }
 

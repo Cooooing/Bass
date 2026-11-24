@@ -4,10 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Type** | **string** |  | 
-**PasswordCredential** | Pointer to [**ReqPasswordCredential**](ReqPasswordCredential.md) |  | [optional] 
-**EmailCredential** | Pointer to [**ReqEmailCredential**](ReqEmailCredential.md) |  | [optional] 
-**PhoneCredential** | Pointer to [**ReqPhoneCredential**](ReqPhoneCredential.md) |  | [optional] 
+**Type** | **string** | 登录方式 | 
+**PasswordCredential** | Pointer to [**ReqPasswordCredential**](ReqPasswordCredential.md) | 密码登录凭证 | [optional] 
+**EmailCredential** | Pointer to [**ReqEmailCredential**](ReqEmailCredential.md) | 邮箱登录凭证 | [optional] 
+**PhoneCredential** | Pointer to [**ReqPhoneCredential**](ReqPhoneCredential.md) | 手机登录凭证 | [optional] 
 
 ## Methods
 

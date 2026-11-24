@@ -17,9 +17,11 @@ import (
 // checks if the ListDomainsResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListDomainsResp{}
 
-// ListDomainsResp struct for ListDomainsResp
+// ListDomainsResp 响应结果。
 type ListDomainsResp struct {
+	// 分页结果
 	Page *PageResp `json:"page,omitempty"`
+	// 领域列表
 	Rows []RespDomain `json:"rows,omitempty"`
 }
 

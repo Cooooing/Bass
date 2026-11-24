@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Email** | Pointer to **string** |  | [optional] 
-**Code** | Pointer to **string** |  | [optional] 
+**Email** | Pointer to **string** | 邮箱地址 | [optional] 
+**Code** | Pointer to **string** | 邮箱 OTP | [optional] 
 
 ## Methods
 

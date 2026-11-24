@@ -17,8 +17,9 @@ import (
 // checks if the SendPhoneOtpResp type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &SendPhoneOtpResp{}
 
-// SendPhoneOtpResp struct for SendPhoneOtpResp
+// SendPhoneOtpResp 响应结果。
 type SendPhoneOtpResp struct {
+	// 非生产环境返回验证码，生产环境为空
 	Code *string `json:"code,omitempty"`
 }
 

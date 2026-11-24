@@ -17,10 +17,13 @@ import (
 // checks if the AccountContact type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AccountContact{}
 
-// AccountContact struct for AccountContact
+// AccountContact 协议消息。
 type AccountContact struct {
+	// 账号 ID
 	UserId *string `json:"user_id,omitempty"`
+	// 邮箱地址
 	Email *string `json:"email,omitempty"`
+	// 手机号
 	Phone *string `json:"phone,omitempty"`
 }
 

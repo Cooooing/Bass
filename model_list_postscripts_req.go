@@ -19,8 +19,9 @@ import (
 // checks if the ListPostscriptsReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ListPostscriptsReq{}
 
-// ListPostscriptsReq struct for ListPostscriptsReq
+// ListPostscriptsReq 请求参数。
 type ListPostscriptsReq struct {
+	// 必填，文章 ID。
 	ArticleId string `json:"article_id"`
 }
 

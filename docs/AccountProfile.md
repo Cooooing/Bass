@@ -4,20 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
-**Nickname** | Pointer to **string** |  | [optional] 
-**Url** | Pointer to **string** |  | [optional] 
-**AvatarUrl** | Pointer to **string** |  | [optional] 
-**BackgroundAssetId** | Pointer to **string** |  | [optional] 
-**Introduction** | Pointer to **string** |  | [optional] 
-**Mbti** | Pointer to **string** |  | [optional] 
-**Status** | Pointer to **string** |  | [optional] 
-**FollowCount** | Pointer to **int32** |  | [optional] 
-**FollowerCount** | Pointer to **int32** |  | [optional] 
-**ProfileUrl** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Id** | Pointer to **string** | 账号 ID | [optional] 
+**Name** | Pointer to **string** | 账号名 | [optional] 
+**Nickname** | Pointer to **string** | 昵称 | [optional] 
+**Url** | Pointer to **string** | 个人主页 | [optional] 
+**AvatarUrl** | Pointer to **string** | 头像 URL | [optional] 
+**Introduction** | Pointer to **string** | 个人简介 | [optional] 
+**Mbti** | Pointer to **string** | MBTI 类型，规范化为大写 | [optional] 
+**Status** | Pointer to **string** | 账号状态 | [optional] 
+**FollowCount** | Pointer to **int32** | 关注数 | [optional] 
+**FollowerCount** | Pointer to **int32** | 粉丝数 | [optional] 
+**CreatedAt** | Pointer to **time.Time** | 创建时间 | [optional] 
+**UpdatedAt** | Pointer to **time.Time** | 更新时间 | [optional] 
 
 ## Methods
 
@@ -163,31 +161,6 @@ SetAvatarUrl sets AvatarUrl field to given value.
 
 HasAvatarUrl returns a boolean if a field has been set.
 
-### GetBackgroundAssetId
-
-`func (o *AccountProfile) GetBackgroundAssetId() string`
-
-GetBackgroundAssetId returns the BackgroundAssetId field if non-nil, zero value otherwise.
-
-### GetBackgroundAssetIdOk
-
-`func (o *AccountProfile) GetBackgroundAssetIdOk() (*string, bool)`
-
-GetBackgroundAssetIdOk returns a tuple with the BackgroundAssetId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetBackgroundAssetId
-
-`func (o *AccountProfile) SetBackgroundAssetId(v string)`
-
-SetBackgroundAssetId sets BackgroundAssetId field to given value.
-
-### HasBackgroundAssetId
-
-`func (o *AccountProfile) HasBackgroundAssetId() bool`
-
-HasBackgroundAssetId returns a boolean if a field has been set.
-
 ### GetIntroduction
 
 `func (o *AccountProfile) GetIntroduction() string`
@@ -312,31 +285,6 @@ SetFollowerCount sets FollowerCount field to given value.
 `func (o *AccountProfile) HasFollowerCount() bool`
 
 HasFollowerCount returns a boolean if a field has been set.
-
-### GetProfileUrl
-
-`func (o *AccountProfile) GetProfileUrl() string`
-
-GetProfileUrl returns the ProfileUrl field if non-nil, zero value otherwise.
-
-### GetProfileUrlOk
-
-`func (o *AccountProfile) GetProfileUrlOk() (*string, bool)`
-
-GetProfileUrlOk returns a tuple with the ProfileUrl field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProfileUrl
-
-`func (o *AccountProfile) SetProfileUrl(v string)`
-
-SetProfileUrl sets ProfileUrl field to given value.
-
-### HasProfileUrl
-
-`func (o *AccountProfile) HasProfileUrl() bool`
-
-HasProfileUrl returns a boolean if a field has been set.
 
 ### GetCreatedAt
 

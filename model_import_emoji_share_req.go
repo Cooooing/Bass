@@ -17,8 +17,9 @@ import (
 // checks if the ImportEmojiShareReq type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ImportEmojiShareReq{}
 
-// ImportEmojiShareReq struct for ImportEmojiShareReq
+// ImportEmojiShareReq 请求参数。
 type ImportEmojiShareReq struct {
+	// 待导入分享码。
 	Code *string `json:"code,omitempty"`
 }
 

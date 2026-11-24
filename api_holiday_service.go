@@ -22,48 +22,48 @@ import (
 type HolidayService interface {
 
 	/*
-	GetCurrent Method for GetCurrent
+	GetCurrentHoliday Method for GetCurrentHoliday
 
 	获取当前节假日状态。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiGetCurrentRequest
+	@return ApiGetCurrentHolidayRequest
 	*/
-	GetCurrent(ctx context.Context) ApiGetCurrentRequest
+	GetCurrentHoliday(ctx context.Context) ApiGetCurrentHolidayRequest
 
-	// GetCurrentExecute executes the request
+	// GetCurrentHolidayExecute executes the request
 	//  @return GetCurrentHolidayResp
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentHolidayResp, *http.Response, error)
+	GetCurrentHolidayExecute(r ApiGetCurrentHolidayRequest) (*GetCurrentHolidayResp, *http.Response, error)
 }
 
 // HolidayServiceService HolidayService service
 type HolidayServiceService service
 
-type ApiGetCurrentRequest struct {
+type ApiGetCurrentHolidayRequest struct {
 	ctx context.Context
 	ApiService HolidayService
 	body *map[string]interface{}
 }
 
-func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentRequest {
+func (r ApiGetCurrentHolidayRequest) Body(body map[string]interface{}) ApiGetCurrentHolidayRequest {
 	r.body = &body
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentHolidayResp, *http.Response, error) {
-	return r.ApiService.GetCurrentExecute(r)
+func (r ApiGetCurrentHolidayRequest) Execute() (*GetCurrentHolidayResp, *http.Response, error) {
+	return r.ApiService.GetCurrentHolidayExecute(r)
 }
 
 /*
-GetCurrent Method for GetCurrent
+GetCurrentHoliday Method for GetCurrentHoliday
 
 获取当前节假日状态。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiGetCurrentRequest
+ @return ApiGetCurrentHolidayRequest
 */
-func (a *HolidayServiceService) GetCurrent(ctx context.Context) ApiGetCurrentRequest {
-	return ApiGetCurrentRequest{
+func (a *HolidayServiceService) GetCurrentHoliday(ctx context.Context) ApiGetCurrentHolidayRequest {
+	return ApiGetCurrentHolidayRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
@@ -71,7 +71,7 @@ func (a *HolidayServiceService) GetCurrent(ctx context.Context) ApiGetCurrentReq
 
 // Execute executes the request
 //  @return GetCurrentHolidayResp
-func (a *HolidayServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentHolidayResp, *http.Response, error) {
+func (a *HolidayServiceService) GetCurrentHolidayExecute(r ApiGetCurrentHolidayRequest) (*GetCurrentHolidayResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -79,7 +79,7 @@ func (a *HolidayServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetC
 		localVarReturnValue  *GetCurrentHolidayResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "HolidayServiceService.GetCurrent")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "HolidayServiceService.GetCurrentHoliday")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}

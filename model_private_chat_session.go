@@ -18,15 +18,23 @@ import (
 // checks if the PrivateChatSession type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &PrivateChatSession{}
 
-// PrivateChatSession struct for PrivateChatSession
+// PrivateChatSession 协议消息。
 type PrivateChatSession struct {
+	// 对端账号 ID。
 	PeerUserId *string `json:"peer_user_id,omitempty"`
+	// 最后已读消息 ID。
 	LastReadMessageId *string `json:"last_read_message_id,omitempty"`
+	// 未读消息数。
 	UnreadCount *int32 `json:"unread_count,omitempty"`
+	// 是否免打扰。
 	Muted *bool `json:"muted,omitempty"`
+	// 是否置顶。
 	Pinned *bool `json:"pinned,omitempty"`
+	// 最后一条消息。
 	LastMessage *PrivateChatMessage `json:"last_message,omitempty"`
+	// 最后消息时间。
 	LastMessageAt *time.Time `json:"last_message_at,omitempty"`
+	// 对端展示资料。
 	Peer *PrivateChatMember `json:"peer,omitempty"`
 }
 

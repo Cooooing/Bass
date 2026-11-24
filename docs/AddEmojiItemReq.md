@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GroupId** | Pointer to **string** |  | [optional] 
-**AssetId** | Pointer to **string** |  | [optional] 
-**Name** | Pointer to **string** |  | [optional] 
+**GroupId** | Pointer to **string** | 可选目标分组 ID；缺省时加入默认分组。 | [optional] 
+**AssetId** | Pointer to **string** | 已确认可用的平台图片资产 ID。 | [optional] 
+**Name** | Pointer to **string** | 可选表情别名。 | [optional] 
 
 ## Methods
 

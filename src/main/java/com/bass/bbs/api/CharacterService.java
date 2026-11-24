@@ -166,252 +166,51 @@ public class CharacterService {
 
   /**
    * 
-   * 查询当前账号角色列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @return ListCharacterResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListCharacterResp callList(APICallListRequest apiRequest) throws ApiException {
-    return callList(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号角色列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ListCharacterResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListCharacterResp callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    Object body = apiRequest.body();
-    return callList(body, headers);
-  }
-
-  /**
-   * 
-   * 查询当前账号角色列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @return ApiResponse&lt;ListCharacterResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListCharacterResp> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
-    return callListWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号角色列表。
-   * @param apiRequest {@link APICallListRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCharacterResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListCharacterResp> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    Object body = apiRequest.body();
-    return callListWithHttpInfo(body, headers);
-  }
-
-  /**
-   * 
-   * 查询当前账号角色列表。
-   * @param body  (required)
-   * @return ListCharacterResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListCharacterResp callList(@javax.annotation.Nonnull Object body) throws ApiException {
-    return callList(body, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号角色列表。
-   * @param body  (required)
-   * @param headers Optional headers to include in the request
-   * @return ListCharacterResp
-   * @throws ApiException if fails to make API call
-   */
-  public ListCharacterResp callList(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListCharacterResp> localVarResponse = callListWithHttpInfo(body, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 查询当前账号角色列表。
-   * @param body  (required)
-   * @return ApiResponse&lt;ListCharacterResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListCharacterResp> callListWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
-    return callListWithHttpInfo(body, null);
-  }
-
-  /**
-   * 
-   * 查询当前账号角色列表。
-   * @param body  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCharacterResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<ListCharacterResp> callListWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(body, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("callList", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<ListCharacterResp>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListCharacterResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCharacterResp>() {});
-        
-
-        return new ApiResponse<ListCharacterResp>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'body' is set
-    if (body == null) {
-      throw new ApiException(400, "Missing the required parameter 'body' when calling callList");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/game-idle/character/list";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APICallListRequest {
-    @javax.annotation.Nonnull
-    private Object body; //  (required)
-
-    private APICallListRequest(Builder builder) {
-      this.body = builder.body;
-    }
-    @javax.annotation.Nonnull
-    public Object body() {
-      return body;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private Object body;
-
-      public Builder body(@javax.annotation.Nonnull Object body) {
-        this.body = body;
-        return this;
-      }
-      public APICallListRequest build() {
-        return new APICallListRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
    * 创建角色。
-   * @param apiRequest {@link APICreateRequest}
+   * @param apiRequest {@link APICreateCharacterRequest}
    * @return CreateCharacterResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCharacterResp create(APICreateRequest apiRequest) throws ApiException {
-    return create(apiRequest, null);
+  public CreateCharacterResp createCharacter(APICreateCharacterRequest apiRequest) throws ApiException {
+    return createCharacter(apiRequest, null);
   }
 
   /**
    * 
    * 创建角色。
-   * @param apiRequest {@link APICreateRequest}
+   * @param apiRequest {@link APICreateCharacterRequest}
    * @param headers Optional headers to include in the request
    * @return CreateCharacterResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCharacterResp create(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateCharacterResp createCharacter(APICreateCharacterRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CreateCharacterReq createCharacterReq = apiRequest.createCharacterReq();
-    return create(createCharacterReq, headers);
+    return createCharacter(createCharacterReq, headers);
   }
 
   /**
    * 
    * 创建角色。
-   * @param apiRequest {@link APICreateRequest}
+   * @param apiRequest {@link APICreateCharacterRequest}
    * @return ApiResponse&lt;CreateCharacterResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCharacterResp> createWithHttpInfo(APICreateRequest apiRequest) throws ApiException {
-    return createWithHttpInfo(apiRequest, null);
+  public ApiResponse<CreateCharacterResp> createCharacterWithHttpInfo(APICreateCharacterRequest apiRequest) throws ApiException {
+    return createCharacterWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 创建角色。
-   * @param apiRequest {@link APICreateRequest}
+   * @param apiRequest {@link APICreateCharacterRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateCharacterResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCharacterResp> createWithHttpInfo(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CreateCharacterResp> createCharacterWithHttpInfo(APICreateCharacterRequest apiRequest, Map<String, String> headers) throws ApiException {
     CreateCharacterReq createCharacterReq = apiRequest.createCharacterReq();
-    return createWithHttpInfo(createCharacterReq, headers);
+    return createCharacterWithHttpInfo(createCharacterReq, headers);
   }
 
   /**
@@ -421,8 +220,8 @@ public class CharacterService {
    * @return CreateCharacterResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCharacterResp create(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq) throws ApiException {
-    return create(createCharacterReq, null);
+  public CreateCharacterResp createCharacter(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq) throws ApiException {
+    return createCharacter(createCharacterReq, null);
   }
 
   /**
@@ -433,8 +232,8 @@ public class CharacterService {
    * @return CreateCharacterResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCharacterResp create(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateCharacterResp> localVarResponse = createWithHttpInfo(createCharacterReq, headers);
+  public CreateCharacterResp createCharacter(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateCharacterResp> localVarResponse = createCharacterWithHttpInfo(createCharacterReq, headers);
     return localVarResponse.getData();
   }
 
@@ -445,8 +244,8 @@ public class CharacterService {
    * @return ApiResponse&lt;CreateCharacterResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCharacterResp> createWithHttpInfo(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq) throws ApiException {
-    return createWithHttpInfo(createCharacterReq, null);
+  public ApiResponse<CreateCharacterResp> createCharacterWithHttpInfo(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq) throws ApiException {
+    return createCharacterWithHttpInfo(createCharacterReq, null);
   }
 
   /**
@@ -457,8 +256,8 @@ public class CharacterService {
    * @return ApiResponse&lt;CreateCharacterResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCharacterResp> createWithHttpInfo(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createRequestBuilder(createCharacterReq, headers);
+  public ApiResponse<CreateCharacterResp> createCharacterWithHttpInfo(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createCharacterRequestBuilder(createCharacterReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -469,7 +268,7 @@ public class CharacterService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("create", localVarResponse);
+          throw getApiException("createCharacter", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -505,10 +304,10 @@ public class CharacterService {
     }
   }
 
-  private HttpRequest.Builder createRequestBuilder(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder createCharacterRequestBuilder(@javax.annotation.Nonnull CreateCharacterReq createCharacterReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'createCharacterReq' is set
     if (createCharacterReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'createCharacterReq' when calling create");
+      throw new ApiException(400, "Missing the required parameter 'createCharacterReq' when calling createCharacter");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -538,11 +337,11 @@ public class CharacterService {
   }
 
 
-  public static final class APICreateRequest {
+  public static final class APICreateCharacterRequest {
     @javax.annotation.Nonnull
     private CreateCharacterReq createCharacterReq; //  (required)
 
-    private APICreateRequest(Builder builder) {
+    private APICreateCharacterRequest(Builder builder) {
       this.createCharacterReq = builder.createCharacterReq;
     }
     @javax.annotation.Nonnull
@@ -560,8 +359,209 @@ public class CharacterService {
         this.createCharacterReq = createCharacterReq;
         return this;
       }
-      public APICreateRequest build() {
-        return new APICreateRequest(this);
+      public APICreateCharacterRequest build() {
+        return new APICreateCharacterRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param apiRequest {@link APIListCharacterRequest}
+   * @return ListCharacterResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListCharacterResp listCharacter(APIListCharacterRequest apiRequest) throws ApiException {
+    return listCharacter(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param apiRequest {@link APIListCharacterRequest}
+   * @param headers Optional headers to include in the request
+   * @return ListCharacterResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListCharacterResp listCharacter(APIListCharacterRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    Object body = apiRequest.body();
+    return listCharacter(body, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param apiRequest {@link APIListCharacterRequest}
+   * @return ApiResponse&lt;ListCharacterResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListCharacterResp> listCharacterWithHttpInfo(APIListCharacterRequest apiRequest) throws ApiException {
+    return listCharacterWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param apiRequest {@link APIListCharacterRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListCharacterResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListCharacterResp> listCharacterWithHttpInfo(APIListCharacterRequest apiRequest, Map<String, String> headers) throws ApiException {
+    Object body = apiRequest.body();
+    return listCharacterWithHttpInfo(body, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param body  (required)
+   * @return ListCharacterResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListCharacterResp listCharacter(@javax.annotation.Nonnull Object body) throws ApiException {
+    return listCharacter(body, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return ListCharacterResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListCharacterResp listCharacter(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListCharacterResp> localVarResponse = listCharacterWithHttpInfo(body, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param body  (required)
+   * @return ApiResponse&lt;ListCharacterResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListCharacterResp> listCharacterWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return listCharacterWithHttpInfo(body, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号角色列表。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListCharacterResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListCharacterResp> listCharacterWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listCharacterRequestBuilder(body, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("listCharacter", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListCharacterResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListCharacterResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCharacterResp>() {});
+        
+
+        return new ApiResponse<ListCharacterResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder listCharacterRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling listCharacter");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/game-idle/character/list";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIListCharacterRequest {
+    @javax.annotation.Nonnull
+    private Object body; //  (required)
+
+    private APIListCharacterRequest(Builder builder) {
+      this.body = builder.body;
+    }
+    @javax.annotation.Nonnull
+    public Object body() {
+      return body;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private Object body;
+
+      public Builder body(@javax.annotation.Nonnull Object body) {
+        this.body = body;
+        return this;
+      }
+      public APIListCharacterRequest build() {
+        return new APIListCharacterRequest(this);
       }
     }
   }

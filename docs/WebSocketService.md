@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**createTicket**](WebSocketService.md#createTicket) | **POST** /v1/game-idle/ws/create-ticket |  |
-| [**createTicketWithHttpInfo**](WebSocketService.md#createTicketWithHttpInfo) | **POST** /v1/game-idle/ws/create-ticket |  |
+| [**createWebSocketTicket**](WebSocketService.md#createWebSocketTicket) | **POST** /v1/game-idle/ws/create-ticket |  |
+| [**createWebSocketTicketWithHttpInfo**](WebSocketService.md#createWebSocketTicketWithHttpInfo) | **POST** /v1/game-idle/ws/create-ticket |  |
 
 
 
-## createTicket
+## createWebSocketTicket
 
-> CreateWebSocketTicketResp createTicket(createTicketRequest)
+> CreateWebSocketTicketResp createWebSocketTicket(createWebSocketTicketRequest)
 
 
 
@@ -36,13 +36,13 @@ public class Example {
         WebSocketService apiInstance = new WebSocketService(defaultClient);
         CreateWebSocketTicketReq createWebSocketTicketReq = new CreateWebSocketTicketReq(); // CreateWebSocketTicketReq | 
         try {
-            APIcreateTicketRequest request = APIcreateTicketRequest.newBuilder()
+            APIcreateWebSocketTicketRequest request = APIcreateWebSocketTicketRequest.newBuilder()
                 .createWebSocketTicketReq(createWebSocketTicketReq)
                 .build();
-            CreateWebSocketTicketResp result = apiInstance.createTicket(request);
+            CreateWebSocketTicketResp result = apiInstance.createWebSocketTicket(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling WebSocketService#createTicket");
+            System.err.println("Exception when calling WebSocketService#createWebSocketTicket");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -56,7 +56,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createTicketRequest | [**APIcreateTicketRequest**](WebSocketService.md#APIcreateTicketRequest)|-|-|
+| createWebSocketTicketRequest | [**APIcreateWebSocketTicketRequest**](WebSocketService.md#APIcreateWebSocketTicketRequest)|-|-|
 
 ### Return type
 
@@ -77,9 +77,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createTicketWithHttpInfo
+## createWebSocketTicketWithHttpInfo
 
-> ApiResponse<CreateWebSocketTicketResp> createTicketWithHttpInfo(createTicketRequest)
+> ApiResponse<CreateWebSocketTicketResp> createWebSocketTicketWithHttpInfo(createWebSocketTicketRequest)
 
 
 
@@ -105,15 +105,15 @@ public class Example {
         WebSocketService apiInstance = new WebSocketService(defaultClient);
         CreateWebSocketTicketReq createWebSocketTicketReq = new CreateWebSocketTicketReq(); // CreateWebSocketTicketReq | 
         try {
-            APIcreateTicketRequest request = APIcreateTicketRequest.newBuilder()
+            APIcreateWebSocketTicketRequest request = APIcreateWebSocketTicketRequest.newBuilder()
                 .createWebSocketTicketReq(createWebSocketTicketReq)
                 .build();
-            ApiResponse<CreateWebSocketTicketResp> response = apiInstance.createTicketWithHttpInfo(request);
+            ApiResponse<CreateWebSocketTicketResp> response = apiInstance.createWebSocketTicketWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling WebSocketService#createTicket");
+            System.err.println("Exception when calling WebSocketService#createWebSocketTicket");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -127,7 +127,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createTicketRequest | [**APIcreateTicketRequest**](WebSocketService.md#APIcreateTicketRequest)|-|-|
+| createWebSocketTicketRequest | [**APIcreateWebSocketTicketRequest**](WebSocketService.md#APIcreateWebSocketTicketRequest)|-|-|
 
 ### Return type
 
@@ -149,8 +149,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateTicketRequest"></a>
-## APIcreateTicketRequest
+<a id="APIcreateWebSocketTicketRequest"></a>
+## APIcreateWebSocketTicketRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

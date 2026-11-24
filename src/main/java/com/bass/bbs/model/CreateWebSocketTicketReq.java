@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateWebSocketTicketReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateWebSocketTicketReq.JSON_PROPERTY_CHARACTER_ID
@@ -50,7 +50,7 @@ public class CreateWebSocketTicketReq {
   }
 
   /**
-   * Get characterId
+   * 角色 ID
    * @return characterId
    */
   @javax.annotation.Nullable

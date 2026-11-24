@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RegisterAccountReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   RegisterAccountReq.JSON_PROPERTY_EMAIL,
@@ -55,7 +55,7 @@ public class RegisterAccountReq {
   }
 
   /**
-   * Get email
+   * 邮箱
    * @return email
    */
   @javax.annotation.Nonnull
@@ -79,7 +79,7 @@ public class RegisterAccountReq {
   }
 
   /**
-   * Get password
+   * 账号密码
    * @return password
    */
   @javax.annotation.Nonnull

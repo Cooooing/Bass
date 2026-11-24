@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * Character
+ * 协议消息。
  */
 @JsonPropertyOrder({
   Character.JSON_PROPERTY_ID,
@@ -55,7 +55,7 @@ public class Character {
   private String name;
 
   /**
-   * Gets or Sets status
+   * 角色状态
    */
   public enum StatusEnum {
     CHARACTER_STATUS_UNSPECIFIED(String.valueOf("CHARACTER_STATUS_UNSPECIFIED")),
@@ -128,7 +128,7 @@ public class Character {
   }
 
   /**
-   * Get id
+   * 角色 ID
    * @return id
    */
   @javax.annotation.Nullable
@@ -152,7 +152,7 @@ public class Character {
   }
 
   /**
-   * Get name
+   * 角色名称
    * @return name
    */
   @javax.annotation.Nullable
@@ -176,7 +176,7 @@ public class Character {
   }
 
   /**
-   * Get status
+   * 角色状态
    * @return status
    */
   @javax.annotation.Nullable
@@ -200,7 +200,7 @@ public class Character {
   }
 
   /**
-   * Get slot
+   * 角色槽位
    * @return slot
    */
   @javax.annotation.Nullable
@@ -224,7 +224,7 @@ public class Character {
   }
 
   /**
-   * Get actionQueueCapacity
+   * 行动队列容量上限
    * @return actionQueueCapacity
    */
   @javax.annotation.Nullable
@@ -248,7 +248,7 @@ public class Character {
   }
 
   /**
-   * Get maxOfflineSeconds
+   * 最大离线收益结算秒数
    * @return maxOfflineSeconds
    */
   @javax.annotation.Nullable
@@ -272,7 +272,7 @@ public class Character {
   }
 
   /**
-   * Get createdAt
+   * 创建时间
    * @return createdAt
    */
   @javax.annotation.Nullable
@@ -296,7 +296,7 @@ public class Character {
   }
 
   /**
-   * Get updatedAt
+   * 更新时间
    * @return updatedAt
    */
   @javax.annotation.Nullable
@@ -320,7 +320,7 @@ public class Character {
   }
 
   /**
-   * Get lastOfflineAt
+   * 最近离线时间
    * @return lastOfflineAt
    */
   @javax.annotation.Nullable

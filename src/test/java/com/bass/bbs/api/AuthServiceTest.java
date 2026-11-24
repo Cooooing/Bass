@@ -45,14 +45,14 @@ public class AuthServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void loginTest() throws ApiException {
+    public void loginAccountTest() throws ApiException {
         LoginAccountReq loginAccountReq = null;
         
-        AuthService.APIloginRequest request = AuthService.APIloginRequest.newBuilder()
+        AuthService.APIloginAccountRequest request = AuthService.APIloginAccountRequest.newBuilder()
           .loginAccountReq(loginAccountReq)
           .build();
         LoginAccountResp response = 
-        api.login(request);
+        api.loginAccount(request);
 
         // TODO: test validations
     }
@@ -66,14 +66,14 @@ public class AuthServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void registerTest() throws ApiException {
+    public void registerAccountTest() throws ApiException {
         RegisterAccountReq registerAccountReq = null;
         
-        AuthService.APIregisterRequest request = AuthService.APIregisterRequest.newBuilder()
+        AuthService.APIregisterAccountRequest request = AuthService.APIregisterAccountRequest.newBuilder()
           .registerAccountReq(registerAccountReq)
           .build();
         Object response = 
-        api.register(request);
+        api.registerAccount(request);
 
         // TODO: test validations
     }

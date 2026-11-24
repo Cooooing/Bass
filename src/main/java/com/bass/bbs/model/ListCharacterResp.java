@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * ListCharacterResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   ListCharacterResp.JSON_PROPERTY_ROWS
@@ -61,7 +61,7 @@ public class ListCharacterResp {
   }
 
   /**
-   * Get rows
+   * 角色列表
    * @return rows
    */
   @javax.annotation.Nullable

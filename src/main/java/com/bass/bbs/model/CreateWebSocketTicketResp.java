@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateWebSocketTicketResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   CreateWebSocketTicketResp.JSON_PROPERTY_CHARACTER_ID,
@@ -65,7 +65,7 @@ public class CreateWebSocketTicketResp {
   }
 
   /**
-   * Get characterId
+   * 角色 ID
    * @return characterId
    */
   @javax.annotation.Nullable
@@ -89,7 +89,7 @@ public class CreateWebSocketTicketResp {
   }
 
   /**
-   * Get ticket
+   * WS 连接凭证
    * @return ticket
    */
   @javax.annotation.Nullable
@@ -113,7 +113,7 @@ public class CreateWebSocketTicketResp {
   }
 
   /**
-   * Get expiresInSeconds
+   * 剩余有效秒数
    * @return expiresInSeconds
    */
   @javax.annotation.Nullable
@@ -137,7 +137,7 @@ public class CreateWebSocketTicketResp {
   }
 
   /**
-   * Get path
+   * WS 连接路径
    * @return path
    */
   @javax.annotation.Nullable

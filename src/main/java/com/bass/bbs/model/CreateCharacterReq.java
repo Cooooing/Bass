@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * CreateCharacterReq
+ * 请求参数。
  */
 @JsonPropertyOrder({
   CreateCharacterReq.JSON_PROPERTY_NAME
@@ -50,7 +50,7 @@ public class CreateCharacterReq {
   }
 
   /**
-   * Get name
+   * 角色名称
    * @return name
    */
   @javax.annotation.Nullable

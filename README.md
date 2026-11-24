@@ -88,13 +88,13 @@ public class AuthServiceExample {
         AuthService apiInstance = new AuthService(defaultClient);
         LoginAccountReq loginAccountReq = new LoginAccountReq(); // LoginAccountReq | 
         try {
-            APIloginRequest request = APIloginRequest.newBuilder()
+            APIloginAccountRequest request = APIloginAccountRequest.newBuilder()
                 .loginAccountReq(loginAccountReq)
                 .build();
-            LoginAccountResp result = apiInstance.login(request);
+            LoginAccountResp result = apiInstance.loginAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AuthService#login");
+            System.err.println("Exception when calling AuthService#loginAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -111,16 +111,16 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/game-idle/auth/login | 
-*AuthService* | [**loginWithHttpInfo**](docs/AuthService.md#loginWithHttpInfo) | **POST** /v1/game-idle/auth/login | 
-*AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/game-idle/auth/register | 
-*AuthService* | [**registerWithHttpInfo**](docs/AuthService.md#registerWithHttpInfo) | **POST** /v1/game-idle/auth/register | 
-*CharacterService* | [**callList**](docs/CharacterService.md#callList) | **POST** /v1/game-idle/character/list | 
-*CharacterService* | [**callListWithHttpInfo**](docs/CharacterService.md#callListWithHttpInfo) | **POST** /v1/game-idle/character/list | 
-*CharacterService* | [**create**](docs/CharacterService.md#create) | **POST** /v1/game-idle/character/create | 
-*CharacterService* | [**createWithHttpInfo**](docs/CharacterService.md#createWithHttpInfo) | **POST** /v1/game-idle/character/create | 
-*WebSocketService* | [**createTicket**](docs/WebSocketService.md#createTicket) | **POST** /v1/game-idle/ws/create-ticket | 
-*WebSocketService* | [**createTicketWithHttpInfo**](docs/WebSocketService.md#createTicketWithHttpInfo) | **POST** /v1/game-idle/ws/create-ticket | 
+*AuthService* | [**loginAccount**](docs/AuthService.md#loginAccount) | **POST** /v1/game-idle/auth/login | 
+*AuthService* | [**loginAccountWithHttpInfo**](docs/AuthService.md#loginAccountWithHttpInfo) | **POST** /v1/game-idle/auth/login | 
+*AuthService* | [**registerAccount**](docs/AuthService.md#registerAccount) | **POST** /v1/game-idle/auth/register | 
+*AuthService* | [**registerAccountWithHttpInfo**](docs/AuthService.md#registerAccountWithHttpInfo) | **POST** /v1/game-idle/auth/register | 
+*CharacterService* | [**createCharacter**](docs/CharacterService.md#createCharacter) | **POST** /v1/game-idle/character/create | 
+*CharacterService* | [**createCharacterWithHttpInfo**](docs/CharacterService.md#createCharacterWithHttpInfo) | **POST** /v1/game-idle/character/create | 
+*CharacterService* | [**listCharacter**](docs/CharacterService.md#listCharacter) | **POST** /v1/game-idle/character/list | 
+*CharacterService* | [**listCharacterWithHttpInfo**](docs/CharacterService.md#listCharacterWithHttpInfo) | **POST** /v1/game-idle/character/list | 
+*WebSocketService* | [**createWebSocketTicket**](docs/WebSocketService.md#createWebSocketTicket) | **POST** /v1/game-idle/ws/create-ticket | 
+*WebSocketService* | [**createWebSocketTicketWithHttpInfo**](docs/WebSocketService.md#createWebSocketTicketWithHttpInfo) | **POST** /v1/game-idle/ws/create-ticket | 
 
 
 ## Documentation for Models

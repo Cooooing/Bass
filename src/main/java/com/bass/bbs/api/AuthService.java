@@ -167,50 +167,50 @@ public class AuthService {
   /**
    * 
    * 登录账号。
-   * @param apiRequest {@link APILoginRequest}
+   * @param apiRequest {@link APILoginAccountRequest}
    * @return LoginAccountResp
    * @throws ApiException if fails to make API call
    */
-  public LoginAccountResp login(APILoginRequest apiRequest) throws ApiException {
-    return login(apiRequest, null);
+  public LoginAccountResp loginAccount(APILoginAccountRequest apiRequest) throws ApiException {
+    return loginAccount(apiRequest, null);
   }
 
   /**
    * 
    * 登录账号。
-   * @param apiRequest {@link APILoginRequest}
+   * @param apiRequest {@link APILoginAccountRequest}
    * @param headers Optional headers to include in the request
    * @return LoginAccountResp
    * @throws ApiException if fails to make API call
    */
-  public LoginAccountResp login(APILoginRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public LoginAccountResp loginAccount(APILoginAccountRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     LoginAccountReq loginAccountReq = apiRequest.loginAccountReq();
-    return login(loginAccountReq, headers);
+    return loginAccount(loginAccountReq, headers);
   }
 
   /**
    * 
    * 登录账号。
-   * @param apiRequest {@link APILoginRequest}
+   * @param apiRequest {@link APILoginAccountRequest}
    * @return ApiResponse&lt;LoginAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LoginAccountResp> loginWithHttpInfo(APILoginRequest apiRequest) throws ApiException {
-    return loginWithHttpInfo(apiRequest, null);
+  public ApiResponse<LoginAccountResp> loginAccountWithHttpInfo(APILoginAccountRequest apiRequest) throws ApiException {
+    return loginAccountWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 登录账号。
-   * @param apiRequest {@link APILoginRequest}
+   * @param apiRequest {@link APILoginAccountRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;LoginAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LoginAccountResp> loginWithHttpInfo(APILoginRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<LoginAccountResp> loginAccountWithHttpInfo(APILoginAccountRequest apiRequest, Map<String, String> headers) throws ApiException {
     LoginAccountReq loginAccountReq = apiRequest.loginAccountReq();
-    return loginWithHttpInfo(loginAccountReq, headers);
+    return loginAccountWithHttpInfo(loginAccountReq, headers);
   }
 
   /**
@@ -220,8 +220,8 @@ public class AuthService {
    * @return LoginAccountResp
    * @throws ApiException if fails to make API call
    */
-  public LoginAccountResp login(@javax.annotation.Nonnull LoginAccountReq loginAccountReq) throws ApiException {
-    return login(loginAccountReq, null);
+  public LoginAccountResp loginAccount(@javax.annotation.Nonnull LoginAccountReq loginAccountReq) throws ApiException {
+    return loginAccount(loginAccountReq, null);
   }
 
   /**
@@ -232,8 +232,8 @@ public class AuthService {
    * @return LoginAccountResp
    * @throws ApiException if fails to make API call
    */
-  public LoginAccountResp login(@javax.annotation.Nonnull LoginAccountReq loginAccountReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<LoginAccountResp> localVarResponse = loginWithHttpInfo(loginAccountReq, headers);
+  public LoginAccountResp loginAccount(@javax.annotation.Nonnull LoginAccountReq loginAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<LoginAccountResp> localVarResponse = loginAccountWithHttpInfo(loginAccountReq, headers);
     return localVarResponse.getData();
   }
 
@@ -244,8 +244,8 @@ public class AuthService {
    * @return ApiResponse&lt;LoginAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LoginAccountResp> loginWithHttpInfo(@javax.annotation.Nonnull LoginAccountReq loginAccountReq) throws ApiException {
-    return loginWithHttpInfo(loginAccountReq, null);
+  public ApiResponse<LoginAccountResp> loginAccountWithHttpInfo(@javax.annotation.Nonnull LoginAccountReq loginAccountReq) throws ApiException {
+    return loginAccountWithHttpInfo(loginAccountReq, null);
   }
 
   /**
@@ -256,8 +256,8 @@ public class AuthService {
    * @return ApiResponse&lt;LoginAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LoginAccountResp> loginWithHttpInfo(@javax.annotation.Nonnull LoginAccountReq loginAccountReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = loginRequestBuilder(loginAccountReq, headers);
+  public ApiResponse<LoginAccountResp> loginAccountWithHttpInfo(@javax.annotation.Nonnull LoginAccountReq loginAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = loginAccountRequestBuilder(loginAccountReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -268,7 +268,7 @@ public class AuthService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("login", localVarResponse);
+          throw getApiException("loginAccount", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -304,10 +304,10 @@ public class AuthService {
     }
   }
 
-  private HttpRequest.Builder loginRequestBuilder(@javax.annotation.Nonnull LoginAccountReq loginAccountReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder loginAccountRequestBuilder(@javax.annotation.Nonnull LoginAccountReq loginAccountReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'loginAccountReq' is set
     if (loginAccountReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'loginAccountReq' when calling login");
+      throw new ApiException(400, "Missing the required parameter 'loginAccountReq' when calling loginAccount");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -337,11 +337,11 @@ public class AuthService {
   }
 
 
-  public static final class APILoginRequest {
+  public static final class APILoginAccountRequest {
     @javax.annotation.Nonnull
     private LoginAccountReq loginAccountReq; //  (required)
 
-    private APILoginRequest(Builder builder) {
+    private APILoginAccountRequest(Builder builder) {
       this.loginAccountReq = builder.loginAccountReq;
     }
     @javax.annotation.Nonnull
@@ -359,8 +359,8 @@ public class AuthService {
         this.loginAccountReq = loginAccountReq;
         return this;
       }
-      public APILoginRequest build() {
-        return new APILoginRequest(this);
+      public APILoginAccountRequest build() {
+        return new APILoginAccountRequest(this);
       }
     }
   }
@@ -368,50 +368,50 @@ public class AuthService {
   /**
    * 
    * 注册账号。
-   * @param apiRequest {@link APIRegisterRequest}
+   * @param apiRequest {@link APIRegisterAccountRequest}
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object register(APIRegisterRequest apiRequest) throws ApiException {
-    return register(apiRequest, null);
+  public Object registerAccount(APIRegisterAccountRequest apiRequest) throws ApiException {
+    return registerAccount(apiRequest, null);
   }
 
   /**
    * 
    * 注册账号。
-   * @param apiRequest {@link APIRegisterRequest}
+   * @param apiRequest {@link APIRegisterAccountRequest}
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object register(APIRegisterRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object registerAccount(APIRegisterAccountRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     RegisterAccountReq registerAccountReq = apiRequest.registerAccountReq();
-    return register(registerAccountReq, headers);
+    return registerAccount(registerAccountReq, headers);
   }
 
   /**
    * 
    * 注册账号。
-   * @param apiRequest {@link APIRegisterRequest}
+   * @param apiRequest {@link APIRegisterAccountRequest}
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> registerWithHttpInfo(APIRegisterRequest apiRequest) throws ApiException {
-    return registerWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> registerAccountWithHttpInfo(APIRegisterAccountRequest apiRequest) throws ApiException {
+    return registerAccountWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 注册账号。
-   * @param apiRequest {@link APIRegisterRequest}
+   * @param apiRequest {@link APIRegisterAccountRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> registerWithHttpInfo(APIRegisterRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<Object> registerAccountWithHttpInfo(APIRegisterAccountRequest apiRequest, Map<String, String> headers) throws ApiException {
     RegisterAccountReq registerAccountReq = apiRequest.registerAccountReq();
-    return registerWithHttpInfo(registerAccountReq, headers);
+    return registerAccountWithHttpInfo(registerAccountReq, headers);
   }
 
   /**
@@ -421,8 +421,8 @@ public class AuthService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object register(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq) throws ApiException {
-    return register(registerAccountReq, null);
+  public Object registerAccount(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq) throws ApiException {
+    return registerAccount(registerAccountReq, null);
   }
 
   /**
@@ -433,8 +433,8 @@ public class AuthService {
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object register(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = registerWithHttpInfo(registerAccountReq, headers);
+  public Object registerAccount(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = registerAccountWithHttpInfo(registerAccountReq, headers);
     return localVarResponse.getData();
   }
 
@@ -445,8 +445,8 @@ public class AuthService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> registerWithHttpInfo(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq) throws ApiException {
-    return registerWithHttpInfo(registerAccountReq, null);
+  public ApiResponse<Object> registerAccountWithHttpInfo(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq) throws ApiException {
+    return registerAccountWithHttpInfo(registerAccountReq, null);
   }
 
   /**
@@ -457,8 +457,8 @@ public class AuthService {
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> registerWithHttpInfo(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = registerRequestBuilder(registerAccountReq, headers);
+  public ApiResponse<Object> registerAccountWithHttpInfo(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = registerAccountRequestBuilder(registerAccountReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -469,7 +469,7 @@ public class AuthService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("register", localVarResponse);
+          throw getApiException("registerAccount", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -505,10 +505,10 @@ public class AuthService {
     }
   }
 
-  private HttpRequest.Builder registerRequestBuilder(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder registerAccountRequestBuilder(@javax.annotation.Nonnull RegisterAccountReq registerAccountReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'registerAccountReq' is set
     if (registerAccountReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'registerAccountReq' when calling register");
+      throw new ApiException(400, "Missing the required parameter 'registerAccountReq' when calling registerAccount");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -538,11 +538,11 @@ public class AuthService {
   }
 
 
-  public static final class APIRegisterRequest {
+  public static final class APIRegisterAccountRequest {
     @javax.annotation.Nonnull
     private RegisterAccountReq registerAccountReq; //  (required)
 
-    private APIRegisterRequest(Builder builder) {
+    private APIRegisterAccountRequest(Builder builder) {
       this.registerAccountReq = builder.registerAccountReq;
     }
     @javax.annotation.Nonnull
@@ -560,8 +560,8 @@ public class AuthService {
         this.registerAccountReq = registerAccountReq;
         return this;
       }
-      public APIRegisterRequest build() {
-        return new APIRegisterRequest(this);
+      public APIRegisterAccountRequest build() {
+        return new APIRegisterAccountRequest(this);
       }
     }
   }

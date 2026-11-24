@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * LoginAccountResp
+ * 响应结果。
  */
 @JsonPropertyOrder({
   LoginAccountResp.JSON_PROPERTY_ACCESS_TOKEN,
@@ -86,7 +86,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get accessToken
+   * 访问令牌
    * @return accessToken
    */
   @javax.annotation.Nullable
@@ -110,7 +110,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get refreshToken
+   * 刷新令牌
    * @return refreshToken
    */
   @javax.annotation.Nullable
@@ -134,7 +134,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get accessTokenExpiresAt
+   * 访问令牌过期时间
    * @return accessTokenExpiresAt
    */
   @javax.annotation.Nullable
@@ -158,7 +158,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get refreshTokenExpiresAt
+   * 刷新令牌过期时间
    * @return refreshTokenExpiresAt
    */
   @javax.annotation.Nullable
@@ -182,7 +182,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get sessionExpiresAt
+   * session 过期时间
    * @return sessionExpiresAt
    */
   @javax.annotation.Nullable
@@ -206,7 +206,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get userId
+   * 当前账号 ID
    * @return userId
    */
   @javax.annotation.Nullable
@@ -230,7 +230,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get name
+   * 账号名
    * @return name
    */
   @javax.annotation.Nullable
@@ -254,7 +254,7 @@ public class LoginAccountResp {
   }
 
   /**
-   * Get nickname
+   * 昵称
    * @return nickname
    */
   @javax.annotation.Nullable

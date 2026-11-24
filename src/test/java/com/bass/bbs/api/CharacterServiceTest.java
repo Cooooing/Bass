@@ -39,20 +39,20 @@ public class CharacterServiceTest {
     /**
      * 
      *
-     * 查询当前账号角色列表。
+     * 创建角色。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void callListTest() throws ApiException {
-        Object body = null;
+    public void createCharacterTest() throws ApiException {
+        CreateCharacterReq createCharacterReq = null;
         
-        CharacterService.APIcallListRequest request = CharacterService.APIcallListRequest.newBuilder()
-          .body(body)
+        CharacterService.APIcreateCharacterRequest request = CharacterService.APIcreateCharacterRequest.newBuilder()
+          .createCharacterReq(createCharacterReq)
           .build();
-        ListCharacterResp response = 
-        api.callList(request);
+        CreateCharacterResp response = 
+        api.createCharacter(request);
 
         // TODO: test validations
     }
@@ -60,20 +60,20 @@ public class CharacterServiceTest {
     /**
      * 
      *
-     * 创建角色。
+     * 查询当前账号角色列表。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void createTest() throws ApiException {
-        CreateCharacterReq createCharacterReq = null;
+    public void listCharacterTest() throws ApiException {
+        Object body = null;
         
-        CharacterService.APIcreateRequest request = CharacterService.APIcreateRequest.newBuilder()
-          .createCharacterReq(createCharacterReq)
+        CharacterService.APIlistCharacterRequest request = CharacterService.APIlistCharacterRequest.newBuilder()
+          .body(body)
           .build();
-        CreateCharacterResp response = 
-        api.create(request);
+        ListCharacterResp response = 
+        api.listCharacter(request);
 
         // TODO: test validations
     }

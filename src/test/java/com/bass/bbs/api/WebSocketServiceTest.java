@@ -44,14 +44,14 @@ public class WebSocketServiceTest {
      *          if the Api call fails
      */
     @Test
-    public void createTicketTest() throws ApiException {
+    public void createWebSocketTicketTest() throws ApiException {
         CreateWebSocketTicketReq createWebSocketTicketReq = null;
         
-        WebSocketService.APIcreateTicketRequest request = WebSocketService.APIcreateTicketRequest.newBuilder()
+        WebSocketService.APIcreateWebSocketTicketRequest request = WebSocketService.APIcreateWebSocketTicketRequest.newBuilder()
           .createWebSocketTicketReq(createWebSocketTicketReq)
           .build();
         CreateWebSocketTicketResp response = 
-        api.createTicket(request);
+        api.createWebSocketTicket(request);
 
         // TODO: test validations
     }

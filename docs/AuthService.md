@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**login**](AuthService.md#login) | **POST** /v1/game-idle/auth/login |  |
-| [**loginWithHttpInfo**](AuthService.md#loginWithHttpInfo) | **POST** /v1/game-idle/auth/login |  |
-| [**register**](AuthService.md#register) | **POST** /v1/game-idle/auth/register |  |
-| [**registerWithHttpInfo**](AuthService.md#registerWithHttpInfo) | **POST** /v1/game-idle/auth/register |  |
+| [**loginAccount**](AuthService.md#loginAccount) | **POST** /v1/game-idle/auth/login |  |
+| [**loginAccountWithHttpInfo**](AuthService.md#loginAccountWithHttpInfo) | **POST** /v1/game-idle/auth/login |  |
+| [**registerAccount**](AuthService.md#registerAccount) | **POST** /v1/game-idle/auth/register |  |
+| [**registerAccountWithHttpInfo**](AuthService.md#registerAccountWithHttpInfo) | **POST** /v1/game-idle/auth/register |  |
 
 
 
-## login
+## loginAccount
 
-> LoginAccountResp login(loginRequest)
+> LoginAccountResp loginAccount(loginAccountRequest)
 
 
 
@@ -38,13 +38,13 @@ public class Example {
         AuthService apiInstance = new AuthService(defaultClient);
         LoginAccountReq loginAccountReq = new LoginAccountReq(); // LoginAccountReq | 
         try {
-            APIloginRequest request = APIloginRequest.newBuilder()
+            APIloginAccountRequest request = APIloginAccountRequest.newBuilder()
                 .loginAccountReq(loginAccountReq)
                 .build();
-            LoginAccountResp result = apiInstance.login(request);
+            LoginAccountResp result = apiInstance.loginAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AuthService#login");
+            System.err.println("Exception when calling AuthService#loginAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -58,7 +58,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| loginRequest | [**APIloginRequest**](AuthService.md#APIloginRequest)|-|-|
+| loginAccountRequest | [**APIloginAccountRequest**](AuthService.md#APIloginAccountRequest)|-|-|
 
 ### Return type
 
@@ -79,9 +79,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## loginWithHttpInfo
+## loginAccountWithHttpInfo
 
-> ApiResponse<LoginAccountResp> loginWithHttpInfo(loginRequest)
+> ApiResponse<LoginAccountResp> loginAccountWithHttpInfo(loginAccountRequest)
 
 
 
@@ -107,15 +107,15 @@ public class Example {
         AuthService apiInstance = new AuthService(defaultClient);
         LoginAccountReq loginAccountReq = new LoginAccountReq(); // LoginAccountReq | 
         try {
-            APIloginRequest request = APIloginRequest.newBuilder()
+            APIloginAccountRequest request = APIloginAccountRequest.newBuilder()
                 .loginAccountReq(loginAccountReq)
                 .build();
-            ApiResponse<LoginAccountResp> response = apiInstance.loginWithHttpInfo(request);
+            ApiResponse<LoginAccountResp> response = apiInstance.loginAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AuthService#login");
+            System.err.println("Exception when calling AuthService#loginAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -129,7 +129,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| loginRequest | [**APIloginRequest**](AuthService.md#APIloginRequest)|-|-|
+| loginAccountRequest | [**APIloginAccountRequest**](AuthService.md#APIloginAccountRequest)|-|-|
 
 ### Return type
 
@@ -151,8 +151,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIloginRequest"></a>
-## APIloginRequest
+<a id="APIloginAccountRequest"></a>
+## APIloginAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
@@ -161,9 +161,9 @@ No authorization required
 
 
 
-## register
+## registerAccount
 
-> Object register(registerRequest)
+> Object registerAccount(registerAccountRequest)
 
 
 
@@ -188,13 +188,13 @@ public class Example {
         AuthService apiInstance = new AuthService(defaultClient);
         RegisterAccountReq registerAccountReq = new RegisterAccountReq(); // RegisterAccountReq | 
         try {
-            APIregisterRequest request = APIregisterRequest.newBuilder()
+            APIregisterAccountRequest request = APIregisterAccountRequest.newBuilder()
                 .registerAccountReq(registerAccountReq)
                 .build();
-            Object result = apiInstance.register(request);
+            Object result = apiInstance.registerAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AuthService#register");
+            System.err.println("Exception when calling AuthService#registerAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -208,7 +208,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| registerRequest | [**APIregisterRequest**](AuthService.md#APIregisterRequest)|-|-|
+| registerAccountRequest | [**APIregisterAccountRequest**](AuthService.md#APIregisterAccountRequest)|-|-|
 
 ### Return type
 
@@ -229,9 +229,9 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## registerWithHttpInfo
+## registerAccountWithHttpInfo
 
-> ApiResponse<Object> registerWithHttpInfo(registerRequest)
+> ApiResponse<Object> registerAccountWithHttpInfo(registerAccountRequest)
 
 
 
@@ -257,15 +257,15 @@ public class Example {
         AuthService apiInstance = new AuthService(defaultClient);
         RegisterAccountReq registerAccountReq = new RegisterAccountReq(); // RegisterAccountReq | 
         try {
-            APIregisterRequest request = APIregisterRequest.newBuilder()
+            APIregisterAccountRequest request = APIregisterAccountRequest.newBuilder()
                 .registerAccountReq(registerAccountReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.registerWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.registerAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AuthService#register");
+            System.err.println("Exception when calling AuthService#registerAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -279,7 +279,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| registerRequest | [**APIregisterRequest**](AuthService.md#APIregisterRequest)|-|-|
+| registerAccountRequest | [**APIregisterAccountRequest**](AuthService.md#APIregisterAccountRequest)|-|-|
 
 ### Return type
 
@@ -301,8 +301,8 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIregisterRequest"></a>
-## APIregisterRequest
+<a id="APIregisterAccountRequest"></a>
+## APIregisterAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |

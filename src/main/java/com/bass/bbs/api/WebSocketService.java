@@ -166,50 +166,50 @@ public class WebSocketService {
   /**
    * 
    * 创建角色 WS 连接凭证。
-   * @param apiRequest {@link APICreateTicketRequest}
+   * @param apiRequest {@link APICreateWebSocketTicketRequest}
    * @return CreateWebSocketTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateWebSocketTicketResp createTicket(APICreateTicketRequest apiRequest) throws ApiException {
-    return createTicket(apiRequest, null);
+  public CreateWebSocketTicketResp createWebSocketTicket(APICreateWebSocketTicketRequest apiRequest) throws ApiException {
+    return createWebSocketTicket(apiRequest, null);
   }
 
   /**
    * 
    * 创建角色 WS 连接凭证。
-   * @param apiRequest {@link APICreateTicketRequest}
+   * @param apiRequest {@link APICreateWebSocketTicketRequest}
    * @param headers Optional headers to include in the request
    * @return CreateWebSocketTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateWebSocketTicketResp createTicket(APICreateTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateWebSocketTicketResp createWebSocketTicket(APICreateWebSocketTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     CreateWebSocketTicketReq createWebSocketTicketReq = apiRequest.createWebSocketTicketReq();
-    return createTicket(createWebSocketTicketReq, headers);
+    return createWebSocketTicket(createWebSocketTicketReq, headers);
   }
 
   /**
    * 
    * 创建角色 WS 连接凭证。
-   * @param apiRequest {@link APICreateTicketRequest}
+   * @param apiRequest {@link APICreateWebSocketTicketRequest}
    * @return ApiResponse&lt;CreateWebSocketTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateWebSocketTicketResp> createTicketWithHttpInfo(APICreateTicketRequest apiRequest) throws ApiException {
-    return createTicketWithHttpInfo(apiRequest, null);
+  public ApiResponse<CreateWebSocketTicketResp> createWebSocketTicketWithHttpInfo(APICreateWebSocketTicketRequest apiRequest) throws ApiException {
+    return createWebSocketTicketWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
    * 创建角色 WS 连接凭证。
-   * @param apiRequest {@link APICreateTicketRequest}
+   * @param apiRequest {@link APICreateWebSocketTicketRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;CreateWebSocketTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateWebSocketTicketResp> createTicketWithHttpInfo(APICreateTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<CreateWebSocketTicketResp> createWebSocketTicketWithHttpInfo(APICreateWebSocketTicketRequest apiRequest, Map<String, String> headers) throws ApiException {
     CreateWebSocketTicketReq createWebSocketTicketReq = apiRequest.createWebSocketTicketReq();
-    return createTicketWithHttpInfo(createWebSocketTicketReq, headers);
+    return createWebSocketTicketWithHttpInfo(createWebSocketTicketReq, headers);
   }
 
   /**
@@ -219,8 +219,8 @@ public class WebSocketService {
    * @return CreateWebSocketTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateWebSocketTicketResp createTicket(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq) throws ApiException {
-    return createTicket(createWebSocketTicketReq, null);
+  public CreateWebSocketTicketResp createWebSocketTicket(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq) throws ApiException {
+    return createWebSocketTicket(createWebSocketTicketReq, null);
   }
 
   /**
@@ -231,8 +231,8 @@ public class WebSocketService {
    * @return CreateWebSocketTicketResp
    * @throws ApiException if fails to make API call
    */
-  public CreateWebSocketTicketResp createTicket(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateWebSocketTicketResp> localVarResponse = createTicketWithHttpInfo(createWebSocketTicketReq, headers);
+  public CreateWebSocketTicketResp createWebSocketTicket(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateWebSocketTicketResp> localVarResponse = createWebSocketTicketWithHttpInfo(createWebSocketTicketReq, headers);
     return localVarResponse.getData();
   }
 
@@ -243,8 +243,8 @@ public class WebSocketService {
    * @return ApiResponse&lt;CreateWebSocketTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateWebSocketTicketResp> createTicketWithHttpInfo(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq) throws ApiException {
-    return createTicketWithHttpInfo(createWebSocketTicketReq, null);
+  public ApiResponse<CreateWebSocketTicketResp> createWebSocketTicketWithHttpInfo(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq) throws ApiException {
+    return createWebSocketTicketWithHttpInfo(createWebSocketTicketReq, null);
   }
 
   /**
@@ -255,8 +255,8 @@ public class WebSocketService {
    * @return ApiResponse&lt;CreateWebSocketTicketResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateWebSocketTicketResp> createTicketWithHttpInfo(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createTicketRequestBuilder(createWebSocketTicketReq, headers);
+  public ApiResponse<CreateWebSocketTicketResp> createWebSocketTicketWithHttpInfo(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createWebSocketTicketRequestBuilder(createWebSocketTicketReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -267,7 +267,7 @@ public class WebSocketService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("createTicket", localVarResponse);
+          throw getApiException("createWebSocketTicket", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -303,10 +303,10 @@ public class WebSocketService {
     }
   }
 
-  private HttpRequest.Builder createTicketRequestBuilder(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq, Map<String, String> headers) throws ApiException {
+  private HttpRequest.Builder createWebSocketTicketRequestBuilder(@javax.annotation.Nonnull CreateWebSocketTicketReq createWebSocketTicketReq, Map<String, String> headers) throws ApiException {
     // verify the required parameter 'createWebSocketTicketReq' is set
     if (createWebSocketTicketReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'createWebSocketTicketReq' when calling createTicket");
+      throw new ApiException(400, "Missing the required parameter 'createWebSocketTicketReq' when calling createWebSocketTicket");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -336,11 +336,11 @@ public class WebSocketService {
   }
 
 
-  public static final class APICreateTicketRequest {
+  public static final class APICreateWebSocketTicketRequest {
     @javax.annotation.Nonnull
     private CreateWebSocketTicketReq createWebSocketTicketReq; //  (required)
 
-    private APICreateTicketRequest(Builder builder) {
+    private APICreateWebSocketTicketRequest(Builder builder) {
       this.createWebSocketTicketReq = builder.createWebSocketTicketReq;
     }
     @javax.annotation.Nonnull
@@ -358,8 +358,8 @@ public class WebSocketService {
         this.createWebSocketTicketReq = createWebSocketTicketReq;
         return this;
       }
-      public APICreateTicketRequest build() {
-        return new APICreateTicketRequest(this);
+      public APICreateWebSocketTicketRequest build() {
+        return new APICreateWebSocketTicketRequest(this);
       }
     }
   }

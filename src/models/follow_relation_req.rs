@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// FollowRelationReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct FollowRelationReq {
+    /// 目标账号 ID
     #[serde(rename = "target_id")]
     pub target_id: String,
 }
 
 impl FollowRelationReq {
+    /// 请求参数。
     pub fn new(target_id: String) -> FollowRelationReq {
         FollowRelationReq {
             target_id,

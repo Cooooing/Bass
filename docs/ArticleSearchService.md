@@ -4,14 +4,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**search**](ArticleSearchService.md#search) | **POST** /v1/content/article/search | 
+[**search_articles**](ArticleSearchService.md#search_articles) | **POST** /v1/content/article/search | 
 
 
 
-## search
+## search_articles
 
-> models::SearchArticlesResp search(search_articles_req)
+> models::SearchArticlesResp search_articles(search_articles_req)
 
+
+服务方法。
 
 ### Parameters
 

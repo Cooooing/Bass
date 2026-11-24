@@ -11,27 +11,37 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// Profile : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Profile {
+    /// 协议字段。
     #[serde(rename = "account", skip_serializing_if = "Option::is_none")]
     pub account: Option<models::AccountProfile>,
+    /// 协议字段。
     #[serde(rename = "background_url", skip_serializing_if = "Option::is_none")]
     pub background_url: Option<String>,
+    /// 协议字段。
     #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
     pub location: Option<models::ProfileLocation>,
+    /// 协议字段。
     #[serde(rename = "last_success_login_at", skip_serializing_if = "Option::is_none")]
     pub last_success_login_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 协议字段。
     #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
     pub visibility: Option<models::ProfileVisibility>,
+    /// 协议字段。
     #[serde(rename = "viewer_relation", skip_serializing_if = "Option::is_none")]
     pub viewer_relation: Option<models::ProfileRelation>,
+    /// 仅本人或允许公开在线状态的账号返回。
     #[serde(rename = "online", skip_serializing_if = "Option::is_none")]
     pub online: Option<bool>,
+    /// 仅本人或允许公开积分的账号返回。
     #[serde(rename = "points", skip_serializing_if = "Option::is_none")]
     pub points: Option<String>,
 }
 
 impl Profile {
+    /// 协议消息。
     pub fn new() -> Profile {
         Profile {
             account: None,

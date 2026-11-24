@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdateCurrentPreferencesReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateCurrentPreferencesReq {
+    /// 时区
     #[serde(rename = "timezone", skip_serializing_if = "Option::is_none")]
     pub timezone: Option<String>,
+    /// 桌面端主题
     #[serde(rename = "theme", skip_serializing_if = "Option::is_none")]
     pub theme: Option<String>,
+    /// 移动端主题
     #[serde(rename = "mobile_theme", skip_serializing_if = "Option::is_none")]
     pub mobile_theme: Option<String>,
+    /// 界面语言
     #[serde(rename = "language", skip_serializing_if = "Option::is_none")]
     pub language: Option<Language>,
 }
 
 impl UpdateCurrentPreferencesReq {
+    /// 请求参数。
     pub fn new() -> UpdateCurrentPreferencesReq {
         UpdateCurrentPreferencesReq {
             timezone: None,
@@ -33,7 +39,7 @@ impl UpdateCurrentPreferencesReq {
         }
     }
 }
-/// 
+/// 界面语言
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Language {
     #[serde(rename = "LANGUAGE_UNSPECIFIED")]

@@ -11,17 +11,21 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PageWatchingMoonbreezesResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct PageMoonbreezesResp {
+pub struct PageWatchingMoonbreezesResp {
+    /// 协议字段。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::Moonbreeze>>,
+    /// 协议字段。
     #[serde(rename = "next_cursor", skip_serializing_if = "Option::is_none")]
     pub next_cursor: Option<String>,
 }
 
-impl PageMoonbreezesResp {
-    pub fn new() -> PageMoonbreezesResp {
-        PageMoonbreezesResp {
+impl PageWatchingMoonbreezesResp {
+    /// 响应结果。
+    pub fn new() -> PageWatchingMoonbreezesResp {
+        PageWatchingMoonbreezesResp {
             rows: None,
             next_cursor: None,
         }

@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RefreshTokenResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RefreshTokenResp {
+    /// 新的访问令牌
     #[serde(rename = "access_token", skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
+    /// 新的刷新令牌
     #[serde(rename = "refresh_token", skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
+    /// 访问令牌过期时间
     #[serde(rename = "access_token_expires_at", skip_serializing_if = "Option::is_none")]
     pub access_token_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 刷新令牌空闲过期时间
     #[serde(rename = "refresh_token_expires_at", skip_serializing_if = "Option::is_none")]
     pub refresh_token_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// session 绝对过期时间
     #[serde(rename = "session_expires_at", skip_serializing_if = "Option::is_none")]
     pub session_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl RefreshTokenResp {
+    /// 响应结果。
     pub fn new() -> RefreshTokenResp {
         RefreshTokenResp {
             access_token: None,

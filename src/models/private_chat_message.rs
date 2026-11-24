@@ -11,27 +11,37 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PrivateChatMessage : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrivateChatMessage {
+    /// 消息 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 发送账号 ID。
     #[serde(rename = "sender_id", skip_serializing_if = "Option::is_none")]
     pub sender_id: Option<String>,
+    /// 接收账号 ID。
     #[serde(rename = "receiver_id", skip_serializing_if = "Option::is_none")]
     pub receiver_id: Option<String>,
+    /// 原始 Markdown 内容。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 消息类型。
     #[serde(rename = "message_type", skip_serializing_if = "Option::is_none")]
     pub message_type: Option<MessageType>,
+    /// 是否已撤回。
     #[serde(rename = "revoked", skip_serializing_if = "Option::is_none")]
     pub revoked: Option<bool>,
+    /// 创建时间。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 撤回时间。
     #[serde(rename = "revoked_at", skip_serializing_if = "Option::is_none")]
     pub revoked_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl PrivateChatMessage {
+    /// 协议消息。
     pub fn new() -> PrivateChatMessage {
         PrivateChatMessage {
             id: None,
@@ -45,7 +55,7 @@ impl PrivateChatMessage {
         }
     }
 }
-/// 
+/// 消息类型。
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum MessageType {
     #[serde(rename = "IM_MESSAGE_TYPE_UNSPECIFIED")]

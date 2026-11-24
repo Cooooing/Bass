@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdatePhoneAccountReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdatePhoneAccountReq {
+    /// 新手机号，必填
     #[serde(rename = "phone")]
     pub phone: String,
+    /// 手机 OTP，必填
     #[serde(rename = "code")]
     pub code: String,
 }
 
 impl UpdatePhoneAccountReq {
+    /// 请求参数。
     pub fn new(phone: String, code: String) -> UpdatePhoneAccountReq {
         UpdatePhoneAccountReq {
             phone,

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReorderEmojiGroupsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReorderEmojiGroupsReq {
+    /// 按最终展示顺序排列的完整分组 ID 序列。
     #[serde(rename = "group_ids", skip_serializing_if = "Option::is_none")]
     pub group_ids: Option<Vec<String>>,
 }
 
 impl ReorderEmojiGroupsReq {
+    /// 请求参数。
     pub fn new() -> ReorderEmojiGroupsReq {
         ReorderEmojiGroupsReq {
             group_ids: None,

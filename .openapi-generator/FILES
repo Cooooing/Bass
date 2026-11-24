@@ -31,6 +31,7 @@ docs/ArticleViewHistoryItem.md
 docs/ArticleViewerActionState.md
 docs/AssetService.md
 docs/AuthService.md
+docs/AvatarAccountResp.md
 docs/BadgeDraft.md
 docs/BadgeService.md
 docs/BeginEnableTotpResp.md
@@ -177,13 +178,15 @@ docs/PageArticleViewHistoryResp.md
 docs/PageCollectedArticlesReq.md
 docs/PageCollectedArticlesResp.md
 docs/PageMemberMoonbreezesReq.md
-docs/PageMoonbreezesResp.md
+docs/PageMemberMoonbreezesResp.md
 docs/PagePublicMoonbreezesReq.md
+docs/PagePublicMoonbreezesResp.md
 docs/PageReq.md
 docs/PageResp.md
 docs/PageWatchedArticlesReq.md
 docs/PageWatchedArticlesResp.md
 docs/PageWatchingMoonbreezesReq.md
+docs/PageWatchingMoonbreezesResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
 docs/PrepareBadgeFontUploadReq.md
@@ -214,6 +217,8 @@ docs/RenameEmojiGroupReq.md
 docs/RenameEmojiGroupResp.md
 docs/RenameEmojiItemReq.md
 docs/RenameEmojiItemResp.md
+docs/RenderMakerBadgeResp.md
+docs/RenderPublishedBadgeResp.md
 docs/RenderSpec.md
 docs/ReorderEmojiGroupsReq.md
 docs/ReorderEmojiItemsReq.md
@@ -352,6 +357,7 @@ src/models/article_postscript.rs
 src/models/article_tag.rs
 src/models/article_view_history_item.rs
 src/models/article_viewer_action_state.rs
+src/models/avatar_account_resp.rs
 src/models/badge_draft.rs
 src/models/begin_enable_totp_resp.rs
 src/models/bind_article_tags_req.rs
@@ -488,13 +494,15 @@ src/models/page_article_view_history_resp.rs
 src/models/page_collected_articles_req.rs
 src/models/page_collected_articles_resp.rs
 src/models/page_member_moonbreezes_req.rs
-src/models/page_moonbreezes_resp.rs
+src/models/page_member_moonbreezes_resp.rs
 src/models/page_public_moonbreezes_req.rs
+src/models/page_public_moonbreezes_resp.rs
 src/models/page_req.rs
 src/models/page_resp.rs
 src/models/page_watched_articles_req.rs
 src/models/page_watched_articles_resp.rs
 src/models/page_watching_moonbreezes_req.rs
+src/models/page_watching_moonbreezes_resp.rs
 src/models/prepare_badge_font_upload_req.rs
 src/models/prepare_badge_font_upload_resp.rs
 src/models/prepare_badge_image_upload_req.rs
@@ -519,6 +527,8 @@ src/models/rename_emoji_group_req.rs
 src/models/rename_emoji_group_resp.rs
 src/models/rename_emoji_item_req.rs
 src/models/rename_emoji_item_resp.rs
+src/models/render_maker_badge_resp.rs
+src/models/render_published_badge_resp.rs
 src/models/render_spec.rs
 src/models/reorder_emoji_groups_req.rs
 src/models/reorder_emoji_items_req.rs

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateCommentResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateCommentResp {
+    /// 创建后的评论
     #[serde(rename = "comment", skip_serializing_if = "Option::is_none")]
     pub comment: Option<models::RespCommentDetail>,
 }
 
 impl CreateCommentResp {
+    /// 响应结果。
     pub fn new() -> CreateCommentResp {
         CreateCommentResp {
             comment: None,

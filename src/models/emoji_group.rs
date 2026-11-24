@@ -14,10 +14,13 @@ use serde::{Deserialize, Serialize};
 /// EmojiGroup : EmojiGroup 是当前账号可操作的表情分组。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct EmojiGroup {
+    /// 分组 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 分组名称。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 分组内可用表情。
     #[serde(rename = "items", skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<models::EmojiItem>>,
 }

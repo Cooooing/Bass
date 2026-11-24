@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CompleteMarkdownImageUploadResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CompleteMarkdownImageUploadResp {
+    /// 已确认资源的 ID。
     #[serde(rename = "asset_id", skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
+    /// 前端本地预览使用的公开图片地址。
     #[serde(rename = "image_url", skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
 }
 
 impl CompleteMarkdownImageUploadResp {
+    /// 响应结果。
     pub fn new() -> CompleteMarkdownImageUploadResp {
         CompleteMarkdownImageUploadResp {
             asset_id: None,

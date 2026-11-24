@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**item_id** | Option<**String**> |  | [optional]
-**group_id** | Option<**String**> |  | [optional]
+**item_id** | Option<**String**> | 待移动表情项 ID。 | [optional]
+**group_id** | Option<**String**> | 目标分组 ID。 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

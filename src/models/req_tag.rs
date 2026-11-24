@@ -11,25 +11,34 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqTag : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqTag {
+    /// 稳定编码
     #[serde(rename = "code")]
     pub code: String,
+    /// 标签名称
     #[serde(rename = "name")]
     pub name: String,
+    /// 描述
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 领域 ID
     #[serde(rename = "domain_id", skip_serializing_if = "Option::is_none")]
     pub domain_id: Option<String>,
+    /// 启停状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 图标
     #[serde(rename = "icon", skip_serializing_if = "Option::is_none")]
     pub icon: Option<String>,
+    /// 排序值，越小越靠前
     #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
     pub sort: Option<i32>,
 }
 
 impl ReqTag {
+    /// 协议消息。
     pub fn new(code: String, name: String) -> ReqTag {
         ReqTag {
             code,
@@ -42,7 +51,7 @@ impl ReqTag {
         }
     }
 }
-/// 
+/// 启停状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "TAG_STATUS_UNSPECIFIED")]

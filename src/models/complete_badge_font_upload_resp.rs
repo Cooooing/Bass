@@ -14,8 +14,10 @@ use serde::{Deserialize, Serialize};
 /// CompleteBadgeFontUploadResp : Resp 返回已确认的字体资源与前端本地预览地址。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CompleteBadgeFontUploadResp {
+    /// 已确认资源的 ID。
     #[serde(rename = "asset_id", skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
+    /// 前端本地预览可用的字体公开地址。
     #[serde(rename = "font_url", skip_serializing_if = "Option::is_none")]
     pub font_url: Option<String>,
 }

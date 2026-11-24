@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// ListBadgeDraftsResp : Resp 返回草稿行。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListBadgeDraftsResp {
+    /// 草稿列表。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::BadgeDraft>>,
 }

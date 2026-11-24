@@ -11,6 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetCurrentHolidayResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentHolidayResp {
     /// 当前日期。
@@ -34,6 +35,7 @@ pub struct GetCurrentHolidayResp {
 }
 
 impl GetCurrentHolidayResp {
+    /// 响应结果。
     pub fn new() -> GetCurrentHolidayResp {
         GetCurrentHolidayResp {
             date: None,

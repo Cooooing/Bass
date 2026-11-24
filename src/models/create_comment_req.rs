@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateCommentReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateCommentReq {
+    /// 文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 评论内容
     #[serde(rename = "content")]
     pub content: String,
+    /// 回复的评论 ID
     #[serde(rename = "reply_id", skip_serializing_if = "Option::is_none")]
     pub reply_id: Option<String>,
 }
 
 impl CreateCommentReq {
+    /// 请求参数。
     pub fn new(article_id: String, content: String) -> CreateCommentReq {
         CreateCommentReq {
             article_id,

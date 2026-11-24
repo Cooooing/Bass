@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ClaimYesterdayLivenessRewardResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ClaimYesterdayLivenessRewardResp {
+    /// 本次领取的积分。
     #[serde(rename = "reward_points", skip_serializing_if = "Option::is_none")]
     pub reward_points: Option<String>,
+    /// 是否已成功领取。
     #[serde(rename = "claimed", skip_serializing_if = "Option::is_none")]
     pub claimed: Option<bool>,
 }
 
 impl ClaimYesterdayLivenessRewardResp {
+    /// 响应结果。
     pub fn new() -> ClaimYesterdayLivenessRewardResp {
         ClaimYesterdayLivenessRewardResp {
             reward_points: None,

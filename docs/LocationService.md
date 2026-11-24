@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_current**](LocationService.md#get_current) | **POST** /v1/platform/location/get-current | 
+[**get_current_location**](LocationService.md#get_current_location) | **POST** /v1/platform/location/get-current | 
 
 
 
-## get_current
+## get_current_location
 
-> models::GetCurrentLocationResp get_current(body)
+> models::GetCurrentLocationResp get_current_location(body)
 
 
 按当前请求来源 IP 获取地理数据。

@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateRealtimeTicketResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateRealtimeTicketResp {
+    /// 一次性 SSE 建连凭证。
     #[serde(rename = "ticket", skip_serializing_if = "Option::is_none")]
     pub ticket: Option<String>,
+    /// 有效期秒数。
     #[serde(rename = "expires_in_seconds", skip_serializing_if = "Option::is_none")]
     pub expires_in_seconds: Option<String>,
+    /// realtime node SSE 路径。
     #[serde(rename = "path", skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
 }
 
 impl CreateRealtimeTicketResp {
+    /// 响应结果。
     pub fn new() -> CreateRealtimeTicketResp {
         CreateRealtimeTicketResp {
             ticket: None,

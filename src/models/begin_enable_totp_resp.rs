@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// BeginEnableTotpResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct BeginEnableTotpResp {
+    /// TOTP 绑定 URL
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// TOTP 二维码图片数据
     #[serde(rename = "qr_code", skip_serializing_if = "Option::is_none")]
     pub qr_code: Option<String>,
 }
 
 impl BeginEnableTotpResp {
+    /// 响应结果。
     pub fn new() -> BeginEnableTotpResp {
         BeginEnableTotpResp {
             url: None,

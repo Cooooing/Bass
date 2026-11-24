@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateTagResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateTagResp {
+    /// 标签信息
     #[serde(rename = "tag", skip_serializing_if = "Option::is_none")]
     pub tag: Option<models::RespTag>,
 }
 
 impl CreateTagResp {
+    /// 响应结果。
     pub fn new() -> CreateTagResp {
         CreateTagResp {
             tag: None,

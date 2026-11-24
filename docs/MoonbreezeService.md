@@ -4,17 +4,19 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create**](MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
-[**page_member**](MoonbreezeService.md#page_member) | **POST** /v1/content/moonbreeze/page-member | 
-[**page_public**](MoonbreezeService.md#page_public) | **POST** /v1/content/moonbreeze/page-public | 
-[**page_watching**](MoonbreezeService.md#page_watching) | **POST** /v1/content/moonbreeze/page-watching | 
+[**create_moonbreeze**](MoonbreezeService.md#create_moonbreeze) | **POST** /v1/content/moonbreeze/create | 
+[**page_member_moonbreezes**](MoonbreezeService.md#page_member_moonbreezes) | **POST** /v1/content/moonbreeze/page-member | 
+[**page_public_moonbreezes**](MoonbreezeService.md#page_public_moonbreezes) | **POST** /v1/content/moonbreeze/page-public | 
+[**page_watching_moonbreezes**](MoonbreezeService.md#page_watching_moonbreezes) | **POST** /v1/content/moonbreeze/page-watching | 
 
 
 
-## create
+## create_moonbreeze
 
-> models::CreateMoonbreezeResp create(create_moonbreeze_req)
+> models::CreateMoonbreezeResp create_moonbreeze(create_moonbreeze_req)
 
+
+服务方法。
 
 ### Parameters
 
@@ -39,10 +41,12 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## page_member
+## page_member_moonbreezes
 
-> models::PageMoonbreezesResp page_member(page_member_moonbreezes_req)
+> models::PageMemberMoonbreezesResp page_member_moonbreezes(page_member_moonbreezes_req)
 
+
+服务方法。
 
 ### Parameters
 
@@ -53,7 +57,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::PageMoonbreezesResp**](PageMoonbreezes_Resp.md)
+[**models::PageMemberMoonbreezesResp**](PageMemberMoonbreezes_Resp.md)
 
 ### Authorization
 
@@ -67,10 +71,12 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## page_public
+## page_public_moonbreezes
 
-> models::PageMoonbreezesResp page_public(page_public_moonbreezes_req)
+> models::PagePublicMoonbreezesResp page_public_moonbreezes(page_public_moonbreezes_req)
 
+
+服务方法。
 
 ### Parameters
 
@@ -81,7 +87,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::PageMoonbreezesResp**](PageMoonbreezes_Resp.md)
+[**models::PagePublicMoonbreezesResp**](PagePublicMoonbreezes_Resp.md)
 
 ### Authorization
 
@@ -95,10 +101,12 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## page_watching
+## page_watching_moonbreezes
 
-> models::PageMoonbreezesResp page_watching(page_watching_moonbreezes_req)
+> models::PageWatchingMoonbreezesResp page_watching_moonbreezes(page_watching_moonbreezes_req)
 
+
+服务方法。
 
 ### Parameters
 
@@ -109,7 +117,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::PageMoonbreezesResp**](PageMoonbreezes_Resp.md)
+[**models::PageWatchingMoonbreezesResp**](PageWatchingMoonbreezes_Resp.md)
 
 ### Authorization
 

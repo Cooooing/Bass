@@ -11,35 +11,49 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespArticleBrief : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespArticleBrief {
+    /// 文章 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 标题
     #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+    /// 文章类型
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub r#type: Option<Type>,
+    /// 作者展示资料
     #[serde(rename = "author_user", skip_serializing_if = "Option::is_none")]
     pub author_user: Option<models::RespAccountProfile>,
+    /// 封面图片 URL
     #[serde(rename = "cover_image_url", skip_serializing_if = "Option::is_none")]
     pub cover_image_url: Option<String>,
+    /// 发布状态
     #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
     pub publish_status: Option<PublishStatus>,
+    /// 可见范围
     #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
     pub visibility: Option<Visibility>,
+    /// 管理限制
     #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
     pub restriction: Option<Restriction>,
+    /// 创建账号 ID
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
+    /// 更新账号 ID
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl RespArticleBrief {
+    /// 协议消息。
     pub fn new() -> RespArticleBrief {
         RespArticleBrief {
             id: None,
@@ -57,7 +71,7 @@ impl RespArticleBrief {
         }
     }
 }
-/// 
+/// 文章类型
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "ARTICLE_TYPE_UNSPECIFIED")]
@@ -79,7 +93,7 @@ impl Default for Type {
         Self::ArticleTypeUnspecified
     }
 }
-/// 
+/// 发布状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum PublishStatus {
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]
@@ -97,7 +111,7 @@ impl Default for PublishStatus {
         Self::ArticlePublishStatusUnspecified
     }
 }
-/// 
+/// 可见范围
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Visibility {
     #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
@@ -113,7 +127,7 @@ impl Default for Visibility {
         Self::ArticleVisibilityUnspecified
     }
 }
-/// 
+/// 管理限制
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Restriction {
     #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]

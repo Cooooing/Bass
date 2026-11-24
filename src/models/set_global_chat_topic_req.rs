@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SetGlobalChatTopicReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SetGlobalChatTopicReq {
+    /// 话题内容。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
 }
 
 impl SetGlobalChatTopicReq {
+    /// 请求参数。
     pub fn new() -> SetGlobalChatTopicReq {
         SetGlobalChatTopicReq {
             content: None,

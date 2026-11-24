@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetArticleReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 可选，预期发布状态；未传按已发布查询
     #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
     pub publish_status: Option<PublishStatus>,
 }
 
 impl GetArticleReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> GetArticleReq {
         GetArticleReq {
             article_id,
@@ -27,7 +31,7 @@ impl GetArticleReq {
         }
     }
 }
-/// 
+/// 可选，预期发布状态；未传按已发布查询
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum PublishStatus {
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]

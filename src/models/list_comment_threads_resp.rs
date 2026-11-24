@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListCommentThreadsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListCommentThreadsResp {
+    /// 分页结果
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
+    /// 评论楼层列表
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::RespCommentThread>>,
+    /// 问答已采纳回答；不可见时不返回
     #[serde(rename = "accepted_answer", skip_serializing_if = "Option::is_none")]
     pub accepted_answer: Option<models::RespPinnedComment>,
+    /// 作者手动置顶评论；不可见时不返回
     #[serde(rename = "pinned_comment", skip_serializing_if = "Option::is_none")]
     pub pinned_comment: Option<models::RespPinnedComment>,
 }
 
 impl ListCommentThreadsResp {
+    /// 响应结果。
     pub fn new() -> ListCommentThreadsResp {
         ListCommentThreadsResp {
             page: None,

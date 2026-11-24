@@ -14,10 +14,13 @@ use serde::{Deserialize, Serialize};
 /// PrepareBadgeFontUploadResp : Resp 返回已存在字体或一次直传凭证。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrepareBadgeFontUploadResp {
+    /// 已存在资源的 ID。
     #[serde(rename = "asset_id", skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
+    /// 新资源的 MinIO multipart POST 地址。
     #[serde(rename = "upload_url", skip_serializing_if = "Option::is_none")]
     pub upload_url: Option<String>,
+    /// MinIO multipart POST 表单字段。
     #[serde(rename = "form_fields", skip_serializing_if = "Option::is_none")]
     pub form_fields: Option<std::collections::HashMap<String, String>>,
 }

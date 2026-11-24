@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ConfirmEnableTotpReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ConfirmEnableTotpReq {
+    /// TOTP 验证码
     #[serde(rename = "code")]
     pub code: String,
 }
 
 impl ConfirmEnableTotpReq {
+    /// 请求参数。
     pub fn new(code: String) -> ConfirmEnableTotpReq {
         ConfirmEnableTotpReq {
             code,

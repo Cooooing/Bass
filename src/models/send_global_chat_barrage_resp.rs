@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SendGlobalChatBarrageResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SendGlobalChatBarrageResp {
+    /// 已发布的弹幕。
     #[serde(rename = "barrage", skip_serializing_if = "Option::is_none")]
     pub barrage: Option<models::GlobalChatBarrage>,
 }
 
 impl SendGlobalChatBarrageResp {
+    /// 响应结果。
     pub fn new() -> SendGlobalChatBarrageResp {
         SendGlobalChatBarrageResp {
             barrage: None,

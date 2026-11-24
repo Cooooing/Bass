@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PrepareProfileImageUploadAccountResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrepareProfileImageUploadAccountResp {
+    /// 已存在时直接返回
     #[serde(rename = "asset_id", skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
+    /// 新资源的 MinIO multipart POST 地址
     #[serde(rename = "upload_url", skip_serializing_if = "Option::is_none")]
     pub upload_url: Option<String>,
+    /// 协议字段。
     #[serde(rename = "form_fields", skip_serializing_if = "Option::is_none")]
     pub form_fields: Option<std::collections::HashMap<String, String>>,
 }
 
 impl PrepareProfileImageUploadAccountResp {
+    /// 响应结果。
     pub fn new() -> PrepareProfileImageUploadAccountResp {
         PrepareProfileImageUploadAccountResp {
             asset_id: None,

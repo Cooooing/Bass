@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CountPrivateChatUnreadResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CountPrivateChatUnreadResp {
+    /// 未读消息总数。
     #[serde(rename = "count", skip_serializing_if = "Option::is_none")]
     pub count: Option<i32>,
 }
 
 impl CountPrivateChatUnreadResp {
+    /// 响应结果。
     pub fn new() -> CountPrivateChatUnreadResp {
         CountPrivateChatUnreadResp {
             count: None,

@@ -11,27 +11,37 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqDomainQuery : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqDomainQuery {
+    /// 领域 ID 列表
     #[serde(rename = "ids", skip_serializing_if = "Option::is_none")]
     pub ids: Option<Vec<String>>,
+    /// 稳定编码
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    /// 领域名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 描述
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 启停状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 链接
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 图标
     #[serde(rename = "icon", skip_serializing_if = "Option::is_none")]
     pub icon: Option<String>,
+    /// 是否在导航中展示
     #[serde(rename = "is_nav", skip_serializing_if = "Option::is_none")]
     pub is_nav: Option<bool>,
 }
 
 impl ReqDomainQuery {
+    /// 协议消息。
     pub fn new() -> ReqDomainQuery {
         ReqDomainQuery {
             ids: None,
@@ -45,7 +55,7 @@ impl ReqDomainQuery {
         }
     }
 }
-/// 
+/// 启停状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "DOMAIN_STATUS_UNSPECIFIED")]

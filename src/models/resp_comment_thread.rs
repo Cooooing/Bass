@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespCommentThread : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespCommentThread {
+    /// 顶层评论
     #[serde(rename = "root", skip_serializing_if = "Option::is_none")]
     pub root: Option<models::RespCommentListItem>,
+    /// 回复预览列表
     #[serde(rename = "preview_replies", skip_serializing_if = "Option::is_none")]
     pub preview_replies: Option<Vec<models::RespCommentListItem>>,
+    /// 回复数量
     #[serde(rename = "reply_count", skip_serializing_if = "Option::is_none")]
     pub reply_count: Option<i32>,
+    /// 是否还有更多回复
     #[serde(rename = "has_more_replies", skip_serializing_if = "Option::is_none")]
     pub has_more_replies: Option<bool>,
 }
 
 impl RespCommentThread {
+    /// 协议消息。
     pub fn new() -> RespCommentThread {
         RespCommentThread {
             root: None,

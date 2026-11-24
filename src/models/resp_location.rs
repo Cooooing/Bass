@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespLocation : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespLocation {
+    /// 国家或地区
     #[serde(rename = "country", skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
+    /// 省份或州
     #[serde(rename = "province", skip_serializing_if = "Option::is_none")]
     pub province: Option<String>,
+    /// 城市
     #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
 }
 
 impl RespLocation {
+    /// 协议消息。
     pub fn new() -> RespLocation {
         RespLocation {
             country: None,

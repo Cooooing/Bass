@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// DisableTotpReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct DisableTotpReq {
+    /// TOTP 验证码
     #[serde(rename = "code")]
     pub code: String,
 }
 
 impl DisableTotpReq {
+    /// 请求参数。
     pub fn new(code: String) -> DisableTotpReq {
         DisableTotpReq {
             code,

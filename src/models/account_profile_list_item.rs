@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// AccountProfileListItem : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AccountProfileListItem {
+    /// 协议字段。
     #[serde(rename = "account", skip_serializing_if = "Option::is_none")]
     pub account: Option<models::AccountProfile>,
+    /// 协议字段。
     #[serde(rename = "viewer_relation", skip_serializing_if = "Option::is_none")]
     pub viewer_relation: Option<models::ProfileRelation>,
 }
 
 impl AccountProfileListItem {
+    /// 协议消息。
     pub fn new() -> AccountProfileListItem {
         AccountProfileListItem {
             account: None,

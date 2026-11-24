@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_current**](PreferencesService.md#get_current) | **POST** /v1/user/preference/get-current | 
-[**update_current**](PreferencesService.md#update_current) | **POST** /v1/user/preference/update-current | 
+[**get_current_preferences**](PreferencesService.md#get_current_preferences) | **POST** /v1/user/preference/get-current | 
+[**update_current_preferences**](PreferencesService.md#update_current_preferences) | **POST** /v1/user/preference/update-current | 
 
 
 
-## get_current
+## get_current_preferences
 
-> models::GetCurrentPreferencesResp get_current(body)
+> models::GetCurrentPreferencesResp get_current_preferences(body)
 
 
 获取当前账号的偏好设置。
@@ -39,9 +39,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## update_current
+## update_current_preferences
 
-> models::UpdateCurrentPreferencesResp update_current(update_current_preferences_req)
+> models::UpdateCurrentPreferencesResp update_current_preferences(update_current_preferences_req)
 
 
 更新当前账号的偏好设置。

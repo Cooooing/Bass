@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetCurrentPrivacySettingResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentPrivacySettingResp {
+    /// 当前账号隐私设置
     #[serde(rename = "privacy_setting", skip_serializing_if = "Option::is_none")]
     pub privacy_setting: Option<models::RespPrivacySetting>,
 }
 
 impl GetCurrentPrivacySettingResp {
+    /// 响应结果。
     pub fn new() -> GetCurrentPrivacySettingResp {
         GetCurrentPrivacySettingResp {
             privacy_setting: None,

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// TransferAccountPointsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TransferAccountPointsResp {
+    /// 转账后的当前积分
     #[serde(rename = "balance", skip_serializing_if = "Option::is_none")]
     pub balance: Option<String>,
 }
 
 impl TransferAccountPointsResp {
+    /// 响应结果。
     pub fn new() -> TransferAccountPointsResp {
         TransferAccountPointsResp {
             balance: None,

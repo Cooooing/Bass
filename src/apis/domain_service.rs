@@ -23,17 +23,17 @@ pub trait DomainService: Send + Sync {
     /// POST /v1/content/domain/create
     ///
     /// 创建领域。
-    async fn create<'create_domain_req>(&self, create_domain_req: models::CreateDomainReq) -> Result<models::CreateDomainResp, Error<CreateError>>;
+    async fn create_domain<'create_domain_req>(&self, create_domain_req: models::CreateDomainReq) -> Result<models::CreateDomainResp, Error<CreateDomainError>>;
 
     /// POST /v1/content/domain/list
     ///
     /// 查询领域列表。
-    async fn list<'list_domains_req>(&self, list_domains_req: models::ListDomainsReq) -> Result<models::ListDomainsResp, Error<ListError>>;
+    async fn list_domains<'list_domains_req>(&self, list_domains_req: models::ListDomainsReq) -> Result<models::ListDomainsResp, Error<ListDomainsError>>;
 
     /// POST /v1/content/domain/update
     ///
     /// 更新领域。
-    async fn update<'update_domain_req>(&self, update_domain_req: models::UpdateDomainReq) -> Result<models::UpdateDomainResp, Error<UpdateError>>;
+    async fn update_domain<'update_domain_req>(&self, update_domain_req: models::UpdateDomainReq) -> Result<models::UpdateDomainResp, Error<UpdateDomainError>>;
 }
 
 pub struct DomainServiceClient {
@@ -51,7 +51,7 @@ impl DomainServiceClient {
 #[async_trait]
 impl DomainService for DomainServiceClient {
     /// 创建领域。
-    async fn create<'create_domain_req>(&self, create_domain_req: models::CreateDomainReq) -> Result<models::CreateDomainResp, Error<CreateError>> {
+    async fn create_domain<'create_domain_req>(&self, create_domain_req: models::CreateDomainReq) -> Result<models::CreateDomainResp, Error<CreateDomainError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -83,14 +83,14 @@ impl DomainService for DomainServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateDomainResp`")))),
             }
         } else {
-            let local_var_entity: Option<CreateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateDomainError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 查询领域列表。
-    async fn list<'list_domains_req>(&self, list_domains_req: models::ListDomainsReq) -> Result<models::ListDomainsResp, Error<ListError>> {
+    async fn list_domains<'list_domains_req>(&self, list_domains_req: models::ListDomainsReq) -> Result<models::ListDomainsResp, Error<ListDomainsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -122,14 +122,14 @@ impl DomainService for DomainServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListDomainsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListDomainsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 更新领域。
-    async fn update<'update_domain_req>(&self, update_domain_req: models::UpdateDomainReq) -> Result<models::UpdateDomainResp, Error<UpdateError>> {
+    async fn update_domain<'update_domain_req>(&self, update_domain_req: models::UpdateDomainReq) -> Result<models::UpdateDomainResp, Error<UpdateDomainError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -161,7 +161,7 @@ impl DomainService for DomainServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateDomainResp`")))),
             }
         } else {
-            let local_var_entity: Option<UpdateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdateDomainError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -169,24 +169,24 @@ impl DomainService for DomainServiceClient {
 
 }
 
-/// struct for typed errors of method [`DomainService::create`]
+/// struct for typed errors of method [`DomainService::create_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CreateError {
+pub enum CreateDomainError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`DomainService::list`]
+/// struct for typed errors of method [`DomainService::list_domains`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListError {
+pub enum ListDomainsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`DomainService::update`]
+/// struct for typed errors of method [`DomainService::update_domain`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpdateError {
+pub enum UpdateDomainError {
     UnknownValue(serde_json::Value),
 }
 

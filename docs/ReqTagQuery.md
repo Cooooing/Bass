@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ids** | Option<**Vec<String>**> |  | [optional]
-**code** | Option<**String**> |  | [optional]
-**name** | Option<**String**> |  | [optional]
-**names** | Option<**Vec<String>**> |  | [optional]
-**description** | Option<**String**> |  | [optional]
-**status** | Option<**Status**> |  (enum: TAG_STATUS_UNSPECIFIED, TAG_STATUS_ENABLED, TAG_STATUS_DISABLED) | [optional]
-**domain_id** | Option<**String**> |  | [optional]
+**ids** | Option<**Vec<String>**> | 标签 ID 列表 | [optional]
+**code** | Option<**String**> | 稳定编码 | [optional]
+**name** | Option<**String**> | 标签名称 | [optional]
+**names** | Option<**Vec<String>**> | 标签名称列表 | [optional]
+**description** | Option<**String**> | 描述 | [optional]
+**status** | Option<**Status**> | 启停状态 (enum: TAG_STATUS_UNSPECIFIED, TAG_STATUS_ENABLED, TAG_STATUS_DISABLED) | [optional]
+**domain_id** | Option<**String**> | 领域 ID | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

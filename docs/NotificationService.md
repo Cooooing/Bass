@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**count_unread**](NotificationService.md#count_unread) | **POST** /v1/notify/notification/count-unread | 
-[**list**](NotificationService.md#list) | **POST** /v1/notify/notification/list | 
-[**mark_read**](NotificationService.md#mark_read) | **POST** /v1/notify/notification/mark-read | 
+[**count_unread_notifications**](NotificationService.md#count_unread_notifications) | **POST** /v1/notify/notification/count-unread | 
+[**list_notifications**](NotificationService.md#list_notifications) | **POST** /v1/notify/notification/list | 
+[**mark_read_notification**](NotificationService.md#mark_read_notification) | **POST** /v1/notify/notification/mark-read | 
 
 
 
-## count_unread
+## count_unread_notifications
 
-> models::CountUnreadNotificationsResp count_unread(body)
+> models::CountUnreadNotificationsResp count_unread_notifications(body)
 
 
 统计未读通知数量。
@@ -40,9 +40,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list
+## list_notifications
 
-> models::ListNotificationsResp list(list_notifications_req)
+> models::ListNotificationsResp list_notifications(list_notifications_req)
 
 
 分页查询通知列表。
@@ -70,9 +70,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## mark_read
+## mark_read_notification
 
-> models::MarkReadNotificationResp mark_read(mark_read_notification_req)
+> models::MarkReadNotificationResp mark_read_notification(mark_read_notification_req)
 
 
 标记通知为已读。

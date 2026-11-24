@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateEmojiShareResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateEmojiShareResp {
+    /// 高熵分享码。
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    /// 分享码剩余有效秒数。
     #[serde(rename = "expires_in_seconds", skip_serializing_if = "Option::is_none")]
     pub expires_in_seconds: Option<String>,
 }
 
 impl CreateEmojiShareResp {
+    /// 响应结果。
     pub fn new() -> CreateEmojiShareResp {
         CreateEmojiShareResp {
             code: None,

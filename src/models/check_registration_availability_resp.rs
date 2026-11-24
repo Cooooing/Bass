@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CheckRegistrationAvailabilityResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CheckRegistrationAvailabilityResp {
+    /// 账号名是否可用
     #[serde(rename = "name_available", skip_serializing_if = "Option::is_none")]
     pub name_available: Option<bool>,
+    /// 邮箱是否可继续用于注册
     #[serde(rename = "email_can_register", skip_serializing_if = "Option::is_none")]
     pub email_can_register: Option<bool>,
+    /// 手机号是否可继续用于注册
     #[serde(rename = "phone_can_register", skip_serializing_if = "Option::is_none")]
     pub phone_can_register: Option<bool>,
 }
 
 impl CheckRegistrationAvailabilityResp {
+    /// 响应结果。
     pub fn new() -> CheckRegistrationAvailabilityResp {
         CheckRegistrationAvailabilityResp {
             name_available: None,

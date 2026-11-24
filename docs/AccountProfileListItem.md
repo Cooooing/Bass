@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**account** | Option<[**models::AccountProfile**](AccountProfile.md)> |  | [optional]
-**viewer_relation** | Option<[**models::ProfileRelation**](ProfileRelation.md)> |  | [optional]
+**account** | Option<[**models::AccountProfile**](AccountProfile.md)> | 协议字段。 | [optional]
+**viewer_relation** | Option<[**models::ProfileRelation**](ProfileRelation.md)> | 协议字段。 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

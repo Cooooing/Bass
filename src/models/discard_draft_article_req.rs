@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// DiscardDraftArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct DiscardDraftArticleReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
 }
 
 impl DiscardDraftArticleReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> DiscardDraftArticleReq {
         DiscardDraftArticleReq {
             article_id,

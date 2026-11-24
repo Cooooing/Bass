@@ -11,29 +11,40 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespNotification : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespNotification {
+    /// 通知 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 来源事件 ID
     #[serde(rename = "event_id", skip_serializing_if = "Option::is_none")]
     pub event_id: Option<String>,
+    /// 接收账号 ID
     #[serde(rename = "receiver_id", skip_serializing_if = "Option::is_none")]
     pub receiver_id: Option<String>,
+    /// 通知类型
     #[serde(rename = "notification_type", skip_serializing_if = "Option::is_none")]
     pub notification_type: Option<NotificationType>,
+    /// 通知标题
     #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+    /// 通知内容
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 已读时间
     #[serde(rename = "read_at", skip_serializing_if = "Option::is_none")]
     pub read_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl RespNotification {
+    /// 协议消息。
     pub fn new() -> RespNotification {
         RespNotification {
             id: None,
@@ -48,7 +59,7 @@ impl RespNotification {
         }
     }
 }
-/// 
+/// 通知类型
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum NotificationType {
     #[serde(rename = "NOTIFICATION_TYPE_UNSPECIFIED")]

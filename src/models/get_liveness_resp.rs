@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetLivenessResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetLivenessResp {
+    /// 当前活跃度总分。
     #[serde(rename = "score", skip_serializing_if = "Option::is_none")]
     pub score: Option<i32>,
+    /// 每日活跃度上限。
     #[serde(rename = "max_score", skip_serializing_if = "Option::is_none")]
     pub max_score: Option<i32>,
+    /// 自动签到所需的最低活跃度。
     #[serde(rename = "checkin_score", skip_serializing_if = "Option::is_none")]
     pub checkin_score: Option<i32>,
 }
 
 impl GetLivenessResp {
+    /// 响应结果。
     pub fn new() -> GetLivenessResp {
         GetLivenessResp {
             score: None,

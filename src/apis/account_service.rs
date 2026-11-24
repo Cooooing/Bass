@@ -23,22 +23,22 @@ pub trait AccountService: Send + Sync {
     /// GET /v1/user/account/avatar
     ///
     /// 生成默认账号头像
-    async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageResp, Error<AvatarError>>;
+    async fn avatar_account<'name>(&self, name: Option<&'name str>) -> Result<models::AvatarAccountResp, Error<AvatarAccountError>>;
 
     /// POST /v1/user/account/complete-profile-image-upload
     ///
     /// 将已由 MinIO 回调确认的资源绑定到当前账号资料。
-    async fn complete_profile_image_upload<'complete_profile_image_upload_account_req>(&self, complete_profile_image_upload_account_req: models::CompleteProfileImageUploadAccountReq) -> Result<models::CompleteProfileImageUploadAccountResp, Error<CompleteProfileImageUploadError>>;
-
-    /// POST /v1/user/account/get-current
-    ///
-    /// 获取当前账号完整资料
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentError>>;
+    async fn complete_profile_image_upload_account<'complete_profile_image_upload_account_req>(&self, complete_profile_image_upload_account_req: models::CompleteProfileImageUploadAccountReq) -> Result<models::CompleteProfileImageUploadAccountResp, Error<CompleteProfileImageUploadAccountError>>;
 
     /// POST /v1/user/account/economy/get
     ///
     /// 查询当前账号的积分余额和累计收支。
-    async fn get_economy_account<'body>(&self, body: serde_json::Value) -> Result<models::GetAccountEconomyResp, Error<GetEconomyAccountError>>;
+    async fn get_account_economy<'body>(&self, body: serde_json::Value) -> Result<models::GetAccountEconomyResp, Error<GetAccountEconomyError>>;
+
+    /// POST /v1/user/account/get-current
+    ///
+    /// 获取当前账号完整资料
+    async fn get_current_account<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentAccountError>>;
 
     /// POST /v1/user/account/get-profile
     ///
@@ -63,37 +63,37 @@ pub trait AccountService: Send + Sync {
     /// POST /v1/user/account/prepare-profile-image-upload
     ///
     /// 申请当前账号资料图片的内容寻址直传能力。
-    async fn prepare_profile_image_upload<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadError>>;
+    async fn prepare_profile_image_upload_account<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadAccountError>>;
 
     /// POST /v1/user/account/search-mention
     ///
     /// 检索可提及账号的候选项。
-    async fn search_mention<'search_mention_accounts_req>(&self, search_mention_accounts_req: models::SearchMentionAccountsReq) -> Result<models::SearchMentionAccountsResp, Error<SearchMentionError>>;
+    async fn search_mention_accounts<'search_mention_accounts_req>(&self, search_mention_accounts_req: models::SearchMentionAccountsReq) -> Result<models::SearchMentionAccountsResp, Error<SearchMentionAccountsError>>;
 
     /// POST /v1/user/account/economy/transfer
     ///
     /// 向指定账号转移积分。
-    async fn transfer_points<'transfer_account_points_req>(&self, transfer_account_points_req: models::TransferAccountPointsReq) -> Result<models::TransferAccountPointsResp, Error<TransferPointsError>>;
+    async fn transfer_account_points<'transfer_account_points_req>(&self, transfer_account_points_req: models::TransferAccountPointsReq) -> Result<models::TransferAccountPointsResp, Error<TransferAccountPointsError>>;
 
     /// POST /v1/user/account/update-email
     ///
     /// 更新当前账号邮箱
-    async fn update_email<'update_email_account_req>(&self, update_email_account_req: models::UpdateEmailAccountReq) -> Result<serde_json::Value, Error<UpdateEmailError>>;
+    async fn update_email_account<'update_email_account_req>(&self, update_email_account_req: models::UpdateEmailAccountReq) -> Result<serde_json::Value, Error<UpdateEmailAccountError>>;
 
     /// POST /v1/user/account/update-password
     ///
     /// 更新当前账号密码
-    async fn update_password<'update_password_account_req>(&self, update_password_account_req: models::UpdatePasswordAccountReq) -> Result<serde_json::Value, Error<UpdatePasswordError>>;
+    async fn update_password_account<'update_password_account_req>(&self, update_password_account_req: models::UpdatePasswordAccountReq) -> Result<serde_json::Value, Error<UpdatePasswordAccountError>>;
 
     /// POST /v1/user/account/update-phone
     ///
     /// 更新当前账号手机号
-    async fn update_phone<'update_phone_account_req>(&self, update_phone_account_req: models::UpdatePhoneAccountReq) -> Result<serde_json::Value, Error<UpdatePhoneError>>;
+    async fn update_phone_account<'update_phone_account_req>(&self, update_phone_account_req: models::UpdatePhoneAccountReq) -> Result<serde_json::Value, Error<UpdatePhoneAccountError>>;
 
     /// POST /v1/user/account/update-profile
     ///
     /// 更新当前账号展示资料
-    async fn update_profile<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileError>>;
+    async fn update_profile_account<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileAccountError>>;
 }
 
 pub struct AccountServiceClient {
@@ -111,7 +111,7 @@ impl AccountServiceClient {
 #[async_trait]
 impl AccountService for AccountServiceClient {
     /// 生成默认账号头像
-    async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageResp, Error<AvatarError>> {
+    async fn avatar_account<'name>(&self, name: Option<&'name str>) -> Result<models::AvatarAccountResp, Error<AvatarAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -141,18 +141,18 @@ impl AccountService for AccountServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ImageResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ImageResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::AvatarAccountResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::AvatarAccountResp`")))),
             }
         } else {
-            let local_var_entity: Option<AvatarError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<AvatarAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 将已由 MinIO 回调确认的资源绑定到当前账号资料。
-    async fn complete_profile_image_upload<'complete_profile_image_upload_account_req>(&self, complete_profile_image_upload_account_req: models::CompleteProfileImageUploadAccountReq) -> Result<models::CompleteProfileImageUploadAccountResp, Error<CompleteProfileImageUploadError>> {
+    async fn complete_profile_image_upload_account<'complete_profile_image_upload_account_req>(&self, complete_profile_image_upload_account_req: models::CompleteProfileImageUploadAccountReq) -> Result<models::CompleteProfileImageUploadAccountResp, Error<CompleteProfileImageUploadAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -184,53 +184,14 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CompleteProfileImageUploadAccountResp`")))),
             }
         } else {
-            let local_var_entity: Option<CompleteProfileImageUploadError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
-    /// 获取当前账号完整资料
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/user/account/get-current", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&body);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentAccountResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentAccountResp`")))),
-            }
-        } else {
-            let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CompleteProfileImageUploadAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 查询当前账号的积分余额和累计收支。
-    async fn get_economy_account<'body>(&self, body: serde_json::Value) -> Result<models::GetAccountEconomyResp, Error<GetEconomyAccountError>> {
+    async fn get_account_economy<'body>(&self, body: serde_json::Value) -> Result<models::GetAccountEconomyResp, Error<GetAccountEconomyError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -262,7 +223,46 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetAccountEconomyResp`")))),
             }
         } else {
-            let local_var_entity: Option<GetEconomyAccountError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetAccountEconomyError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 获取当前账号完整资料
+    async fn get_current_account<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentAccountError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/get-current", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&body);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentAccountResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentAccountResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<GetCurrentAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -425,7 +425,7 @@ impl AccountService for AccountServiceClient {
     }
 
     /// 申请当前账号资料图片的内容寻址直传能力。
-    async fn prepare_profile_image_upload<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadError>> {
+    async fn prepare_profile_image_upload_account<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -457,14 +457,14 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PrepareProfileImageUploadAccountResp`")))),
             }
         } else {
-            let local_var_entity: Option<PrepareProfileImageUploadError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<PrepareProfileImageUploadAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 检索可提及账号的候选项。
-    async fn search_mention<'search_mention_accounts_req>(&self, search_mention_accounts_req: models::SearchMentionAccountsReq) -> Result<models::SearchMentionAccountsResp, Error<SearchMentionError>> {
+    async fn search_mention_accounts<'search_mention_accounts_req>(&self, search_mention_accounts_req: models::SearchMentionAccountsReq) -> Result<models::SearchMentionAccountsResp, Error<SearchMentionAccountsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -496,14 +496,14 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::SearchMentionAccountsResp`")))),
             }
         } else {
-            let local_var_entity: Option<SearchMentionError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<SearchMentionAccountsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 向指定账号转移积分。
-    async fn transfer_points<'transfer_account_points_req>(&self, transfer_account_points_req: models::TransferAccountPointsReq) -> Result<models::TransferAccountPointsResp, Error<TransferPointsError>> {
+    async fn transfer_account_points<'transfer_account_points_req>(&self, transfer_account_points_req: models::TransferAccountPointsReq) -> Result<models::TransferAccountPointsResp, Error<TransferAccountPointsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -535,14 +535,14 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::TransferAccountPointsResp`")))),
             }
         } else {
-            let local_var_entity: Option<TransferPointsError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<TransferAccountPointsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 更新当前账号邮箱
-    async fn update_email<'update_email_account_req>(&self, update_email_account_req: models::UpdateEmailAccountReq) -> Result<serde_json::Value, Error<UpdateEmailError>> {
+    async fn update_email_account<'update_email_account_req>(&self, update_email_account_req: models::UpdateEmailAccountReq) -> Result<serde_json::Value, Error<UpdateEmailAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -574,14 +574,14 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<UpdateEmailError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdateEmailAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 更新当前账号密码
-    async fn update_password<'update_password_account_req>(&self, update_password_account_req: models::UpdatePasswordAccountReq) -> Result<serde_json::Value, Error<UpdatePasswordError>> {
+    async fn update_password_account<'update_password_account_req>(&self, update_password_account_req: models::UpdatePasswordAccountReq) -> Result<serde_json::Value, Error<UpdatePasswordAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -613,14 +613,14 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<UpdatePasswordError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdatePasswordAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 更新当前账号手机号
-    async fn update_phone<'update_phone_account_req>(&self, update_phone_account_req: models::UpdatePhoneAccountReq) -> Result<serde_json::Value, Error<UpdatePhoneError>> {
+    async fn update_phone_account<'update_phone_account_req>(&self, update_phone_account_req: models::UpdatePhoneAccountReq) -> Result<serde_json::Value, Error<UpdatePhoneAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -652,14 +652,14 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<UpdatePhoneError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdatePhoneAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 更新当前账号展示资料
-    async fn update_profile<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileError>> {
+    async fn update_profile_account<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileAccountError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -691,7 +691,7 @@ impl AccountService for AccountServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateProfileAccountResp`")))),
             }
         } else {
-            let local_var_entity: Option<UpdateProfileError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdateProfileAccountError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -699,31 +699,31 @@ impl AccountService for AccountServiceClient {
 
 }
 
-/// struct for typed errors of method [`AccountService::avatar`]
+/// struct for typed errors of method [`AccountService::avatar_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AvatarError {
+pub enum AvatarAccountError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::complete_profile_image_upload`]
+/// struct for typed errors of method [`AccountService::complete_profile_image_upload_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CompleteProfileImageUploadError {
+pub enum CompleteProfileImageUploadAccountError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::get_current`]
+/// struct for typed errors of method [`AccountService::get_account_economy`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetCurrentError {
+pub enum GetAccountEconomyError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::get_economy_account`]
+/// struct for typed errors of method [`AccountService::get_current_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetEconomyAccountError {
+pub enum GetCurrentAccountError {
     UnknownValue(serde_json::Value),
 }
 
@@ -755,52 +755,52 @@ pub enum ListPointRecordsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::prepare_profile_image_upload`]
+/// struct for typed errors of method [`AccountService::prepare_profile_image_upload_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PrepareProfileImageUploadError {
+pub enum PrepareProfileImageUploadAccountError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::search_mention`]
+/// struct for typed errors of method [`AccountService::search_mention_accounts`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum SearchMentionError {
+pub enum SearchMentionAccountsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::transfer_points`]
+/// struct for typed errors of method [`AccountService::transfer_account_points`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum TransferPointsError {
+pub enum TransferAccountPointsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::update_email`]
+/// struct for typed errors of method [`AccountService::update_email_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpdateEmailError {
+pub enum UpdateEmailAccountError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::update_password`]
+/// struct for typed errors of method [`AccountService::update_password_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpdatePasswordError {
+pub enum UpdatePasswordAccountError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::update_phone`]
+/// struct for typed errors of method [`AccountService::update_phone_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpdatePhoneError {
+pub enum UpdatePhoneAccountError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AccountService::update_profile`]
+/// struct for typed errors of method [`AccountService::update_profile_account`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpdateProfileError {
+pub enum UpdateProfileAccountError {
     UnknownValue(serde_json::Value),
 }
 

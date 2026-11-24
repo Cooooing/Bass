@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetProfileReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetProfileReq {
+    /// 账号名，必填
     #[serde(rename = "name")]
     pub name: String,
 }
 
 impl GetProfileReq {
+    /// 请求参数。
     pub fn new(name: String) -> GetProfileReq {
         GetProfileReq {
             name,

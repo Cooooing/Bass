@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespAccount : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespAccount {
+    /// 基础信息
     #[serde(rename = "basic", skip_serializing_if = "Option::is_none")]
     pub basic: Option<models::RespAccountBasic>,
+    /// 联系方式
     #[serde(rename = "contact", skip_serializing_if = "Option::is_none")]
     pub contact: Option<models::RespAccountContact>,
 }
 
 impl RespAccount {
+    /// 协议消息。
     pub fn new() -> RespAccount {
         RespAccount {
             basic: None,

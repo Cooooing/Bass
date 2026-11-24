@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListPostscriptsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListPostscriptsResp {
+    /// 文章附言列表。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::ArticlePostscript>>,
 }
 
 impl ListPostscriptsResp {
+    /// 响应结果。
     pub fn new() -> ListPostscriptsResp {
         ListPostscriptsResp {
             rows: None,

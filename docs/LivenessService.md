@@ -4,15 +4,17 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**claim_yesterday_reward**](LivenessService.md#claim_yesterday_reward) | **POST** /v1/user/liveness/yesterday-reward/claim | 
+[**claim_yesterday_liveness_reward**](LivenessService.md#claim_yesterday_liveness_reward) | **POST** /v1/user/liveness/yesterday-reward/claim | 
 [**get_liveness**](LivenessService.md#get_liveness) | **GET** /v1/user/liveness | 
 
 
 
-## claim_yesterday_reward
+## claim_yesterday_liveness_reward
 
-> models::ClaimYesterdayLivenessRewardResp claim_yesterday_reward(body)
+> models::ClaimYesterdayLivenessRewardResp claim_yesterday_liveness_reward(body)
 
+
+服务方法。
 
 ### Parameters
 
@@ -41,6 +43,8 @@ No authorization required
 
 > models::GetLivenessResp get_liveness()
 
+
+服务方法。
 
 ### Parameters
 

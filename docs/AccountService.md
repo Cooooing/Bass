@@ -4,27 +4,27 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
-[**complete_profile_image_upload**](AccountService.md#complete_profile_image_upload) | **POST** /v1/user/account/complete-profile-image-upload | 
-[**get_current**](AccountService.md#get_current) | **POST** /v1/user/account/get-current | 
-[**get_economy_account**](AccountService.md#get_economy_account) | **POST** /v1/user/account/economy/get | 
+[**avatar_account**](AccountService.md#avatar_account) | **GET** /v1/user/account/avatar | 
+[**complete_profile_image_upload_account**](AccountService.md#complete_profile_image_upload_account) | **POST** /v1/user/account/complete-profile-image-upload | 
+[**get_account_economy**](AccountService.md#get_account_economy) | **POST** /v1/user/account/economy/get | 
+[**get_current_account**](AccountService.md#get_current_account) | **POST** /v1/user/account/get-current | 
 [**get_profile**](AccountService.md#get_profile) | **POST** /v1/user/account/get-profile | 
 [**list_followers**](AccountService.md#list_followers) | **POST** /v1/user/account/list-followers | 
 [**list_following**](AccountService.md#list_following) | **POST** /v1/user/account/list-following | 
 [**list_point_records**](AccountService.md#list_point_records) | **POST** /v1/user/account/list-point-records | 
-[**prepare_profile_image_upload**](AccountService.md#prepare_profile_image_upload) | **POST** /v1/user/account/prepare-profile-image-upload | 
-[**search_mention**](AccountService.md#search_mention) | **POST** /v1/user/account/search-mention | 
-[**transfer_points**](AccountService.md#transfer_points) | **POST** /v1/user/account/economy/transfer | 
-[**update_email**](AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
-[**update_password**](AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
-[**update_phone**](AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
-[**update_profile**](AccountService.md#update_profile) | **POST** /v1/user/account/update-profile | 
+[**prepare_profile_image_upload_account**](AccountService.md#prepare_profile_image_upload_account) | **POST** /v1/user/account/prepare-profile-image-upload | 
+[**search_mention_accounts**](AccountService.md#search_mention_accounts) | **POST** /v1/user/account/search-mention | 
+[**transfer_account_points**](AccountService.md#transfer_account_points) | **POST** /v1/user/account/economy/transfer | 
+[**update_email_account**](AccountService.md#update_email_account) | **POST** /v1/user/account/update-email | 
+[**update_password_account**](AccountService.md#update_password_account) | **POST** /v1/user/account/update-password | 
+[**update_phone_account**](AccountService.md#update_phone_account) | **POST** /v1/user/account/update-phone | 
+[**update_profile_account**](AccountService.md#update_profile_account) | **POST** /v1/user/account/update-profile | 
 
 
 
-## avatar
+## avatar_account
 
-> models::ImageResp avatar(name)
+> models::AvatarAccountResp avatar_account(name)
 
 
 生成默认账号头像
@@ -34,11 +34,11 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**name** | Option<**String**> |  |  |
+**name** | Option<**String**> | 账号名，必填 |  |
 
 ### Return type
 
-[**models::ImageResp**](ImageResp.md)
+[**models::AvatarAccountResp**](AvatarAccount_Resp.md)
 
 ### Authorization
 
@@ -52,9 +52,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## complete_profile_image_upload
+## complete_profile_image_upload_account
 
-> models::CompleteProfileImageUploadAccountResp complete_profile_image_upload(complete_profile_image_upload_account_req)
+> models::CompleteProfileImageUploadAccountResp complete_profile_image_upload_account(complete_profile_image_upload_account_req)
 
 
 将已由 MinIO 回调确认的资源绑定到当前账号资料。
@@ -82,39 +82,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## get_current
+## get_account_economy
 
-> models::GetCurrentAccountResp get_current(body)
-
-
-获取当前账号完整资料
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**body** | **serde_json::Value** |  | [required] |
-
-### Return type
-
-[**models::GetCurrentAccountResp**](GetCurrentAccount_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## get_economy_account
-
-> models::GetAccountEconomyResp get_economy_account(body)
+> models::GetAccountEconomyResp get_account_economy(body)
 
 
 查询当前账号的积分余额和累计收支。
@@ -129,6 +99,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::GetAccountEconomyResp**](GetAccountEconomy_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## get_current_account
+
+> models::GetCurrentAccountResp get_current_account(body)
+
+
+获取当前账号完整资料
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**body** | **serde_json::Value** |  | [required] |
+
+### Return type
+
+[**models::GetCurrentAccountResp**](GetCurrentAccount_Resp.md)
 
 ### Authorization
 
@@ -262,9 +262,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## prepare_profile_image_upload
+## prepare_profile_image_upload_account
 
-> models::PrepareProfileImageUploadAccountResp prepare_profile_image_upload(prepare_profile_image_upload_account_req)
+> models::PrepareProfileImageUploadAccountResp prepare_profile_image_upload_account(prepare_profile_image_upload_account_req)
 
 
 申请当前账号资料图片的内容寻址直传能力。
@@ -292,9 +292,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## search_mention
+## search_mention_accounts
 
-> models::SearchMentionAccountsResp search_mention(search_mention_accounts_req)
+> models::SearchMentionAccountsResp search_mention_accounts(search_mention_accounts_req)
 
 
 检索可提及账号的候选项。
@@ -322,9 +322,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## transfer_points
+## transfer_account_points
 
-> models::TransferAccountPointsResp transfer_points(transfer_account_points_req)
+> models::TransferAccountPointsResp transfer_account_points(transfer_account_points_req)
 
 
 向指定账号转移积分。
@@ -352,9 +352,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## update_email
+## update_email_account
 
-> serde_json::Value update_email(update_email_account_req)
+> serde_json::Value update_email_account(update_email_account_req)
 
 
 更新当前账号邮箱
@@ -382,9 +382,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## update_password
+## update_password_account
 
-> serde_json::Value update_password(update_password_account_req)
+> serde_json::Value update_password_account(update_password_account_req)
 
 
 更新当前账号密码
@@ -412,9 +412,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## update_phone
+## update_phone_account
 
-> serde_json::Value update_phone(update_phone_account_req)
+> serde_json::Value update_phone_account(update_phone_account_req)
 
 
 更新当前账号手机号
@@ -442,9 +442,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## update_profile
+## update_profile_account
 
-> models::UpdateProfileAccountResp update_profile(update_profile_account_req)
+> models::UpdateProfileAccountResp update_profile_account(update_profile_account_req)
 
 
 更新当前账号展示资料

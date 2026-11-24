@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdateProfileAccountReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateProfileAccountReq {
+    /// 昵称，选填
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
+    /// 个人主页 URL，选填
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 个人简介，选填
     #[serde(rename = "introduction", skip_serializing_if = "Option::is_none")]
     pub introduction: Option<String>,
+    /// MBTI 类型，选填；空字符串表示清除
     #[serde(rename = "mbti", skip_serializing_if = "Option::is_none")]
     pub mbti: Option<String>,
 }
 
 impl UpdateProfileAccountReq {
+    /// 请求参数。
     pub fn new() -> UpdateProfileAccountReq {
         UpdateProfileAccountReq {
             nickname: None,

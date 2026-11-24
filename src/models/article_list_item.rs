@@ -11,75 +11,109 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticleListItem : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleListItem {
+    /// 文章 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 标题
     #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
+    /// 摘要原文
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 摘要渲染内容
     #[serde(rename = "content_render", skip_serializing_if = "Option::is_none")]
     pub content_render: Option<String>,
+    /// 是否有附言
     #[serde(rename = "has_postscript", skip_serializing_if = "Option::is_none")]
     pub has_postscript: Option<bool>,
+    /// 是否有打赏区
     #[serde(rename = "has_reward", skip_serializing_if = "Option::is_none")]
     pub has_reward: Option<bool>,
+    /// 文章类型
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub r#type: Option<Type>,
+    /// 创作声明
     #[serde(rename = "statement", skip_serializing_if = "Option::is_none")]
     pub statement: Option<String>,
+    /// 是否允许评论
     #[serde(rename = "commentable", skip_serializing_if = "Option::is_none")]
     pub commentable: Option<bool>,
+    /// 浏览数
     #[serde(rename = "view_count", skip_serializing_if = "Option::is_none")]
     pub view_count: Option<i32>,
+    /// 感谢数
     #[serde(rename = "thank_count", skip_serializing_if = "Option::is_none")]
     pub thank_count: Option<i32>,
+    /// 点赞数
     #[serde(rename = "like_count", skip_serializing_if = "Option::is_none")]
     pub like_count: Option<i32>,
+    /// 收藏数
     #[serde(rename = "collect_count", skip_serializing_if = "Option::is_none")]
     pub collect_count: Option<i32>,
+    /// 关注数
     #[serde(rename = "watch_count", skip_serializing_if = "Option::is_none")]
     pub watch_count: Option<i32>,
+    /// 打赏数
     #[serde(rename = "reward_count", skip_serializing_if = "Option::is_none")]
     pub reward_count: Option<i32>,
+    /// 回复数
     #[serde(rename = "reply_count", skip_serializing_if = "Option::is_none")]
     pub reply_count: Option<i32>,
+    /// 作者资料
     #[serde(rename = "author_user", skip_serializing_if = "Option::is_none")]
     pub author_user: Option<models::AccountProfile>,
+    /// 最后回复用户
     #[serde(rename = "last_reply_user", skip_serializing_if = "Option::is_none")]
     pub last_reply_user: Option<models::AccountProfile>,
+    /// 最后回复时间
     #[serde(rename = "last_reply_at", skip_serializing_if = "Option::is_none")]
     pub last_reply_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 封面图片 URL
     #[serde(rename = "cover_image_url", skip_serializing_if = "Option::is_none")]
     pub cover_image_url: Option<String>,
+    /// 当前用户互动状态
     #[serde(rename = "viewer_action_state", skip_serializing_if = "Option::is_none")]
     pub viewer_action_state: Option<models::ArticleViewerActionState>,
+    /// 发布时间
     #[serde(rename = "published_at", skip_serializing_if = "Option::is_none")]
     pub published_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 发布状态
     #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
     pub publish_status: Option<PublishStatus>,
+    /// 可见范围
     #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
     pub visibility: Option<Visibility>,
+    /// 治理限制
     #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
     pub restriction: Option<Restriction>,
+    /// 编辑时间
     #[serde(rename = "edited_at", skip_serializing_if = "Option::is_none")]
     pub edited_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 文章标签
     #[serde(rename = "tags", skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<models::ArticleTag>>,
+    /// 文章所属领域
     #[serde(rename = "domains", skip_serializing_if = "Option::is_none")]
     pub domains: Option<Vec<models::ArticleDomain>>,
+    /// 创建账号 ID
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
+    /// 更新账号 ID
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl ArticleListItem {
+    /// 协议消息。
     pub fn new() -> ArticleListItem {
         ArticleListItem {
             id: None,
@@ -117,7 +151,7 @@ impl ArticleListItem {
         }
     }
 }
-/// 
+/// 文章类型
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "ARTICLE_TYPE_UNSPECIFIED")]
@@ -139,7 +173,7 @@ impl Default for Type {
         Self::ArticleTypeUnspecified
     }
 }
-/// 
+/// 发布状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum PublishStatus {
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]
@@ -157,7 +191,7 @@ impl Default for PublishStatus {
         Self::ArticlePublishStatusUnspecified
     }
 }
-/// 
+/// 可见范围
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Visibility {
     #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
@@ -173,7 +207,7 @@ impl Default for Visibility {
         Self::ArticleVisibilityUnspecified
     }
 }
-/// 
+/// 治理限制
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Restriction {
     #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]

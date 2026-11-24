@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateEmojiShareReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateEmojiShareReq {
+    /// 待分享分组 ID。
     #[serde(rename = "group_id", skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
 }
 
 impl CreateEmojiShareReq {
+    /// 请求参数。
     pub fn new() -> CreateEmojiShareReq {
         CreateEmojiShareReq {
             group_id: None,

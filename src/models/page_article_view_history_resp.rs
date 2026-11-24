@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PageArticleViewHistoryResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PageArticleViewHistoryResp {
+    /// 协议字段。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::ArticleViewHistoryItem>>,
+    /// 协议字段。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
 }
 
 impl PageArticleViewHistoryResp {
+    /// 响应结果。
     pub fn new() -> PageArticleViewHistoryResp {
         PageArticleViewHistoryResp {
             rows: None,

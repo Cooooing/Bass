@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetStatusRelationReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetStatusRelationReq {
+    /// 目标账号 ID
     #[serde(rename = "target_id")]
     pub target_id: String,
 }
 
 impl GetStatusRelationReq {
+    /// 请求参数。
     pub fn new(target_id: String) -> GetStatusRelationReq {
         GetStatusRelationReq {
             target_id,

@@ -11,47 +11,67 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CommentListItem : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CommentListItem {
+    /// 评论 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 文章 ID
     #[serde(rename = "article_id", skip_serializing_if = "Option::is_none")]
     pub article_id: Option<String>,
+    /// 原始内容
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 渲染后的内容
     #[serde(rename = "content_render", skip_serializing_if = "Option::is_none")]
     pub content_render: Option<String>,
+    /// 评论层级
     #[serde(rename = "level", skip_serializing_if = "Option::is_none")]
     pub level: Option<i32>,
+    /// 父评论 ID
     #[serde(rename = "parent_id", skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
+    /// 回复的评论 ID
     #[serde(rename = "reply_id", skip_serializing_if = "Option::is_none")]
     pub reply_id: Option<String>,
+    /// 回复数量
     #[serde(rename = "reply_count", skip_serializing_if = "Option::is_none")]
     pub reply_count: Option<i32>,
+    /// 点赞数量
     #[serde(rename = "like_count", skip_serializing_if = "Option::is_none")]
     pub like_count: Option<i32>,
+    /// 感谢数量
     #[serde(rename = "thank_count", skip_serializing_if = "Option::is_none")]
     pub thank_count: Option<i32>,
+    /// 评论账号展示资料
     #[serde(rename = "user", skip_serializing_if = "Option::is_none")]
     pub user: Option<models::AccountProfile>,
+    /// 被回复账号展示资料
     #[serde(rename = "reply_user", skip_serializing_if = "Option::is_none")]
     pub reply_user: Option<models::AccountProfile>,
+    /// 当前查看账号的评论行为状态
     #[serde(rename = "viewer_action_state", skip_serializing_if = "Option::is_none")]
     pub viewer_action_state: Option<models::CommentViewerActionState>,
+    /// 管理限制
     #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
     pub restriction: Option<Restriction>,
+    /// 创建账号 ID
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
+    /// 更新账号 ID
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl CommentListItem {
+    /// 协议消息。
     pub fn new() -> CommentListItem {
         CommentListItem {
             id: None,
@@ -75,7 +95,7 @@ impl CommentListItem {
         }
     }
 }
-/// 
+/// 管理限制
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Restriction {
     #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]

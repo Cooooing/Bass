@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// EnterArticleLotteryReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct EnterArticleLotteryReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// true 报名，false 撤销报名
     #[serde(rename = "entered", skip_serializing_if = "Option::is_none")]
     pub entered: Option<bool>,
 }
 
 impl EnterArticleLotteryReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> EnterArticleLotteryReq {
         EnterArticleLotteryReq {
             article_id,

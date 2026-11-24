@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CompleteBadgeImageUploadResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CompleteBadgeImageUploadResp {
+    /// 已确认资源的 ID。
     #[serde(rename = "asset_id", skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
+    /// 可公开访问的图片地址。
     #[serde(rename = "image_url", skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
 }
 
 impl CompleteBadgeImageUploadResp {
+    /// 响应结果。
     pub fn new() -> CompleteBadgeImageUploadResp {
         CompleteBadgeImageUploadResp {
             asset_id: None,

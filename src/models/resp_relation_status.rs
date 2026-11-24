@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespRelationStatus : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespRelationStatus {
+    /// 目标账号 ID
     #[serde(rename = "target_id", skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
+    /// 当前账号是否关注目标账号
     #[serde(rename = "following", skip_serializing_if = "Option::is_none")]
     pub following: Option<bool>,
+    /// 目标账号是否关注当前账号
     #[serde(rename = "followed_by", skip_serializing_if = "Option::is_none")]
     pub followed_by: Option<bool>,
+    /// 当前账号是否拉黑目标账号
     #[serde(rename = "blocking", skip_serializing_if = "Option::is_none")]
     pub blocking: Option<bool>,
+    /// 目标账号是否拉黑当前账号
     #[serde(rename = "blocked_by", skip_serializing_if = "Option::is_none")]
     pub blocked_by: Option<bool>,
 }
 
 impl RespRelationStatus {
+    /// 协议消息。
     pub fn new() -> RespRelationStatus {
         RespRelationStatus {
             target_id: None,

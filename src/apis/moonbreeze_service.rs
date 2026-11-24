@@ -22,23 +22,23 @@ pub trait MoonbreezeService: Send + Sync {
 
     /// POST /v1/content/moonbreeze/create
     ///
-    /// 
-    async fn create<'create_moonbreeze_req>(&self, create_moonbreeze_req: models::CreateMoonbreezeReq) -> Result<models::CreateMoonbreezeResp, Error<CreateError>>;
+    /// 服务方法。
+    async fn create_moonbreeze<'create_moonbreeze_req>(&self, create_moonbreeze_req: models::CreateMoonbreezeReq) -> Result<models::CreateMoonbreezeResp, Error<CreateMoonbreezeError>>;
 
     /// POST /v1/content/moonbreeze/page-member
     ///
-    /// 
-    async fn page_member<'page_member_moonbreezes_req>(&self, page_member_moonbreezes_req: models::PageMemberMoonbreezesReq) -> Result<models::PageMoonbreezesResp, Error<PageMemberError>>;
+    /// 服务方法。
+    async fn page_member_moonbreezes<'page_member_moonbreezes_req>(&self, page_member_moonbreezes_req: models::PageMemberMoonbreezesReq) -> Result<models::PageMemberMoonbreezesResp, Error<PageMemberMoonbreezesError>>;
 
     /// POST /v1/content/moonbreeze/page-public
     ///
-    /// 
-    async fn page_public<'page_public_moonbreezes_req>(&self, page_public_moonbreezes_req: models::PagePublicMoonbreezesReq) -> Result<models::PageMoonbreezesResp, Error<PagePublicError>>;
+    /// 服务方法。
+    async fn page_public_moonbreezes<'page_public_moonbreezes_req>(&self, page_public_moonbreezes_req: models::PagePublicMoonbreezesReq) -> Result<models::PagePublicMoonbreezesResp, Error<PagePublicMoonbreezesError>>;
 
     /// POST /v1/content/moonbreeze/page-watching
     ///
-    /// 
-    async fn page_watching<'page_watching_moonbreezes_req>(&self, page_watching_moonbreezes_req: models::PageWatchingMoonbreezesReq) -> Result<models::PageMoonbreezesResp, Error<PageWatchingError>>;
+    /// 服务方法。
+    async fn page_watching_moonbreezes<'page_watching_moonbreezes_req>(&self, page_watching_moonbreezes_req: models::PageWatchingMoonbreezesReq) -> Result<models::PageWatchingMoonbreezesResp, Error<PageWatchingMoonbreezesError>>;
 }
 
 pub struct MoonbreezeServiceClient {
@@ -55,7 +55,8 @@ impl MoonbreezeServiceClient {
 
 #[async_trait]
 impl MoonbreezeService for MoonbreezeServiceClient {
-    async fn create<'create_moonbreeze_req>(&self, create_moonbreeze_req: models::CreateMoonbreezeReq) -> Result<models::CreateMoonbreezeResp, Error<CreateError>> {
+    /// 服务方法。
+    async fn create_moonbreeze<'create_moonbreeze_req>(&self, create_moonbreeze_req: models::CreateMoonbreezeReq) -> Result<models::CreateMoonbreezeResp, Error<CreateMoonbreezeError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -87,13 +88,14 @@ impl MoonbreezeService for MoonbreezeServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateMoonbreezeResp`")))),
             }
         } else {
-            let local_var_entity: Option<CreateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateMoonbreezeError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn page_member<'page_member_moonbreezes_req>(&self, page_member_moonbreezes_req: models::PageMemberMoonbreezesReq) -> Result<models::PageMoonbreezesResp, Error<PageMemberError>> {
+    /// 服务方法。
+    async fn page_member_moonbreezes<'page_member_moonbreezes_req>(&self, page_member_moonbreezes_req: models::PageMemberMoonbreezesReq) -> Result<models::PageMemberMoonbreezesResp, Error<PageMemberMoonbreezesError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -121,17 +123,18 @@ impl MoonbreezeService for MoonbreezeServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageMoonbreezesResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageMoonbreezesResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageMemberMoonbreezesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageMemberMoonbreezesResp`")))),
             }
         } else {
-            let local_var_entity: Option<PageMemberError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<PageMemberMoonbreezesError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn page_public<'page_public_moonbreezes_req>(&self, page_public_moonbreezes_req: models::PagePublicMoonbreezesReq) -> Result<models::PageMoonbreezesResp, Error<PagePublicError>> {
+    /// 服务方法。
+    async fn page_public_moonbreezes<'page_public_moonbreezes_req>(&self, page_public_moonbreezes_req: models::PagePublicMoonbreezesReq) -> Result<models::PagePublicMoonbreezesResp, Error<PagePublicMoonbreezesError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -159,17 +162,18 @@ impl MoonbreezeService for MoonbreezeServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageMoonbreezesResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageMoonbreezesResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PagePublicMoonbreezesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PagePublicMoonbreezesResp`")))),
             }
         } else {
-            let local_var_entity: Option<PagePublicError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<PagePublicMoonbreezesError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
-    async fn page_watching<'page_watching_moonbreezes_req>(&self, page_watching_moonbreezes_req: models::PageWatchingMoonbreezesReq) -> Result<models::PageMoonbreezesResp, Error<PageWatchingError>> {
+    /// 服务方法。
+    async fn page_watching_moonbreezes<'page_watching_moonbreezes_req>(&self, page_watching_moonbreezes_req: models::PageWatchingMoonbreezesReq) -> Result<models::PageWatchingMoonbreezesResp, Error<PageWatchingMoonbreezesError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -197,11 +201,11 @@ impl MoonbreezeService for MoonbreezeServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageMoonbreezesResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageMoonbreezesResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageWatchingMoonbreezesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageWatchingMoonbreezesResp`")))),
             }
         } else {
-            let local_var_entity: Option<PageWatchingError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<PageWatchingMoonbreezesError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -209,31 +213,31 @@ impl MoonbreezeService for MoonbreezeServiceClient {
 
 }
 
-/// struct for typed errors of method [`MoonbreezeService::create`]
+/// struct for typed errors of method [`MoonbreezeService::create_moonbreeze`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CreateError {
+pub enum CreateMoonbreezeError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`MoonbreezeService::page_member`]
+/// struct for typed errors of method [`MoonbreezeService::page_member_moonbreezes`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PageMemberError {
+pub enum PageMemberMoonbreezesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`MoonbreezeService::page_public`]
+/// struct for typed errors of method [`MoonbreezeService::page_public_moonbreezes`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PagePublicError {
+pub enum PagePublicMoonbreezesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`MoonbreezeService::page_watching`]
+/// struct for typed errors of method [`MoonbreezeService::page_watching_moonbreezes`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum PageWatchingError {
+pub enum PageWatchingMoonbreezesError {
     UnknownValue(serde_json::Value),
 }
 

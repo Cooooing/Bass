@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CompleteProfileImageUploadAccountResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CompleteProfileImageUploadAccountResp {
+    /// 协议字段。
     #[serde(rename = "profile", skip_serializing_if = "Option::is_none")]
     pub profile: Option<models::AccountProfile>,
+    /// 协议字段。
     #[serde(rename = "image_url", skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
 }
 
 impl CompleteProfileImageUploadAccountResp {
+    /// 响应结果。
     pub fn new() -> CompleteProfileImageUploadAccountResp {
         CompleteProfileImageUploadAccountResp {
             profile: None,

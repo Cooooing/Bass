@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListCommentThreadsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListCommentThreadsReq {
+    /// 分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
+    /// 文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 顶层评论排序方式
     #[serde(rename = "order", skip_serializing_if = "Option::is_none")]
     pub order: Option<Order>,
+    /// 每个楼层返回的回复预览数量
     #[serde(rename = "reply_preview_limit", skip_serializing_if = "Option::is_none")]
     pub reply_preview_limit: Option<i32>,
 }
 
 impl ListCommentThreadsReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> ListCommentThreadsReq {
         ListCommentThreadsReq {
             page: None,
@@ -33,7 +39,7 @@ impl ListCommentThreadsReq {
         }
     }
 }
-/// 
+/// 顶层评论排序方式
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Order {
     #[serde(rename = "COMMENT_ORDER_UNSPECIFIED")]

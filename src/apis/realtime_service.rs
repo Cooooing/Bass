@@ -22,8 +22,8 @@ pub trait RealtimeService: Send + Sync {
 
     /// POST /v1/realtime/ticket
     ///
-    /// 
-    async fn create_ticket<'body>(&self, body: serde_json::Value) -> Result<models::CreateRealtimeTicketResp, Error<CreateTicketError>>;
+    /// 服务方法。
+    async fn create_realtime_ticket<'body>(&self, body: serde_json::Value) -> Result<models::CreateRealtimeTicketResp, Error<CreateRealtimeTicketError>>;
 }
 
 pub struct RealtimeServiceClient {
@@ -40,7 +40,8 @@ impl RealtimeServiceClient {
 
 #[async_trait]
 impl RealtimeService for RealtimeServiceClient {
-    async fn create_ticket<'body>(&self, body: serde_json::Value) -> Result<models::CreateRealtimeTicketResp, Error<CreateTicketError>> {
+    /// 服务方法。
+    async fn create_realtime_ticket<'body>(&self, body: serde_json::Value) -> Result<models::CreateRealtimeTicketResp, Error<CreateRealtimeTicketError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -72,7 +73,7 @@ impl RealtimeService for RealtimeServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateRealtimeTicketResp`")))),
             }
         } else {
-            let local_var_entity: Option<CreateTicketError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateRealtimeTicketError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -80,10 +81,10 @@ impl RealtimeService for RealtimeServiceClient {
 
 }
 
-/// struct for typed errors of method [`RealtimeService::create_ticket`]
+/// struct for typed errors of method [`RealtimeService::create_realtime_ticket`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CreateTicketError {
+pub enum CreateRealtimeTicketError {
     UnknownValue(serde_json::Value),
 }
 

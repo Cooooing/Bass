@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RefreshTokenReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RefreshTokenReq {
+    /// 刷新令牌
     #[serde(rename = "refresh_token")]
     pub refresh_token: String,
 }
 
 impl RefreshTokenReq {
+    /// 请求参数。
     pub fn new(refresh_token: String) -> RefreshTokenReq {
         RefreshTokenReq {
             refresh_token,

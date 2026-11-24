@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListEmojiGroupsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListEmojiGroupsReq {
+    /// 按表情别名进行的模糊查询。
     #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
 }
 
 impl ListEmojiGroupsReq {
+    /// 请求参数。
     pub fn new() -> ListEmojiGroupsReq {
         ListEmojiGroupsReq {
             query: None,

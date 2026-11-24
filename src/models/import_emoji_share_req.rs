@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ImportEmojiShareReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ImportEmojiShareReq {
+    /// 待导入分享码。
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
 }
 
 impl ImportEmojiShareReq {
+    /// 请求参数。
     pub fn new() -> ImportEmojiShareReq {
         ImportEmojiShareReq {
             code: None,

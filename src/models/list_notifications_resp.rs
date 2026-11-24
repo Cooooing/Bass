@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListNotificationsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListNotificationsResp {
+    /// 分页结果
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
+    /// 通知列表
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::RespNotification>>,
 }
 
 impl ListNotificationsResp {
+    /// 响应结果。
     pub fn new() -> ListNotificationsResp {
         ListNotificationsResp {
             page: None,

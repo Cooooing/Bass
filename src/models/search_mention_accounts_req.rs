@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SearchMentionAccountsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SearchMentionAccountsReq {
+    /// 用户名或昵称搜索词，可为空。
     #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
+    /// 分页参数。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl SearchMentionAccountsReq {
+    /// 请求参数。
     pub fn new() -> SearchMentionAccountsReq {
         SearchMentionAccountsReq {
             query: None,

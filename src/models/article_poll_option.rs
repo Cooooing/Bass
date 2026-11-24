@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticlePollOption : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticlePollOption {
+    /// 选项 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 选项内容
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 可见时的票数
     #[serde(rename = "vote_count", skip_serializing_if = "Option::is_none")]
     pub vote_count: Option<i32>,
 }
 
 impl ArticlePollOption {
+    /// 协议消息。
     pub fn new() -> ArticlePollOption {
         ArticlePollOption {
             id: None,

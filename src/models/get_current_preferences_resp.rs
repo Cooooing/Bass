@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetCurrentPreferencesResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentPreferencesResp {
+    /// 当前账号偏好设置
     #[serde(rename = "preference", skip_serializing_if = "Option::is_none")]
     pub preference: Option<models::RespPreference>,
 }
 
 impl GetCurrentPreferencesResp {
+    /// 响应结果。
     pub fn new() -> GetCurrentPreferencesResp {
         GetCurrentPreferencesResp {
             preference: None,

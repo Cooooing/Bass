@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RewardArticleResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RewardArticleResp {
+    /// 是否已完成打赏
     #[serde(rename = "rewarded", skip_serializing_if = "Option::is_none")]
     pub rewarded: Option<bool>,
 }
 
 impl RewardArticleResp {
+    /// 响应结果。
     pub fn new() -> RewardArticleResp {
         RewardArticleResp {
             rewarded: None,

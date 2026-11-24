@@ -11,29 +11,40 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespPrivacySetting : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespPrivacySetting {
+    /// 账号 ID
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 是否公开积分
     #[serde(rename = "public_points", skip_serializing_if = "Option::is_none")]
     pub public_points: Option<bool>,
+    /// 是否公开粉丝列表
     #[serde(rename = "public_follower_list", skip_serializing_if = "Option::is_none")]
     pub public_follower_list: Option<bool>,
+    /// 是否公开关注列表
     #[serde(rename = "public_following_list", skip_serializing_if = "Option::is_none")]
     pub public_following_list: Option<bool>,
+    /// 是否公开帖子列表
     #[serde(rename = "public_article_list", skip_serializing_if = "Option::is_none")]
     pub public_article_list: Option<bool>,
+    /// 是否公开回复列表
     #[serde(rename = "public_comment_list", skip_serializing_if = "Option::is_none")]
     pub public_comment_list: Option<bool>,
+    /// 是否公开在线状态
     #[serde(rename = "public_online_status", skip_serializing_if = "Option::is_none")]
     pub public_online_status: Option<bool>,
+    /// 是否公开地理资料
     #[serde(rename = "public_location", skip_serializing_if = "Option::is_none")]
     pub public_location: Option<bool>,
+    /// 是否公开清风明月列表
     #[serde(rename = "public_moonbreeze_list", skip_serializing_if = "Option::is_none")]
     pub public_moonbreeze_list: Option<bool>,
 }
 
 impl RespPrivacySetting {
+    /// 协议消息。
     pub fn new() -> RespPrivacySetting {
         RespPrivacySetting {
             user_id: None,

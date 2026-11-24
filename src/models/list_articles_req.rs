@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListArticlesReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListArticlesReq {
+    /// 可选，分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
+    /// 可选，查询条件
     #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
     pub query: Option<models::ReqArticleQuery>,
 }
 
 impl ListArticlesReq {
+    /// 请求参数。
     pub fn new() -> ListArticlesReq {
         ListArticlesReq {
             page: None,

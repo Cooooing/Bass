@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RenameEmojiItemReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RenameEmojiItemReq {
+    /// 待重命名表情项 ID。
     #[serde(rename = "item_id", skip_serializing_if = "Option::is_none")]
     pub item_id: Option<String>,
+    /// 新表情别名。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
 impl RenameEmojiItemReq {
+    /// 请求参数。
     pub fn new() -> RenameEmojiItemReq {
         RenameEmojiItemReq {
             item_id: None,

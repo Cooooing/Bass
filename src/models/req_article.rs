@@ -11,29 +11,40 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqArticle : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqArticle {
+    /// 必填，标题
     #[serde(rename = "title")]
     pub title: String,
+    /// 必填，正文
     #[serde(rename = "content")]
     pub content: String,
+    /// 可选，打赏区内容
     #[serde(rename = "reward_content", skip_serializing_if = "Option::is_none")]
     pub reward_content: Option<String>,
+    /// 可选，打赏积分
     #[serde(rename = "reward_points", skip_serializing_if = "Option::is_none")]
     pub reward_points: Option<i32>,
+    /// 必填，文章类型
     #[serde(rename = "type")]
     pub r#type: Type,
+    /// 可选，创作声明
     #[serde(rename = "statement", skip_serializing_if = "Option::is_none")]
     pub statement: Option<String>,
+    /// 可选，是否允许评论
     #[serde(rename = "commentable", skip_serializing_if = "Option::is_none")]
     pub commentable: Option<bool>,
+    /// 可选，投票文章的草稿配置
     #[serde(rename = "poll", skip_serializing_if = "Option::is_none")]
     pub poll: Option<models::ArticlePollDraft>,
+    /// 可选，抽奖文章的草稿配置
     #[serde(rename = "lottery", skip_serializing_if = "Option::is_none")]
     pub lottery: Option<models::ArticleLotteryDraft>,
 }
 
 impl ReqArticle {
+    /// 协议消息。
     pub fn new(title: String, content: String, r#type: Type) -> ReqArticle {
         ReqArticle {
             title,
@@ -48,7 +59,7 @@ impl ReqArticle {
         }
     }
 }
-/// 
+/// 必填，文章类型
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "ARTICLE_TYPE_UNSPECIFIED")]

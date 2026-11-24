@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetAccountEconomyResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetAccountEconomyResp {
+    /// 当前积分
     #[serde(rename = "balance", skip_serializing_if = "Option::is_none")]
     pub balance: Option<String>,
+    /// 累计获得
     #[serde(rename = "total_income", skip_serializing_if = "Option::is_none")]
     pub total_income: Option<String>,
+    /// 累计消耗
     #[serde(rename = "total_expense", skip_serializing_if = "Option::is_none")]
     pub total_expense: Option<String>,
 }
 
 impl GetAccountEconomyResp {
+    /// 响应结果。
     pub fn new() -> GetAccountEconomyResp {
         GetAccountEconomyResp {
             balance: None,

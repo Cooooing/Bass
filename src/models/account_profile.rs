@@ -11,39 +11,49 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// AccountProfile : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AccountProfile {
+    /// 账号 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 账号名
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 昵称
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
+    /// 个人主页
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 头像 URL
     #[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
-    #[serde(rename = "background_asset_id", skip_serializing_if = "Option::is_none")]
-    pub background_asset_id: Option<String>,
+    /// 个人简介
     #[serde(rename = "introduction", skip_serializing_if = "Option::is_none")]
     pub introduction: Option<String>,
+    /// MBTI 类型，规范化为大写
     #[serde(rename = "mbti", skip_serializing_if = "Option::is_none")]
     pub mbti: Option<String>,
+    /// 账号状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 关注数
     #[serde(rename = "follow_count", skip_serializing_if = "Option::is_none")]
     pub follow_count: Option<i32>,
+    /// 粉丝数
     #[serde(rename = "follower_count", skip_serializing_if = "Option::is_none")]
     pub follower_count: Option<i32>,
-    #[serde(rename = "profile_url", skip_serializing_if = "Option::is_none")]
-    pub profile_url: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl AccountProfile {
+    /// 协议消息。
     pub fn new() -> AccountProfile {
         AccountProfile {
             id: None,
@@ -51,19 +61,17 @@ impl AccountProfile {
             nickname: None,
             url: None,
             avatar_url: None,
-            background_asset_id: None,
             introduction: None,
             mbti: None,
             status: None,
             follow_count: None,
             follower_count: None,
-            profile_url: None,
             created_at: None,
             updated_at: None,
         }
     }
 }
-/// 
+/// 账号状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "ACCOUNT_STATUS_UNSPECIFIED")]

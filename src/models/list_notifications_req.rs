@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListNotificationsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListNotificationsReq {
+    /// 分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl ListNotificationsReq {
+    /// 请求参数。
     pub fn new() -> ListNotificationsReq {
         ListNotificationsReq {
             page: None,

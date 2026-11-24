@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GlobalChatTopic : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GlobalChatTopic {
+    /// 话题记录 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 设置话题的账号 ID。
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 话题内容。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 本次设置实际消耗的积分。
     #[serde(rename = "points_cost", skip_serializing_if = "Option::is_none")]
     pub points_cost: Option<String>,
+    /// 话题设置时间。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl GlobalChatTopic {
+    /// 协议消息。
     pub fn new() -> GlobalChatTopic {
         GlobalChatTopic {
             id: None,

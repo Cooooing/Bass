@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ImportEmojiShareResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ImportEmojiShareResp {
+    /// 新建的导入分组。
     #[serde(rename = "group", skip_serializing_if = "Option::is_none")]
     pub group: Option<models::EmojiGroup>,
+    /// 因资源不可用而跳过的表情数。
     #[serde(rename = "skipped_count", skip_serializing_if = "Option::is_none")]
     pub skipped_count: Option<i32>,
 }
 
 impl ImportEmojiShareResp {
+    /// 响应结果。
     pub fn new() -> ImportEmojiShareResp {
         ImportEmojiShareResp {
             group: None,

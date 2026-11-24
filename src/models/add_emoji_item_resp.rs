@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// AddEmojiItemResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AddEmojiItemResp {
+    /// 已添加表情项。
     #[serde(rename = "item", skip_serializing_if = "Option::is_none")]
     pub item: Option<models::EmojiItem>,
 }
 
 impl AddEmojiItemResp {
+    /// 响应结果。
     pub fn new() -> AddEmojiItemResp {
         AddEmojiItemResp {
             item: None,

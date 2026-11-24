@@ -23,12 +23,12 @@ pub trait PreferencesService: Send + Sync {
     /// POST /v1/user/preference/get-current
     ///
     /// 获取当前账号的偏好设置。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesResp, Error<GetCurrentError>>;
+    async fn get_current_preferences<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesResp, Error<GetCurrentPreferencesError>>;
 
     /// POST /v1/user/preference/update-current
     ///
     /// 更新当前账号的偏好设置。
-    async fn update_current<'update_current_preferences_req>(&self, update_current_preferences_req: models::UpdateCurrentPreferencesReq) -> Result<models::UpdateCurrentPreferencesResp, Error<UpdateCurrentError>>;
+    async fn update_current_preferences<'update_current_preferences_req>(&self, update_current_preferences_req: models::UpdateCurrentPreferencesReq) -> Result<models::UpdateCurrentPreferencesResp, Error<UpdateCurrentPreferencesError>>;
 }
 
 pub struct PreferencesServiceClient {
@@ -46,7 +46,7 @@ impl PreferencesServiceClient {
 #[async_trait]
 impl PreferencesService for PreferencesServiceClient {
     /// 获取当前账号的偏好设置。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesResp, Error<GetCurrentError>> {
+    async fn get_current_preferences<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesResp, Error<GetCurrentPreferencesError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -78,14 +78,14 @@ impl PreferencesService for PreferencesServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentPreferencesResp`")))),
             }
         } else {
-            let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetCurrentPreferencesError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 更新当前账号的偏好设置。
-    async fn update_current<'update_current_preferences_req>(&self, update_current_preferences_req: models::UpdateCurrentPreferencesReq) -> Result<models::UpdateCurrentPreferencesResp, Error<UpdateCurrentError>> {
+    async fn update_current_preferences<'update_current_preferences_req>(&self, update_current_preferences_req: models::UpdateCurrentPreferencesReq) -> Result<models::UpdateCurrentPreferencesResp, Error<UpdateCurrentPreferencesError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -117,7 +117,7 @@ impl PreferencesService for PreferencesServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateCurrentPreferencesResp`")))),
             }
         } else {
-            let local_var_entity: Option<UpdateCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdateCurrentPreferencesError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -125,17 +125,17 @@ impl PreferencesService for PreferencesServiceClient {
 
 }
 
-/// struct for typed errors of method [`PreferencesService::get_current`]
+/// struct for typed errors of method [`PreferencesService::get_current_preferences`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetCurrentError {
+pub enum GetCurrentPreferencesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`PreferencesService::update_current`]
+/// struct for typed errors of method [`PreferencesService::update_current_preferences`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpdateCurrentError {
+pub enum UpdateCurrentPreferencesError {
     UnknownValue(serde_json::Value),
 }
 

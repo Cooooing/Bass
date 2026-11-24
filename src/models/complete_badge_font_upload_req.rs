@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// CompleteBadgeFontUploadReq : Req 指定已上传字体的内容哈希。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CompleteBadgeFontUploadReq {
+    /// 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
     #[serde(rename = "hash")]
     pub hash: String,
 }

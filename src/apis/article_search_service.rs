@@ -22,8 +22,8 @@ pub trait ArticleSearchService: Send + Sync {
 
     /// POST /v1/content/article/search
     ///
-    /// 
-    async fn search<'search_articles_req>(&self, search_articles_req: models::SearchArticlesReq) -> Result<models::SearchArticlesResp, Error<SearchError>>;
+    /// 服务方法。
+    async fn search_articles<'search_articles_req>(&self, search_articles_req: models::SearchArticlesReq) -> Result<models::SearchArticlesResp, Error<SearchArticlesError>>;
 }
 
 pub struct ArticleSearchServiceClient {
@@ -40,7 +40,8 @@ impl ArticleSearchServiceClient {
 
 #[async_trait]
 impl ArticleSearchService for ArticleSearchServiceClient {
-    async fn search<'search_articles_req>(&self, search_articles_req: models::SearchArticlesReq) -> Result<models::SearchArticlesResp, Error<SearchError>> {
+    /// 服务方法。
+    async fn search_articles<'search_articles_req>(&self, search_articles_req: models::SearchArticlesReq) -> Result<models::SearchArticlesResp, Error<SearchArticlesError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -72,7 +73,7 @@ impl ArticleSearchService for ArticleSearchServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::SearchArticlesResp`")))),
             }
         } else {
-            let local_var_entity: Option<SearchError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<SearchArticlesError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -80,10 +81,10 @@ impl ArticleSearchService for ArticleSearchServiceClient {
 
 }
 
-/// struct for typed errors of method [`ArticleSearchService::search`]
+/// struct for typed errors of method [`ArticleSearchService::search_articles`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum SearchError {
+pub enum SearchArticlesError {
     UnknownValue(serde_json::Value),
 }
 

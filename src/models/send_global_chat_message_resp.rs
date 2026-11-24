@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SendGlobalChatMessageResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SendGlobalChatMessageResp {
+    /// 消息。
     #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
     pub message: Option<models::GlobalChatMessage>,
 }
 
 impl SendGlobalChatMessageResp {
+    /// 响应结果。
     pub fn new() -> SendGlobalChatMessageResp {
         SendGlobalChatMessageResp {
             message: None,

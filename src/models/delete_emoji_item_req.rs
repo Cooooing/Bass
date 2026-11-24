@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// DeleteEmojiItemReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct DeleteEmojiItemReq {
+    /// 待删除表情项 ID。
     #[serde(rename = "item_id", skip_serializing_if = "Option::is_none")]
     pub item_id: Option<String>,
 }
 
 impl DeleteEmojiItemReq {
+    /// 请求参数。
     pub fn new() -> DeleteEmojiItemReq {
         DeleteEmojiItemReq {
             item_id: None,

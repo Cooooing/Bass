@@ -11,6 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ImageResp : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ImageResp {
     /// 图片数据
@@ -22,6 +23,7 @@ pub struct ImageResp {
 }
 
 impl ImageResp {
+    /// 协议消息。
     pub fn new() -> ImageResp {
         ImageResp {
             data: None,

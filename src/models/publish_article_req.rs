@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PublishArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PublishArticleReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 可选，定时发布时间
     #[serde(rename = "scheduled_at", skip_serializing_if = "Option::is_none")]
     pub scheduled_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl PublishArticleReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> PublishArticleReq {
         PublishArticleReq {
             article_id,

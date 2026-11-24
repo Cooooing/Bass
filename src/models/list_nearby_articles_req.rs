@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListNearbyArticlesReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListNearbyArticlesReq {
+    /// 可选，分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl ListNearbyArticlesReq {
+    /// 请求参数。
     pub fn new() -> ListNearbyArticlesReq {
         ListNearbyArticlesReq {
             page: None,

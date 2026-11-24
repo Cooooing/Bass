@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PrepareMarkdownImageUploadReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrepareMarkdownImageUploadReq {
+    /// 文件 SHA-256，小写十六进制。
     #[serde(rename = "hash")]
     pub hash: String,
+    /// 上传 MIME 类型。
     #[serde(rename = "mime_type")]
     pub mime_type: String,
+    /// 文件大小，最大 5 MiB。
     #[serde(rename = "size")]
     pub size: String,
 }
 
 impl PrepareMarkdownImageUploadReq {
+    /// 请求参数。
     pub fn new(hash: String, mime_type: String, size: String) -> PrepareMarkdownImageUploadReq {
         PrepareMarkdownImageUploadReq {
             hash,

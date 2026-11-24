@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RevokeGlobalChatMessageReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RevokeGlobalChatMessageReq {
+    /// 消息 ID。
     #[serde(rename = "message_id", skip_serializing_if = "Option::is_none")]
     pub message_id: Option<String>,
 }
 
 impl RevokeGlobalChatMessageReq {
+    /// 请求参数。
     pub fn new() -> RevokeGlobalChatMessageReq {
         RevokeGlobalChatMessageReq {
             message_id: None,

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetCurrentLocationResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentLocationResp {
+    /// 当前请求来源地理数据
     #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
     pub location: Option<models::RespLocation>,
 }
 
 impl GetCurrentLocationResp {
+    /// 响应结果。
     pub fn new() -> GetCurrentLocationResp {
         GetCurrentLocationResp {
             location: None,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdateDraftArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateDraftArticleReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 必填，草稿内容
     #[serde(rename = "article")]
     pub article: models::ReqArticle,
 }
 
 impl UpdateDraftArticleReq {
+    /// 请求参数。
     pub fn new(article_id: String, article: models::ReqArticle) -> UpdateDraftArticleReq {
         UpdateDraftArticleReq {
             article_id,

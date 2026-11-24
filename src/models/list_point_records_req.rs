@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListPointRecordsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListPointRecordsReq {
+    /// 账号名，必填
     #[serde(rename = "name")]
     pub name: String,
+    /// 分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl ListPointRecordsReq {
+    /// 请求参数。
     pub fn new(name: String) -> ListPointRecordsReq {
         ListPointRecordsReq {
             name,

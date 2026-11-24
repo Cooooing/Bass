@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SendEmailOtpReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SendEmailOtpReq {
+    /// 邮箱地址
     #[serde(rename = "email")]
     pub email: String,
 }
 
 impl SendEmailOtpReq {
+    /// 请求参数。
     pub fn new(email: String) -> SendEmailOtpReq {
         SendEmailOtpReq {
             email,

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// MarkReadNotificationResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MarkReadNotificationResp {
+    /// 成功标记的通知数量
     #[serde(rename = "count", skip_serializing_if = "Option::is_none")]
     pub count: Option<i32>,
 }
 
 impl MarkReadNotificationResp {
+    /// 响应结果。
     pub fn new() -> MarkReadNotificationResp {
         MarkReadNotificationResp {
             count: None,

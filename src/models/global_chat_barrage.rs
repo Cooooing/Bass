@@ -11,23 +11,31 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GlobalChatBarrage : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GlobalChatBarrage {
+    /// 弹幕 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 发送账号 ID。
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 纯文本弹幕内容。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 本次实际消耗的积分。
     #[serde(rename = "points_cost", skip_serializing_if = "Option::is_none")]
     pub points_cost: Option<String>,
+    /// 发送者展示资料。
     #[serde(rename = "sender", skip_serializing_if = "Option::is_none")]
     pub sender: Option<models::GlobalChatMember>,
+    /// 创建时间。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl GlobalChatBarrage {
+    /// 协议消息。
     pub fn new() -> GlobalChatBarrage {
         GlobalChatBarrage {
             id: None,

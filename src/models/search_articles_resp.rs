@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SearchArticlesResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SearchArticlesResp {
+    /// 文章列表
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::ArticleListItem>>,
+    /// 下一页游标
     #[serde(rename = "next_cursor", skip_serializing_if = "Option::is_none")]
     pub next_cursor: Option<String>,
 }
 
 impl SearchArticlesResp {
+    /// 响应结果。
     pub fn new() -> SearchArticlesResp {
         SearchArticlesResp {
             rows: None,

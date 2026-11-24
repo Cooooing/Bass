@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// AcceptArticleAnswerReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AcceptArticleAnswerReq {
+    /// 问答文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 采纳的一级回答 ID
     #[serde(rename = "comment_id")]
     pub comment_id: String,
 }
 
 impl AcceptArticleAnswerReq {
+    /// 请求参数。
     pub fn new(article_id: String, comment_id: String) -> AcceptArticleAnswerReq {
         AcceptArticleAnswerReq {
             article_id,

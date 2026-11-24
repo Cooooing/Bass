@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListPrivateChatMessagesReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListPrivateChatMessagesReq {
+    /// 对端账号 ID。
     #[serde(rename = "peer_user_id", skip_serializing_if = "Option::is_none")]
     pub peer_user_id: Option<String>,
+    /// 向前分页游标。
     #[serde(rename = "before_id", skip_serializing_if = "Option::is_none")]
     pub before_id: Option<String>,
+    /// 分页参数。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl ListPrivateChatMessagesReq {
+    /// 请求参数。
     pub fn new() -> ListPrivateChatMessagesReq {
         ListPrivateChatMessagesReq {
             peer_user_id: None,

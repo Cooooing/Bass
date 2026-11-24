@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetCurrentAccountResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentAccountResp {
+    /// 当前账号完整资料
     #[serde(rename = "account", skip_serializing_if = "Option::is_none")]
     pub account: Option<models::RespCurrentAccount>,
 }
 
 impl GetCurrentAccountResp {
+    /// 响应结果。
     pub fn new() -> GetCurrentAccountResp {
         GetCurrentAccountResp {
             account: None,

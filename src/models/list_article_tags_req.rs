@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListArticleTagsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListArticleTagsReq {
+    /// 文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
 }
 
 impl ListArticleTagsReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> ListArticleTagsReq {
         ListArticleTagsReq {
             article_id,

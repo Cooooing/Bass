@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SendEmailOtpResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SendEmailOtpResp {
+    /// 非生产环境返回验证码，生产环境为空
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
 }
 
 impl SendEmailOtpResp {
+    /// 响应结果。
     pub fn new() -> SendEmailOtpResp {
         SendEmailOtpResp {
             code: None,

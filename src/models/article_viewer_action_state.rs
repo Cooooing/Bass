@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticleViewerActionState : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleViewerActionState {
+    /// 是否已点赞
     #[serde(rename = "liked", skip_serializing_if = "Option::is_none")]
     pub liked: Option<bool>,
+    /// 是否已感谢
     #[serde(rename = "thanked", skip_serializing_if = "Option::is_none")]
     pub thanked: Option<bool>,
+    /// 是否已收藏
     #[serde(rename = "collected", skip_serializing_if = "Option::is_none")]
     pub collected: Option<bool>,
+    /// 是否已打赏
     #[serde(rename = "rewarded", skip_serializing_if = "Option::is_none")]
     pub rewarded: Option<bool>,
+    /// 是否已关注
     #[serde(rename = "watched", skip_serializing_if = "Option::is_none")]
     pub watched: Option<bool>,
 }
 
 impl ArticleViewerActionState {
+    /// 协议消息。
     pub fn new() -> ArticleViewerActionState {
         ArticleViewerActionState {
             liked: None,

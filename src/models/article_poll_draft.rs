@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticlePollDraft : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticlePollDraft {
+    /// 投票选项
     #[serde(rename = "options", skip_serializing_if = "Option::is_none")]
     pub options: Option<Vec<String>>,
+    /// 截止时间
     #[serde(rename = "ends_at", skip_serializing_if = "Option::is_none")]
     pub ends_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 每人最多选择数
     #[serde(rename = "max_choices", skip_serializing_if = "Option::is_none")]
     pub max_choices: Option<i32>,
 }
 
 impl ArticlePollDraft {
+    /// 协议消息。
     pub fn new() -> ArticlePollDraft {
         ArticlePollDraft {
             options: None,

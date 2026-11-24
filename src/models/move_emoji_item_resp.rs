@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// MoveEmojiItemResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MoveEmojiItemResp {
+    /// 已移动表情项。
     #[serde(rename = "item", skip_serializing_if = "Option::is_none")]
     pub item: Option<models::EmojiItem>,
 }
 
 impl MoveEmojiItemResp {
+    /// 响应结果。
     pub fn new() -> MoveEmojiItemResp {
         MoveEmojiItemResp {
             item: None,

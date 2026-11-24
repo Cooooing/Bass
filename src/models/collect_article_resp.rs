@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CollectArticleResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CollectArticleResp {
+    /// 是否已收藏
     #[serde(rename = "collected", skip_serializing_if = "Option::is_none")]
     pub collected: Option<bool>,
 }
 
 impl CollectArticleResp {
+    /// 响应结果。
     pub fn new() -> CollectArticleResp {
         CollectArticleResp {
             collected: None,

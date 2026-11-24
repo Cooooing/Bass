@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RenameEmojiGroupResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RenameEmojiGroupResp {
+    /// 已重命名分组。
     #[serde(rename = "group", skip_serializing_if = "Option::is_none")]
     pub group: Option<models::EmojiGroup>,
 }
 
 impl RenameEmojiGroupResp {
+    /// 响应结果。
     pub fn new() -> RenameEmojiGroupResp {
         RenameEmojiGroupResp {
             group: None,

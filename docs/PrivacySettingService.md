@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_current**](PrivacySettingService.md#get_current) | **POST** /v1/user/privacy-setting/get-current | 
-[**update_current**](PrivacySettingService.md#update_current) | **POST** /v1/user/privacy-setting/update-current | 
+[**get_current_privacy_setting**](PrivacySettingService.md#get_current_privacy_setting) | **POST** /v1/user/privacy-setting/get-current | 
+[**update_current_privacy_setting**](PrivacySettingService.md#update_current_privacy_setting) | **POST** /v1/user/privacy-setting/update-current | 
 
 
 
-## get_current
+## get_current_privacy_setting
 
-> models::GetCurrentPrivacySettingResp get_current(body)
+> models::GetCurrentPrivacySettingResp get_current_privacy_setting(body)
 
 
 获取当前账号的隐私设置。
@@ -39,9 +39,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## update_current
+## update_current_privacy_setting
 
-> models::UpdateCurrentPrivacySettingResp update_current(update_current_privacy_setting_req)
+> models::UpdateCurrentPrivacySettingResp update_current_privacy_setting(update_current_privacy_setting_req)
 
 
 更新当前账号的隐私设置。

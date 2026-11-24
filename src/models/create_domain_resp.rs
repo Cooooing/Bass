@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateDomainResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateDomainResp {
+    /// 领域信息
     #[serde(rename = "domain", skip_serializing_if = "Option::is_none")]
     pub domain: Option<models::RespDomain>,
 }
 
 impl CreateDomainResp {
+    /// 响应结果。
     pub fn new() -> CreateDomainResp {
         CreateDomainResp {
             domain: None,

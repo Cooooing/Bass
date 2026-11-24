@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **String** |  | 
-**page** | Option<[**models::PageReq**](PageReq.md)> |  | [optional]
+**name** | **String** | 账号名，必填 | 
+**page** | Option<[**models::PageReq**](PageReq.md)> | 分页参数 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -11,29 +11,40 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqCommentQuery : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqCommentQuery {
+    /// 评论 ID
     #[serde(rename = "comment_id", skip_serializing_if = "Option::is_none")]
     pub comment_id: Option<String>,
+    /// 文章 ID
     #[serde(rename = "article_id", skip_serializing_if = "Option::is_none")]
     pub article_id: Option<String>,
+    /// 父评论 ID
     #[serde(rename = "parent_id", skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<String>,
+    /// 回复的评论 ID
     #[serde(rename = "reply_id", skip_serializing_if = "Option::is_none")]
     pub reply_id: Option<String>,
+    /// 排序方式
     #[serde(rename = "order", skip_serializing_if = "Option::is_none")]
     pub order: Option<Order>,
+    /// 评论账号 ID
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 评论层级
     #[serde(rename = "level", skip_serializing_if = "Option::is_none")]
     pub level: Option<i32>,
+    /// 管理限制
     #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
     pub restriction: Option<Restriction>,
+    /// 管理限制列表
     #[serde(rename = "restrictions", skip_serializing_if = "Option::is_none")]
     pub restrictions: Option<Vec<Restrictions>>,
 }
 
 impl ReqCommentQuery {
+    /// 协议消息。
     pub fn new() -> ReqCommentQuery {
         ReqCommentQuery {
             comment_id: None,
@@ -48,7 +59,7 @@ impl ReqCommentQuery {
         }
     }
 }
-/// 
+/// 排序方式
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Order {
     #[serde(rename = "COMMENT_ORDER_UNSPECIFIED")]
@@ -66,7 +77,7 @@ impl Default for Order {
         Self::CommentOrderUnspecified
     }
 }
-/// 
+/// 管理限制
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Restriction {
     #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]
@@ -84,7 +95,7 @@ impl Default for Restriction {
         Self::ContentRestrictionUnspecified
     }
 }
-/// 
+/// 管理限制列表
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Restrictions {
     #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]

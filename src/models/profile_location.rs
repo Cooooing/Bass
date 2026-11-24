@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ProfileLocation : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ProfileLocation {
+    /// 协议字段。
     #[serde(rename = "country", skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
+    /// 协议字段。
     #[serde(rename = "province", skip_serializing_if = "Option::is_none")]
     pub province: Option<String>,
+    /// 协议字段。
     #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
 }
 
 impl ProfileLocation {
+    /// 协议消息。
     pub fn new() -> ProfileLocation {
         ProfileLocation {
             country: None,

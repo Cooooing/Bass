@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateEmojiGroupReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateEmojiGroupReq {
+    /// 新分组名称。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
 impl CreateEmojiGroupReq {
+    /// 请求参数。
     pub fn new() -> CreateEmojiGroupReq {
         CreateEmojiGroupReq {
             name: None,

@@ -23,12 +23,12 @@ pub trait PostscriptService: Send + Sync {
     /// POST /v1/content/postscript/add
     ///
     /// 添加文章附言。
-    async fn add<'add_postscript_req>(&self, add_postscript_req: models::AddPostscriptReq) -> Result<models::AddPostscriptResp, Error<AddError>>;
+    async fn add_postscript<'add_postscript_req>(&self, add_postscript_req: models::AddPostscriptReq) -> Result<models::AddPostscriptResp, Error<AddPostscriptError>>;
 
     /// POST /v1/content/postscript/list
     ///
     /// 查询文章附言列表。
-    async fn list<'list_postscripts_req>(&self, list_postscripts_req: models::ListPostscriptsReq) -> Result<models::ListPostscriptsResp, Error<ListError>>;
+    async fn list_postscripts<'list_postscripts_req>(&self, list_postscripts_req: models::ListPostscriptsReq) -> Result<models::ListPostscriptsResp, Error<ListPostscriptsError>>;
 }
 
 pub struct PostscriptServiceClient {
@@ -46,7 +46,7 @@ impl PostscriptServiceClient {
 #[async_trait]
 impl PostscriptService for PostscriptServiceClient {
     /// 添加文章附言。
-    async fn add<'add_postscript_req>(&self, add_postscript_req: models::AddPostscriptReq) -> Result<models::AddPostscriptResp, Error<AddError>> {
+    async fn add_postscript<'add_postscript_req>(&self, add_postscript_req: models::AddPostscriptReq) -> Result<models::AddPostscriptResp, Error<AddPostscriptError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -78,14 +78,14 @@ impl PostscriptService for PostscriptServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::AddPostscriptResp`")))),
             }
         } else {
-            let local_var_entity: Option<AddError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<AddPostscriptError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 查询文章附言列表。
-    async fn list<'list_postscripts_req>(&self, list_postscripts_req: models::ListPostscriptsReq) -> Result<models::ListPostscriptsResp, Error<ListError>> {
+    async fn list_postscripts<'list_postscripts_req>(&self, list_postscripts_req: models::ListPostscriptsReq) -> Result<models::ListPostscriptsResp, Error<ListPostscriptsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -117,7 +117,7 @@ impl PostscriptService for PostscriptServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListPostscriptsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListPostscriptsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -125,17 +125,17 @@ impl PostscriptService for PostscriptServiceClient {
 
 }
 
-/// struct for typed errors of method [`PostscriptService::add`]
+/// struct for typed errors of method [`PostscriptService::add_postscript`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AddError {
+pub enum AddPostscriptError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`PostscriptService::list`]
+/// struct for typed errors of method [`PostscriptService::list_postscripts`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListError {
+pub enum ListPostscriptsError {
     UnknownValue(serde_json::Value),
 }
 

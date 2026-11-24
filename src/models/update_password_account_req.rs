@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdatePasswordAccountReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdatePasswordAccountReq {
+    /// 旧密码，必填
     #[serde(rename = "old_password")]
     pub old_password: String,
+    /// 新密码，必填
     #[serde(rename = "new_password")]
     pub new_password: String,
 }
 
 impl UpdatePasswordAccountReq {
+    /// 请求参数。
     pub fn new(old_password: String, new_password: String) -> UpdatePasswordAccountReq {
         UpdatePasswordAccountReq {
             old_password,

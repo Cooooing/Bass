@@ -55,9 +55,9 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**name** | Option<**String**> |  |  |
-**email** | Option<**String**> |  |  |
-**phone** | Option<**String**> |  |  |
+**name** | Option<**String**> | 待检查的账号名 |  |
+**email** | Option<**String**> | 待检查的邮箱 |  |
+**phone** | Option<**String**> | 待检查的手机号 |  |
 
 ### Return type
 

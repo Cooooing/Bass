@@ -14,12 +14,16 @@ use serde::{Deserialize, Serialize};
 /// UpsertBadgeDraftReq : Req 缺失 draft_id 时创建，存在时更新。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpsertBadgeDraftReq {
+    /// 待保存草稿 ID。
     #[serde(rename = "draft_id", skip_serializing_if = "Option::is_none")]
     pub draft_id: Option<String>,
+    /// 草稿名称。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 草稿说明。
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 草稿渲染参数。
     #[serde(rename = "render_spec", skip_serializing_if = "Option::is_none")]
     pub render_spec: Option<models::RenderSpec>,
 }

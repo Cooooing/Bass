@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// Moonbreeze : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Moonbreeze {
+    /// 协议字段。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 协议字段。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// 协议字段。
     #[serde(rename = "author", skip_serializing_if = "Option::is_none")]
     pub author: Option<models::AccountProfile>,
+    /// 协议字段。
     #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
+    /// 协议字段。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl Moonbreeze {
+    /// 协议消息。
     pub fn new() -> Moonbreeze {
         Moonbreeze {
             id: None,

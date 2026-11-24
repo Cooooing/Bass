@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdateProfileAccountResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateProfileAccountResp {
+    /// 更新后的账号资料
     #[serde(rename = "profile", skip_serializing_if = "Option::is_none")]
     pub profile: Option<models::AccountProfile>,
 }
 
 impl UpdateProfileAccountResp {
+    /// 响应结果。
     pub fn new() -> UpdateProfileAccountResp {
         UpdateProfileAccountResp {
             profile: None,

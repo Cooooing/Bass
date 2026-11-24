@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateMoonbreezeResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateMoonbreezeResp {
+    /// 协议字段。
     #[serde(rename = "moonbreeze", skip_serializing_if = "Option::is_none")]
     pub moonbreeze: Option<models::Moonbreeze>,
 }
 
 impl CreateMoonbreezeResp {
+    /// 响应结果。
     pub fn new() -> CreateMoonbreezeResp {
         CreateMoonbreezeResp {
             moonbreeze: None,

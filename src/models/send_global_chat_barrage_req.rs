@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SendGlobalChatBarrageReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SendGlobalChatBarrageReq {
+    /// 原始弹幕内容。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
 }
 
 impl SendGlobalChatBarrageReq {
+    /// 请求参数。
     pub fn new() -> SendGlobalChatBarrageReq {
         SendGlobalChatBarrageReq {
             content: None,

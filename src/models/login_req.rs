@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// LoginReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LoginReq {
+    /// 登录方式
     #[serde(rename = "type")]
     pub r#type: Type,
+    /// 密码登录凭证
     #[serde(rename = "password_credential", skip_serializing_if = "Option::is_none")]
     pub password_credential: Option<models::ReqPasswordCredential>,
+    /// 邮箱登录凭证
     #[serde(rename = "email_credential", skip_serializing_if = "Option::is_none")]
     pub email_credential: Option<models::ReqEmailCredential>,
+    /// 手机登录凭证
     #[serde(rename = "phone_credential", skip_serializing_if = "Option::is_none")]
     pub phone_credential: Option<models::ReqPhoneCredential>,
 }
 
 impl LoginReq {
+    /// 请求参数。
     pub fn new(r#type: Type) -> LoginReq {
         LoginReq {
             r#type,
@@ -33,7 +39,7 @@ impl LoginReq {
         }
     }
 }
-/// 
+/// 登录方式
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "LOGIN_TYPE_UNSPECIFIED")]

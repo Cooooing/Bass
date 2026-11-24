@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetProfileResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetProfileResp {
+    /// 协议字段。
     #[serde(rename = "profile", skip_serializing_if = "Option::is_none")]
     pub profile: Option<models::Profile>,
 }
 
 impl GetProfileResp {
+    /// 响应结果。
     pub fn new() -> GetProfileResp {
         GetProfileResp {
             profile: None,

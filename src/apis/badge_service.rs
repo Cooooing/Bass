@@ -23,27 +23,27 @@ pub trait BadgeService: Send + Sync {
     /// POST /v1/badge/draft/delete
     ///
     /// DeleteDraft 删除一个未发布草稿。
-    async fn delete_draft<'delete_badge_draft_req>(&self, delete_badge_draft_req: models::DeleteBadgeDraftReq) -> Result<serde_json::Value, Error<DeleteDraftError>>;
+    async fn delete_badge_draft<'delete_badge_draft_req>(&self, delete_badge_draft_req: models::DeleteBadgeDraftReq) -> Result<serde_json::Value, Error<DeleteBadgeDraftError>>;
 
     /// POST /v1/badge/draft/list
     ///
     /// ListDrafts 返回当前登录用户的徽章草稿。
-    async fn list_drafts<'body>(&self, body: serde_json::Value) -> Result<models::ListBadgeDraftsResp, Error<ListDraftsError>>;
+    async fn list_badge_drafts<'body>(&self, body: serde_json::Value) -> Result<models::ListBadgeDraftsResp, Error<ListBadgeDraftsError>>;
 
     /// GET /v1/badge/maker/render
     ///
     /// RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-    async fn render_maker<'render_spec_image_asset_id, 'render_spec_text, 'render_spec_background_colors, 'render_spec_text_colors, 'render_spec_background_direction, 'render_spec_text_direction, 'render_spec_size, 'render_spec_border, 'render_spec_text_bar_length, 'render_spec_text_size, 'render_spec_text_bar_radius, 'render_spec_scale, 'render_spec_shadow, 'render_spec_animation_seconds, 'render_spec_font_asset_id>(&self, render_spec_image_asset_id: Option<&'render_spec_image_asset_id str>, render_spec_text: Option<&'render_spec_text str>, render_spec_background_colors: Option<Vec<String>>, render_spec_text_colors: Option<Vec<String>>, render_spec_background_direction: Option<&'render_spec_background_direction str>, render_spec_text_direction: Option<&'render_spec_text_direction str>, render_spec_size: Option<i32>, render_spec_border: Option<i32>, render_spec_text_bar_length: Option<i32>, render_spec_text_size: Option<i32>, render_spec_text_bar_radius: Option<i32>, render_spec_scale: Option<f64>, render_spec_shadow: Option<f64>, render_spec_animation_seconds: Option<f64>, render_spec_font_asset_id: Option<&'render_spec_font_asset_id str>) -> Result<models::ImageResp, Error<RenderMakerError>>;
+    async fn render_maker_badge<'render_spec_image_asset_id, 'render_spec_text, 'render_spec_background_colors, 'render_spec_text_colors, 'render_spec_background_direction, 'render_spec_text_direction, 'render_spec_size, 'render_spec_border, 'render_spec_text_bar_length, 'render_spec_text_size, 'render_spec_text_bar_radius, 'render_spec_scale, 'render_spec_shadow, 'render_spec_animation_seconds, 'render_spec_font_asset_id>(&self, render_spec_image_asset_id: Option<&'render_spec_image_asset_id str>, render_spec_text: Option<&'render_spec_text str>, render_spec_background_colors: Option<Vec<String>>, render_spec_text_colors: Option<Vec<String>>, render_spec_background_direction: Option<&'render_spec_background_direction str>, render_spec_text_direction: Option<&'render_spec_text_direction str>, render_spec_size: Option<i32>, render_spec_border: Option<i32>, render_spec_text_bar_length: Option<i32>, render_spec_text_size: Option<i32>, render_spec_text_bar_radius: Option<i32>, render_spec_scale: Option<f64>, render_spec_shadow: Option<f64>, render_spec_animation_seconds: Option<f64>, render_spec_font_asset_id: Option<&'render_spec_font_asset_id str>) -> Result<models::RenderMakerBadgeResp, Error<RenderMakerBadgeError>>;
 
     /// GET /v1/badge/render
     ///
     /// RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-    async fn render_published<'code>(&self, code: Option<&'code str>) -> Result<models::ImageResp, Error<RenderPublishedError>>;
+    async fn render_published_badge<'code>(&self, code: Option<&'code str>) -> Result<models::RenderPublishedBadgeResp, Error<RenderPublishedBadgeError>>;
 
     /// POST /v1/badge/draft/upsert
     ///
     /// UpsertDraft 保存当前登录用户的徽章草稿。
-    async fn upsert_draft<'upsert_badge_draft_req>(&self, upsert_badge_draft_req: models::UpsertBadgeDraftReq) -> Result<models::UpsertBadgeDraftResp, Error<UpsertDraftError>>;
+    async fn upsert_badge_draft<'upsert_badge_draft_req>(&self, upsert_badge_draft_req: models::UpsertBadgeDraftReq) -> Result<models::UpsertBadgeDraftResp, Error<UpsertBadgeDraftError>>;
 }
 
 pub struct BadgeServiceClient {
@@ -61,7 +61,7 @@ impl BadgeServiceClient {
 #[async_trait]
 impl BadgeService for BadgeServiceClient {
     /// DeleteDraft 删除一个未发布草稿。
-    async fn delete_draft<'delete_badge_draft_req>(&self, delete_badge_draft_req: models::DeleteBadgeDraftReq) -> Result<serde_json::Value, Error<DeleteDraftError>> {
+    async fn delete_badge_draft<'delete_badge_draft_req>(&self, delete_badge_draft_req: models::DeleteBadgeDraftReq) -> Result<serde_json::Value, Error<DeleteBadgeDraftError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -93,14 +93,14 @@ impl BadgeService for BadgeServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<DeleteDraftError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<DeleteBadgeDraftError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// ListDrafts 返回当前登录用户的徽章草稿。
-    async fn list_drafts<'body>(&self, body: serde_json::Value) -> Result<models::ListBadgeDraftsResp, Error<ListDraftsError>> {
+    async fn list_badge_drafts<'body>(&self, body: serde_json::Value) -> Result<models::ListBadgeDraftsResp, Error<ListBadgeDraftsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -132,14 +132,14 @@ impl BadgeService for BadgeServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListBadgeDraftsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListDraftsError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListBadgeDraftsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
-    async fn render_maker<'render_spec_image_asset_id, 'render_spec_text, 'render_spec_background_colors, 'render_spec_text_colors, 'render_spec_background_direction, 'render_spec_text_direction, 'render_spec_size, 'render_spec_border, 'render_spec_text_bar_length, 'render_spec_text_size, 'render_spec_text_bar_radius, 'render_spec_scale, 'render_spec_shadow, 'render_spec_animation_seconds, 'render_spec_font_asset_id>(&self, render_spec_image_asset_id: Option<&'render_spec_image_asset_id str>, render_spec_text: Option<&'render_spec_text str>, render_spec_background_colors: Option<Vec<String>>, render_spec_text_colors: Option<Vec<String>>, render_spec_background_direction: Option<&'render_spec_background_direction str>, render_spec_text_direction: Option<&'render_spec_text_direction str>, render_spec_size: Option<i32>, render_spec_border: Option<i32>, render_spec_text_bar_length: Option<i32>, render_spec_text_size: Option<i32>, render_spec_text_bar_radius: Option<i32>, render_spec_scale: Option<f64>, render_spec_shadow: Option<f64>, render_spec_animation_seconds: Option<f64>, render_spec_font_asset_id: Option<&'render_spec_font_asset_id str>) -> Result<models::ImageResp, Error<RenderMakerError>> {
+    async fn render_maker_badge<'render_spec_image_asset_id, 'render_spec_text, 'render_spec_background_colors, 'render_spec_text_colors, 'render_spec_background_direction, 'render_spec_text_direction, 'render_spec_size, 'render_spec_border, 'render_spec_text_bar_length, 'render_spec_text_size, 'render_spec_text_bar_radius, 'render_spec_scale, 'render_spec_shadow, 'render_spec_animation_seconds, 'render_spec_font_asset_id>(&self, render_spec_image_asset_id: Option<&'render_spec_image_asset_id str>, render_spec_text: Option<&'render_spec_text str>, render_spec_background_colors: Option<Vec<String>>, render_spec_text_colors: Option<Vec<String>>, render_spec_background_direction: Option<&'render_spec_background_direction str>, render_spec_text_direction: Option<&'render_spec_text_direction str>, render_spec_size: Option<i32>, render_spec_border: Option<i32>, render_spec_text_bar_length: Option<i32>, render_spec_text_size: Option<i32>, render_spec_text_bar_radius: Option<i32>, render_spec_scale: Option<f64>, render_spec_shadow: Option<f64>, render_spec_animation_seconds: Option<f64>, render_spec_font_asset_id: Option<&'render_spec_font_asset_id str>) -> Result<models::RenderMakerBadgeResp, Error<RenderMakerBadgeError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -217,18 +217,18 @@ impl BadgeService for BadgeServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ImageResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ImageResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::RenderMakerBadgeResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::RenderMakerBadgeResp`")))),
             }
         } else {
-            let local_var_entity: Option<RenderMakerError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<RenderMakerBadgeError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// RenderPublished 匿名返回一个已发布徽章的主站 SVG。
-    async fn render_published<'code>(&self, code: Option<&'code str>) -> Result<models::ImageResp, Error<RenderPublishedError>> {
+    async fn render_published_badge<'code>(&self, code: Option<&'code str>) -> Result<models::RenderPublishedBadgeResp, Error<RenderPublishedBadgeError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -258,18 +258,18 @@ impl BadgeService for BadgeServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ImageResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ImageResp`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::RenderPublishedBadgeResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::RenderPublishedBadgeResp`")))),
             }
         } else {
-            let local_var_entity: Option<RenderPublishedError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<RenderPublishedBadgeError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// UpsertDraft 保存当前登录用户的徽章草稿。
-    async fn upsert_draft<'upsert_badge_draft_req>(&self, upsert_badge_draft_req: models::UpsertBadgeDraftReq) -> Result<models::UpsertBadgeDraftResp, Error<UpsertDraftError>> {
+    async fn upsert_badge_draft<'upsert_badge_draft_req>(&self, upsert_badge_draft_req: models::UpsertBadgeDraftReq) -> Result<models::UpsertBadgeDraftResp, Error<UpsertBadgeDraftError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -301,7 +301,7 @@ impl BadgeService for BadgeServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpsertBadgeDraftResp`")))),
             }
         } else {
-            let local_var_entity: Option<UpsertDraftError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpsertBadgeDraftError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -309,38 +309,38 @@ impl BadgeService for BadgeServiceClient {
 
 }
 
-/// struct for typed errors of method [`BadgeService::delete_draft`]
+/// struct for typed errors of method [`BadgeService::delete_badge_draft`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum DeleteDraftError {
+pub enum DeleteBadgeDraftError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`BadgeService::list_drafts`]
+/// struct for typed errors of method [`BadgeService::list_badge_drafts`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListDraftsError {
+pub enum ListBadgeDraftsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`BadgeService::render_maker`]
+/// struct for typed errors of method [`BadgeService::render_maker_badge`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RenderMakerError {
+pub enum RenderMakerBadgeError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`BadgeService::render_published`]
+/// struct for typed errors of method [`BadgeService::render_published_badge`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RenderPublishedError {
+pub enum RenderPublishedBadgeError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`BadgeService::upsert_draft`]
+/// struct for typed errors of method [`BadgeService::upsert_badge_draft`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpsertDraftError {
+pub enum UpsertBadgeDraftError {
     UnknownValue(serde_json::Value),
 }
 

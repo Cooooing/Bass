@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListBlockedRelationsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListBlockedRelationsResp {
+    /// 分页结果
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
+    /// 账号关系列表
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::Relation>>,
 }
 
 impl ListBlockedRelationsResp {
+    /// 响应结果。
     pub fn new() -> ListBlockedRelationsResp {
         ListBlockedRelationsResp {
             page: None,

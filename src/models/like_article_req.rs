@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// LikeArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LikeArticleReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 必填，是否点赞
     #[serde(rename = "active")]
     pub active: bool,
 }
 
 impl LikeArticleReq {
+    /// 请求参数。
     pub fn new(article_id: String, active: bool) -> LikeArticleReq {
         LikeArticleReq {
             article_id,

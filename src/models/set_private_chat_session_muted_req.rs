@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SetPrivateChatSessionMutedReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SetPrivateChatSessionMutedReq {
+    /// 对端账号 ID。
     #[serde(rename = "peer_user_id", skip_serializing_if = "Option::is_none")]
     pub peer_user_id: Option<String>,
+    /// 是否免打扰。
     #[serde(rename = "muted", skip_serializing_if = "Option::is_none")]
     pub muted: Option<bool>,
 }
 
 impl SetPrivateChatSessionMutedReq {
+    /// 请求参数。
     pub fn new() -> SetPrivateChatSessionMutedReq {
         SetPrivateChatSessionMutedReq {
             peer_user_id: None,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticleLotteryDraft : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleLotteryDraft {
+    /// 奖项配置
     #[serde(rename = "prizes", skip_serializing_if = "Option::is_none")]
     pub prizes: Option<Vec<models::ArticleLotteryPrizeDraft>>,
+    /// 开奖时间
     #[serde(rename = "draw_at", skip_serializing_if = "Option::is_none")]
     pub draw_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl ArticleLotteryDraft {
+    /// 协议消息。
     pub fn new() -> ArticleLotteryDraft {
         ArticleLotteryDraft {
             prizes: None,

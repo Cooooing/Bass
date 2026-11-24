@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdateTagReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateTagReq {
+    /// 标签 ID
     #[serde(rename = "tag_id")]
     pub tag_id: String,
+    /// 标签信息
     #[serde(rename = "tag")]
     pub tag: models::ReqTag,
 }
 
 impl UpdateTagReq {
+    /// 请求参数。
     pub fn new(tag_id: String, tag: models::ReqTag) -> UpdateTagReq {
         UpdateTagReq {
             tag_id,

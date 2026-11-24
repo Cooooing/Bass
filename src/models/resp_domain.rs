@@ -11,37 +11,52 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespDomain : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespDomain {
+    /// 领域 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 稳定编码
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    /// 领域名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 描述
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 启停状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 链接
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 图标
     #[serde(rename = "icon", skip_serializing_if = "Option::is_none")]
     pub icon: Option<String>,
+    /// 是否在导航中展示
     #[serde(rename = "is_nav", skip_serializing_if = "Option::is_none")]
     pub is_nav: Option<bool>,
+    /// 排序值，越小越靠前
     #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
     pub sort: Option<i32>,
+    /// 创建用户 ID
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
+    /// 更新用户 ID
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl RespDomain {
+    /// 协议消息。
     pub fn new() -> RespDomain {
         RespDomain {
             id: None,
@@ -60,7 +75,7 @@ impl RespDomain {
         }
     }
 }
-/// 
+/// 启停状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "DOMAIN_STATUS_UNSPECIFIED")]

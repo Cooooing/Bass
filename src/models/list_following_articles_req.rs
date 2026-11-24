@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListFollowingArticlesReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListFollowingArticlesReq {
+    /// 可选，分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl ListFollowingArticlesReq {
+    /// 请求参数。
     pub fn new() -> ListFollowingArticlesReq {
         ListFollowingArticlesReq {
             page: None,

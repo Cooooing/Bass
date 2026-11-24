@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetGlobalChatTopicResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetGlobalChatTopicResp {
+    /// 当前话题；未设置时为空。
     #[serde(rename = "topic", skip_serializing_if = "Option::is_none")]
     pub topic: Option<models::GlobalChatTopic>,
 }
 
 impl GetGlobalChatTopicResp {
+    /// 响应结果。
     pub fn new() -> GetGlobalChatTopicResp {
         GetGlobalChatTopicResp {
             topic: None,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// VoteArticlePollReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct VoteArticlePollReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 必填，所选选项 ID
     #[serde(rename = "option_ids")]
     pub option_ids: Vec<String>,
 }
 
 impl VoteArticlePollReq {
+    /// 请求参数。
     pub fn new(article_id: String, option_ids: Vec<String>) -> VoteArticlePollReq {
         VoteArticlePollReq {
             article_id,

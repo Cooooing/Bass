@@ -11,6 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PageResp : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PageResp {
     /// 总数
@@ -25,6 +26,7 @@ pub struct PageResp {
 }
 
 impl PageResp {
+    /// 协议消息。
     pub fn new() -> PageResp {
         PageResp {
             total: None,

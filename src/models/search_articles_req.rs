@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SearchArticlesReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SearchArticlesReq {
+    /// 必填，搜索词
     #[serde(rename = "query")]
     pub query: String,
+    /// 可选，不透明续页游标
     #[serde(rename = "cursor", skip_serializing_if = "Option::is_none")]
     pub cursor: Option<String>,
+    /// 可选，返回条数
     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
     pub size: Option<i32>,
 }
 
 impl SearchArticlesReq {
+    /// 请求参数。
     pub fn new(query: String) -> SearchArticlesReq {
         SearchArticlesReq {
             query,

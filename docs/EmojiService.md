@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**add_item**](EmojiService.md#add_item) | **POST** /v1/im/emoji/items | 
-[**create_group**](EmojiService.md#create_group) | **POST** /v1/im/emoji/groups | 
-[**create_share**](EmojiService.md#create_share) | **POST** /v1/im/emoji/shares | 
-[**delete_group**](EmojiService.md#delete_group) | **POST** /v1/im/emoji/groups/delete | 
-[**delete_item**](EmojiService.md#delete_item) | **POST** /v1/im/emoji/items/delete | 
-[**import_share**](EmojiService.md#import_share) | **POST** /v1/im/emoji/shares/import | 
-[**list**](EmojiService.md#list) | **POST** /v1/im/emoji/groups/list | 
-[**move_item**](EmojiService.md#move_item) | **POST** /v1/im/emoji/items/move | 
-[**rename_group**](EmojiService.md#rename_group) | **POST** /v1/im/emoji/groups/rename | 
-[**rename_item**](EmojiService.md#rename_item) | **POST** /v1/im/emoji/items/rename | 
-[**reorder_groups**](EmojiService.md#reorder_groups) | **POST** /v1/im/emoji/groups/reorder | 
-[**reorder_items**](EmojiService.md#reorder_items) | **POST** /v1/im/emoji/items/reorder | 
+[**add_emoji_item**](EmojiService.md#add_emoji_item) | **POST** /v1/im/emoji/items | 
+[**create_emoji_group**](EmojiService.md#create_emoji_group) | **POST** /v1/im/emoji/groups | 
+[**create_emoji_share**](EmojiService.md#create_emoji_share) | **POST** /v1/im/emoji/shares | 
+[**delete_emoji_group**](EmojiService.md#delete_emoji_group) | **POST** /v1/im/emoji/groups/delete | 
+[**delete_emoji_item**](EmojiService.md#delete_emoji_item) | **POST** /v1/im/emoji/items/delete | 
+[**import_emoji_share**](EmojiService.md#import_emoji_share) | **POST** /v1/im/emoji/shares/import | 
+[**list_emoji_groups**](EmojiService.md#list_emoji_groups) | **POST** /v1/im/emoji/groups/list | 
+[**move_emoji_item**](EmojiService.md#move_emoji_item) | **POST** /v1/im/emoji/items/move | 
+[**rename_emoji_group**](EmojiService.md#rename_emoji_group) | **POST** /v1/im/emoji/groups/rename | 
+[**rename_emoji_item**](EmojiService.md#rename_emoji_item) | **POST** /v1/im/emoji/items/rename | 
+[**reorder_emoji_groups**](EmojiService.md#reorder_emoji_groups) | **POST** /v1/im/emoji/groups/reorder | 
+[**reorder_emoji_items**](EmojiService.md#reorder_emoji_items) | **POST** /v1/im/emoji/items/reorder | 
 
 
 
-## add_item
+## add_emoji_item
 
-> models::AddEmojiItemResp add_item(add_emoji_item_req)
+> models::AddEmojiItemResp add_emoji_item(add_emoji_item_req)
 
 
 向分组加入已上传图片。
@@ -49,9 +49,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## create_group
+## create_emoji_group
 
-> models::CreateEmojiGroupResp create_group(create_emoji_group_req)
+> models::CreateEmojiGroupResp create_emoji_group(create_emoji_group_req)
 
 
 创建一个表情分组。
@@ -79,9 +79,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## create_share
+## create_emoji_share
 
-> models::CreateEmojiShareResp create_share(create_emoji_share_req)
+> models::CreateEmojiShareResp create_emoji_share(create_emoji_share_req)
 
 
 生成七天有效的分组分享码。
@@ -109,9 +109,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## delete_group
+## delete_emoji_group
 
-> serde_json::Value delete_group(delete_emoji_group_req)
+> serde_json::Value delete_emoji_group(delete_emoji_group_req)
 
 
 删除一个表情分组。
@@ -139,9 +139,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## delete_item
+## delete_emoji_item
 
-> serde_json::Value delete_item(delete_emoji_item_req)
+> serde_json::Value delete_emoji_item(delete_emoji_item_req)
 
 
 从分组移除表情。
@@ -169,9 +169,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## import_share
+## import_emoji_share
 
-> models::ImportEmojiShareResp import_share(import_emoji_share_req)
+> models::ImportEmojiShareResp import_emoji_share(import_emoji_share_req)
 
 
 把分享码导入为一个新分组。
@@ -199,9 +199,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list
+## list_emoji_groups
 
-> models::ListEmojiGroupsResp list(list_emoji_groups_req)
+> models::ListEmojiGroupsResp list_emoji_groups(list_emoji_groups_req)
 
 
 查询当前账号的表情分组。
@@ -229,9 +229,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## move_item
+## move_emoji_item
 
-> models::MoveEmojiItemResp move_item(move_emoji_item_req)
+> models::MoveEmojiItemResp move_emoji_item(move_emoji_item_req)
 
 
 将表情移动到另一个当前账号分组。
@@ -259,9 +259,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## rename_group
+## rename_emoji_group
 
-> models::RenameEmojiGroupResp rename_group(rename_emoji_group_req)
+> models::RenameEmojiGroupResp rename_emoji_group(rename_emoji_group_req)
 
 
 重命名一个表情分组。
@@ -289,9 +289,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## rename_item
+## rename_emoji_item
 
-> models::RenameEmojiItemResp rename_item(rename_emoji_item_req)
+> models::RenameEmojiItemResp rename_emoji_item(rename_emoji_item_req)
 
 
 重命名一个表情别名。
@@ -319,9 +319,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## reorder_groups
+## reorder_emoji_groups
 
-> serde_json::Value reorder_groups(reorder_emoji_groups_req)
+> serde_json::Value reorder_emoji_groups(reorder_emoji_groups_req)
 
 
 重排表情分组。
@@ -349,9 +349,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## reorder_items
+## reorder_emoji_items
 
-> serde_json::Value reorder_items(reorder_emoji_items_req)
+> serde_json::Value reorder_emoji_items(reorder_emoji_items_req)
 
 
 重排同一分组内的表情。

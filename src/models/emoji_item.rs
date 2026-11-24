@@ -14,12 +14,16 @@ use serde::{Deserialize, Serialize};
 /// EmojiItem : EmojiItem 是可直接插入编辑器的表情图片。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct EmojiItem {
+    /// 表情项 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 平台图片资产 ID。
     #[serde(rename = "asset_id", skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
+    /// 可选表情别名。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 可插入 Markdown 的公开图片地址。
     #[serde(rename = "image_url", skip_serializing_if = "Option::is_none")]
     pub image_url: Option<String>,
 }

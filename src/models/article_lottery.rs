@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticleLottery : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleLottery {
+    /// 开奖时间
     #[serde(rename = "draw_at", skip_serializing_if = "Option::is_none")]
     pub draw_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 实际开奖时间
     #[serde(rename = "drawn_at", skip_serializing_if = "Option::is_none")]
     pub drawn_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 有效报名人数
     #[serde(rename = "entry_count", skip_serializing_if = "Option::is_none")]
     pub entry_count: Option<String>,
+    /// 当前账号是否已报名
     #[serde(rename = "entered", skip_serializing_if = "Option::is_none")]
     pub entered: Option<bool>,
+    /// 奖项和中奖结果
     #[serde(rename = "prizes", skip_serializing_if = "Option::is_none")]
     pub prizes: Option<Vec<models::ArticleLotteryPrize>>,
 }
 
 impl ArticleLottery {
+    /// 协议消息。
     pub fn new() -> ArticleLottery {
         ArticleLottery {
             draw_at: None,

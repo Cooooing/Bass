@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ProfileVisibility : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ProfileVisibility {
+    /// 协议字段。
     #[serde(rename = "article_list", skip_serializing_if = "Option::is_none")]
     pub article_list: Option<bool>,
+    /// 协议字段。
     #[serde(rename = "comment_list", skip_serializing_if = "Option::is_none")]
     pub comment_list: Option<bool>,
+    /// 协议字段。
     #[serde(rename = "follower_list", skip_serializing_if = "Option::is_none")]
     pub follower_list: Option<bool>,
+    /// 协议字段。
     #[serde(rename = "following_list", skip_serializing_if = "Option::is_none")]
     pub following_list: Option<bool>,
+    /// 协议字段。
     #[serde(rename = "moonbreeze_list", skip_serializing_if = "Option::is_none")]
     pub moonbreeze_list: Option<bool>,
 }
 
 impl ProfileVisibility {
+    /// 协议消息。
     pub fn new() -> ProfileVisibility {
         ProfileVisibility {
             article_list: None,

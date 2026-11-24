@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SetPrivateChatSessionPinnedReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SetPrivateChatSessionPinnedReq {
+    /// 对端账号 ID。
     #[serde(rename = "peer_user_id", skip_serializing_if = "Option::is_none")]
     pub peer_user_id: Option<String>,
+    /// 是否置顶。
     #[serde(rename = "pinned", skip_serializing_if = "Option::is_none")]
     pub pinned: Option<bool>,
 }
 
 impl SetPrivateChatSessionPinnedReq {
+    /// 请求参数。
     pub fn new() -> SetPrivateChatSessionPinnedReq {
         SetPrivateChatSessionPinnedReq {
             peer_user_id: None,

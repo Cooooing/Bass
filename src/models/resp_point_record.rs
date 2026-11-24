@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespPointRecord : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespPointRecord {
+    /// 记录创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 流水类型展示文案
     #[serde(rename = "type_label", skip_serializing_if = "Option::is_none")]
     pub type_label: Option<String>,
+    /// 收入或支出方向
     #[serde(rename = "direction", skip_serializing_if = "Option::is_none")]
     pub direction: Option<Direction>,
+    /// 绝对变动积分
     #[serde(rename = "amount", skip_serializing_if = "Option::is_none")]
     pub amount: Option<String>,
+    /// 变动后的积分余额
     #[serde(rename = "balance_after", skip_serializing_if = "Option::is_none")]
     pub balance_after: Option<String>,
 }
 
 impl RespPointRecord {
+    /// 协议消息。
     pub fn new() -> RespPointRecord {
         RespPointRecord {
             created_at: None,
@@ -36,7 +43,7 @@ impl RespPointRecord {
         }
     }
 }
-/// 
+/// 收入或支出方向
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Direction {
     #[serde(rename = "ECONOMY_RECORD_DIRECTION_UNSPECIFIED")]

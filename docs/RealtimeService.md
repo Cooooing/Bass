@@ -4,14 +4,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_ticket**](RealtimeService.md#create_ticket) | **POST** /v1/realtime/ticket | 
+[**create_realtime_ticket**](RealtimeService.md#create_realtime_ticket) | **POST** /v1/realtime/ticket | 
 
 
 
-## create_ticket
+## create_realtime_ticket
 
-> models::CreateRealtimeTicketResp create_ticket(body)
+> models::CreateRealtimeTicketResp create_realtime_ticket(body)
 
+
+服务方法。
 
 ### Parameters
 

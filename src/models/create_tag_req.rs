@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateTagReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateTagReq {
+    /// 标签信息
     #[serde(rename = "tag")]
     pub tag: models::ReqTag,
 }
 
 impl CreateTagReq {
+    /// 请求参数。
     pub fn new(tag: models::ReqTag) -> CreateTagReq {
         CreateTagReq {
             tag,

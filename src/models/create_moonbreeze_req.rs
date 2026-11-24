@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateMoonbreezeReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateMoonbreezeReq {
+    /// 协议字段。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
 }
 
 impl CreateMoonbreezeReq {
+    /// 请求参数。
     pub fn new() -> CreateMoonbreezeReq {
         CreateMoonbreezeReq {
             content: None,

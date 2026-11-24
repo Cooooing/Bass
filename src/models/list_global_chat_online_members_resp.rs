@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListGlobalChatOnlineMembersResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListGlobalChatOnlineMembersResp {
+    /// 在线成员列表。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::GlobalChatOnlineMember>>,
 }
 
 impl ListGlobalChatOnlineMembersResp {
+    /// 响应结果。
     pub fn new() -> ListGlobalChatOnlineMembersResp {
         ListGlobalChatOnlineMembersResp {
             rows: None,

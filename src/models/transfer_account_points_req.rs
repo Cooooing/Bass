@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// TransferAccountPointsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TransferAccountPointsReq {
+    /// 收款账号名，必填
     #[serde(rename = "target_name")]
     pub target_name: String,
+    /// 转账积分数量，必填
     #[serde(rename = "amount")]
     pub amount: String,
+    /// 转账备注
     #[serde(rename = "remark", skip_serializing_if = "Option::is_none")]
     pub remark: Option<String>,
+    /// 本次转账的技术幂等键，必填
     #[serde(rename = "idempotency_key")]
     pub idempotency_key: String,
 }
 
 impl TransferAccountPointsReq {
+    /// 请求参数。
     pub fn new(target_name: String, amount: String, idempotency_key: String) -> TransferAccountPointsReq {
         TransferAccountPointsReq {
             target_name,

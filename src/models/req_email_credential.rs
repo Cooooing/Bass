@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqEmailCredential : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqEmailCredential {
+    /// 邮箱地址
     #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
+    /// 邮箱 OTP
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
 }
 
 impl ReqEmailCredential {
+    /// 协议消息。
     pub fn new() -> ReqEmailCredential {
         ReqEmailCredential {
             email: None,

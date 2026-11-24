@@ -11,6 +11,7 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PageReq : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PageReq {
     /// 页码
@@ -22,6 +23,7 @@ pub struct PageReq {
 }
 
 impl PageReq {
+    /// 协议消息。
     pub fn new() -> PageReq {
         PageReq {
             page: None,

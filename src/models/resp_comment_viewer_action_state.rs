@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespCommentViewerActionState : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespCommentViewerActionState {
+    /// 是否已点赞
     #[serde(rename = "liked", skip_serializing_if = "Option::is_none")]
     pub liked: Option<bool>,
+    /// 是否已感谢
     #[serde(rename = "thanked", skip_serializing_if = "Option::is_none")]
     pub thanked: Option<bool>,
 }
 
 impl RespCommentViewerActionState {
+    /// 协议消息。
     pub fn new() -> RespCommentViewerActionState {
         RespCommentViewerActionState {
             liked: None,

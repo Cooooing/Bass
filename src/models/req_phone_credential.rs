@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqPhoneCredential : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqPhoneCredential {
+    /// 手机号
     #[serde(rename = "phone", skip_serializing_if = "Option::is_none")]
     pub phone: Option<String>,
+    /// 手机 OTP
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
 }
 
 impl ReqPhoneCredential {
+    /// 协议消息。
     pub fn new() -> ReqPhoneCredential {
         ReqPhoneCredential {
             phone: None,

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetStatusRelationResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetStatusRelationResp {
+    /// 关系状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<models::RespRelationStatus>,
 }
 
 impl GetStatusRelationResp {
+    /// 响应结果。
     pub fn new() -> GetStatusRelationResp {
         GetStatusRelationResp {
             status: None,

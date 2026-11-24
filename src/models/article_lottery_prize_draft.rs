@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticleLotteryPrizeDraft : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleLotteryPrizeDraft {
+    /// 奖项名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 奖项说明
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 中奖名额
     #[serde(rename = "winner_limit", skip_serializing_if = "Option::is_none")]
     pub winner_limit: Option<i32>,
 }
 
 impl ArticleLotteryPrizeDraft {
+    /// 协议消息。
     pub fn new() -> ArticleLotteryPrizeDraft {
         ArticleLotteryPrizeDraft {
             name: None,

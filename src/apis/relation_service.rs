@@ -23,42 +23,42 @@ pub trait RelationService: Send + Sync {
     /// POST /v1/user/relation/block
     ///
     /// 当前账号拉黑目标账号。
-    async fn block<'block_relation_req>(&self, block_relation_req: models::BlockRelationReq) -> Result<serde_json::Value, Error<BlockError>>;
+    async fn block_relation<'block_relation_req>(&self, block_relation_req: models::BlockRelationReq) -> Result<serde_json::Value, Error<BlockRelationError>>;
 
     /// POST /v1/user/relation/follow
     ///
     /// 当前账号关注目标账号。
-    async fn follow<'follow_relation_req>(&self, follow_relation_req: models::FollowRelationReq) -> Result<serde_json::Value, Error<FollowError>>;
+    async fn follow_relation<'follow_relation_req>(&self, follow_relation_req: models::FollowRelationReq) -> Result<serde_json::Value, Error<FollowRelationError>>;
 
     /// POST /v1/user/relation/get-status
     ///
     /// 查询当前账号与目标账号之间的关系。
-    async fn get_status<'get_status_relation_req>(&self, get_status_relation_req: models::GetStatusRelationReq) -> Result<models::GetStatusRelationResp, Error<GetStatusError>>;
+    async fn get_status_relation<'get_status_relation_req>(&self, get_status_relation_req: models::GetStatusRelationReq) -> Result<models::GetStatusRelationResp, Error<GetStatusRelationError>>;
 
     /// POST /v1/user/relation/list-blocked
     ///
     /// 分页查询当前账号拉黑的账号列表。
-    async fn list_blocked<'list_blocked_relations_req>(&self, list_blocked_relations_req: models::ListBlockedRelationsReq) -> Result<models::ListBlockedRelationsResp, Error<ListBlockedError>>;
+    async fn list_blocked_relations<'list_blocked_relations_req>(&self, list_blocked_relations_req: models::ListBlockedRelationsReq) -> Result<models::ListBlockedRelationsResp, Error<ListBlockedRelationsError>>;
 
     /// POST /v1/user/relation/list-followers
     ///
     /// 分页查询当前账号的粉丝账号列表。
-    async fn list_followers<'list_followers_relations_req>(&self, list_followers_relations_req: models::ListFollowersRelationsReq) -> Result<models::ListFollowersRelationsResp, Error<ListFollowersError>>;
+    async fn list_followers_relations<'list_followers_relations_req>(&self, list_followers_relations_req: models::ListFollowersRelationsReq) -> Result<models::ListFollowersRelationsResp, Error<ListFollowersRelationsError>>;
 
     /// POST /v1/user/relation/list-following
     ///
     /// 分页查询当前账号关注的账号列表。
-    async fn list_following<'list_following_relations_req>(&self, list_following_relations_req: models::ListFollowingRelationsReq) -> Result<models::ListFollowingRelationsResp, Error<ListFollowingError>>;
+    async fn list_following_relations<'list_following_relations_req>(&self, list_following_relations_req: models::ListFollowingRelationsReq) -> Result<models::ListFollowingRelationsResp, Error<ListFollowingRelationsError>>;
 
     /// POST /v1/user/relation/unblock
     ///
     /// 当前账号取消拉黑目标账号。
-    async fn unblock<'unblock_relation_req>(&self, unblock_relation_req: models::UnblockRelationReq) -> Result<serde_json::Value, Error<UnblockError>>;
+    async fn unblock_relation<'unblock_relation_req>(&self, unblock_relation_req: models::UnblockRelationReq) -> Result<serde_json::Value, Error<UnblockRelationError>>;
 
     /// POST /v1/user/relation/unfollow
     ///
     /// 当前账号取消关注目标账号。
-    async fn unfollow<'unfollow_relation_req>(&self, unfollow_relation_req: models::UnfollowRelationReq) -> Result<serde_json::Value, Error<UnfollowError>>;
+    async fn unfollow_relation<'unfollow_relation_req>(&self, unfollow_relation_req: models::UnfollowRelationReq) -> Result<serde_json::Value, Error<UnfollowRelationError>>;
 }
 
 pub struct RelationServiceClient {
@@ -76,7 +76,7 @@ impl RelationServiceClient {
 #[async_trait]
 impl RelationService for RelationServiceClient {
     /// 当前账号拉黑目标账号。
-    async fn block<'block_relation_req>(&self, block_relation_req: models::BlockRelationReq) -> Result<serde_json::Value, Error<BlockError>> {
+    async fn block_relation<'block_relation_req>(&self, block_relation_req: models::BlockRelationReq) -> Result<serde_json::Value, Error<BlockRelationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -108,14 +108,14 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<BlockError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<BlockRelationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 当前账号关注目标账号。
-    async fn follow<'follow_relation_req>(&self, follow_relation_req: models::FollowRelationReq) -> Result<serde_json::Value, Error<FollowError>> {
+    async fn follow_relation<'follow_relation_req>(&self, follow_relation_req: models::FollowRelationReq) -> Result<serde_json::Value, Error<FollowRelationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -147,14 +147,14 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<FollowError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<FollowRelationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 查询当前账号与目标账号之间的关系。
-    async fn get_status<'get_status_relation_req>(&self, get_status_relation_req: models::GetStatusRelationReq) -> Result<models::GetStatusRelationResp, Error<GetStatusError>> {
+    async fn get_status_relation<'get_status_relation_req>(&self, get_status_relation_req: models::GetStatusRelationReq) -> Result<models::GetStatusRelationResp, Error<GetStatusRelationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -186,14 +186,14 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetStatusRelationResp`")))),
             }
         } else {
-            let local_var_entity: Option<GetStatusError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetStatusRelationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 分页查询当前账号拉黑的账号列表。
-    async fn list_blocked<'list_blocked_relations_req>(&self, list_blocked_relations_req: models::ListBlockedRelationsReq) -> Result<models::ListBlockedRelationsResp, Error<ListBlockedError>> {
+    async fn list_blocked_relations<'list_blocked_relations_req>(&self, list_blocked_relations_req: models::ListBlockedRelationsReq) -> Result<models::ListBlockedRelationsResp, Error<ListBlockedRelationsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -225,14 +225,14 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListBlockedRelationsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListBlockedError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListBlockedRelationsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 分页查询当前账号的粉丝账号列表。
-    async fn list_followers<'list_followers_relations_req>(&self, list_followers_relations_req: models::ListFollowersRelationsReq) -> Result<models::ListFollowersRelationsResp, Error<ListFollowersError>> {
+    async fn list_followers_relations<'list_followers_relations_req>(&self, list_followers_relations_req: models::ListFollowersRelationsReq) -> Result<models::ListFollowersRelationsResp, Error<ListFollowersRelationsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -264,14 +264,14 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListFollowersRelationsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListFollowersError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListFollowersRelationsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 分页查询当前账号关注的账号列表。
-    async fn list_following<'list_following_relations_req>(&self, list_following_relations_req: models::ListFollowingRelationsReq) -> Result<models::ListFollowingRelationsResp, Error<ListFollowingError>> {
+    async fn list_following_relations<'list_following_relations_req>(&self, list_following_relations_req: models::ListFollowingRelationsReq) -> Result<models::ListFollowingRelationsResp, Error<ListFollowingRelationsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -303,14 +303,14 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListFollowingRelationsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListFollowingError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListFollowingRelationsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 当前账号取消拉黑目标账号。
-    async fn unblock<'unblock_relation_req>(&self, unblock_relation_req: models::UnblockRelationReq) -> Result<serde_json::Value, Error<UnblockError>> {
+    async fn unblock_relation<'unblock_relation_req>(&self, unblock_relation_req: models::UnblockRelationReq) -> Result<serde_json::Value, Error<UnblockRelationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -342,14 +342,14 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<UnblockError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UnblockRelationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 当前账号取消关注目标账号。
-    async fn unfollow<'unfollow_relation_req>(&self, unfollow_relation_req: models::UnfollowRelationReq) -> Result<serde_json::Value, Error<UnfollowError>> {
+    async fn unfollow_relation<'unfollow_relation_req>(&self, unfollow_relation_req: models::UnfollowRelationReq) -> Result<serde_json::Value, Error<UnfollowRelationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -381,7 +381,7 @@ impl RelationService for RelationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<UnfollowError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UnfollowRelationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -389,59 +389,59 @@ impl RelationService for RelationServiceClient {
 
 }
 
-/// struct for typed errors of method [`RelationService::block`]
+/// struct for typed errors of method [`RelationService::block_relation`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum BlockError {
+pub enum BlockRelationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`RelationService::follow`]
+/// struct for typed errors of method [`RelationService::follow_relation`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum FollowError {
+pub enum FollowRelationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`RelationService::get_status`]
+/// struct for typed errors of method [`RelationService::get_status_relation`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetStatusError {
+pub enum GetStatusRelationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`RelationService::list_blocked`]
+/// struct for typed errors of method [`RelationService::list_blocked_relations`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListBlockedError {
+pub enum ListBlockedRelationsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`RelationService::list_followers`]
+/// struct for typed errors of method [`RelationService::list_followers_relations`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListFollowersError {
+pub enum ListFollowersRelationsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`RelationService::list_following`]
+/// struct for typed errors of method [`RelationService::list_following_relations`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListFollowingError {
+pub enum ListFollowingRelationsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`RelationService::unblock`]
+/// struct for typed errors of method [`RelationService::unblock_relation`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UnblockError {
+pub enum UnblockRelationError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`RelationService::unfollow`]
+/// struct for typed errors of method [`RelationService::unfollow_relation`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UnfollowError {
+pub enum UnfollowRelationError {
     UnknownValue(serde_json::Value),
 }
 

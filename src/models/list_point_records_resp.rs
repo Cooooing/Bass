@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListPointRecordsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListPointRecordsResp {
+    /// 积分流水列表
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::RespPointRecord>>,
+    /// 分页结果
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
 }
 
 impl ListPointRecordsResp {
+    /// 响应结果。
     pub fn new() -> ListPointRecordsResp {
         ListPointRecordsResp {
             rows: None,

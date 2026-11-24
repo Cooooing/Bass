@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespTotp : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespTotp {
+    /// 账号 ID
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 是否启用 TOTP
     #[serde(rename = "enable", skip_serializing_if = "Option::is_none")]
     pub enable: Option<bool>,
+    /// 启用时间
     #[serde(rename = "enable_time", skip_serializing_if = "Option::is_none")]
     pub enable_time: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl RespTotp {
+    /// 协议消息。
     pub fn new() -> RespTotp {
         RespTotp {
             user_id: None,

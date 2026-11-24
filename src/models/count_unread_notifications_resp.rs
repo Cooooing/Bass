@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CountUnreadNotificationsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CountUnreadNotificationsResp {
+    /// 未读通知数量
     #[serde(rename = "count", skip_serializing_if = "Option::is_none")]
     pub count: Option<String>,
 }
 
 impl CountUnreadNotificationsResp {
+    /// 响应结果。
     pub fn new() -> CountUnreadNotificationsResp {
         CountUnreadNotificationsResp {
             count: None,

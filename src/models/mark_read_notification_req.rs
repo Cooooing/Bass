@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// MarkReadNotificationReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MarkReadNotificationReq {
+    /// 通知 ID 列表
     #[serde(rename = "ids")]
     pub ids: Vec<String>,
 }
 
 impl MarkReadNotificationReq {
+    /// 请求参数。
     pub fn new(ids: Vec<String>) -> MarkReadNotificationReq {
         MarkReadNotificationReq {
             ids,

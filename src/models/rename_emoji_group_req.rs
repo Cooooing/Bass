@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RenameEmojiGroupReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RenameEmojiGroupReq {
+    /// 待修改分组 ID。
     #[serde(rename = "group_id", skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
+    /// 新分组名称。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
 impl RenameEmojiGroupReq {
+    /// 请求参数。
     pub fn new() -> RenameEmojiGroupReq {
         RenameEmojiGroupReq {
             group_id: None,

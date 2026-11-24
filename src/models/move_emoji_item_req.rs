@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// MoveEmojiItemReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MoveEmojiItemReq {
+    /// 待移动表情项 ID。
     #[serde(rename = "item_id", skip_serializing_if = "Option::is_none")]
     pub item_id: Option<String>,
+    /// 目标分组 ID。
     #[serde(rename = "group_id", skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
 }
 
 impl MoveEmojiItemReq {
+    /// 请求参数。
     pub fn new() -> MoveEmojiItemReq {
         MoveEmojiItemReq {
             item_id: None,

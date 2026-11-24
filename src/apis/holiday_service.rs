@@ -23,7 +23,7 @@ pub trait HolidayService: Send + Sync {
     /// POST /v1/platform/holiday/get-current
     ///
     /// 获取当前节假日状态。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentHolidayResp, Error<GetCurrentError>>;
+    async fn get_current_holiday<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentHolidayResp, Error<GetCurrentHolidayError>>;
 }
 
 pub struct HolidayServiceClient {
@@ -41,7 +41,7 @@ impl HolidayServiceClient {
 #[async_trait]
 impl HolidayService for HolidayServiceClient {
     /// 获取当前节假日状态。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentHolidayResp, Error<GetCurrentError>> {
+    async fn get_current_holiday<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentHolidayResp, Error<GetCurrentHolidayError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -73,7 +73,7 @@ impl HolidayService for HolidayServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentHolidayResp`")))),
             }
         } else {
-            let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetCurrentHolidayError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -81,10 +81,10 @@ impl HolidayService for HolidayServiceClient {
 
 }
 
-/// struct for typed errors of method [`HolidayService::get_current`]
+/// struct for typed errors of method [`HolidayService::get_current_holiday`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetCurrentError {
+pub enum GetCurrentHolidayError {
     UnknownValue(serde_json::Value),
 }
 

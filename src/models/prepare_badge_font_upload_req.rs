@@ -14,10 +14,13 @@ use serde::{Deserialize, Serialize};
 /// PrepareBadgeFontUploadReq : Req 指定待上传字体的内容寻址信息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrepareBadgeFontUploadReq {
+    /// 文件 SHA-256，小写十六进制。
     #[serde(rename = "hash")]
     pub hash: String,
+    /// 上传字体 MIME 类型。
     #[serde(rename = "mime_type")]
     pub mime_type: String,
+    /// 文件大小，最大 5 MiB。
     #[serde(rename = "size")]
     pub size: String,
 }

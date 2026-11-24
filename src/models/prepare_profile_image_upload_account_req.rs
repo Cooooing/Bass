@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PrepareProfileImageUploadAccountReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrepareProfileImageUploadAccountReq {
+    /// 图片用途，必填；仅用于 BFF 业务校验
     #[serde(rename = "purpose")]
     pub purpose: Purpose,
+    /// 文件 SHA-256，小写十六进制
     #[serde(rename = "hash")]
     pub hash: String,
+    /// 上传 MIME 类型
     #[serde(rename = "mime_type")]
     pub mime_type: String,
+    /// 文件大小，最大 2 MiB
     #[serde(rename = "size")]
     pub size: String,
 }
 
 impl PrepareProfileImageUploadAccountReq {
+    /// 请求参数。
     pub fn new(purpose: Purpose, hash: String, mime_type: String, size: String) -> PrepareProfileImageUploadAccountReq {
         PrepareProfileImageUploadAccountReq {
             purpose,
@@ -33,7 +39,7 @@ impl PrepareProfileImageUploadAccountReq {
         }
     }
 }
-/// 
+/// 图片用途，必填；仅用于 BFF 业务校验
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Purpose {
     #[serde(rename = "PROFILE_IMAGE_PURPOSE_UNSPECIFIED")]

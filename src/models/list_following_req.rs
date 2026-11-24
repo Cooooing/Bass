@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListFollowingReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListFollowingReq {
+    /// 协议字段。
     #[serde(rename = "name")]
     pub name: String,
+    /// 协议字段。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl ListFollowingReq {
+    /// 请求参数。
     pub fn new(name: String) -> ListFollowingReq {
         ListFollowingReq {
             name,

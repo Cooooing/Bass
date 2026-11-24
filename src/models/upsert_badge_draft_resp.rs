@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// UpsertBadgeDraftResp : Resp 返回保存后的草稿。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpsertBadgeDraftResp {
+    /// 已保存草稿。
     #[serde(rename = "draft", skip_serializing_if = "Option::is_none")]
     pub draft: Option<models::BadgeDraft>,
 }

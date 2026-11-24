@@ -14,14 +14,19 @@ use serde::{Deserialize, Serialize};
 /// BadgeDraft : BadgeDraft 是 Maker 可编辑的徽章草稿。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct BadgeDraft {
+    /// 草稿主键。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 草稿名称。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 草稿说明。
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 草稿渲染参数。
     #[serde(rename = "render_spec", skip_serializing_if = "Option::is_none")]
     pub render_spec: Option<models::RenderSpec>,
+    /// 设计者用户 ID。
     #[serde(rename = "designer_user_id", skip_serializing_if = "Option::is_none")]
     pub designer_user_id: Option<String>,
 }

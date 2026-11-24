@@ -23,62 +23,62 @@ pub trait EmojiService: Send + Sync {
     /// POST /v1/im/emoji/items
     ///
     /// 向分组加入已上传图片。
-    async fn add_item<'add_emoji_item_req>(&self, add_emoji_item_req: models::AddEmojiItemReq) -> Result<models::AddEmojiItemResp, Error<AddItemError>>;
+    async fn add_emoji_item<'add_emoji_item_req>(&self, add_emoji_item_req: models::AddEmojiItemReq) -> Result<models::AddEmojiItemResp, Error<AddEmojiItemError>>;
 
     /// POST /v1/im/emoji/groups
     ///
     /// 创建一个表情分组。
-    async fn create_group<'create_emoji_group_req>(&self, create_emoji_group_req: models::CreateEmojiGroupReq) -> Result<models::CreateEmojiGroupResp, Error<CreateGroupError>>;
+    async fn create_emoji_group<'create_emoji_group_req>(&self, create_emoji_group_req: models::CreateEmojiGroupReq) -> Result<models::CreateEmojiGroupResp, Error<CreateEmojiGroupError>>;
 
     /// POST /v1/im/emoji/shares
     ///
     /// 生成七天有效的分组分享码。
-    async fn create_share<'create_emoji_share_req>(&self, create_emoji_share_req: models::CreateEmojiShareReq) -> Result<models::CreateEmojiShareResp, Error<CreateShareError>>;
+    async fn create_emoji_share<'create_emoji_share_req>(&self, create_emoji_share_req: models::CreateEmojiShareReq) -> Result<models::CreateEmojiShareResp, Error<CreateEmojiShareError>>;
 
     /// POST /v1/im/emoji/groups/delete
     ///
     /// 删除一个表情分组。
-    async fn delete_group<'delete_emoji_group_req>(&self, delete_emoji_group_req: models::DeleteEmojiGroupReq) -> Result<serde_json::Value, Error<DeleteGroupError>>;
+    async fn delete_emoji_group<'delete_emoji_group_req>(&self, delete_emoji_group_req: models::DeleteEmojiGroupReq) -> Result<serde_json::Value, Error<DeleteEmojiGroupError>>;
 
     /// POST /v1/im/emoji/items/delete
     ///
     /// 从分组移除表情。
-    async fn delete_item<'delete_emoji_item_req>(&self, delete_emoji_item_req: models::DeleteEmojiItemReq) -> Result<serde_json::Value, Error<DeleteItemError>>;
+    async fn delete_emoji_item<'delete_emoji_item_req>(&self, delete_emoji_item_req: models::DeleteEmojiItemReq) -> Result<serde_json::Value, Error<DeleteEmojiItemError>>;
 
     /// POST /v1/im/emoji/shares/import
     ///
     /// 把分享码导入为一个新分组。
-    async fn import_share<'import_emoji_share_req>(&self, import_emoji_share_req: models::ImportEmojiShareReq) -> Result<models::ImportEmojiShareResp, Error<ImportShareError>>;
+    async fn import_emoji_share<'import_emoji_share_req>(&self, import_emoji_share_req: models::ImportEmojiShareReq) -> Result<models::ImportEmojiShareResp, Error<ImportEmojiShareError>>;
 
     /// POST /v1/im/emoji/groups/list
     ///
     /// 查询当前账号的表情分组。
-    async fn list<'list_emoji_groups_req>(&self, list_emoji_groups_req: models::ListEmojiGroupsReq) -> Result<models::ListEmojiGroupsResp, Error<ListError>>;
+    async fn list_emoji_groups<'list_emoji_groups_req>(&self, list_emoji_groups_req: models::ListEmojiGroupsReq) -> Result<models::ListEmojiGroupsResp, Error<ListEmojiGroupsError>>;
 
     /// POST /v1/im/emoji/items/move
     ///
     /// 将表情移动到另一个当前账号分组。
-    async fn move_item<'move_emoji_item_req>(&self, move_emoji_item_req: models::MoveEmojiItemReq) -> Result<models::MoveEmojiItemResp, Error<MoveItemError>>;
+    async fn move_emoji_item<'move_emoji_item_req>(&self, move_emoji_item_req: models::MoveEmojiItemReq) -> Result<models::MoveEmojiItemResp, Error<MoveEmojiItemError>>;
 
     /// POST /v1/im/emoji/groups/rename
     ///
     /// 重命名一个表情分组。
-    async fn rename_group<'rename_emoji_group_req>(&self, rename_emoji_group_req: models::RenameEmojiGroupReq) -> Result<models::RenameEmojiGroupResp, Error<RenameGroupError>>;
+    async fn rename_emoji_group<'rename_emoji_group_req>(&self, rename_emoji_group_req: models::RenameEmojiGroupReq) -> Result<models::RenameEmojiGroupResp, Error<RenameEmojiGroupError>>;
 
     /// POST /v1/im/emoji/items/rename
     ///
     /// 重命名一个表情别名。
-    async fn rename_item<'rename_emoji_item_req>(&self, rename_emoji_item_req: models::RenameEmojiItemReq) -> Result<models::RenameEmojiItemResp, Error<RenameItemError>>;
+    async fn rename_emoji_item<'rename_emoji_item_req>(&self, rename_emoji_item_req: models::RenameEmojiItemReq) -> Result<models::RenameEmojiItemResp, Error<RenameEmojiItemError>>;
 
     /// POST /v1/im/emoji/groups/reorder
     ///
     /// 重排表情分组。
-    async fn reorder_groups<'reorder_emoji_groups_req>(&self, reorder_emoji_groups_req: models::ReorderEmojiGroupsReq) -> Result<serde_json::Value, Error<ReorderGroupsError>>;
+    async fn reorder_emoji_groups<'reorder_emoji_groups_req>(&self, reorder_emoji_groups_req: models::ReorderEmojiGroupsReq) -> Result<serde_json::Value, Error<ReorderEmojiGroupsError>>;
 
     /// POST /v1/im/emoji/items/reorder
     ///
     /// 重排同一分组内的表情。
-    async fn reorder_items<'reorder_emoji_items_req>(&self, reorder_emoji_items_req: models::ReorderEmojiItemsReq) -> Result<serde_json::Value, Error<ReorderItemsError>>;
+    async fn reorder_emoji_items<'reorder_emoji_items_req>(&self, reorder_emoji_items_req: models::ReorderEmojiItemsReq) -> Result<serde_json::Value, Error<ReorderEmojiItemsError>>;
 }
 
 pub struct EmojiServiceClient {
@@ -96,7 +96,7 @@ impl EmojiServiceClient {
 #[async_trait]
 impl EmojiService for EmojiServiceClient {
     /// 向分组加入已上传图片。
-    async fn add_item<'add_emoji_item_req>(&self, add_emoji_item_req: models::AddEmojiItemReq) -> Result<models::AddEmojiItemResp, Error<AddItemError>> {
+    async fn add_emoji_item<'add_emoji_item_req>(&self, add_emoji_item_req: models::AddEmojiItemReq) -> Result<models::AddEmojiItemResp, Error<AddEmojiItemError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -128,14 +128,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::AddEmojiItemResp`")))),
             }
         } else {
-            let local_var_entity: Option<AddItemError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<AddEmojiItemError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 创建一个表情分组。
-    async fn create_group<'create_emoji_group_req>(&self, create_emoji_group_req: models::CreateEmojiGroupReq) -> Result<models::CreateEmojiGroupResp, Error<CreateGroupError>> {
+    async fn create_emoji_group<'create_emoji_group_req>(&self, create_emoji_group_req: models::CreateEmojiGroupReq) -> Result<models::CreateEmojiGroupResp, Error<CreateEmojiGroupError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -167,14 +167,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateEmojiGroupResp`")))),
             }
         } else {
-            let local_var_entity: Option<CreateGroupError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateEmojiGroupError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 生成七天有效的分组分享码。
-    async fn create_share<'create_emoji_share_req>(&self, create_emoji_share_req: models::CreateEmojiShareReq) -> Result<models::CreateEmojiShareResp, Error<CreateShareError>> {
+    async fn create_emoji_share<'create_emoji_share_req>(&self, create_emoji_share_req: models::CreateEmojiShareReq) -> Result<models::CreateEmojiShareResp, Error<CreateEmojiShareError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -206,14 +206,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateEmojiShareResp`")))),
             }
         } else {
-            let local_var_entity: Option<CreateShareError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CreateEmojiShareError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 删除一个表情分组。
-    async fn delete_group<'delete_emoji_group_req>(&self, delete_emoji_group_req: models::DeleteEmojiGroupReq) -> Result<serde_json::Value, Error<DeleteGroupError>> {
+    async fn delete_emoji_group<'delete_emoji_group_req>(&self, delete_emoji_group_req: models::DeleteEmojiGroupReq) -> Result<serde_json::Value, Error<DeleteEmojiGroupError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -245,14 +245,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<DeleteGroupError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<DeleteEmojiGroupError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 从分组移除表情。
-    async fn delete_item<'delete_emoji_item_req>(&self, delete_emoji_item_req: models::DeleteEmojiItemReq) -> Result<serde_json::Value, Error<DeleteItemError>> {
+    async fn delete_emoji_item<'delete_emoji_item_req>(&self, delete_emoji_item_req: models::DeleteEmojiItemReq) -> Result<serde_json::Value, Error<DeleteEmojiItemError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -284,14 +284,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<DeleteItemError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<DeleteEmojiItemError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 把分享码导入为一个新分组。
-    async fn import_share<'import_emoji_share_req>(&self, import_emoji_share_req: models::ImportEmojiShareReq) -> Result<models::ImportEmojiShareResp, Error<ImportShareError>> {
+    async fn import_emoji_share<'import_emoji_share_req>(&self, import_emoji_share_req: models::ImportEmojiShareReq) -> Result<models::ImportEmojiShareResp, Error<ImportEmojiShareError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -323,14 +323,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ImportEmojiShareResp`")))),
             }
         } else {
-            let local_var_entity: Option<ImportShareError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ImportEmojiShareError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 查询当前账号的表情分组。
-    async fn list<'list_emoji_groups_req>(&self, list_emoji_groups_req: models::ListEmojiGroupsReq) -> Result<models::ListEmojiGroupsResp, Error<ListError>> {
+    async fn list_emoji_groups<'list_emoji_groups_req>(&self, list_emoji_groups_req: models::ListEmojiGroupsReq) -> Result<models::ListEmojiGroupsResp, Error<ListEmojiGroupsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -362,14 +362,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListEmojiGroupsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListEmojiGroupsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 将表情移动到另一个当前账号分组。
-    async fn move_item<'move_emoji_item_req>(&self, move_emoji_item_req: models::MoveEmojiItemReq) -> Result<models::MoveEmojiItemResp, Error<MoveItemError>> {
+    async fn move_emoji_item<'move_emoji_item_req>(&self, move_emoji_item_req: models::MoveEmojiItemReq) -> Result<models::MoveEmojiItemResp, Error<MoveEmojiItemError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -401,14 +401,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::MoveEmojiItemResp`")))),
             }
         } else {
-            let local_var_entity: Option<MoveItemError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<MoveEmojiItemError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 重命名一个表情分组。
-    async fn rename_group<'rename_emoji_group_req>(&self, rename_emoji_group_req: models::RenameEmojiGroupReq) -> Result<models::RenameEmojiGroupResp, Error<RenameGroupError>> {
+    async fn rename_emoji_group<'rename_emoji_group_req>(&self, rename_emoji_group_req: models::RenameEmojiGroupReq) -> Result<models::RenameEmojiGroupResp, Error<RenameEmojiGroupError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -440,14 +440,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::RenameEmojiGroupResp`")))),
             }
         } else {
-            let local_var_entity: Option<RenameGroupError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<RenameEmojiGroupError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 重命名一个表情别名。
-    async fn rename_item<'rename_emoji_item_req>(&self, rename_emoji_item_req: models::RenameEmojiItemReq) -> Result<models::RenameEmojiItemResp, Error<RenameItemError>> {
+    async fn rename_emoji_item<'rename_emoji_item_req>(&self, rename_emoji_item_req: models::RenameEmojiItemReq) -> Result<models::RenameEmojiItemResp, Error<RenameEmojiItemError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -479,14 +479,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::RenameEmojiItemResp`")))),
             }
         } else {
-            let local_var_entity: Option<RenameItemError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<RenameEmojiItemError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 重排表情分组。
-    async fn reorder_groups<'reorder_emoji_groups_req>(&self, reorder_emoji_groups_req: models::ReorderEmojiGroupsReq) -> Result<serde_json::Value, Error<ReorderGroupsError>> {
+    async fn reorder_emoji_groups<'reorder_emoji_groups_req>(&self, reorder_emoji_groups_req: models::ReorderEmojiGroupsReq) -> Result<serde_json::Value, Error<ReorderEmojiGroupsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -518,14 +518,14 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ReorderGroupsError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ReorderEmojiGroupsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 重排同一分组内的表情。
-    async fn reorder_items<'reorder_emoji_items_req>(&self, reorder_emoji_items_req: models::ReorderEmojiItemsReq) -> Result<serde_json::Value, Error<ReorderItemsError>> {
+    async fn reorder_emoji_items<'reorder_emoji_items_req>(&self, reorder_emoji_items_req: models::ReorderEmojiItemsReq) -> Result<serde_json::Value, Error<ReorderEmojiItemsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -557,7 +557,7 @@ impl EmojiService for EmojiServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<ReorderItemsError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ReorderEmojiItemsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -565,87 +565,87 @@ impl EmojiService for EmojiServiceClient {
 
 }
 
-/// struct for typed errors of method [`EmojiService::add_item`]
+/// struct for typed errors of method [`EmojiService::add_emoji_item`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AddItemError {
+pub enum AddEmojiItemError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::create_group`]
+/// struct for typed errors of method [`EmojiService::create_emoji_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CreateGroupError {
+pub enum CreateEmojiGroupError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::create_share`]
+/// struct for typed errors of method [`EmojiService::create_emoji_share`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CreateShareError {
+pub enum CreateEmojiShareError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::delete_group`]
+/// struct for typed errors of method [`EmojiService::delete_emoji_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum DeleteGroupError {
+pub enum DeleteEmojiGroupError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::delete_item`]
+/// struct for typed errors of method [`EmojiService::delete_emoji_item`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum DeleteItemError {
+pub enum DeleteEmojiItemError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::import_share`]
+/// struct for typed errors of method [`EmojiService::import_emoji_share`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ImportShareError {
+pub enum ImportEmojiShareError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::list`]
+/// struct for typed errors of method [`EmojiService::list_emoji_groups`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListError {
+pub enum ListEmojiGroupsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::move_item`]
+/// struct for typed errors of method [`EmojiService::move_emoji_item`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MoveItemError {
+pub enum MoveEmojiItemError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::rename_group`]
+/// struct for typed errors of method [`EmojiService::rename_emoji_group`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RenameGroupError {
+pub enum RenameEmojiGroupError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::rename_item`]
+/// struct for typed errors of method [`EmojiService::rename_emoji_item`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum RenameItemError {
+pub enum RenameEmojiItemError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::reorder_groups`]
+/// struct for typed errors of method [`EmojiService::reorder_emoji_groups`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ReorderGroupsError {
+pub enum ReorderEmojiGroupsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`EmojiService::reorder_items`]
+/// struct for typed errors of method [`EmojiService::reorder_emoji_items`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ReorderItemsError {
+pub enum ReorderEmojiItemsError {
     UnknownValue(serde_json::Value),
 }
 

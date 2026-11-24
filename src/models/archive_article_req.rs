@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArchiveArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArchiveArticleReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 可选，归档原因
     #[serde(rename = "reason", skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
 }
 
 impl ArchiveArticleReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> ArchiveArticleReq {
         ArchiveArticleReq {
             article_id,

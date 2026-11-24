@@ -11,23 +11,31 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RegisterReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RegisterReq {
+    /// 注册方式
     #[serde(rename = "type")]
     pub r#type: Type,
+    /// 账号名
     #[serde(rename = "name")]
     pub name: String,
+    /// 账号密码
     #[serde(rename = "password")]
     pub password: String,
+    /// 昵称
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
+    /// 邮箱注册凭证
     #[serde(rename = "email_credential", skip_serializing_if = "Option::is_none")]
     pub email_credential: Option<models::ReqEmailCredential>,
+    /// 手机注册凭证
     #[serde(rename = "phone_credential", skip_serializing_if = "Option::is_none")]
     pub phone_credential: Option<models::ReqPhoneCredential>,
 }
 
 impl RegisterReq {
+    /// 请求参数。
     pub fn new(r#type: Type, name: String, password: String) -> RegisterReq {
         RegisterReq {
             r#type,
@@ -39,7 +47,7 @@ impl RegisterReq {
         }
     }
 }
-/// 
+/// 注册方式
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "REGISTER_TYPE_UNSPECIFIED")]

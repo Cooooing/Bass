@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**profile** | Option<[**models::Profile**](Profile.md)> |  | [optional]
+**profile** | Option<[**models::Profile**](Profile.md)> | 协议字段。 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

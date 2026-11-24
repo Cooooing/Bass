@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SetPinnedArticleCommentReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SetPinnedArticleCommentReq {
+    /// 文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 置顶的一级评论，未传表示取消
     #[serde(rename = "comment_id", skip_serializing_if = "Option::is_none")]
     pub comment_id: Option<String>,
 }
 
 impl SetPinnedArticleCommentReq {
+    /// 请求参数。
     pub fn new(article_id: String) -> SetPinnedArticleCommentReq {
         SetPinnedArticleCommentReq {
             article_id,

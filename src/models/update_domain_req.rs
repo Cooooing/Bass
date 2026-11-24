@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// UpdateDomainReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateDomainReq {
+    /// 领域 ID
     #[serde(rename = "domain_id")]
     pub domain_id: String,
+    /// 领域信息
     #[serde(rename = "domain")]
     pub domain: models::ReqDomain,
 }
 
 impl UpdateDomainReq {
+    /// 请求参数。
     pub fn new(domain_id: String, domain: models::ReqDomain) -> UpdateDomainReq {
         UpdateDomainReq {
             domain_id,

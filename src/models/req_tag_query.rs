@@ -11,25 +11,34 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqTagQuery : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqTagQuery {
+    /// 标签 ID 列表
     #[serde(rename = "ids", skip_serializing_if = "Option::is_none")]
     pub ids: Option<Vec<String>>,
+    /// 稳定编码
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    /// 标签名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 标签名称列表
     #[serde(rename = "names", skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
+    /// 描述
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 启停状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 领域 ID
     #[serde(rename = "domain_id", skip_serializing_if = "Option::is_none")]
     pub domain_id: Option<String>,
 }
 
 impl ReqTagQuery {
+    /// 协议消息。
     pub fn new() -> ReqTagQuery {
         ReqTagQuery {
             ids: None,
@@ -42,7 +51,7 @@ impl ReqTagQuery {
         }
     }
 }
-/// 
+/// 启停状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "TAG_STATUS_UNSPECIFIED")]

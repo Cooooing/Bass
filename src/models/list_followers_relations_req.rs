@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListFollowersRelationsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListFollowersRelationsReq {
+    /// 分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
 }
 
 impl ListFollowersRelationsReq {
+    /// 请求参数。
     pub fn new() -> ListFollowersRelationsReq {
         ListFollowersRelationsReq {
             page: None,

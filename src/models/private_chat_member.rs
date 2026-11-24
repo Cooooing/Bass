@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PrivateChatMember : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrivateChatMember {
+    /// 账号 ID。
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 用户名。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 昵称。
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
+    /// 头像地址。
     #[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
+    /// 是否存在有效实时连接。
     #[serde(rename = "online", skip_serializing_if = "Option::is_none")]
     pub online: Option<bool>,
 }
 
 impl PrivateChatMember {
+    /// 协议消息。
     pub fn new() -> PrivateChatMember {
         PrivateChatMember {
             user_id: None,

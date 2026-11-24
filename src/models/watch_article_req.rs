@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// WatchArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct WatchArticleReq {
+    /// 必填，文章 ID
     #[serde(rename = "article_id")]
     pub article_id: String,
+    /// 必填，是否关注
     #[serde(rename = "active")]
     pub active: bool,
 }
 
 impl WatchArticleReq {
+    /// 请求参数。
     pub fn new(article_id: String, active: bool) -> WatchArticleReq {
         WatchArticleReq {
             article_id,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CompleteProfileImageUploadAccountReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CompleteProfileImageUploadAccountReq {
+    /// 协议字段。
     #[serde(rename = "purpose")]
     pub purpose: Purpose,
+    /// 文件 SHA-256；回调尚未入库时返回可重试错误
     #[serde(rename = "hash")]
     pub hash: String,
 }
 
 impl CompleteProfileImageUploadAccountReq {
+    /// 请求参数。
     pub fn new(purpose: Purpose, hash: String) -> CompleteProfileImageUploadAccountReq {
         CompleteProfileImageUploadAccountReq {
             purpose,
@@ -27,7 +31,7 @@ impl CompleteProfileImageUploadAccountReq {
         }
     }
 }
-/// 
+/// 协议字段。
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Purpose {
     #[serde(rename = "PROFILE_IMAGE_PURPOSE_UNSPECIFIED")]

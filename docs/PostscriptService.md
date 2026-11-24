@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**add**](PostscriptService.md#add) | **POST** /v1/content/postscript/add | 
-[**list**](PostscriptService.md#list) | **POST** /v1/content/postscript/list | 
+[**add_postscript**](PostscriptService.md#add_postscript) | **POST** /v1/content/postscript/add | 
+[**list_postscripts**](PostscriptService.md#list_postscripts) | **POST** /v1/content/postscript/list | 
 
 
 
-## add
+## add_postscript
 
-> models::AddPostscriptResp add(add_postscript_req)
+> models::AddPostscriptResp add_postscript(add_postscript_req)
 
 
 添加文章附言。
@@ -39,9 +39,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list
+## list_postscripts
 
-> models::ListPostscriptsResp list(list_postscripts_req)
+> models::ListPostscriptsResp list_postscripts(list_postscripts_req)
 
 
 查询文章附言列表。

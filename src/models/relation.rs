@@ -11,23 +11,31 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// Relation : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Relation {
+    /// 关系 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 关系类型
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub r#type: Option<Type>,
+    /// 发起账号 ID
     #[serde(rename = "actor_id", skip_serializing_if = "Option::is_none")]
     pub actor_id: Option<String>,
+    /// 目标账号 ID
     #[serde(rename = "target_id", skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl Relation {
+    /// 协议消息。
     pub fn new() -> Relation {
         Relation {
             id: None,
@@ -39,7 +47,7 @@ impl Relation {
         }
     }
 }
-/// 
+/// 关系类型
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "RELATION_TYPE_UNSPECIFIED")]

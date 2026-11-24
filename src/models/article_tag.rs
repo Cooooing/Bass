@@ -11,21 +11,28 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticleTag : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleTag {
+    /// 标签 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 稳定编码
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    /// 标签名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 图标
     #[serde(rename = "icon", skip_serializing_if = "Option::is_none")]
     pub icon: Option<String>,
+    /// 所属领域 ID
     #[serde(rename = "domain_id", skip_serializing_if = "Option::is_none")]
     pub domain_id: Option<String>,
 }
 
 impl ArticleTag {
+    /// 协议消息。
     pub fn new() -> ArticleTag {
         ArticleTag {
             id: None,

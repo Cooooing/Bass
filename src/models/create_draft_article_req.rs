@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateDraftArticleReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateDraftArticleReq {
+    /// 必填，草稿内容
     #[serde(rename = "article")]
     pub article: models::ReqArticle,
 }
 
 impl CreateDraftArticleReq {
+    /// 请求参数。
     pub fn new(article: models::ReqArticle) -> CreateDraftArticleReq {
         CreateDraftArticleReq {
             article,

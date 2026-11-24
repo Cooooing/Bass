@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListGlobalChatMessagesResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListGlobalChatMessagesResp {
+    /// 分页信息。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
+    /// 消息列表。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::GlobalChatMessage>>,
 }
 
 impl ListGlobalChatMessagesResp {
+    /// 响应结果。
     pub fn new() -> ListGlobalChatMessagesResp {
         ListGlobalChatMessagesResp {
             page: None,

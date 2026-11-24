@@ -23,12 +23,12 @@ pub trait PrivacySettingService: Send + Sync {
     /// POST /v1/user/privacy-setting/get-current
     ///
     /// 获取当前账号的隐私设置。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingResp, Error<GetCurrentError>>;
+    async fn get_current_privacy_setting<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingResp, Error<GetCurrentPrivacySettingError>>;
 
     /// POST /v1/user/privacy-setting/update-current
     ///
     /// 更新当前账号的隐私设置。
-    async fn update_current<'update_current_privacy_setting_req>(&self, update_current_privacy_setting_req: models::UpdateCurrentPrivacySettingReq) -> Result<models::UpdateCurrentPrivacySettingResp, Error<UpdateCurrentError>>;
+    async fn update_current_privacy_setting<'update_current_privacy_setting_req>(&self, update_current_privacy_setting_req: models::UpdateCurrentPrivacySettingReq) -> Result<models::UpdateCurrentPrivacySettingResp, Error<UpdateCurrentPrivacySettingError>>;
 }
 
 pub struct PrivacySettingServiceClient {
@@ -46,7 +46,7 @@ impl PrivacySettingServiceClient {
 #[async_trait]
 impl PrivacySettingService for PrivacySettingServiceClient {
     /// 获取当前账号的隐私设置。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingResp, Error<GetCurrentError>> {
+    async fn get_current_privacy_setting<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPrivacySettingResp, Error<GetCurrentPrivacySettingError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -78,14 +78,14 @@ impl PrivacySettingService for PrivacySettingServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentPrivacySettingResp`")))),
             }
         } else {
-            let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<GetCurrentPrivacySettingError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 更新当前账号的隐私设置。
-    async fn update_current<'update_current_privacy_setting_req>(&self, update_current_privacy_setting_req: models::UpdateCurrentPrivacySettingReq) -> Result<models::UpdateCurrentPrivacySettingResp, Error<UpdateCurrentError>> {
+    async fn update_current_privacy_setting<'update_current_privacy_setting_req>(&self, update_current_privacy_setting_req: models::UpdateCurrentPrivacySettingReq) -> Result<models::UpdateCurrentPrivacySettingResp, Error<UpdateCurrentPrivacySettingError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -117,7 +117,7 @@ impl PrivacySettingService for PrivacySettingServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateCurrentPrivacySettingResp`")))),
             }
         } else {
-            let local_var_entity: Option<UpdateCurrentError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<UpdateCurrentPrivacySettingError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -125,17 +125,17 @@ impl PrivacySettingService for PrivacySettingServiceClient {
 
 }
 
-/// struct for typed errors of method [`PrivacySettingService::get_current`]
+/// struct for typed errors of method [`PrivacySettingService::get_current_privacy_setting`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetCurrentError {
+pub enum GetCurrentPrivacySettingError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`PrivacySettingService::update_current`]
+/// struct for typed errors of method [`PrivacySettingService::update_current_privacy_setting`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UpdateCurrentError {
+pub enum UpdateCurrentPrivacySettingError {
     UnknownValue(serde_json::Value),
 }
 

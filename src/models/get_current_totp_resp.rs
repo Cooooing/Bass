@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// GetCurrentTotpResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentTotpResp {
+    /// TOTP 状态
     #[serde(rename = "totp", skip_serializing_if = "Option::is_none")]
     pub totp: Option<models::RespTotp>,
 }
 
 impl GetCurrentTotpResp {
+    /// 响应结果。
     pub fn new() -> GetCurrentTotpResp {
         GetCurrentTotpResp {
             totp: None,

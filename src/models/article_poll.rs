@@ -11,25 +11,34 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticlePoll : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticlePoll {
+    /// 截止时间
     #[serde(rename = "ends_at", skip_serializing_if = "Option::is_none")]
     pub ends_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 每人最多选择数
     #[serde(rename = "max_choices", skip_serializing_if = "Option::is_none")]
     pub max_choices: Option<i32>,
+    /// 投票选项
     #[serde(rename = "options", skip_serializing_if = "Option::is_none")]
     pub options: Option<Vec<models::ArticlePollOption>>,
+    /// 当前账号已选选项 ID
     #[serde(rename = "selected_option_ids", skip_serializing_if = "Option::is_none")]
     pub selected_option_ids: Option<Vec<String>>,
+    /// 当前账号是否可查看实时结果
     #[serde(rename = "result_visible", skip_serializing_if = "Option::is_none")]
     pub result_visible: Option<bool>,
+    /// 已投票账号数
     #[serde(rename = "participant_count", skip_serializing_if = "Option::is_none")]
     pub participant_count: Option<String>,
+    /// 所有选项累计票数
     #[serde(rename = "total_vote_count", skip_serializing_if = "Option::is_none")]
     pub total_vote_count: Option<String>,
 }
 
 impl ArticlePoll {
+    /// 协议消息。
     pub fn new() -> ArticlePoll {
         ArticlePoll {
             ends_at: None,

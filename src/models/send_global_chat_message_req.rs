@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SendGlobalChatMessageReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SendGlobalChatMessageReq {
+    /// 客户端幂等消息 ID。
     #[serde(rename = "client_message_id", skip_serializing_if = "Option::is_none")]
     pub client_message_id: Option<String>,
+    /// 原始 Markdown 内容。
     #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
 }
 
 impl SendGlobalChatMessageReq {
+    /// 请求参数。
     pub fn new() -> SendGlobalChatMessageReq {
         SendGlobalChatMessageReq {
             client_message_id: None,

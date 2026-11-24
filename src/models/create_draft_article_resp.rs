@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateDraftArticleResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateDraftArticleResp {
+    /// 已创建草稿的文章 ID
     #[serde(rename = "article_id", skip_serializing_if = "Option::is_none")]
     pub article_id: Option<String>,
 }
 
 impl CreateDraftArticleResp {
+    /// 响应结果。
     pub fn new() -> CreateDraftArticleResp {
         CreateDraftArticleResp {
             article_id: None,

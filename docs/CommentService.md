@@ -4,19 +4,19 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create**](CommentService.md#create) | **POST** /v1/content/comment/create | 
-[**like**](CommentService.md#like) | **POST** /v1/content/comment/like | 
-[**list**](CommentService.md#list) | **POST** /v1/content/comment/list | 
-[**list_replies**](CommentService.md#list_replies) | **POST** /v1/content/comment/list-replies | 
-[**list_threads**](CommentService.md#list_threads) | **POST** /v1/content/comment/list-threads | 
-[**list_timeline**](CommentService.md#list_timeline) | **POST** /v1/content/comment/list-timeline | 
-[**thank**](CommentService.md#thank) | **POST** /v1/content/comment/thank | 
+[**create_comment**](CommentService.md#create_comment) | **POST** /v1/content/comment/create | 
+[**like_comment**](CommentService.md#like_comment) | **POST** /v1/content/comment/like | 
+[**list_comment_replies**](CommentService.md#list_comment_replies) | **POST** /v1/content/comment/list-replies | 
+[**list_comment_threads**](CommentService.md#list_comment_threads) | **POST** /v1/content/comment/list-threads | 
+[**list_comment_timeline**](CommentService.md#list_comment_timeline) | **POST** /v1/content/comment/list-timeline | 
+[**list_comments**](CommentService.md#list_comments) | **POST** /v1/content/comment/list | 
+[**thank_comment**](CommentService.md#thank_comment) | **POST** /v1/content/comment/thank | 
 
 
 
-## create
+## create_comment
 
-> models::CreateCommentResp create(create_comment_req)
+> models::CreateCommentResp create_comment(create_comment_req)
 
 
 创建评论。
@@ -44,9 +44,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## like
+## like_comment
 
-> models::LikeCommentResp like(like_comment_req)
+> models::LikeCommentResp like_comment(like_comment_req)
 
 
 点赞或取消点赞评论。
@@ -74,39 +74,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list
+## list_comment_replies
 
-> models::ListCommentsResp list(list_comments_req)
-
-
-分页查询评论列表。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**list_comments_req** | [**ListCommentsReq**](ListCommentsReq.md) |  | [required] |
-
-### Return type
-
-[**models::ListCommentsResp**](ListComments_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## list_replies
-
-> models::ListCommentRepliesResp list_replies(list_comment_replies_req)
+> models::ListCommentRepliesResp list_comment_replies(list_comment_replies_req)
 
 
 分页查询评论回复。
@@ -134,9 +104,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list_threads
+## list_comment_threads
 
-> models::ListCommentThreadsResp list_threads(list_comment_threads_req)
+> models::ListCommentThreadsResp list_comment_threads(list_comment_threads_req)
 
 
 分页查询评论楼层。
@@ -164,9 +134,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list_timeline
+## list_comment_timeline
 
-> models::ListCommentTimelineResp list_timeline(list_comment_timeline_req)
+> models::ListCommentTimelineResp list_comment_timeline(list_comment_timeline_req)
 
 
 分页查询评论时间线。
@@ -194,9 +164,39 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## thank
+## list_comments
 
-> models::ThankCommentResp thank(thank_comment_req)
+> models::ListCommentsResp list_comments(list_comments_req)
+
+
+分页查询评论列表。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**list_comments_req** | [**ListCommentsReq**](ListCommentsReq.md) |  | [required] |
+
+### Return type
+
+[**models::ListCommentsResp**](ListComments_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## thank_comment
+
+> models::ThankCommentResp thank_comment(thank_comment_req)
 
 
 感谢或取消感谢评论。

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListPrivateChatMessagesResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListPrivateChatMessagesResp {
+    /// 分页信息。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
+    /// 消息列表。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::PrivateChatMessage>>,
 }
 
 impl ListPrivateChatMessagesResp {
+    /// 响应结果。
     pub fn new() -> ListPrivateChatMessagesResp {
         ListPrivateChatMessagesResp {
             page: None,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ListTagsReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ListTagsReq {
+    /// 分页参数
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageReq>,
+    /// 查询条件
     #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
     pub query: Option<models::ReqTagQuery>,
 }
 
 impl ListTagsReq {
+    /// 请求参数。
     pub fn new() -> ListTagsReq {
         ListTagsReq {
             page: None,

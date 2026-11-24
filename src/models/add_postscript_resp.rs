@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// AddPostscriptResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AddPostscriptResp {
+    /// 创建后的文章附言。
     #[serde(rename = "postscript", skip_serializing_if = "Option::is_none")]
     pub postscript: Option<models::ArticlePostscript>,
 }
 
 impl AddPostscriptResp {
+    /// 响应结果。
     pub fn new() -> AddPostscriptResp {
         AddPostscriptResp {
             postscript: None,

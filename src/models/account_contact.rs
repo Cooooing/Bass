@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// AccountContact : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AccountContact {
+    /// 账号 ID
     #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
+    /// 邮箱地址
     #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
+    /// 手机号
     #[serde(rename = "phone", skip_serializing_if = "Option::is_none")]
     pub phone: Option<String>,
 }
 
 impl AccountContact {
+    /// 协议消息。
     pub fn new() -> AccountContact {
         AccountContact {
             user_id: None,

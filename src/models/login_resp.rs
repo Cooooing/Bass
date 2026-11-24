@@ -11,23 +11,31 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// LoginResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LoginResp {
+    /// 访问令牌
     #[serde(rename = "access_token", skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
+    /// 刷新令牌
     #[serde(rename = "refresh_token", skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
+    /// 访问令牌过期时间
     #[serde(rename = "access_token_expires_at", skip_serializing_if = "Option::is_none")]
     pub access_token_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 刷新令牌空闲过期时间
     #[serde(rename = "refresh_token_expires_at", skip_serializing_if = "Option::is_none")]
     pub refresh_token_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// session 绝对过期时间
     #[serde(rename = "session_expires_at", skip_serializing_if = "Option::is_none")]
     pub session_expires_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 当前账号完整资料
     #[serde(rename = "account", skip_serializing_if = "Option::is_none")]
     pub account: Option<models::RespAccount>,
 }
 
 impl LoginResp {
+    /// 响应结果。
     pub fn new() -> LoginResp {
         LoginResp {
             access_token: None,

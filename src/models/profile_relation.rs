@@ -11,19 +11,25 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ProfileRelation : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ProfileRelation {
+    /// 协议字段。
     #[serde(rename = "following", skip_serializing_if = "Option::is_none")]
     pub following: Option<bool>,
+    /// 协议字段。
     #[serde(rename = "followed_by", skip_serializing_if = "Option::is_none")]
     pub followed_by: Option<bool>,
+    /// 协议字段。
     #[serde(rename = "blocking", skip_serializing_if = "Option::is_none")]
     pub blocking: Option<bool>,
+    /// 协议字段。
     #[serde(rename = "blocked_by", skip_serializing_if = "Option::is_none")]
     pub blocked_by: Option<bool>,
 }
 
 impl ProfileRelation {
+    /// 协议消息。
     pub fn new() -> ProfileRelation {
         ProfileRelation {
             following: None,

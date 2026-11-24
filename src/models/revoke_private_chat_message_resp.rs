@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RevokePrivateChatMessageResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RevokePrivateChatMessageResp {
+    /// 已撤回消息。
     #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
     pub message: Option<models::PrivateChatMessage>,
 }
 
 impl RevokePrivateChatMessageResp {
+    /// 响应结果。
     pub fn new() -> RevokePrivateChatMessageResp {
         RevokePrivateChatMessageResp {
             message: None,

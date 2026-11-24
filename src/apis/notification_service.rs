@@ -23,17 +23,17 @@ pub trait NotificationService: Send + Sync {
     /// POST /v1/notify/notification/count-unread
     ///
     /// 统计未读通知数量。
-    async fn count_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsResp, Error<CountUnreadError>>;
+    async fn count_unread_notifications<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsResp, Error<CountUnreadNotificationsError>>;
 
     /// POST /v1/notify/notification/list
     ///
     /// 分页查询通知列表。
-    async fn list<'list_notifications_req>(&self, list_notifications_req: models::ListNotificationsReq) -> Result<models::ListNotificationsResp, Error<ListError>>;
+    async fn list_notifications<'list_notifications_req>(&self, list_notifications_req: models::ListNotificationsReq) -> Result<models::ListNotificationsResp, Error<ListNotificationsError>>;
 
     /// POST /v1/notify/notification/mark-read
     ///
     /// 标记通知为已读。
-    async fn mark_read<'mark_read_notification_req>(&self, mark_read_notification_req: models::MarkReadNotificationReq) -> Result<models::MarkReadNotificationResp, Error<MarkReadError>>;
+    async fn mark_read_notification<'mark_read_notification_req>(&self, mark_read_notification_req: models::MarkReadNotificationReq) -> Result<models::MarkReadNotificationResp, Error<MarkReadNotificationError>>;
 }
 
 pub struct NotificationServiceClient {
@@ -51,7 +51,7 @@ impl NotificationServiceClient {
 #[async_trait]
 impl NotificationService for NotificationServiceClient {
     /// 统计未读通知数量。
-    async fn count_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsResp, Error<CountUnreadError>> {
+    async fn count_unread_notifications<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsResp, Error<CountUnreadNotificationsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -83,14 +83,14 @@ impl NotificationService for NotificationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CountUnreadNotificationsResp`")))),
             }
         } else {
-            let local_var_entity: Option<CountUnreadError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<CountUnreadNotificationsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 分页查询通知列表。
-    async fn list<'list_notifications_req>(&self, list_notifications_req: models::ListNotificationsReq) -> Result<models::ListNotificationsResp, Error<ListError>> {
+    async fn list_notifications<'list_notifications_req>(&self, list_notifications_req: models::ListNotificationsReq) -> Result<models::ListNotificationsResp, Error<ListNotificationsError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -122,14 +122,14 @@ impl NotificationService for NotificationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListNotificationsResp`")))),
             }
         } else {
-            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ListNotificationsError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
     /// 标记通知为已读。
-    async fn mark_read<'mark_read_notification_req>(&self, mark_read_notification_req: models::MarkReadNotificationReq) -> Result<models::MarkReadNotificationResp, Error<MarkReadError>> {
+    async fn mark_read_notification<'mark_read_notification_req>(&self, mark_read_notification_req: models::MarkReadNotificationReq) -> Result<models::MarkReadNotificationResp, Error<MarkReadNotificationError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -161,7 +161,7 @@ impl NotificationService for NotificationServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::MarkReadNotificationResp`")))),
             }
         } else {
-            let local_var_entity: Option<MarkReadError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<MarkReadNotificationError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -169,24 +169,24 @@ impl NotificationService for NotificationServiceClient {
 
 }
 
-/// struct for typed errors of method [`NotificationService::count_unread`]
+/// struct for typed errors of method [`NotificationService::count_unread_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CountUnreadError {
+pub enum CountUnreadNotificationsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`NotificationService::list`]
+/// struct for typed errors of method [`NotificationService::list_notifications`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ListError {
+pub enum ListNotificationsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`NotificationService::mark_read`]
+/// struct for typed errors of method [`NotificationService::mark_read_notification`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MarkReadError {
+pub enum MarkReadNotificationError {
     UnknownValue(serde_json::Value),
 }
 

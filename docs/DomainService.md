@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create**](DomainService.md#create) | **POST** /v1/content/domain/create | 
-[**list**](DomainService.md#list) | **POST** /v1/content/domain/list | 
-[**update**](DomainService.md#update) | **POST** /v1/content/domain/update | 
+[**create_domain**](DomainService.md#create_domain) | **POST** /v1/content/domain/create | 
+[**list_domains**](DomainService.md#list_domains) | **POST** /v1/content/domain/list | 
+[**update_domain**](DomainService.md#update_domain) | **POST** /v1/content/domain/update | 
 
 
 
-## create
+## create_domain
 
-> models::CreateDomainResp create(create_domain_req)
+> models::CreateDomainResp create_domain(create_domain_req)
 
 
 创建领域。
@@ -40,9 +40,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## list
+## list_domains
 
-> models::ListDomainsResp list(list_domains_req)
+> models::ListDomainsResp list_domains(list_domains_req)
 
 
 查询领域列表。
@@ -70,9 +70,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## update
+## update_domain
 
-> models::UpdateDomainResp update(update_domain_req)
+> models::UpdateDomainResp update_domain(update_domain_req)
 
 
 更新领域。

@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CreateEmojiGroupResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CreateEmojiGroupResp {
+    /// 已创建分组。
     #[serde(rename = "group", skip_serializing_if = "Option::is_none")]
     pub group: Option<models::EmojiGroup>,
 }
 
 impl CreateEmojiGroupResp {
+    /// 响应结果。
     pub fn new() -> CreateEmojiGroupResp {
         CreateEmojiGroupResp {
             group: None,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PageWatchingMoonbreezesReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PageWatchingMoonbreezesReq {
+    /// 协议字段。
     #[serde(rename = "cursor", skip_serializing_if = "Option::is_none")]
     pub cursor: Option<String>,
+    /// 协议字段。
     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
     pub size: Option<i32>,
 }
 
 impl PageWatchingMoonbreezesReq {
+    /// 请求参数。
     pub fn new() -> PageWatchingMoonbreezesReq {
         PageWatchingMoonbreezesReq {
             cursor: None,

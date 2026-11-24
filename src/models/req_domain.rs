@@ -11,27 +11,37 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqDomain : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqDomain {
+    /// 稳定编码
     #[serde(rename = "code")]
     pub code: String,
+    /// 领域名称
     #[serde(rename = "name")]
     pub name: String,
+    /// 描述
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 启停状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 链接
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// 图标
     #[serde(rename = "icon", skip_serializing_if = "Option::is_none")]
     pub icon: Option<String>,
+    /// 是否在导航中展示
     #[serde(rename = "is_nav", skip_serializing_if = "Option::is_none")]
     pub is_nav: Option<bool>,
+    /// 排序值，越小越靠前
     #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
     pub sort: Option<i32>,
 }
 
 impl ReqDomain {
+    /// 协议消息。
     pub fn new(code: String, name: String) -> ReqDomain {
         ReqDomain {
             code,
@@ -45,7 +55,7 @@ impl ReqDomain {
         }
     }
 }
-/// 
+/// 启停状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "DOMAIN_STATUS_UNSPECIFIED")]

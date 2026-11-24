@@ -11,35 +11,49 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqArticleQuery : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqArticleQuery {
+    /// 可选，标签 ID
     #[serde(rename = "tag_id", skip_serializing_if = "Option::is_none")]
     pub tag_id: Option<String>,
+    /// 可选，领域 ID
     #[serde(rename = "domain_id", skip_serializing_if = "Option::is_none")]
     pub domain_id: Option<String>,
+    /// 可选，文章类型
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub r#type: Option<Type>,
+    /// 可选，排序方式
     #[serde(rename = "order", skip_serializing_if = "Option::is_none")]
     pub order: Option<Order>,
+    /// 可选，作者账号 ID
     #[serde(rename = "author_id", skip_serializing_if = "Option::is_none")]
     pub author_id: Option<String>,
+    /// 可选，发布状态
     #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
     pub publish_status: Option<PublishStatus>,
+    /// 可选，发布状态列表
     #[serde(rename = "publish_statuses", skip_serializing_if = "Option::is_none")]
     pub publish_statuses: Option<Vec<PublishStatuses>>,
+    /// 可选，可见范围
     #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
     pub visibility: Option<Visibility>,
+    /// 可选，可见范围列表
     #[serde(rename = "visibilities", skip_serializing_if = "Option::is_none")]
     pub visibilities: Option<Vec<Visibilities>>,
+    /// 可选，治理限制
     #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
     pub restriction: Option<Restriction>,
+    /// 可选，治理限制列表
     #[serde(rename = "restrictions", skip_serializing_if = "Option::is_none")]
     pub restrictions: Option<Vec<Restrictions>>,
+    /// 可选，仅本人草稿：是否已设置发布时间
     #[serde(rename = "scheduled", skip_serializing_if = "Option::is_none")]
     pub scheduled: Option<bool>,
 }
 
 impl ReqArticleQuery {
+    /// 协议消息。
     pub fn new() -> ReqArticleQuery {
         ReqArticleQuery {
             tag_id: None,
@@ -57,7 +71,7 @@ impl ReqArticleQuery {
         }
     }
 }
-/// 
+/// 可选，文章类型
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Type {
     #[serde(rename = "ARTICLE_TYPE_UNSPECIFIED")]
@@ -79,7 +93,7 @@ impl Default for Type {
         Self::ArticleTypeUnspecified
     }
 }
-/// 
+/// 可选，排序方式
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Order {
     #[serde(rename = "ARTICLE_ORDER_UNSPECIFIED")]
@@ -95,7 +109,7 @@ impl Default for Order {
         Self::ArticleOrderUnspecified
     }
 }
-/// 
+/// 可选，发布状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum PublishStatus {
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]
@@ -113,7 +127,7 @@ impl Default for PublishStatus {
         Self::ArticlePublishStatusUnspecified
     }
 }
-/// 
+/// 可选，发布状态列表
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum PublishStatuses {
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]
@@ -131,7 +145,7 @@ impl Default for PublishStatuses {
         Self::ArticlePublishStatusUnspecified
     }
 }
-/// 
+/// 可选，可见范围
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Visibility {
     #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
@@ -147,7 +161,7 @@ impl Default for Visibility {
         Self::ArticleVisibilityUnspecified
     }
 }
-/// 
+/// 可选，可见范围列表
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Visibilities {
     #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
@@ -163,7 +177,7 @@ impl Default for Visibilities {
         Self::ArticleVisibilityUnspecified
     }
 }
-/// 
+/// 可选，治理限制
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Restriction {
     #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]
@@ -181,7 +195,7 @@ impl Default for Restriction {
         Self::ContentRestrictionUnspecified
     }
 }
-/// 
+/// 可选，治理限制列表
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Restrictions {
     #[serde(rename = "CONTENT_RESTRICTION_UNSPECIFIED")]

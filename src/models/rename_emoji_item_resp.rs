@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RenameEmojiItemResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RenameEmojiItemResp {
+    /// 已重命名表情项。
     #[serde(rename = "item", skip_serializing_if = "Option::is_none")]
     pub item: Option<models::EmojiItem>,
 }
 
 impl RenameEmojiItemResp {
+    /// 响应结果。
     pub fn new() -> RenameEmojiItemResp {
         RenameEmojiItemResp {
             item: None,

@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// AddEmojiItemReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AddEmojiItemReq {
+    /// 可选目标分组 ID；缺省时加入默认分组。
     #[serde(rename = "group_id", skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
+    /// 已确认可用的平台图片资产 ID。
     #[serde(rename = "asset_id", skip_serializing_if = "Option::is_none")]
     pub asset_id: Option<String>,
+    /// 可选表情别名。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
 impl AddEmojiItemReq {
+    /// 请求参数。
     pub fn new() -> AddEmojiItemReq {
         AddEmojiItemReq {
             group_id: None,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// CancelAccountReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CancelAccountReq {
+    /// 当前密码
     #[serde(rename = "password")]
     pub password: String,
+    /// 启用 TOTP 时作为 TOTP code
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
 }
 
 impl CancelAccountReq {
+    /// 请求参数。
     pub fn new(password: String) -> CancelAccountReq {
         CancelAccountReq {
             password,

@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespCurrentAccount : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespCurrentAccount {
+    /// 账号展示资料
     #[serde(rename = "profile", skip_serializing_if = "Option::is_none")]
     pub profile: Option<models::AccountProfile>,
+    /// 账号联系方式
     #[serde(rename = "contact", skip_serializing_if = "Option::is_none")]
     pub contact: Option<models::AccountContact>,
+    /// 当前账号地理资料
     #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
     pub location: Option<models::ProfileLocation>,
 }
 
 impl RespCurrentAccount {
+    /// 协议消息。
     pub fn new() -> RespCurrentAccount {
         RespCurrentAccount {
             profile: None,

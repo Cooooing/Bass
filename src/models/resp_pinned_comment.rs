@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespPinnedComment : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespPinnedComment {
+    /// 独立置顶评论线程
     #[serde(rename = "thread", skip_serializing_if = "Option::is_none")]
     pub thread: Option<models::RespCommentThread>,
 }
 
 impl RespPinnedComment {
+    /// 协议消息。
     pub fn new() -> RespPinnedComment {
         RespPinnedComment {
             thread: None,

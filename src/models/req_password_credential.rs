@@ -11,17 +11,22 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ReqPasswordCredential : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ReqPasswordCredential {
+    /// 账号名、邮箱或手机号
     #[serde(rename = "account", skip_serializing_if = "Option::is_none")]
     pub account: Option<String>,
+    /// 密码
     #[serde(rename = "password", skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
+    /// 账号启用 TOTP 时作为 TOTP code
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
 }
 
 impl ReqPasswordCredential {
+    /// 协议消息。
     pub fn new() -> ReqPasswordCredential {
         ReqPasswordCredential {
             account: None,

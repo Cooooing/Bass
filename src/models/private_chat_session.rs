@@ -11,27 +11,37 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// PrivateChatSession : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PrivateChatSession {
+    /// 对端账号 ID。
     #[serde(rename = "peer_user_id", skip_serializing_if = "Option::is_none")]
     pub peer_user_id: Option<String>,
+    /// 最后已读消息 ID。
     #[serde(rename = "last_read_message_id", skip_serializing_if = "Option::is_none")]
     pub last_read_message_id: Option<String>,
+    /// 未读消息数。
     #[serde(rename = "unread_count", skip_serializing_if = "Option::is_none")]
     pub unread_count: Option<i32>,
+    /// 是否免打扰。
     #[serde(rename = "muted", skip_serializing_if = "Option::is_none")]
     pub muted: Option<bool>,
+    /// 是否置顶。
     #[serde(rename = "pinned", skip_serializing_if = "Option::is_none")]
     pub pinned: Option<bool>,
+    /// 最后一条消息。
     #[serde(rename = "last_message", skip_serializing_if = "Option::is_none")]
     pub last_message: Option<models::PrivateChatMessage>,
+    /// 最后消息时间。
     #[serde(rename = "last_message_at", skip_serializing_if = "Option::is_none")]
     pub last_message_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 对端展示资料。
     #[serde(rename = "peer", skip_serializing_if = "Option::is_none")]
     pub peer: Option<models::PrivateChatMember>,
 }
 
 impl PrivateChatSession {
+    /// 协议消息。
     pub fn new() -> PrivateChatSession {
         PrivateChatSession {
             peer_user_id: None,

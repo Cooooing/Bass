@@ -22,12 +22,12 @@ pub trait LivenessService: Send + Sync {
 
     /// POST /v1/user/liveness/yesterday-reward/claim
     ///
-    /// 
-    async fn claim_yesterday_reward<'body>(&self, body: serde_json::Value) -> Result<models::ClaimYesterdayLivenessRewardResp, Error<ClaimYesterdayRewardError>>;
+    /// 服务方法。
+    async fn claim_yesterday_liveness_reward<'body>(&self, body: serde_json::Value) -> Result<models::ClaimYesterdayLivenessRewardResp, Error<ClaimYesterdayLivenessRewardError>>;
 
     /// GET /v1/user/liveness
     ///
-    /// 
+    /// 服务方法。
     async fn get_liveness<>(&self, ) -> Result<models::GetLivenessResp, Error<GetLivenessError>>;
 }
 
@@ -45,7 +45,8 @@ impl LivenessServiceClient {
 
 #[async_trait]
 impl LivenessService for LivenessServiceClient {
-    async fn claim_yesterday_reward<'body>(&self, body: serde_json::Value) -> Result<models::ClaimYesterdayLivenessRewardResp, Error<ClaimYesterdayRewardError>> {
+    /// 服务方法。
+    async fn claim_yesterday_liveness_reward<'body>(&self, body: serde_json::Value) -> Result<models::ClaimYesterdayLivenessRewardResp, Error<ClaimYesterdayLivenessRewardError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -77,12 +78,13 @@ impl LivenessService for LivenessServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ClaimYesterdayLivenessRewardResp`")))),
             }
         } else {
-            let local_var_entity: Option<ClaimYesterdayRewardError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<ClaimYesterdayLivenessRewardError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
     }
 
+    /// 服务方法。
     async fn get_liveness<>(&self, ) -> Result<models::GetLivenessResp, Error<GetLivenessError>> {
         let local_var_configuration = &self.configuration;
 
@@ -122,10 +124,10 @@ impl LivenessService for LivenessServiceClient {
 
 }
 
-/// struct for typed errors of method [`LivenessService::claim_yesterday_reward`]
+/// struct for typed errors of method [`LivenessService::claim_yesterday_liveness_reward`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ClaimYesterdayRewardError {
+pub enum ClaimYesterdayLivenessRewardError {
     UnknownValue(serde_json::Value),
 }
 

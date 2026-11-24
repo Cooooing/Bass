@@ -14,34 +14,49 @@ use serde::{Deserialize, Serialize};
 /// RenderSpec : RenderSpec 是客户端 Maker 传递的完整渲染参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RenderSpec {
+    /// Platform 已确认可用的徽章图标资源 ID。
     #[serde(rename = "image_asset_id", skip_serializing_if = "Option::is_none")]
     pub image_asset_id: Option<String>,
+    /// 文字条内容。
     #[serde(rename = "text", skip_serializing_if = "Option::is_none")]
     pub text: Option<String>,
+    /// 背景颜色列表。
     #[serde(rename = "background_colors", skip_serializing_if = "Option::is_none")]
     pub background_colors: Option<Vec<String>>,
+    /// 文字颜色列表。
     #[serde(rename = "text_colors", skip_serializing_if = "Option::is_none")]
     pub text_colors: Option<Vec<String>>,
+    /// 背景渐变方向或角度。
     #[serde(rename = "background_direction", skip_serializing_if = "Option::is_none")]
     pub background_direction: Option<String>,
+    /// 文字渐变方向或角度。
     #[serde(rename = "text_direction", skip_serializing_if = "Option::is_none")]
     pub text_direction: Option<String>,
+    /// 图标边长。
     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
     pub size: Option<i32>,
+    /// 图标边距。
     #[serde(rename = "border", skip_serializing_if = "Option::is_none")]
     pub border: Option<i32>,
+    /// 文字条长度。
     #[serde(rename = "text_bar_length", skip_serializing_if = "Option::is_none")]
     pub text_bar_length: Option<i32>,
+    /// 文字字号。
     #[serde(rename = "text_size", skip_serializing_if = "Option::is_none")]
     pub text_size: Option<i32>,
+    /// 文字条圆角。
     #[serde(rename = "text_bar_radius", skip_serializing_if = "Option::is_none")]
     pub text_bar_radius: Option<i32>,
+    /// 整体缩放比例。
     #[serde(rename = "scale", skip_serializing_if = "Option::is_none")]
     pub scale: Option<f64>,
+    /// 阴影强度。
     #[serde(rename = "shadow", skip_serializing_if = "Option::is_none")]
     pub shadow: Option<f64>,
+    /// 动画时长。
     #[serde(rename = "animation_seconds", skip_serializing_if = "Option::is_none")]
     pub animation_seconds: Option<f64>,
+    /// Platform 已确认可用的自定义字体资源 ID。
     #[serde(rename = "font_asset_id", skip_serializing_if = "Option::is_none")]
     pub font_asset_id: Option<String>,
 }

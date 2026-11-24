@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ThankCommentReq : 请求参数。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ThankCommentReq {
+    /// 评论 ID
     #[serde(rename = "id")]
     pub id: String,
 }
 
 impl ThankCommentReq {
+    /// 请求参数。
     pub fn new(id: String) -> ThankCommentReq {
         ThankCommentReq {
             id,

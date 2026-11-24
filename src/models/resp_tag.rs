@@ -11,37 +11,52 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// RespTag : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespTag {
+    /// 标签 ID
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// 稳定编码
     #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    /// 标签名称
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// 描述
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// 领域 ID
     #[serde(rename = "domain_id", skip_serializing_if = "Option::is_none")]
     pub domain_id: Option<String>,
+    /// 启停状态
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
+    /// 图标
     #[serde(rename = "icon", skip_serializing_if = "Option::is_none")]
     pub icon: Option<String>,
+    /// 排序值，越小越靠前
     #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
     pub sort: Option<i32>,
+    /// 文章数量
     #[serde(rename = "article_count", skip_serializing_if = "Option::is_none")]
     pub article_count: Option<i32>,
+    /// 创建用户 ID
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
+    /// 更新用户 ID
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
+    /// 创建时间
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    /// 更新时间
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl RespTag {
+    /// 协议消息。
     pub fn new() -> RespTag {
         RespTag {
             id: None,
@@ -60,7 +75,7 @@ impl RespTag {
         }
     }
 }
-/// 
+/// 启停状态
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "TAG_STATUS_UNSPECIFIED")]

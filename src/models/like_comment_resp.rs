@@ -11,13 +11,16 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// LikeCommentResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LikeCommentResp {
+    /// 是否已点赞
     #[serde(rename = "liked", skip_serializing_if = "Option::is_none")]
     pub liked: Option<bool>,
 }
 
 impl LikeCommentResp {
+    /// 响应结果。
     pub fn new() -> LikeCommentResp {
         LikeCommentResp {
             liked: None,

@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// SearchMentionAccountsResp : 响应结果。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SearchMentionAccountsResp {
+    /// 最多五个可提及账号候选。
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::AccountProfile>>,
+    /// 分页结果。
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
 }
 
 impl SearchMentionAccountsResp {
+    /// 响应结果。
     pub fn new() -> SearchMentionAccountsResp {
         SearchMentionAccountsResp {
             rows: None,

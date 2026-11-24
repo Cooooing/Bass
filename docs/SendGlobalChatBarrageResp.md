@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**barrage** | Option<[**models::GlobalChatBarrage**](GlobalChatBarrage.md)> |  | [optional]
+**barrage** | Option<[**models::GlobalChatBarrage**](GlobalChatBarrage.md)> | 已发布的弹幕。 | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

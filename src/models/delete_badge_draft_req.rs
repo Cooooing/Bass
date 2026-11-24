@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 /// DeleteBadgeDraftReq : Req 指定待删除草稿。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct DeleteBadgeDraftReq {
+    /// 草稿 ID。
     #[serde(rename = "draft_id", skip_serializing_if = "Option::is_none")]
     pub draft_id: Option<String>,
 }

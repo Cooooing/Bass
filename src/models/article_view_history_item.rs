@@ -11,15 +11,19 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
+/// ArticleViewHistoryItem : 协议消息。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleViewHistoryItem {
+    /// 当前仍可展示的文章
     #[serde(rename = "article", skip_serializing_if = "Option::is_none")]
     pub article: Option<models::ArticleListItem>,
+    /// 最近浏览时间
     #[serde(rename = "viewed_at", skip_serializing_if = "Option::is_none")]
     pub viewed_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl ArticleViewHistoryItem {
+    /// 协议消息。
     pub fn new() -> ArticleViewHistoryItem {
         ArticleViewHistoryItem {
             article: None,

@@ -6,9 +6,9 @@ Resp 返回已存在字体或一次直传凭证。
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**asset_id** | **string** |  | [optional] [default to undefined]
-**upload_url** | **string** |  | [optional] [default to undefined]
-**form_fields** | **{ [key: string]: string; }** |  | [optional] [default to undefined]
+**asset_id** | **string** | 已存在资源的 ID。 | [optional] [default to undefined]
+**upload_url** | **string** | 新资源的 MinIO multipart POST 地址。 | [optional] [default to undefined]
+**form_fields** | **{ [key: string]: string; }** | MinIO multipart POST 表单字段。 | [optional] [default to undefined]
 
 ## Example
 

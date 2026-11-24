@@ -1,11 +1,12 @@
 # ThankCommentReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [default to undefined]
+**id** | **string** | 评论 ID | [default to undefined]
 
 ## Example
 

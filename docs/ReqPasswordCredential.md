@@ -1,13 +1,14 @@
 # ReqPasswordCredential
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**account** | **string** |  | [optional] [default to undefined]
-**password** | **string** |  | [optional] [default to undefined]
-**code** | **string** |  | [optional] [default to undefined]
+**account** | **string** | 账号名、邮箱或手机号 | [optional] [default to undefined]
+**password** | **string** | 密码 | [optional] [default to undefined]
+**code** | **string** | 账号启用 TOTP 时作为 TOTP code | [optional] [default to undefined]
 
 ## Example
 

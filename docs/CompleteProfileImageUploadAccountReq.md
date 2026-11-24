@@ -1,12 +1,13 @@
 # CompleteProfileImageUploadAccountReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**purpose** | **string** |  | [default to undefined]
-**hash** | **string** |  | [default to undefined]
+**purpose** | **string** | 协议字段。 | [default to undefined]
+**hash** | **string** | 文件 SHA-256；回调尚未入库时返回可重试错误 | [default to undefined]
 
 ## Example
 

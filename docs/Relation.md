@@ -1,16 +1,17 @@
 # Relation
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**type** | **string** |  | [optional] [default to undefined]
-**actor_id** | **string** |  | [optional] [default to undefined]
-**target_id** | **string** |  | [optional] [default to undefined]
-**created_at** | **string** |  | [optional] [default to undefined]
-**updated_at** | **string** |  | [optional] [default to undefined]
+**id** | **string** | 关系 ID | [optional] [default to undefined]
+**type** | **string** | 关系类型 | [optional] [default to undefined]
+**actor_id** | **string** | 发起账号 ID | [optional] [default to undefined]
+**target_id** | **string** | 目标账号 ID | [optional] [default to undefined]
+**created_at** | **string** | 创建时间 | [optional] [default to undefined]
+**updated_at** | **string** | 更新时间 | [optional] [default to undefined]
 
 ## Example
 

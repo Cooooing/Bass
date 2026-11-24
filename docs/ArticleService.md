@@ -4,32 +4,32 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**acceptAnswer**](#acceptanswer) | **POST** /v1/content/article/answer/accept | |
-|[**archive**](#archive) | **POST** /v1/content/article/archive | |
-|[**cancelPublish**](#cancelpublish) | **POST** /v1/content/article/publish/cancel | |
-|[**collect**](#collect) | **POST** /v1/content/article/collect | |
-|[**countCollected**](#countcollected) | **POST** /v1/content/article/collect/count | |
-|[**createDraft**](#createdraft) | **POST** /v1/content/article/draft/create | |
-|[**discardDraft**](#discarddraft) | **POST** /v1/content/article/draft/discard | |
-|[**enterLottery**](#enterlottery) | **POST** /v1/content/article/lottery/entry | |
-|[**get**](#get) | **POST** /v1/content/article/get | |
-|[**like**](#like) | **POST** /v1/content/article/like | |
-|[**list**](#list) | **POST** /v1/content/article/list | |
-|[**listFollowing**](#listfollowing) | **POST** /v1/content/article/following/list | |
-|[**listNearby**](#listnearby) | **POST** /v1/content/article/nearby/list | |
-|[**pageCollected**](#pagecollected) | **POST** /v1/content/article/collected/page | |
-|[**pageViewHistory**](#pageviewhistory) | **POST** /v1/content/article/view-history/page | |
-|[**pageWatched**](#pagewatched) | **POST** /v1/content/article/watched/page | |
-|[**publish**](#publish) | **POST** /v1/content/article/publish | |
-|[**reward**](#reward) | **POST** /v1/content/article/reward | |
-|[**setPinnedComment**](#setpinnedcomment) | **POST** /v1/content/article/comment/pin | |
-|[**thank**](#thank) | **POST** /v1/content/article/thank | |
-|[**updateDraft**](#updatedraft) | **POST** /v1/content/article/draft/update | |
-|[**votePoll**](#votepoll) | **POST** /v1/content/article/poll/vote | |
-|[**watch**](#watch) | **POST** /v1/content/article/watch | |
+|[**acceptArticleAnswer**](#acceptarticleanswer) | **POST** /v1/content/article/answer/accept | |
+|[**archiveArticle**](#archivearticle) | **POST** /v1/content/article/archive | |
+|[**cancelPublishArticle**](#cancelpublisharticle) | **POST** /v1/content/article/publish/cancel | |
+|[**collectArticle**](#collectarticle) | **POST** /v1/content/article/collect | |
+|[**countCollectedArticles**](#countcollectedarticles) | **POST** /v1/content/article/collect/count | |
+|[**createDraftArticle**](#createdraftarticle) | **POST** /v1/content/article/draft/create | |
+|[**discardDraftArticle**](#discarddraftarticle) | **POST** /v1/content/article/draft/discard | |
+|[**enterArticleLottery**](#enterarticlelottery) | **POST** /v1/content/article/lottery/entry | |
+|[**getArticle**](#getarticle) | **POST** /v1/content/article/get | |
+|[**likeArticle**](#likearticle) | **POST** /v1/content/article/like | |
+|[**listArticles**](#listarticles) | **POST** /v1/content/article/list | |
+|[**listFollowingArticles**](#listfollowingarticles) | **POST** /v1/content/article/following/list | |
+|[**listNearbyArticles**](#listnearbyarticles) | **POST** /v1/content/article/nearby/list | |
+|[**pageArticleViewHistory**](#pagearticleviewhistory) | **POST** /v1/content/article/view-history/page | |
+|[**pageCollectedArticles**](#pagecollectedarticles) | **POST** /v1/content/article/collected/page | |
+|[**pageWatchedArticles**](#pagewatchedarticles) | **POST** /v1/content/article/watched/page | |
+|[**publishArticle**](#publisharticle) | **POST** /v1/content/article/publish | |
+|[**rewardArticle**](#rewardarticle) | **POST** /v1/content/article/reward | |
+|[**setPinnedArticleComment**](#setpinnedarticlecomment) | **POST** /v1/content/article/comment/pin | |
+|[**thankArticle**](#thankarticle) | **POST** /v1/content/article/thank | |
+|[**updateDraftArticle**](#updatedraftarticle) | **POST** /v1/content/article/draft/update | |
+|[**voteArticlePoll**](#votearticlepoll) | **POST** /v1/content/article/poll/vote | |
+|[**watchArticle**](#watcharticle) | **POST** /v1/content/article/watch | |
 
-# **acceptAnswer**
-> object acceptAnswer(acceptArticleAnswerReq)
+# **acceptArticleAnswer**
+> object acceptArticleAnswer(acceptArticleAnswerReq)
 
 采纳文章回答
 
@@ -47,7 +47,7 @@ const apiInstance = new ArticleService(configuration);
 
 let acceptArticleAnswerReq: AcceptArticleAnswerReq; //
 
-const { status, data } = await apiInstance.acceptAnswer(
+const { status, data } = await apiInstance.acceptArticleAnswer(
     acceptArticleAnswerReq
 );
 ```
@@ -80,8 +80,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **archive**
-> object archive(archiveArticleReq)
+# **archiveArticle**
+> object archiveArticle(archiveArticleReq)
 
 归档文章
 
@@ -99,7 +99,7 @@ const apiInstance = new ArticleService(configuration);
 
 let archiveArticleReq: ArchiveArticleReq; //
 
-const { status, data } = await apiInstance.archive(
+const { status, data } = await apiInstance.archiveArticle(
     archiveArticleReq
 );
 ```
@@ -132,8 +132,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **cancelPublish**
-> object cancelPublish(cancelPublishArticleReq)
+# **cancelPublishArticle**
+> object cancelPublishArticle(cancelPublishArticleReq)
 
 取消定时发布
 
@@ -151,7 +151,7 @@ const apiInstance = new ArticleService(configuration);
 
 let cancelPublishArticleReq: CancelPublishArticleReq; //
 
-const { status, data } = await apiInstance.cancelPublish(
+const { status, data } = await apiInstance.cancelPublishArticle(
     cancelPublishArticleReq
 );
 ```
@@ -184,8 +184,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **collect**
-> CollectArticleResp collect(collectArticleReq)
+# **collectArticle**
+> CollectArticleResp collectArticle(collectArticleReq)
 
 收藏文章
 
@@ -203,7 +203,7 @@ const apiInstance = new ArticleService(configuration);
 
 let collectArticleReq: CollectArticleReq; //
 
-const { status, data } = await apiInstance.collect(
+const { status, data } = await apiInstance.collectArticle(
     collectArticleReq
 );
 ```
@@ -236,8 +236,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **countCollected**
-> CountCollectedArticlesResp countCollected(body)
+# **countCollectedArticles**
+> CountCollectedArticlesResp countCollectedArticles(body)
 
 统计当前账号收藏的文章数量。
 
@@ -254,7 +254,7 @@ const apiInstance = new ArticleService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.countCollected(
+const { status, data } = await apiInstance.countCollectedArticles(
     body
 );
 ```
@@ -287,8 +287,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **createDraft**
-> CreateDraftArticleResp createDraft(createDraftArticleReq)
+# **createDraftArticle**
+> CreateDraftArticleResp createDraftArticle(createDraftArticleReq)
 
 创建文章草稿
 
@@ -306,7 +306,7 @@ const apiInstance = new ArticleService(configuration);
 
 let createDraftArticleReq: CreateDraftArticleReq; //
 
-const { status, data } = await apiInstance.createDraft(
+const { status, data } = await apiInstance.createDraftArticle(
     createDraftArticleReq
 );
 ```
@@ -339,8 +339,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **discardDraft**
-> object discardDraft(discardDraftArticleReq)
+# **discardDraftArticle**
+> object discardDraftArticle(discardDraftArticleReq)
 
 丢弃文章草稿
 
@@ -358,7 +358,7 @@ const apiInstance = new ArticleService(configuration);
 
 let discardDraftArticleReq: DiscardDraftArticleReq; //
 
-const { status, data } = await apiInstance.discardDraft(
+const { status, data } = await apiInstance.discardDraftArticle(
     discardDraftArticleReq
 );
 ```
@@ -391,8 +391,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **enterLottery**
-> object enterLottery(enterArticleLotteryReq)
+# **enterArticleLottery**
+> object enterArticleLottery(enterArticleLotteryReq)
 
 报名或撤销抽奖报名。
 
@@ -410,7 +410,7 @@ const apiInstance = new ArticleService(configuration);
 
 let enterArticleLotteryReq: EnterArticleLotteryReq; //
 
-const { status, data } = await apiInstance.enterLottery(
+const { status, data } = await apiInstance.enterArticleLottery(
     enterArticleLotteryReq
 );
 ```
@@ -443,8 +443,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get**
-> GetArticleResp get(getArticleReq)
+# **getArticle**
+> GetArticleResp getArticle(getArticleReq)
 
 查询文章详情
 
@@ -462,7 +462,7 @@ const apiInstance = new ArticleService(configuration);
 
 let getArticleReq: GetArticleReq; //
 
-const { status, data } = await apiInstance.get(
+const { status, data } = await apiInstance.getArticle(
     getArticleReq
 );
 ```
@@ -495,8 +495,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **like**
-> LikeArticleResp like(likeArticleReq)
+# **likeArticle**
+> LikeArticleResp likeArticle(likeArticleReq)
 
 点赞文章
 
@@ -514,7 +514,7 @@ const apiInstance = new ArticleService(configuration);
 
 let likeArticleReq: LikeArticleReq; //
 
-const { status, data } = await apiInstance.like(
+const { status, data } = await apiInstance.likeArticle(
     likeArticleReq
 );
 ```
@@ -547,8 +547,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> ListArticlesResp list(listArticlesReq)
+# **listArticles**
+> ListArticlesResp listArticles(listArticlesReq)
 
 查询文章列表
 
@@ -566,7 +566,7 @@ const apiInstance = new ArticleService(configuration);
 
 let listArticlesReq: ListArticlesReq; //
 
-const { status, data } = await apiInstance.list(
+const { status, data } = await apiInstance.listArticles(
     listArticlesReq
 );
 ```
@@ -599,8 +599,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listFollowing**
-> ListFollowingArticlesResp listFollowing(listFollowingArticlesReq)
+# **listFollowingArticles**
+> ListFollowingArticlesResp listFollowingArticles(listFollowingArticlesReq)
 
 查询当前账号关注作者发布的文章。
 
@@ -618,7 +618,7 @@ const apiInstance = new ArticleService(configuration);
 
 let listFollowingArticlesReq: ListFollowingArticlesReq; //
 
-const { status, data } = await apiInstance.listFollowing(
+const { status, data } = await apiInstance.listFollowingArticles(
     listFollowingArticlesReq
 );
 ```
@@ -651,8 +651,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listNearby**
-> ListNearbyArticlesResp listNearby(listNearbyArticlesReq)
+# **listNearbyArticles**
+> ListNearbyArticlesResp listNearbyArticles(listNearbyArticlesReq)
 
 查询当前账号所在城市发布的文章。
 
@@ -670,7 +670,7 @@ const apiInstance = new ArticleService(configuration);
 
 let listNearbyArticlesReq: ListNearbyArticlesReq; //
 
-const { status, data } = await apiInstance.listNearby(
+const { status, data } = await apiInstance.listNearbyArticles(
     listNearbyArticlesReq
 );
 ```
@@ -703,60 +703,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **pageCollected**
-> PageCollectedArticlesResp pageCollected(pageCollectedArticlesReq)
-
-查询当前账号收藏的文章。
-
-### Example
-
-```typescript
-import {
-    ArticleService,
-    Configuration,
-    PageCollectedArticlesReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new ArticleService(configuration);
-
-let pageCollectedArticlesReq: PageCollectedArticlesReq; //
-
-const { status, data } = await apiInstance.pageCollected(
-    pageCollectedArticlesReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **pageCollectedArticlesReq** | **PageCollectedArticlesReq**|  | |
-
-
-### Return type
-
-**PageCollectedArticlesResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **pageViewHistory**
-> PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
+# **pageArticleViewHistory**
+> PageArticleViewHistoryResp pageArticleViewHistory(pageArticleViewHistoryReq)
 
 查询当前账号的浏览历史。
 
@@ -774,7 +722,7 @@ const apiInstance = new ArticleService(configuration);
 
 let pageArticleViewHistoryReq: PageArticleViewHistoryReq; //
 
-const { status, data } = await apiInstance.pageViewHistory(
+const { status, data } = await apiInstance.pageArticleViewHistory(
     pageArticleViewHistoryReq
 );
 ```
@@ -807,8 +755,60 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **pageWatched**
-> PageWatchedArticlesResp pageWatched(pageWatchedArticlesReq)
+# **pageCollectedArticles**
+> PageCollectedArticlesResp pageCollectedArticles(pageCollectedArticlesReq)
+
+查询当前账号收藏的文章。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    PageCollectedArticlesReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let pageCollectedArticlesReq: PageCollectedArticlesReq; //
+
+const { status, data } = await apiInstance.pageCollectedArticles(
+    pageCollectedArticlesReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **pageCollectedArticlesReq** | **PageCollectedArticlesReq**|  | |
+
+
+### Return type
+
+**PageCollectedArticlesResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **pageWatchedArticles**
+> PageWatchedArticlesResp pageWatchedArticles(pageWatchedArticlesReq)
 
 查询当前账号关注的文章。
 
@@ -826,7 +826,7 @@ const apiInstance = new ArticleService(configuration);
 
 let pageWatchedArticlesReq: PageWatchedArticlesReq; //
 
-const { status, data } = await apiInstance.pageWatched(
+const { status, data } = await apiInstance.pageWatchedArticles(
     pageWatchedArticlesReq
 );
 ```
@@ -859,8 +859,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **publish**
-> object publish(publishArticleReq)
+# **publishArticle**
+> object publishArticle(publishArticleReq)
 
 发布文章
 
@@ -878,7 +878,7 @@ const apiInstance = new ArticleService(configuration);
 
 let publishArticleReq: PublishArticleReq; //
 
-const { status, data } = await apiInstance.publish(
+const { status, data } = await apiInstance.publishArticle(
     publishArticleReq
 );
 ```
@@ -911,8 +911,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **reward**
-> RewardArticleResp reward(rewardArticleReq)
+# **rewardArticle**
+> RewardArticleResp rewardArticle(rewardArticleReq)
 
 打赏文章
 
@@ -930,7 +930,7 @@ const apiInstance = new ArticleService(configuration);
 
 let rewardArticleReq: RewardArticleReq; //
 
-const { status, data } = await apiInstance.reward(
+const { status, data } = await apiInstance.rewardArticle(
     rewardArticleReq
 );
 ```
@@ -963,8 +963,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **setPinnedComment**
-> object setPinnedComment(setPinnedArticleCommentReq)
+# **setPinnedArticleComment**
+> object setPinnedArticleComment(setPinnedArticleCommentReq)
 
 设置或取消当前账号文章的置顶评论。
 
@@ -982,7 +982,7 @@ const apiInstance = new ArticleService(configuration);
 
 let setPinnedArticleCommentReq: SetPinnedArticleCommentReq; //
 
-const { status, data } = await apiInstance.setPinnedComment(
+const { status, data } = await apiInstance.setPinnedArticleComment(
     setPinnedArticleCommentReq
 );
 ```
@@ -1015,8 +1015,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **thank**
-> ThankArticleResp thank(thankArticleReq)
+# **thankArticle**
+> ThankArticleResp thankArticle(thankArticleReq)
 
 感谢文章，确认后不可撤销。
 
@@ -1034,7 +1034,7 @@ const apiInstance = new ArticleService(configuration);
 
 let thankArticleReq: ThankArticleReq; //
 
-const { status, data } = await apiInstance.thank(
+const { status, data } = await apiInstance.thankArticle(
     thankArticleReq
 );
 ```
@@ -1067,8 +1067,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updateDraft**
-> UpdateDraftArticleResp updateDraft(updateDraftArticleReq)
+# **updateDraftArticle**
+> UpdateDraftArticleResp updateDraftArticle(updateDraftArticleReq)
 
 编辑文章草稿
 
@@ -1086,7 +1086,7 @@ const apiInstance = new ArticleService(configuration);
 
 let updateDraftArticleReq: UpdateDraftArticleReq; //
 
-const { status, data } = await apiInstance.updateDraft(
+const { status, data } = await apiInstance.updateDraftArticle(
     updateDraftArticleReq
 );
 ```
@@ -1119,8 +1119,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **votePoll**
-> object votePoll(voteArticlePollReq)
+# **voteArticlePoll**
+> object voteArticlePoll(voteArticlePollReq)
 
 提交一次不可修改的文章投票。
 
@@ -1138,7 +1138,7 @@ const apiInstance = new ArticleService(configuration);
 
 let voteArticlePollReq: VoteArticlePollReq; //
 
-const { status, data } = await apiInstance.votePoll(
+const { status, data } = await apiInstance.voteArticlePoll(
     voteArticlePollReq
 );
 ```
@@ -1171,8 +1171,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **watch**
-> WatchArticleResp watch(watchArticleReq)
+# **watchArticle**
+> WatchArticleResp watchArticle(watchArticleReq)
 
 关注文章
 
@@ -1190,7 +1190,7 @@ const apiInstance = new ArticleService(configuration);
 
 let watchArticleReq: WatchArticleReq; //
 
-const { status, data } = await apiInstance.watch(
+const { status, data } = await apiInstance.watchArticle(
     watchArticleReq
 );
 ```

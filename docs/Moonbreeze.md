@@ -1,15 +1,16 @@
 # Moonbreeze
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**content** | **string** |  | [optional] [default to undefined]
-**author** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
-**city** | **string** |  | [optional] [default to undefined]
-**created_at** | **string** |  | [optional] [default to undefined]
+**id** | **string** | 协议字段。 | [optional] [default to undefined]
+**content** | **string** | 协议字段。 | [optional] [default to undefined]
+**author** | [**AccountProfile**](AccountProfile.md) | 协议字段。 | [optional] [default to undefined]
+**city** | **string** | 协议字段。 | [optional] [default to undefined]
+**created_at** | **string** | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

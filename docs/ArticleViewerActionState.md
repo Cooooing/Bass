@@ -1,15 +1,16 @@
 # ArticleViewerActionState
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**liked** | **boolean** |  | [optional] [default to undefined]
-**thanked** | **boolean** |  | [optional] [default to undefined]
-**collected** | **boolean** |  | [optional] [default to undefined]
-**rewarded** | **boolean** |  | [optional] [default to undefined]
-**watched** | **boolean** |  | [optional] [default to undefined]
+**liked** | **boolean** | 是否已点赞 | [optional] [default to undefined]
+**thanked** | **boolean** | 是否已感谢 | [optional] [default to undefined]
+**collected** | **boolean** | 是否已收藏 | [optional] [default to undefined]
+**rewarded** | **boolean** | 是否已打赏 | [optional] [default to undefined]
+**watched** | **boolean** | 是否已关注 | [optional] [default to undefined]
 
 ## Example
 

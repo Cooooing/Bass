@@ -1,11 +1,12 @@
 # RenameEmojiGroupResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group** | [**EmojiGroup**](EmojiGroup.md) |  | [optional] [default to undefined]
+**group** | [**EmojiGroup**](EmojiGroup.md) | 已重命名分组。 | [optional] [default to undefined]
 
 ## Example
 

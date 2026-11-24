@@ -1,18 +1,19 @@
 # PrivateChatSession
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**peer_user_id** | **string** |  | [optional] [default to undefined]
-**last_read_message_id** | **string** |  | [optional] [default to undefined]
-**unread_count** | **number** |  | [optional] [default to undefined]
-**muted** | **boolean** |  | [optional] [default to undefined]
-**pinned** | **boolean** |  | [optional] [default to undefined]
-**last_message** | [**PrivateChatMessage**](PrivateChatMessage.md) |  | [optional] [default to undefined]
-**last_message_at** | **string** |  | [optional] [default to undefined]
-**peer** | [**PrivateChatMember**](PrivateChatMember.md) |  | [optional] [default to undefined]
+**peer_user_id** | **string** | 对端账号 ID。 | [optional] [default to undefined]
+**last_read_message_id** | **string** | 最后已读消息 ID。 | [optional] [default to undefined]
+**unread_count** | **number** | 未读消息数。 | [optional] [default to undefined]
+**muted** | **boolean** | 是否免打扰。 | [optional] [default to undefined]
+**pinned** | **boolean** | 是否置顶。 | [optional] [default to undefined]
+**last_message** | [**PrivateChatMessage**](PrivateChatMessage.md) | 最后一条消息。 | [optional] [default to undefined]
+**last_message_at** | **string** | 最后消息时间。 | [optional] [default to undefined]
+**peer** | [**PrivateChatMember**](PrivateChatMember.md) | 对端展示资料。 | [optional] [default to undefined]
 
 ## Example
 

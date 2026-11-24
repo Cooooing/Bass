@@ -1,12 +1,13 @@
 # UnbindArticleTagsReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**tag_ids** | **Array&lt;string&gt;** |  | [default to undefined]
+**article_id** | **string** | 文章 ID | [default to undefined]
+**tag_ids** | **Array&lt;string&gt;** | 标签 ID 列表 | [default to undefined]
 
 ## Example
 

@@ -1,12 +1,13 @@
 # RenameEmojiGroupReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group_id** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
+**group_id** | **string** | 待修改分组 ID。 | [optional] [default to undefined]
+**name** | **string** | 新分组名称。 | [optional] [default to undefined]
 
 ## Example
 

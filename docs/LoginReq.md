@@ -1,14 +1,15 @@
 # LoginReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **string** |  | [default to undefined]
-**password_credential** | [**ReqPasswordCredential**](ReqPasswordCredential.md) |  | [optional] [default to undefined]
-**email_credential** | [**ReqEmailCredential**](ReqEmailCredential.md) |  | [optional] [default to undefined]
-**phone_credential** | [**ReqPhoneCredential**](ReqPhoneCredential.md) |  | [optional] [default to undefined]
+**type** | **string** | 登录方式 | [default to undefined]
+**password_credential** | [**ReqPasswordCredential**](ReqPasswordCredential.md) | 密码登录凭证 | [optional] [default to undefined]
+**email_credential** | [**ReqEmailCredential**](ReqEmailCredential.md) | 邮箱登录凭证 | [optional] [default to undefined]
+**phone_credential** | [**ReqPhoneCredential**](ReqPhoneCredential.md) | 手机登录凭证 | [optional] [default to undefined]
 
 ## Example
 

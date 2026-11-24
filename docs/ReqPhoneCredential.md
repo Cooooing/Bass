@@ -1,12 +1,13 @@
 # ReqPhoneCredential
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**phone** | **string** |  | [optional] [default to undefined]
-**code** | **string** |  | [optional] [default to undefined]
+**phone** | **string** | 手机号 | [optional] [default to undefined]
+**code** | **string** | 手机 OTP | [optional] [default to undefined]
 
 ## Example
 

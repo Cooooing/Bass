@@ -6,9 +6,9 @@ EmojiGroup 是当前账号可操作的表情分组。
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
-**items** | [**Array&lt;EmojiItem&gt;**](EmojiItem.md) |  | [optional] [default to undefined]
+**id** | **string** | 分组 ID。 | [optional] [default to undefined]
+**name** | **string** | 分组名称。 | [optional] [default to undefined]
+**items** | [**Array&lt;EmojiItem&gt;**](EmojiItem.md) | 分组内可用表情。 | [optional] [default to undefined]
 
 ## Example
 

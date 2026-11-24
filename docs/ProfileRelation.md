@@ -1,14 +1,15 @@
 # ProfileRelation
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**following** | **boolean** |  | [optional] [default to undefined]
-**followed_by** | **boolean** |  | [optional] [default to undefined]
-**blocking** | **boolean** |  | [optional] [default to undefined]
-**blocked_by** | **boolean** |  | [optional] [default to undefined]
+**following** | **boolean** | 协议字段。 | [optional] [default to undefined]
+**followed_by** | **boolean** | 协议字段。 | [optional] [default to undefined]
+**blocking** | **boolean** | 协议字段。 | [optional] [default to undefined]
+**blocked_by** | **boolean** | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,12 +1,13 @@
 # UpdateEmailAccountReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **string** |  | [default to undefined]
-**code** | **string** |  | [default to undefined]
+**email** | **string** | 新邮箱地址，必填 | [default to undefined]
+**code** | **string** | 邮箱 OTP，必填 | [default to undefined]
 
 ## Example
 

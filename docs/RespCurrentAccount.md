@@ -1,13 +1,14 @@
 # RespCurrentAccount
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**profile** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
-**contact** | [**AccountContact**](AccountContact.md) |  | [optional] [default to undefined]
-**location** | [**ProfileLocation**](ProfileLocation.md) |  | [optional] [default to undefined]
+**profile** | [**AccountProfile**](AccountProfile.md) | 账号展示资料 | [optional] [default to undefined]
+**contact** | [**AccountContact**](AccountContact.md) | 账号联系方式 | [optional] [default to undefined]
+**location** | [**ProfileLocation**](ProfileLocation.md) | 当前账号地理资料 | [optional] [default to undefined]
 
 ## Example
 

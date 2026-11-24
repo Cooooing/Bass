@@ -1,12 +1,13 @@
 # VoteArticlePollReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**option_ids** | **Array&lt;string&gt;** |  | [default to undefined]
+**article_id** | **string** | 必填，文章 ID | [default to undefined]
+**option_ids** | **Array&lt;string&gt;** | 必填，所选选项 ID | [default to undefined]
 
 ## Example
 

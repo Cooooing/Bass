@@ -1,11 +1,12 @@
 # ImportEmojiShareReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
+**code** | **string** | 待导入分享码。 | [optional] [default to undefined]
 
 ## Example
 

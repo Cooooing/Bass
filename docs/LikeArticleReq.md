@@ -1,12 +1,13 @@
 # LikeArticleReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**active** | **boolean** |  | [default to undefined]
+**article_id** | **string** | 必填，文章 ID | [default to undefined]
+**active** | **boolean** | 必填，是否点赞 | [default to undefined]
 
 ## Example
 

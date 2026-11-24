@@ -1,11 +1,12 @@
 # UpdateDraftArticleResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [optional] [default to undefined]
+**article_id** | **string** | 已保存草稿的文章 ID | [optional] [default to undefined]
 
 ## Example
 

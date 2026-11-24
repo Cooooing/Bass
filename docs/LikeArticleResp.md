@@ -1,11 +1,12 @@
 # LikeArticleResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**liked** | **boolean** |  | [optional] [default to undefined]
+**liked** | **boolean** | 是否已点赞 | [optional] [default to undefined]
 
 ## Example
 

@@ -4,14 +4,15 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**create**](#create) | **POST** /v1/content/moonbreeze/create | |
-|[**pageMember**](#pagemember) | **POST** /v1/content/moonbreeze/page-member | |
-|[**pagePublic**](#pagepublic) | **POST** /v1/content/moonbreeze/page-public | |
-|[**pageWatching**](#pagewatching) | **POST** /v1/content/moonbreeze/page-watching | |
+|[**createMoonbreeze**](#createmoonbreeze) | **POST** /v1/content/moonbreeze/create | |
+|[**pageMemberMoonbreezes**](#pagemembermoonbreezes) | **POST** /v1/content/moonbreeze/page-member | |
+|[**pagePublicMoonbreezes**](#pagepublicmoonbreezes) | **POST** /v1/content/moonbreeze/page-public | |
+|[**pageWatchingMoonbreezes**](#pagewatchingmoonbreezes) | **POST** /v1/content/moonbreeze/page-watching | |
 
-# **create**
-> CreateMoonbreezeResp create(createMoonbreezeReq)
+# **createMoonbreeze**
+> CreateMoonbreezeResp createMoonbreeze(createMoonbreezeReq)
 
+服务方法。
 
 ### Example
 
@@ -27,7 +28,7 @@ const apiInstance = new MoonbreezeService(configuration);
 
 let createMoonbreezeReq: CreateMoonbreezeReq; //
 
-const { status, data } = await apiInstance.create(
+const { status, data } = await apiInstance.createMoonbreeze(
     createMoonbreezeReq
 );
 ```
@@ -60,9 +61,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **pageMember**
-> PageMoonbreezesResp pageMember(pageMemberMoonbreezesReq)
+# **pageMemberMoonbreezes**
+> PageMemberMoonbreezesResp pageMemberMoonbreezes(pageMemberMoonbreezesReq)
 
+服务方法。
 
 ### Example
 
@@ -78,7 +80,7 @@ const apiInstance = new MoonbreezeService(configuration);
 
 let pageMemberMoonbreezesReq: PageMemberMoonbreezesReq; //
 
-const { status, data } = await apiInstance.pageMember(
+const { status, data } = await apiInstance.pageMemberMoonbreezes(
     pageMemberMoonbreezesReq
 );
 ```
@@ -92,7 +94,7 @@ const { status, data } = await apiInstance.pageMember(
 
 ### Return type
 
-**PageMoonbreezesResp**
+**PageMemberMoonbreezesResp**
 
 ### Authorization
 
@@ -111,9 +113,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **pagePublic**
-> PageMoonbreezesResp pagePublic(pagePublicMoonbreezesReq)
+# **pagePublicMoonbreezes**
+> PagePublicMoonbreezesResp pagePublicMoonbreezes(pagePublicMoonbreezesReq)
 
+服务方法。
 
 ### Example
 
@@ -129,7 +132,7 @@ const apiInstance = new MoonbreezeService(configuration);
 
 let pagePublicMoonbreezesReq: PagePublicMoonbreezesReq; //
 
-const { status, data } = await apiInstance.pagePublic(
+const { status, data } = await apiInstance.pagePublicMoonbreezes(
     pagePublicMoonbreezesReq
 );
 ```
@@ -143,7 +146,7 @@ const { status, data } = await apiInstance.pagePublic(
 
 ### Return type
 
-**PageMoonbreezesResp**
+**PagePublicMoonbreezesResp**
 
 ### Authorization
 
@@ -162,9 +165,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **pageWatching**
-> PageMoonbreezesResp pageWatching(pageWatchingMoonbreezesReq)
+# **pageWatchingMoonbreezes**
+> PageWatchingMoonbreezesResp pageWatchingMoonbreezes(pageWatchingMoonbreezesReq)
 
+服务方法。
 
 ### Example
 
@@ -180,7 +184,7 @@ const apiInstance = new MoonbreezeService(configuration);
 
 let pageWatchingMoonbreezesReq: PageWatchingMoonbreezesReq; //
 
-const { status, data } = await apiInstance.pageWatching(
+const { status, data } = await apiInstance.pageWatchingMoonbreezes(
     pageWatchingMoonbreezesReq
 );
 ```
@@ -194,7 +198,7 @@ const { status, data } = await apiInstance.pageWatching(
 
 ### Return type
 
-**PageMoonbreezesResp**
+**PageWatchingMoonbreezesResp**
 
 ### Authorization
 

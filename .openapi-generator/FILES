@@ -34,6 +34,7 @@ docs/ArticleViewHistoryItem.md
 docs/ArticleViewerActionState.md
 docs/AssetService.md
 docs/AuthService.md
+docs/AvatarAccountResp.md
 docs/BadgeDraft.md
 docs/BadgeService.md
 docs/BeginEnableTotpResp.md
@@ -180,13 +181,15 @@ docs/PageArticleViewHistoryResp.md
 docs/PageCollectedArticlesReq.md
 docs/PageCollectedArticlesResp.md
 docs/PageMemberMoonbreezesReq.md
-docs/PageMoonbreezesResp.md
+docs/PageMemberMoonbreezesResp.md
 docs/PagePublicMoonbreezesReq.md
+docs/PagePublicMoonbreezesResp.md
 docs/PageReq.md
 docs/PageResp.md
 docs/PageWatchedArticlesReq.md
 docs/PageWatchedArticlesResp.md
 docs/PageWatchingMoonbreezesReq.md
+docs/PageWatchingMoonbreezesResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
 docs/PrepareBadgeFontUploadReq.md
@@ -217,6 +220,8 @@ docs/RenameEmojiGroupReq.md
 docs/RenameEmojiGroupResp.md
 docs/RenameEmojiItemReq.md
 docs/RenameEmojiItemResp.md
+docs/RenderMakerBadgeResp.md
+docs/RenderPublishedBadgeResp.md
 docs/RenderSpec.md
 docs/ReorderEmojiGroupsReq.md
 docs/ReorderEmojiItemsReq.md

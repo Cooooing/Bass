@@ -1,12 +1,13 @@
 # UpdateDomainReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**domain_id** | **string** |  | [default to undefined]
-**domain** | [**ReqDomain**](ReqDomain.md) |  | [default to undefined]
+**domain_id** | **string** | 领域 ID | [default to undefined]
+**domain** | [**ReqDomain**](ReqDomain.md) | 领域信息 | [default to undefined]
 
 ## Example
 

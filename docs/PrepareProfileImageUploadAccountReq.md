@@ -1,14 +1,15 @@
 # PrepareProfileImageUploadAccountReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**purpose** | **string** |  | [default to undefined]
-**hash** | **string** |  | [default to undefined]
-**mime_type** | **string** |  | [default to undefined]
-**size** | **string** |  | [default to undefined]
+**purpose** | **string** | 图片用途，必填；仅用于 BFF 业务校验 | [default to undefined]
+**hash** | **string** | 文件 SHA-256，小写十六进制 | [default to undefined]
+**mime_type** | **string** | 上传 MIME 类型 | [default to undefined]
+**size** | **string** | 文件大小，最大 2 MiB | [default to undefined]
 
 ## Example
 

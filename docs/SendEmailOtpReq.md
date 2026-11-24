@@ -1,11 +1,12 @@
 # SendEmailOtpReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **string** |  | [default to undefined]
+**email** | **string** | 邮箱地址 | [default to undefined]
 
 ## Example
 

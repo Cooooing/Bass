@@ -1,11 +1,12 @@
 # DeleteEmojiGroupReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group_id** | **string** |  | [optional] [default to undefined]
+**group_id** | **string** | 待删除分组 ID。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,11 +1,12 @@
 # CreateTagResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**tag** | [**RespTag**](RespTag.md) |  | [optional] [default to undefined]
+**tag** | [**RespTag**](RespTag.md) | 标签信息 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,11 +1,12 @@
 # CreateMoonbreezeReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **string** |  | [optional] [default to undefined]
+**content** | **string** | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

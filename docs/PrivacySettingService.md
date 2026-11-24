@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**getCurrent**](#getcurrent) | **POST** /v1/user/privacy-setting/get-current | |
-|[**updateCurrent**](#updatecurrent) | **POST** /v1/user/privacy-setting/update-current | |
+|[**getCurrentPrivacySetting**](#getcurrentprivacysetting) | **POST** /v1/user/privacy-setting/get-current | |
+|[**updateCurrentPrivacySetting**](#updatecurrentprivacysetting) | **POST** /v1/user/privacy-setting/update-current | |
 
-# **getCurrent**
-> GetCurrentPrivacySettingResp getCurrent(body)
+# **getCurrentPrivacySetting**
+> GetCurrentPrivacySettingResp getCurrentPrivacySetting(body)
 
 获取当前账号的隐私设置。
 
@@ -25,7 +25,7 @@ const apiInstance = new PrivacySettingService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.getCurrent(
+const { status, data } = await apiInstance.getCurrentPrivacySetting(
     body
 );
 ```
@@ -58,8 +58,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updateCurrent**
-> UpdateCurrentPrivacySettingResp updateCurrent(updateCurrentPrivacySettingReq)
+# **updateCurrentPrivacySetting**
+> UpdateCurrentPrivacySettingResp updateCurrentPrivacySetting(updateCurrentPrivacySettingReq)
 
 更新当前账号的隐私设置。
 
@@ -77,7 +77,7 @@ const apiInstance = new PrivacySettingService(configuration);
 
 let updateCurrentPrivacySettingReq: UpdateCurrentPrivacySettingReq; //
 
-const { status, data } = await apiInstance.updateCurrent(
+const { status, data } = await apiInstance.updateCurrentPrivacySetting(
     updateCurrentPrivacySettingReq
 );
 ```

@@ -1,12 +1,13 @@
 # LikeCommentReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [default to undefined]
-**active** | **boolean** |  | [default to undefined]
+**id** | **string** | 评论 ID | [default to undefined]
+**active** | **boolean** | 是否点赞 | [default to undefined]
 
 ## Example
 

@@ -1,11 +1,12 @@
 # ThankCommentResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**thanked** | **boolean** |  | [optional] [default to undefined]
+**thanked** | **boolean** | 是否已感谢 | [optional] [default to undefined]
 
 ## Example
 

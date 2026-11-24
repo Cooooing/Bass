@@ -1,13 +1,14 @@
 # ArticlePollOption
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**content** | **string** |  | [optional] [default to undefined]
-**vote_count** | **number** |  | [optional] [default to undefined]
+**id** | **string** | 选项 ID | [optional] [default to undefined]
+**content** | **string** | 选项内容 | [optional] [default to undefined]
+**vote_count** | **number** | 可见时的票数 | [optional] [default to undefined]
 
 ## Example
 

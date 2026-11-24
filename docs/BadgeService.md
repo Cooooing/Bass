@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**deleteDraft**](#deletedraft) | **POST** /v1/badge/draft/delete | |
-|[**listDrafts**](#listdrafts) | **POST** /v1/badge/draft/list | |
-|[**renderMaker**](#rendermaker) | **GET** /v1/badge/maker/render | |
-|[**renderPublished**](#renderpublished) | **GET** /v1/badge/render | |
-|[**upsertDraft**](#upsertdraft) | **POST** /v1/badge/draft/upsert | |
+|[**deleteBadgeDraft**](#deletebadgedraft) | **POST** /v1/badge/draft/delete | |
+|[**listBadgeDrafts**](#listbadgedrafts) | **POST** /v1/badge/draft/list | |
+|[**renderMakerBadge**](#rendermakerbadge) | **GET** /v1/badge/maker/render | |
+|[**renderPublishedBadge**](#renderpublishedbadge) | **GET** /v1/badge/render | |
+|[**upsertBadgeDraft**](#upsertbadgedraft) | **POST** /v1/badge/draft/upsert | |
 
-# **deleteDraft**
-> object deleteDraft(deleteBadgeDraftReq)
+# **deleteBadgeDraft**
+> object deleteBadgeDraft(deleteBadgeDraftReq)
 
 DeleteDraft 删除一个未发布草稿。
 
@@ -29,7 +29,7 @@ const apiInstance = new BadgeService(configuration);
 
 let deleteBadgeDraftReq: DeleteBadgeDraftReq; //
 
-const { status, data } = await apiInstance.deleteDraft(
+const { status, data } = await apiInstance.deleteBadgeDraft(
     deleteBadgeDraftReq
 );
 ```
@@ -62,8 +62,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listDrafts**
-> ListBadgeDraftsResp listDrafts(body)
+# **listBadgeDrafts**
+> ListBadgeDraftsResp listBadgeDrafts(body)
 
 ListDrafts 返回当前登录用户的徽章草稿。
 
@@ -80,7 +80,7 @@ const apiInstance = new BadgeService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.listDrafts(
+const { status, data } = await apiInstance.listBadgeDrafts(
     body
 );
 ```
@@ -113,8 +113,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **renderMaker**
-> ImageResp renderMaker()
+# **renderMakerBadge**
+> RenderMakerBadgeResp renderMakerBadge()
 
 RenderMaker 仅允许已登录用户预览其提交的完整 Maker 参数。
 
@@ -129,23 +129,23 @@ import {
 const configuration = new Configuration();
 const apiInstance = new BadgeService(configuration);
 
-let renderSpecImageAssetId: string; // (optional) (default to undefined)
-let renderSpecText: string; // (optional) (default to undefined)
-let renderSpecBackgroundColors: Array<string>; // (optional) (default to undefined)
-let renderSpecTextColors: Array<string>; // (optional) (default to undefined)
-let renderSpecBackgroundDirection: string; // (optional) (default to undefined)
-let renderSpecTextDirection: string; // (optional) (default to undefined)
-let renderSpecSize: number; // (optional) (default to undefined)
-let renderSpecBorder: number; // (optional) (default to undefined)
-let renderSpecTextBarLength: number; // (optional) (default to undefined)
-let renderSpecTextSize: number; // (optional) (default to undefined)
-let renderSpecTextBarRadius: number; // (optional) (default to undefined)
-let renderSpecScale: number; // (optional) (default to undefined)
-let renderSpecShadow: number; // (optional) (default to undefined)
-let renderSpecAnimationSeconds: number; // (optional) (default to undefined)
-let renderSpecFontAssetId: string; // (optional) (default to undefined)
+let renderSpecImageAssetId: string; //Platform 已确认可用的徽章图标资源 ID。 (optional) (default to undefined)
+let renderSpecText: string; //文字条内容。 (optional) (default to undefined)
+let renderSpecBackgroundColors: Array<string>; //背景颜色列表。 (optional) (default to undefined)
+let renderSpecTextColors: Array<string>; //文字颜色列表。 (optional) (default to undefined)
+let renderSpecBackgroundDirection: string; //背景渐变方向或角度。 (optional) (default to undefined)
+let renderSpecTextDirection: string; //文字渐变方向或角度。 (optional) (default to undefined)
+let renderSpecSize: number; //图标边长。 (optional) (default to undefined)
+let renderSpecBorder: number; //图标边距。 (optional) (default to undefined)
+let renderSpecTextBarLength: number; //文字条长度。 (optional) (default to undefined)
+let renderSpecTextSize: number; //文字字号。 (optional) (default to undefined)
+let renderSpecTextBarRadius: number; //文字条圆角。 (optional) (default to undefined)
+let renderSpecScale: number; //整体缩放比例。 (optional) (default to undefined)
+let renderSpecShadow: number; //阴影强度。 (optional) (default to undefined)
+let renderSpecAnimationSeconds: number; //动画时长。 (optional) (default to undefined)
+let renderSpecFontAssetId: string; //Platform 已确认可用的自定义字体资源 ID。 (optional) (default to undefined)
 
-const { status, data } = await apiInstance.renderMaker(
+const { status, data } = await apiInstance.renderMakerBadge(
     renderSpecImageAssetId,
     renderSpecText,
     renderSpecBackgroundColors,
@@ -168,26 +168,26 @@ const { status, data } = await apiInstance.renderMaker(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **renderSpecImageAssetId** | [**string**] |  | (optional) defaults to undefined|
-| **renderSpecText** | [**string**] |  | (optional) defaults to undefined|
-| **renderSpecBackgroundColors** | **Array&lt;string&gt;** |  | (optional) defaults to undefined|
-| **renderSpecTextColors** | **Array&lt;string&gt;** |  | (optional) defaults to undefined|
-| **renderSpecBackgroundDirection** | [**string**] |  | (optional) defaults to undefined|
-| **renderSpecTextDirection** | [**string**] |  | (optional) defaults to undefined|
-| **renderSpecSize** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecBorder** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecTextBarLength** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecTextSize** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecTextBarRadius** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecScale** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecShadow** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecAnimationSeconds** | [**number**] |  | (optional) defaults to undefined|
-| **renderSpecFontAssetId** | [**string**] |  | (optional) defaults to undefined|
+| **renderSpecImageAssetId** | [**string**] | Platform 已确认可用的徽章图标资源 ID。 | (optional) defaults to undefined|
+| **renderSpecText** | [**string**] | 文字条内容。 | (optional) defaults to undefined|
+| **renderSpecBackgroundColors** | **Array&lt;string&gt;** | 背景颜色列表。 | (optional) defaults to undefined|
+| **renderSpecTextColors** | **Array&lt;string&gt;** | 文字颜色列表。 | (optional) defaults to undefined|
+| **renderSpecBackgroundDirection** | [**string**] | 背景渐变方向或角度。 | (optional) defaults to undefined|
+| **renderSpecTextDirection** | [**string**] | 文字渐变方向或角度。 | (optional) defaults to undefined|
+| **renderSpecSize** | [**number**] | 图标边长。 | (optional) defaults to undefined|
+| **renderSpecBorder** | [**number**] | 图标边距。 | (optional) defaults to undefined|
+| **renderSpecTextBarLength** | [**number**] | 文字条长度。 | (optional) defaults to undefined|
+| **renderSpecTextSize** | [**number**] | 文字字号。 | (optional) defaults to undefined|
+| **renderSpecTextBarRadius** | [**number**] | 文字条圆角。 | (optional) defaults to undefined|
+| **renderSpecScale** | [**number**] | 整体缩放比例。 | (optional) defaults to undefined|
+| **renderSpecShadow** | [**number**] | 阴影强度。 | (optional) defaults to undefined|
+| **renderSpecAnimationSeconds** | [**number**] | 动画时长。 | (optional) defaults to undefined|
+| **renderSpecFontAssetId** | [**string**] | Platform 已确认可用的自定义字体资源 ID。 | (optional) defaults to undefined|
 
 
 ### Return type
 
-**ImageResp**
+**RenderMakerBadgeResp**
 
 ### Authorization
 
@@ -206,8 +206,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **renderPublished**
-> ImageResp renderPublished()
+# **renderPublishedBadge**
+> RenderPublishedBadgeResp renderPublishedBadge()
 
 RenderPublished 匿名返回一个已发布徽章的主站 SVG。
 
@@ -222,9 +222,9 @@ import {
 const configuration = new Configuration();
 const apiInstance = new BadgeService(configuration);
 
-let code: string; // (optional) (default to undefined)
+let code: string; //已发布徽章稳定编码。 (optional) (default to undefined)
 
-const { status, data } = await apiInstance.renderPublished(
+const { status, data } = await apiInstance.renderPublishedBadge(
     code
 );
 ```
@@ -233,12 +233,12 @@ const { status, data } = await apiInstance.renderPublished(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **code** | [**string**] |  | (optional) defaults to undefined|
+| **code** | [**string**] | 已发布徽章稳定编码。 | (optional) defaults to undefined|
 
 
 ### Return type
 
-**ImageResp**
+**RenderPublishedBadgeResp**
 
 ### Authorization
 
@@ -257,8 +257,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **upsertDraft**
-> UpsertBadgeDraftResp upsertDraft(upsertBadgeDraftReq)
+# **upsertBadgeDraft**
+> UpsertBadgeDraftResp upsertBadgeDraft(upsertBadgeDraftReq)
 
 UpsertDraft 保存当前登录用户的徽章草稿。
 
@@ -276,7 +276,7 @@ const apiInstance = new BadgeService(configuration);
 
 let upsertBadgeDraftReq: UpsertBadgeDraftReq; //
 
-const { status, data } = await apiInstance.upsertDraft(
+const { status, data } = await apiInstance.upsertBadgeDraft(
     upsertBadgeDraftReq
 );
 ```

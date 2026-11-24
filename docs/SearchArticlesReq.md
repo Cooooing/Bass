@@ -1,13 +1,14 @@
 # SearchArticlesReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**query** | **string** |  | [default to undefined]
-**cursor** | **string** |  | [optional] [default to undefined]
-**size** | **number** |  | [optional] [default to undefined]
+**query** | **string** | 必填，搜索词 | [default to undefined]
+**cursor** | **string** | 可选，不透明续页游标 | [optional] [default to undefined]
+**size** | **number** | 可选，返回条数 | [optional] [default to undefined]
 
 ## Example
 

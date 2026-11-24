@@ -1,12 +1,13 @@
 # ArchiveArticleReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**reason** | **string** |  | [optional] [default to undefined]
+**article_id** | **string** | 必填，文章 ID | [default to undefined]
+**reason** | **string** | 可选，归档原因 | [optional] [default to undefined]
 
 ## Example
 

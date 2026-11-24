@@ -1,15 +1,16 @@
 # ProfileVisibility
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_list** | **boolean** |  | [optional] [default to undefined]
-**comment_list** | **boolean** |  | [optional] [default to undefined]
-**follower_list** | **boolean** |  | [optional] [default to undefined]
-**following_list** | **boolean** |  | [optional] [default to undefined]
-**moonbreeze_list** | **boolean** |  | [optional] [default to undefined]
+**article_list** | **boolean** | 协议字段。 | [optional] [default to undefined]
+**comment_list** | **boolean** | 协议字段。 | [optional] [default to undefined]
+**follower_list** | **boolean** | 协议字段。 | [optional] [default to undefined]
+**following_list** | **boolean** | 协议字段。 | [optional] [default to undefined]
+**moonbreeze_list** | **boolean** | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

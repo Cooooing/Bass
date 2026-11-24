@@ -1,11 +1,12 @@
 # ListGlobalChatOnlineMembersResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rows** | [**Array&lt;GlobalChatOnlineMember&gt;**](GlobalChatOnlineMember.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;GlobalChatOnlineMember&gt;**](GlobalChatOnlineMember.md) | 在线成员列表。 | [optional] [default to undefined]
 
 ## Example
 

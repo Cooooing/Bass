@@ -1,11 +1,12 @@
 # UpdateCurrentPrivacySettingResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**privacy_setting** | [**RespPrivacySetting**](RespPrivacySetting.md) |  | [optional] [default to undefined]
+**privacy_setting** | [**RespPrivacySetting**](RespPrivacySetting.md) | 更新后的账号隐私设置 | [optional] [default to undefined]
 
 ## Example
 

@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**create**](#create) | **POST** /v1/content/domain/create | |
-|[**list**](#list) | **POST** /v1/content/domain/list | |
-|[**update**](#update) | **POST** /v1/content/domain/update | |
+|[**createDomain**](#createdomain) | **POST** /v1/content/domain/create | |
+|[**listDomains**](#listdomains) | **POST** /v1/content/domain/list | |
+|[**updateDomain**](#updatedomain) | **POST** /v1/content/domain/update | |
 
-# **create**
-> CreateDomainResp create(createDomainReq)
+# **createDomain**
+> CreateDomainResp createDomain(createDomainReq)
 
 创建领域。
 
@@ -27,7 +27,7 @@ const apiInstance = new DomainService(configuration);
 
 let createDomainReq: CreateDomainReq; //
 
-const { status, data } = await apiInstance.create(
+const { status, data } = await apiInstance.createDomain(
     createDomainReq
 );
 ```
@@ -60,8 +60,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> ListDomainsResp list(listDomainsReq)
+# **listDomains**
+> ListDomainsResp listDomains(listDomainsReq)
 
 查询领域列表。
 
@@ -79,7 +79,7 @@ const apiInstance = new DomainService(configuration);
 
 let listDomainsReq: ListDomainsReq; //
 
-const { status, data } = await apiInstance.list(
+const { status, data } = await apiInstance.listDomains(
     listDomainsReq
 );
 ```
@@ -112,8 +112,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **update**
-> UpdateDomainResp update(updateDomainReq)
+# **updateDomain**
+> UpdateDomainResp updateDomain(updateDomainReq)
 
 更新领域。
 
@@ -131,7 +131,7 @@ const apiInstance = new DomainService(configuration);
 
 let updateDomainReq: UpdateDomainReq; //
 
-const { status, data } = await apiInstance.update(
+const { status, data } = await apiInstance.updateDomain(
     updateDomainReq
 );
 ```

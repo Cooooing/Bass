@@ -1,12 +1,13 @@
 # RenameEmojiItemReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**item_id** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
+**item_id** | **string** | 待重命名表情项 ID。 | [optional] [default to undefined]
+**name** | **string** | 新表情别名。 | [optional] [default to undefined]
 
 ## Example
 

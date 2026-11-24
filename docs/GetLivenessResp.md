@@ -1,13 +1,14 @@
 # GetLivenessResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**score** | **number** |  | [optional] [default to undefined]
-**max_score** | **number** |  | [optional] [default to undefined]
-**checkin_score** | **number** |  | [optional] [default to undefined]
+**score** | **number** | 当前活跃度总分。 | [optional] [default to undefined]
+**max_score** | **number** | 每日活跃度上限。 | [optional] [default to undefined]
+**checkin_score** | **number** | 自动签到所需的最低活跃度。 | [optional] [default to undefined]
 
 ## Example
 

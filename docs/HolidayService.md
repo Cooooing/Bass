@@ -4,10 +4,10 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**getCurrent**](#getcurrent) | **POST** /v1/platform/holiday/get-current | |
+|[**getCurrentHoliday**](#getcurrentholiday) | **POST** /v1/platform/holiday/get-current | |
 
-# **getCurrent**
-> GetCurrentHolidayResp getCurrent(body)
+# **getCurrentHoliday**
+> GetCurrentHolidayResp getCurrentHoliday(body)
 
 获取当前节假日状态。
 
@@ -24,7 +24,7 @@ const apiInstance = new HolidayService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.getCurrent(
+const { status, data } = await apiInstance.getCurrentHoliday(
     body
 );
 ```

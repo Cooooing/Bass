@@ -1,18 +1,19 @@
 # ReqDomain
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [default to undefined]
-**name** | **string** |  | [default to undefined]
-**description** | **string** |  | [optional] [default to undefined]
-**status** | **string** |  | [optional] [default to undefined]
-**url** | **string** |  | [optional] [default to undefined]
-**icon** | **string** |  | [optional] [default to undefined]
-**is_nav** | **boolean** |  | [optional] [default to undefined]
-**sort** | **number** |  | [optional] [default to undefined]
+**code** | **string** | 稳定编码 | [default to undefined]
+**name** | **string** | 领域名称 | [default to undefined]
+**description** | **string** | 描述 | [optional] [default to undefined]
+**status** | **string** | 启停状态 | [optional] [default to undefined]
+**url** | **string** | 链接 | [optional] [default to undefined]
+**icon** | **string** | 图标 | [optional] [default to undefined]
+**is_nav** | **boolean** | 是否在导航中展示 | [optional] [default to undefined]
+**sort** | **number** | 排序值，越小越靠前 | [optional] [default to undefined]
 
 ## Example
 

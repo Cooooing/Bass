@@ -1,11 +1,12 @@
 # CollectArticleResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**collected** | **boolean** |  | [optional] [default to undefined]
+**collected** | **boolean** | 是否已收藏 | [optional] [default to undefined]
 
 ## Example
 

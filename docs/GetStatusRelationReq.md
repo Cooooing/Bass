@@ -1,11 +1,12 @@
 # GetStatusRelationReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**target_id** | **string** |  | [default to undefined]
+**target_id** | **string** | 目标账号 ID | [default to undefined]
 
 ## Example
 

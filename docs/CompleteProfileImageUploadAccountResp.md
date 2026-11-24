@@ -1,12 +1,13 @@
 # CompleteProfileImageUploadAccountResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**profile** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
-**image_url** | **string** |  | [optional] [default to undefined]
+**profile** | [**AccountProfile**](AccountProfile.md) | 协议字段。 | [optional] [default to undefined]
+**image_url** | **string** | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,15 +1,16 @@
 # ArticleLotteryPrize
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
-**description** | **string** |  | [optional] [default to undefined]
-**winner_limit** | **number** |  | [optional] [default to undefined]
-**winner_users** | [**Array&lt;AccountProfile&gt;**](AccountProfile.md) |  | [optional] [default to undefined]
+**id** | **string** | 奖项 ID | [optional] [default to undefined]
+**name** | **string** | 奖项名称 | [optional] [default to undefined]
+**description** | **string** | 奖项说明 | [optional] [default to undefined]
+**winner_limit** | **number** | 中奖名额 | [optional] [default to undefined]
+**winner_users** | [**Array&lt;AccountProfile&gt;**](AccountProfile.md) | 按抽取顺序的中奖账号资料 | [optional] [default to undefined]
 
 ## Example
 

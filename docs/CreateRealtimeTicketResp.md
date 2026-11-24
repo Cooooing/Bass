@@ -1,13 +1,14 @@
 # CreateRealtimeTicketResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ticket** | **string** |  | [optional] [default to undefined]
-**expires_in_seconds** | **string** |  | [optional] [default to undefined]
-**path** | **string** |  | [optional] [default to undefined]
+**ticket** | **string** | 一次性 SSE 建连凭证。 | [optional] [default to undefined]
+**expires_in_seconds** | **string** | 有效期秒数。 | [optional] [default to undefined]
+**path** | **string** | realtime node SSE 路径。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,11 +1,12 @@
 # GetArticleResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article** | [**ArticleDetail**](ArticleDetail.md) |  | [optional] [default to undefined]
+**article** | [**ArticleDetail**](ArticleDetail.md) | 文章详情 | [optional] [default to undefined]
 
 ## Example
 

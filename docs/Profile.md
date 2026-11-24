@@ -1,18 +1,19 @@
 # Profile
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**account** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
-**background_url** | **string** |  | [optional] [default to undefined]
-**location** | [**ProfileLocation**](ProfileLocation.md) |  | [optional] [default to undefined]
-**last_success_login_at** | **string** |  | [optional] [default to undefined]
-**visibility** | [**ProfileVisibility**](ProfileVisibility.md) |  | [optional] [default to undefined]
-**viewer_relation** | [**ProfileRelation**](ProfileRelation.md) |  | [optional] [default to undefined]
-**online** | **boolean** |  | [optional] [default to undefined]
-**points** | **string** |  | [optional] [default to undefined]
+**account** | [**AccountProfile**](AccountProfile.md) | 协议字段。 | [optional] [default to undefined]
+**background_url** | **string** | 协议字段。 | [optional] [default to undefined]
+**location** | [**ProfileLocation**](ProfileLocation.md) | 协议字段。 | [optional] [default to undefined]
+**last_success_login_at** | **string** | 协议字段。 | [optional] [default to undefined]
+**visibility** | [**ProfileVisibility**](ProfileVisibility.md) | 协议字段。 | [optional] [default to undefined]
+**viewer_relation** | [**ProfileRelation**](ProfileRelation.md) | 协议字段。 | [optional] [default to undefined]
+**online** | **boolean** | 仅本人或允许公开在线状态的账号返回。 | [optional] [default to undefined]
+**points** | **string** | 仅本人或允许公开积分的账号返回。 | [optional] [default to undefined]
 
 ## Example
 

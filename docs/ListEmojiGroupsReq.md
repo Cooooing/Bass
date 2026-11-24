@@ -1,11 +1,12 @@
 # ListEmojiGroupsReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**query** | **string** |  | [optional] [default to undefined]
+**query** | **string** | 按表情别名进行的模糊查询。 | [optional] [default to undefined]
 
 ## Example
 

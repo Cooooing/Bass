@@ -1,14 +1,15 @@
 # TransferAccountPointsReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**target_name** | **string** |  | [default to undefined]
-**amount** | **string** |  | [default to undefined]
-**remark** | **string** |  | [optional] [default to undefined]
-**idempotency_key** | **string** |  | [default to undefined]
+**target_name** | **string** | 收款账号名，必填 | [default to undefined]
+**amount** | **string** | 转账积分数量，必填 | [default to undefined]
+**remark** | **string** | 转账备注 | [optional] [default to undefined]
+**idempotency_key** | **string** | 本次转账的技术幂等键，必填 | [default to undefined]
 
 ## Example
 

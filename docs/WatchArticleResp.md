@@ -1,11 +1,12 @@
 # WatchArticleResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**watched** | **boolean** |  | [optional] [default to undefined]
+**watched** | **boolean** | 是否已关注 | [optional] [default to undefined]
 
 ## Example
 

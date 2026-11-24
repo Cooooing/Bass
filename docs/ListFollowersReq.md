@@ -1,12 +1,13 @@
 # ListFollowersReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [default to undefined]
-**page** | [**PageReq**](PageReq.md) |  | [optional] [default to undefined]
+**name** | **string** | 协议字段。 | [default to undefined]
+**page** | [**PageReq**](PageReq.md) | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

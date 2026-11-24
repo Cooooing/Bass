@@ -1,12 +1,13 @@
 # ArticleLotteryDraft
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**prizes** | [**Array&lt;ArticleLotteryPrizeDraft&gt;**](ArticleLotteryPrizeDraft.md) |  | [optional] [default to undefined]
-**draw_at** | **string** |  | [optional] [default to undefined]
+**prizes** | [**Array&lt;ArticleLotteryPrizeDraft&gt;**](ArticleLotteryPrizeDraft.md) | 奖项配置 | [optional] [default to undefined]
+**draw_at** | **string** | 开奖时间 | [optional] [default to undefined]
 
 ## Example
 

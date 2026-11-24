@@ -1,11 +1,12 @@
 # RefreshTokenReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**refresh_token** | **string** |  | [default to undefined]
+**refresh_token** | **string** | 刷新令牌 | [default to undefined]
 
 ## Example
 

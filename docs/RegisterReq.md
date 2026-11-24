@@ -1,16 +1,17 @@
 # RegisterReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**type** | **string** |  | [default to undefined]
-**name** | **string** |  | [default to undefined]
-**password** | **string** |  | [default to undefined]
-**nickname** | **string** |  | [optional] [default to undefined]
-**email_credential** | [**ReqEmailCredential**](ReqEmailCredential.md) |  | [optional] [default to undefined]
-**phone_credential** | [**ReqPhoneCredential**](ReqPhoneCredential.md) |  | [optional] [default to undefined]
+**type** | **string** | 注册方式 | [default to undefined]
+**name** | **string** | 账号名 | [default to undefined]
+**password** | **string** | 账号密码 | [default to undefined]
+**nickname** | **string** | 昵称 | [optional] [default to undefined]
+**email_credential** | [**ReqEmailCredential**](ReqEmailCredential.md) | 邮箱注册凭证 | [optional] [default to undefined]
+**phone_credential** | [**ReqPhoneCredential**](ReqPhoneCredential.md) | 手机注册凭证 | [optional] [default to undefined]
 
 ## Example
 

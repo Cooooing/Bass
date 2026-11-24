@@ -1,11 +1,12 @@
 # ListArticleTagsReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
+**article_id** | **string** | 文章 ID | [default to undefined]
 
 ## Example
 

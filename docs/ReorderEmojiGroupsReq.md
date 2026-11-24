@@ -1,11 +1,12 @@
 # ReorderEmojiGroupsReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group_ids** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**group_ids** | **Array&lt;string&gt;** | 按最终展示顺序排列的完整分组 ID 序列。 | [optional] [default to undefined]
 
 ## Example
 

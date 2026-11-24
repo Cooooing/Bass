@@ -1,11 +1,12 @@
 # MarkReadNotificationReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ids** | **Array&lt;string&gt;** |  | [default to undefined]
+**ids** | **Array&lt;string&gt;** | 通知 ID 列表 | [default to undefined]
 
 ## Example
 

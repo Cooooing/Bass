@@ -1,12 +1,13 @@
 # ListFollowingRelationsResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PageResp**](PageResp.md) |  | [optional] [default to undefined]
-**rows** | [**Array&lt;Relation&gt;**](Relation.md) |  | [optional] [default to undefined]
+**page** | [**PageResp**](PageResp.md) | 分页结果 | [optional] [default to undefined]
+**rows** | [**Array&lt;Relation&gt;**](Relation.md) | 账号关系列表 | [optional] [default to undefined]
 
 ## Example
 

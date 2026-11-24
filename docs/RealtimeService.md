@@ -4,11 +4,12 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**createTicket**](#createticket) | **POST** /v1/realtime/ticket | |
+|[**createRealtimeTicket**](#createrealtimeticket) | **POST** /v1/realtime/ticket | |
 
-# **createTicket**
-> CreateRealtimeTicketResp createTicket(body)
+# **createRealtimeTicket**
+> CreateRealtimeTicketResp createRealtimeTicket(body)
 
+服务方法。
 
 ### Example
 
@@ -23,7 +24,7 @@ const apiInstance = new RealtimeService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.createTicket(
+const { status, data } = await apiInstance.createRealtimeTicket(
     body
 );
 ```

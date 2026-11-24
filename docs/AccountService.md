@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**avatar**](#avatar) | **GET** /v1/user/account/avatar | |
-|[**completeProfileImageUpload**](#completeprofileimageupload) | **POST** /v1/user/account/complete-profile-image-upload | |
-|[**getCurrent**](#getcurrent) | **POST** /v1/user/account/get-current | |
-|[**getEconomyAccount**](#geteconomyaccount) | **POST** /v1/user/account/economy/get | |
+|[**avatarAccount**](#avataraccount) | **GET** /v1/user/account/avatar | |
+|[**completeProfileImageUploadAccount**](#completeprofileimageuploadaccount) | **POST** /v1/user/account/complete-profile-image-upload | |
+|[**getAccountEconomy**](#getaccounteconomy) | **POST** /v1/user/account/economy/get | |
+|[**getCurrentAccount**](#getcurrentaccount) | **POST** /v1/user/account/get-current | |
 |[**getProfile**](#getprofile) | **POST** /v1/user/account/get-profile | |
 |[**listFollowers**](#listfollowers) | **POST** /v1/user/account/list-followers | |
 |[**listFollowing**](#listfollowing) | **POST** /v1/user/account/list-following | |
 |[**listPointRecords**](#listpointrecords) | **POST** /v1/user/account/list-point-records | |
-|[**prepareProfileImageUpload**](#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload | |
-|[**searchMention**](#searchmention) | **POST** /v1/user/account/search-mention | |
-|[**transferPoints**](#transferpoints) | **POST** /v1/user/account/economy/transfer | |
-|[**updateEmail**](#updateemail) | **POST** /v1/user/account/update-email | |
-|[**updatePassword**](#updatepassword) | **POST** /v1/user/account/update-password | |
-|[**updatePhone**](#updatephone) | **POST** /v1/user/account/update-phone | |
-|[**updateProfile**](#updateprofile) | **POST** /v1/user/account/update-profile | |
+|[**prepareProfileImageUploadAccount**](#prepareprofileimageuploadaccount) | **POST** /v1/user/account/prepare-profile-image-upload | |
+|[**searchMentionAccounts**](#searchmentionaccounts) | **POST** /v1/user/account/search-mention | |
+|[**transferAccountPoints**](#transferaccountpoints) | **POST** /v1/user/account/economy/transfer | |
+|[**updateEmailAccount**](#updateemailaccount) | **POST** /v1/user/account/update-email | |
+|[**updatePasswordAccount**](#updatepasswordaccount) | **POST** /v1/user/account/update-password | |
+|[**updatePhoneAccount**](#updatephoneaccount) | **POST** /v1/user/account/update-phone | |
+|[**updateProfileAccount**](#updateprofileaccount) | **POST** /v1/user/account/update-profile | |
 
-# **avatar**
-> ImageResp avatar()
+# **avatarAccount**
+> AvatarAccountResp avatarAccount()
 
 生成默认账号头像
 
@@ -36,9 +36,9 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AccountService(configuration);
 
-let name: string; // (optional) (default to undefined)
+let name: string; //账号名，必填 (optional) (default to undefined)
 
-const { status, data } = await apiInstance.avatar(
+const { status, data } = await apiInstance.avatarAccount(
     name
 );
 ```
@@ -47,12 +47,12 @@ const { status, data } = await apiInstance.avatar(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **name** | [**string**] |  | (optional) defaults to undefined|
+| **name** | [**string**] | 账号名，必填 | (optional) defaults to undefined|
 
 
 ### Return type
 
-**ImageResp**
+**AvatarAccountResp**
 
 ### Authorization
 
@@ -71,8 +71,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **completeProfileImageUpload**
-> CompleteProfileImageUploadAccountResp completeProfileImageUpload(completeProfileImageUploadAccountReq)
+# **completeProfileImageUploadAccount**
+> CompleteProfileImageUploadAccountResp completeProfileImageUploadAccount(completeProfileImageUploadAccountReq)
 
 将已由 MinIO 回调确认的资源绑定到当前账号资料。
 
@@ -90,7 +90,7 @@ const apiInstance = new AccountService(configuration);
 
 let completeProfileImageUploadAccountReq: CompleteProfileImageUploadAccountReq; //
 
-const { status, data } = await apiInstance.completeProfileImageUpload(
+const { status, data } = await apiInstance.completeProfileImageUploadAccount(
     completeProfileImageUploadAccountReq
 );
 ```
@@ -123,10 +123,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getCurrent**
-> GetCurrentAccountResp getCurrent(body)
+# **getAccountEconomy**
+> GetAccountEconomyResp getAccountEconomy(body)
 
-获取当前账号完整资料
+查询当前账号的积分余额和累计收支。
 
 ### Example
 
@@ -141,7 +141,7 @@ const apiInstance = new AccountService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.getCurrent(
+const { status, data } = await apiInstance.getAccountEconomy(
     body
 );
 ```
@@ -155,7 +155,7 @@ const { status, data } = await apiInstance.getCurrent(
 
 ### Return type
 
-**GetCurrentAccountResp**
+**GetAccountEconomyResp**
 
 ### Authorization
 
@@ -174,10 +174,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getEconomyAccount**
-> GetAccountEconomyResp getEconomyAccount(body)
+# **getCurrentAccount**
+> GetCurrentAccountResp getCurrentAccount(body)
 
-查询当前账号的积分余额和累计收支。
+获取当前账号完整资料
 
 ### Example
 
@@ -192,7 +192,7 @@ const apiInstance = new AccountService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.getEconomyAccount(
+const { status, data } = await apiInstance.getCurrentAccount(
     body
 );
 ```
@@ -206,7 +206,7 @@ const { status, data } = await apiInstance.getEconomyAccount(
 
 ### Return type
 
-**GetAccountEconomyResp**
+**GetCurrentAccountResp**
 
 ### Authorization
 
@@ -433,8 +433,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **prepareProfileImageUpload**
-> PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadAccountReq)
+# **prepareProfileImageUploadAccount**
+> PrepareProfileImageUploadAccountResp prepareProfileImageUploadAccount(prepareProfileImageUploadAccountReq)
 
 申请当前账号资料图片的内容寻址直传能力。
 
@@ -452,7 +452,7 @@ const apiInstance = new AccountService(configuration);
 
 let prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq; //
 
-const { status, data } = await apiInstance.prepareProfileImageUpload(
+const { status, data } = await apiInstance.prepareProfileImageUploadAccount(
     prepareProfileImageUploadAccountReq
 );
 ```
@@ -485,8 +485,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **searchMention**
-> SearchMentionAccountsResp searchMention(searchMentionAccountsReq)
+# **searchMentionAccounts**
+> SearchMentionAccountsResp searchMentionAccounts(searchMentionAccountsReq)
 
 检索可提及账号的候选项。
 
@@ -504,7 +504,7 @@ const apiInstance = new AccountService(configuration);
 
 let searchMentionAccountsReq: SearchMentionAccountsReq; //
 
-const { status, data } = await apiInstance.searchMention(
+const { status, data } = await apiInstance.searchMentionAccounts(
     searchMentionAccountsReq
 );
 ```
@@ -537,8 +537,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **transferPoints**
-> TransferAccountPointsResp transferPoints(transferAccountPointsReq)
+# **transferAccountPoints**
+> TransferAccountPointsResp transferAccountPoints(transferAccountPointsReq)
 
 向指定账号转移积分。
 
@@ -556,7 +556,7 @@ const apiInstance = new AccountService(configuration);
 
 let transferAccountPointsReq: TransferAccountPointsReq; //
 
-const { status, data } = await apiInstance.transferPoints(
+const { status, data } = await apiInstance.transferAccountPoints(
     transferAccountPointsReq
 );
 ```
@@ -589,8 +589,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updateEmail**
-> object updateEmail(updateEmailAccountReq)
+# **updateEmailAccount**
+> object updateEmailAccount(updateEmailAccountReq)
 
 更新当前账号邮箱
 
@@ -608,7 +608,7 @@ const apiInstance = new AccountService(configuration);
 
 let updateEmailAccountReq: UpdateEmailAccountReq; //
 
-const { status, data } = await apiInstance.updateEmail(
+const { status, data } = await apiInstance.updateEmailAccount(
     updateEmailAccountReq
 );
 ```
@@ -641,8 +641,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updatePassword**
-> object updatePassword(updatePasswordAccountReq)
+# **updatePasswordAccount**
+> object updatePasswordAccount(updatePasswordAccountReq)
 
 更新当前账号密码
 
@@ -660,7 +660,7 @@ const apiInstance = new AccountService(configuration);
 
 let updatePasswordAccountReq: UpdatePasswordAccountReq; //
 
-const { status, data } = await apiInstance.updatePassword(
+const { status, data } = await apiInstance.updatePasswordAccount(
     updatePasswordAccountReq
 );
 ```
@@ -693,8 +693,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updatePhone**
-> object updatePhone(updatePhoneAccountReq)
+# **updatePhoneAccount**
+> object updatePhoneAccount(updatePhoneAccountReq)
 
 更新当前账号手机号
 
@@ -712,7 +712,7 @@ const apiInstance = new AccountService(configuration);
 
 let updatePhoneAccountReq: UpdatePhoneAccountReq; //
 
-const { status, data } = await apiInstance.updatePhone(
+const { status, data } = await apiInstance.updatePhoneAccount(
     updatePhoneAccountReq
 );
 ```
@@ -745,8 +745,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updateProfile**
-> UpdateProfileAccountResp updateProfile(updateProfileAccountReq)
+# **updateProfileAccount**
+> UpdateProfileAccountResp updateProfileAccount(updateProfileAccountReq)
 
 更新当前账号展示资料
 
@@ -764,7 +764,7 @@ const apiInstance = new AccountService(configuration);
 
 let updateProfileAccountReq: UpdateProfileAccountReq; //
 
-const { status, data } = await apiInstance.updateProfile(
+const { status, data } = await apiInstance.updateProfileAccount(
     updateProfileAccountReq
 );
 ```

@@ -1,11 +1,12 @@
 # CreateEmojiGroupReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [optional] [default to undefined]
+**name** | **string** | 新分组名称。 | [optional] [default to undefined]
 
 ## Example
 

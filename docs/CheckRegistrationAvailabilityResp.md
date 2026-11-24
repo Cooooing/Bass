@@ -1,13 +1,14 @@
 # CheckRegistrationAvailabilityResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name_available** | **boolean** |  | [optional] [default to undefined]
-**email_can_register** | **boolean** |  | [optional] [default to undefined]
-**phone_can_register** | **boolean** |  | [optional] [default to undefined]
+**name_available** | **boolean** | 账号名是否可用 | [optional] [default to undefined]
+**email_can_register** | **boolean** | 邮箱是否可继续用于注册 | [optional] [default to undefined]
+**phone_can_register** | **boolean** | 手机号是否可继续用于注册 | [optional] [default to undefined]
 
 ## Example
 

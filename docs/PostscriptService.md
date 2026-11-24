@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**add**](#add) | **POST** /v1/content/postscript/add | |
-|[**list**](#list) | **POST** /v1/content/postscript/list | |
+|[**addPostscript**](#addpostscript) | **POST** /v1/content/postscript/add | |
+|[**listPostscripts**](#listpostscripts) | **POST** /v1/content/postscript/list | |
 
-# **add**
-> AddPostscriptResp add(addPostscriptReq)
+# **addPostscript**
+> AddPostscriptResp addPostscript(addPostscriptReq)
 
 添加文章附言。
 
@@ -26,7 +26,7 @@ const apiInstance = new PostscriptService(configuration);
 
 let addPostscriptReq: AddPostscriptReq; //
 
-const { status, data } = await apiInstance.add(
+const { status, data } = await apiInstance.addPostscript(
     addPostscriptReq
 );
 ```
@@ -59,8 +59,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> ListPostscriptsResp list(listPostscriptsReq)
+# **listPostscripts**
+> ListPostscriptsResp listPostscripts(listPostscriptsReq)
 
 查询文章附言列表。
 
@@ -78,7 +78,7 @@ const apiInstance = new PostscriptService(configuration);
 
 let listPostscriptsReq: ListPostscriptsReq; //
 
-const { status, data } = await apiInstance.list(
+const { status, data } = await apiInstance.listPostscripts(
     listPostscriptsReq
 );
 ```

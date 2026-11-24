@@ -1,16 +1,17 @@
 # GlobalChatBarrage
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**user_id** | **string** |  | [optional] [default to undefined]
-**content** | **string** |  | [optional] [default to undefined]
-**points_cost** | **string** |  | [optional] [default to undefined]
-**sender** | [**GlobalChatMember**](GlobalChatMember.md) |  | [optional] [default to undefined]
-**created_at** | **string** |  | [optional] [default to undefined]
+**id** | **string** | 弹幕 ID。 | [optional] [default to undefined]
+**user_id** | **string** | 发送账号 ID。 | [optional] [default to undefined]
+**content** | **string** | 纯文本弹幕内容。 | [optional] [default to undefined]
+**points_cost** | **string** | 本次实际消耗的积分。 | [optional] [default to undefined]
+**sender** | [**GlobalChatMember**](GlobalChatMember.md) | 发送者展示资料。 | [optional] [default to undefined]
+**created_at** | **string** | 创建时间。 | [optional] [default to undefined]
 
 ## Example
 

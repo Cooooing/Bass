@@ -1,11 +1,12 @@
 # ListArticleTagsResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rows** | [**Array&lt;RespTag&gt;**](RespTag.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;RespTag&gt;**](RespTag.md) | 标签列表 | [optional] [default to undefined]
 
 ## Example
 

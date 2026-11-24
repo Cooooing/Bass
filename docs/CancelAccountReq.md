@@ -1,12 +1,13 @@
 # CancelAccountReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**password** | **string** |  | [default to undefined]
-**code** | **string** |  | [optional] [default to undefined]
+**password** | **string** | 当前密码 | [default to undefined]
+**code** | **string** | 启用 TOTP 时作为 TOTP code | [optional] [default to undefined]
 
 ## Example
 

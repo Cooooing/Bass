@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**getCurrent**](#getcurrent) | **POST** /v1/user/preference/get-current | |
-|[**updateCurrent**](#updatecurrent) | **POST** /v1/user/preference/update-current | |
+|[**getCurrentPreferences**](#getcurrentpreferences) | **POST** /v1/user/preference/get-current | |
+|[**updateCurrentPreferences**](#updatecurrentpreferences) | **POST** /v1/user/preference/update-current | |
 
-# **getCurrent**
-> GetCurrentPreferencesResp getCurrent(body)
+# **getCurrentPreferences**
+> GetCurrentPreferencesResp getCurrentPreferences(body)
 
 获取当前账号的偏好设置。
 
@@ -25,7 +25,7 @@ const apiInstance = new PreferencesService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.getCurrent(
+const { status, data } = await apiInstance.getCurrentPreferences(
     body
 );
 ```
@@ -58,8 +58,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **updateCurrent**
-> UpdateCurrentPreferencesResp updateCurrent(updateCurrentPreferencesReq)
+# **updateCurrentPreferences**
+> UpdateCurrentPreferencesResp updateCurrentPreferences(updateCurrentPreferencesReq)
 
 更新当前账号的偏好设置。
 
@@ -77,7 +77,7 @@ const apiInstance = new PreferencesService(configuration);
 
 let updateCurrentPreferencesReq: UpdateCurrentPreferencesReq; //
 
-const { status, data } = await apiInstance.updateCurrent(
+const { status, data } = await apiInstance.updateCurrentPreferences(
     updateCurrentPreferencesReq
 );
 ```

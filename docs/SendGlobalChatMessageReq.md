@@ -1,12 +1,13 @@
 # SendGlobalChatMessageReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**client_message_id** | **string** |  | [optional] [default to undefined]
-**content** | **string** |  | [optional] [default to undefined]
+**client_message_id** | **string** | 客户端幂等消息 ID。 | [optional] [default to undefined]
+**content** | **string** | 原始 Markdown 内容。 | [optional] [default to undefined]
 
 ## Example
 

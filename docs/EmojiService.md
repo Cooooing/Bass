@@ -4,21 +4,21 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**addItem**](#additem) | **POST** /v1/im/emoji/items | |
-|[**createGroup**](#creategroup) | **POST** /v1/im/emoji/groups | |
-|[**createShare**](#createshare) | **POST** /v1/im/emoji/shares | |
-|[**deleteGroup**](#deletegroup) | **POST** /v1/im/emoji/groups/delete | |
-|[**deleteItem**](#deleteitem) | **POST** /v1/im/emoji/items/delete | |
-|[**importShare**](#importshare) | **POST** /v1/im/emoji/shares/import | |
-|[**list**](#list) | **POST** /v1/im/emoji/groups/list | |
-|[**moveItem**](#moveitem) | **POST** /v1/im/emoji/items/move | |
-|[**renameGroup**](#renamegroup) | **POST** /v1/im/emoji/groups/rename | |
-|[**renameItem**](#renameitem) | **POST** /v1/im/emoji/items/rename | |
-|[**reorderGroups**](#reordergroups) | **POST** /v1/im/emoji/groups/reorder | |
-|[**reorderItems**](#reorderitems) | **POST** /v1/im/emoji/items/reorder | |
+|[**addEmojiItem**](#addemojiitem) | **POST** /v1/im/emoji/items | |
+|[**createEmojiGroup**](#createemojigroup) | **POST** /v1/im/emoji/groups | |
+|[**createEmojiShare**](#createemojishare) | **POST** /v1/im/emoji/shares | |
+|[**deleteEmojiGroup**](#deleteemojigroup) | **POST** /v1/im/emoji/groups/delete | |
+|[**deleteEmojiItem**](#deleteemojiitem) | **POST** /v1/im/emoji/items/delete | |
+|[**importEmojiShare**](#importemojishare) | **POST** /v1/im/emoji/shares/import | |
+|[**listEmojiGroups**](#listemojigroups) | **POST** /v1/im/emoji/groups/list | |
+|[**moveEmojiItem**](#moveemojiitem) | **POST** /v1/im/emoji/items/move | |
+|[**renameEmojiGroup**](#renameemojigroup) | **POST** /v1/im/emoji/groups/rename | |
+|[**renameEmojiItem**](#renameemojiitem) | **POST** /v1/im/emoji/items/rename | |
+|[**reorderEmojiGroups**](#reorderemojigroups) | **POST** /v1/im/emoji/groups/reorder | |
+|[**reorderEmojiItems**](#reorderemojiitems) | **POST** /v1/im/emoji/items/reorder | |
 
-# **addItem**
-> AddEmojiItemResp addItem(addEmojiItemReq)
+# **addEmojiItem**
+> AddEmojiItemResp addEmojiItem(addEmojiItemReq)
 
 向分组加入已上传图片。
 
@@ -36,7 +36,7 @@ const apiInstance = new EmojiService(configuration);
 
 let addEmojiItemReq: AddEmojiItemReq; //
 
-const { status, data } = await apiInstance.addItem(
+const { status, data } = await apiInstance.addEmojiItem(
     addEmojiItemReq
 );
 ```
@@ -69,8 +69,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **createGroup**
-> CreateEmojiGroupResp createGroup(createEmojiGroupReq)
+# **createEmojiGroup**
+> CreateEmojiGroupResp createEmojiGroup(createEmojiGroupReq)
 
 创建一个表情分组。
 
@@ -88,7 +88,7 @@ const apiInstance = new EmojiService(configuration);
 
 let createEmojiGroupReq: CreateEmojiGroupReq; //
 
-const { status, data } = await apiInstance.createGroup(
+const { status, data } = await apiInstance.createEmojiGroup(
     createEmojiGroupReq
 );
 ```
@@ -121,8 +121,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **createShare**
-> CreateEmojiShareResp createShare(createEmojiShareReq)
+# **createEmojiShare**
+> CreateEmojiShareResp createEmojiShare(createEmojiShareReq)
 
 生成七天有效的分组分享码。
 
@@ -140,7 +140,7 @@ const apiInstance = new EmojiService(configuration);
 
 let createEmojiShareReq: CreateEmojiShareReq; //
 
-const { status, data } = await apiInstance.createShare(
+const { status, data } = await apiInstance.createEmojiShare(
     createEmojiShareReq
 );
 ```
@@ -173,8 +173,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **deleteGroup**
-> object deleteGroup(deleteEmojiGroupReq)
+# **deleteEmojiGroup**
+> object deleteEmojiGroup(deleteEmojiGroupReq)
 
 删除一个表情分组。
 
@@ -192,7 +192,7 @@ const apiInstance = new EmojiService(configuration);
 
 let deleteEmojiGroupReq: DeleteEmojiGroupReq; //
 
-const { status, data } = await apiInstance.deleteGroup(
+const { status, data } = await apiInstance.deleteEmojiGroup(
     deleteEmojiGroupReq
 );
 ```
@@ -225,8 +225,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **deleteItem**
-> object deleteItem(deleteEmojiItemReq)
+# **deleteEmojiItem**
+> object deleteEmojiItem(deleteEmojiItemReq)
 
 从分组移除表情。
 
@@ -244,7 +244,7 @@ const apiInstance = new EmojiService(configuration);
 
 let deleteEmojiItemReq: DeleteEmojiItemReq; //
 
-const { status, data } = await apiInstance.deleteItem(
+const { status, data } = await apiInstance.deleteEmojiItem(
     deleteEmojiItemReq
 );
 ```
@@ -277,8 +277,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **importShare**
-> ImportEmojiShareResp importShare(importEmojiShareReq)
+# **importEmojiShare**
+> ImportEmojiShareResp importEmojiShare(importEmojiShareReq)
 
 把分享码导入为一个新分组。
 
@@ -296,7 +296,7 @@ const apiInstance = new EmojiService(configuration);
 
 let importEmojiShareReq: ImportEmojiShareReq; //
 
-const { status, data } = await apiInstance.importShare(
+const { status, data } = await apiInstance.importEmojiShare(
     importEmojiShareReq
 );
 ```
@@ -329,8 +329,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> ListEmojiGroupsResp list(listEmojiGroupsReq)
+# **listEmojiGroups**
+> ListEmojiGroupsResp listEmojiGroups(listEmojiGroupsReq)
 
 查询当前账号的表情分组。
 
@@ -348,7 +348,7 @@ const apiInstance = new EmojiService(configuration);
 
 let listEmojiGroupsReq: ListEmojiGroupsReq; //
 
-const { status, data } = await apiInstance.list(
+const { status, data } = await apiInstance.listEmojiGroups(
     listEmojiGroupsReq
 );
 ```
@@ -381,8 +381,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **moveItem**
-> MoveEmojiItemResp moveItem(moveEmojiItemReq)
+# **moveEmojiItem**
+> MoveEmojiItemResp moveEmojiItem(moveEmojiItemReq)
 
 将表情移动到另一个当前账号分组。
 
@@ -400,7 +400,7 @@ const apiInstance = new EmojiService(configuration);
 
 let moveEmojiItemReq: MoveEmojiItemReq; //
 
-const { status, data } = await apiInstance.moveItem(
+const { status, data } = await apiInstance.moveEmojiItem(
     moveEmojiItemReq
 );
 ```
@@ -433,8 +433,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **renameGroup**
-> RenameEmojiGroupResp renameGroup(renameEmojiGroupReq)
+# **renameEmojiGroup**
+> RenameEmojiGroupResp renameEmojiGroup(renameEmojiGroupReq)
 
 重命名一个表情分组。
 
@@ -452,7 +452,7 @@ const apiInstance = new EmojiService(configuration);
 
 let renameEmojiGroupReq: RenameEmojiGroupReq; //
 
-const { status, data } = await apiInstance.renameGroup(
+const { status, data } = await apiInstance.renameEmojiGroup(
     renameEmojiGroupReq
 );
 ```
@@ -485,8 +485,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **renameItem**
-> RenameEmojiItemResp renameItem(renameEmojiItemReq)
+# **renameEmojiItem**
+> RenameEmojiItemResp renameEmojiItem(renameEmojiItemReq)
 
 重命名一个表情别名。
 
@@ -504,7 +504,7 @@ const apiInstance = new EmojiService(configuration);
 
 let renameEmojiItemReq: RenameEmojiItemReq; //
 
-const { status, data } = await apiInstance.renameItem(
+const { status, data } = await apiInstance.renameEmojiItem(
     renameEmojiItemReq
 );
 ```
@@ -537,8 +537,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **reorderGroups**
-> object reorderGroups(reorderEmojiGroupsReq)
+# **reorderEmojiGroups**
+> object reorderEmojiGroups(reorderEmojiGroupsReq)
 
 重排表情分组。
 
@@ -556,7 +556,7 @@ const apiInstance = new EmojiService(configuration);
 
 let reorderEmojiGroupsReq: ReorderEmojiGroupsReq; //
 
-const { status, data } = await apiInstance.reorderGroups(
+const { status, data } = await apiInstance.reorderEmojiGroups(
     reorderEmojiGroupsReq
 );
 ```
@@ -589,8 +589,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **reorderItems**
-> object reorderItems(reorderEmojiItemsReq)
+# **reorderEmojiItems**
+> object reorderEmojiItems(reorderEmojiItemsReq)
 
 重排同一分组内的表情。
 
@@ -608,7 +608,7 @@ const apiInstance = new EmojiService(configuration);
 
 let reorderEmojiItemsReq: ReorderEmojiItemsReq; //
 
-const { status, data } = await apiInstance.reorderItems(
+const { status, data } = await apiInstance.reorderEmojiItems(
     reorderEmojiItemsReq
 );
 ```

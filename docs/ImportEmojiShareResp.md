@@ -1,12 +1,13 @@
 # ImportEmojiShareResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group** | [**EmojiGroup**](EmojiGroup.md) |  | [optional] [default to undefined]
-**skipped_count** | **number** |  | [optional] [default to undefined]
+**group** | [**EmojiGroup**](EmojiGroup.md) | 新建的导入分组。 | [optional] [default to undefined]
+**skipped_count** | **number** | 因资源不可用而跳过的表情数。 | [optional] [default to undefined]
 
 ## Example
 

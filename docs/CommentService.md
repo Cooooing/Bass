@@ -4,16 +4,16 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**create**](#create) | **POST** /v1/content/comment/create | |
-|[**like**](#like) | **POST** /v1/content/comment/like | |
-|[**list**](#list) | **POST** /v1/content/comment/list | |
-|[**listReplies**](#listreplies) | **POST** /v1/content/comment/list-replies | |
-|[**listThreads**](#listthreads) | **POST** /v1/content/comment/list-threads | |
-|[**listTimeline**](#listtimeline) | **POST** /v1/content/comment/list-timeline | |
-|[**thank**](#thank) | **POST** /v1/content/comment/thank | |
+|[**createComment**](#createcomment) | **POST** /v1/content/comment/create | |
+|[**likeComment**](#likecomment) | **POST** /v1/content/comment/like | |
+|[**listCommentReplies**](#listcommentreplies) | **POST** /v1/content/comment/list-replies | |
+|[**listCommentThreads**](#listcommentthreads) | **POST** /v1/content/comment/list-threads | |
+|[**listCommentTimeline**](#listcommenttimeline) | **POST** /v1/content/comment/list-timeline | |
+|[**listComments**](#listcomments) | **POST** /v1/content/comment/list | |
+|[**thankComment**](#thankcomment) | **POST** /v1/content/comment/thank | |
 
-# **create**
-> CreateCommentResp create(createCommentReq)
+# **createComment**
+> CreateCommentResp createComment(createCommentReq)
 
 创建评论。
 
@@ -31,7 +31,7 @@ const apiInstance = new CommentService(configuration);
 
 let createCommentReq: CreateCommentReq; //
 
-const { status, data } = await apiInstance.create(
+const { status, data } = await apiInstance.createComment(
     createCommentReq
 );
 ```
@@ -64,8 +64,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **like**
-> LikeCommentResp like(likeCommentReq)
+# **likeComment**
+> LikeCommentResp likeComment(likeCommentReq)
 
 点赞或取消点赞评论。
 
@@ -83,7 +83,7 @@ const apiInstance = new CommentService(configuration);
 
 let likeCommentReq: LikeCommentReq; //
 
-const { status, data } = await apiInstance.like(
+const { status, data } = await apiInstance.likeComment(
     likeCommentReq
 );
 ```
@@ -116,60 +116,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> ListCommentsResp list(listCommentsReq)
-
-分页查询评论列表。
-
-### Example
-
-```typescript
-import {
-    CommentService,
-    Configuration,
-    ListCommentsReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new CommentService(configuration);
-
-let listCommentsReq: ListCommentsReq; //
-
-const { status, data } = await apiInstance.list(
-    listCommentsReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **listCommentsReq** | **ListCommentsReq**|  | |
-
-
-### Return type
-
-**ListCommentsResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **listReplies**
-> ListCommentRepliesResp listReplies(listCommentRepliesReq)
+# **listCommentReplies**
+> ListCommentRepliesResp listCommentReplies(listCommentRepliesReq)
 
 分页查询评论回复。
 
@@ -187,7 +135,7 @@ const apiInstance = new CommentService(configuration);
 
 let listCommentRepliesReq: ListCommentRepliesReq; //
 
-const { status, data } = await apiInstance.listReplies(
+const { status, data } = await apiInstance.listCommentReplies(
     listCommentRepliesReq
 );
 ```
@@ -220,8 +168,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listThreads**
-> ListCommentThreadsResp listThreads(listCommentThreadsReq)
+# **listCommentThreads**
+> ListCommentThreadsResp listCommentThreads(listCommentThreadsReq)
 
 分页查询评论楼层。
 
@@ -239,7 +187,7 @@ const apiInstance = new CommentService(configuration);
 
 let listCommentThreadsReq: ListCommentThreadsReq; //
 
-const { status, data } = await apiInstance.listThreads(
+const { status, data } = await apiInstance.listCommentThreads(
     listCommentThreadsReq
 );
 ```
@@ -272,8 +220,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listTimeline**
-> ListCommentTimelineResp listTimeline(listCommentTimelineReq)
+# **listCommentTimeline**
+> ListCommentTimelineResp listCommentTimeline(listCommentTimelineReq)
 
 分页查询评论时间线。
 
@@ -291,7 +239,7 @@ const apiInstance = new CommentService(configuration);
 
 let listCommentTimelineReq: ListCommentTimelineReq; //
 
-const { status, data } = await apiInstance.listTimeline(
+const { status, data } = await apiInstance.listCommentTimeline(
     listCommentTimelineReq
 );
 ```
@@ -324,8 +272,60 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **thank**
-> ThankCommentResp thank(thankCommentReq)
+# **listComments**
+> ListCommentsResp listComments(listCommentsReq)
+
+分页查询评论列表。
+
+### Example
+
+```typescript
+import {
+    CommentService,
+    Configuration,
+    ListCommentsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new CommentService(configuration);
+
+let listCommentsReq: ListCommentsReq; //
+
+const { status, data } = await apiInstance.listComments(
+    listCommentsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listCommentsReq** | **ListCommentsReq**|  | |
+
+
+### Return type
+
+**ListCommentsResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **thankComment**
+> ThankCommentResp thankComment(thankCommentReq)
 
 感谢或取消感谢评论。
 
@@ -343,7 +343,7 @@ const apiInstance = new CommentService(configuration);
 
 let thankCommentReq: ThankCommentReq; //
 
-const { status, data } = await apiInstance.thank(
+const { status, data } = await apiInstance.thankComment(
     thankCommentReq
 );
 ```

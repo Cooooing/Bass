@@ -1,12 +1,13 @@
 # PublishArticleReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**scheduled_at** | **string** |  | [optional] [default to undefined]
+**article_id** | **string** | 必填，文章 ID | [default to undefined]
+**scheduled_at** | **string** | 可选，定时发布时间 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,12 +1,13 @@
 # ListGlobalChatBarragesResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PageResp**](PageResp.md) |  | [optional] [default to undefined]
-**rows** | [**Array&lt;GlobalChatBarrage&gt;**](GlobalChatBarrage.md) |  | [optional] [default to undefined]
+**page** | [**PageResp**](PageResp.md) | 分页信息。 | [optional] [default to undefined]
+**rows** | [**Array&lt;GlobalChatBarrage&gt;**](GlobalChatBarrage.md) | 已发布弹幕。 | [optional] [default to undefined]
 
 ## Example
 

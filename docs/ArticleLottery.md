@@ -1,15 +1,16 @@
 # ArticleLottery
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**draw_at** | **string** |  | [optional] [default to undefined]
-**drawn_at** | **string** |  | [optional] [default to undefined]
-**entry_count** | **string** |  | [optional] [default to undefined]
-**entered** | **boolean** |  | [optional] [default to undefined]
-**prizes** | [**Array&lt;ArticleLotteryPrize&gt;**](ArticleLotteryPrize.md) |  | [optional] [default to undefined]
+**draw_at** | **string** | 开奖时间 | [optional] [default to undefined]
+**drawn_at** | **string** | 实际开奖时间 | [optional] [default to undefined]
+**entry_count** | **string** | 有效报名人数 | [optional] [default to undefined]
+**entered** | **boolean** | 当前账号是否已报名 | [optional] [default to undefined]
+**prizes** | [**Array&lt;ArticleLotteryPrize&gt;**](ArticleLotteryPrize.md) | 奖项和中奖结果 | [optional] [default to undefined]
 
 ## Example
 

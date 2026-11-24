@@ -1,12 +1,13 @@
 # UpdateDraftArticleReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**article** | [**ReqArticle**](ReqArticle.md) |  | [default to undefined]
+**article_id** | **string** | 必填，文章 ID | [default to undefined]
+**article** | [**ReqArticle**](ReqArticle.md) | 必填，草稿内容 | [default to undefined]
 
 ## Example
 

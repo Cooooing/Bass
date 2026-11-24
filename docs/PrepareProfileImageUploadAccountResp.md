@@ -1,13 +1,14 @@
 # PrepareProfileImageUploadAccountResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**asset_id** | **string** |  | [optional] [default to undefined]
-**upload_url** | **string** |  | [optional] [default to undefined]
-**form_fields** | **{ [key: string]: string; }** |  | [optional] [default to undefined]
+**asset_id** | **string** | 已存在时直接返回 | [optional] [default to undefined]
+**upload_url** | **string** | 新资源的 MinIO multipart POST 地址 | [optional] [default to undefined]
+**form_fields** | **{ [key: string]: string; }** | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,11 +1,12 @@
 # SendPhoneOtpReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**phone** | **string** |  | [default to undefined]
+**phone** | **string** | 手机号 | [default to undefined]
 
 ## Example
 

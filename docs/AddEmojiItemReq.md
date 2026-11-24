@@ -1,13 +1,14 @@
 # AddEmojiItemReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**group_id** | **string** |  | [optional] [default to undefined]
-**asset_id** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
+**group_id** | **string** | 可选目标分组 ID；缺省时加入默认分组。 | [optional] [default to undefined]
+**asset_id** | **string** | 已确认可用的平台图片资产 ID。 | [optional] [default to undefined]
+**name** | **string** | 可选表情别名。 | [optional] [default to undefined]
 
 ## Example
 

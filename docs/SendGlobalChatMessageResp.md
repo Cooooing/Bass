@@ -1,11 +1,12 @@
 # SendGlobalChatMessageResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**message** | [**GlobalChatMessage**](GlobalChatMessage.md) |  | [optional] [default to undefined]
+**message** | [**GlobalChatMessage**](GlobalChatMessage.md) | 消息。 | [optional] [default to undefined]
 
 ## Example
 

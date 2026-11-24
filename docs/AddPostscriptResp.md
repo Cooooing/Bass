@@ -1,11 +1,12 @@
 # AddPostscriptResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**postscript** | [**ArticlePostscript**](ArticlePostscript.md) |  | [optional] [default to undefined]
+**postscript** | [**ArticlePostscript**](ArticlePostscript.md) | 创建后的文章附言。 | [optional] [default to undefined]
 
 ## Example
 

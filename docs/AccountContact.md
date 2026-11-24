@@ -1,13 +1,14 @@
 # AccountContact
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [optional] [default to undefined]
-**email** | **string** |  | [optional] [default to undefined]
-**phone** | **string** |  | [optional] [default to undefined]
+**user_id** | **string** | 账号 ID | [optional] [default to undefined]
+**email** | **string** | 邮箱地址 | [optional] [default to undefined]
+**phone** | **string** | 手机号 | [optional] [default to undefined]
 
 ## Example
 

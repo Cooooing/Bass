@@ -4,10 +4,10 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**getCurrent**](#getcurrent) | **POST** /v1/platform/location/get-current | |
+|[**getCurrentLocation**](#getcurrentlocation) | **POST** /v1/platform/location/get-current | |
 
-# **getCurrent**
-> GetCurrentLocationResp getCurrent(body)
+# **getCurrentLocation**
+> GetCurrentLocationResp getCurrentLocation(body)
 
 按当前请求来源 IP 获取地理数据。
 
@@ -24,7 +24,7 @@ const apiInstance = new LocationService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.getCurrent(
+const { status, data } = await apiInstance.getCurrentLocation(
     body
 );
 ```

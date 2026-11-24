@@ -1,12 +1,13 @@
 # GetArticleReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**publish_status** | **string** |  | [optional] [default to undefined]
+**article_id** | **string** | 必填，文章 ID | [default to undefined]
+**publish_status** | **string** | 可选，预期发布状态；未传按已发布查询 | [optional] [default to undefined]
 
 ## Example
 

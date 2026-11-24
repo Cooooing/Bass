@@ -1,11 +1,12 @@
 # RevokeGlobalChatMessageReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**message_id** | **string** |  | [optional] [default to undefined]
+**message_id** | **string** | 消息 ID。 | [optional] [default to undefined]
 
 ## Example
 

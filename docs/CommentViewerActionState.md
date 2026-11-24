@@ -1,12 +1,13 @@
 # CommentViewerActionState
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**liked** | **boolean** |  | [optional] [default to undefined]
-**thanked** | **boolean** |  | [optional] [default to undefined]
+**liked** | **boolean** | 是否已点赞 | [optional] [default to undefined]
+**thanked** | **boolean** | 是否已感谢 | [optional] [default to undefined]
 
 ## Example
 

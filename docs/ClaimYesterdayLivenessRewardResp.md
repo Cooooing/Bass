@@ -1,12 +1,13 @@
 # ClaimYesterdayLivenessRewardResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**reward_points** | **string** |  | [optional] [default to undefined]
-**claimed** | **boolean** |  | [optional] [default to undefined]
+**reward_points** | **string** | 本次领取的积分。 | [optional] [default to undefined]
+**claimed** | **boolean** | 是否已成功领取。 | [optional] [default to undefined]
 
 ## Example
 

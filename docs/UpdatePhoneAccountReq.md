@@ -1,12 +1,13 @@
 # UpdatePhoneAccountReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**phone** | **string** |  | [default to undefined]
-**code** | **string** |  | [default to undefined]
+**phone** | **string** | 新手机号，必填 | [default to undefined]
+**code** | **string** | 手机 OTP，必填 | [default to undefined]
 
 ## Example
 

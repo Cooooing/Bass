@@ -1,13 +1,14 @@
 # PageMemberMoonbreezesReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [optional] [default to undefined]
-**cursor** | **string** |  | [optional] [default to undefined]
-**size** | **number** |  | [optional] [default to undefined]
+**name** | **string** | 协议字段。 | [optional] [default to undefined]
+**cursor** | **string** | 协议字段。 | [optional] [default to undefined]
+**size** | **number** | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

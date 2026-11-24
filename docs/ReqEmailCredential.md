@@ -1,12 +1,13 @@
 # ReqEmailCredential
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **string** |  | [optional] [default to undefined]
-**code** | **string** |  | [optional] [default to undefined]
+**email** | **string** | 邮箱地址 | [optional] [default to undefined]
+**code** | **string** | 邮箱 OTP | [optional] [default to undefined]
 
 ## Example
 

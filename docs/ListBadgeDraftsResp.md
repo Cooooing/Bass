@@ -6,7 +6,7 @@ Resp 返回草稿行。
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rows** | [**Array&lt;BadgeDraft&gt;**](BadgeDraft.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;BadgeDraft&gt;**](BadgeDraft.md) | 草稿列表。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,12 +1,13 @@
 # ArticleViewHistoryItem
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article** | [**ArticleListItem**](ArticleListItem.md) |  | [optional] [default to undefined]
-**viewed_at** | **string** |  | [optional] [default to undefined]
+**article** | [**ArticleListItem**](ArticleListItem.md) | 当前仍可展示的文章 | [optional] [default to undefined]
+**viewed_at** | **string** | 最近浏览时间 | [optional] [default to undefined]
 
 ## Example
 

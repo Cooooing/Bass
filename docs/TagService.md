@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**bindArticle**](#bindarticle) | **POST** /v1/content/tag/bind-article | |
-|[**create**](#create) | **POST** /v1/content/tag/create | |
-|[**list**](#list) | **POST** /v1/content/tag/list | |
+|[**bindArticleTags**](#bindarticletags) | **POST** /v1/content/tag/bind-article | |
+|[**createTag**](#createtag) | **POST** /v1/content/tag/create | |
 |[**listArticleTags**](#listarticletags) | **POST** /v1/content/tag/list-article-tags | |
-|[**unbindArticle**](#unbindarticle) | **POST** /v1/content/tag/unbind-article | |
-|[**update**](#update) | **POST** /v1/content/tag/update | |
+|[**listTags**](#listtags) | **POST** /v1/content/tag/list | |
+|[**unbindArticleTags**](#unbindarticletags) | **POST** /v1/content/tag/unbind-article | |
+|[**updateTag**](#updatetag) | **POST** /v1/content/tag/update | |
 
-# **bindArticle**
-> object bindArticle(bindArticleTagsReq)
+# **bindArticleTags**
+> object bindArticleTags(bindArticleTagsReq)
 
 绑定文章标签。
 
@@ -30,7 +30,7 @@ const apiInstance = new TagService(configuration);
 
 let bindArticleTagsReq: BindArticleTagsReq; //
 
-const { status, data } = await apiInstance.bindArticle(
+const { status, data } = await apiInstance.bindArticleTags(
     bindArticleTagsReq
 );
 ```
@@ -63,8 +63,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **create**
-> CreateTagResp create(createTagReq)
+# **createTag**
+> CreateTagResp createTag(createTagReq)
 
 创建标签。
 
@@ -82,7 +82,7 @@ const apiInstance = new TagService(configuration);
 
 let createTagReq: CreateTagReq; //
 
-const { status, data } = await apiInstance.create(
+const { status, data } = await apiInstance.createTag(
     createTagReq
 );
 ```
@@ -97,58 +97,6 @@ const { status, data } = await apiInstance.create(
 ### Return type
 
 **CreateTagResp**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **list**
-> ListTagsResp list(listTagsReq)
-
-查询标签列表。
-
-### Example
-
-```typescript
-import {
-    TagService,
-    Configuration,
-    ListTagsReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new TagService(configuration);
-
-let listTagsReq: ListTagsReq; //
-
-const { status, data } = await apiInstance.list(
-    listTagsReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **listTagsReq** | **ListTagsReq**|  | |
-
-
-### Return type
-
-**ListTagsResp**
 
 ### Authorization
 
@@ -219,8 +167,60 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **unbindArticle**
-> object unbindArticle(unbindArticleTagsReq)
+# **listTags**
+> ListTagsResp listTags(listTagsReq)
+
+查询标签列表。
+
+### Example
+
+```typescript
+import {
+    TagService,
+    Configuration,
+    ListTagsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new TagService(configuration);
+
+let listTagsReq: ListTagsReq; //
+
+const { status, data } = await apiInstance.listTags(
+    listTagsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listTagsReq** | **ListTagsReq**|  | |
+
+
+### Return type
+
+**ListTagsResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unbindArticleTags**
+> object unbindArticleTags(unbindArticleTagsReq)
 
 解绑文章标签。
 
@@ -238,7 +238,7 @@ const apiInstance = new TagService(configuration);
 
 let unbindArticleTagsReq: UnbindArticleTagsReq; //
 
-const { status, data } = await apiInstance.unbindArticle(
+const { status, data } = await apiInstance.unbindArticleTags(
     unbindArticleTagsReq
 );
 ```
@@ -271,8 +271,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **update**
-> UpdateTagResp update(updateTagReq)
+# **updateTag**
+> UpdateTagResp updateTag(updateTagReq)
 
 更新标签。
 
@@ -290,7 +290,7 @@ const apiInstance = new TagService(configuration);
 
 let updateTagReq: UpdateTagReq; //
 
-const { status, data } = await apiInstance.update(
+const { status, data } = await apiInstance.updateTag(
     updateTagReq
 );
 ```

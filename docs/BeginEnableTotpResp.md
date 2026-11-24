@@ -1,12 +1,13 @@
 # BeginEnableTotpResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**url** | **string** |  | [optional] [default to undefined]
-**qr_code** | **string** |  | [optional] [default to undefined]
+**url** | **string** | TOTP 绑定 URL | [optional] [default to undefined]
+**qr_code** | **string** | TOTP 二维码图片数据 | [optional] [default to undefined]
 
 ## Example
 

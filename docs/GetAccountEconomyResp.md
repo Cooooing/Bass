@@ -1,13 +1,14 @@
 # GetAccountEconomyResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**balance** | **string** |  | [optional] [default to undefined]
-**total_income** | **string** |  | [optional] [default to undefined]
-**total_expense** | **string** |  | [optional] [default to undefined]
+**balance** | **string** | 当前积分 | [optional] [default to undefined]
+**total_income** | **string** | 累计获得 | [optional] [default to undefined]
+**total_expense** | **string** | 累计消耗 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,12 +1,13 @@
 # MoveEmojiItemReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**item_id** | **string** |  | [optional] [default to undefined]
-**group_id** | **string** |  | [optional] [default to undefined]
+**item_id** | **string** | 待移动表情项 ID。 | [optional] [default to undefined]
+**group_id** | **string** | 目标分组 ID。 | [optional] [default to undefined]
 
 ## Example
 

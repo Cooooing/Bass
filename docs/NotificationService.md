@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**countUnread**](#countunread) | **POST** /v1/notify/notification/count-unread | |
-|[**list**](#list) | **POST** /v1/notify/notification/list | |
-|[**markRead**](#markread) | **POST** /v1/notify/notification/mark-read | |
+|[**countUnreadNotifications**](#countunreadnotifications) | **POST** /v1/notify/notification/count-unread | |
+|[**listNotifications**](#listnotifications) | **POST** /v1/notify/notification/list | |
+|[**markReadNotification**](#markreadnotification) | **POST** /v1/notify/notification/mark-read | |
 
-# **countUnread**
-> CountUnreadNotificationsResp countUnread(body)
+# **countUnreadNotifications**
+> CountUnreadNotificationsResp countUnreadNotifications(body)
 
 统计未读通知数量。
 
@@ -26,7 +26,7 @@ const apiInstance = new NotificationService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.countUnread(
+const { status, data } = await apiInstance.countUnreadNotifications(
     body
 );
 ```
@@ -59,8 +59,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **list**
-> ListNotificationsResp list(listNotificationsReq)
+# **listNotifications**
+> ListNotificationsResp listNotifications(listNotificationsReq)
 
 分页查询通知列表。
 
@@ -78,7 +78,7 @@ const apiInstance = new NotificationService(configuration);
 
 let listNotificationsReq: ListNotificationsReq; //
 
-const { status, data } = await apiInstance.list(
+const { status, data } = await apiInstance.listNotifications(
     listNotificationsReq
 );
 ```
@@ -111,8 +111,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **markRead**
-> MarkReadNotificationResp markRead(markReadNotificationReq)
+# **markReadNotification**
+> MarkReadNotificationResp markReadNotification(markReadNotificationReq)
 
 标记通知为已读。
 
@@ -130,7 +130,7 @@ const apiInstance = new NotificationService(configuration);
 
 let markReadNotificationReq: MarkReadNotificationReq; //
 
-const { status, data } = await apiInstance.markRead(
+const { status, data } = await apiInstance.markReadNotification(
     markReadNotificationReq
 );
 ```

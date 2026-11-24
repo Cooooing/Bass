@@ -1,12 +1,13 @@
 # UpdatePasswordAccountReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**old_password** | **string** |  | [default to undefined]
-**new_password** | **string** |  | [default to undefined]
+**old_password** | **string** | 旧密码，必填 | [default to undefined]
+**new_password** | **string** | 新密码，必填 | [default to undefined]
 
 ## Example
 

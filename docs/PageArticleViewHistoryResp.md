@@ -1,12 +1,13 @@
 # PageArticleViewHistoryResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rows** | [**Array&lt;ArticleViewHistoryItem&gt;**](ArticleViewHistoryItem.md) |  | [optional] [default to undefined]
-**page** | [**PageResp**](PageResp.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;ArticleViewHistoryItem&gt;**](ArticleViewHistoryItem.md) | 协议字段。 | [optional] [default to undefined]
+**page** | [**PageResp**](PageResp.md) | 协议字段。 | [optional] [default to undefined]
 
 ## Example
 

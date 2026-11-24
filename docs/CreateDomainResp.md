@@ -1,11 +1,12 @@
 # CreateDomainResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**domain** | [**RespDomain**](RespDomain.md) |  | [optional] [default to undefined]
+**domain** | [**RespDomain**](RespDomain.md) | 领域信息 | [optional] [default to undefined]
 
 ## Example
 

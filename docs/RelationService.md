@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**block**](#block) | **POST** /v1/user/relation/block | |
-|[**follow**](#follow) | **POST** /v1/user/relation/follow | |
-|[**getStatus**](#getstatus) | **POST** /v1/user/relation/get-status | |
-|[**listBlocked**](#listblocked) | **POST** /v1/user/relation/list-blocked | |
-|[**listFollowers**](#listfollowers) | **POST** /v1/user/relation/list-followers | |
-|[**listFollowing**](#listfollowing) | **POST** /v1/user/relation/list-following | |
-|[**unblock**](#unblock) | **POST** /v1/user/relation/unblock | |
-|[**unfollow**](#unfollow) | **POST** /v1/user/relation/unfollow | |
+|[**blockRelation**](#blockrelation) | **POST** /v1/user/relation/block | |
+|[**followRelation**](#followrelation) | **POST** /v1/user/relation/follow | |
+|[**getStatusRelation**](#getstatusrelation) | **POST** /v1/user/relation/get-status | |
+|[**listBlockedRelations**](#listblockedrelations) | **POST** /v1/user/relation/list-blocked | |
+|[**listFollowersRelations**](#listfollowersrelations) | **POST** /v1/user/relation/list-followers | |
+|[**listFollowingRelations**](#listfollowingrelations) | **POST** /v1/user/relation/list-following | |
+|[**unblockRelation**](#unblockrelation) | **POST** /v1/user/relation/unblock | |
+|[**unfollowRelation**](#unfollowrelation) | **POST** /v1/user/relation/unfollow | |
 
-# **block**
-> object block(blockRelationReq)
+# **blockRelation**
+> object blockRelation(blockRelationReq)
 
 当前账号拉黑目标账号。
 
@@ -32,7 +32,7 @@ const apiInstance = new RelationService(configuration);
 
 let blockRelationReq: BlockRelationReq; //
 
-const { status, data } = await apiInstance.block(
+const { status, data } = await apiInstance.blockRelation(
     blockRelationReq
 );
 ```
@@ -65,8 +65,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **follow**
-> object follow(followRelationReq)
+# **followRelation**
+> object followRelation(followRelationReq)
 
 当前账号关注目标账号。
 
@@ -84,7 +84,7 @@ const apiInstance = new RelationService(configuration);
 
 let followRelationReq: FollowRelationReq; //
 
-const { status, data } = await apiInstance.follow(
+const { status, data } = await apiInstance.followRelation(
     followRelationReq
 );
 ```
@@ -117,8 +117,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **getStatus**
-> GetStatusRelationResp getStatus(getStatusRelationReq)
+# **getStatusRelation**
+> GetStatusRelationResp getStatusRelation(getStatusRelationReq)
 
 查询当前账号与目标账号之间的关系。
 
@@ -136,7 +136,7 @@ const apiInstance = new RelationService(configuration);
 
 let getStatusRelationReq: GetStatusRelationReq; //
 
-const { status, data } = await apiInstance.getStatus(
+const { status, data } = await apiInstance.getStatusRelation(
     getStatusRelationReq
 );
 ```
@@ -169,8 +169,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listBlocked**
-> ListBlockedRelationsResp listBlocked(listBlockedRelationsReq)
+# **listBlockedRelations**
+> ListBlockedRelationsResp listBlockedRelations(listBlockedRelationsReq)
 
 分页查询当前账号拉黑的账号列表。
 
@@ -188,7 +188,7 @@ const apiInstance = new RelationService(configuration);
 
 let listBlockedRelationsReq: ListBlockedRelationsReq; //
 
-const { status, data } = await apiInstance.listBlocked(
+const { status, data } = await apiInstance.listBlockedRelations(
     listBlockedRelationsReq
 );
 ```
@@ -221,8 +221,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listFollowers**
-> ListFollowersRelationsResp listFollowers(listFollowersRelationsReq)
+# **listFollowersRelations**
+> ListFollowersRelationsResp listFollowersRelations(listFollowersRelationsReq)
 
 分页查询当前账号的粉丝账号列表。
 
@@ -240,7 +240,7 @@ const apiInstance = new RelationService(configuration);
 
 let listFollowersRelationsReq: ListFollowersRelationsReq; //
 
-const { status, data } = await apiInstance.listFollowers(
+const { status, data } = await apiInstance.listFollowersRelations(
     listFollowersRelationsReq
 );
 ```
@@ -273,8 +273,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **listFollowing**
-> ListFollowingRelationsResp listFollowing(listFollowingRelationsReq)
+# **listFollowingRelations**
+> ListFollowingRelationsResp listFollowingRelations(listFollowingRelationsReq)
 
 分页查询当前账号关注的账号列表。
 
@@ -292,7 +292,7 @@ const apiInstance = new RelationService(configuration);
 
 let listFollowingRelationsReq: ListFollowingRelationsReq; //
 
-const { status, data } = await apiInstance.listFollowing(
+const { status, data } = await apiInstance.listFollowingRelations(
     listFollowingRelationsReq
 );
 ```
@@ -325,8 +325,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **unblock**
-> object unblock(unblockRelationReq)
+# **unblockRelation**
+> object unblockRelation(unblockRelationReq)
 
 当前账号取消拉黑目标账号。
 
@@ -344,7 +344,7 @@ const apiInstance = new RelationService(configuration);
 
 let unblockRelationReq: UnblockRelationReq; //
 
-const { status, data } = await apiInstance.unblock(
+const { status, data } = await apiInstance.unblockRelation(
     unblockRelationReq
 );
 ```
@@ -377,8 +377,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **unfollow**
-> object unfollow(unfollowRelationReq)
+# **unfollowRelation**
+> object unfollowRelation(unfollowRelationReq)
 
 当前账号取消关注目标账号。
 
@@ -396,7 +396,7 @@ const apiInstance = new RelationService(configuration);
 
 let unfollowRelationReq: UnfollowRelationReq; //
 
-const { status, data } = await apiInstance.unfollow(
+const { status, data } = await apiInstance.unfollowRelation(
     unfollowRelationReq
 );
 ```

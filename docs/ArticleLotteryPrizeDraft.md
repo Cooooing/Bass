@@ -1,13 +1,14 @@
 # ArticleLotteryPrizeDraft
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [optional] [default to undefined]
-**description** | **string** |  | [optional] [default to undefined]
-**winner_limit** | **number** |  | [optional] [default to undefined]
+**name** | **string** | 奖项名称 | [optional] [default to undefined]
+**description** | **string** | 奖项说明 | [optional] [default to undefined]
+**winner_limit** | **number** | 中奖名额 | [optional] [default to undefined]
 
 ## Example
 

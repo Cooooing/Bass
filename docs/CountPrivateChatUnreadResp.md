@@ -1,11 +1,12 @@
 # CountPrivateChatUnreadResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**count** | **number** |  | [optional] [default to undefined]
+**count** | **number** | 未读消息总数。 | [optional] [default to undefined]
 
 ## Example
 

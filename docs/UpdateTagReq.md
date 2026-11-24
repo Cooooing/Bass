@@ -1,12 +1,13 @@
 # UpdateTagReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**tag_id** | **string** |  | [default to undefined]
-**tag** | [**ReqTag**](ReqTag.md) |  | [default to undefined]
+**tag_id** | **string** | 标签 ID | [default to undefined]
+**tag** | [**ReqTag**](ReqTag.md) | 标签信息 | [default to undefined]
 
 ## Example
 

@@ -79,9 +79,9 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AuthService(configuration);
 
-let name: string; // (optional) (default to undefined)
-let email: string; // (optional) (default to undefined)
-let phone: string; // (optional) (default to undefined)
+let name: string; //待检查的账号名 (optional) (default to undefined)
+let email: string; //待检查的邮箱 (optional) (default to undefined)
+let phone: string; //待检查的手机号 (optional) (default to undefined)
 
 const { status, data } = await apiInstance.checkRegistrationAvailability(
     name,
@@ -94,9 +94,9 @@ const { status, data } = await apiInstance.checkRegistrationAvailability(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **name** | [**string**] |  | (optional) defaults to undefined|
-| **email** | [**string**] |  | (optional) defaults to undefined|
-| **phone** | [**string**] |  | (optional) defaults to undefined|
+| **name** | [**string**] | 待检查的账号名 | (optional) defaults to undefined|
+| **email** | [**string**] | 待检查的邮箱 | (optional) defaults to undefined|
+| **phone** | [**string**] | 待检查的手机号 | (optional) defaults to undefined|
 
 
 ### Return type

@@ -6,7 +6,7 @@ Req 指定待删除草稿。
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**draft_id** | **string** |  | [optional] [default to undefined]
+**draft_id** | **string** | 草稿 ID。 | [optional] [default to undefined]
 
 ## Example
 

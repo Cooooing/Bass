@@ -1,11 +1,12 @@
 # SendGlobalChatBarrageReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **string** |  | [optional] [default to undefined]
+**content** | **string** | 原始弹幕内容。 | [optional] [default to undefined]
 
 ## Example
 

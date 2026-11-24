@@ -1,11 +1,12 @@
 # ConfirmEnableTotpReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [default to undefined]
+**code** | **string** | TOTP 验证码 | [default to undefined]
 
 ## Example
 

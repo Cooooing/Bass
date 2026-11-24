@@ -1,13 +1,14 @@
 # RespLocation
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**country** | **string** |  | [optional] [default to undefined]
-**province** | **string** |  | [optional] [default to undefined]
-**city** | **string** |  | [optional] [default to undefined]
+**country** | **string** | 国家或地区 | [optional] [default to undefined]
+**province** | **string** | 省份或州 | [optional] [default to undefined]
+**city** | **string** | 城市 | [optional] [default to undefined]
 
 ## Example
 

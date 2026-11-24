@@ -1,11 +1,12 @@
 # TransferAccountPointsResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**balance** | **string** |  | [optional] [default to undefined]
+**balance** | **string** | 转账后的当前积分 | [optional] [default to undefined]
 
 ## Example
 

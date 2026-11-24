@@ -4,12 +4,13 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**claimYesterdayReward**](#claimyesterdayreward) | **POST** /v1/user/liveness/yesterday-reward/claim | |
+|[**claimYesterdayLivenessReward**](#claimyesterdaylivenessreward) | **POST** /v1/user/liveness/yesterday-reward/claim | |
 |[**getLiveness**](#getliveness) | **GET** /v1/user/liveness | |
 
-# **claimYesterdayReward**
-> ClaimYesterdayLivenessRewardResp claimYesterdayReward(body)
+# **claimYesterdayLivenessReward**
+> ClaimYesterdayLivenessRewardResp claimYesterdayLivenessReward(body)
 
+服务方法。
 
 ### Example
 
@@ -24,7 +25,7 @@ const apiInstance = new LivenessService(configuration);
 
 let body: object; //
 
-const { status, data } = await apiInstance.claimYesterdayReward(
+const { status, data } = await apiInstance.claimYesterdayLivenessReward(
     body
 );
 ```
@@ -60,6 +61,7 @@ No authorization required
 # **getLiveness**
 > GetLivenessResp getLiveness()
 
+服务方法。
 
 ### Example
 

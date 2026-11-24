@@ -1,11 +1,12 @@
 # SendGlobalChatBarrageResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**barrage** | [**GlobalChatBarrage**](GlobalChatBarrage.md) |  | [optional] [default to undefined]
+**barrage** | [**GlobalChatBarrage**](GlobalChatBarrage.md) | 已发布的弹幕。 | [optional] [default to undefined]
 
 ## Example
 

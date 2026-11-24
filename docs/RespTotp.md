@@ -1,13 +1,14 @@
 # RespTotp
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [optional] [default to undefined]
-**enable** | **boolean** |  | [optional] [default to undefined]
-**enable_time** | **string** |  | [optional] [default to undefined]
+**user_id** | **string** | 账号 ID | [optional] [default to undefined]
+**enable** | **boolean** | 是否启用 TOTP | [optional] [default to undefined]
+**enable_time** | **string** | 启用时间 | [optional] [default to undefined]
 
 ## Example
 

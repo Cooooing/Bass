@@ -1,14 +1,15 @@
 # ListCommentRepliesReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | [**PageReq**](PageReq.md) |  | [optional] [default to undefined]
-**article_id** | **string** |  | [default to undefined]
-**parent_id** | **string** |  | [default to undefined]
-**order** | **string** |  | [optional] [default to undefined]
+**page** | [**PageReq**](PageReq.md) | 分页参数 | [optional] [default to undefined]
+**article_id** | **string** | 文章 ID | [default to undefined]
+**parent_id** | **string** | 顶层评论 ID | [default to undefined]
+**order** | **string** | 排序方式 | [optional] [default to undefined]
 
 ## Example
 

@@ -4,11 +4,12 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**search**](#search) | **POST** /v1/content/article/search | |
+|[**searchArticles**](#searcharticles) | **POST** /v1/content/article/search | |
 
-# **search**
-> SearchArticlesResp search(searchArticlesReq)
+# **searchArticles**
+> SearchArticlesResp searchArticles(searchArticlesReq)
 
+服务方法。
 
 ### Example
 
@@ -24,7 +25,7 @@ const apiInstance = new ArticleSearchService(configuration);
 
 let searchArticlesReq: SearchArticlesReq; //
 
-const { status, data } = await apiInstance.search(
+const { status, data } = await apiInstance.searchArticles(
     searchArticlesReq
 );
 ```

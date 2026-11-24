@@ -1,12 +1,13 @@
 # CreateEmojiShareResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
-**expires_in_seconds** | **string** |  | [optional] [default to undefined]
+**code** | **string** | 高熵分享码。 | [optional] [default to undefined]
+**expires_in_seconds** | **string** | 分享码剩余有效秒数。 | [optional] [default to undefined]
 
 ## Example
 

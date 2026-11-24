@@ -1,12 +1,13 @@
 # CompleteBadgeImageUploadResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**asset_id** | **string** |  | [optional] [default to undefined]
-**image_url** | **string** |  | [optional] [default to undefined]
+**asset_id** | **string** | 已确认资源的 ID。 | [optional] [default to undefined]
+**image_url** | **string** | 可公开访问的图片地址。 | [optional] [default to undefined]
 
 ## Example
 

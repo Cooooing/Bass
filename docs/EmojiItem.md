@@ -6,10 +6,10 @@ EmojiItem 是可直接插入编辑器的表情图片。
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** |  | [optional] [default to undefined]
-**asset_id** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
-**image_url** | **string** |  | [optional] [default to undefined]
+**id** | **string** | 表情项 ID。 | [optional] [default to undefined]
+**asset_id** | **string** | 平台图片资产 ID。 | [optional] [default to undefined]
+**name** | **string** | 可选表情别名。 | [optional] [default to undefined]
+**image_url** | **string** | 可插入 Markdown 的公开图片地址。 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,11 +1,12 @@
 # GetProfileReq
 
+请求参数。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **string** |  | [default to undefined]
+**name** | **string** | 账号名，必填 | [default to undefined]
 
 ## Example
 

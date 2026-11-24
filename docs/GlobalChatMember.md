@@ -1,14 +1,15 @@
 # GlobalChatMember
 
+协议消息。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [optional] [default to undefined]
-**name** | **string** |  | [optional] [default to undefined]
-**nickname** | **string** |  | [optional] [default to undefined]
-**avatar_url** | **string** |  | [optional] [default to undefined]
+**user_id** | **string** | 账号 ID。 | [optional] [default to undefined]
+**name** | **string** | 用户名。 | [optional] [default to undefined]
+**nickname** | **string** | 昵称。 | [optional] [default to undefined]
+**avatar_url** | **string** | 头像地址。 | [optional] [default to undefined]
 
 ## Example
 

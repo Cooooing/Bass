@@ -1,12 +1,13 @@
 # ListPointRecordsResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**rows** | [**Array&lt;RespPointRecord&gt;**](RespPointRecord.md) |  | [optional] [default to undefined]
-**page** | [**PageResp**](PageResp.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;RespPointRecord&gt;**](RespPointRecord.md) | 积分流水列表 | [optional] [default to undefined]
+**page** | [**PageResp**](PageResp.md) | 分页结果 | [optional] [default to undefined]
 
 ## Example
 

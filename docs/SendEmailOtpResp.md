@@ -1,11 +1,12 @@
 # SendEmailOtpResp
 
+响应结果。
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
+**code** | **string** | 非生产环境返回验证码，生产环境为空 | [optional] [default to undefined]
 
 ## Example
 
